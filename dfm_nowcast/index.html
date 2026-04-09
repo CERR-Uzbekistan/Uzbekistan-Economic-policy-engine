@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GDP Nowcasting — Uzbekistan DFM</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="../shared/report-engine.js"></script>
 <script src="dfm_data.js" onerror="window.DFM_DATA=null"></script>
 <style>
 :root {
@@ -128,6 +130,14 @@ tr:hover td { background: #f8f9ff; }
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
   .col-span-2, .col-span-3 { grid-column: span 1; }
 }
+.export-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 20px;background:#f8fafc;border-radius:10px;
+  border:1px solid #e0e4ef;margin:16px 0;}
+.export-label{font-size:12px;font-weight:600;color:#64748b;}
+.export-btn{padding:7px 16px;border:1px solid #cbd5e1;background:white;
+  border-radius:8px;font-size:12px;cursor:pointer;color:#334155;
+  display:inline-flex;align-items:center;gap:6px;transition:all 0.15s;font-family:inherit;}
+.export-btn:hover{background:#1a3a6e;color:white;border-color:#1a3a6e;}
 </style>
 </head>
 <body>
@@ -199,6 +209,14 @@ tr:hover td { background: #f8f9ff; }
     <div class="chart-wrap" style="height:260px">
       <canvas id="chart-decomp"></canvas>
     </div>
+  </div>
+
+  <!-- Export toolbar -->
+  <div class="export-toolbar">
+    <span class="export-label">Export Results:</span>
+    <button class="export-btn" onclick="dfmExportCSV()">📊 CSV</button>
+    <button class="export-btn" onclick="dfmExportPNG()">🖼 PNG Chart</button>
+    <button class="export-btn" onclick="dfmExportPDF()">📄 PDF Report</button>
   </div>
 </div>
 
@@ -1076,6 +1094,69 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('alert-no-data').style.display = 'flex';
   }
 });
+
+/* ── DFM Export functions ── */
+function dfmExportCSV() {
+  const soKeys = Object.keys(STATOFFICE_YOY).sort();
+  const headers = ['Quarter', 'GDP YoY (%)', 'Type'];
+  const rows = soKeys.map(k => [k, STATOFFICE_YOY[k].toFixed(1), 'Official (StatOffice)']);
+  if (D && D.gdp) {
+    const dfmDates = D.gdp.dates.map(fmtQ);
+    const dfmYoY   = D.gdp.grw_yoy.map(v => v === null ? null : +v);
+    dfmDates.forEach((q, i) => {
+      if (q > soKeys[soKeys.length-1] && dfmYoY[i] !== null) {
+        rows.push([q, dfmYoY[i].toFixed(2), 'DFM Nowcast']);
+      }
+    });
+  }
+  ReportEngine.downloadCSV('DFM Nowcasting — GDP YoY — Uzbekistan', headers, rows, 'dfm_nowcast.csv');
+}
+
+function dfmExportPNG() {
+  ReportEngine.downloadChartPNG('chart-gdp-yoy', 'dfm_gdp_nowcast.png');
+}
+
+function dfmExportPDF() {
+  const latestYoY = document.getElementById('kpi-yoy')?.textContent || '—';
+  const latestPeriod = document.getElementById('kpi-yoy-period')?.textContent || '—';
+  const factor = document.getElementById('kpi-factor')?.textContent || '—';
+  const status = document.getElementById('kpi-status')?.textContent || '—';
+
+  const soKeys = Object.keys(STATOFFICE_YOY).sort();
+  const tableHeaders = ['Quarter', 'GDP YoY (%)', 'Type'];
+  const tableRows = soKeys.slice(-12).map(k => [k, STATOFFICE_YOY[k].toFixed(1)+'%', 'Official']);
+  if (D && D.gdp) {
+    const dfmDates = D.gdp.dates.map(fmtQ);
+    const dfmYoY   = D.gdp.grw_yoy.map(v => v === null ? null : +v);
+    dfmDates.forEach((q, i) => {
+      if (q > soKeys[soKeys.length-1] && dfmYoY[i] !== null) {
+        tableRows.push([q, dfmYoY[i].toFixed(2)+'%', 'DFM Nowcast']);
+      }
+    });
+  }
+
+  ReportEngine.generatePDF({
+    title: 'DFM Nowcasting — GDP Growth Forecast',
+    subtitle: 'Dynamic Factor Model — Mixed-frequency — Uzbekistan',
+    date: new Date().toISOString().slice(0, 10),
+    modelInfo: 'Dynamic Factor Model (Bańbura & Modugno, 2014). 34 monthly indicators + quarterly GDP. 1 common factor, Kalman smoother. Historical data from Statistics Agency of Uzbekistan; nowcast from fitted DFM parameters.',
+    assumptions: [
+      { name: 'Model type',    value: 'Dynamic Factor Model (DFM)' },
+      { name: 'Reference',     value: 'Bańbura & Modugno (2014)' },
+      { name: 'Indicators',    value: '34 monthly + 1 quarterly (GDP)' },
+      { name: 'Common factors', value: '1' },
+    ],
+    kpis: [
+      { label: 'GDP YoY Nowcast',    value: latestYoY,  note: latestPeriod },
+      { label: 'Common Factor',      value: factor,     note: '>0 above trend, <0 below trend' },
+      { label: 'Model Status',       value: status,     note: 'Kalman filter convergence' },
+    ],
+    tableHeaders,
+    tableRows,
+    chartCanvasId: 'chart-gdp-yoy',
+    filename: 'dfm_nowcast_report.pdf'
+  });
+}
 </script>
 </body>
 </html>

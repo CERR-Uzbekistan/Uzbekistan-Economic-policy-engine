@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Input-Output Model — Uzbekistan 2022</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="../shared/report-engine.js"></script>
 <style>
 :root {
   --bg:#f4f6f9; --card:#fff; --primary:#1a3a6e; --primary-l:#2563eb;
@@ -152,6 +154,14 @@ tr:hover td{background:#fffbf3;}
   .span2,.span3{grid-column:span 1;}
   .detail-grid{grid-template-columns:1fr;}
 }
+.export-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 20px;background:#f8fafc;border-radius:10px;
+  border:1px solid #e0e4ef;margin:16px 0;}
+.export-label{font-size:12px;font-weight:600;color:#64748b;}
+.export-btn{padding:7px 16px;border:1px solid #cbd5e1;background:white;
+  border-radius:8px;font-size:12px;cursor:pointer;color:#334155;
+  display:inline-flex;align-items:center;gap:6px;transition:all 0.15s;font-family:inherit;}
+.export-btn:hover{background:#1a3a6e;color:white;border-color:#1a3a6e;}
 </style>
 </head>
 <body>
@@ -284,6 +294,14 @@ tr:hover td{background:#fffbf3;}
         <tbody id="shock-table-body"></tbody>
       </table>
     </div>
+
+    <!-- Export toolbar -->
+    <div class="export-toolbar">
+      <span class="export-label">Export Results:</span>
+      <button class="export-btn" onclick="ioExportCSV()">📊 CSV</button>
+      <button class="export-btn" onclick="ioExportPNG()">🖼 PNG Chart</button>
+      <button class="export-btn" onclick="ioExportPDF()">📄 PDF Report</button>
+    </div>
   </div>
 </div>
 
@@ -366,6 +384,7 @@ let sectors = [];       // parsed sector array
 let A = [], L = [];     // matrices as float64
 let X = [], GVA = [];   // output and gva vectors
 let shockSelected = []; // [{id, name, code}]
+let lastShockResult = null; // stored for export
 let sortCol = 'output_multiplier', sortDir = -1;
 let charts = {};
 
@@ -672,6 +691,14 @@ function runShock() {
       <td>${totalDX > 0 ? fmt(s.dx/totalDX*100, 2) : '0.00'}%</td>
     </tr>`).join('');
 
+  // Store for export
+  lastShockResult = {
+    shocks: shockSelected.map(s => s.name),
+    amount, unit,
+    totalDY, totalDX, totalDVA, multiplier,
+    allRanked
+  };
+
   document.getElementById('shock-results').scrollIntoView({behavior:'smooth'});
 }
 
@@ -825,6 +852,67 @@ document.addEventListener('click', e => {
 
 // ── Boot ─────────────────────────────────────
 loadData();
+
+/* ── Export functions ── */
+function ioExportCSV() {
+  if (!lastShockResult) { alert('Run the demand shock simulation first.'); return; }
+  const { shocks, amount, unit, allRanked, totalDX, totalDVA, multiplier } = lastShockResult;
+  const headers = ['Sector', 'ISIC Code', 'Output Change (bln UZS)', 'GVA Change (bln UZS)', 'Share of Total (%)'];
+  const rows = allRanked.map(s => [
+    s.name,
+    s.code,
+    (s.dx/1e6).toFixed(2),
+    (s.dva/1e6).toFixed(2),
+    totalDX > 0 ? (s.dx/totalDX*100).toFixed(2)+'%' : '0.00%'
+  ]);
+  rows.push(['', '', '', '', '']);
+  rows.push(['TOTAL', '', (totalDX/1e6).toFixed(2), (totalDVA/1e6).toFixed(2), '100%']);
+  rows.push(['Multiplier', '', multiplier.toFixed(3)+'x', '', '']);
+  ReportEngine.downloadCSV(
+    'I-O Demand Shock — ' + shocks.join(', ') + ' — Uzbekistan 2022',
+    headers, rows, 'io_shock_results.csv'
+  );
+}
+
+function ioExportPNG() {
+  if (!lastShockResult) { alert('Run the demand shock simulation first.'); return; }
+  ReportEngine.downloadChartPNG('chart-shock-output', 'io_shock_output.png');
+}
+
+function ioExportPDF() {
+  if (!lastShockResult) { alert('Run the demand shock simulation first.'); return; }
+  const { shocks, amount, unit, totalDY, totalDX, totalDVA, multiplier, allRanked } = lastShockResult;
+  const unitLabel = unit === 'bln' ? 'bln UZS' : unit === 'trln' ? 'trln UZS' : '% of output';
+  const kpis = [
+    { label: 'Initial Demand Shock',  value: fmt(totalDY/1e6,1) + ' bln UZS', note: amount + ' ' + unitLabel + ' per sector' },
+    { label: 'Total Output Effect',   value: fmt(totalDX/1e6,1) + ' bln UZS', note: 'Economy-wide Leontief multiplier' },
+    { label: 'Total GVA Effect',      value: fmt(totalDVA/1e6,1) + ' bln UZS', note: 'Value-added propagation' },
+    { label: 'Effective Multiplier',  value: multiplier.toFixed(3) + 'x',        note: 'Total output / initial shock' },
+  ];
+  const tableHeaders = ['Sector', 'ISIC Code', 'ΔOutput (bln)', 'ΔGVA (bln)', 'Share (%)'];
+  const tableRows = allRanked.slice(0, 20).map(s => [
+    truncate(s.name, 35), s.code,
+    (s.dx/1e6).toFixed(2), (s.dva/1e6).toFixed(2),
+    totalDX > 0 ? (s.dx/totalDX*100).toFixed(2)+'%' : '0%'
+  ]);
+  ReportEngine.generatePDF({
+    title: 'I-O Model — Demand Shock Analysis',
+    subtitle: 'Leontief Input-Output Table — Uzbekistan 2022 · 136 Sectors',
+    date: new Date().toISOString().slice(0, 10),
+    modelInfo: 'Leontief input-output model based on the 2022 benchmark table for Uzbekistan (136 sectors). Demand shock propagated through Leontief inverse matrix ΔX = L × ΔY. Value-added effects computed using sector-specific GVA/output ratios.',
+    assumptions: [
+      { name: 'Shocked sectors', value: shocks.slice(0, 3).join(', ') + (shocks.length > 3 ? ' +' + (shocks.length-3) + ' more' : '') },
+      { name: 'Shock amount',    value: amount + ' ' + unitLabel },
+      { name: 'Framework',       value: 'Leontief I-O (open model)' },
+      { name: 'Data year',       value: '2022 (Statistics Agency of Uzbekistan)' },
+    ],
+    kpis,
+    tableHeaders,
+    tableRows,
+    chartCanvasId: 'chart-shock-output',
+    filename: 'io_shock_report.pdf'
+  });
+}
 </script>
 </body>
 </html>
