@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Input-Output Model — Uzbekistan 2022</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="../shared/report-engine.js"></script>
 <script src="io_data.js"></script>
@@ -768,8 +769,8 @@ function buildScatter(){
         tooltip:{callbacks:{label:d=>`${d.raw.label} (BL=${d.raw.x.toFixed(2)}, FL=${d.raw.y.toFixed(2)})`}},
         annotation:{
           annotations:{
-            vl:{type:'line',xMin:1,xMax:1,borderColor:'#94a3b8',borderDash:[4,4]},
-            hl:{type:'line',yMin:1,yMax:1,borderColor:'#94a3b8',borderDash:[4,4]}
+            vl:{type:'line',xMin:1,xMax:1,yMin:0,yMax:9,borderColor:'#94a3b8',borderWidth:1.5,borderDash:[5,5]},
+            hl:{type:'line',yMin:1,yMax:1,xMin:0,xMax:9,borderColor:'#94a3b8',borderWidth:1.5,borderDash:[5,5]}
           }
         }
       },

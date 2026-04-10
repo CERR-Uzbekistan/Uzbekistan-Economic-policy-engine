@@ -428,6 +428,10 @@ button { font-family: inherit; cursor: pointer; }
         <span class="nav-icon">⚙️</span> CGE Model
         <span class="nav-badge available">Ready</span>
       </button>
+      <button class="nav-item" onclick="navigate('fpp')">
+        <span class="nav-icon">💰</span> Fin. Programming
+        <span class="nav-badge available">Ready</span>
+      </button>
     </div>
 
     <div class="nav-divider"></div>
@@ -439,12 +443,6 @@ button { font-family: inherit; cursor: pointer; }
         <span class="nav-badge soon">Soon</span>
       </button>
     </div>
-    <div class="sidebar-section">
-      <div class="sidebar-label">Available Models</div>
-      <button class="nav-item" onclick="navigate('fpp')">
-        <span class="nav-icon">💰</span> Fin. Programming
-        <span class="nav-badge available">✓</span>
-      </button>
 
     <div class="nav-divider"></div>
 
@@ -481,27 +479,12 @@ button { font-family: inherit; cursor: pointer; }
             and external shocks propagate through Uzbekistan's economy — backed by
             state-of-the-art structural models.
           </p>
-          <div class="hero-actions">
+          <div class="hero-actions" style="flex-wrap:wrap;gap:10px;">
             <button class="btn btn-primary" onclick="navigate('qpm')">▶ Open QPM Simulator</button>
-            <button class="btn btn-ghost" onclick="navigate('dfm')">📈 View GDP Nowcast</button>
-          </div>
-          <div class="hero-stats">
-            <div>
-              <div class="hero-stat-val">6</div>
-              <div class="hero-stat-lbl">Models Planned</div>
-            </div>
-            <div>
-              <div class="hero-stat-val">2</div>
-              <div class="hero-stat-lbl">Live Now</div>
-            </div>
-            <div>
-              <div class="hero-stat-val">35</div>
-              <div class="hero-stat-lbl">Indicators Tracked</div>
-            </div>
-            <div>
-              <div class="hero-stat-val" id="hero-nowcast">—</div>
-              <div class="hero-stat-lbl">GDP Nowcast YoY</div>
-            </div>
+            <button class="btn btn-ghost" onclick="navigate('dfm')">🔮 View GDP Nowcast</button>
+            <button class="btn btn-ghost" onclick="navigate('io')">🔗 Input-Output Model</button>
+            <button class="btn btn-ghost" onclick="navigate('fpp')">💰 FPP Simulator</button>
+            <button class="btn btn-ghost" onclick="navigate('cge')">⚙️ CGE Model</button>
           </div>
         </div>
 
@@ -705,7 +688,7 @@ button { font-family: inherit; cursor: pointer; }
             <div class="q-icon" style="background:#fff7ed">🔗</div>
             <div>
               <div class="q-text">"Which sector has the highest multiplier effect on total output and employment?"</div>
-              <div class="q-model">→ Input-Output · Multiplier Analysis <span style="color:var(--amber)">· Coming Soon</span></div>
+              <div class="q-model">→ Input-Output · Multiplier Analysis</div>
             </div>
           </div>
           <div class="q-card" onclick="navigate('fpp')">
@@ -719,7 +702,7 @@ button { font-family: inherit; cursor: pointer; }
             <div class="q-icon" style="background:#f5f3ff">⚙️</div>
             <div>
               <div class="q-text">"How do VAT rate changes affect household welfare across income groups?"</div>
-              <div class="q-model">→ CGE · Tax Incidence Analysis <span style="color:var(--amber)">· Coming Soon</span></div>
+              <div class="q-model">→ CGE · Tax Incidence Analysis</div>
             </div>
           </div>
         </div>
@@ -820,24 +803,51 @@ button { font-family: inherit; cursor: pointer; }
     <!-- ── COMPARE ── -->
     <div id="page-compare" class="page">
       <div class="compare-content">
-        <div class="section-header" style="margin-bottom:24px">
+        <div class="section-header" style="margin-bottom:20px">
           <h2>Compare Scenarios</h2>
-          <span>Run two models side by side</span>
+          <span>Run any two models side by side</span>
         </div>
+
+        <!-- Model selectors -->
+        <div style="display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
+          <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:200px;">
+            <label style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;">Left Panel</label>
+            <select id="compare-left-sel" onchange="updateCompareFrame('left')"
+              style="border:1px solid var(--border);border-radius:8px;padding:9px 14px;font-size:13px;background:var(--surface);color:var(--text);cursor:pointer;">
+              <option value="qpm_uzbekistan/index.html">📈 QPM — Monetary Policy Simulator</option>
+              <option value="dfm_nowcast/index.html">🔮 DFM — GDP Nowcasting</option>
+              <option value="io_model/index.html">🔗 Input-Output Model</option>
+              <option value="fpp_model/index.html">💰 FPP — Financial Programming</option>
+              <option value="cge_model/index.html">⚙️ CGE Model</option>
+            </select>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:200px;">
+            <label style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;">Right Panel</label>
+            <select id="compare-right-sel" onchange="updateCompareFrame('right')"
+              style="border:1px solid var(--border);border-radius:8px;padding:9px 14px;font-size:13px;background:var(--surface);color:var(--text);cursor:pointer;">
+              <option value="dfm_nowcast/index.html">🔮 DFM — GDP Nowcasting</option>
+              <option value="qpm_uzbekistan/index.html">📈 QPM — Monetary Policy Simulator</option>
+              <option value="io_model/index.html">🔗 Input-Output Model</option>
+              <option value="fpp_model/index.html">💰 FPP — Financial Programming</option>
+              <option value="cge_model/index.html">⚙️ CGE Model</option>
+            </select>
+          </div>
+        </div>
+
         <div class="compare-grid">
           <div class="compare-frame-wrap">
-            <div class="compare-frame-hdr">📈 QPM — Monetary Policy Simulator</div>
-            <iframe class="compare-iframe" src="qpm_uzbekistan/index.html" title="QPM Compare"></iframe>
+            <div class="compare-frame-hdr" id="compare-left-hdr">📈 QPM — Monetary Policy Simulator</div>
+            <iframe class="compare-iframe" id="compare-iframe-left" src="qpm_uzbekistan/index.html" title="Left Compare"></iframe>
           </div>
           <div class="compare-frame-wrap">
-            <div class="compare-frame-hdr">🔮 DFM — GDP Nowcasting</div>
-            <iframe class="compare-iframe" src="dfm_nowcast/index.html" title="DFM Compare"></iframe>
+            <div class="compare-frame-hdr" id="compare-right-hdr">🔮 DFM — GDP Nowcasting</div>
+            <iframe class="compare-iframe" id="compare-iframe-right" src="dfm_nowcast/index.html" title="Right Compare"></iframe>
           </div>
         </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;font-size:13.5px;color:var(--text2);line-height:1.65">
-          <strong style="color:var(--text)">How to use:</strong> Run a shock in the QPM panel (e.g., monetary tightening) and observe the implied output gap path.
-          Then cross-reference with the DFM nowcast on the right to see how current real-time data aligns with the model projection.
-          Future updates will add automated cross-model scenario linking.
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 22px;font-size:13px;color:var(--text2);line-height:1.65;margin-top:16px;">
+          <strong style="color:var(--text)">How to use:</strong> Select any two models from the dropdowns above to compare them side by side.
+          For example, run a fiscal shock in the FPP model and compare the implied output path against the QPM simulation,
+          or cross-reference the IO demand multipliers with CGE economy-wide effects.
         </div>
       </div>
     </div>
@@ -863,42 +873,42 @@ button { font-family: inherit; cursor: pointer; }
               <td>New-Keynesian DSGE</td>
               <td>Quarterly</td>
               <td>IRF: inflation, output gap, policy rate, exchange rate</td>
-              <td style="color:var(--green);font-weight:700">✓ Live</td>
+              <td style="color:var(--green);font-weight:700">✓ Available</td>
             </tr>
             <tr>
               <td><strong>DFM</strong></td>
               <td>Mixed-frequency Factor Model</td>
               <td>Monthly → Quarterly</td>
               <td>GDP nowcast YoY/QoQ, news decomposition</td>
-              <td style="color:var(--green);font-weight:700">✓ Live</td>
+              <td style="color:var(--green);font-weight:700">✓ Available</td>
             </tr>
             <tr>
               <td><strong>Input-Output</strong></td>
-              <td>Leontief I-O Table</td>
+              <td>Leontief I-O Table (136 × 136)</td>
               <td>Annual (2022)</td>
-              <td>Sector multipliers, output/employment effects</td>
-              <td style="color:var(--amber);font-weight:700">⏳ Development</td>
+              <td>BL/FL linkages, output/VA/employment multipliers, demand & price shocks</td>
+              <td style="color:var(--green);font-weight:700">✓ Available</td>
+            </tr>
+            <tr>
+              <td><strong>CGE</strong></td>
+              <td>1-2-3 Computable General Equilibrium</td>
+              <td>Annual (2021)</td>
+              <td>Economy-wide welfare, trade balance, tax incidence, FDI effects</td>
+              <td style="color:var(--green);font-weight:700">✓ Available</td>
+            </tr>
+            <tr>
+              <td><strong>FPP</strong></td>
+              <td>CAEM Financial Programming (IMF)</td>
+              <td>Annual / MTF (2025–2027)</td>
+              <td>Fiscal balance, BOP, debt sustainability, Phillips Curve inflation</td>
+              <td style="color:var(--green);font-weight:700">✓ Available</td>
             </tr>
             <tr>
               <td><strong>Partial Equilibrium</strong></td>
               <td>Supply-demand market model</td>
               <td>As needed</td>
               <td>Price, quantity, welfare effects by policy change</td>
-              <td style="color:var(--amber);font-weight:700">⏳ Development</td>
-            </tr>
-            <tr>
-              <td><strong>CGE</strong></td>
-              <td>Multi-sector general equilibrium</td>
-              <td>Annual</td>
-              <td>Economy-wide welfare, trade, tax incidence</td>
-              <td style="color:var(--amber);font-weight:700">⏳ Development</td>
-            </tr>
-            <tr>
-              <td><strong>FPP</strong></td>
-              <td>Financial programming framework</td>
-              <td>Annual / MTF</td>
-              <td>Fiscal balance, BOP, debt sustainability</td>
-              <td style="color:#16a34a;font-weight:700">✓ Live</td>
+              <td style="color:var(--amber);font-weight:700">⏳ In Development</td>
             </tr>
           </tbody>
         </table>
@@ -927,14 +937,60 @@ button { font-family: inherit; cursor: pointer; }
           as a JSON file; the prediction step (Kalman filter update) runs live in the browser.
         </p>
 
+        <h3>Input-Output Model — Leontief Framework</h3>
+        <p>
+          The Input-Output model is based on the official 136 × 136 Supply-Use Table (ТЗВ) for Uzbekistan 2022,
+          compiled by the Statistics Agency. The technical coefficients matrix <code>A</code> and the Leontief inverse
+          <code>L = (I − A)⁻¹</code> are used to compute three types of analysis:
+        </p>
+        <p>
+          <strong>Demand model:</strong> ΔX = L · ΔY, where ΔY_i = ΔC_i + ΔG_i + ΔI_i + ΔX_i − ΔM_i.
+          A sector-level final demand shock is propagated through the entire production network.<br>
+          <strong>Price model:</strong> Δp = Δv · L (row-vector times L matrix). A cost-push shock in value-added
+          (e.g. wages, energy) is transmitted to all downstream sector prices.<br>
+          <strong>Linkage analysis:</strong> Rasmussen backward linkage BL_j = n·(Σ_i L_ij)/Σ_ij L_ij and forward
+          linkage FL_i = n·(Σ_j L_ij)/Σ_ij L_ij. Sectors with BL>1 and FL>1 are classified as Key Sectors.
+          Employment multipliers are computed using formal/informal employment data from the Labour Force Survey.
+        </p>
+
+        <h3>CGE Model — 1-2-3 Framework</h3>
+        <p>
+          The CGE model follows the Devarajan, Lewis & Robinson (1990) 1-2-3 model structure, calibrated to
+          Uzbekistan's 2021 Social Accounting Matrix. It distinguishes three commodities (exports, imports,
+          domestically produced and consumed) and two sectors (tradables and non-tradables).
+          Supply is modelled with a CET (constant elasticity of transformation) function between domestic
+          sales and exports; import demand follows the Armington assumption. The model endogenously
+          determines the real exchange rate, domestic price level, and trade balance.
+          Policy instruments include tariff rates, VAT, export subsidies, government spending, and FDI shocks.
+        </p>
+
+        <h3>FPP — Financial Programming & Policies (CAEM Sep 2025)</h3>
+        <p>
+          The Financial Programming & Policies model implements the IMF's Country Analysis and Evaluation Model
+          (CAEM) framework, calibrated to CAEM Uzbekistan Sep 2025 with base year 2024 and projection horizon
+          2025–2027. The model comprises four linked sectors:
+        </p>
+        <p>
+          <strong>Real sector:</strong> GDP growth path, output gap, and an open-economy Phillips Curve where
+          imported inflation is dominant: π_t = λ₂·π_imp + (1−λ₁−λ₂)·π_exp + λ₁·π_{t−1} + λ₃·y_gap,
+          with λ₁=0.05 (inertia), λ₂=0.70 (imported), λ₃=0.40 (output gap), imported inflation = NER depreciation + US CPI.<br>
+          <strong>External sector:</strong> Current account, reserves (months of imports adequacy), BOP identity.<br>
+          <strong>Fiscal sector:</strong> Revenue, expenditure, fiscal balance, debt dynamics (Δdebt/GDP).<br>
+          <strong>Monetary sector:</strong> Money demand (MV=PY), NFA+NDA=M2, velocity, policy rate.
+          A consistency matrix flags deviations from 5% inflation target, 3-month reserve floor,
+          and 40% debt-to-GDP ceiling.
+        </p>
+
         <h3>Data Sources</h3>
         <table class="method-table">
           <thead><tr><th>Source</th><th>Coverage</th></tr></thead>
           <tbody>
-            <tr><td>Statistics Agency under the President of Uzbekistan</td><td>GDP, industrial production, trade, prices, construction</td></tr>
-            <tr><td>Central Bank of Uzbekistan (CBU)</td><td>Monetary aggregates, interest rates, exchange rate, NPL</td></tr>
+            <tr><td>Statistics Agency under the President of Uzbekistan</td><td>GDP, industrial production, trade, prices, construction, IO tables (2022)</td></tr>
+            <tr><td>Central Bank of Uzbekistan (CBU)</td><td>Monetary aggregates, interest rates, exchange rate, NPL, BOP</td></tr>
+            <tr><td>Ministry of Finance of Uzbekistan</td><td>Fiscal revenue, expenditure, debt, budget execution</td></tr>
             <tr><td>Center for Economic Research and Reforms (CERR)</td><td>Business activity index, real estate, car sales, climate indices</td></tr>
-            <tr><td>Bureau of National Statistics (Kazakhstan)</td><td>Kazakhstan leading indicator</td></tr>
+            <tr><td>IMF CAEM / World Economic Outlook</td><td>CAEM Sep 2025 calibration, US CPI, global assumptions</td></tr>
+            <tr><td>Bureau of National Statistics (Kazakhstan)</td><td>Kazakhstan leading indicator (DFM)</td></tr>
           </tbody>
         </table>
       </div>
@@ -976,6 +1032,21 @@ function navigate(name) {
 
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ── Compare panel frame switcher ─────────────────────────
+const COMPARE_LABELS = {
+  'qpm_uzbekistan/index.html':  '📈 QPM — Monetary Policy Simulator',
+  'dfm_nowcast/index.html':     '🔮 DFM — GDP Nowcasting',
+  'io_model/index.html':        '🔗 Input-Output Model',
+  'fpp_model/index.html':       '💰 FPP — Financial Programming',
+  'cge_model/index.html':       '⚙️ CGE Model'
+};
+function updateCompareFrame(side) {
+  const sel = document.getElementById('compare-' + side + '-sel');
+  const src = sel.value;
+  document.getElementById('compare-iframe-' + side).src = src;
+  document.getElementById('compare-' + side + '-hdr').textContent = COMPARE_LABELS[src] || src;
 }
 
 // ── Macro snapshot & chart ──────────────────────────────
