@@ -5,9 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Input-Output Model — Uzbekistan 2022</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="../shared/report-engine.js"></script>
 <script src="io_data.js"></script>
 <style>
 :root{
@@ -210,10 +208,10 @@ tr:hover td{background:#fffbf3;}
 </header>
 
 <nav>
-  <button class="tab active" onclick="showTab('overview')">📊 Overview & Linkages</button>
-  <button class="tab" onclick="showTab('demand')">⚡ Demand Simulator</button>
-  <button class="tab" onclick="showTab('price')">💰 Price Model</button>
-  <button class="tab" onclick="showTab('sectors')">🔍 Sector Explorer</button>
+  <button class="tab active" onclick="showTab('overview',this)">📊 Overview & Linkages</button>
+  <button class="tab" onclick="showTab('demand',this)">⚡ Demand Simulator</button>
+  <button class="tab" onclick="showTab('price',this)">💰 Price Model</button>
+  <button class="tab" onclick="showTab('sectors',this)">🔍 Sector Explorer</button>
 </nav>
 
 <!-- ═══════════════════════════════════════
@@ -709,11 +707,11 @@ sectors.forEach(s=>typeCounts[s.type]++);
 // ═══════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════
-function showTab(name){
+function showTab(name, btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
-  event.currentTarget.classList.add('active');
+  if(btn) btn.classList.add('active');
 }
 
 // ═══════════════════════════════════════
@@ -752,31 +750,45 @@ function initOverview(){
 
 function buildScatter(){
   const typeColor = {key:'#d97706',back:'#2563eb',fwd:'#16a34a',weak:'#94a3b8'};
-  const datasets = ['key','back','fwd','weak'].map(t=>({
-    label: t==='key'?'Key Sector':t==='back'?'Backward Key':t==='fwd'?'Forward Key':'Weak',
+  const typeLabel = {key:'Key Sector (BL>1, FL>1)',back:'Backward Key (BL>1, FL≤1)',fwd:'Forward Key (BL≤1, FL>1)',weak:'Weak (BL≤1, FL≤1)'};
+  // Find axis max for reference lines
+  const maxBL = Math.min(Math.ceil(Math.max(...BL))+0.5, 8);
+  const maxFL = Math.min(Math.ceil(Math.max(...FL))+0.5, 8);
+  const pointDatasets = ['key','back','fwd','weak'].map(t=>({
+    label: typeLabel[t],
     data: sectors.filter(s=>s.type===t).map(s=>({x:s.bl,y:s.fl,label:s.code+' '+s.name.slice(0,30)})),
     backgroundColor: typeColor[t]+'cc',
     borderColor: typeColor[t],
-    borderWidth:1, pointRadius:5, pointHoverRadius:8
+    borderWidth:1, pointRadius:4, pointHoverRadius:8,
+    type:'scatter'
   }));
+  // Reference lines as line datasets (no plugin needed)
+  const refDatasets = [
+    { label:'_BL=1', data:[{x:1,y:0},{x:1,y:maxFL}], borderColor:'#94a3b8', borderWidth:1.5,
+      borderDash:[5,5], pointRadius:0, showLine:true, type:'line', fill:false },
+    { label:'_FL=1', data:[{x:0,y:1},{x:maxBL,y:1}], borderColor:'#94a3b8', borderWidth:1.5,
+      borderDash:[5,5], pointRadius:0, showLine:true, type:'line', fill:false }
+  ];
   new Chart(document.getElementById('chart-scatter'),{
     type:'scatter',
-    data:{datasets},
+    data:{datasets:[...pointDatasets, ...refDatasets]},
     options:{
       responsive:true, maintainAspectRatio:false,
       plugins:{
-        legend:{position:'top'},
-        tooltip:{callbacks:{label:d=>`${d.raw.label} (BL=${d.raw.x.toFixed(2)}, FL=${d.raw.y.toFixed(2)})`}},
-        annotation:{
-          annotations:{
-            vl:{type:'line',xMin:1,xMax:1,yMin:0,yMax:9,borderColor:'#94a3b8',borderWidth:1.5,borderDash:[5,5]},
-            hl:{type:'line',yMin:1,yMax:1,xMin:0,xMax:9,borderColor:'#94a3b8',borderWidth:1.5,borderDash:[5,5]}
+        legend:{
+          position:'top',
+          labels:{filter:item=>!item.text.startsWith('_')}
+        },
+        tooltip:{callbacks:{
+          label:d=>{
+            if(!d.raw.label) return null;
+            return `${d.raw.label} (BL=${d.raw.x.toFixed(2)}, FL=${d.raw.y.toFixed(2)})`;
           }
-        }
+        }}
       },
       scales:{
-        x:{title:{display:true,text:'Backward Linkage (BL)'},grid:{color:'#f0f2f5'}},
-        y:{title:{display:true,text:'Forward Linkage (FL)'},grid:{color:'#f0f2f5'}}
+        x:{min:0,title:{display:true,text:'Backward Linkage (BL)'},grid:{color:'#f0f2f5'}},
+        y:{min:0,title:{display:true,text:'Forward Linkage (FL)'},grid:{color:'#f0f2f5'}}
       }
     }
   });
@@ -1444,10 +1456,17 @@ document.addEventListener('click',e=>{
 });
 
 // ═══════════════════════════════════════
-// INIT
+// INIT — safe, wrapped
 // ═══════════════════════════════════════
-initOverview();
-initSectors();
+function safeInit(){
+  try { initOverview(); } catch(e){ console.error('initOverview error:',e); }
+  try { initSectors();  } catch(e){ console.error('initSectors error:',e); }
+}
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', safeInit);
+} else {
+  safeInit();
+}
 </script>
 </body>
 </html>
