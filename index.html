@@ -389,10 +389,10 @@ button { font-family: inherit; cursor: pointer; }
   <div class="header-right">
     <div class="header-pill live">● Live Models: 6</div>
     <div class="header-pill">Beta v0.3</div>
-    <div style="display:flex;gap:4px;align-items:center;">
-      <button onclick="setLang('en')" id="lang-en" style="background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:3px 9px;font-size:12px;font-weight:600;color:#fff;cursor:pointer;display:flex;align-items:center;gap:5px;">🇬🇧 EN</button>
-      <button onclick="setLang('ru')" id="lang-ru" style="background:none;border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:3px 9px;font-size:12px;font-weight:600;color:rgba(255,255,255,.6);cursor:pointer;display:flex;align-items:center;gap:5px;">🇷🇺 RU</button>
-      <button onclick="setLang('uz')" id="lang-uz" style="background:none;border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:3px 9px;font-size:12px;font-weight:600;color:rgba(255,255,255,.6);cursor:pointer;display:flex;align-items:center;gap:5px;">🇺🇿 UZ</button>
+    <div style="display:flex;gap:6px;align-items:center;margin-left:4px;">
+      <button onclick="setLang('en')" id="lang-en" style="background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.4);border-radius:8px;padding:5px 14px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px;line-height:1.2;"><span style="font-size:18px;">🇬🇧</span> EN</button>
+      <button onclick="setLang('ru')" id="lang-ru" style="background:none;border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:5px 14px;font-size:13px;font-weight:700;color:rgba(255,255,255,.65);cursor:pointer;display:flex;align-items:center;gap:6px;line-height:1.2;"><span style="font-size:18px;">🇷🇺</span> RU</button>
+      <button onclick="setLang('uz')" id="lang-uz" style="background:none;border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:5px 14px;font-size:13px;font-weight:700;color:rgba(255,255,255,.65);cursor:pointer;display:flex;align-items:center;gap:6px;line-height:1.2;"><span style="font-size:18px;">🇺🇿</span> UZ</button>
     </div>
   </div>
 </header>
@@ -561,8 +561,8 @@ button { font-family: inherit; cursor: pointer; }
 
         <!-- Models -->
         <div class="section-header">
-          <h2>Models & Tools</h2>
-          <span>Click to open a model</span>
+          <h2 data-i18n="models_title">Models & Tools</h2>
+          <span data-i18n="models_sub">Click to open a model</span>
         </div>
         <div class="model-grid">
           <div class="model-card" onclick="navigate('qpm')">
@@ -570,7 +570,7 @@ button { font-family: inherit; cursor: pointer; }
               <div class="mc-icon qpm">📈</div>
               <span class="mc-status ready">✓ Available</span>
             </div>
-            <div class="mc-name">Quarterly Projection Model (QPM)</div>
+            <div class="mc-name" data-i18n="mc_qpm_name">Quarterly Projection Model (QPM)</div>
             <div class="mc-desc">New-Keynesian small open-economy DSGE model. Simulate monetary policy shocks, aggregate demand, exchange rate movements, and cost-push inflation. Full impulse response functions with 20-quarter horizon.</div>
             <div class="mc-tags">
               <span class="mc-tag">Monetary Policy</span>
@@ -578,7 +578,7 @@ button { font-family: inherit; cursor: pointer; }
               <span class="mc-tag">Exchange Rate</span>
               <span class="mc-tag">IRF</span>
             </div>
-            <div class="mc-action">Open QPM Simulator <span class="mc-arrow">→</span></div>
+            <div class="mc-action"><span data-i18n="mc_qpm_act">Open QPM Simulator</span> <span class="mc-arrow">→</span></div>
           </div>
 
           <div class="model-card" onclick="navigate('dfm')">
@@ -586,7 +586,7 @@ button { font-family: inherit; cursor: pointer; }
               <div class="mc-icon dfm">🔮</div>
               <span class="mc-status ready">✓ Available</span>
             </div>
-            <div class="mc-name">GDP Nowcasting (DFM)</div>
+            <div class="mc-name" data-i18n="mc_dfm_name">GDP Nowcasting (DFM)</div>
             <div class="mc-desc">Mixed-frequency Dynamic Factor Model extracting a common latent factor from 34 monthly indicators to nowcast quarterly GDP. Live Kalman filter — update the nowcast as new data arrives.</div>
             <div class="mc-tags">
               <span class="mc-tag">GDP Forecast</span>
@@ -594,7 +594,7 @@ button { font-family: inherit; cursor: pointer; }
               <span class="mc-tag">35 Indicators</span>
               <span class="mc-tag">Real-time</span>
             </div>
-            <div class="mc-action">Open Nowcasting Dashboard <span class="mc-arrow">→</span></div>
+            <div class="mc-action"><span data-i18n="mc_dfm_act">Open Nowcasting Dashboard</span> <span class="mc-arrow">→</span></div>
           </div>
 
           <div class="model-card" onclick="navigate('io')">
@@ -602,14 +602,14 @@ button { font-family: inherit; cursor: pointer; }
               <div class="mc-icon io">🔗</div>
               <span class="mc-status ready">✓ Available</span>
             </div>
-            <div class="mc-name">Input-Output Model (2022)</div>
+            <div class="mc-name" data-i18n="mc_io_name">Input-Output Model (2022)</div>
             <div class="mc-desc">Leontief input-output table for Uzbekistan (2022 benchmark). Analyse sectoral linkages, multipliers, and the propagation of demand or supply shocks through the production network.</div>
             <div class="mc-tags">
               <span class="mc-tag">Sectoral Analysis</span>
               <span class="mc-tag">Multipliers</span>
               <span class="mc-tag">Leontief</span>
             </div>
-            <div class="mc-action">Open I-O Simulator <span class="mc-arrow">→</span></div>
+            <div class="mc-action"><span data-i18n="mc_io_act">Open I-O Simulator</span> <span class="mc-arrow">→</span></div>
           </div>
 
           <div class="model-card" onclick="navigate('pe')">
@@ -617,14 +617,14 @@ button { font-family: inherit; cursor: pointer; }
               <div class="mc-icon pe">⚖️</div>
               <span class="mc-status ready">✓ Available</span>
             </div>
-            <div class="mc-name">Partial Equilibrium Model</div>
+            <div class="mc-name" data-i18n="mc_pe_name">Partial Equilibrium Model</div>
             <div class="mc-desc">WITS-SMART methodology. Analyses WTO accession trade effects: trade creation, trade diversion, welfare and tariff revenue changes across HS 28–40 (Chemicals &amp; Plastics) — 3 liberalisation scenarios + custom simulator.</div>
             <div class="mc-tags">
               <span class="mc-tag">WTO Accession</span>
               <span class="mc-tag">Tariff Analysis</span>
               <span class="mc-tag">Trade Flows</span>
             </div>
-            <div class="mc-action">Open PE Simulator <span class="mc-arrow">→</span></div>
+            <div class="mc-action"><span data-i18n="mc_pe_act">Open PE Simulator</span> <span class="mc-arrow">→</span></div>
           </div>
 
           <div class="model-card" onclick="navigate('cge')">
@@ -632,14 +632,14 @@ button { font-family: inherit; cursor: pointer; }
               <div class="mc-icon cge">⚙️</div>
               <span class="mc-status ready">✓ Available</span>
             </div>
-            <div class="mc-name">Computable General Equilibrium (CGE)</div>
+            <div class="mc-name" data-i18n="mc_cge_name">Computable General Equilibrium (CGE)</div>
             <div class="mc-desc">1-2-3 macro CGE model (Devarajan et al.) calibrated to Uzbekistan 2021. Simulate trade tariffs, world price shocks, fiscal reform, and FDI. CET supply + Armington absorption + flexible exchange rate.</div>
             <div class="mc-tags">
               <span class="mc-tag">Trade Policy</span>
               <span class="mc-tag">Fiscal Reform</span>
               <span class="mc-tag">1-2-3 Model</span>
             </div>
-            <div class="mc-action">Open CGE Simulator <span class="mc-arrow">→</span></div>
+            <div class="mc-action"><span data-i18n="mc_cge_act">Open CGE Simulator</span> <span class="mc-arrow">→</span></div>
           </div>
 
           <div class="model-card" onclick="navigate('fpp')" style="cursor:pointer">
@@ -647,7 +647,7 @@ button { font-family: inherit; cursor: pointer; }
               <div class="mc-icon fpp">💰</div>
               <span class="mc-status available">✓ Available</span>
             </div>
-            <div class="mc-name">Financial Programming & Policies (FPP)</div>
+            <div class="mc-name" data-i18n="mc_fpp_name">Financial Programming & Policies (FPP)</div>
             <div class="mc-desc">CAEM Sep 2025 four-sector consistency framework. Base year 2024, projection 2025–2027. Open-economy Phillips Curve (imported inflation dominant), BOP, fiscal programming, and monetary survey decomposition.</div>
             <div class="mc-tags">
               <span class="mc-tag">Fiscal Balance</span>
@@ -655,14 +655,14 @@ button { font-family: inherit; cursor: pointer; }
               <span class="mc-tag">Debt Sustainability</span>
               <span class="mc-tag">Phillips Curve</span>
             </div>
-            <div class="mc-action">Open FPP Simulator <span class="mc-arrow">→</span></div>
+            <div class="mc-action"><span data-i18n="mc_fpp_act">Open FPP Simulator</span> <span class="mc-arrow">→</span></div>
           </div>
         </div>
 
         <!-- Policy Questions -->
         <div class="section-header">
-          <h2>Policy Questions You Can Answer</h2>
-          <span>Click a question to open the relevant model</span>
+          <h2 data-i18n="pq_title">Policy Questions You Can Answer</h2>
+          <span data-i18n="pq_sub">Click a question to open the relevant model</span>
         </div>
         <div class="questions-grid">
           <div class="q-card" onclick="navigate('qpm')">
@@ -732,8 +732,8 @@ button { font-family: inherit; cursor: pointer; }
         <div class="model-frame-header">
           <span class="model-frame-pill pill-qpm">QPM</span>
           <div>
-            <div class="model-frame-title">Quarterly Projection Model</div>
-            <div class="model-frame-sub">New-Keynesian DSGE · IRF Simulator · 4 shocks · 20Q horizon</div>
+            <div class="model-frame-title" data-i18n="fh_qpm_title">Quarterly Projection Model</div>
+            <div class="model-frame-sub" data-i18n="fh_qpm_sub">New-Keynesian DSGE · IRF Simulator · 4 shocks · 20Q horizon</div>
           </div>
         </div>
         <iframe class="model-iframe" id="iframe-qpm" src="qpm_uzbekistan/index.html"
@@ -747,8 +747,8 @@ button { font-family: inherit; cursor: pointer; }
         <div class="model-frame-header">
           <span class="model-frame-pill pill-dfm">DFM</span>
           <div>
-            <div class="model-frame-title">GDP Nowcasting — Dynamic Factor Model</div>
-            <div class="model-frame-sub">Mixed-frequency · 34 indicators · Live Kalman filter update</div>
+            <div class="model-frame-title" data-i18n="fh_dfm_title">GDP Nowcasting — Dynamic Factor Model</div>
+            <div class="model-frame-sub" data-i18n="fh_dfm_sub">Mixed-frequency · 34 indicators · Live Kalman filter update</div>
           </div>
         </div>
         <iframe class="model-iframe" id="iframe-dfm" src="dfm_nowcast/index.html"
@@ -762,8 +762,8 @@ button { font-family: inherit; cursor: pointer; }
         <div class="model-frame-header">
           <span class="model-frame-pill" style="background:#fef9c3;color:#92400e;">I-O</span>
           <div>
-            <div class="model-frame-title">Input-Output Model — Uzbekistan 2022</div>
-            <div class="model-frame-sub">136 sectors · Leontief table · Demand shock simulator</div>
+            <div class="model-frame-title" data-i18n="fh_io_title">Input-Output Model — Uzbekistan 2022</div>
+            <div class="model-frame-sub" data-i18n="fh_io_sub">136 sectors · Leontief table · Demand shock simulator</div>
           </div>
         </div>
         <iframe class="model-iframe" src="io_model/index.html" title="I-O Model" loading="lazy"></iframe>
@@ -775,8 +775,8 @@ button { font-family: inherit; cursor: pointer; }
         <div class="model-frame-header">
           <span class="model-frame-pill" style="background:#ccfbf1;color:#0f766e;">PE</span>
           <div>
-            <div class="model-frame-title">Partial Equilibrium Model — WTO Accession Analysis</div>
-            <div class="model-frame-sub">WITS-SMART framework · HS 28–40 (Chemicals &amp; Plastics) · Trade creation, diversion &amp; welfare · 3 tariff scenarios + custom simulator</div>
+            <div class="model-frame-title" data-i18n="fh_pe_title">Partial Equilibrium Model — WTO Accession Analysis</div>
+            <div class="model-frame-sub" data-i18n="fh_pe_sub">WITS-SMART framework · HS 28–40 (Chemicals &amp; Plastics) · Trade creation, diversion &amp; welfare · 3 tariff scenarios + custom simulator</div>
           </div>
         </div>
         <iframe class="model-iframe" src="pe_model/index.html" title="PE Model" loading="lazy"></iframe>
@@ -788,8 +788,8 @@ button { font-family: inherit; cursor: pointer; }
         <div class="model-frame-header">
           <span class="model-frame-pill" style="background:#ede9fe;color:#6d28d9;">CGE</span>
           <div>
-            <div class="model-frame-title">CGE 1-2-3 Model — Uzbekistan 2021</div>
-            <div class="model-frame-sub">Devarajan et al. · CET supply · Armington imports · Trade &amp; fiscal shock simulator</div>
+            <div class="model-frame-title" data-i18n="fh_cge_title">CGE 1-2-3 Model — Uzbekistan 2021</div>
+            <div class="model-frame-sub" data-i18n="fh_cge_sub">Devarajan et al. · CET supply · Armington imports · Trade &amp; fiscal shock simulator</div>
           </div>
         </div>
         <iframe class="model-iframe" src="cge_model/index.html" title="CGE Model" loading="lazy"></iframe>
@@ -801,8 +801,8 @@ button { font-family: inherit; cursor: pointer; }
         <div class="model-frame-header">
           <span class="model-frame-pill" style="background:#fee2e2;color:#991b1b;">FPP</span>
           <div>
-            <div class="model-frame-title">Financial Programming &amp; Policies — CAEM Uzbekistan Sep 2025</div>
-            <div class="model-frame-sub">CAEM framework · Base 2024 · Phillips Curve (λ₂=0.70 imported inflation) · BOP · Fiscal · Monetary · 2025–2027 projection</div>
+            <div class="model-frame-title" data-i18n="fh_fpp_title">Financial Programming &amp; Policies — CAEM Uzbekistan Sep 2025</div>
+            <div class="model-frame-sub" data-i18n="fh_fpp_sub">CAEM framework · Base 2024 · Phillips Curve (λ₂=0.70 imported inflation) · BOP · Fiscal · Monetary · 2025–2027 projection</div>
           </div>
         </div>
         <iframe class="model-iframe" src="fpp_model/index.html" title="FPP Model" loading="lazy"></iframe>
@@ -1041,45 +1041,45 @@ button { font-family: inherit; cursor: pointer; }
 
         <!-- KPI cards row -->
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-bottom:32px;">
-          <div class="macro-card" style="border-top:3px solid #1a56db;">
+          <div class="macro-card" style="border-top:3px solid var(--green);">
             <div class="macro-label">GDP Growth 2025</div>
-            <div class="macro-val" style="color:var(--green);font-size:26px">+7.0%</div>
-            <div class="macro-sub">IMF WEO Apr 2025</div>
+            <div class="macro-val" style="color:var(--green);font-size:26px">+7.7%</div>
+            <div class="macro-sub">Official · Stat Agency</div>
+            <div class="macro-badge up">Actual</div>
+          </div>
+          <div class="macro-card" style="border-top:3px solid #1a56db;">
+            <div class="macro-label">GDP Forecast 2026</div>
+            <div class="macro-val" style="color:var(--blue);font-size:26px">+6.0%</div>
+            <div class="macro-sub">IMF Art. IV Nov 2025</div>
             <div class="macro-badge up">IMF</div>
           </div>
           <div class="macro-card" style="border-top:3px solid #057a55;">
-            <div class="macro-label">GDP Growth 2025</div>
-            <div class="macro-val" style="color:var(--green);font-size:26px">+6.8%</div>
-            <div class="macro-sub">World Bank Jan 2025</div>
+            <div class="macro-label">GDP Forecast 2026</div>
+            <div class="macro-val" style="color:var(--green);font-size:26px">+6.4%</div>
+            <div class="macro-sub">World Bank Apr 2026</div>
             <div class="macro-badge up">World Bank</div>
           </div>
-          <div class="macro-card" style="border-top:3px solid #c27803;">
-            <div class="macro-label">GDP Growth 2025</div>
-            <div class="macro-val" style="color:var(--green);font-size:26px">+6.5%</div>
-            <div class="macro-sub">ADB Apr 2025</div>
-            <div class="macro-badge up">ADB</div>
-          </div>
           <div class="macro-card" style="border-top:3px solid #9061f9;">
-            <div class="macro-label">GDP Growth 2025</div>
-            <div class="macro-val" style="color:var(--green);font-size:26px">+6.8%</div>
-            <div class="macro-sub">EBRD Jan 2025</div>
+            <div class="macro-label">GDP Forecast 2026</div>
+            <div class="macro-val" style="color:var(--purple);font-size:26px">+6.5%</div>
+            <div class="macro-sub">EBRD Mar 2026</div>
             <div class="macro-badge up">EBRD</div>
           </div>
           <div class="macro-card" style="border-top:3px solid var(--red);">
             <div class="macro-label">Inflation 2025</div>
-            <div class="macro-val" style="color:var(--amber);font-size:26px">8.5%</div>
-            <div class="macro-sub">IMF WEO Apr 2025</div>
-            <div class="macro-badge flat">IMF</div>
+            <div class="macro-val" style="color:var(--amber);font-size:26px">7.3%</div>
+            <div class="macro-sub">Annual avg · CBU/Stat</div>
+            <div class="macro-badge flat">Actual</div>
           </div>
-          <div class="macro-card" style="border-top:3px solid var(--teal);">
-            <div class="macro-label">Current Account</div>
-            <div class="macro-val" style="color:var(--red);font-size:26px">−5.2%</div>
-            <div class="macro-sub">% of GDP · 2025</div>
-            <div class="macro-badge down">IMF</div>
+          <div class="macro-card" style="border-top:3px solid var(--amber);">
+            <div class="macro-label">Inflation (Mar 2026)</div>
+            <div class="macro-val" style="color:var(--amber);font-size:26px">7.1%</div>
+            <div class="macro-sub">YoY · latest reading</div>
+            <div class="macro-badge flat">CBU</div>
           </div>
           <div class="macro-card" style="border-top:3px solid var(--navy);">
             <div class="macro-label">Fiscal Balance</div>
-            <div class="macro-val" style="color:var(--red);font-size:26px">−3.5%</div>
+            <div class="macro-val" style="color:var(--red);font-size:26px">−3.4%</div>
             <div class="macro-sub">% of GDP · 2025</div>
             <div class="macro-badge down">IMF / WB</div>
           </div>
@@ -1095,8 +1095,8 @@ button { font-family: inherit; cursor: pointer; }
         <div class="chart-card" style="margin-bottom:28px;">
           <div class="chart-card-header">
             <div>
-              <div class="chart-card-title">GDP Growth Forecasts — Uzbekistan 2024–2026</div>
-              <div class="chart-card-sub">IMF · World Bank · ADB · EBRD · latest projections</div>
+              <div class="chart-card-title">GDP Growth — Uzbekistan 2023–2027</div>
+              <div class="chart-card-sub">Actual (2023–2025) + Forecasts (2026–2027) · IMF · World Bank · EBRD · latest 2026 reports</div>
             </div>
           </div>
           <div style="height:260px;position:relative"><canvas id="intl-gdp-chart"></canvas></div>
@@ -1106,8 +1106,8 @@ button { font-family: inherit; cursor: pointer; }
         <div class="chart-card" style="margin-bottom:28px;">
           <div class="chart-card-header">
             <div>
-              <div class="chart-card-title">Inflation Forecasts — Uzbekistan 2024–2026</div>
-              <div class="chart-card-sub">Average annual consumer price inflation (%)</div>
+              <div class="chart-card-title">Inflation — Uzbekistan 2023–2027</div>
+              <div class="chart-card-sub">Average annual CPI inflation (%) · actual + forecasts from latest 2026 reports</div>
             </div>
           </div>
           <div style="height:220px;position:relative"><canvas id="intl-inf-chart"></canvas></div>
@@ -1120,24 +1120,25 @@ button { font-family: inherit; cursor: pointer; }
             <thead>
               <tr>
                 <th>Indicator</th>
+                <th style="color:var(--green)">📊 Actual</th>
                 <th style="color:#1a56db">🏛 IMF</th>
                 <th style="color:#057a55">🌍 World Bank</th>
-                <th style="color:#c27803">🏦 ADB</th>
                 <th style="color:#9061f9">🏗 EBRD</th>
-                <th>Source / Year</th>
+                <th>Source</th>
               </tr>
             </thead>
             <tbody>
-              <tr style="background:#f0fdf4"><td><strong>Real GDP Growth 2024</strong></td><td>7.2%</td><td>7.0%</td><td>6.8%</td><td>7.0%</td><td>WEO Apr 25 / WB Jan 25 / ADO Apr 25 / REP Jan 25</td></tr>
-              <tr><td><strong>Real GDP Growth 2025</strong></td><td>7.0%</td><td>6.8%</td><td>6.5%</td><td>6.8%</td><td>WEO Apr 25 / WB Jan 25 / ADO Apr 25 / REP Jan 25</td></tr>
-              <tr style="background:#f0fdf4"><td><strong>Real GDP Growth 2026</strong></td><td>6.5%</td><td>6.5%</td><td>6.3%</td><td>—</td><td>WEO Apr 25 / WB Jan 25 / ADO Apr 25</td></tr>
-              <tr><td><strong>Inflation 2024 (avg)</strong></td><td>9.9%</td><td>9.5%</td><td>10.0%</td><td>9.8%</td><td>WEO Apr 25 / WB Jan 25 / ADO Apr 25</td></tr>
-              <tr style="background:#f0fdf4"><td><strong>Inflation 2025 (avg)</strong></td><td>8.5%</td><td>8.0%</td><td>8.5%</td><td>8.0%</td><td>WEO Apr 25 / WB Jan 25 / ADO Apr 25</td></tr>
-              <tr><td><strong>Current Account (% GDP) 2025</strong></td><td>−5.2%</td><td>−5.5%</td><td>−5.0%</td><td>—</td><td>WEO Apr 25 / WB Jan 25 / ADO Apr 25</td></tr>
-              <tr style="background:#f0fdf4"><td><strong>Fiscal Balance (% GDP) 2025</strong></td><td>−3.5%</td><td>−3.2%</td><td>−3.0%</td><td>—</td><td>WEO Apr 25 / WB Jan 25 / ADO Apr 25</td></tr>
-              <tr><td><strong>Public Debt (% GDP) 2025</strong></td><td>36%</td><td>35%</td><td>—</td><td>—</td><td>WEO Apr 25 / WB Jan 25</td></tr>
-              <tr style="background:#f0fdf4"><td><strong>FDI Inflows (% GDP) 2025</strong></td><td>4.5%</td><td>4.2%</td><td>—</td><td>—</td><td>WEO Apr 25 / WB Jan 25</td></tr>
-              <tr><td><strong>Poverty Rate ($6.85 PPP)</strong></td><td>—</td><td>~11%</td><td>—</td><td>—</td><td>WB Poverty Brief 2024</td></tr>
+              <tr style="background:#f0fdf4"><td><strong>Real GDP Growth 2024</strong></td><td>7.5%</td><td>7.2%</td><td>7.0%</td><td>7.0%</td><td>Stat Agency / WEO Oct 25 / WB Apr 26 / EBRD Mar 26</td></tr>
+              <tr><td><strong>Real GDP Growth 2025</strong></td><td><strong style="color:var(--green)">7.7%</strong></td><td>6.5%</td><td>6.5%</td><td>6.2%</td><td>Stat Agency (official) / IMF Art IV Nov 25 / WB Apr 26 / EBRD Mar 26</td></tr>
+              <tr style="background:#f0fdf4"><td><strong>Real GDP Growth 2026f</strong></td><td>—</td><td>6.0%</td><td>6.4%</td><td>6.5%</td><td>IMF Art IV Nov 25 / WB Apr 26 / EBRD Mar 26</td></tr>
+              <tr><td><strong>Real GDP Growth 2027f</strong></td><td>—</td><td>5.8%</td><td>6.7%</td><td>—</td><td>IMF Art IV Nov 25 / WB Apr 26</td></tr>
+              <tr style="background:#f0fdf4"><td><strong>Inflation 2024 (avg)</strong></td><td>10.0%</td><td>9.9%</td><td>9.5%</td><td>9.8%</td><td>CBU/Stat Agency</td></tr>
+              <tr><td><strong>Inflation 2025 (avg)</strong></td><td><strong style="color:var(--amber)">7.3%</strong></td><td>7.5%</td><td>7.5%</td><td>7.5%</td><td>CBU/Stat Agency (official)</td></tr>
+              <tr style="background:#f0fdf4"><td><strong>Inflation Mar 2026 (YoY)</strong></td><td><strong style="color:var(--amber)">7.1%</strong></td><td>—</td><td>—</td><td>—</td><td>CBU latest reading</td></tr>
+              <tr><td><strong>Current Account (% GDP) 2025</strong></td><td>—</td><td>−5.0%</td><td>−5.5%</td><td>—</td><td>IMF Art IV Nov 25 / WB Apr 26</td></tr>
+              <tr style="background:#f0fdf4"><td><strong>Fiscal Balance (% GDP) 2025</strong></td><td>−3.4%</td><td>−3.5%</td><td>−3.2%</td><td>—</td><td>MoF / IMF Nov 25 / WB Apr 26</td></tr>
+              <tr><td><strong>Public Debt (% GDP) 2025</strong></td><td>~34%</td><td>36%</td><td>35%</td><td>—</td><td>MoF / IMF Nov 25 / WB Apr 26</td></tr>
+              <tr style="background:#f0fdf4"><td><strong>Poverty Rate ($6.85 PPP)</strong></td><td>—</td><td>—</td><td>~11%</td><td>—</td><td>WB Poverty Brief 2024</td></tr>
             </tbody>
           </table>
         </div>
@@ -1148,22 +1149,22 @@ button { font-family: inherit; cursor: pointer; }
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;border-left:4px solid #1a56db;">
             <div style="font-size:18px;font-weight:800;color:#1a56db;margin-bottom:6px;">🏛 IMF</div>
             <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">International Monetary Fund</div>
-            <div style="font-size:12.5px;color:var(--text2);line-height:1.6;">Annual Article IV consultations · World Economic Outlook · FSAP. Latest: WEO Apr 2025 projects 7.0% growth; inflation declining to 8.5%; recommends continued fiscal consolidation and exchange rate flexibility.</div>
+            <div style="font-size:12.5px;color:var(--text2);line-height:1.6;">Annual Article IV consultations · World Economic Outlook · FSAP. Latest: Art. IV Nov 2025 — 2025 GDP revised up to 6.5%, 2026 forecast 6.0%; inflation easing to ~7.5%; recommends continued fiscal consolidation, monetary tightening and exchange rate flexibility to anchor inflation expectations.</div>
           </div>
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;border-left:4px solid #057a55;">
             <div style="font-size:18px;font-weight:800;color:#057a55;margin-bottom:6px;">🌍 World Bank</div>
             <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">World Bank Group</div>
-            <div style="font-size:12.5px;color:var(--text2);line-height:1.6;">Uzbekistan Economic Update (semi-annual) · Country Economic Memorandum · Poverty & Equity Brief. Latest (Jan 2025): 6.8% growth; poverty at 11%; private sector share growing; energy subsidy reform ongoing.</div>
+            <div style="font-size:12.5px;color:var(--text2);line-height:1.6;">Uzbekistan Economic Update (semi-annual) · Country Economic Memorandum · Poverty & Equity Brief. Latest (Apr 2026): 2025 GDP actual 7.7%; 2026 forecast 6.4%, 2027 forecast 6.7%; poverty at ~11%; energy subsidy reform and private sector development key priorities.</div>
           </div>
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;border-left:4px solid #c27803;">
             <div style="font-size:18px;font-weight:800;color:#c27803;margin-bottom:6px;">🏦 ADB</div>
             <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">Asian Development Bank</div>
-            <div style="font-size:12.5px;color:var(--text2);line-height:1.6;">Asian Development Outlook (ADO) · Country Partnership Strategy. Latest (Apr 2025): 6.5% growth; infrastructure bottlenecks key constraint; $8bn renewable energy investment target; fiscal pressures from subsidy reform.</div>
+            <div style="font-size:12.5px;color:var(--text2);line-height:1.6;">Asian Development Outlook (ADO) · Country Partnership Strategy. Latest (ADO Apr 2025): 6.5% growth in 2025; infrastructure bottlenecks key constraint; $8bn renewable energy investment target; fiscal pressures from subsidy reform. ADO 2026 update pending April 2026 release.</div>
           </div>
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;border-left:4px solid #9061f9;">
             <div style="font-size:18px;font-weight:800;color:#9061f9;margin-bottom:6px;">🏗 EBRD</div>
             <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">European Bank for Reconstruction and Development</div>
-            <div style="font-size:12.5px;color:var(--text2);line-height:1.6;">Regional Economic Prospects · Transition Report. Latest (Jan 2025): 6.8% growth; private sector share rising; SOE reform critical; green transition financing expanding.</div>
+            <div style="font-size:12.5px;color:var(--text2);line-height:1.6;">Regional Economic Prospects · Transition Report. Latest (Mar 2026): raised 2026 GDP forecast to 6.5% (up from 6.2%); 2025 actual confirmed at 7.7%; strong domestic demand and investment; SOE reform and green transition financing expanding; inflation declining toward target.</div>
           </div>
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;border-left:4px solid var(--teal);">
             <div style="font-size:18px;font-weight:800;color:var(--teal);margin-bottom:6px;">🇺🇳 UN Agencies</div>
@@ -1198,16 +1199,35 @@ const LANGS = {
     chart_legend_stat:'🔵 Statistical Committee — official data',
     chart_legend_fc:'🟠 CERR DFM — forecast',
     intl_title:"International Organizations — Uzbekistan",
-    intl_sub:"Latest projections & assessments · 2025",
+    intl_sub:"Latest projections & assessments · 2026",
     intl_desc:"Macroeconomic forecasts and key findings from IMF, World Bank, ADB, EBRD and UN agencies on Uzbekistan's economy.",
     hero_btn_qpm:'▶ Open QPM Simulator', hero_btn_dfm:'🔮 GDP Forecast',
     hero_btn_pe:'⚖️ Partial Equilibrium', hero_btn_io:'🔗 Input-Output',
     hero_btn_fpp:'💰 FPP', hero_btn_cge:'⚙️ CGE',
+    // model cards
+    mc_qpm_name:'Quarterly Projection Model (QPM)',
+    mc_dfm_name:'GDP Nowcasting (DFM)',
+    mc_io_name:'Input-Output Model (2022)',
+    mc_pe_name:'Partial Equilibrium Model',
+    mc_cge_name:'Computable General Equilibrium (CGE)',
+    mc_fpp_name:'Financial Programming & Policies (FPP)',
+    mc_qpm_act:'Open QPM Simulator', mc_dfm_act:'Open Nowcasting Dashboard',
+    mc_io_act:'Open I-O Simulator', mc_pe_act:'Open PE Simulator',
+    mc_cge_act:'Open CGE Simulator', mc_fpp_act:'Open FPP Simulator',
+    models_title:'Models & Tools', models_sub:'Click to open a model',
+    pq_title:'Policy Questions You Can Answer', pq_sub:'Click a question to open the relevant model',
+    // frame headers
+    fh_qpm_title:'Quarterly Projection Model', fh_qpm_sub:'New-Keynesian DSGE · IRF Simulator · 4 shocks · 20Q horizon',
+    fh_dfm_title:'GDP Nowcasting — Dynamic Factor Model', fh_dfm_sub:'Mixed-frequency · 34 indicators · Live Kalman filter update',
+    fh_pe_title:'Partial Equilibrium Model — WTO Accession Analysis', fh_pe_sub:'WITS-SMART framework · Full HS coverage · Trade creation, diversion & welfare',
+    fh_io_title:'Input-Output Model — Uzbekistan 2022', fh_io_sub:'136 sectors · Leontief table · Demand shock simulator',
+    fh_cge_title:'CGE 1-2-3 Model — Uzbekistan 2021', fh_cge_sub:'Devarajan et al. · CET supply · Armington imports · Trade & fiscal shock simulator',
+    fh_fpp_title:'Financial Programming & Policies — CAEM Uzbekistan', fh_fpp_sub:'CAEM framework · Base 2024 · Phillips Curve · BOP · Fiscal · 2025–2027 projection',
   },
   ru: {
     nav_section_overview:'Навигация', nav_section_models:'Доступные модели', nav_section_platform:'Платформа',
     nav_home:'Главная', nav_intl:'Межд. организации', nav_compare:'Сравнить сценарии',
-    nav_qpm:'QPM симулятор', nav_dfm:'Прогноз ВВП', nav_pe:'Частичное равновесие',
+    nav_qpm:'Симулятор КПМ', nav_dfm:'Прогноз ВВП', nav_pe:'Модель частичного равновесия',
     nav_io:'Межотраслевой баланс', nav_cge:'Модель CGE', nav_fpp:'Фин. программирование', nav_about:'Методология',
     snap_title:'Макро-индикаторы', snap_sub:'Ключевые показатели · Последние данные',
     snap_gdp_nom:'Номинальный ВВП', snap_gdp:'Рост ВВП г/г', snap_gdp_fc:'Прогноз ВВП',
@@ -1216,29 +1236,63 @@ const LANGS = {
     chart_legend_stat:'🔵 Статкомитет — официальные данные',
     chart_legend_fc:'🟠 ЦЭИР ДФМ — прогноз',
     intl_title:"Международные организации — Узбекистан",
-    intl_sub:"Последние прогнозы и оценки · 2025",
-    intl_desc:"Макроэкономические прогнозы и ключевые выводы МВФ, Всемирного банка, АБР, ЕБРР и агентств ООН по экономике Узбекистана.",
-    hero_btn_qpm:'▶ Открыть QPM', hero_btn_dfm:'🔮 Прогноз ВВП',
+    intl_sub:"Последние прогнозы и оценки · 2026",
+    intl_desc:"Макроэкономические прогнозы МВФ, Всемирного банка, АБР, ЕБРР и агентств ООН по экономике Узбекистана.",
+    hero_btn_qpm:'▶ Открыть КПМ', hero_btn_dfm:'🔮 Прогноз ВВП',
     hero_btn_pe:'⚖️ Частичное равновесие', hero_btn_io:'🔗 МОБ',
     hero_btn_fpp:'💰 ФПП', hero_btn_cge:'⚙️ CGE',
+    mc_qpm_name:'Квартальная прогнозная модель (КПМ)',
+    mc_dfm_name:'Прогноз ВВП (ДФМ)',
+    mc_io_name:'Межотраслевой баланс (2022)',
+    mc_pe_name:'Модель частичного равновесия',
+    mc_cge_name:'Вычислимая модель общего равновесия (CGE)',
+    mc_fpp_name:'Финансовое программирование и политика (ФПП)',
+    mc_qpm_act:'Открыть КПМ', mc_dfm_act:'Открыть прогноз ВВП',
+    mc_io_act:'Открыть МОБ', mc_pe_act:'Открыть модель ЧР',
+    mc_cge_act:'Открыть CGE', mc_fpp_act:'Открыть ФПП',
+    models_title:'Модели и инструменты', models_sub:'Нажмите для открытия',
+    pq_title:'Вопросы политики, на которые вы можете ответить', pq_sub:'Нажмите вопрос, чтобы открыть нужную модель',
+    fh_qpm_title:'Квартальная прогнозная модель (КПМ)', fh_qpm_sub:'Новокейнсианская ДСГЭ · Симулятор ИРФ · 4 шока · горизонт 20 кварталов',
+    fh_dfm_title:'Прогноз ВВП — Динамическая факторная модель', fh_dfm_sub:'Смешанная частота · 34 индикатора · Фильтр Калмана в реальном времени',
+    fh_pe_title:'Модель частичного равновесия — Анализ вступления в ВТО', fh_pe_sub:'Методология WITS-SMART · Все главы ТН ВЭД · Создание и отклонение торговли',
+    fh_io_title:'Межотраслевой баланс — Узбекистан 2022', fh_io_sub:'136 секторов · Таблица Леонтьева · Симулятор шоков спроса',
+    fh_cge_title:'CGE модель 1-2-3 — Узбекистан 2021', fh_cge_sub:'Деварajan и др. · Функция CET · Спрос Армингтон · Торговые и фискальные шоки',
+    fh_fpp_title:'Финансовое программирование и политика — CAEM Узбекистан', fh_fpp_sub:'Система CAEM · База 2024 · Кривая Филлипса · ПБ · Фискал · Прогноз 2025–2027',
   },
   uz: {
     nav_section_overview:'Navigatsiya', nav_section_models:'Mavjud modellar', nav_section_platform:'Platforma',
     nav_home:'Bosh sahifa', nav_intl:'Xalqaro tashkilotlar', nav_compare:'Stsenariylarni solishtirish',
-    nav_qpm:'QPM simulyatori', nav_dfm:'YaIM prognozi', nav_pe:'Qisman muvozanat',
-    nav_io:'Tarmoqlararo balans', nav_cge:'CGE modeli', nav_fpp:'Moliyaviy dasturlash', nav_about:'Metodologiya',
+    nav_qpm:"Choraklik prognoz modeli simulyatori", nav_dfm:'YaIM prognozi', nav_pe:'Qisman muvozanat modeli',
+    nav_io:'Tarmoqlararo balans', nav_cge:'Umumiy muvozanat modeli', nav_fpp:'Moliyaviy dasturlash', nav_about:'Metodologiya',
     snap_title:"Makro ko'rsatkichlar", snap_sub:"Asosiy ko'rsatkichlar · So'nggi ma'lumotlar",
     snap_gdp_nom:'Nominal YaIM', snap_gdp:"YaIM o'sishi (y/y)", snap_gdp_fc:'YaIM prognozi',
-    snap_inf:'Inflyatsiya', snap_ind:"Sanoat o'sishi (y/y)", snap_svc:"Xizmatlar o'sishi (y/y)",
+    snap_inf:"Inflyatsiya", snap_ind:"Sanoat o'sishi (y/y)", snap_svc:"Xizmatlar o'sishi (y/y)",
     snap_agr:"Qishloq xo'jaligi (y/y)", snap_rate:'Asosiy stavka',
     chart_legend_stat:"🔵 Statistika qo'mitasi — rasmiy ma'lumotlar",
     chart_legend_fc:"🟠 IQTISODIYOT MARKAZI DFM — prognoz",
     intl_title:"Xalqaro tashkilotlar — O'zbekiston",
-    intl_sub:"So'nggi prognozlar va baholar · 2025",
+    intl_sub:"So'nggi prognozlar va baholar · 2026",
     intl_desc:"XVF, Jahon banki, ADB, YIIB va BMT agentliklarining O'zbekiston iqtisodiyoti bo'yicha makroiqtisodiy prognozlari.",
-    hero_btn_qpm:"▶ QPM ochish", hero_btn_dfm:"🔮 YaIM prognozi",
+    hero_btn_qpm:"▶ CPM simulyatorini ochish", hero_btn_dfm:"🔮 YaIM prognozi",
     hero_btn_pe:"⚖️ Qisman muvozanat", hero_btn_io:"🔗 Tarmoqlararo",
-    hero_btn_fpp:"💰 Moliyaviy dasturlash", hero_btn_cge:"⚙️ CGE",
+    hero_btn_fpp:"💰 Moliyaviy dasturlash", hero_btn_cge:"⚙️ Umumiy muvozanat",
+    mc_qpm_name:"Choraklik prognoz modeli (CPM)",
+    mc_dfm_name:"YaIM prognozi (DFM)",
+    mc_io_name:"Tarmoqlararo balans (2022)",
+    mc_pe_name:"Qisman muvozanat modeli",
+    mc_cge_name:"Umumiy muvozanat modeli (CGE)",
+    mc_fpp_name:"Moliyaviy dasturlash va siyosat (MDS)",
+    mc_qpm_act:"CPM simulyatorini ochish", mc_dfm_act:"YaIM prognozini ochish",
+    mc_io_act:"TMB simulyatorini ochish", mc_pe_act:"QM simulyatorini ochish",
+    mc_cge_act:"CGE simulyatorini ochish", mc_fpp_act:"MDS simulyatorini ochish",
+    models_title:"Modellar va vositalar", models_sub:"Ochish uchun bosing",
+    pq_title:"Siz javob bera oladigan siyosat savollari", pq_sub:"Tegishli modelni ochish uchun savolni bosing",
+    fh_qpm_title:"Choraklik prognoz modeli (CPM)", fh_qpm_sub:"Yangi Keynscha DSGE · IRF simulyatori · 4 zarbа · 20 chorak gorizonti",
+    fh_dfm_title:"YaIM prognozi — Dinamik faktor modeli", fh_dfm_sub:"Aralash chastota · 34 ko'rsatkich · Kalman filtri",
+    fh_pe_title:"Qisman muvozanat modeli — JTO tahlili", fh_pe_sub:"WITS-SMART metodologiyasi · Barcha HS bo'limlari · Savdo yaratilishi va yo'naltirilishi",
+    fh_io_title:"Tarmoqlararo balans — O'zbekiston 2022", fh_io_sub:"136 tarmoq · Leontief jadvali · Talab zarbasi simulyatori",
+    fh_cge_title:"CGE 1-2-3 modeli — O'zbekiston 2021", fh_cge_sub:"Devarajan va boshq. · CET taklifi · Armington importi · Savdo va fiskal zarbalar",
+    fh_fpp_title:"Moliyaviy dasturlash va siyosat — CAEM", fh_fpp_sub:"CAEM tizimi · 2024 baza yili · Filips egri chizig'i · TB · Fiskal · 2025–2027 prognoz",
   }
 };
 let currentLang = 'en';
@@ -1280,12 +1334,12 @@ function initIntlCharts() {
     new Chart(gdpCtx, {
       type: 'bar',
       data: {
-        labels: ['2023', '2024', '2025f', '2026f'],
+        labels: ['2023', '2024', '2025 actual', '2026f', '2027f'],
         datasets: [
-          { label: 'IMF',        data: [6.3, 7.2, 7.0, 6.5], backgroundColor: 'rgba(26,86,219,.8)',  borderRadius: 5 },
-          { label: 'World Bank', data: [6.3, 7.0, 6.8, 6.5], backgroundColor: 'rgba(5,122,85,.8)',   borderRadius: 5 },
-          { label: 'ADB',        data: [6.3, 6.8, 6.5, 6.3], backgroundColor: 'rgba(194,120,3,.8)',  borderRadius: 5 },
-          { label: 'EBRD',       data: [6.3, 7.0, 6.8, null], backgroundColor: 'rgba(144,97,249,.8)', borderRadius: 5 },
+          { label: 'Actual (Stat Agency)', data: [6.3, 7.5, 7.7, null, null], backgroundColor: 'rgba(22,163,74,.85)',   borderRadius: 5 },
+          { label: 'IMF',                  data: [null, null, null, 6.0, 5.8], backgroundColor: 'rgba(26,86,219,.8)',   borderRadius: 5 },
+          { label: 'World Bank',           data: [null, null, null, 6.4, 6.7], backgroundColor: 'rgba(5,122,85,.8)',    borderRadius: 5 },
+          { label: 'EBRD',                 data: [null, null, null, 6.5, null], backgroundColor: 'rgba(144,97,249,.8)', borderRadius: 5 },
         ]
       },
       options: {
@@ -1308,11 +1362,11 @@ function initIntlCharts() {
     new Chart(infCtx, {
       type: 'line',
       data: {
-        labels: ['2023', '2024', '2025f', '2026f'],
+        labels: ['2023', '2024', '2025 actual', '2026f', '2027f'],
         datasets: [
-          { label: 'IMF',        data: [11.5, 9.9, 8.5, 7.0], borderColor: '#1a56db', backgroundColor: 'rgba(26,86,219,.08)',  tension: 0.3, fill: false, pointRadius: 5 },
-          { label: 'World Bank', data: [11.5, 9.5, 8.0, 6.5], borderColor: '#057a55', backgroundColor: 'rgba(5,122,85,.08)',   tension: 0.3, fill: false, pointRadius: 5 },
-          { label: 'ADB',        data: [11.5, 10.0, 8.5, null], borderColor: '#c27803', backgroundColor: 'rgba(194,120,3,.08)', tension: 0.3, fill: false, pointRadius: 5 },
+          { label: 'Actual (CBU/Stat)', data: [11.5, 10.0, 7.3, null, null], borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,.08)',  tension: 0.3, fill: false, pointRadius: 5 },
+          { label: 'IMF',               data: [null, null, null, 6.5, 5.5],  borderColor: '#1a56db', backgroundColor: 'rgba(26,86,219,.08)',  tension: 0.3, fill: false, pointRadius: 5 },
+          { label: 'World Bank',        data: [null, null, null, 6.8, 5.8],  borderColor: '#057a55', backgroundColor: 'rgba(5,122,85,.08)',   tension: 0.3, fill: false, pointRadius: 5 },
         ]
       },
       options: {
