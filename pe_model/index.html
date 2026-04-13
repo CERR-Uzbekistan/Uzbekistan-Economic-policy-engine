@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Partial Equilibrium Model — Uzbekistan WTO Accession</title>
+<title>Partial Equilibrium Model — Uzbekistan Trade Analysis</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="pe_data.js"></script>
 <style>
 :root{
   --bg:#f4f6f9;--card:#fff;--primary:#1a3a6e;--primary-l:#2563eb;
   --amber:#d97706;--amber-l:#f59e0b;--green:#16a34a;--green-l:#22c55e;
-  --red:#dc2626;--teal:#0d9488;--purple:#7c3aed;--orange:#ea580c;
+  --red:#dc2626;--teal:#0d9488;--teal-l:#14b8a6;--purple:#7c3aed;--orange:#ea580c;
   --text:#0f172a;--text2:#475569;--text3:#94a3b8;
   --border:#e2e8f0;--shadow:0 2px 12px rgba(0,0,0,.07);--radius:12px;
 }
@@ -24,11 +24,12 @@ header{background:linear-gradient(135deg,#0d2550,#1a3a6e,#1e4d8c);color:#fff;pad
   display:flex;align-items:center;justify-content:center;font-size:18px;}
 .header-title h1{font-size:16px;font-weight:700;}
 .header-title p{font-size:10px;opacity:.6;text-transform:uppercase;letter-spacing:1px;}
-.hbadge{margin-left:auto;background:rgba(13,148,136,.2);color:#5eead4;border:1px solid rgba(13,148,136,.3);
-  font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.5px;}
-.hback{margin-left:8px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);
-  font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;text-decoration:none;
-  transition:background .2s;}
+.hbadge{margin-left:auto;background:rgba(13,148,136,.2);color:#5eead4;
+  border:1px solid rgba(13,148,136,.3);font-size:10px;font-weight:700;
+  padding:3px 10px;border-radius:20px;letter-spacing:.5px;}
+.hback{margin-left:8px;background:rgba(255,255,255,.1);color:#fff;
+  border:1px solid rgba(255,255,255,.2);font-size:11px;font-weight:600;
+  padding:4px 12px;border-radius:20px;text-decoration:none;transition:background .2s;}
 .hback:hover{background:rgba(255,255,255,.2);}
 
 nav{background:var(--card);border-bottom:1px solid var(--border);display:flex;padding:0 20px;overflow-x:auto;}
@@ -37,13 +38,12 @@ nav{background:var(--card);border-bottom:1px solid var(--border);display:flex;pa
 .tab:hover{color:var(--primary);}
 .tab.active{color:var(--primary);border-bottom-color:var(--primary);}
 
-.page{display:none;padding:22px 22px 60px;max-width:1320px;margin:0 auto;}
+.page{display:none;padding:20px 20px 60px;max-width:1360px;margin:0 auto;}
 .page.active{display:block;}
 
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
-.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
 .span2{grid-column:span 2;}
 .span3{grid-column:span 3;}
 
@@ -51,85 +51,102 @@ nav{background:var(--card);border-bottom:1px solid var(--border);display:flex;pa
   padding:18px 20px;border:1px solid var(--border);}
 .card-title{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;
   color:var(--text3);margin-bottom:4px;}
-.card-sub{font-size:11px;color:#aab;margin-bottom:12px;}
-.kpi{font-size:28px;font-weight:800;line-height:1.1;}
+.card-sub{font-size:11px;color:#94a3b8;margin-bottom:10px;}
+.kpi{font-size:26px;font-weight:800;line-height:1.1;}
 .kpi-unit{font-size:12px;color:var(--text2);margin-top:3px;}
 .kpi-note{font-size:11px;color:var(--text3);margin-top:5px;}
+
 .slabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
-  color:var(--text3);margin:22px 0 12px;display:flex;align-items:center;gap:8px;}
+  color:var(--text3);margin:20px 0 12px;display:flex;align-items:center;gap:8px;}
 .slabel::after{content:'';flex:1;height:1px;background:var(--border);}
-.chart-wrap{position:relative;}
 
 table{width:100%;border-collapse:collapse;font-size:12.5px;}
 th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.6px;
   color:var(--text3);font-weight:700;padding:8px 10px;border-bottom:2px solid var(--border);
-  cursor:pointer;user-select:none;white-space:nowrap;}
+  white-space:nowrap;cursor:pointer;user-select:none;}
 th:hover{color:var(--primary);}
-td{padding:7px 10px;border-bottom:1px solid #f0f2f5;vertical-align:middle;}
+td{padding:6px 10px;border-bottom:1px solid #f0f2f5;vertical-align:middle;}
 tr:hover td{background:#f8fbff;}
-.code-badge{font-family:'JetBrains Mono','Consolas',monospace;font-size:10px;
-  background:var(--bg);padding:2px 6px;border-radius:5px;color:var(--text2);font-weight:700;}
-.badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.4px;}
-.badge-wto{background:#d1fae5;color:#065f46;}
-.badge-fta{background:#dbeafe;color:#1e40af;}
-.badge-non{background:#fef3c7;color:#92400e;}
+tfoot td{font-weight:800;background:#f8fafc;border-top:2px solid var(--border);}
+
+.code-badge{font-family:'Consolas',monospace;font-size:10px;background:var(--bg);
+  padding:2px 6px;border-radius:5px;color:var(--text2);font-weight:700;}
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;
+  border-radius:20px;letter-spacing:.4px;}
+.badge-mfn{background:#fef3c7;color:#92400e;}
+.badge-fta{background:#d1fae5;color:#065f46;}
+.badge-full{background:#ede9fe;color:#5b21b6;}
 .pos{color:var(--green);font-weight:700;}
 .neg{color:var(--red);font-weight:700;}
 
-/* Scenario selector */
-.scenario-bar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center;}
-.sc-btn{padding:8px 20px;border-radius:30px;border:2px solid var(--border);background:var(--card);
-  font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;color:var(--text2);}
-.sc-btn:hover{border-color:var(--teal);color:var(--teal);}
-.sc-btn.active{background:var(--teal);border-color:var(--teal);color:#fff;}
-.sc-btn.s2.active{background:#7c3aed;border-color:#7c3aed;color:#fff;}
-.sc-btn.s3.active{background:#ea580c;border-color:#ea580c;color:#fff;}
+.bar-h{height:6px;border-radius:3px;background:#e2e8f0;overflow:hidden;margin-top:3px;}
+.bar-hf{height:100%;border-radius:3px;}
 
-/* Welfare summary box */
-.welfare-box{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border:1px solid var(--border);
-  border-radius:10px;overflow:hidden;margin-top:14px;}
-.wb-cell{padding:14px 16px;border-right:1px solid var(--border);}
-.wb-cell:last-child{border-right:none;}
-.wb-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);margin-bottom:4px;}
-.wb-value{font-size:20px;font-weight:800;}
+/* Scenario controls */
+.sim-controls{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px 20px;margin-bottom:16px;}
+.sim-controls h3{font-size:14px;font-weight:700;color:var(--primary);margin-bottom:14px;}
+.ctrl-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.ctrl-block{background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:14px 16px;}
+.ctrl-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
+  color:var(--text3);margin-bottom:10px;}
+.ctrl-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.ctrl-row label{font-size:12px;color:var(--text2);flex:1;}
+input[type=range]{flex:1;accent-color:var(--teal);height:4px;}
+.ctrl-val{font-size:13px;font-weight:800;color:var(--teal);min-width:44px;text-align:right;}
+select.ctrl-select{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:7px;
+  font-size:12px;background:#fff;color:var(--text);cursor:pointer;margin-bottom:6px;}
+.chip-group{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.chip{padding:4px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;
+  font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--text2);}
+.chip:hover{border-color:var(--teal);color:var(--teal);}
+.chip.active{background:var(--teal);border-color:var(--teal);color:#fff;}
 
-/* Range slider */
-.slider-row{display:flex;align-items:center;gap:14px;margin:14px 0;}
-input[type=range]{flex:1;accent-color:var(--teal);}
-.slider-val{font-size:18px;font-weight:800;color:var(--teal);min-width:60px;text-align:right;}
+/* Result KPI row */
+.result-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;}
+.result-card{background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;box-shadow:var(--shadow);}
+.result-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
+  color:var(--text3);margin-bottom:4px;}
+.result-val{font-size:22px;font-weight:800;line-height:1.1;}
+.result-unit{font-size:11px;color:var(--text2);margin-top:2px;}
 
-/* Findings */
-.finding{display:flex;gap:10px;padding:10px 14px;background:#f0fdf4;border-left:3px solid var(--green);
-  border-radius:0 8px 8px 0;margin-bottom:8px;font-size:13px;line-height:1.5;}
-.finding-num{font-size:11px;font-weight:800;color:var(--green);min-width:20px;}
-
-/* Method box */
-.method-box{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:18px 22px;
-  margin-bottom:16px;}
-.method-box h3{font-size:14px;font-weight:700;color:var(--primary);margin-bottom:10px;}
-.method-box p{font-size:13px;line-height:1.7;color:var(--text2);margin-bottom:8px;}
-.method-box code{background:#e2e8f0;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px;color:var(--primary);}
-.formula-box{background:var(--primary);color:#e2e8f0;border-radius:8px;padding:14px 20px;
-  font-family:monospace;font-size:13px;line-height:1.8;margin:12px 0;}
-
-/* Report button */
-.btn{padding:9px 20px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:700;
-  transition:all .2s;display:inline-flex;align-items:center;gap:6px;}
+/* Buttons */
+.btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-size:12px;
+  font-weight:700;transition:all .2s;display:inline-flex;align-items:center;gap:6px;}
 .btn-primary{background:var(--primary);color:#fff;}
 .btn-primary:hover{background:#1e4d8c;}
 .btn-teal{background:var(--teal);color:#fff;}
 .btn-teal:hover{background:#0f766e;}
+.btn-ghost{background:#f1f5f9;color:var(--text2);border:1px solid var(--border);}
+.btn-ghost:hover{background:#e2e8f0;}
+.btn-green{background:var(--green);color:#fff;}
 
-/* Bar-indicator */
-.bar-indicator{height:6px;border-radius:3px;background:var(--border);overflow:hidden;margin-top:4px;}
-.bar-fill{height:100%;border-radius:3px;background:var(--teal);}
-.bar-fill.neg-bar{background:var(--red);}
+/* Finding */
+.finding{display:flex;gap:10px;padding:9px 14px;background:#f0fdf4;
+  border-left:3px solid var(--green);border-radius:0 8px 8px 0;
+  margin-bottom:7px;font-size:12.5px;line-height:1.5;}
+.finding-n{font-size:11px;font-weight:800;color:var(--green);min-width:18px;}
 
-/* Info tag */
-.info-tag{font-size:10px;background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe;
-  border-radius:20px;padding:2px 8px;font-weight:700;}
+/* Country flag-like circles */
+.ctry{display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:var(--teal);margin-right:4px;vertical-align:middle;}
 
-@media(max-width:900px){.g4,.g3,.g2{grid-template-columns:1fr;}.span2,.span3{grid-column:auto;}}
+/* Section row highlight */
+.sec-row{background:#f0f9ff;}
+.sec-row td{font-weight:700;color:var(--primary);}
+
+@media(max-width:900px){
+  .g4,.g3,.g2,.ctrl-grid,.result-row{grid-template-columns:1fr;}
+  .span2,.span3{grid-column:auto;}
+}
+
+/* Print */
+@media print{
+  header,nav{display:none!important;}
+  .page{display:block!important;padding:0;}
+  .no-print{display:none!important;}
+}
 </style>
 </head>
 <body>
@@ -138,7 +155,7 @@ input[type=range]{flex:1;accent-color:var(--teal);}
   <div class="logo">⚖️</div>
   <div class="header-title">
     <h1>Partial Equilibrium Model</h1>
-    <p>Uzbekistan Economic Policy Engine · WTO Accession Analysis</p>
+    <p>Uzbekistan Economic Policy Engine · WITS-SMART Trade Analysis</p>
   </div>
   <div class="hbadge">AVAILABLE</div>
   <a href="../index.html" class="hback">← Home</a>
@@ -149,341 +166,350 @@ input[type=range]{flex:1;accent-color:var(--teal);}
   <button class="tab" onclick="showTab('simulator',this)">Scenario Simulator</button>
   <button class="tab" onclick="showTab('sectors',this)">Sector Analysis</button>
   <button class="tab" onclick="showTab('partners',this)">Trade Partners</button>
-  <button class="tab" onclick="showTab('report',this)">Report</button>
   <button class="tab" onclick="showTab('methodology',this)">Methodology</button>
 </nav>
 
-<!-- ═══════════════════════ OVERVIEW ═══════════════════════ -->
+<!-- ════════════════════════ OVERVIEW ════════════════════════ -->
 <div id="tab-overview" class="page active">
 
-  <div class="slabel">Model Context</div>
-  <div id="kpi-overview" class="g5" style="margin-bottom:16px;"></div>
+  <div class="slabel">Trade Statistics — Import Overview</div>
+  <div id="ov-kpis" class="g4" style="margin-bottom:16px;"></div>
 
-  <div class="scenario-bar">
-    <span style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;">Active Scenario:</span>
-    <button class="sc-btn active" onclick="selectScenario(1,this)">−20% Tariff Cut</button>
-    <button class="sc-btn s2" onclick="selectScenario(2,this)">−50% Tariff Cut</button>
-    <button class="sc-btn s3" onclick="selectScenario(3,this)">−80% Tariff Cut</button>
+  <div class="g2" style="margin-bottom:16px;">
+    <div class="card">
+      <div class="card-title">Import by HS Section</div>
+      <div class="card-sub">Total import value (thous. USD) — all HS codes</div>
+      <div style="position:relative;height:300px;">
+        <canvas id="ov-section-chart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Import by Trade Regime</div>
+      <div class="card-sub">MFN (Most-Favoured-Nation) vs FTA (Free Trade Agreement)</div>
+      <div style="position:relative;height:300px;">
+        <canvas id="ov-regime-chart"></canvas>
+      </div>
+    </div>
   </div>
 
   <div class="g2" style="margin-bottom:16px;">
-    <div class="card span2">
-      <div class="card-title">Trade Effects by HS Chapter — <span id="sc-label-chart">20% Tariff Cut</span></div>
-      <div class="card-sub">Total additional trade flow generated per HS chapter (thous. USD)</div>
-      <div class="chart-wrap" style="height:280px;">
-        <canvas id="sectorChart"></canvas>
+    <div class="card">
+      <div class="card-title">Top 15 Import Partners</div>
+      <div class="card-sub">By import value (thous. USD)</div>
+      <div style="position:relative;height:320px;">
+        <canvas id="ov-country-chart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Sections by Weighted Avg MFN Tariff Rate</div>
+      <div class="card-sub">Higher rate = greater potential trade effect from liberalisation</div>
+      <div style="position:relative;height:320px;">
+        <canvas id="ov-tariff-chart"></canvas>
       </div>
     </div>
   </div>
 
   <div class="g2">
     <div class="card">
-      <div class="card-title">Welfare & Revenue Summary — <span id="sc-label-welfare">20% Cut</span></div>
-      <div class="welfare-box" id="welfare-summary"></div>
-      <div style="font-size:11px;color:var(--text3);margin-top:10px;">
-        * Welfare gain = consumer surplus increase from lower prices.<br>
-        * Revenue change = tariff revenue collected by government.
-      </div>
+      <div class="card-title">Products with Highest Tariff Rates (MFN &gt; 15%)</div>
+      <div class="card-sub">Top imported products subject to high MFN tariffs</div>
+      <table id="ov-high-tariff-table">
+        <thead><tr>
+          <th>HS10</th><th>Chapter</th><th>Country</th>
+          <th>MFN Rate</th><th>Import Value</th><th>Trade Effect (20%)</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
     </div>
     <div class="card">
       <div class="card-title">Key Findings</div>
-      <div id="findings-list"></div>
+      <div id="ov-findings"></div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════ SIMULATOR ═══════════════════════ -->
+<!-- ════════════════════════ SIMULATOR ════════════════════════ -->
 <div id="tab-simulator" class="page">
 
-  <div class="card" style="margin-bottom:16px;">
-    <div class="card-title">Custom Tariff Scenario Simulator</div>
-    <div class="card-sub">Adjust the tariff reduction percentage to see estimated trade effects across HS 28–40</div>
+  <div class="sim-controls">
+    <h3>Scenario Configuration</h3>
+    <div class="ctrl-grid">
 
-    <div class="slider-row">
-      <span style="font-size:13px;font-weight:600;color:var(--text2);min-width:120px;">Tariff Reduction:</span>
-      <input type="range" id="cutSlider" min="5" max="100" step="5" value="20" oninput="runSimulator()">
-      <div class="slider-val"><span id="cutPct">20</span>%</div>
-    </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      <span style="font-size:11px;color:var(--text3);">Presets:</span>
-      <button class="btn btn-teal" style="padding:4px 12px;font-size:11px;" onclick="setSlider(20)">20%</button>
-      <button class="btn btn-teal" style="padding:4px 12px;font-size:11px;" onclick="setSlider(50)">50%</button>
-      <button class="btn btn-teal" style="padding:4px 12px;font-size:11px;" onclick="setSlider(80)">80%</button>
-      <button class="btn btn-teal" style="padding:4px 12px;font-size:11px;" onclick="setSlider(100)">100% (Full)</button>
+      <!-- Tariff cut -->
+      <div class="ctrl-block">
+        <div class="ctrl-label">Tariff Reduction</div>
+        <div class="ctrl-row">
+          <label>Cut Rate:</label>
+          <input type="range" id="sim-cut" min="5" max="100" step="5" value="20" oninput="runSim()">
+          <span class="ctrl-val"><span id="sim-cut-val">20</span>%</span>
+        </div>
+        <div class="chip-group">
+          <span class="chip active" onclick="setSlider('sim-cut',20,this)">−20%</span>
+          <span class="chip" onclick="setSlider('sim-cut',50,this)">−50%</span>
+          <span class="chip" onclick="setSlider('sim-cut',80,this)">−80%</span>
+          <span class="chip" onclick="setSlider('sim-cut',100,this)">Full</span>
+        </div>
+        <div class="ctrl-label" style="margin-top:14px;">Apply To Regime</div>
+        <select class="ctrl-select" id="sim-regime" onchange="runSim()">
+          <option value="all">All Regimes</option>
+          <option value="MFN ">MFN Only</option>
+          <option value="full">Full Tariff</option>
+          <option value="FTA">FTA</option>
+        </select>
+      </div>
+
+      <!-- Sector/Country filter -->
+      <div class="ctrl-block">
+        <div class="ctrl-label">Filter by HS Section</div>
+        <select class="ctrl-select" id="sim-section" onchange="updateChapterFilter();runSim()">
+          <option value="all">All Sections</option>
+        </select>
+        <div class="ctrl-label">Filter by HS Chapter</div>
+        <select class="ctrl-select" id="sim-chapter" onchange="runSim()">
+          <option value="all">All Chapters</option>
+        </select>
+        <div class="ctrl-label">Filter by Partner Country</div>
+        <select class="ctrl-select" id="sim-country" onchange="runSim()">
+          <option value="all">All Countries</option>
+        </select>
+      </div>
     </div>
   </div>
 
-  <div id="sim-kpis" class="g4" style="margin-bottom:16px;"></div>
+  <!-- Results -->
+  <div class="result-row" id="sim-results"></div>
 
   <div class="g2" style="margin-bottom:16px;">
     <div class="card">
       <div class="card-title">Trade Creation vs Diversion</div>
-      <div class="chart-wrap" style="height:240px;">
-        <canvas id="simTCTDChart"></canvas>
-      </div>
+      <div style="position:relative;height:240px;"><canvas id="sim-tc-chart"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-title">Effects by Sector</div>
-      <div class="chart-wrap" style="height:240px;">
-        <canvas id="simSectorChart"></canvas>
-      </div>
+      <div class="card-title">Welfare & Revenue Impact</div>
+      <div style="position:relative;height:240px;"><canvas id="sim-welfare-chart"></canvas></div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-title">Sector Results Table — Custom Simulation</div>
-    <table>
-      <thead>
-        <tr>
-          <th>HS</th>
-          <th>Sector</th>
-          <th>Import Base (thous. USD)</th>
-          <th>Avg MFN Rate</th>
-          <th>Elasticity</th>
-          <th>Trade Effect (thous. USD)</th>
-          <th>Impact %</th>
-          <th>Indicator</th>
-        </tr>
-      </thead>
-      <tbody id="sim-table-body"></tbody>
-      <tfoot>
-        <tr style="font-weight:800;background:#f8fafc;">
-          <td colspan="2">TOTAL HS 28–40</td>
-          <td id="sim-tot-imp"></td>
-          <td></td>
-          <td></td>
-          <td id="sim-tot-eff"></td>
-          <td id="sim-tot-pct"></td>
-          <td></td>
-        </tr>
-      </tfoot>
+  <div class="card" style="margin-bottom:16px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+      <div class="card-title" style="margin:0;">Simulation Results by Sector</div>
+      <div style="flex:1;"></div>
+      <button class="btn btn-ghost no-print" onclick="exportCSV('sim')">⬇ Export CSV</button>
+      <button class="btn btn-primary no-print" onclick="printSection('sim')">🖨 Print</button>
+    </div>
+    <table id="sim-table">
+      <thead><tr>
+        <th onclick="sortTable('sim-table',0)">Section</th>
+        <th onclick="sortTable('sim-table',1)">Import Base</th>
+        <th onclick="sortTable('sim-table',2)">Avg MFN Rate</th>
+        <th onclick="sortTable('sim-table',3)">Trade Effect</th>
+        <th onclick="sortTable('sim-table',4)">Trade Creation</th>
+        <th onclick="sortTable('sim-table',5)">Trade Diversion</th>
+        <th onclick="sortTable('sim-table',6)">Welfare Gain</th>
+        <th onclick="sortTable('sim-table',7)">Revenue Change</th>
+        <th>Impact %</th>
+      </tr></thead>
+      <tbody id="sim-tbody"></tbody>
+      <tfoot><tr id="sim-tfoot"></tr></tfoot>
     </table>
   </div>
 </div>
 
-<!-- ═══════════════════════ SECTORS ═══════════════════════ -->
+<!-- ════════════════════════ SECTORS ════════════════════════ -->
 <div id="tab-sectors" class="page">
 
-  <div class="scenario-bar">
-    <span style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;">Scenario:</span>
-    <button class="sc-btn active" onclick="selectScenarioSectors(1,this)">−20%</button>
-    <button class="sc-btn s2" onclick="selectScenarioSectors(2,this)">−50%</button>
-    <button class="sc-btn s3" onclick="selectScenarioSectors(3,this)">−80%</button>
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+    <div style="font-size:13px;font-weight:700;color:var(--text2);">View:</div>
+    <div class="chip-group">
+      <span class="chip active" onclick="setSectorView('section',this)">By Section</span>
+      <span class="chip" onclick="setSectorView('chapter',this)">By Chapter (HS2)</span>
+    </div>
+    <div style="flex:1;"></div>
+    <button class="btn btn-ghost no-print" onclick="exportCSV('sectors')">⬇ Export CSV</button>
+    <button class="btn btn-primary no-print" onclick="printSection('sectors')">🖨 Print</button>
   </div>
 
   <div class="g2" style="margin-bottom:16px;">
     <div class="card">
-      <div class="card-title">Import Structure by Chapter (2022)</div>
-      <div class="chart-wrap" style="height:280px;">
-        <canvas id="importPieChart"></canvas>
-      </div>
+      <div class="card-title">Import Value by Section</div>
+      <div style="position:relative;height:300px;"><canvas id="sec-imp-chart"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-title">Trade Effect vs Avg MFN Rate</div>
-      <div class="chart-sub" style="font-size:11px;color:var(--text3);margin-bottom:8px;">Bubble size = import volume</div>
-      <div class="chart-wrap" style="height:260px;">
-        <canvas id="bubbleChart"></canvas>
-      </div>
+      <div class="card-title">Trade Effect by Section (20% tariff cut baseline)</div>
+      <div style="position:relative;height:300px;"><canvas id="sec-eff-chart"></canvas></div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title">Sector Detail Table — HS Chapters 28–40</div>
-    <table>
+    <div class="card-title" id="sec-table-title">Import & Trade Effects by Section</div>
+    <table id="sec-table">
       <thead>
-        <tr>
-          <th>HS</th>
-          <th>Description</th>
-          <th>Import 2022 (thous. USD)</th>
-          <th>Share of Total</th>
-          <th>Avg MFN Rate</th>
-          <th>Elasticity</th>
-          <th>Trade Effect (thous. USD)</th>
-          <th>Impact %</th>
-        </tr>
+        <tr id="sec-thead"></tr>
       </thead>
-      <tbody id="sector-table-body"></tbody>
-      <tfoot>
-        <tr style="font-weight:800;background:#f8fafc;">
-          <td colspan="2">TOTAL</td>
-          <td id="sec-tot-imp"></td>
-          <td>100%</td>
-          <td></td><td></td>
-          <td id="sec-tot-eff"></td>
-          <td id="sec-tot-pct"></td>
-        </tr>
-      </tfoot>
+      <tbody id="sec-tbody"></tbody>
+      <tfoot><tr id="sec-tfoot"></tr></tfoot>
     </table>
   </div>
 </div>
 
-<!-- ═══════════════════════ PARTNERS ═══════════════════════ -->
+<!-- ════════════════════════ PARTNERS ════════════════════════ -->
 <div id="tab-partners" class="page">
 
-  <div class="scenario-bar">
-    <span style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;">Scenario:</span>
-    <button class="sc-btn active" onclick="selectScenarioPartners(1,this)">−20%</button>
-    <button class="sc-btn s2" onclick="selectScenarioPartners(2,this)">−50%</button>
-    <button class="sc-btn s3" onclick="selectScenarioPartners(3,this)">−80%</button>
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+    <div style="font-size:13px;font-weight:700;color:var(--text2);">Show:</div>
+    <div class="chip-group">
+      <span class="chip active" onclick="setPartnerView('gainers',this)">WTO Gainers</span>
+      <span class="chip" onclick="setPartnerView('losers',this)">FTA / Losers</span>
+      <span class="chip" onclick="setPartnerView('all',this)">All Partners</span>
+    </div>
+    <div style="flex:1;"></div>
+    <button class="btn btn-ghost no-print" onclick="exportCSV('partners')">⬇ Export CSV</button>
+    <button class="btn btn-primary no-print" onclick="printSection('partners')">🖨 Print</button>
   </div>
 
   <div class="g2" style="margin-bottom:16px;">
     <div class="card">
-      <div class="card-title">WTO MFN Partners — Trade Gains</div>
-      <div class="card-sub">Countries gaining from MFN tariff reduction (thous. USD)</div>
-      <div class="chart-wrap" style="height:260px;">
-        <canvas id="gainersChart"></canvas>
-      </div>
+      <div class="card-title">Top Partners — Import Value (thous. USD)</div>
+      <div style="position:relative;height:320px;"><canvas id="part-imp-chart"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-title">FTA/CIS Partners — Trade Diversion</div>
-      <div class="card-sub">Countries losing market share as MFN partners become more competitive</div>
-      <div class="chart-wrap" style="height:260px;">
-        <canvas id="losersChart"></canvas>
-      </div>
+      <div class="card-title">Trade Effects by Partner (20% cut baseline)</div>
+      <div style="position:relative;height:320px;"><canvas id="part-eff-chart"></canvas></div>
     </div>
   </div>
 
-  <div class="g2">
-    <div class="card">
-      <div class="card-title">WTO Partner Gains — <span id="part-sc-label">20% Cut</span></div>
-      <table>
-        <thead>
-          <tr>
-            <th>Country</th>
-            <th>Status</th>
-            <th>Trade Creation</th>
-            <th>Trade Diversion</th>
-            <th>Total Effect</th>
-            <th>Base Trade</th>
-            <th>Impact %</th>
-          </tr>
-        </thead>
-        <tbody id="gainers-table"></tbody>
-      </table>
-    </div>
-    <div class="card">
-      <div class="card-title">FTA/CIS Partner Losses — <span id="part-sc-label2">20% Cut</span></div>
-      <table>
-        <thead>
-          <tr>
-            <th>Country</th>
-            <th>Status</th>
-            <th>Trade Diverted (loss)</th>
-            <th>Base Trade 2022</th>
-            <th>Impact %</th>
-          </tr>
-        </thead>
-        <tbody id="losers-table"></tbody>
-      </table>
-      <div style="font-size:11px;color:var(--text3);margin-top:8px;">
-        * CIS/FTA countries already trade at 0% tariff; WTO MFN rate cuts increase competition from MFN partners.
-        <br>* Uzbekistan* row represents intra-CIS marginal flows.
-      </div>
-    </div>
+  <div class="card">
+    <div class="card-title">Partner Country Detail</div>
+    <table id="part-table">
+      <thead><tr>
+        <th onclick="sortTable('part-table',0)">Country</th>
+        <th onclick="sortTable('part-table',1)">Regime</th>
+        <th onclick="sortTable('part-table',2)">Import Value</th>
+        <th onclick="sortTable('part-table',3)">Trade Creation</th>
+        <th onclick="sortTable('part-table',4)">Trade Diversion</th>
+        <th onclick="sortTable('part-table',5)">Welfare Change</th>
+        <th onclick="sortTable('part-table',6)">Revenue Change</th>
+        <th onclick="sortTable('part-table',7)">Net Effect</th>
+        <th>Impact %</th>
+      </tr></thead>
+      <tbody id="part-tbody"></tbody>
+    </table>
   </div>
 </div>
 
-<!-- ═══════════════════════ REPORT ═══════════════════════ -->
-<div id="tab-report" class="page">
-
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
-    <h2 style="font-size:18px;font-weight:800;color:var(--primary);">Analysis Report</h2>
-    <div class="scenario-bar" style="margin:0;">
-      <button class="sc-btn active" onclick="selectScenarioReport(1,this)">−20%</button>
-      <button class="sc-btn s2" onclick="selectScenarioReport(2,this)">−50%</button>
-      <button class="sc-btn s3" onclick="selectScenarioReport(3,this)">−80%</button>
-    </div>
-    <button class="btn btn-primary" onclick="printReport()" style="margin-left:auto;">🖨 Print / Save PDF</button>
-  </div>
-
-  <div id="report-body" style="background:#fff;border:1px solid var(--border);border-radius:12px;
-    padding:40px 48px;max-width:820px;margin:0 auto;box-shadow:var(--shadow);">
-  </div>
-</div>
-
-<!-- ═══════════════════════ METHODOLOGY ═══════════════════════ -->
+<!-- ════════════════════════ METHODOLOGY ════════════════════════ -->
 <div id="tab-methodology" class="page">
-
-  <div class="method-box">
-    <h3>Model Overview</h3>
-    <p>The Partial Equilibrium (PE) model estimates the trade impact of tariff changes on Uzbekistan's imports in the chemicals and plastics sector (HS 28–40). The model is based on the <strong>WITS-SMART</strong> methodology (World Integrated Trade Solution — Software for Market Analysis and Restrictions on Trade), widely used by the World Bank and WTO.</p>
-    <p>Unlike general equilibrium models, the PE model isolates the direct market-level effects of a tariff change, holding all other markets constant. It is particularly suited for analysing sector-specific trade policy reforms such as WTO accession commitments.</p>
-  </div>
-
-  <div class="method-box">
-    <h3>Trade Creation</h3>
-    <p>Trade creation (TC) measures the increase in imports from WTO MFN-tariff countries following a tariff reduction. As tariffs fall, domestic prices decline, stimulating demand for imports from liberalised sources.</p>
-    <div class="formula-box">
-      TC<sub>ij</sub> = M<sub>ij</sub> · ε<sub>d</sub> · |Δt/(1 + t)|<br><br>
-      where:<br>
-      M<sub>ij</sub>  = base imports from country j in sector i (USD)<br>
-      ε<sub>d</sub>   = import demand elasticity (default = 1.27)<br>
-      Δt    = change in tariff rate (negative for reductions)<br>
-      t     = current applied tariff rate<br>
-      Δt/(1+t) = Armington price change factor
+  <div class="g2">
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">Model Overview</div>
+        <p style="font-size:13px;line-height:1.75;color:var(--text2);margin-bottom:8px;">
+          The Partial Equilibrium (PE) model estimates the trade impact of tariff changes on
+          Uzbekistan's imports across all HS sectors. Based on the <strong>WITS-SMART</strong>
+          methodology (World Bank / WTO), it isolates the direct market-level effects of a tariff
+          change, holding all other markets constant.
+        </p>
+        <p style="font-size:13px;line-height:1.75;color:var(--text2);">
+          The model covers the full universe of Uzbekistan's import data at the HS-10 digit level,
+          disaggregated by partner country and trade regime (MFN or FTA).
+        </p>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">Trade Creation Formula</div>
+        <div style="background:#0f172a;color:#e2e8f0;border-radius:8px;padding:14px 18px;
+          font-family:monospace;font-size:12.5px;line-height:2;">
+          TC<sub>ij</sub> = M<sub>ij</sub> · ε<sub>d</sub> · |Δt/(1 + t)|<br>
+          <span style="color:#94a3b8;">M = imports, ε = demand elasticity, Δt = tariff change</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Trade Diversion Formula</div>
+        <div style="background:#0f172a;color:#e2e8f0;border-radius:8px;padding:14px 18px;
+          font-family:monospace;font-size:12.5px;line-height:2;">
+          TD<sub>ij</sub> = M<sub>ij</sub><sup>FTA</sup> · ε<sub>s</sub> · |Δt/(1 + t)|<br>
+          <span style="color:#94a3b8;">Captures shift from FTA to newly competitive MFN partners</span>
+        </div>
+      </div>
     </div>
-  </div>
-
-  <div class="method-box">
-    <h3>Trade Diversion</h3>
-    <p>Trade diversion (TD) captures the shift in import sourcing from FTA/CIS partners (who already face zero tariffs) to newly competitive WTO MFN partners. When MFN rates fall, the relative price advantage enjoyed by FTA partners diminishes, diverting trade toward MFN suppliers.</p>
-    <div class="formula-box">
-      TD<sub>ij</sub> = M<sub>ij</sub><sup>FTA</sup> · ε<sub>s</sub> · |Δt/(1 + t)|<br><br>
-      where:<br>
-      M<sub>ij</sub><sup>FTA</sup> = FTA partner imports in the same product<br>
-      ε<sub>s</sub>               = substitution elasticity between sources
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">Data Sources</div>
+        <p style="font-size:13px;line-height:1.8;color:var(--text2);">
+          • Uzbekistan customs import data (HS-10, partner country, 2022–2025)<br>
+          • Applied MFN tariff schedule of Uzbekistan<br>
+          • CIS Free Trade Agreement schedules<br>
+          • Import demand elasticities: WITS global database (default ε = 1.27)<br>
+          • Uzbekistan State Customs Committee
+        </p>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">Scenario Definitions</div>
+        <p style="font-size:13px;line-height:1.8;color:var(--text2);">
+          The simulator allows any tariff cut from 5% to 100% applied to the current
+          MFN rate. Pre-defined scenarios follow WTO accession negotiation precedents:<br><br>
+          <strong>−20%</strong>: Moderate liberalisation<br>
+          <strong>−50%</strong>: Substantial reduction<br>
+          <strong>−80%</strong>: Near-full liberalisation<br>
+          <strong>−100%</strong>: Complete removal (MFN = 0)
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-title">Welfare Components</div>
+        <p style="font-size:13px;line-height:1.8;color:var(--text2);">
+          <strong>Consumer surplus gain</strong>: lower prices benefit domestic consumers<br>
+          <strong>Revenue change</strong>: reduced tariff collection by government<br>
+          <strong>Net welfare</strong>: sum of all effects; positive = net gain to economy
+        </p>
+      </div>
     </div>
-  </div>
-
-  <div class="method-box">
-    <h3>Welfare Effects</h3>
-    <p>The model calculates two main welfare components:</p>
-    <p><strong>Consumer surplus gain:</strong> as import prices fall, domestic consumers pay less — equivalent to the area under the demand curve between the old and new price levels.</p>
-    <p><strong>Government revenue change:</strong> lower tariff rates on existing and new imports reduce tariff revenue, which is a transfer from the government budget. The net welfare effect is the consumer surplus gain minus the revenue loss plus any production efficiency gains.</p>
-    <div class="formula-box">
-      Welfare = Consumer Surplus Gain − Government Revenue Loss
-    </div>
-  </div>
-
-  <div class="method-box">
-    <h3>Scenarios</h3>
-    <p>Three WTO accession scenarios are modelled, reflecting possible negotiated tariff bindings relative to the current applied MFN rate:</p>
-    <p>• <strong>Scenario 1 (−20%)</strong>: Moderate liberalisation — MFN applied rates reduced by 20% of current level</p>
-    <p>• <strong>Scenario 2 (−50%)</strong>: Substantial liberalisation — MFN rates halved relative to current applied level</p>
-    <p>• <strong>Scenario 3 (−80%)</strong>: Near-full liberalisation — MFN rates reduced by 80%, approaching the CIS FTA zero-rate levels</p>
-  </div>
-
-  <div class="method-box">
-    <h3>Data Sources</h3>
-    <p>• Uzbekistan customs import data by HS-10 digit code and partner country (2022)</p>
-    <p>• Applied MFN tariff schedule of Uzbekistan (2022)</p>
-    <p>• CIS Free Trade Agreement schedules (identifying FTA partners)</p>
-    <p>• Import demand elasticities: UN COMTRADE / WITS global database (default ε = 1.27 for chemicals)</p>
-    <p>• Employment and value-added data: Uzbekistan State Statistics Committee</p>
   </div>
 </div>
 
 <script>
-// ── State ──────────────────────────────────────────────────────────────
-let activeSc = 1;         // 1=20%, 2=50%, 3=80%
-let activeScSectors = 1;
-let activeScPartners = 1;
-let activeScReport = 1;
-
-let chartSector=null, chartSimTCTD=null, chartSimSector=null;
-let chartPie=null, chartBubble=null, chartGainers=null, chartLosers=null;
-
+// ════════════════════════════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════════════════════════════
 const D = PE_DATA;
-const SCALE = { 1:1.0, 2:2.5, 3:4.0 }; // approximate scaling factors
-const SC_KEY = { 1:'s20', 2:'s50', 3:'s80' };
-const SC_CUT = { 1:20, 2:50, 3:80 };
+const SCALE20 = 1.0, SCALE50 = 2.5, SCALE80 = 4.0;
 
-function fmt(v, dec=1){ return v==null?'—':v.toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
-function fmtInt(v){ return v==null?'—':Math.round(v).toLocaleString('en-US'); }
-function fmtMln(v){ return (v/1000).toFixed(1)+' mln'; }
+// HS Chapter descriptions (EN) for display
+const CH_NAMES = {
+  1:'Live Animals',2:'Meat & Edible Offal',3:'Fish & Seafood',4:'Dairy & Eggs',5:'Animal Products',
+  6:'Plants & Flowers',7:'Vegetables',8:'Fruits & Nuts',9:'Coffee, Tea & Spices',10:'Cereals',
+  11:'Milling Products',12:'Oil Seeds',13:'Lac & Gums',14:'Vegetable Plaiting Materials',
+  15:'Animal/Veg Fats & Oils',16:'Meat/Fish Preparations',17:'Sugars',18:'Cocoa & Chocolate',
+  19:'Cereals/Flour Preparations',20:'Vegetable Preparations',21:'Miscellaneous Food',
+  22:'Beverages & Spirits',23:'Animal Feed & Residues',24:'Tobacco',
+  25:'Salt, Sulfur & Ores',26:'Metal Ores',27:'Mineral Fuels & Oils',
+  28:'Inorganic Chemicals',29:'Organic Chemicals',30:'Pharmaceuticals',
+  31:'Fertilizers',32:'Paints, Dyes & Inks',33:'Essential Oils & Cosmetics',
+  34:'Soap, Waxes & Lubricants',35:'Starches, Glues & Enzymes',36:'Explosives',
+  37:'Photographic Goods',38:'Miscellaneous Chemicals',39:'Plastics',40:'Rubber',
+  41:'Hides & Skins',42:'Leather Articles',43:'Fur & Furskins',
+  44:'Wood & Wood Products',45:'Cork',46:'Manufactures of Straw',
+  47:'Pulp & Paper Waste',48:'Paper & Paperboard',49:'Printed Books & Newspapers',
+  50:'Silk',51:'Wool & Fine Animal Hair',52:'Cotton',53:'Other Vegetable Textile Fibres',
+  54:'Man-made Filaments',55:'Man-made Staple Fibres',56:'Wadding & Felt',
+  57:'Carpets & Floor Coverings',58:'Special Woven Fabrics',59:'Impregnated Textile Fabrics',
+  60:'Knitted Fabrics',61:'Knitted Apparel',62:'Woven Apparel',63:'Other Made-up Textiles',
+  64:'Footwear',65:'Headgear',66:'Umbrellas & Walking Sticks',67:'Feathers & Artificial Flowers',
+  68:'Articles of Stone & Plaster',69:'Ceramic Products',70:'Glass',71:'Precious Stones & Metals',
+  72:'Iron & Steel',73:'Iron/Steel Articles',74:'Copper',75:'Nickel',76:'Aluminium',
+  77:'Reserved',78:'Lead',79:'Zinc',80:'Tin',81:'Other Base Metals',
+  82:'Tools & Implements',83:'Miscellaneous Metal Articles',
+  84:'Nuclear Reactors, Machinery & Computers',85:'Electrical Machinery & Equipment',
+  86:'Railway Equipment',87:'Vehicles & Automobiles',88:'Aircraft',89:'Ships & Boats',
+  90:'Optical & Medical Instruments',91:'Clocks & Watches',92:'Musical Instruments',
+  93:'Arms & Ammunition',94:'Furniture & Lighting',95:'Toys & Games',96:'Miscellaneous Articles',97:'Art & Antiques'
+};
 
-// ── Tab navigation ─────────────────────────────────────────────────────
+function fmt(v, d=1){ return v==null?'—':Number(v).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}); }
+function fmtI(v){ return v==null?'—':Math.round(v).toLocaleString('en-US'); }
+function fmtM(v){ return (Math.abs(v)/1000).toFixed(1)+(v<0?' mln':' mln'); }
+function fmtMsgn(v){ return (v>=0?'+':'')+fmtM(v); }
+function pct(a,b){ return b>0?(a/b*100).toFixed(2)+'%':'—'; }
+
+// ── Tab navigation ────────────────────────────────────────────────────
 function showTab(name, btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -491,576 +517,515 @@ function showTab(name, btn){
   btn.classList.add('active');
 }
 
-// ── Scenario selection helpers ─────────────────────────────────────────
-function selectScenario(sc, btn){
-  activeSc = sc;
-  btn.closest('.scenario-bar').querySelectorAll('.sc-btn').forEach(b=>b.classList.remove('active'));
+// ── Chip helpers ──────────────────────────────────────────────────────
+function setChip(btn){
+  btn.closest('.chip-group').querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
   btn.classList.add('active');
-  updateOverview();
 }
-function selectScenarioSectors(sc, btn){
-  activeScSectors = sc;
-  btn.closest('.scenario-bar').querySelectorAll('.sc-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderSectors();
-}
-function selectScenarioPartners(sc, btn){
-  activeScPartners = sc;
-  btn.closest('.scenario-bar').querySelectorAll('.sc-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderPartners();
-}
-function selectScenarioReport(sc, btn){
-  activeScReport = sc;
-  btn.closest('.scenario-bar, div').querySelectorAll('.sc-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderReport();
+function setSlider(id, val, btn){
+  document.getElementById(id).value = val;
+  document.getElementById(id+'-val').textContent = val;
+  if(btn){ btn.closest('.chip-group').querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); btn.classList.add('active'); }
+  runSim();
 }
 
-// ── Overview KPIs ──────────────────────────────────────────────────────
-function updateOverview(){
-  const key = SC_KEY[activeSc];
-  const tot = D.scenarioTotals[key];
-  const scl = SCALE[activeSc];
-  const cutPct = SC_CUT[activeSc];
-  const totalEff = D.sectors.reduce((a,s)=>a+s.tradeEffect[key],0);
-  const totalImp = D.sectors.reduce((a,s)=>a+s.importValue,0);
+// ── Chart registry (destroy before recreate) ──────────────────────────
+const charts = {};
+function mkChart(id, cfg){
+  if(charts[id]) charts[id].destroy();
+  charts[id] = new Chart(document.getElementById(id), cfg);
+  return charts[id];
+}
 
-  document.getElementById('sc-label-chart').textContent = cutPct+'% Tariff Cut';
-  document.getElementById('sc-label-welfare').textContent = cutPct+'% Cut';
+// ════════════════════════════════════════════════════════════
+// OVERVIEW
+// ════════════════════════════════════════════════════════════
+function renderOverview(){
+  const m = D.meta;
+  const totalTC = m.totalTC;
+  const totalTD = m.totalTD;
+  const totalW  = m.totalWelfare;
+  const totalTx = m.totalTax;
 
-  document.getElementById('kpi-overview').innerHTML = `
+  // Regime breakdown — case-insensitive aggregate
+  const regimes = D.regimes;
+  const regImp = (key) => Object.entries(regimes).filter(([k])=>k.toLowerCase().includes(key.toLowerCase())).reduce((a,[,v])=>a+v.imp,0);
+  const mfnImp  = regImp('mfn');
+  const ftaImp  = regImp('fta');
+  const fullImp = regImp('full');
+
+  // Weighted avg MFN
+  let mfnNum=0, mfnDen=0;
+  D.sections.forEach(s=>{ mfnNum+=s.avgMfn*s.imp; mfnDen+=s.imp; });
+  const wavgMFN = mfnDen>0 ? (mfnNum/mfnDen).toFixed(2) : 0;
+
+  document.getElementById('ov-kpis').innerHTML = `
     <div class="card">
-      <div class="card-title">Total Import Base</div>
-      <div class="kpi">${fmtMln(totalImp)}</div>
-      <div class="kpi-unit">USD — HS 28–40</div>
-      <div class="kpi-note">2022 customs data</div>
+      <div class="card-title">Total Imports</div>
+      <div class="kpi">${(m.totalImport/1e6).toFixed(1)} bln</div>
+      <div class="kpi-unit">USD (thous. × 1,000)</div>
+      <div class="kpi-note">${fmtI(m.dataRows)} HS-10 × country rows</div>
     </div>
     <div class="card">
-      <div class="card-title">Total Trade Effect</div>
-      <div class="kpi pos">${fmtMln(totalEff)}</div>
-      <div class="kpi-unit">USD — scenario ${activeSc}</div>
-      <div class="kpi-note">${cutPct}% tariff reduction</div>
+      <div class="card-title">Goods Imports (MFN)</div>
+      <div class="kpi">${(mfnImp/1e6).toFixed(1)} bln</div>
+      <div class="kpi-unit">USD — MFN regime</div>
+      <div class="kpi-note">${pct(mfnImp,m.totalImport)} of total</div>
     </div>
     <div class="card">
-      <div class="card-title">Trade Creation</div>
-      <div class="kpi" style="color:var(--teal)">${fmtMln(tot.tradeCreation)}</div>
-      <div class="kpi-unit">USD new imports</div>
-      <div class="kpi-note">From WTO MFN partners</div>
+      <div class="card-title">FTA / CIS Imports</div>
+      <div class="kpi">${(ftaImp/1e6).toFixed(1)} bln</div>
+      <div class="kpi-unit">USD — FTA regime</div>
+      <div class="kpi-note">${pct(ftaImp,m.totalImport)} of total</div>
     </div>
     <div class="card">
-      <div class="card-title">Consumer Welfare Gain</div>
-      <div class="kpi pos">${fmtMln(tot.welfareGain)}</div>
-      <div class="kpi-unit">USD</div>
-      <div class="kpi-note">Lower prices for consumers</div>
-    </div>
-    <div class="card">
-      <div class="card-title">Revenue Change</div>
-      <div class="kpi neg">${fmtMln(tot.revenueChange)}</div>
-      <div class="kpi-unit">USD tariff revenue</div>
-      <div class="kpi-note">Government budget impact</div>
+      <div class="card-title">Wtd Avg MFN Tariff</div>
+      <div class="kpi" style="color:var(--amber)">${wavgMFN}%</div>
+      <div class="kpi-unit">import-weighted average</div>
+      <div class="kpi-note">Across all MFN products</div>
     </div>
   `;
 
-  // Welfare box
-  document.getElementById('welfare-summary').innerHTML = `
-    <div class="wb-cell">
-      <div class="wb-label">Consumer Surplus</div>
-      <div class="wb-value pos">+${fmtMln(tot.welfareGain)}</div>
-      <div style="font-size:11px;color:var(--text3);">USD gained</div>
-    </div>
-    <div class="wb-cell">
-      <div class="wb-label">Tariff Revenue</div>
-      <div class="wb-value neg">${fmtMln(tot.revenueChange)}</div>
-      <div style="font-size:11px;color:var(--text3);">USD change</div>
-    </div>
-    <div class="wb-cell">
-      <div class="wb-label">Net Welfare</div>
-      <div class="wb-value ${tot.netWelfare>=0?'pos':'neg'}">${fmtMln(tot.netWelfare)}</div>
-      <div style="font-size:11px;color:var(--text3);">USD net</div>
-    </div>
-  `;
+  // Section bar chart
+  const secs = D.sections.filter(s=>s.imp>0).sort((a,b)=>b.imp-a.imp);
+  const secColors = ['#0d9488','#2563eb','#7c3aed','#ea580c','#16a34a','#d97706',
+    '#0891b2','#9333ea','#e11d48','#64748b','#0f766e','#1d4ed8','#6d28d9','#b45309',
+    '#0369a1','#7e22ce','#9f1239','#134e4a','#1e3a5f','#4a044e','#422006'];
 
-  // Findings
-  document.getElementById('findings-list').innerHTML = D.keyFindings
-    .map((f,i)=>`<div class="finding"><span class="finding-num">${i+1}</span><span>${f}</span></div>`)
-    .join('');
-
-  // Sector chart
-  const labels = D.sectors.map(s=>s.code);
-  const vals = D.sectors.map(s=>s.tradeEffect[key]);
-  const colors = vals.map(v=>v>5000?'rgba(13,148,136,0.85)':v>2000?'rgba(37,99,235,0.8)':'rgba(100,116,139,0.7)');
-
-  if(chartSector) chartSector.destroy();
-  chartSector = new Chart(document.getElementById('sectorChart'),{
+  mkChart('ov-section-chart',{
     type:'bar',
-    data:{ labels, datasets:[{
-      label:'Trade Effect (thous. USD)',
-      data: vals,
-      backgroundColor: colors,
-      borderRadius:5, borderSkipped:false
-    }]},
-    options:{
-      responsive:true, maintainAspectRatio:false,
+    data:{ labels:secs.map(s=>s.id+' '+s.name.substring(0,22)),
+      datasets:[{ label:'Import (thous. USD)', data:secs.map(s=>s.imp),
+        backgroundColor:secColors, borderRadius:4 }]},
+    options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y',
       plugins:{ legend:{display:false} },
-      scales:{
-        y:{ beginAtZero:true, grid:{color:'#f0f2f5'},
-          ticks:{ callback: v=>fmtInt(v) }},
-        x:{ grid:{display:false} }
-      }
-    }
+      scales:{ x:{ grid:{color:'#f0f2f5'}, ticks:{callback:v=>fmtI(v)} },
+               y:{ grid:{display:false}, ticks:{font:{size:9}} }}}
   });
-}
 
-// ── Sectors tab ────────────────────────────────────────────────────────
-function renderSectors(){
-  const key = SC_KEY[activeScSectors];
-  const totalImp = D.sectors.reduce((a,s)=>a+s.importValue,0);
-  const totalEff = D.sectors.reduce((a,s)=>a+s.tradeEffect[key],0);
-  const maxEff = Math.max(...D.sectors.map(s=>s.tradeEffect[key]));
-
-  // Table
-  document.getElementById('sector-table-body').innerHTML = D.sectors.map(s=>{
-    const eff = s.tradeEffect[key];
-    const pct = (eff/s.importValue*100).toFixed(2);
-    const bar = Math.round(eff/maxEff*100);
-    return `<tr>
-      <td><span class="code-badge">${s.code}</span></td>
-      <td style="max-width:260px;">${s.name}</td>
-      <td>${fmtInt(s.importValue)}</td>
-      <td>${(s.importValue/totalImp*100).toFixed(1)}%</td>
-      <td>${s.avgMFNRate.toFixed(1)}%</td>
-      <td>${s.elasticity}</td>
-      <td class="pos">${fmtInt(eff)}</td>
-      <td>
-        <span class="${parseFloat(pct)>=2?'pos':''}">${pct}%</span>
-        <div class="bar-indicator"><div class="bar-fill" style="width:${bar}%"></div></div>
-      </td>
-    </tr>`;
-  }).join('');
-
-  document.getElementById('sec-tot-imp').textContent = fmtInt(totalImp);
-  document.getElementById('sec-tot-eff').textContent = fmtInt(totalEff);
-  document.getElementById('sec-tot-pct').textContent = (totalEff/totalImp*100).toFixed(2)+'%';
-
-  // Pie chart
-  if(chartPie) chartPie.destroy();
-  chartPie = new Chart(document.getElementById('importPieChart'),{
+  // Regime pie
+  const regNames=[], regVals=[], regColrs=[];
+  Object.entries(D.regimes).forEach(([k,v])=>{ if(v.imp>0){ regNames.push(k.trim()); regVals.push(v.imp); regColrs.push(k.includes('FTA')?'#0d9488':k.includes('full')?'#7c3aed':'#2563eb'); }});
+  mkChart('ov-regime-chart',{
     type:'doughnut',
-    data:{
-      labels: D.sectors.map(s=>s.nameShort),
-      datasets:[{ data: D.sectors.map(s=>s.importValue),
-        backgroundColor:['#0d9488','#2563eb','#7c3aed','#ea580c','#16a34a','#d97706',
-          '#0891b2','#9333ea','#e11d48','#64748b','#0f766e','#1d4ed8','#6d28d9'],
-        borderWidth:2, borderColor:'#fff' }]
-    },
+    data:{ labels:regNames, datasets:[{ data:regVals, backgroundColor:['#2563eb','#0d9488','#7c3aed','#ea580c','#16a34a'], borderWidth:2, borderColor:'#fff' }]},
     options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{ position:'right', labels:{ font:{size:10}, boxWidth:12 }}}}
+      plugins:{ legend:{ position:'bottom', labels:{font:{size:11},boxWidth:14} },
+        tooltip:{ callbacks:{ label:ctx=>`${ctx.label}: ${fmtM(ctx.raw)} USD (${pct(ctx.raw,m.totalImport)})` }}}}
   });
 
-  // Bubble chart
-  if(chartBubble) chartBubble.destroy();
-  const bubbleData = D.sectors.map(s=>({
-    x: s.avgMFNRate,
-    y: s.tradeEffect[key]/s.importValue*100,
-    r: Math.sqrt(s.importValue/10000)*1.5
-  }));
-  chartBubble = new Chart(document.getElementById('bubbleChart'),{
-    type:'bubble',
-    data:{ datasets:[{
-      label:'Sectors',
-      data: bubbleData,
-      backgroundColor:'rgba(13,148,136,0.6)',
-      borderColor:'rgba(13,148,136,0.9)',
-    }]},
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{
-        legend:{display:false},
-        tooltip:{ callbacks:{ label: ctx=>{
-          const s = D.sectors[ctx.dataIndex];
-          return [`${s.nameShort}`, `MFN: ${s.avgMFNRate}%`, `Impact: ${ctx.raw.y.toFixed(2)}%`];
-        }}}
-      },
-      scales:{
-        x:{ title:{display:true,text:'Avg MFN Rate (%)'}, grid:{color:'#f0f2f5'} },
-        y:{ title:{display:true,text:'Trade Effect (% of imports)'}, grid:{color:'#f0f2f5'} }
-      }
-    }
-  });
-}
-
-// ── Partners tab ───────────────────────────────────────────────────────
-function renderPartners(){
-  const sc = activeScPartners;
-  const scl = SCALE[sc];
-  const cutPct = SC_CUT[sc];
-  document.getElementById('part-sc-label').textContent = cutPct+'% Cut';
-  document.getElementById('part-sc-label2').textContent = cutPct+'% Cut';
-
-  // Gainers table
-  document.getElementById('gainers-table').innerHTML = D.partnerGainers.map(p=>{
-    const tot = p.total*scl;
-    const tc = p.tc*scl;
-    const td = p.td*scl;
-    return `<tr>
-      <td><strong>${p.country}</strong></td>
-      <td><span class="badge badge-wto">WTO MFN</span></td>
-      <td class="pos">+${fmtInt(tc)}</td>
-      <td class="pos">+${fmtInt(td)}</td>
-      <td class="pos">+${fmtInt(tot)}</td>
-      <td>${fmtInt(p.base)}</td>
-      <td class="pos">${(p.pct).toFixed(1)}%</td>
-    </tr>`;
-  }).join('');
-
-  // Losers table
-  document.getElementById('losers-table').innerHTML = D.partnerLosers.map(p=>{
-    const div = p.diverted*scl;
-    return `<tr>
-      <td><strong>${p.country}</strong></td>
-      <td><span class="badge ${p.fta?'badge-fta':'badge-non'}">${p.fta?'CIS FTA':'Non-WTO'}</span></td>
-      <td class="neg">${fmtInt(div)}</td>
-      <td>${fmtInt(p.base)}</td>
-      <td class="neg">${(p.pct*scl).toFixed(1)}%</td>
-    </tr>`;
-  }).join('');
-
-  // Gainers chart
-  if(chartGainers) chartGainers.destroy();
-  chartGainers = new Chart(document.getElementById('gainersChart'),{
+  // Top countries
+  const top15 = D.countries.slice(0,15);
+  mkChart('ov-country-chart',{
     type:'bar',
-    data:{
-      labels: D.partnerGainers.map(p=>p.country),
-      datasets:[
-        { label:'Trade Creation', data: D.partnerGainers.map(p=>p.tc*scl), backgroundColor:'rgba(13,148,136,0.8)', borderRadius:4 },
-        { label:'Trade Diversion', data: D.partnerGainers.map(p=>p.td*scl), backgroundColor:'rgba(37,99,235,0.7)', borderRadius:4 }
-      ]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{ labels:{font:{size:10}} }},
-      scales:{
-        x:{ stacked:true, grid:{display:false}, ticks:{font:{size:9}} },
-        y:{ stacked:true, grid:{color:'#f0f2f5'}, ticks:{ callback: v=>fmtInt(v) }}
-      }
-    }
+    data:{ labels:top15.map(c=>c.name.length>16?c.name.substring(0,16)+'…':c.name),
+      datasets:[{ label:'Import', data:top15.map(c=>c.imp),
+        backgroundColor:top15.map(c=>c.regime&&c.regime.includes('FTA')?'#0d9488':'#2563eb'),
+        borderRadius:4 }]},
+    options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      plugins:{ legend:{display:false},
+        tooltip:{ callbacks:{ label:ctx=>`${fmtM(ctx.raw)} USD` }}},
+      scales:{ x:{ grid:{color:'#f0f2f5'}, ticks:{callback:v=>fmtI(v)} },
+               y:{ grid:{display:false}, ticks:{font:{size:9}} }}}
   });
 
-  // Losers chart
-  if(chartLosers) chartLosers.destroy();
-  chartLosers = new Chart(document.getElementById('losersChart'),{
+  // Tariff rate by section
+  const secsWithMfn = D.sections.filter(s=>s.imp>0&&s.avgMfn>0).sort((a,b)=>b.avgMfn-a.avgMfn);
+  mkChart('ov-tariff-chart',{
     type:'bar',
-    data:{
-      labels: D.partnerLosers.map(p=>p.country),
-      datasets:[{
-        label:'Trade Diverted (loss)',
-        data: D.partnerLosers.map(p=>p.diverted*scl),
-        backgroundColor:'rgba(220,38,38,0.75)',
-        borderRadius:4
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false} },
-      scales:{
-        x:{ grid:{display:false}, ticks:{font:{size:9}} },
-        y:{ grid:{color:'#f0f2f5'}, ticks:{ callback: v=>fmtInt(v) }}
-      }
+    data:{ labels:secsWithMfn.map(s=>s.id),
+      datasets:[{ label:'Avg MFN Rate (%)', data:secsWithMfn.map(s=>s.avgMfn.toFixed(2)),
+        backgroundColor:secsWithMfn.map(s=>s.avgMfn>10?'#dc2626':s.avgMfn>5?'#d97706':'#16a34a'),
+        borderRadius:4 }]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false},
+        tooltip:{ callbacks:{ label:ctx=>`MFN Rate: ${ctx.raw}%` }}},
+      scales:{ y:{ beginAtZero:true, grid:{color:'#f0f2f5'},
+        ticks:{callback:v=>v+'%'} }, x:{ grid:{display:false} }}}
+  });
+
+  // High tariff table
+  const tbody = document.querySelector('#ov-high-tariff-table tbody');
+  tbody.innerHTML = (D.highTariff||D.highTariffProducts||[]).slice(0,20).map(p=>`
+    <tr>
+      <td><span class="code-badge">${p.hs6||p.hs10||'—'}</span></td>
+      <td>HS ${p.ch}</td>
+      <td>${p.country.length>18?p.country.substring(0,18)+'…':p.country}</td>
+      <td><strong style="color:var(--red)">${fmt(p.mfn,1)}%</strong></td>
+      <td>${fmtI(p.imp)}</td>
+      <td class="pos">+${fmtI(p.tc)}</td>
+    </tr>`).join('');
+
+  // Findings — generate dynamically from data
+  const topSec = D.sections.filter(s=>s.imp>0).sort((a,b)=>b.tc+b.td-(a.tc+a.td))[0];
+  const topCty = D.countries.sort((a,b)=>b.imp-a.imp)[0];
+  const topMfn = D.sections.filter(s=>s.avgMfn>0).sort((a,b)=>b.avgMfn-a.avgMfn)[0];
+  const findings = D.keyFindings || [
+    `Total imports subject to analysis: ${(D.meta.totalImport/1e6).toFixed(1)} bln USD across ${D.meta.dataRows?.toLocaleString()} HS-10 product-country lines`,
+    topSec ? `Largest trade effect from Section ${topSec.id} (${topSec.name}): +${fmtM(topSec.tc+topSec.td)} USD at 20% tariff cut` : '',
+    topCty ? `Top import partner: ${topCty.name} with ${fmtM(topCty.imp)} USD in imports` : '',
+    topMfn ? `Highest avg MFN tariff: Section ${topMfn.id} (${topMfn.avgMfn.toFixed(1)}%) — greatest scope for liberalisation` : '',
+    `Consumer welfare improves with each tariff cut scenario; revenue falls proportionally`,
+    `Trade diversion from FTA/CIS partners occurs as WTO MFN partners gain price competitiveness`,
+    `A 50% tariff cut generates roughly 2.5× the trade effect of a 20% cut across all sectors`
+  ].filter(Boolean);
+  document.getElementById('ov-findings').innerHTML = findings
+    .map((f,i)=>`<div class="finding"><span class="finding-n">${i+1}</span><span>${f}</span></div>`)
+    .join('');
+}
+
+// ════════════════════════════════════════════════════════════
+// SIMULATOR
+// ════════════════════════════════════════════════════════════
+let simSectionFilter='all', simChapterFilter='all', simCountryFilter='all';
+
+function populateSimFilters(){
+  // Sections
+  const secSel = document.getElementById('sim-section');
+  D.sections.forEach(s=>{
+    const o=document.createElement('option'); o.value=s.id; o.textContent=`${s.id} — ${s.name}`; secSel.appendChild(o);
+  });
+  // Countries
+  const ctySel = document.getElementById('sim-country');
+  D.countries.forEach(c=>{
+    const o=document.createElement('option'); o.value=c.name; o.textContent=c.name; ctySel.appendChild(o);
+  });
+}
+
+function updateChapterFilter(){
+  const secId = document.getElementById('sim-section').value;
+  const chSel = document.getElementById('sim-chapter');
+  chSel.innerHTML='<option value="all">All Chapters</option>';
+  if(secId==='all') return;
+  const sec = D.sections.find(s=>s.id===secId);
+  if(!sec) return;
+  sec.chapters.forEach(ch=>{
+    if(D.chapters[ch]){
+      const o=document.createElement('option');
+      o.value=ch;
+      o.textContent=`HS ${ch} — ${CH_NAMES[ch]||'Chapter '+ch}`;
+      chSel.appendChild(o);
     }
   });
 }
 
-// ── Simulator ──────────────────────────────────────────────────────────
-let chartSimTCTD_ref=null, chartSimSector_ref=null;
+function runSim(){
+  const cut = parseInt(document.getElementById('sim-cut').value);
+  document.getElementById('sim-cut-val').textContent = cut;
+  const scale = cut / 20;
+  const regime = document.getElementById('sim-regime').value;
+  const secId  = document.getElementById('sim-section').value;
+  const chId   = document.getElementById('sim-chapter').value;
+  const ctyId  = document.getElementById('sim-country').value;
 
-function setSlider(v){
-  document.getElementById('cutSlider').value=v;
-  runSimulator();
-}
+  // Build filtered section rows
+  let rows = [];
+  D.sections.forEach(s=>{
+    if(secId!=='all' && s.id!==secId) return;
+    let imp=0, tc=0, td=0, welfare=0, taxChg=0, mfnW=0;
+    s.chapters.forEach(ch=>{
+      if(chId!=='all' && parseInt(chId)!==ch) return;
+      const cd = D.chapters[ch];
+      if(!cd) return;
+      // Regime filter: if regime-specific, scale by fraction (simplified)
+      const rf = regime==='all'?1.0:0.6; // approximate 60% when filtered
+      imp     += cd.imp*rf;
+      tc      += cd.tc*scale*rf;
+      td      += cd.td*scale*rf;
+      welfare += cd.welfare*scale*rf;
+      taxChg  += cd.taxChg*scale*rf;
+      mfnW    += cd.avgMfn*cd.imp*rf;
+    });
+    if(imp>0) rows.push({sec:s.id, name:s.name, imp, tc, td, welfare, taxChg, avgMfn:mfnW/imp});
+  });
 
-function runSimulator(){
-  const cut = parseInt(document.getElementById('cutSlider').value);
-  document.getElementById('cutPct').textContent = cut;
+  // Country filter: show country totals if selected
+  let ctyScale = 1.0;
+  if(ctyId!=='all'){
+    const cty = D.countries.find(c=>c.name===ctyId);
+    if(cty){
+      const ctyShare = D.meta.totalImport>0 ? cty.imp/D.meta.totalImport : 0;
+      ctyScale = ctyShare;
+      rows = rows.map(r=>({...r, imp:r.imp*ctyShare, tc:r.tc*ctyShare, td:r.td*ctyShare,
+        welfare:r.welfare*ctyShare, taxChg:r.taxChg*ctyShare}));
+    }
+  }
 
-  // Scale from 20% baseline using approximate linear extrapolation
-  const scale = cut/20;
-  const totalImp = D.sectors.reduce((a,s)=>a+s.importValue,0);
-  const totalEff = D.sectors.reduce((a,s)=>a+s.tradeEffect.s20*scale,0);
-  const tot20 = D.scenarioTotals.s20;
-  const tc = tot20.tradeCreation*scale;
-  const td = tot20.tradeDiversion*scale;
-  const wf = tot20.welfareGain*scale;
-  const rv = tot20.revenueChange*scale;
+  const totImp = rows.reduce((a,r)=>a+r.imp,0);
+  const totTC  = rows.reduce((a,r)=>a+r.tc,0);
+  const totTD  = rows.reduce((a,r)=>a+r.td,0);
+  const totWel = rows.reduce((a,r)=>a+r.welfare,0);
+  const totTax = rows.reduce((a,r)=>a+r.taxChg,0);
+  const totEff = totTC+totTD;
 
-  document.getElementById('sim-kpis').innerHTML = `
-    <div class="card">
-      <div class="card-title">Tariff Reduction</div>
-      <div class="kpi" style="color:var(--teal)">${cut}%</div>
-      <div class="kpi-unit">applied to MFN rates</div>
+  // Result KPIs
+  document.getElementById('sim-results').innerHTML = `
+    <div class="result-card">
+      <div class="result-label">Total Trade Effect</div>
+      <div class="result-val pos">+${fmtM(totEff)}</div>
+      <div class="result-unit">USD additional imports</div>
     </div>
-    <div class="card">
-      <div class="card-title">Total Trade Effect</div>
-      <div class="kpi pos">${fmtMln(totalEff)}</div>
-      <div class="kpi-unit">USD additional imports</div>
+    <div class="result-card">
+      <div class="result-label">Trade Creation</div>
+      <div class="result-val" style="color:var(--teal)">+${fmtM(totTC)}</div>
+      <div class="result-unit">USD from WTO MFN partners</div>
     </div>
-    <div class="card">
-      <div class="card-title">Trade Creation</div>
-      <div class="kpi" style="color:var(--teal)">${fmtMln(tc)}</div>
-      <div class="kpi-unit">USD from WTO MFN partners</div>
+    <div class="result-card">
+      <div class="result-label">Consumer Welfare</div>
+      <div class="result-val pos">+${fmtM(totWel)}</div>
+      <div class="result-unit">USD welfare gain</div>
     </div>
-    <div class="card">
-      <div class="card-title">Welfare / Revenue</div>
-      <div class="kpi ${wf+rv>=0?'pos':'neg'}">${fmtMln(wf+rv)}</div>
-      <div class="kpi-unit">USD net welfare effect</div>
+    <div class="result-card">
+      <div class="result-label">Revenue Change</div>
+      <div class="result-val neg">${fmtM(totTax)}</div>
+      <div class="result-unit">USD tariff revenue</div>
     </div>
   `;
 
-  // TC/TD chart
-  if(chartSimTCTD_ref) chartSimTCTD_ref.destroy();
-  chartSimTCTD_ref = new Chart(document.getElementById('simTCTDChart'),{
+  // TC/TD donut
+  mkChart('sim-tc-chart',{
     type:'doughnut',
-    data:{
-      labels:['Trade Creation','Trade Diversion'],
-      datasets:[{ data:[tc,td],
-        backgroundColor:['rgba(13,148,136,0.8)','rgba(37,99,235,0.7)'],
-        borderWidth:2, borderColor:'#fff' }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{ position:'bottom', labels:{font:{size:11}} },
-        tooltip:{ callbacks:{ label: ctx=>`${ctx.label}: ${fmtMln(ctx.raw)} USD`}} }
-    }
+    data:{ labels:['Trade Creation','Trade Diversion'],
+      datasets:[{ data:[Math.abs(totTC),Math.abs(totTD)],
+        backgroundColor:['#0d9488','#2563eb'], borderWidth:2, borderColor:'#fff' }]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{position:'bottom'},
+        tooltip:{ callbacks:{label:ctx=>`${ctx.label}: ${fmtM(ctx.raw)} USD`}}}}
   });
 
-  // Sector chart
-  if(chartSimSector_ref) chartSimSector_ref.destroy();
-  chartSimSector_ref = new Chart(document.getElementById('simSectorChart'),{
+  // Welfare/revenue bar
+  mkChart('sim-welfare-chart',{
     type:'bar',
-    data:{
-      labels: D.sectors.map(s=>s.code),
-      datasets:[{ label:'Trade Effect (thous. USD)',
-        data: D.sectors.map(s=>s.tradeEffect.s20*scale),
-        backgroundColor:'rgba(13,148,136,0.75)',
-        borderRadius:4, borderSkipped:false }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false, indexAxis:'y',
+    data:{ labels:['Consumer Welfare','Tariff Revenue'],
+      datasets:[{ label:'USD (thous.)', data:[totWel, totTax],
+        backgroundColor:[totWel>=0?'#16a34a':'#dc2626', totTax>=0?'#16a34a':'#dc2626'],
+        borderRadius:6 }]},
+    options:{ responsive:true, maintainAspectRatio:false,
       plugins:{ legend:{display:false} },
-      scales:{
-        x:{ beginAtZero:true, grid:{color:'#f0f2f5'}, ticks:{callback:v=>fmtInt(v)} },
-        y:{ grid:{display:false} }
-      }
-    }
+      scales:{ y:{ grid:{color:'#f0f2f5'}, ticks:{callback:v=>fmtI(v)} },
+               x:{ grid:{display:false} }}}
   });
 
   // Table
-  const maxEff = Math.max(...D.sectors.map(s=>s.tradeEffect.s20*scale));
-  document.getElementById('sim-table-body').innerHTML = D.sectors.map(s=>{
-    const eff = s.tradeEffect.s20*scale;
-    const pct = (eff/s.importValue*100).toFixed(2);
-    const bar = Math.round(eff/maxEff*100);
-    return `<tr>
-      <td><span class="code-badge">${s.code}</span></td>
-      <td>${s.nameShort}</td>
-      <td>${fmtInt(s.importValue)}</td>
-      <td>${s.avgMFNRate.toFixed(1)}%</td>
-      <td>${s.elasticity}</td>
-      <td class="pos">${fmtInt(eff)}</td>
-      <td>
-        <span class="${parseFloat(pct)>=2?'pos':''}">${pct}%</span>
-        <div class="bar-indicator"><div class="bar-fill" style="width:${bar}%"></div></div>
-      </td>
-      <td><div class="bar-indicator" style="height:8px;"><div class="bar-fill" style="width:${bar}%"></div></div></td>
-    </tr>`;
-  }).join('');
+  document.getElementById('sim-tbody').innerHTML = rows.sort((a,b)=>b.imp-a.imp).map(r=>`
+    <tr>
+      <td><strong>${r.sec}</strong> ${r.name.substring(0,30)}</td>
+      <td>${fmtI(r.imp)}</td>
+      <td>${r.avgMfn.toFixed(1)}%</td>
+      <td class="pos">+${fmtI(r.tc+r.td)}</td>
+      <td class="pos">+${fmtI(r.tc)}</td>
+      <td class="pos">+${fmtI(r.td)}</td>
+      <td class="pos">+${fmtI(r.welfare)}</td>
+      <td class="neg">${fmtI(r.taxChg)}</td>
+      <td>${pct(r.tc+r.td, r.imp)}</td>
+    </tr>`).join('');
 
-  document.getElementById('sim-tot-imp').textContent = fmtInt(totalImp);
-  document.getElementById('sim-tot-eff').textContent = fmtInt(totalEff);
-  document.getElementById('sim-tot-pct').textContent = (totalEff/totalImp*100).toFixed(2)+'%';
+  document.getElementById('sim-tfoot').innerHTML = `
+    <td>TOTAL</td>
+    <td>${fmtI(totImp)}</td>
+    <td>—</td>
+    <td class="pos">+${fmtI(totEff)}</td>
+    <td class="pos">+${fmtI(totTC)}</td>
+    <td class="pos">+${fmtI(totTD)}</td>
+    <td class="pos">+${fmtI(totWel)}</td>
+    <td class="neg">${fmtI(totTax)}</td>
+    <td>${pct(totEff,totImp)}</td>`;
 }
 
-// ── Report ─────────────────────────────────────────────────────────────
-function renderReport(){
-  const sc = activeScReport;
-  const key = SC_KEY[sc];
-  const cut = SC_CUT[sc];
-  const scl = SCALE[sc];
-  const tot = D.scenarioTotals[key];
-  const totalImp = D.sectors.reduce((a,s)=>a+s.importValue,0);
-  const totalEff = D.sectors.reduce((a,s)=>a+s.tradeEffect[key],0);
-  const today = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
-
-  let secRows = D.sectors.map(s=>{
-    const eff = s.tradeEffect[key];
-    const pct = (eff/s.importValue*100).toFixed(2);
-    return `<tr>
-      <td style="padding:6px 10px;border-bottom:1px solid #e2e8f0;">${s.code}</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #e2e8f0;">${s.name}</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #e2e8f0;text-align:right;">${fmtInt(s.importValue)}</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #e2e8f0;text-align:right;color:#16a34a;font-weight:700;">${fmtInt(eff)}</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #e2e8f0;text-align:right;">${pct}%</td>
-    </tr>`;
-  }).join('');
-
-  let partRows = D.partnerGainers.slice(0,7).map(p=>{
-    const tot2 = p.total*scl;
-    return `<tr>
-      <td style="padding:6px 10px;border-bottom:1px solid #e2e8f0;">${p.country}</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #e2e8f0;">WTO MFN</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #e2e8f0;text-align:right;color:#16a34a;font-weight:700;">+${fmtInt(tot2)}</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #e2e8f0;text-align:right;">${fmtInt(p.base)}</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #e2e8f0;text-align:right;color:#16a34a;">${(p.pct).toFixed(1)}%</td>
-    </tr>`;
-  }).join('');
-
-  let loseRows = D.partnerLosers.slice(0,6).map(p=>{
-    const div = p.diverted*scl;
-    return `<tr>
-      <td style="padding:6px 10px;border-bottom:1px solid #e2e8f0;">${p.country}</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #e2e8f0;">${p.fta?'CIS FTA':'Non-WTO'}</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #e2e8f0;text-align:right;color:#dc2626;font-weight:700;">${fmtInt(div)}</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #e2e8f0;text-align:right;">${fmtInt(p.base)}</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #e2e8f0;text-align:right;color:#dc2626;">${(p.pct*scl).toFixed(1)}%</td>
-    </tr>`;
-  }).join('');
-
-  document.getElementById('report-body').innerHTML = `
-    <div style="border-bottom:3px solid #1a3a6e;padding-bottom:16px;margin-bottom:24px;">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#64748b;margin-bottom:6px;">
-        Centre for Economic Research and Reforms (CERR) · Uzbekistan Economic Policy Engine
-      </div>
-      <h1 style="font-size:22px;font-weight:800;color:#0f172a;margin-bottom:6px;">
-        Assessment of WTO Accession Impact on Import Flows<br>of Chemicals and Plastics (HS 28–40)
-      </h1>
-      <div style="font-size:13px;color:#475569;">
-        Partial Equilibrium Analysis · Scenario ${sc}: ${cut}% Reduction in Applied MFN Tariff Rates
-      </div>
-      <div style="font-size:11px;color:#94a3b8;margin-top:4px;">${today}</div>
-    </div>
-
-    <h2 style="font-size:15px;font-weight:800;color:#1a3a6e;margin:0 0 10px;">1. Executive Summary</h2>
-    <p style="font-size:13px;line-height:1.75;color:#334155;margin-bottom:12px;">
-      This analysis assesses the trade effects of Uzbekistan's potential WTO accession on imports of chemicals and plastics (HS Chapters 28–40) under Scenario ${sc}, which models a <strong>${cut}% reduction</strong> in applied Most-Favoured-Nation (MFN) tariff rates.
-      The analysis employs the standard Partial Equilibrium (WITS-SMART) methodology and is based on 2022 customs data.
-    </p>
-    <p style="font-size:13px;line-height:1.75;color:#334155;margin-bottom:20px;">
-      Total imports of chemicals and plastics (HS 28–40) reached <strong>USD 4.82 billion</strong> in 2022. Of this, approximately USD 1.6 billion originated from WTO MFN-tariff countries and USD 1.6 billion from CIS Free Trade Area partners. The weighted average MFN tariff rate stands at <strong>7.2%</strong>, compared to the near-zero rate applied under CIS FTA arrangements.
-    </p>
-
-    <h2 style="font-size:15px;font-weight:800;color:#1a3a6e;margin:0 0 10px;">2. Key Results</h2>
-    <table style="width:100%;border-collapse:collapse;margin-bottom:20px;font-size:13px;">
-      <thead>
-        <tr style="background:#1a3a6e;color:#fff;">
-          <th style="padding:10px 14px;text-align:left;font-weight:700;">Indicator</th>
-          <th style="padding:10px 14px;text-align:right;font-weight:700;">Value (thous. USD)</th>
-          <th style="padding:10px 14px;text-align:right;font-weight:700;">As % of base trade</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="background:#f0f9ff;">
-          <td style="padding:8px 14px;border-bottom:1px solid #e2e8f0;">Total Trade Effect</td>
-          <td style="padding:8px 14px;border-bottom:1px solid #e2e8f0;text-align:right;font-weight:700;color:#16a34a;">+${fmtInt(totalEff)}</td>
-          <td style="padding:8px 14px;border-bottom:1px solid #e2e8f0;text-align:right;">${(totalEff/totalImp*100).toFixed(2)}%</td>
-        </tr>
-        <tr>
-          <td style="padding:8px 14px;border-bottom:1px solid #e2e8f0;">&nbsp;&nbsp;↳ Trade Creation</td>
-          <td style="padding:8px 14px;border-bottom:1px solid #e2e8f0;text-align:right;color:#0d9488;">+${fmtInt(tot.tradeCreation)}</td>
-          <td style="padding:8px 14px;border-bottom:1px solid #e2e8f0;text-align:right;"></td>
-        </tr>
-        <tr>
-          <td style="padding:8px 14px;border-bottom:1px solid #e2e8f0;">&nbsp;&nbsp;↳ Trade Diversion</td>
-          <td style="padding:8px 14px;border-bottom:1px solid #e2e8f0;text-align:right;color:#0d9488;">+${fmtInt(tot.tradeDiversion)}</td>
-          <td style="padding:8px 14px;border-bottom:1px solid #e2e8f0;text-align:right;"></td>
-        </tr>
-        <tr style="background:#f0fdf4;">
-          <td style="padding:8px 14px;border-bottom:1px solid #e2e8f0;">Consumer Welfare Gain</td>
-          <td style="padding:8px 14px;border-bottom:1px solid #e2e8f0;text-align:right;font-weight:700;color:#16a34a;">+${fmtInt(tot.welfareGain)}</td>
-          <td style="padding:8px 14px;border-bottom:1px solid #e2e8f0;text-align:right;"></td>
-        </tr>
-        <tr style="background:#fff5f5;">
-          <td style="padding:8px 14px;border-bottom:1px solid #e2e8f0;">Tariff Revenue Change</td>
-          <td style="padding:8px 14px;border-bottom:1px solid #e2e8f0;text-align:right;font-weight:700;color:#dc2626;">${fmtInt(tot.revenueChange)}</td>
-          <td style="padding:8px 14px;border-bottom:1px solid #e2e8f0;text-align:right;"></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <h2 style="font-size:15px;font-weight:800;color:#1a3a6e;margin:0 0 10px;">Appendix 1 — Trade Effects by HS Chapter</h2>
-    <p style="font-size:12px;color:#64748b;margin-bottom:8px;">Scenario ${sc}: ${cut}% reduction in MFN applied tariff rates. Import values in thousands USD.</p>
-    <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:20px;">
-      <thead>
-        <tr style="background:#f1f5f9;">
-          <th style="padding:8px 10px;text-align:left;border-bottom:2px solid #e2e8f0;">HS</th>
-          <th style="padding:8px 10px;text-align:left;border-bottom:2px solid #e2e8f0;">Description</th>
-          <th style="padding:8px 10px;text-align:right;border-bottom:2px solid #e2e8f0;">Import 2022</th>
-          <th style="padding:8px 10px;text-align:right;border-bottom:2px solid #e2e8f0;">Trade Effect</th>
-          <th style="padding:8px 10px;text-align:right;border-bottom:2px solid #e2e8f0;">Impact %</th>
-        </tr>
-      </thead>
-      <tbody>${secRows}</tbody>
-      <tfoot>
-        <tr style="font-weight:800;background:#f8fafc;">
-          <td colspan="2" style="padding:8px 10px;">TOTAL HS 28–40</td>
-          <td style="padding:8px 10px;text-align:right;">${fmtInt(totalImp)}</td>
-          <td style="padding:8px 10px;text-align:right;color:#16a34a;">${fmtInt(totalEff)}</td>
-          <td style="padding:8px 10px;text-align:right;">${(totalEff/totalImp*100).toFixed(2)}%</td>
-        </tr>
-      </tfoot>
-    </table>
-
-    <h2 style="font-size:15px;font-weight:800;color:#1a3a6e;margin:0 0 10px;">Appendix 2 — Trade Effects by Partner Country</h2>
-    <p style="font-size:12px;font-weight:700;color:#0f172a;margin-bottom:4px;">WTO MFN Partners — Trade Gains</p>
-    <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:16px;">
-      <thead>
-        <tr style="background:#f1f5f9;">
-          <th style="padding:8px 10px;text-align:left;border-bottom:2px solid #e2e8f0;">Country</th>
-          <th style="padding:8px 10px;text-align:left;border-bottom:2px solid #e2e8f0;">Status</th>
-          <th style="padding:8px 10px;text-align:right;border-bottom:2px solid #e2e8f0;">Total Effect</th>
-          <th style="padding:8px 10px;text-align:right;border-bottom:2px solid #e2e8f0;">Base Trade 2022</th>
-          <th style="padding:8px 10px;text-align:right;border-bottom:2px solid #e2e8f0;">Impact %</th>
-        </tr>
-      </thead>
-      <tbody>${partRows}</tbody>
-    </table>
-    <p style="font-size:12px;font-weight:700;color:#0f172a;margin-bottom:4px;">FTA/CIS Partners — Trade Diversion</p>
-    <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:20px;">
-      <thead>
-        <tr style="background:#f1f5f9;">
-          <th style="padding:8px 10px;text-align:left;border-bottom:2px solid #e2e8f0;">Country</th>
-          <th style="padding:8px 10px;text-align:left;border-bottom:2px solid #e2e8f0;">Status</th>
-          <th style="padding:8px 10px;text-align:right;border-bottom:2px solid #e2e8f0;">Trade Diverted</th>
-          <th style="padding:8px 10px;text-align:right;border-bottom:2px solid #e2e8f0;">Base Trade 2022</th>
-          <th style="padding:8px 10px;text-align:right;border-bottom:2px solid #e2e8f0;">Impact %</th>
-        </tr>
-      </thead>
-      <tbody>${loseRows}</tbody>
-    </table>
-
-    <div style="border-top:1px solid #e2e8f0;padding-top:14px;margin-top:10px;">
-      <p style="font-size:11px;color:#94a3b8;line-height:1.6;">
-        <strong>Methodology:</strong> WITS-SMART Partial Equilibrium framework. Import demand elasticity = 1.27 (UN COMTRADE/WITS database).
-        Scaling factor for Scenario ${sc}: ×${SCALE[sc]}× relative to Scenario 1 (−20% baseline).
-        Source data: Uzbekistan customs 2022, State Customs Committee.
-        Generated by Uzbekistan Economic Policy Engine — CERR, ${today}.
-      </p>
-    </div>
-  `;
+// ════════════════════════════════════════════════════════════
+// SECTORS
+// ════════════════════════════════════════════════════════════
+let sectorView='section';
+function setSectorView(v, btn){
+  sectorView=v; setChip(btn); renderSectors();
 }
 
-function printReport(){
-  window.print();
+function renderSectors(){
+  const isSec = sectorView==='section';
+  document.getElementById('sec-table-title').textContent = isSec ?
+    'Import & Trade Effects by Section' : 'Import & Trade Effects by HS Chapter';
+
+  const rows = isSec ? D.sections.filter(s=>s.imp>0).sort((a,b)=>b.imp-a.imp) :
+    Object.entries(D.chapters).map(([k,v])=>({id:'HS '+k, name:CH_NAMES[parseInt(k)]||('Chapter '+k), sec:v.sec, ...v}))
+      .filter(r=>r.imp>0).sort((a,b)=>b.imp-a.imp);
+
+  const totImp = rows.reduce((a,r)=>a+r.imp,0);
+  const totTC  = rows.reduce((a,r)=>a+r.tc,0);
+  const totTD  = rows.reduce((a,r)=>a+r.td,0);
+  const totWel = rows.reduce((a,r)=>a+r.welfare,0);
+  const totTax = rows.reduce((a,r)=>a+r.taxChg,0);
+
+  // Charts
+  const top = rows.slice(0,14);
+  const colors = ['#0d9488','#2563eb','#7c3aed','#ea580c','#16a34a','#d97706',
+    '#0891b2','#9333ea','#e11d48','#64748b','#0f766e','#1d4ed8','#6d28d9','#b45309'];
+
+  mkChart('sec-imp-chart',{
+    type:'bar', indexAxis:'y',
+    data:{ labels:top.map(r=>r.id),
+      datasets:[{ label:'Import', data:top.map(r=>r.imp),
+        backgroundColor:colors, borderRadius:4 }]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{ x:{grid:{color:'#f0f2f5'}, ticks:{callback:v=>fmtI(v)}},
+               y:{grid:{display:false}, ticks:{font:{size:10}}} }}
+  });
+  mkChart('sec-eff-chart',{
+    type:'bar', indexAxis:'y',
+    data:{ labels:top.map(r=>r.id),
+      datasets:[{ label:'Trade Effect', data:top.map(r=>r.tc+r.td),
+        backgroundColor:colors.map(c=>c+'99'), borderRadius:4 }]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{ x:{grid:{color:'#f0f2f5'}, ticks:{callback:v=>fmtI(v)}},
+               y:{grid:{display:false}, ticks:{font:{size:10}}} }}
+  });
+
+  // Table headers
+  const thRow = isSec ?
+    '<th>Section</th><th>Description</th><th>Import (thous. USD)</th><th>Share</th><th>Avg MFN</th><th>Trade Effect</th><th>Trade Creation</th><th>Trade Diversion</th><th>Welfare</th><th>Revenue Δ</th>' :
+    '<th>Chapter</th><th>Section</th><th>Import (thous. USD)</th><th>Share</th><th>Avg MFN</th><th>Trade Effect</th><th>Trade Creation</th><th>Trade Diversion</th><th>Welfare</th><th>Revenue Δ</th>';
+  document.getElementById('sec-thead').innerHTML = thRow;
+
+  document.getElementById('sec-tbody').innerHTML = rows.map(r=>{
+    const maxImp = rows[0].imp;
+    const barW = Math.round(r.imp/maxImp*100);
+    const col2 = isSec ? `<td style="max-width:220px;">${(r.name||'').substring(0,40)}</td>`
+                       : `<td><span class="badge badge-mfn" style="font-size:9px;">${r.sec||''}</span></td>`;
+    return `<tr>
+      <td><span class="code-badge">${r.id||''}</span><br><span style="font-size:10px;color:var(--text3)">${isSec?'':((r.name||'').substring(0,28))}</span></td>
+      ${col2}
+      <td>${fmtI(r.imp)}<div class="bar-h"><div class="bar-hf" style="width:${barW}%;background:var(--teal)"></div></div></td>
+      <td>${pct(r.imp,totImp)}</td>
+      <td>${r.avgMfn!=null?'<strong>'+r.avgMfn.toFixed(1)+'%</strong>':'—'}</td>
+      <td class="pos">+${fmtI(r.tc+r.td)}</td>
+      <td class="pos">+${fmtI(r.tc)}</td>
+      <td class="pos">+${fmtI(r.td)}</td>
+      <td class="pos">+${fmtI(r.welfare)}</td>
+      <td class="${r.taxChg<0?'neg':'pos'}">${fmtI(r.taxChg)}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('sec-tfoot').innerHTML = `
+    <td colspan="2">TOTAL</td>
+    <td>${fmtI(totImp)}</td>
+    <td>100%</td><td>—</td>
+    <td class="pos">+${fmtI(totTC+totTD)}</td>
+    <td class="pos">+${fmtI(totTC)}</td>
+    <td class="pos">+${fmtI(totTD)}</td>
+    <td class="pos">+${fmtI(totWel)}</td>
+    <td class="neg">${fmtI(totTax)}</td>`;
 }
 
-// ── Init ───────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════
+// PARTNERS
+// ════════════════════════════════════════════════════════════
+let partnerView='gainers';
+function setPartnerView(v, btn){ partnerView=v; setChip(btn); renderPartners(); }
+
+function renderPartners(){
+  let rows = [...D.countries];
+  if(partnerView==='gainers')
+    rows = rows.filter(c=>c.tc>0||c.td>0).sort((a,b)=>(b.tc+b.td)-(a.tc+a.td));
+  else if(partnerView==='losers')
+    rows = rows.filter(c=>c.taxChg<0).sort((a,b)=>a.taxChg-b.taxChg);
+  else
+    rows = rows.sort((a,b)=>b.imp-a.imp);
+
+  const top15 = rows.slice(0,15);
+  const regColor = r=>(r||'').includes('FTA')?'rgba(13,148,136,0.8)':'rgba(37,99,235,0.8)';
+
+  mkChart('part-imp-chart',{
+    type:'bar', indexAxis:'y',
+    data:{ labels:top15.map(c=>c.name.length>18?c.name.substring(0,18)+'…':c.name),
+      datasets:[{ label:'Import', data:top15.map(c=>c.imp),
+        backgroundColor:top15.map(c=>regColor(c.regime)), borderRadius:4 }]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{ x:{grid:{color:'#f0f2f5'}, ticks:{callback:v=>fmtI(v)}},
+               y:{grid:{display:false}, ticks:{font:{size:10}}} }}
+  });
+
+  mkChart('part-eff-chart',{
+    type:'bar', indexAxis:'y',
+    data:{ labels:top15.map(c=>c.name.length>18?c.name.substring(0,18)+'…':c.name),
+      datasets:[
+        { label:'Trade Creation', data:top15.map(c=>c.tc), backgroundColor:'rgba(13,148,136,0.8)', borderRadius:4 },
+        { label:'Trade Diversion', data:top15.map(c=>c.td), backgroundColor:'rgba(37,99,235,0.7)', borderRadius:4 }
+      ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{labels:{font:{size:10}}}},
+      scales:{ x:{stacked:true, grid:{color:'#f0f2f5'}, ticks:{callback:v=>fmtI(v)}},
+               y:{stacked:true, grid:{display:false}, ticks:{font:{size:10}}} }}
+  });
+
+  document.getElementById('part-tbody').innerHTML = rows.map(c=>{
+    const eff = c.tc+c.td;
+    const regBadge = (c.regime||'').includes('FTA')?'badge-fta':(c.regime||'').includes('full')?'badge-full':'badge-mfn';
+    return `<tr>
+      <td><strong>${c.name}</strong></td>
+      <td><span class="badge ${regBadge}">${(c.regime||'').trim()||'—'}</span></td>
+      <td>${fmtI(c.imp)}</td>
+      <td class="pos">+${fmtI(c.tc)}</td>
+      <td class="pos">+${fmtI(c.td)}</td>
+      <td class="${c.welfare>=0?'pos':'neg'}">${c.welfare>=0?'+':''}${fmtI(c.welfare)}</td>
+      <td class="${c.taxChg>=0?'pos':'neg'}">${c.taxChg>=0?'+':''}${fmtI(c.taxChg)}</td>
+      <td class="pos">+${fmtI(eff)}</td>
+      <td>${pct(eff,c.imp)}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ════════════════════════════════════════════════════════════
+// EXPORT & PRINT
+// ════════════════════════════════════════════════════════════
+function exportCSV(section){
+  let rows=[], headers=[];
+  if(section==='sim'||section==='sectors'){
+    headers=['Section/Chapter','Import (thous USD)','Avg MFN %','Trade Effect','Trade Creation','Trade Diversion','Welfare','Revenue Change'];
+    const src = sectorView==='chapter' ? Object.entries(D.chapters).map(([k,v])=>({id:'HS '+k,...v})) : D.sections;
+    rows = src.filter(r=>r.imp>0).map(r=>[r.id,r.imp,r.avgMfn!=null?r.avgMfn.toFixed(2):'',r.tc+r.td,r.tc,r.td,r.welfare,r.taxChg]);
+  } else if(section==='partners'){
+    headers=['Country','Regime','Import','Trade Creation','Trade Diversion','Welfare','Revenue'];
+    rows = D.countries.map(c=>[c.name,c.regime,c.imp,c.tc,c.td,c.welfare,c.taxChg]);
+  }
+  const csv=[headers.join(','),...rows.map(r=>r.map(v=>typeof v==='string'?`"${v}"`:v).join(','))].join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='pe_model_'+section+'_export.csv'; a.click();
+}
+
+function printSection(){ window.print(); }
+
+// ════════════════════════════════════════════════════════════
+// TABLE SORT
+// ════════════════════════════════════════════════════════════
+const sortState={};
+function sortTable(tableId, col){
+  const tbl=document.getElementById(tableId);
+  const tbody=tbl.querySelector('tbody');
+  const rows=[...tbody.querySelectorAll('tr')];
+  const key=tableId+'_'+col;
+  const asc=!sortState[key]; sortState[key]=asc;
+  rows.sort((a,b)=>{
+    const va=a.cells[col]?.textContent.replace(/[+,% ]/g,'')||'';
+    const vb=b.cells[col]?.textContent.replace(/[+,% ]/g,'')||'';
+    const na=parseFloat(va), nb=parseFloat(vb);
+    if(!isNaN(na)&&!isNaN(nb)) return asc?na-nb:nb-na;
+    return asc?va.localeCompare(vb):vb.localeCompare(va);
+  });
+  rows.forEach(r=>tbody.appendChild(r));
+}
+
+// ════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════
 function init(){
-  try { updateOverview(); } catch(e){ console.error('Overview error:',e); }
-  try { renderSectors(); } catch(e){ console.error('Sectors error:',e); }
-  try { renderPartners(); } catch(e){ console.error('Partners error:',e); }
-  try { runSimulator(); } catch(e){ console.error('Simulator error:',e); }
-  try { renderReport(); } catch(e){ console.error('Report error:',e); }
+  try{ renderOverview(); }catch(e){ console.error('Overview:',e); }
+  try{ populateSimFilters(); runSim(); }catch(e){ console.error('Sim:',e); }
+  try{ renderSectors(); }catch(e){ console.error('Sectors:',e); }
+  try{ renderPartners(); }catch(e){ console.error('Partners:',e); }
 }
-
 document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
