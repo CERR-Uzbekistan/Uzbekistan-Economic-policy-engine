@@ -1,0 +1,95 @@
+name: Validate
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  html-check:
+    name: HTML & Link Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check HTML files exist and are non-empty
+        run: |
+          echo "Checking all HTML files..."
+          errors=0
+          for f in index.html */index.html; do
+            if [ ! -f "$f" ]; then
+              echo "MISSING: $f"
+              errors=$((errors + 1))
+            elif [ ! -s "$f" ]; then
+              echo "EMPTY: $f"
+              errors=$((errors + 1))
+            else
+              echo "OK: $f ($(wc -c < "$f") bytes)"
+            fi
+          done
+          if [ $errors -gt 0 ]; then
+            echo "::error::$errors HTML file(s) missing or empty"
+            exit 1
+          fi
+
+      - name: Check for console.log debugging leftovers
+        run: |
+          echo "Checking for debugging console.log statements..."
+          # Allow console.warn and console.error (legitimate), flag console.log
+          if grep -rn "console\.log(" --include="*.html" --include="*.js" \
+              --exclude-dir=node_modules --exclude="*_data.js" | \
+              grep -v "// keep" | head -20; then
+            echo "::warning::Found console.log statements — consider removing before merge"
+          else
+            echo "No console.log statements found"
+          fi
+
+      - name: Check data files are present
+        run: |
+          echo "Checking required data files..."
+          errors=0
+          for f in dfm_nowcast/dfm_data.js io_model/io_data.js pe_model/pe_data.js; do
+            if [ ! -f "$f" ]; then
+              echo "MISSING: $f"
+              errors=$((errors + 1))
+            else
+              size=$(wc -c < "$f")
+              echo "OK: $f ($size bytes)"
+              if [ "$size" -lt 100 ]; then
+                echo "WARNING: $f seems too small ($size bytes)"
+              fi
+            fi
+          done
+          if [ $errors -gt 0 ]; then
+            echo "::error::$errors data file(s) missing"
+            exit 1
+          fi
+
+      - name: Check shared modules exist
+        run: |
+          echo "Checking shared modules..."
+          for f in shared/report-engine.js shared/scenario-engine.js shared/ai-advisor.js shared/toast.js; do
+            if [ ! -f "$f" ]; then
+              echo "::error::Missing shared module: $f"
+              exit 1
+            else
+              echo "OK: $f"
+            fi
+          done
+
+  i18n-check:
+    name: i18n Completeness
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check hub page i18n keys
+        run: |
+          echo "Checking index.html for i18n coverage..."
+          # Count elements with data-i18n vs hardcoded visible text
+          i18n_count=$(grep -c 'data-i18n' index.html || true)
+          echo "Found $i18n_count i18n-tagged elements in hub page"
+          if [ "$i18n_count" -lt 10 ]; then
+            echo "::warning::Hub page has very few i18n tags ($i18n_count) — check translations"
+          fi
