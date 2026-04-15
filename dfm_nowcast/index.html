@@ -195,8 +195,22 @@ tr:hover td { background: #f8f9ff; }
 
   <div class="section-label">GDP Growth History & Nowcast</div>
   <div class="card" style="margin-bottom:18px">
-    <div class="card-title">GDP Year-on-Year Growth Rate (%)</div>
-    <div class="card-subtitle">Historical + DFM nowcast (highlighted) · Quarterly</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
+      <div>
+        <div class="card-title" style="margin-bottom:0">GDP Year-on-Year Growth Rate (%)</div>
+        <div class="card-subtitle" style="margin-bottom:0">Historical + DFM nowcast (highlighted) · Quarterly</div>
+      </div>
+      <button id="fan-toggle-btn" onclick="toggleFanChart()" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:5px 13px;font-size:12px;font-weight:600;color:#1d4ed8;cursor:pointer;display:flex;align-items:center;gap:5px;">
+        📊 Show Fan Chart
+      </button>
+    </div>
+    <!-- Fan chart legend (hidden until fan is on) -->
+    <div id="fan-legend" style="display:none;gap:12px;flex-wrap:wrap;margin:6px 0 10px;font-size:11px;color:#555;">
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:22px;height:10px;background:rgba(230,126,34,0.55);border-radius:2px;display:inline-block;"></span>50% CI</span>
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:22px;height:10px;background:rgba(230,126,34,0.30);border-radius:2px;display:inline-block;"></span>70% CI</span>
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:22px;height:10px;background:rgba(230,126,34,0.13);border-radius:2px;display:inline-block;"></span>90% CI</span>
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;background:rgba(230,126,34,0.9);border-radius:50%;display:inline-block;"></span>Central forecast</span>
+    </div>
     <div class="chart-wrap" style="height:300px">
       <canvas id="chart-gdp-yoy"></canvas>
     </div>
@@ -747,6 +761,66 @@ function renderNowcastPage() {
                     'rgba(192,57,43,1)'
   );
 
+  // ── Fan chart uncertainty bands ─────────────────────────
+  // σ grows with forecast horizon: σ(h) = σ_base × √h
+  // Based on typical DFM out-of-sample RMSE for Uzbekistan GDP ≈ 0.45pp
+  const σ_base = 0.45;
+  const fcIndices = chartIsFc.map((f, i) => f ? i : -1).filter(i => i >= 0);
+  const fanUpper90 = chartValues.map((v, i) => {
+    if (!chartIsFc[i]) return null;
+    const h = fcIndices.indexOf(i) + 1;
+    return v + 1.645 * σ_base * Math.sqrt(h);
+  });
+  const fanLower90 = chartValues.map((v, i) => {
+    if (!chartIsFc[i]) return null;
+    const h = fcIndices.indexOf(i) + 1;
+    return v - 1.645 * σ_base * Math.sqrt(h);
+  });
+  const fanUpper70 = chartValues.map((v, i) => {
+    if (!chartIsFc[i]) return null;
+    const h = fcIndices.indexOf(i) + 1;
+    return v + 1.036 * σ_base * Math.sqrt(h);
+  });
+  const fanLower70 = chartValues.map((v, i) => {
+    if (!chartIsFc[i]) return null;
+    const h = fcIndices.indexOf(i) + 1;
+    return v - 1.036 * σ_base * Math.sqrt(h);
+  });
+  const fanUpper50 = chartValues.map((v, i) => {
+    if (!chartIsFc[i]) return null;
+    const h = fcIndices.indexOf(i) + 1;
+    return v + 0.674 * σ_base * Math.sqrt(h);
+  });
+  const fanLower50 = chartValues.map((v, i) => {
+    if (!chartIsFc[i]) return null;
+    const h = fcIndices.indexOf(i) + 1;
+    return v - 0.674 * σ_base * Math.sqrt(h);
+  });
+
+  let fanVisible = false;
+
+  // Fan colors: off = transparent, on = visible shades
+  const FAN_COLORS_ON  = ['rgba(230,126,34,0.10)','transparent','rgba(230,126,34,0.22)','transparent','rgba(230,126,34,0.40)','transparent'];
+  const FAN_COLORS_OFF = Array(6).fill('transparent');
+
+  const fanDatasets = [
+    // 90% CI band (outermost, lightest)
+    { type:'line', label:'90% CI', data: fanUpper90, borderWidth:0, pointRadius:0, fill:'+1',
+      backgroundColor:'transparent', tension:0.35 },
+    { type:'line', label:'', data: fanLower90, borderWidth:0, pointRadius:0, fill:false,
+      backgroundColor:'transparent', tension:0.35 },
+    // 70% CI band
+    { type:'line', label:'70% CI', data: fanUpper70, borderWidth:0, pointRadius:0, fill:'+1',
+      backgroundColor:'transparent', tension:0.35 },
+    { type:'line', label:'', data: fanLower70, borderWidth:0, pointRadius:0, fill:false,
+      backgroundColor:'transparent', tension:0.35 },
+    // 50% CI band (innermost, darkest)
+    { type:'line', label:'50% CI', data: fanUpper50, borderWidth:0, pointRadius:0, fill:'+1',
+      backgroundColor:'transparent', tension:0.35 },
+    { type:'line', label:'', data: fanLower50, borderWidth:0, pointRadius:0, fill:false,
+      backgroundColor:'transparent', tension:0.35 },
+  ];
+
   destroyChart('chart-gdp-yoy');
   const ctx = document.getElementById('chart-gdp-yoy');
   if (ctx) {
@@ -763,15 +837,16 @@ function renderNowcastPage() {
             borderColor:     borderColors.map((c, i) => chartIsFc[i] ? 'transparent' : c),
             borderWidth: 1, borderRadius: 4, borderSkipped: false
           },
-          // Forecast bars (DFM)
+          // Forecast bars (DFM central)
           {
             label: 'DFM Nowcast',
             data: chartValues.map((v, i) => chartIsFc[i] ? v : null),
             backgroundColor: chartValues.map((v, i) => chartIsFc[i] ? 'rgba(230,126,34,0.90)' : 'transparent'),
             borderColor:     chartValues.map((v, i) => chartIsFc[i] ? 'rgba(200,100,10,1)'    : 'transparent'),
-            borderWidth: 2, borderRadius: 4, borderSkipped: false,
-            borderDash: []
-          }
+            borderWidth: 2, borderRadius: 4, borderSkipped: false
+          },
+          // Fan chart band datasets (hidden by default)
+          ...fanDatasets
         ]
       },
       options: {
@@ -781,16 +856,22 @@ function renderNowcastPage() {
             display: true, position: 'top',
             labels: {
               font: {size: 11}, usePointStyle: true, pointStyleWidth: 10,
-              filter: item => item.label !== ''
+              filter: item => item.label !== '' && !['90% CI','70% CI','50% CI'].includes(item.label)
             }
           },
           tooltip: {
             callbacks: {
               label: c => {
+                if (!c.raw && c.raw !== 0) return null;
                 const isFc = chartIsFc[c.dataIndex];
+                if (c.datasetIndex >= 2) {
+                  const bandLabels = ['90% CI upper','90% CI lower','70% CI upper','70% CI lower','50% CI upper','50% CI lower'];
+                  return ` ${bandLabels[c.datasetIndex - 2]}: ${c.raw?.toFixed(2)}%`;
+                }
                 return ` ${c.raw?.toFixed(2)}%  ${isFc ? '(DFM Nowcast)' : '(StatOffice)'}`;
               }
-            }
+            },
+            filter: item => item.raw !== null
           },
           annotation: {}
         },
@@ -804,6 +885,22 @@ function renderNowcastPage() {
       }
     });
   }
+
+  // Toggle: swap backgroundColor between transparent (off) and visible (on)
+  window.toggleFanChart = function() {
+    fanVisible = !fanVisible;
+    const chart = charts['chart-gdp-yoy'];
+    if (!chart) return;
+    const colors = fanVisible ? FAN_COLORS_ON : FAN_COLORS_OFF;
+    for (let i = 0; i < 6; i++) {
+      chart.data.datasets[2 + i].backgroundColor = colors[i];
+    }
+    chart.update('none'); // 'none' = no animation, instant redraw
+    const btn = document.getElementById('fan-toggle-btn');
+    const leg = document.getElementById('fan-legend');
+    if (btn) { btn.innerHTML = fanVisible ? '📊 Hide Fan Chart' : '📊 Show Fan Chart'; btn.style.background = fanVisible ? '#1d4ed8' : '#eff6ff'; btn.style.color = fanVisible ? '#fff' : '#1d4ed8'; btn.style.borderColor = fanVisible ? '#1d4ed8' : '#bfdbfe'; }
+    if (leg) leg.style.display = fanVisible ? 'flex' : 'none';
+  };
 
   // Decomposition chart
   const contrib = D.loadings.contributions.map(Number);
