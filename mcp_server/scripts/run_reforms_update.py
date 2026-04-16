@@ -49,9 +49,10 @@ async def run_full_pipeline():
         print(f"  Found {len(valid_docs)} documents from {source}")
         report.append(f"{source}: {len(valid_docs)} documents found")
 
-        # Step 2: Categorize each document with AI
-        if api_key and valid_docs:
-            print(f"  Categorizing {len(valid_docs)} documents with AI...")
+        # Step 2: Categorize each document (AI if key available, keyword fallback otherwise)
+        if valid_docs:
+            mode = "AI" if api_key else "keyword-matching"
+            print(f"  Categorizing {len(valid_docs)} documents via {mode}...")
             for i, doc in enumerate(valid_docs):
                 print(f"    [{i+1}/{len(valid_docs)}] {doc.get('title', 'Untitled')[:60]}...")
                 cat_result = await categorize_reform(
@@ -63,9 +64,6 @@ async def run_full_pipeline():
                     all_reforms.append(cat_result["reform"])
                 elif "error" in cat_result:
                     print(f"    WARNING: {cat_result['error']}")
-        elif not api_key and valid_docs:
-            print(f"  No ANTHROPIC_API_KEY — skipping AI categorization")
-            report.append("AI categorization skipped (no API key)")
 
     if not all_reforms:
         print(f"\n  No reforms to update.")

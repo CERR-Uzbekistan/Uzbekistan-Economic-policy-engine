@@ -130,12 +130,13 @@ async def categorize_reform(
 
     import httpx
 
-    api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
-    if not api_key:
-        return {"error": "No API key. Set ANTHROPIC_API_KEY environment variable."}
-
     if not raw_text or len(raw_text.strip()) < 20:
         return {"error": "Document text too short to categorize."}
+
+    api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
+    if not api_key:
+        # Fallback: keyword-based categorization without AI
+        return {"reform": _categorize_by_keywords(raw_text, source), "source": source}
 
     prompt = f"""Categorize this Uzbekistan government document and generate a structured entry.
 
@@ -306,7 +307,102 @@ async def update_tracker_file(
     }
 
 
-def _parse_lex_uz(html: str, limit: int) -> list[dict]:
+def _categorize_by_keywords(raw_text: str, source: str) -> dict:
+    """Categorize a reform using keyword matching — no API key needed."""
+    text = raw_text.lower()
+    today = _today()
+
+    # Category detection
+    category_keywords = {
+        "wto": ["wto", "вто", "jto", "world trade", "accession", "присоединение"],
+        "tax": ["tax", "налог", "soliq", "vat", "ндс", "qqs", "акциз", "excise"],
+        "trade": ["trade", "торговл", "savdo", "tariff", "тариф", "customs", "таможен", "bojxona", "export", "import"],
+        "monetary": ["monetary", "монетар", "monetar", "interest rate", "ставк", "stavka", "inflation", "инфляц", "inflyatsiya", "central bank", "марказий банк"],
+        "fiscal": ["fiscal", "фискал", "fiskal", "budget", "бюджет", "byudjet", "spending", "расход"],
+        "structural": ["reform", "реформ", "islohotlar", "privatiz", "приватиз", "digital", "цифров", "raqamli", "energy", "энерг", "energetika"],
+    }
+    category = "structural"
+    best_score = 0
+    for cat, keywords in category_keywords.items():
+        score = sum(1 for kw in keywords if kw in text)
+        if score > best_score:
+            best_score = score
+            category = cat
+
+    # Sector detection
+    sector_keywords = {
+        "agriculture": ["agriculture", "сельск", "qishloq", "farm", "фермер", "dehqon"],
+        "industry": ["industr", "промышлен", "sanoat", "manufactur", "производств"],
+        "energy": ["energy", "энерг", "energetika", "oil", "gas", "нефт", "газ"],
+        "finance": ["bank", "банк", "finance", "финанс", "moliya", "insurance", "страхов"],
+        "digital": ["digital", "цифров", "raqamli", "IT", "technolog", "технолог", "texnologiya"],
+        "services": ["service", "услуг", "xizmat", "tourism", "туризм", "sayyohlik"],
+    }
+    sector = "all"
+    best_score = 0
+    for sec, keywords in sector_keywords.items():
+        score = sum(1 for kw in keywords if kw in text)
+        if score > best_score:
+            best_score = score
+            sector = sec
+
+    # Document type from source
+    doc_type_keywords = {
+        "presidential_decree": ["указ", "президент", "farmon", "decree"],
+        "cabinet_resolution": ["постановлен", "кабинет", "qaror", "resolution", "cabinet"],
+        "law": ["закон", "qonun", "law"],
+        "strategy": ["стратеги", "strategiya", "strategy", "program", "программ", "dastur"],
+    }
+    doc_type = "regulation"
+    for dt, keywords in doc_type_keywords.items():
+        if any(kw in text for kw in keywords):
+            doc_type = dt
+            break
+
+    # Domain mapping from category
+    domain_map = {
+        "wto": "Trade", "tax": "Tax", "trade": "Trade",
+        "monetary": "Banking", "fiscal": "Tax", "structural": "SOE",
+    }
+    if sector == "energy":
+        domain = "Energy"
+    elif sector == "agriculture":
+        domain = "Agriculture"
+    elif sector == "digital":
+        domain = "Digital"
+    else:
+        domain = domain_map.get(category, "SOE")
+
+    # Linked models
+    model_links = {
+        "wto": ["pe", "cge"], "tax": ["cge", "fpp"], "trade": ["pe", "cge", "io"],
+        "monetary": ["qpm", "dfm"], "fiscal": ["fpp", "cge"], "structural": ["io", "cge"],
+    }
+    linked = model_links.get(category, ["cge"])
+
+    # Use raw text as title (truncated)
+    title = raw_text.strip()[:120].replace('"', "'")
+
+    return {
+        "category": category,
+        "sector": sector,
+        "documentType": doc_type,
+        "region": "national",
+        "status": "active",
+        "domain": domain,
+        "title_en": title,
+        "title_ru": title,
+        "title_uz": title,
+        "description_en": f"Policy document from {source} — auto-categorized by keyword matching.",
+        "description_ru": f"Нормативный документ из {source} — автоматическая категоризация.",
+        "description_uz": f"{source} dan normativ hujjat — kalit so'zlar bo'yicha tasniflangan.",
+        "linkedModels": linked,
+        "startDate": today,
+        "endDate": None,
+    }
+
+
+
     """Extract document entries from lex.uz search results HTML."""
     docs = []
     # Look for document blocks — lex.uz uses structured HTML
