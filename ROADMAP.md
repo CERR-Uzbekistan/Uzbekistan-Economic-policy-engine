@@ -57,6 +57,39 @@ No government or central bank in Central Asia has a **web-native, AI-enhanced, m
 
 ---
 
+## Phase 1B: Model Methodology Improvements (April 2026 Audit)
+
+**Goal:** Strengthen economic rigor of all 6 models based on professional audit findings.
+
+### QPM — Monetary Policy Model
+- [ ] **Activate external demand shock (b3)** — parameter exists but no UI button; cannot simulate Russia/China slowdown (Low effort, High impact)
+- [ ] **Add direct import price pass-through to Phillips Curve** — current indirect channel (via RER gap) underestimates; add `a4·Δpm` term for import-dependent economy (Medium effort)
+- [ ] **Reconcile baseline forecast with IRF solver** — `runBL()` uses ad-hoc `a2*rmc*3` scaling inconsistent with `solveIRF()`; should use same structural equations (Medium effort)
+- [ ] **Add risk premium to UIP** — no country risk wedge; cannot simulate capital flight or sovereign risk shocks (Medium effort)
+
+### PE — Trade Model
+- [ ] **Replace uniform elasticity (ε=1.27) with sector-specific values** — food (ε≈0.3) responds differently than machinery (ε≈2.5); use WITS-provided product elasticities (Medium effort, High impact)
+- [ ] **Remove ad-hoc 0.6 regime filter** — replace with actual trade share computation under each regime (Low effort)
+
+### FPP — Financial Programming
+- [ ] **Add inflation stress scenarios** — baseline projects 9.6%→3.0% in one year; unrealistic without NER cooperation; add persistent depreciation scenario (Low effort)
+- [ ] **Make current account endogenous to real exchange rate** — currently CA/GDP is an input; should respond to competitiveness (High effort)
+
+### I-O — Input-Output Model
+- [ ] **Upgrade to Type II multipliers** — add induced consumption effects (household spending feedback); Type I underestimates services sector impact by 20-40% (Medium effort)
+
+### CGE — General Equilibrium
+- [ ] **Add simple labor market block** — no employment in current model; add wage-employment with formal/informal split for Uzbekistan labor policy analysis (High effort)
+
+### DFM — Nowcasting
+- [ ] **Expand to 2-3 factors** — single factor misses sectoral divergence (e.g., agriculture boom + industry contraction); consider real activity, external, financial factors (High effort)
+
+### Cross-Model
+- [ ] **Harmonize Phillips Curve parameters** — QPM uses (a1=0.6, a2=0.2) vs FPP (λ1=0.05, λ2=0.70); document structural differences or reconcile
+- [ ] **Add uncertainty bands to all models** — only DFM has fan charts; QPM, CGE, FPP should show parameter uncertainty
+
+---
+
 ## Phase 2: Scenario Engine & Cross-Model Integration
 
 **Goal:** Transform from 6 isolated models into an integrated policy analysis platform.
@@ -220,4 +253,4 @@ EFFORT│                 │                  │  EFFORT
 
 ---
 
-*Last updated: 2026-04-13*
+*Last updated: 2026-04-16*
