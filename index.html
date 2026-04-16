@@ -1900,6 +1900,7 @@ const LANGS = {
     explorer_sources_title:'Data Sources', explorer_flow_title:'Computation Flows',
     explorer_filter_model:'All Models', explorer_filter_type:'All Types',
     explorer_no_params:'No parameters match selected filters',
+    explorer_params_count:'parameters',
     research_title:'Research & Analysis', research_sub:'Policy briefs and analytical notes',
     research_intro:'Filter CERR briefs by topic, model, and author.',
     research_search_ph:'Search research...', research_filter_topic:'All Topics',
@@ -1981,6 +1982,7 @@ const LANGS = {
     explorer_sources_title:'Источники данных', explorer_flow_title:'Вычислительные потоки',
     explorer_filter_model:'Все модели', explorer_filter_type:'Все типы',
     explorer_no_params:'Параметры по выбранным фильтрам не найдены',
+    explorer_params_count:'параметров',
     research_title:'Исследования и аналитика', research_sub:'Политические брифы и аналитические заметки',
     research_intro:'Фильтруйте материалы ЦЭИР по теме, модели и автору.',
     research_search_ph:'Поиск исследований...', research_filter_topic:'Все темы',
@@ -2062,6 +2064,7 @@ const LANGS = {
     explorer_sources_title:"Ma'lumot manbalari", explorer_flow_title:"Hisoblash oqimlari",
     explorer_filter_model:"Barcha modellar", explorer_filter_type:"Barcha turlar",
     explorer_no_params:"Tanlangan filtrlarga mos parametrlar topilmadi",
+    explorer_params_count:"parametrlar",
     research_title:"Tadqiqot va tahlil", research_sub:"Siyosiy briflar va analitik materiallar",
     research_intro:"CERR materiallarini mavzu, model va muallif bo'yicha filtrlang.",
     research_search_ph:"Tadqiqotni qidiring...", research_filter_topic:"Barcha mavzular",
@@ -2151,10 +2154,12 @@ function explorerRows() {
   const rows = [];
   models.forEach(model => {
     (model.parameters || []).forEach(param => {
+      const range = (param.min != null && param.max != null) ? `${param.min} – ${param.max}` : '';
       rows.push({
         modelId: model.id,
         modelName: localize(model.name),
         ...param,
+        range,
       });
     });
   });
@@ -2175,7 +2180,7 @@ function renderExplorerPage() {
         <div class="explorer-summary-card">
           <div class="explorer-summary-title">${escHtml(localize(m.name))}</div>
           <div class="explorer-summary-meta">${escHtml(m.type || '')}</div>
-          <div class="explorer-summary-meta">${count} ${escHtml(i18nText('explorer_col_name', 'Name').toLowerCase())}</div>
+          <div class="explorer-summary-meta">${count} ${escHtml(i18nText('explorer_params_count', 'parameters'))}</div>
         </div>
       `;
     }).join('');
