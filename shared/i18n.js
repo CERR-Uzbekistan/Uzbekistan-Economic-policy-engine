@@ -741,6 +741,12 @@ window.applyModelLang = function(lang) {
     const key = el.getAttribute('data-i18n-placeholder');
     if (t[key] !== undefined) el.placeholder = t[key];
   });
+  // Swap tooltip text for .ptip elements that carry data-tip-{lang} attributes
+  const tipAttr = 'data-tip-' + lang;
+  document.querySelectorAll('.ptip[' + tipAttr + ']').forEach(el => {
+    const tip = el.getAttribute(tipAttr);
+    if (tip) el.setAttribute('data-tip', tip);
+  });
   // Store current lang for newly rendered dynamic content
   document.documentElement.setAttribute('lang', lang);
 };

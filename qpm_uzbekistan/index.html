@@ -217,22 +217,22 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   <div class="sec">
     <div class="sec-hd" data-i18n="qpm_is_hd">IS Curve — Aggregate Demand</div>
     <div class="prow">
-      <div class="plabel"><span class="pname" data-i18n="qpm_b1">b₁ — Gap persistence<span class="ptip" data-tip="Controls how quickly the GDP gap closes. Higher b₁ = more inertia, slower recovery from shocks.">i</span></span><span class="pval" id="vb1">0.70</span></div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_b1">b₁ — Gap persistence<span class="ptip" data-tip="Controls how quickly the GDP gap closes. Higher b₁ = more inertia, slower recovery from shocks." data-tip-ru="Контролирует скорость закрытия разрыва ВВП. Высокий b₁ = больше инерции, медленнее восстановление после шоков." data-tip-uz="YaIM bo'shlig'i qanchalik tez yopilishini boshqaradi. Yuqori b₁ = ko'proq inersiya, sekinroq tiklanish.">i</span></span><span class="pval" id="vb1">0.70</span></div>
       <div class="pdesc" data-i18n="qpm_b1_desc">Inertia in output gap dynamics</div>
       <input type="range" id="b1" min="0.3" max="0.95" step="0.05" value="0.7" oninput="sl(this,'vb1',f2)">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname" data-i18n="qpm_b2">b₂ — MCI sensitivity<span class="ptip" data-tip="How strongly monetary conditions (interest rate + exchange rate) affect output gap. Key monetary transmission parameter.">i</span></span><span class="pval" id="vb2">0.20</span></div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_b2">b₂ — MCI sensitivity<span class="ptip" data-tip="How strongly monetary conditions (interest rate + exchange rate) affect output gap. Key monetary transmission parameter." data-tip-ru="Насколько денежные условия (ставка + курс) влияют на разрыв выпуска. Ключевой параметр денежной трансмиссии." data-tip-uz="Pul-kredit shartlari chiqarish bo'shlig'iga ta'sir kuchi. Asosiy monetar transmissiya parametri.">i</span></span><span class="pval" id="vb2">0.20</span></div>
       <div class="pdesc" data-i18n="qpm_b2_desc">Monetary policy transmission to demand</div>
       <input type="range" id="b2" min="0.05" max="0.6" step="0.05" value="0.2" oninput="sl(this,'vb2',f2)">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname" data-i18n="qpm_b3">b₃ — External demand<span class="ptip" data-tip="Sensitivity of domestic output to foreign economic cycles. Important for Uzbekistan as an open economy with significant trade and remittances.">i</span></span><span class="pval" id="vb3">0.30</span></div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_b3">b₃ — External demand<span class="ptip" data-tip="Sensitivity of domestic output to foreign economic cycles. Important for Uzbekistan as an open economy with significant trade and remittances." data-tip-ru="Чувствительность внутреннего выпуска к внешним экономическим циклам. Важно для открытой экономики Узбекистана с торговлей и денежными переводами." data-tip-uz="Ichki chiqarish tashqi iqtisodiy tsikllarga sezgirligi. Savdo va pul o'tkazmalari bo'lgan ochiq iqtisodiyot uchun muhim.">i</span></span><span class="pval" id="vb3">0.30</span></div>
       <div class="pdesc" data-i18n="qpm_b3_desc">Foreign output gap spillover</div>
       <input type="range" id="b3" min="0.05" max="0.6" step="0.05" value="0.3" oninput="sl(this,'vb3',f2)">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname" data-i18n="qpm_b4">b₄ — IR weight in MCI<span class="ptip" data-tip="Share of interest rate in the Monetary Conditions Index. Remaining (1−b₄) is the exchange rate weight. Calibrated to Uzbekistan's financial structure.">i</span></span><span class="pval" id="vb4">0.60</span></div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_b4">b₄ — IR weight in MCI<span class="ptip" data-tip="Share of interest rate in the Monetary Conditions Index. Remaining (1−b₄) is the exchange rate weight. Calibrated to Uzbekistan's financial structure." data-tip-ru="Доля процентной ставки в индексе денежных условий. Остаток (1−b₄) — вес обменного курса. Откалибровано для Узбекистана." data-tip-uz="Pul-kredit shartlari indeksida foiz stavkasi ulushi. Qolgan (1−b₄) — valyuta kursi og'irligi. O'zbekiston uchun kalibrlangan.">i</span></span><span class="pval" id="vb4">0.60</span></div>
       <div class="pdesc" data-i18n="qpm_b4_desc">Interest rate vs exchange rate (1-b₄) in MCI</div>
       <input type="range" id="b4" min="0.1" max="0.9" step="0.1" value="0.6" oninput="sl(this,'vb4',f2)">
     </div>
@@ -241,17 +241,17 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   <div class="sec">
     <div class="sec-hd" data-i18n="qpm_pc_hd">Phillips Curve — Inflation</div>
     <div class="prow">
-      <div class="plabel"><span class="pname" data-i18n="qpm_a1">a₁ — Inflation persistence<span class="ptip" data-tip="Share of inflation driven by past inflation (backward-looking expectations). High a₁ = inflation is hard to anchor; low = expectations are more forward-looking and responsive to CBU signals.">i</span></span><span class="pval" id="va1">0.60</span></div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_a1">a₁ — Inflation persistence<span class="ptip" data-tip="Share of inflation driven by past inflation (backward-looking expectations). High a₁ = inflation is hard to anchor; low = expectations are more forward-looking and responsive to CBU signals." data-tip-ru="Доля инфляции, обусловленная прошлой инфляцией. Высокий a₁ = инфляцию трудно сдержать; низкий = ожидания более перспективные и реагируют на сигналы ЦБУ." data-tip-uz="O'tgan inflyatsiya bilan bog'liq inflyatsiya ulushi. Yuqori a₁ = inflyatsiyani jilovlash qiyin; past = kutishlar CBU signallariga ko'proq sezgir.">i</span></span><span class="pval" id="va1">0.60</span></div>
       <div class="pdesc" data-i18n="qpm_a1_desc">Backward-looking share of expectations</div>
       <input type="range" id="a1" min="0.3" max="0.9" step="0.05" value="0.6" oninput="sl(this,'va1',f2)">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname" data-i18n="qpm_a2">a₂ — Marginal cost pass-through<span class="ptip" data-tip="Pass-through from real marginal cost (output gap) to CPI inflation. Higher a₂ = stronger demand-pull inflation pressures at each unit of economic overheating.">i</span></span><span class="pval" id="va2">0.20</span></div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_a2">a₂ — Marginal cost pass-through<span class="ptip" data-tip="Pass-through from real marginal cost (output gap) to CPI inflation. Higher a₂ = stronger demand-pull inflation pressures at each unit of economic overheating." data-tip-ru="Передача реальных предельных издержек в инфляцию CPI. Высокий a₂ = сильное инфляционное давление со стороны спроса при перегреве экономики." data-tip-uz="Haqiqiy chegaraviy xarajatlardan CPI inflyatsiyasiga o'tish. Yuqori a₂ = iqtisodiyot qizib ketganda kuchliroq inflyatsion bosim.">i</span></span><span class="pval" id="va2">0.20</span></div>
       <div class="pdesc" data-i18n="qpm_a2_desc">RMC impact on inflation</div>
       <input type="range" id="a2" min="0.05" max="0.5" step="0.05" value="0.20" oninput="sl(this,'va2',f2)">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname" data-i18n="qpm_a3">a₃ — Domestic cost share<span class="ptip" data-tip="Share of domestically driven costs in the CPI basket. Remaining (1−a₃) is the imported inflation component. Uzbekistan: ~65% domestic, ~35% import-driven.">i</span></span><span class="pval" id="va3">0.65</span></div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_a3">a₃ — Domestic cost share<span class="ptip" data-tip="Share of domestically driven costs in the CPI basket. Remaining (1−a₃) is the imported inflation component. Uzbekistan: ~65% domestic, ~35% import-driven." data-tip-ru="Доля внутренних затрат в корзине CPI. Остаток (1−a₃) = импортная инфляция. Узбекистан: ~65% внутренние, ~35% импорт." data-tip-uz="IFK savatchasida ichki xarajatlar ulushi. Qolgan (1−a₃) = import inflyatsiyasi. O'zbekiston: ~65% ichki, ~35% import.">i</span></span><span class="pval" id="va3">0.65</span></div>
       <div class="pdesc" data-i18n="qpm_a3_desc">Domestic vs imported inflation</div>
       <input type="range" id="a3" min="0.2" max="0.9" step="0.05" value="0.65" oninput="sl(this,'va3',f2)">
     </div>
@@ -260,22 +260,22 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   <div class="sec">
     <div class="sec-hd" data-i18n="qpm_tr_hd">Taylor Rule — Monetary Policy</div>
     <div class="prow">
-      <div class="plabel"><span class="pname" data-i18n="qpm_g1">g₁ — Rate smoothing<span class="ptip" data-tip="Central bank gradualism: how slowly the CBU adjusts rates. High g₁ (≈0.8) = gradual, predictable changes. Low g₁ = aggressive, volatile rate moves.">i</span></span><span class="pval" id="vg1">0.80</span></div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_g1">g₁ — Rate smoothing<span class="ptip" data-tip="Central bank gradualism: how slowly the CBU adjusts rates. High g₁ (≈0.8) = gradual, predictable changes. Low g₁ = aggressive, volatile rate moves." data-tip-ru="Постепенность ЦБУ: насколько медленно корректируются ставки. Высокий g₁ (≈0.8) = плавные, предсказуемые изменения. Низкий g₁ = агрессивные движения ставок." data-tip-uz="Markaziy bank gradualizmi: CBU stavkalarni qanchalik sekin moslashtiradi. Yuqori g₁ (≈0.8) = asta-sekin, bashoratli o'zgarishlar. Past g₁ = tajovuzkor stavka harakatlari.">i</span></span><span class="pval" id="vg1">0.80</span></div>
       <div class="pdesc" data-i18n="qpm_g1_desc">CBU gradualism in rate adjustments</div>
       <input type="range" id="g1" min="0.3" max="0.95" step="0.05" value="0.8" oninput="sl(this,'vg1',f2)">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname" data-i18n="qpm_g2">g₂ — Inflation response<span class="ptip" data-tip="Taylor Principle: must exceed 1 for inflation stability. g₂=1.5 means the CBU raises the nominal rate by 150bp for every 1pp inflation overshoot — ensuring the real rate rises to cool demand.">i</span></span><span class="pval" id="vg2">1.50</span></div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_g2">g₂ — Inflation response<span class="ptip" data-tip="Taylor Principle: must exceed 1 for inflation stability. g₂=1.5 means the CBU raises the nominal rate by 150bp for every 1pp inflation overshoot — ensuring the real rate rises to cool demand." data-tip-ru="Принцип Тейлора: должен превышать 1 для стабильности инфляции. g₂=1.5: ЦБУ повышает ставку на 150 б.п. при каждом 1 п.п. превышения инфляции." data-tip-uz="Teylor printsipi: inflyatsiya barqarorligi uchun 1 dan katta bo'lishi shart. g₂=1.5: har 1 p.p. inflyatsiya ortiqchaligida CBU stavkani 150 b.p. ko'taradi.">i</span></span><span class="pval" id="vg2">1.50</span></div>
       <div class="pdesc" data-i18n="qpm_g2_desc">Taylor principle: must be &gt; 1 for stability</div>
       <input type="range" id="g2" min="1.0" max="3.0" step="0.1" value="1.5" oninput="sl(this,'vg2',f2)">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname" data-i18n="qpm_g3">g₃ — Output gap response<span class="ptip" data-tip="How much the CBU reacts to economic slack or overheating. Higher g₃ = more activist, dual-mandate style policy; lower = pure inflation targeter.">i</span></span><span class="pval" id="vg3">0.50</span></div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_g3">g₃ — Output gap response<span class="ptip" data-tip="How much the CBU reacts to economic slack or overheating. Higher g₃ = more activist, dual-mandate style policy; lower = pure inflation targeter." data-tip-ru="Насколько ЦБУ реагирует на перегрев или спад экономики. Высокий g₃ = активная политика двойного мандата; низкий = чистое таргетирование инфляции." data-tip-uz="CBU iqtisodiy qizib ketish yoki tangliqqa qanchalik reaksiya qiladi. Yuqori g₃ = ikki mandatli faolroq siyosat; past = toza inflyatsiya targetingi.">i</span></span><span class="pval" id="vg3">0.50</span></div>
       <div class="pdesc" data-i18n="qpm_g3_desc">Weight on economic activity</div>
       <input type="range" id="g3" min="0.1" max="1.5" step="0.1" value="0.5" oninput="sl(this,'vg3',f2)">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname" data-i18n="qpm_e1">e₁ — UIP backward weight<span class="ptip" data-tip="Share of exchange rate expectations that are backward-looking (based on past rates). Lower e₁ = more forward-looking expectations, stronger UIP arbitrage discipline on the UZS.">i</span></span><span class="pval" id="ve1">0.70</span></div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_e1">e₁ — UIP backward weight<span class="ptip" data-tip="Share of exchange rate expectations that are backward-looking (based on past rates). Lower e₁ = more forward-looking expectations, stronger UIP arbitrage discipline on the UZS." data-tip-ru="Доля ожиданий обменного курса, основанных на прошлых значениях. Низкий e₁ = более перспективные ожидания, более сильная дисциплина UIP для UZS." data-tip-uz="O'tgan kurslarga asoslangan valyuta kursi kutishlari ulushi. Past e₁ = ko'proq istiqbolga yo'nalgan kutishlar, UZS uchun kuchliroq UIP intizomi.">i</span></span><span class="pval" id="ve1">0.70</span></div>
       <div class="pdesc" data-i18n="qpm_e1_desc">Exchange rate backward-looking share</div>
       <input type="range" id="e1" min="0.1" max="0.9" step="0.1" value="0.7" oninput="sl(this,'ve1',f2)">
     </div>
@@ -284,15 +284,15 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   <div class="sec">
     <div class="sec-hd" data-i18n="qpm_ss_hd">Steady-State Values</div>
     <div class="prow">
-      <div class="plabel"><span class="pname" data-i18n="qpm_target">Inflation Target π* (%)<span class="ptip" data-tip="Long-run CBU inflation goal. Official target: 5% for 2024–2026. The Taylor Rule anchors the nominal rate to keep inflation near this value.">i</span></span><span class="pval" id="vtar">5.0</span></div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_target">Inflation Target π* (%)<span class="ptip" data-tip="Long-run CBU inflation goal. Official target: 5% for 2024–2026. The Taylor Rule anchors the nominal rate to keep inflation near this value." data-tip-ru="Долгосрочная цель ЦБУ по инфляции. Официальная цель: 5% на 2024–2026 гг. Правило Тейлора удерживает номинальную ставку вблизи этого значения." data-tip-uz="CBUning uzoq muddatli inflyatsiya maqsadi. Rasmiy maqsad: 2024–2026 yillar uchun 5%. Teylor qoidasi nominal stavkani ushbu qiymat atrofida saqlaydi.">i</span></span><span class="pval" id="vtar">5.0</span></div>
       <input type="range" id="ssTar" min="3" max="12" step="0.5" value="5" oninput="sl(this,'vtar',v=>v.toFixed(1))">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname" data-i18n="qpm_rrbar">Neutral Real Rate r̄ (%)<span class="ptip" data-tip="Equilibrium real interest rate: neither expansionary nor contractionary. Estimated at 3–4% for Uzbekistan based on trend growth and external balance conditions.">i</span></span><span class="pval" id="vrrbar">3.5</span></div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_rrbar">Neutral Real Rate r̄ (%)<span class="ptip" data-tip="Equilibrium real interest rate: neither expansionary nor contractionary. Estimated at 3–4% for Uzbekistan based on trend growth and external balance conditions." data-tip-ru="Равновесная реальная ставка: ни стимулирующая, ни сдерживающая. Оценивается в 3–4% для Узбекистана на основе трендового роста и условий внешнего баланса." data-tip-uz="Muvozanat haqiqiy foiz stavkasi: na kengaytiruvchi, na cheklovchi. O'zbekiston uchun trend o'sishi va tashqi muvozanat sharoitlari asosida 3–4% deb baholanadi.">i</span></span><span class="pval" id="vrrbar">3.5</span></div>
       <input type="range" id="ssRRbar" min="1" max="8" step="0.5" value="3.5" oninput="sl(this,'vrrbar',v=>v.toFixed(1))">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname" data-i18n="qpm_gdpbar">Potential Growth ȳ (%)<span class="ptip" data-tip="Trend GDP growth consistent with stable inflation and full employment. Uzbekistan's structural growth potential: ~6% (CERR, IMF estimates).">i</span></span><span class="pval" id="vgdpbar">6.0</span></div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_gdpbar">Potential Growth ȳ (%)<span class="ptip" data-tip="Trend GDP growth consistent with stable inflation and full employment. Uzbekistan's structural growth potential: ~6% (CERR, IMF estimates)." data-tip-ru="Потенциальный рост ВВП при стабильной инфляции и полной занятости. Структурный потенциал Узбекистана: ~6% (CERR, МВФ)." data-tip-uz="Barqaror inflyatsiya va to'liq bandlik bilan muvofiq YaIM o'sishi. O'zbekistonning strukturaviy salohiyati: ~6% (CERR, IMF).">i</span></span><span class="pval" id="vgdpbar">6.0</span></div>
       <input type="range" id="ssGdpbar" min="2" max="10" step="0.5" value="6" oninput="sl(this,'vgdpbar',v=>v.toFixed(1))">
     </div>
   </div>
@@ -894,28 +894,72 @@ function showPage(name, btn) {
 
 function fillParamTable() {
   const p = P();
-  // [symbol, domId, value, i18nKey, fallbackDesc, blockLabel, isChanged, tipText]
+  // [symbol, domId, value, i18nKey, fallbackDesc, blockLabel, isChanged, tipEN, tipRU, tipUZ]
   const rows = [
-    ['b₁','b1', p.b1.toFixed(2), 'qpm_pt_b1', 'Output gap persistence',      'IS curve',    false, 'Controls how quickly the GDP gap closes. Higher b₁ = more inertia.'],
-    ['b₂','b2', p.b2.toFixed(2), 'qpm_pt_b2', 'MCI → output sensitivity',     'IS curve',    false, 'How strongly monetary conditions affect the output gap.'],
-    ['b₃','b3', p.b3.toFixed(2), 'qpm_pt_b3', 'External demand weight',        'IS curve',    false, 'Sensitivity to foreign output gap — trade and remittance channel.'],
-    ['b₄','b4', p.b4.toFixed(2), 'qpm_pt_b4', 'IR weight in MCI',              'MCI',         false, 'Share of interest rate in the Monetary Conditions Index; (1−b₄) = FX weight.'],
-    ['a₁','a1', p.a1.toFixed(2), 'qpm_pt_a1', 'Inflation persistence',         'Phillips',    false, 'Backward-looking share of expectations. High a₁ = hard to disinflate.'],
-    ['a₂','a2', p.a2.toFixed(2), 'qpm_pt_a2', 'Marginal cost pass-through',    'Phillips',    true,  'Pass-through from real marginal cost (output gap) to CPI inflation.'],
-    ['a₃','a3', p.a3.toFixed(2), 'qpm_pt_a3', 'Domestic cost share',           'Phillips',    true,  'Share of domestic costs in CPI basket; (1−a₃) = import-driven component.'],
-    ['g₁','g1', p.g1.toFixed(2), 'qpm_pt_g1', 'Interest rate smoothing',       'Taylor rule', false, 'CBU gradualism: how slowly rates are adjusted each quarter.'],
-    ['g₂','g2', p.g2.toFixed(2), 'qpm_pt_g2', 'Inflation response (>1)',       'Taylor rule', false, 'Taylor Principle: must exceed 1 for inflation stability.'],
-    ['g₃','g3', p.g3.toFixed(2), 'qpm_pt_g3', 'Output gap response',           'Taylor rule', false, 'How much the CBU reacts to economic slack or overheating.'],
-    ['e₁','e1', p.e1.toFixed(2), 'qpm_pt_e1', 'UIP backward-looking weight',   'UIP',         false, 'Share of exchange rate expectations that are backward-looking (past rates).'],
-    ['π*','—',  p.tar.toFixed(1)+'%',  'qpm_pt_pi_ss', 'Inflation target',      'SS',          false, 'CBU official medium-term inflation target (5% for 2024–2026).'],
-    ['r̄', '—',  p.rrbar.toFixed(1)+'%','qpm_pt_rrbar', 'Neutral real rate',    'SS',          false, 'Equilibrium real rate: neither expansionary nor contractionary.'],
-    ['ȳ', '—',  p.gdpbar.toFixed(1)+'%','qpm_pt_gdpbar','Potential GDP growth', 'SS',          false, 'Trend GDP growth consistent with stable inflation and full employment.'],
+    ['b₁','b1', p.b1.toFixed(2), 'qpm_pt_b1', 'Output gap persistence',      'IS curve',    false,
+      'Controls how quickly the GDP gap closes. Higher b₁ = more inertia.',
+      'Контролирует скорость закрытия разрыва ВВП. Высокий b₁ = больше инерции, медленнее восстановление.',
+      "YaIM bo'shlig'i qanchalik tez yopilishini boshqaradi. Yuqori b₁ = ko'proq inersiya, sekinroq tiklanish."],
+    ['b₂','b2', p.b2.toFixed(2), 'qpm_pt_b2', 'MCI → output sensitivity',     'IS curve',    false,
+      'How strongly monetary conditions affect the output gap.',
+      'Насколько денежные условия (ставка + курс) влияют на разрыв выпуска. Ключевой параметр трансмиссии.',
+      "Pul-kredit shartlari chiqarish bo'shlig'iga ta'sir kuchi. Asosiy monetar transmissiya parametri."],
+    ['b₃','b3', p.b3.toFixed(2), 'qpm_pt_b3', 'External demand weight',        'IS curve',    false,
+      'Sensitivity to foreign output gap — trade and remittance channel.',
+      'Чувствительность к внешнему разрыву выпуска — торговля и денежные переводы.',
+      "Tashqi chiqarish bo'shlig'iga sezgirlik — savdo va pul o'tkazmalari kanali."],
+    ['b₄','b4', p.b4.toFixed(2), 'qpm_pt_b4', 'IR weight in MCI',              'MCI',         false,
+      'Share of interest rate in the Monetary Conditions Index; (1−b₄) = FX weight.',
+      'Доля процентной ставки в индексе денежных условий; (1−b₄) = вес обменного курса.',
+      "Pul-kredit shartlari indeksida foiz stavkasi ulushi; (1−b₄) = valyuta kursi og'irligi."],
+    ['a₁','a1', p.a1.toFixed(2), 'qpm_pt_a1', 'Inflation persistence',         'Phillips',    false,
+      'Backward-looking share of expectations. High a₁ = hard to disinflate.',
+      'Доля инфляции, обусловленная прошлой инфляцией. Высокий a₁ = инфляцию трудно сдержать.',
+      "O'tgan inflyatsiya bilan bog'liq inflyatsiya ulushi. Yuqori a₁ = inflyatsiyani jilovlash qiyin."],
+    ['a₂','a2', p.a2.toFixed(2), 'qpm_pt_a2', 'Marginal cost pass-through',    'Phillips',    true,
+      'Pass-through from real marginal cost (output gap) to CPI inflation.',
+      'Передача реальных предельных издержек в инфляцию CPI. Высокий a₂ = сильное инфляционное давление.',
+      "Haqiqiy chegaraviy xarajatlardan CPI inflyatsiyasiga o'tish. Yuqori a₂ = kuchliroq inflyatsion bosim."],
+    ['a₃','a3', p.a3.toFixed(2), 'qpm_pt_a3', 'Domestic cost share',           'Phillips',    true,
+      'Share of domestic costs in CPI basket; (1−a₃) = import-driven component.',
+      'Доля внутренних затрат в корзине CPI; (1−a₃) = импортная инфляция. Узбекистан: ~65% внутр.',
+      "IFK savatchasida ichki xarajatlar ulushi; (1−a₃) = import inflyatsiyasi. O'zbekiston: ~65% ichki."],
+    ['g₁','g1', p.g1.toFixed(2), 'qpm_pt_g1', 'Interest rate smoothing',       'Taylor rule', false,
+      'CBU gradualism: how slowly rates are adjusted each quarter.',
+      'Постепенность ЦБУ: насколько медленно корректируются ставки каждый квартал.',
+      "CBU gradualizmi: har chorakda stavkalar qanchalik sekin moslanadi."],
+    ['g₂','g2', p.g2.toFixed(2), 'qpm_pt_g2', 'Inflation response (>1)',       'Taylor rule', false,
+      'Taylor Principle: must exceed 1 for inflation stability.',
+      'Принцип Тейлора: должен превышать 1 для стабильности инфляции. g₂=1.5: +150 б.п. при каждом +1 п.п. инфляции.',
+      "Teylor printsipi: inflyatsiya barqarorligi uchun 1 dan katta bo'lishi shart. g₂=1.5: +1 p.p. inflyatsiyada +150 b.p. stavka."],
+    ['g₃','g3', p.g3.toFixed(2), 'qpm_pt_g3', 'Output gap response',           'Taylor rule', false,
+      'How much the CBU reacts to economic slack or overheating.',
+      'Насколько ЦБУ реагирует на экономический спад или перегрев. Высокий g₃ = политика двойного мандата.',
+      "CBU iqtisodiy tangliq yoki qizib ketishga qanchalik reaksiya qiladi. Yuqori g₃ = ikki mandatli siyosat."],
+    ['e₁','e1', p.e1.toFixed(2), 'qpm_pt_e1', 'UIP backward-looking weight',   'UIP',         false,
+      'Share of exchange rate expectations that are backward-looking (past rates).',
+      'Доля ожиданий обменного курса, основанных на прошлых значениях. Низкий e₁ = более перспективные ожидания.',
+      "O'tgan kurslarga asoslangan valyuta kursi kutishlari ulushi. Past e₁ = ko'proq istiqbolga yo'nalgan."],
+    ['π*','—',  p.tar.toFixed(1)+'%',  'qpm_pt_pi_ss', 'Inflation target',      'SS',          false,
+      'CBU official medium-term inflation target (5% for 2024–2026).',
+      'Официальная среднесрочная цель ЦБУ по инфляции (5% на 2024–2026 гг.).',
+      "CBUning rasmiy o'rta muddatli inflyatsiya maqsadi (2024–2026 yillar uchun 5%)."],
+    ['r̄', '—',  p.rrbar.toFixed(1)+'%','qpm_pt_rrbar', 'Neutral real rate',    'SS',          false,
+      'Equilibrium real rate: neither expansionary nor contractionary.',
+      'Равновесная реальная ставка: ни стимулирующая, ни сдерживающая. Оценивается в 3–4% для Узбекистана.',
+      "Muvozanat haqiqiy stavka: na kengaytiruvchi, na cheklovchi. O'zbekiston uchun 3–4% deb baholanadi."],
+    ['ȳ', '—',  p.gdpbar.toFixed(1)+'%','qpm_pt_gdpbar','Potential GDP growth', 'SS',          false,
+      'Trend GDP growth consistent with stable inflation and full employment.',
+      'Потенциальный рост ВВП при стабильной инфляции и полной занятости. Структурный потенциал: ~6%.',
+      "Barqaror inflyatsiya va to'liq bandlik bilan muvofiq YaIM o'sishi. Salohiyat: ~6%."],
   ];
-  document.getElementById('ptbody').innerHTML = rows.map(([sym,_,val,key,desc,blk,chg,tip]) =>
-    `<tr><td><strong>${sym}</strong></td>
+  const lang = document.documentElement.getAttribute('lang') || 'en';
+  document.getElementById('ptbody').innerHTML = rows.map(([sym,_,val,key,desc,blk,chg,tipEN,tipRU,tipUZ]) => {
+    const tip = lang === 'ru' ? tipRU : lang === 'uz' ? tipUZ : tipEN;
+    return `<tr><td><strong>${sym}</strong></td>
          <td class="${chg?'changed':''}"><strong>${val}</strong>${chg?' ★':''}</td>
-         <td>${t(key,desc)} <span class="ptip" data-tip="${tip}">i</span> <span style="color:var(--text2);font-size:.65rem">[${blk}]</span></td></tr>`
-  ).join('');
+         <td>${t(key,desc)} <span class="ptip" data-tip="${tip}" data-tip-en="${tipEN}" data-tip-ru="${tipRU}" data-tip-uz="${tipUZ}">i</span> <span style="color:var(--text2);font-size:.65rem">[${blk}]</span></td></tr>`;
+  }).join('');
 }
 
 // ── Init ──
@@ -945,17 +989,38 @@ function qpmExportPDF() {
   if (!lastIRF) { alert('Run the simulation first.'); return; }
   const { series, shock, sz, T } = lastIRF;
   const p = P();
-  const lang = document.documentElement.getAttribute('lang') || 'en';
 
-  const REPORT_LABELS = {
-    en: { title:'QPM Shock Analysis Report', subtitle:'Quarterly Projection Model — New-Keynesian DSGE — Uzbekistan', overview:'Scenario Overview', results:'Key Results', exec:'Executive Summary', findings:'Key Findings', risks:'Risk Flags', recs:'Policy Recommendations', appendix_charts:'Appendix A — Impulse Response Functions', appendix_table:'Appendix B — Full Results Table', shock_type:'Shock type', shock_size:'Shock size', horizon:'Horizon', model:'Model', param:'Parameters', target_label:'Target' },
-    ru: { title:'Отчёт по шоковому анализу КПМ', subtitle:'Квартальная проекционная модель — Новокейнсианская ДСГЭ — Узбекистан', overview:'Описание сценария', results:'Ключевые результаты', exec:'Краткое изложение', findings:'Основные выводы', risks:'Риски', recs:'Рекомендации', appendix_charts:'Приложение А — Функции импульсных откликов', appendix_table:'Приложение Б — Полная таблица результатов', shock_type:'Тип шока', shock_size:'Размер шока', horizon:'Горизонт', model:'Модель', param:'Параметры', target_label:'Цель' },
-    uz: { title:'CPM Shok Tahlili Hisoboti', subtitle:'Choraklik prognoz modeli — Yangi-Keynschi DSGE — O\'zbekiston', overview:'Stsenariy tavsifi', results:'Asosiy natijalar', exec:'Qisqacha xulosa', findings:'Asosiy topilmalar', risks:'Xavf omillari', recs:'Siyosat tavsiyalari', appendix_charts:'Ilova A — Impuls javob funksiyalari', appendix_table:'Ilova B — To\'liq natijalar jadvali', shock_type:'Shok turi', shock_size:'Shok hajmi', horizon:'Gorizont', model:'Model', param:'Parametrlar', target_label:'Maqsad' },
+  // NOTE: jsPDF's built-in helvetica font does not support Cyrillic or Uzbek
+  // extended Latin characters. PDF is always generated in English to ensure
+  // the report is readable regardless of the currently selected UI language.
+  const savedLang = document.documentElement.getAttribute('lang') || 'en';
+  document.documentElement.setAttribute('lang', 'en');
+
+  const RL = {
+    title:'QPM Shock Analysis Report',
+    subtitle:'Quarterly Projection Model — New-Keynesian DSGE — Uzbekistan',
+    overview:'Scenario Overview',
+    results:'Key Results',
+    exec:'Executive Summary',
+    findings:'Key Findings',
+    risks:'Risk Flags',
+    recs:'Policy Recommendations',
+    appendix_charts:'Appendix A — Impulse Response Functions',
+    appendix_table:'Appendix B — Full Results Table',
+    shock_type:'Shock type',
+    shock_size:'Shock size',
+    horizon:'Horizon',
+    model:'Model',
+    param:'Parameters',
+    target_label:'Target',
+    lang_note: savedLang !== 'en' ? 'Report generated in English (font compatibility)' : '',
   };
-  const RL = REPORT_LABELS[lang] || REPORT_LABELS.en;
 
   const shockName = getShockName(shock);
   const analysis = buildQPMExpertAnalysis();
+
+  // Restore UI language immediately after extracting English content
+  document.documentElement.setAttribute('lang', savedLang);
 
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
@@ -1055,11 +1120,19 @@ function qpmExportPDF() {
   doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(...white);
   doc.text(new Date().toISOString().slice(0,10), marginL + 25, 76.5, {align:'center'});
 
+  // Language compatibility note (shown when PDF generated while non-English UI active)
+  if (RL.lang_note) {
+    doc.setFillColor(255, 248, 220);
+    doc.roundedRect(marginL, 84, contentW, 8, 2, 2, 'F');
+    doc.setFontSize(8); doc.setFont('helvetica','italic'); doc.setTextColor(140, 100, 20);
+    doc.text('Note: ' + RL.lang_note, pageW/2, 89.5, {align:'center'});
+  }
+
   // Footer on cover
   doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(150,150,150);
   doc.text(RL.title + ' · p.1', pageW/2, pageH-8, {align:'center'});
 
-  y = 90;
+  y = RL.lang_note ? 100 : 90;
 
   // ══════════════════════════════════════════════
   // SCENARIO OVERVIEW
