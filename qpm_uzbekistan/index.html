@@ -326,62 +326,62 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 
     <div class="kpis">
       <div class="kcard">
-        <div class="klbl">Peak Inflation (D4L_CPI)</div>
+        <div class="klbl" data-i18n="qpm_kpi_inflation">Peak Inflation (D4L_CPI)</div>
         <div class="kval" id="kpi0" style="color:var(--red)">—</div>
-        <div class="ksub" id="kpi0s">at quarter —</div>
+        <div class="ksub" id="kpi0s">—</div>
       </div>
       <div class="kcard">
-        <div class="klbl">Peak Output Gap (L_GDP_GAP)</div>
+        <div class="klbl" data-i18n="qpm_kpi_gap">Peak Output Gap (L_GDP_GAP)</div>
         <div class="kval" id="kpi1" style="color:var(--blue)">—</div>
-        <div class="ksub" id="kpi1s">at quarter —</div>
+        <div class="ksub" id="kpi1s">—</div>
       </div>
       <div class="kcard">
-        <div class="klbl">Peak Policy Rate (RS)</div>
+        <div class="klbl" data-i18n="qpm_kpi_rate">Peak Policy Rate (RS)</div>
         <div class="kval" id="kpi2" style="color:var(--navy)">—</div>
-        <div class="ksub" id="kpi2s">at quarter —</div>
+        <div class="ksub" id="kpi2s">—</div>
       </div>
       <div class="kcard">
-        <div class="klbl">Peak NER Depreciation (D4L_S)</div>
+        <div class="klbl" data-i18n="qpm_kpi_ner">Peak NER Depreciation (D4L_S)</div>
         <div class="kval" id="kpi3" style="color:var(--amber)">—</div>
-        <div class="ksub" id="kpi3s">at quarter —</div>
+        <div class="ksub" id="kpi3s">—</div>
       </div>
     </div>
 
     <div class="cgrid">
       <div class="ccard">
-        <div class="ctitle">CPI Inflation YoY</div>
+        <div class="ctitle" data-i18n="qpm_ch0_title">CPI Inflation YoY</div>
         <div class="cvar">D4L_CPI = L_CPI − L_CPI{−4}</div>
-        <div class="csub">Year-on-year inflation deviation, percentage points</div>
+        <div class="csub" data-i18n="qpm_ch0_sub">Year-on-year inflation deviation, pp</div>
         <div class="cwrap"><canvas id="ch0"></canvas></div>
       </div>
       <div class="ccard">
-        <div class="ctitle">Output Gap</div>
+        <div class="ctitle" data-i18n="qpm_ch1_title">Output Gap</div>
         <div class="cvar">L_GDP_GAP = L_GDP − L_GDP_BAR</div>
-        <div class="csub">Deviation of GDP from potential, percent</div>
+        <div class="csub" data-i18n="qpm_ch1_sub">Deviation of GDP from potential, %</div>
         <div class="cwrap"><canvas id="ch1"></canvas></div>
       </div>
       <div class="ccard">
-        <div class="ctitle">Nominal Policy Rate</div>
+        <div class="ctitle" data-i18n="qpm_ch2_title">Nominal Policy Rate</div>
         <div class="cvar">RS — CBU Key Rate</div>
-        <div class="csub">Deviation from neutral rate, percentage points</div>
+        <div class="csub" data-i18n="qpm_ch2_sub">Deviation from neutral rate, pp</div>
         <div class="cwrap"><canvas id="ch2"></canvas></div>
       </div>
       <div class="ccard">
-        <div class="ctitle">Nominal Exchange Rate Depreciation YoY</div>
+        <div class="ctitle" data-i18n="qpm_ch3_title">NER Depreciation YoY</div>
         <div class="cvar">D4L_S = L_S − L_S{−4}</div>
-        <div class="csub">Annual UZS/USD depreciation deviation, pp (+ = weaker UZS)</div>
+        <div class="csub" data-i18n="qpm_ch3_sub">Annual UZS/USD depreciation, pp (+ = weaker UZS)</div>
         <div class="cwrap"><canvas id="ch3"></canvas></div>
       </div>
       <div class="ccard">
-        <div class="ctitle">Real Exchange Rate Gap</div>
+        <div class="ctitle" data-i18n="qpm_ch4_title">Real Exchange Rate Gap</div>
         <div class="cvar">L_Z_GAP = (L_S + L_CPI_RW − L_CPI) − L_Z_BAR</div>
-        <div class="csub">RER deviation from equilibrium (+ = undervalued UZS)</div>
+        <div class="csub" data-i18n="qpm_ch4_sub">RER deviation from equilibrium (+ = undervalued UZS)</div>
         <div class="cwrap"><canvas id="ch4"></canvas></div>
       </div>
       <div class="ccard">
-        <div class="ctitle">Real Monetary Conditions Index</div>
+        <div class="ctitle" data-i18n="qpm_ch5_title">Monetary Conditions Index</div>
         <div class="cvar">MCI = b₄·RR_GAP − (1−b₄)·L_Z_GAP</div>
-        <div class="csub">Combined monetary tightness (+ = tighter conditions)</div>
+        <div class="csub" data-i18n="qpm_ch5_sub">Combined monetary tightness (+ = tighter)</div>
         <div class="cwrap"><canvas id="ch5"></canvas></div>
       </div>
     </div>
@@ -687,6 +687,20 @@ const SHOCK_NAMES = {
   exchange:  'UZS Depreciation Shock',
   monetary:  'Monetary Policy Tightening Shock',
 };
+// Localised helpers: pull from window.MODEL_LANGS if available
+function t(key, fallback) {
+  const lang = document.documentElement.getAttribute('lang') || 'en';
+  return (window.MODEL_LANGS && window.MODEL_LANGS[lang] && window.MODEL_LANGS[lang][key]) || fallback || key;
+}
+function getShockName(shock) {
+  const map = {
+    demand:    'qpm_shock_demand_full',
+    inflation: 'qpm_shock_inflation_full',
+    exchange:  'qpm_shock_exchange_full',
+    monetary:  'qpm_shock_monetary_full',
+  };
+  return t(map[shock], SHOCK_NAMES[shock]);
+}
 const CHART_COLORS = [
   'rgba(192,57,43,1)',   // red   — inflation
   'rgba(36,113,163,1)',  // blue  — gap
@@ -711,9 +725,9 @@ function run() {
   // Labels: Q0..QT
   const lbls = Array.from({length: T+1}, (_, i) => `Q${i}`);
 
-  // Update header
-  document.getElementById('irfTitle').textContent = SHOCK_NAMES[activeShock] + ' — Impulse Response Functions';
-  document.getElementById('irfDesc').textContent  = `Shock = ${sz.toFixed(2)} pp  ·  Horizon = ${T} Q  ·  Q0 = shock period`;
+  // Update header (translated)
+  document.getElementById('irfTitle').textContent = getShockName(activeShock) + ' ' + t('qpm_irf_suffix','— Impulse Response Functions');
+  document.getElementById('irfDesc').textContent  = t('qpm_shock_param_lbl','Shock') + ` = ${sz.toFixed(2)} pp  ·  ` + t('qpm_horizon','Horizon') + ` = ${T} Q  ·  Q0 = ` + t('qpm_shock_period','shock period');
 
   const series = [r.pi4, r.gap, r.rs, r.d4l_s, r.l_z_gap, r.mci];
   lastIRF = { series, shock: activeShock, sz, T };
@@ -721,16 +735,19 @@ function run() {
 
   // Peak KPIs (4 top cards)
   const kpiSeries = [r.pi4, r.gap, r.rs, r.d4l_s];
+  const atQ = t('qpm_at_quarter', 'at quarter');
   kpiSeries.forEach((arr, i) => {
     let pk = arr[0], qi = 0;
     arr.forEach((v, j) => { if (Math.abs(v) > Math.abs(pk)) { pk = v; qi = j; } });
     const sign = pk >= 0 ? '+' : '';
     document.getElementById(`kpi${i}`).textContent = `${sign}${pk.toFixed(3)} pp`;
-    document.getElementById(`kpi${i}s`).textContent = `at quarter Q${qi}`;
+    document.getElementById(`kpi${i}s`).textContent = `${atQ} Q${qi}`;
   });
 
   // Draw charts
   const zero = new Array(T+1).fill(0);
+  const lbl_dev  = t('qpm_deviation', 'Deviation');
+  const lbl_base = t('qpm_baseline',  'Baseline');
   series.forEach((data, i) => {
     const clr = CHART_COLORS[i];
     const fill_clr = clr.replace('1)', '0.12)');
@@ -740,9 +757,9 @@ function run() {
       data: {
         labels: lbls,
         datasets: [
-          { label: 'Deviation', data, borderColor: clr, backgroundColor: fill_clr,
+          { label: lbl_dev, data, borderColor: clr, backgroundColor: fill_clr,
             borderWidth: 2.5, pointRadius: 2.5, fill: true, tension: 0.3 },
-          { label: 'Baseline',  data: zero, borderColor: 'rgba(0,0,0,.2)',
+          { label: lbl_base, data: zero, borderColor: 'rgba(0,0,0,.2)',
             borderWidth: 1, borderDash: [5,4], pointRadius: 0, fill: false },
         ]
       },
@@ -992,6 +1009,128 @@ function qpmSaveScenario() {
   Toast.show('Scenario saved: ' + name, 'success');
 }
 
+/* ── QPM Expert Analysis builder ─────────────────────────── */
+function buildQPMExpertAnalysis() {
+  if (!lastIRF) return null;
+  const { shock, sz, T } = lastIRF;
+  const p = P();
+  const lang = document.documentElement.getAttribute('lang') || 'en';
+
+  // Parse KPI values from DOM
+  function kpiVal(id) {
+    const txt = document.getElementById(id)?.textContent || '0';
+    return parseFloat(txt.replace(/[^-0-9.]/g, '')) || 0;
+  }
+  function kpiQ(id) {
+    const txt = document.getElementById(id + 's')?.textContent || 'Q?';
+    return (txt.match(/Q\d+/) || ['Q?'])[0];
+  }
+  const pi  = kpiVal('kpi0'), piQ  = kpiQ('kpi0');
+  const gap = kpiVal('kpi1'), gapQ = kpiQ('kpi1');
+  const rs  = kpiVal('kpi2'), rsQ  = kpiQ('kpi2');
+  const ner = kpiVal('kpi3'), nerQ = kpiQ('kpi3');
+
+  const f3 = v => (v >= 0 ? '+' : '') + v.toFixed(3);
+  const abs = v => Math.abs(v).toFixed(3);
+
+  // ── English content ──────────────────────────────────────
+  const CONTENT = {
+    demand: {
+      summary: `A ${sz.toFixed(2)}pp positive aggregate demand shock (fiscal expansion, surge in investment or domestic spending) generates peak CPI inflation of ${f3(pi)}pp at ${piQ}, output gap peak of ${f3(gap)}pp at ${gapQ}, and requires the CBU to raise the policy rate by ${f3(rs)}pp at ${rsQ}. The UZS ${ner >= 0 ? 'depreciates' : 'appreciates'} by ${abs(ner)}pp at ${nerQ}.`,
+      findings: [
+        `Output gap peaks at ${f3(gap)}pp (${gapQ}) — the economy overheats. With IS persistence b₁=${p.b1.toFixed(2)}, the gap takes approximately ${Math.round(T * p.b1)} quarters to fully close after peaking.`,
+        `Inflation overshoots by ${f3(pi)}pp at ${piQ}. High a₁=${p.a1.toFixed(2)} (backward-looking expectations) means second-round effects persist — disinflation will require sustained monetary tightening beyond the initial shock.`,
+        `The CBU's Taylor Rule response peaks at ${f3(rs)}pp (${rsQ}). With g₂=${p.g2.toFixed(2)}, the real policy rate rises by ~${((p.g2 - 1) * Math.abs(pi)).toFixed(3)}pp above the inflation shock, satisfying the Taylor Principle.`,
+        `The UZS ${ner >= 0 ? 'depreciates' : 'appreciates'} by ${abs(ner)}pp at ${nerQ} — the exchange rate channel ${ner >= 0 ? 'amplifies imported inflation' : 'partially offsets the demand shock via import competition, restraining price pressures'}.`,
+        `The Monetary Conditions Index (MCI) tightens as both the rate and exchange rate work together. With b₄=${p.b4.toFixed(2)}, interest rate has ${(p.b4 * 100).toFixed(0)}% weight and the exchange rate ${((1 - p.b4) * 100).toFixed(0)}% weight in MCI.`,
+      ],
+      risks: [
+        `Inflation persistence risk: a₁=${p.a1.toFixed(2)} implies inflation expectations are ${(p.a1 * 100).toFixed(0)}% backward-looking. A ${f3(pi)}pp overshoot may take ${Math.round(Math.abs(pi) / 0.3)} quarters to fully dissipate even after the CBU responds.`,
+        `Pro-cyclical fiscal risk: if the demand shock originates from fiscal expansion during an already positive output gap, the economy risks overheating. Public debt sustainability should be monitored.`,
+        `Exchange rate pass-through risk: the ${abs(ner)}pp currency movement may generate ${(Math.abs(ner) * (1 - p.a3) * p.a2).toFixed(3)}pp of additional imported inflation via the Phillips curve import share (1−a₃=${(1 - p.a3).toFixed(2)}).`,
+      ],
+      recommendations: [
+        `Pre-emptive monetary tightening: the CBU should begin rate normalisation ahead of the peak output gap to prevent inflation expectations from de-anchoring. A front-loaded approach reduces the total policy rate adjustment needed.`,
+        `Fiscal coordination: fiscal authorities should signal consolidation plans to anchor medium-term expectations, particularly if the demand shock is policy-induced (spending surge or tax cuts).`,
+        `Communication strategy: CBU forward guidance should emphasise the temporary nature of the demand shock and the commitment to the 5% inflation target to keep a₁ from rising further.`,
+        `Monitor import pass-through: track monthly CPI components for signs of exchange-rate pass-through feeding into core inflation beyond the model's (1−a₃)=${(1 - p.a3).toFixed(2)} assumption.`,
+      ],
+    },
+    inflation: {
+      summary: `A ${sz.toFixed(2)}pp cost-push inflation shock (energy price spike, supply disruption, import price surge) drives CPI inflation to a peak of ${f3(pi)}pp at ${piQ}, compresses the output gap to ${f3(gap)}pp at ${gapQ} (stagflationary), requires a CBU rate response of ${f3(rs)}pp at ${rsQ}, and causes UZS ${ner >= 0 ? 'depreciation' : 'appreciation'} of ${abs(ner)}pp at ${nerQ}.`,
+      findings: [
+        `Cost-push stagflation: the shock simultaneously raises inflation (${f3(pi)}pp) and reduces output (gap ${f3(gap)}pp at ${gapQ}), placing the CBU in a classic policy dilemma — tightening to fight inflation risks deepening the output contraction.`,
+        `Inflation persistence is driven by a₁=${p.a1.toFixed(2)}: ${(p.a1 * 100).toFixed(0)}% of current inflation is anchored to past inflation, meaning a temporary supply shock can generate persistent above-target CPI even after the initial cost pressure subsides.`,
+        `The Taylor Rule forces a ${f3(rs)}pp rate increase (${rsQ}) despite negative output gap. This reflects g₂=${p.g2.toFixed(2)} — the CBU's inflation mandate dominates the output stabilisation goal.`,
+        `Domestic inflation share a₃=${p.a3.toFixed(2)} means ${(p.a3 * 100).toFixed(0)}% of the shock stays in domestic prices. The remaining ${((1 - p.a3) * 100).toFixed(0)}% is absorbed via the import price channel, limiting the exchange rate amplification.`,
+      ],
+      risks: [
+        `Stagflation trap: with output already negative (${f3(gap)}pp at ${gapQ}), aggressive monetary tightening could deepen the recession. The optimal path requires balancing the inflation overshoot (${f3(pi)}pp) against output costs.`,
+        `Second-round wage-price spiral: high backward-looking share a₁=${p.a1.toFixed(2)} means wage negotiations anchored to past high inflation could entrench the supply shock into persistent core inflation.`,
+        `Reserve adequacy: if the cost-push shock stems from global commodity prices, import costs rise sharply, pressuring the current account and FX reserves. Uzbekistan's gold-heavy reserves (≈30% of total) provide a natural buffer but require monitoring.`,
+      ],
+      recommendations: [
+        `Graduated tightening: avoid over-tightening into a negative output gap. A moderate rate increase (capped below the full Taylor response) combined with strong forward guidance may be more efficient than sharp hikes that deepen the contraction.`,
+        `Supply-side interventions: targeted fiscal measures (fuel subsidies, strategic food reserves) can directly address the source of the cost shock, reducing the monetary tightening burden.`,
+        `Expectation anchoring: increase transparency of CBU decisions and publish updated inflation forecasts to keep medium-term expectations near the 5% target, preventing a₁ from rising.`,
+        `Exchange rate flexibility: allow the UZS to absorb some shock via managed depreciation, which reduces the domestic price of exports (competitiveness gain) while partially offsetting the imported cost-push through higher import prices — use only if inflationary pass-through is limited.`,
+      ],
+    },
+    exchange: {
+      summary: `A ${sz.toFixed(2)}pp UZS depreciation shock (capital outflow, import demand surge, FX intervention reduction) generates peak CPI inflation of ${f3(pi)}pp at ${piQ} (import pass-through), peak output effect of ${f3(gap)}pp at ${gapQ}, requires a rate response of ${f3(rs)}pp at ${rsQ}, and the NER effect peaks at ${f3(ner)}pp at ${nerQ}.`,
+      findings: [
+        `Import price pass-through: the depreciation shock feeds into CPI at rate (1−a₃)=${(1 - p.a3).toFixed(2)} per unit of exchange rate change. At the peak, the ${sz.toFixed(2)}pp depreciation generates ~${(sz * (1 - p.a3) * p.a2).toFixed(3)}pp of direct inflation via the import channel.`,
+        `Output gap response (${f3(gap)}pp at ${gapQ}) reflects two competing forces: the competitiveness boost (exports cheaper → higher output) vs. higher import costs compressing real incomes. Net effect: ${gap > 0 ? 'positive — export competitiveness dominates' : 'negative — real income compression dominates'}.`,
+        `The CBU's UIP-based exchange rate equation has backward weight e₁=${p.e1.toFixed(2)} — ${(p.e1 * 100).toFixed(0)}% of exchange rate expectations are backward-looking. This means depreciation expectations can be self-fulfilling if not countered by rate hikes.`,
+        `The Taylor Rule response (${f3(rs)}pp at ${rsQ}) is the CBU's defensive reaction to the inflation generated by the weaker UZS, not a proactive stance — distinguishing this from a domestic demand shock.`,
+      ],
+      risks: [
+        `Depreciation-inflation spiral: e₁=${p.e1.toFixed(2)} backward expectations + a₁=${p.a1.toFixed(2)} inflation persistence create a dangerous self-reinforcing loop where each depreciation wave feeds next period's inflation expectations, requiring ever-larger rate hikes to break.`,
+        `Reserve depletion risk: defending the UZS against continued depreciation pressure requires FX sales from CBU reserves. At an assumed intervention cost of $50–100M per 1pp of UZS stabilisation, sustained shocks could deplete usable reserves within 12–18 months.`,
+        `Dollarisation risk: repeated UZS depreciation episodes increase household demand for USD savings (de facto currency substitution), weakening the CBU's monetary transmission and effectiveness of the interest rate channel.`,
+      ],
+      recommendations: [
+        `Rate defense with clear communication: raise the key rate ahead of market panic to arrest depreciation expectations. Explicitly reference the 5% inflation target as the anchor. Signal that the rate will be reduced once FX stability is restored.`,
+        `Controlled FX intervention: use FX reserves to smooth volatility — not defend a fixed rate. Target a predictable depreciation path (e.g. 1–2% per quarter) to reduce uncertainty for importers and corporate borrowers.`,
+        `Capital flow management: consider temporary macro-prudential tools (FX deposit restrictions for non-residents, FX surrender requirements for exporters) to stabilise short-term capital outflows without raising rates excessively.`,
+        `Export revenue capture: coordinate with major gold and gas exporters (state enterprises) to front-load FX sales during depreciation episodes, providing a natural supply-side buffer in the FX market.`,
+      ],
+    },
+    monetary: {
+      summary: `A ${sz.toFixed(2)}pp monetary policy tightening shock (CBU key rate hike above the Taylor Rule path) reduces the output gap by ${f3(gap)}pp at ${gapQ}, brings CPI inflation down by ${f3(pi)}pp at ${piQ}, and generates UZS ${ner >= 0 ? 'depreciation' : 'appreciation'} of ${abs(ner)}pp at ${nerQ} via the UIP channel.`,
+      findings: [
+        `Monetary transmission via MCI: with b₂=${p.b2.toFixed(2)} (MCI sensitivity) and b₄=${p.b4.toFixed(2)} (IR share in MCI), the policy rate tightening transmits to output with force b₂·b₄=${(p.b2 * p.b4).toFixed(3)}, generating a ${f3(gap)}pp output gap at ${gapQ}.`,
+        `Disinflation: the policy tightening reduces inflation by ${f3(pi)}pp at ${piQ}. The disinflation is gradual due to inflation persistence a₁=${p.a1.toFixed(2)} — CBU must sustain elevated rates for ~${Math.round(Math.abs(pi) / 0.15)} quarters to achieve full convergence back to the 5% target.`,
+        `UIP channel: the ${sz.toFixed(2)}pp rate hike makes UZS assets more attractive, causing ${ner < 0 ? 'UZS appreciation of ' + abs(ner) + 'pp — consistent with the interest rate parity condition' : 'currency pressure of ' + abs(ner) + 'pp'}. With e₁=${p.e1.toFixed(2)}, ${(p.e1 * 100).toFixed(0)}% of exchange rate expectations are backward-looking, slowing the appreciation.`,
+        `Rate smoothing: g₁=${p.g1.toFixed(2)} means the CBU's optimal rate path is heavily smoothed. The tightening is spread over ${Math.round(1 / (1 - p.g1))} quarters, preventing sharp market dislocations but also delaying the full anti-inflationary impact.`,
+      ],
+      risks: [
+        `Recession risk: the ${f3(gap)}pp output contraction at ${gapQ} implies above-normal unemployment pressure. If the tightening is too aggressive (g₂>${p.g2.toFixed(2)}), the recovery could be delayed by ${Math.round(T * p.b1 * 0.5)} additional quarters.`,
+        `Financial stability risk: higher rates increase debt-servicing costs for corporates and households. Uzbekistan's rapid credit expansion (15–20% YoY) means a rate shock could trigger NPL spikes in construction and retail sectors.`,
+        `Premature easing risk: once inflation begins declining, political pressure to cut rates may intensify before disinflation is complete. With a₁=${p.a1.toFixed(2)}, premature easing could re-ignite inflation expectations, requiring a more costly second tightening cycle.`,
+      ],
+      recommendations: [
+        `Data-dependent gradualism: implement the tightening in measured 50bp steps (consistent with g₁=${p.g1.toFixed(2)} smoothing) while monitoring real-time inflation expectations from CBU surveys and bond market break-evens.`,
+        `Complementary macroprudential measures: supplement rate hikes with targeted credit growth caps on the highest-risk lending segments (unsecured consumer credit, FX loans to unhedged borrowers) to reduce the rate level needed for equivalent tightening.`,
+        `Banking sector stress-testing: with rates elevated by ${sz.toFixed(2)}pp above neutral, commission targeted NPL stress tests for banks with high exposure to construction and real estate to identify potential fragility before it materialises.`,
+        `Clear forward guidance: communicate the conditions for future rate reductions (e.g., "we will begin reducing the rate when core inflation has been below 7% for three consecutive months") to reduce uncertainty and lower long-term yields without sacrificing short-term credibility.`,
+      ],
+    },
+  };
+
+  const C = CONTENT[shock] || CONTENT.demand;
+  return {
+    summary: C.summary,
+    findings: C.findings,
+    risks: C.risks,
+    recommendations: C.recommendations,
+    fullText: '',
+    language: lang,
+    model: 'qpm-expert-template',
+    timestamp: new Date().toISOString(),
+  };
+}
+
 /* ── AI analysis ── */
 async function qpmAIAnalysis() {
   if (!lastIRF) { Toast.show('Run the simulation first', 'warning'); return; }
@@ -1005,22 +1144,33 @@ async function qpmAIAnalysis() {
     container.style.cssText = 'margin-top:20px;';
     document.querySelector('.main')?.appendChild(container);
   }
-  container.innerHTML = '<div style="display:flex;align-items:center;gap:10px;padding:20px;font-size:13px;color:#475569;"><span style="display:inline-block;width:20px;height:20px;border:3px solid #e2e8f0;border-top-color:#2563eb;border-radius:50%;animation:spin .8s linear infinite;"></span> Analyzing with AI...</div>';
+  container.innerHTML = '<div style="display:flex;align-items:center;gap:10px;padding:20px;font-size:13px;color:#475569;"><span style="display:inline-block;width:20px;height:20px;border:3px solid #e2e8f0;border-top-color:#2563eb;border-radius:50%;animation:spin .8s linear infinite;"></span> Analyzing...</div>';
   container.scrollIntoView({ behavior: 'smooth' });
-  const analysis = await PolicyAdvisor.analyzeSim('qpm', {
-    shockType: SHOCK_NAMES[shock], shockSize: sz, horizon: T,
-    IS: { b1: p.b1, b2: p.b2, b3: p.b3, b4: p.b4 },
-    Phillips: { a1: p.a1, a2: p.a2, a3: p.a3 },
-    Taylor: { g1: p.g1, g2: p.g2, g3: p.g3 },
-    steadyState: { pi_ss: p.pi_ss, rs_ss: p.rs_ss, g_ss: p.g_ss }
-  }, {
-    kpis: [
-      { label: 'Peak Inflation', value: document.getElementById('kpi0')?.textContent || '—' },
-      { label: 'Peak Output Gap', value: document.getElementById('kpi1')?.textContent || '—' },
-      { label: 'Peak Policy Rate', value: document.getElementById('kpi2')?.textContent || '—' },
-      { label: 'Peak NER Depreciation', value: document.getElementById('kpi3')?.textContent || '—' },
-    ]
-  });
+
+  // Try API-powered analysis first; fall back to expert template
+  let analysis;
+  try {
+    analysis = await PolicyAdvisor.analyzeSim('qpm', {
+      shockType: SHOCK_NAMES[shock], shockSize: sz, horizon: T,
+      IS: { b1: p.b1, b2: p.b2, b3: p.b3, b4: p.b4 },
+      Phillips: { a1: p.a1, a2: p.a2, a3: p.a3 },
+      Taylor: { g1: p.g1, g2: p.g2, g3: p.g3 },
+      steadyState: { pi_ss: p.pi_ss, rs_ss: p.rs_ss, g_ss: p.g_ss }
+    }, {
+      kpis: [
+        { label: 'Peak Inflation', value: document.getElementById('kpi0')?.textContent || '—' },
+        { label: 'Peak Output Gap', value: document.getElementById('kpi1')?.textContent || '—' },
+        { label: 'Peak Policy Rate', value: document.getElementById('kpi2')?.textContent || '—' },
+        { label: 'Peak NER Depreciation', value: document.getElementById('kpi3')?.textContent || '—' },
+      ]
+    });
+    // If it's a generic template (no API), override with expert version
+    if (analysis.model === 'template-fallback') {
+      analysis = buildQPMExpertAnalysis() || analysis;
+    }
+  } catch(e) {
+    analysis = buildQPMExpertAnalysis();
+  }
   PolicyAdvisor.renderAdvisorPanel('qpm-ai-output', analysis);
 }
 </script>

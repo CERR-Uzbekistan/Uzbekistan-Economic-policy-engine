@@ -69,6 +69,34 @@ window.MODEL_LANGS = {
     qpm_rrbar:          'Neutral Real Rate r̄ (%)',
     qpm_gdpbar:         'Trend GDP Growth ȳ (%)',
 
+    // QPM chart & KPI labels
+    qpm_kpi_inflation:       'Peak Inflation (D4L_CPI)',
+    qpm_kpi_gap:             'Peak Output Gap (L_GDP_GAP)',
+    qpm_kpi_rate:            'Peak Policy Rate (RS)',
+    qpm_kpi_ner:             'Peak NER Depreciation (D4L_S)',
+    qpm_ch0_title:           'CPI Inflation YoY',
+    qpm_ch0_sub:             'Year-on-year inflation deviation, pp',
+    qpm_ch1_title:           'Output Gap',
+    qpm_ch1_sub:             'Deviation of GDP from potential, %',
+    qpm_ch2_title:           'Nominal Policy Rate',
+    qpm_ch2_sub:             'Deviation from neutral rate, pp',
+    qpm_ch3_title:           'NER Depreciation YoY',
+    qpm_ch3_sub:             'Annual UZS/USD depreciation, pp (+ = weaker UZS)',
+    qpm_ch4_title:           'Real Exchange Rate Gap',
+    qpm_ch4_sub:             'RER deviation from equilibrium (+ = undervalued)',
+    qpm_ch5_title:           'Monetary Conditions Index',
+    qpm_ch5_sub:             'Combined monetary tightness (+ = tighter)',
+    qpm_deviation:           'Deviation',
+    qpm_baseline:            'Baseline',
+    qpm_at_quarter:          'at quarter',
+    qpm_irf_suffix:          '— Impulse Response Functions',
+    qpm_shock_param_lbl:     'Shock',
+    qpm_shock_period:        'shock period',
+    qpm_shock_demand_full:   'Aggregate Demand Shock',
+    qpm_shock_inflation_full:'Cost-Push Inflation Shock',
+    qpm_shock_exchange_full: 'UZS Depreciation Shock',
+    qpm_shock_monetary_full: 'Monetary Policy Tightening Shock',
+
     // DFM model
     dfm_title:          'GDP Nowcasting — Uzbekistan DFM',
     dfm_tab_nowcast:    '📈 Current Nowcast',
@@ -225,6 +253,34 @@ window.MODEL_LANGS = {
     qpm_target:         'Цель по инфляции π* (%)',
     qpm_rrbar:          'Нейтральная реальная ставка r̄ (%)',
     qpm_gdpbar:         'Тренд роста ВВП ȳ (%)',
+
+    // QPM chart & KPI labels (RU)
+    qpm_kpi_inflation:       'Пик инфляции (D4L_CPI)',
+    qpm_kpi_gap:             'Пик разрыва выпуска (L_GDP_GAP)',
+    qpm_kpi_rate:            'Пик ключевой ставки (RS)',
+    qpm_kpi_ner:             'Пик обесценения курса (D4L_S)',
+    qpm_ch0_title:           'ИПЦ инфляция г/г',
+    qpm_ch0_sub:             'Отклонение инфляции г/г, пп',
+    qpm_ch1_title:           'Разрыв выпуска',
+    qpm_ch1_sub:             'Отклонение ВВП от потенциала, %',
+    qpm_ch2_title:           'Номинальная ключевая ставка',
+    qpm_ch2_sub:             'Отклонение от нейтральной ставки, пп',
+    qpm_ch3_title:           'Обесценение курса г/г',
+    qpm_ch3_sub:             'Годовое обесценение UZS/USD, пп (+ = слабее)',
+    qpm_ch4_title:           'Разрыв реального курса',
+    qpm_ch4_sub:             'Отклонение РОК от равновесия (+ = недооценён)',
+    qpm_ch5_title:           'Индекс денежных условий',
+    qpm_ch5_sub:             'Совокупная жёсткость ДКП (+ = жёстче)',
+    qpm_deviation:           'Отклонение',
+    qpm_baseline:            'Базовый уровень',
+    qpm_at_quarter:          'в квартале',
+    qpm_irf_suffix:          '— Функции импульсных откликов',
+    qpm_shock_param_lbl:     'Шок',
+    qpm_shock_period:        'период шока',
+    qpm_shock_demand_full:   'Шок совокупного спроса',
+    qpm_shock_inflation_full:'Инфляционный шок (издержки)',
+    qpm_shock_exchange_full: 'Шок обесценения валюты',
+    qpm_shock_monetary_full: 'Шок ужесточения ДКП',
 
     // DFM
     dfm_title:          'Прогноз ВВП — Динамическая факторная модель',
@@ -383,6 +439,34 @@ window.MODEL_LANGS = {
     qpm_rrbar:          'Neytral real stavka r̄ (%)',
     qpm_gdpbar:         'YaIM o\'sish trendi ȳ (%)',
 
+    // QPM chart & KPI labels (UZ)
+    qpm_kpi_inflation:       'Cho\'qqi — Inflyatsiya (D4L_CPI)',
+    qpm_kpi_gap:             'Cho\'qqi — Chiqarish tafovuti (L_GDP_GAP)',
+    qpm_kpi_rate:            'Cho\'qqi — Foiz stavkasi (RS)',
+    qpm_kpi_ner:             'Cho\'qqi — Valyuta kursi (D4L_S)',
+    qpm_ch0_title:           'YoY inflyatsiya (CPI)',
+    qpm_ch0_sub:             'Yillik inflyatsiya og\'ishi, pp',
+    qpm_ch1_title:           'Chiqarish tafovuti',
+    qpm_ch1_sub:             'YaIMning potensialdan og\'ishi, %',
+    qpm_ch2_title:           'Nominal foiz stavkasi',
+    qpm_ch2_sub:             'Neytral stavkadan og\'ish, pp',
+    qpm_ch3_title:           'Valyuta kursi og\'ishi YoY',
+    qpm_ch3_sub:             'Yillik UZS/USD qadrsizlanishi, pp (+ = kuchsizroq)',
+    qpm_ch4_title:           'Real valyuta kursi tafovuti',
+    qpm_ch4_sub:             'Muvozanat kursidan og\'ish (+ = qadrsizlangan)',
+    qpm_ch5_title:           'Pul-kredit sharoitlari indeksi',
+    qpm_ch5_sub:             'Umumiy pul-kredit qattiqligi (+ = qattiqroq)',
+    qpm_deviation:           'Og\'ish',
+    qpm_baseline:            'Asosiy',
+    qpm_at_quarter:          'chorakda',
+    qpm_irf_suffix:          '— Impuls javob funksiyalari',
+    qpm_shock_param_lbl:     'Shok',
+    qpm_shock_period:        'shok davri',
+    qpm_shock_demand_full:   'Yalpi talab shoki',
+    qpm_shock_inflation_full:'Inflyatsiya shoki (xarajat)',
+    qpm_shock_exchange_full: 'Valyuta kursi shoki',
+    qpm_shock_monetary_full: 'Pul siyosati qattiqlashuvi shoki',
+
     // DFM
     dfm_title:          'YaIM prognozi — Dinamik faktor modeli',
     dfm_tab_nowcast:    '📈 Joriy prognoz',
@@ -505,5 +589,9 @@ window.applyModelLang = function(lang) {
 window.addEventListener('message', function(e) {
   if (e.data && e.data.type === 'setLang') {
     window.applyModelLang(e.data.lang);
+    // Re-render QPM charts (irfTitle, KPI "at quarter", chart legends) if available
+    if (typeof run === 'function' && typeof lastIRF !== 'undefined' && lastIRF) {
+      try { run(); } catch(_) {}
+    }
   }
 });

@@ -504,14 +504,13 @@
     <div class="header-pill">Beta v0.4</div>
     <div class="lang-picker" id="lang-picker">
       <button class="lang-current" id="lang-current-btn" onclick="toggleLangPicker(event)" title="Switch language">
-        <span id="lang-flag">🇬🇧</span>
         <span id="lang-code" class="lang-code">EN</span>
         <span class="lang-caret">▾</span>
       </button>
       <div class="lang-dropdown" id="lang-dropdown">
-        <button class="lang-opt" onclick="setLang('en');closeLangPicker()"><span>🇬🇧</span><span class="lang-opt-code">EN</span></button>
-        <button class="lang-opt" onclick="setLang('ru');closeLangPicker()"><span>🇷🇺</span><span class="lang-opt-code">RU</span></button>
-        <button class="lang-opt" onclick="setLang('uz');closeLangPicker()"><span>🇺🇿</span><span class="lang-opt-code">UZ</span></button>
+        <button class="lang-opt" onclick="setLang('en');closeLangPicker()"><span class="lang-opt-code">EN</span></button>
+        <button class="lang-opt" onclick="setLang('ru');closeLangPicker()"><span class="lang-opt-code">RU</span></button>
+        <button class="lang-opt" onclick="setLang('uz');closeLangPicker()"><span class="lang-opt-code">UZ</span></button>
       </div>
     </div>
   </div>
@@ -1607,9 +1606,7 @@ const LANG_CODES = { en: 'EN', ru: 'RU', uz: 'UZ' };
 function setLang(lang) {
   currentLang = lang;
   applyLang(lang);
-  // Update the flag and code shown on the picker button
-  const flagEl = document.getElementById('lang-flag');
-  if (flagEl) flagEl.textContent = LANG_FLAGS[lang] || '🇬🇧';
+  // Update the lang code shown on the picker button
   const codeEl = document.getElementById('lang-code');
   if (codeEl) codeEl.textContent = LANG_CODES[lang] || 'EN';
   // Broadcast to all embedded model iframes
