@@ -12,6 +12,7 @@
 <script src="../shared/toast.js"></script>
 <script src="../shared/scenario-engine.js"></script>
 <script src="../shared/ai-advisor.js"></script>
+<script src="../shared/i18n.js"></script>
 <style>
 /* Tokens inherited from design-system.css — aliases for backward compat */
 :root{
@@ -164,17 +165,17 @@ select.ctrl-select{width:100%;padding:7px 10px;border:1px solid var(--border);bo
 </header>
 
 <nav>
-  <button class="tab active" onclick="showTab('overview',this)">Overview</button>
-  <button class="tab" onclick="showTab('simulator',this)">Scenario Simulator</button>
-  <button class="tab" onclick="showTab('sectors',this)">Sector Analysis</button>
-  <button class="tab" onclick="showTab('partners',this)">Trade Partners</button>
-  <button class="tab" onclick="showTab('methodology',this)">Methodology</button>
+  <button class="tab active" onclick="showTab('overview',this)" data-i18n="pe_tab_overview">Overview</button>
+  <button class="tab" onclick="showTab('simulator',this)" data-i18n="pe_tab_scenario">Scenario Simulator</button>
+  <button class="tab" onclick="showTab('sectors',this)" data-i18n="pe_tab_sector">Sector Analysis</button>
+  <button class="tab" onclick="showTab('partners',this)" data-i18n="pe_tab_partners">Trade Partners</button>
+  <button class="tab" onclick="showTab('methodology',this)" data-i18n="pe_tab_method">Methodology</button>
 </nav>
 
 <!-- ════════════════════════ OVERVIEW ════════════════════════ -->
 <div id="tab-overview" class="page active">
 
-  <div class="slabel">Trade Statistics — Import Overview</div>
+  <div class="slabel" data-i18n="pe_trade_stats">Trade Statistics — Import Overview</div>
   <div id="ov-kpis" class="g4" style="margin-bottom:16px;"></div>
 
   <div class="g2" style="margin-bottom:16px;">

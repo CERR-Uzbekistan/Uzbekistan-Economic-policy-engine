@@ -13,6 +13,7 @@
 <script src="../shared/toast.js"></script>
 <script src="../shared/scenario-engine.js"></script>
 <script src="../shared/ai-advisor.js"></script>
+<script src="../shared/i18n.js"></script>
 <style>
 /* Reset and typography inherited from design-system.css */
 
@@ -181,9 +182,9 @@
 </div>
 
 <div class="tabs">
-  <div class="tab active" onclick="switchTab('sim')">📊 Simulator</div>
-  <div class="tab" onclick="switchTab('hist')">📈 Historical &amp; Baseline</div>
-  <div class="tab" onclick="switchTab('about')">📘 Model &amp; Equations</div>
+  <div class="tab active" onclick="switchTab('sim')">📊 <span data-i18n="fpp_tab_sim">Simulator</span></div>
+  <div class="tab" onclick="switchTab('hist')">📈 <span data-i18n="fpp_tab_hist">Historical & Baseline</span></div>
+  <div class="tab" onclick="switchTab('about')">📘 <span data-i18n="fpp_tab_about">Model & Equations</span></div>
 </div>
 
 <div class="main">
@@ -194,13 +195,13 @@
 
   <div class="assume-panel">
     <div class="assume-hdr">
-      <h3>Policy Assumptions</h3>
-      <p>Adjust scenario vs CAEM Sep 2025 baseline</p>
+      <h3 data-i18n="fpp_assumptions">Policy Assumptions</h3>
+      <p data-i18n="fpp_baseline_note">Adjust scenario vs CAEM Sep 2025 baseline</p>
     </div>
 
     <!-- REAL -->
     <div class="sector-block">
-      <span class="sector-label sl-real">🔵 Real Sector</span>
+      <span class="sector-label sl-real">🔵 <span data-i18n="fpp_real_sector">Real Sector</span></span>
       <div class="inp-grid">
         <div class="inp-col"><div class="inp-year">2025</div></div>
         <div class="inp-col"><div class="inp-year">2026</div></div>
@@ -219,7 +220,7 @@
 
     <!-- EXTERNAL -->
     <div class="sector-block">
-      <span class="sector-label sl-ext">🟢 External Sector</span>
+      <span class="sector-label sl-ext">🟢 <span data-i18n="fpp_ext_sector">External Sector</span></span>
       <div class="inp-grid">
         <div class="inp-col"></div><div class="inp-col"></div><div class="inp-col"></div>
         <div class="inp-col"><div class="inp-field"><label>CA/GDP (%)</label><input id="ca0" type="number" value="-3.3" step="0.1"></div></div>
@@ -236,7 +237,7 @@
 
     <!-- FISCAL -->
     <div class="sector-block">
-      <span class="sector-label sl-fiscal">🟡 Fiscal Sector</span>
+      <span class="sector-label sl-fiscal">🟡 <span data-i18n="fpp_fiscal_sector">Fiscal Sector</span></span>
       <div class="inp-grid">
         <div class="inp-col"></div><div class="inp-col"></div><div class="inp-col"></div>
         <div class="inp-col"><div class="inp-field"><label>Revenue/GDP (%)</label><input id="rev0" type="number" value="26.7" step="0.1"></div></div>
@@ -250,7 +251,7 @@
 
     <!-- MONETARY -->
     <div class="sector-block">
-      <span class="sector-label sl-mon">🟣 Monetary Sector</span>
+      <span class="sector-label sl-mon">🟣 <span data-i18n="fpp_mon_sector">Monetary Sector</span></span>
       <div class="inp-grid">
         <div class="inp-col"></div><div class="inp-col"></div><div class="inp-col"></div>
         <div class="inp-col"><div class="inp-field"><label>Policy rate (%)</label><input id="pr0" type="number" value="13.5" step="0.1"></div></div>

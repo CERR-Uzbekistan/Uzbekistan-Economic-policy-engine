@@ -13,6 +13,7 @@
 <script src="../shared/toast.js"></script>
 <script src="../shared/scenario-engine.js"></script>
 <script src="../shared/ai-advisor.js"></script>
+<script src="../shared/i18n.js"></script>
 <style>
 /* Tokens inherited from design-system.css — aliases for backward compat */
 :root{
@@ -209,10 +210,10 @@ tr:hover td{background:#fffbf3;}
 </header>
 
 <nav>
-  <button class="tab active" onclick="showTab('overview',this)">📊 Overview & Linkages</button>
-  <button class="tab" onclick="showTab('demand',this)">⚡ Demand Simulator</button>
-  <button class="tab" onclick="showTab('price',this)">💰 Price Model</button>
-  <button class="tab" onclick="showTab('sectors',this)">🔍 Sector Explorer</button>
+  <button class="tab active" onclick="showTab('overview',this)">📊 <span data-i18n="io_tab_overview">Overview & Linkages</span></button>
+  <button class="tab" onclick="showTab('demand',this)">⚡ <span data-i18n="io_tab_demand">Demand Simulator</span></button>
+  <button class="tab" onclick="showTab('price',this)">💰 <span data-i18n="io_tab_price">Price Model</span></button>
+  <button class="tab" onclick="showTab('sectors',this)">🔍 <span data-i18n="io_tab_sectors">Sector Explorer</span></button>
 </nav>
 
 <!-- ═══════════════════════════════════════
@@ -231,16 +232,16 @@ tr:hover td{background:#fffbf3;}
     <button class="export-btn" onclick="ioAIAnalysis()" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
   </div>
 
-  <div class="slabel">Backward & Forward Linkages — Sector Classification</div>
+  <div class="slabel" data-i18n="io_slabel_linkages">Backward & Forward Linkages — Sector Classification</div>
   <div class="g2" style="margin-bottom:18px;">
     <div class="card span2">
-      <div class="card-title">Linkage Scatter — Rasmussen Classification</div>
-      <div class="card-sub">Backward linkage (BL) on X-axis; Forward linkage (FL) on Y-axis. Dashed lines at BL=1 / FL=1 divide four quadrants.</div>
+      <div class="card-title" data-i18n="io_scatter_title">Linkage Scatter — Rasmussen Classification</div>
+      <div class="card-sub" data-i18n="io_scatter_sub">Backward linkage (BL) on X-axis; Forward linkage (FL) on Y-axis. Dashed lines at BL=1 / FL=1 divide four quadrants.</div>
       <div class="quadrant-legend">
-        <span class="ql-item"><span class="ql-dot" style="background:#d97706"></span>Key Sector (BL>1, FL>1)</span>
-        <span class="ql-item"><span class="ql-dot" style="background:#2563eb"></span>Backward Key (BL>1, FL≤1)</span>
-        <span class="ql-item"><span class="ql-dot" style="background:#16a34a"></span>Forward Key (BL≤1, FL>1)</span>
-        <span class="ql-item"><span class="ql-dot" style="background:#94a3b8"></span>Weak (BL≤1, FL≤1)</span>
+        <span class="ql-item"><span class="ql-dot" style="background:#d97706"></span><span data-i18n="io_key_sector">Key Sector (BL>1, FL>1)</span></span>
+        <span class="ql-item"><span class="ql-dot" style="background:#2563eb"></span><span data-i18n="io_backward_key">Backward Key (BL>1, FL≤1)</span></span>
+        <span class="ql-item"><span class="ql-dot" style="background:#16a34a"></span><span data-i18n="io_forward_key">Forward Key (BL≤1, FL>1)</span></span>
+        <span class="ql-item"><span class="ql-dot" style="background:#94a3b8"></span><span data-i18n="io_weak">Weak (BL≤1, FL≤1)</span></span>
       </div>
       <div class="chart-wrap" style="height:400px;"><canvas id="chart-scatter"></canvas></div>
     </div>
@@ -272,7 +273,7 @@ tr:hover td{background:#fffbf3;}
     </div>
   </div>
 
-  <div class="slabel">Full Linkage Table (136 Sectors)</div>
+  <div class="slabel" data-i18n="io_slabel_full_table">Full Linkage Table (136 Sectors)</div>
   <div class="card">
     <div class="search-row">
       <input class="search-input" id="link-search" placeholder="Search sector name or code…" oninput="filterLinkTable()">

@@ -13,6 +13,7 @@
 <script src="../shared/toast.js"></script>
 <script src="../shared/scenario-engine.js"></script>
 <script src="../shared/ai-advisor.js"></script>
+<script src="../shared/i18n.js"></script>
 <style>
 /* Tokens inherited from design-system.css — aliases for backward compat */
 :root {
@@ -198,10 +199,10 @@ tr:hover td { background: #f5f8ff; }
 </header>
 
 <nav>
-  <button class="tab-btn active" onclick="showTab('simulator')">⚡ Shock Simulator</button>
-  <button class="tab-btn" onclick="showTab('scenarios')">📋 Scenario Analysis</button>
+  <button class="tab-btn active" onclick="showTab('simulator')">⚡ <span data-i18n="pe_tab_scenario">Shock Simulator</span></button>
+  <button class="tab-btn" onclick="showTab('scenarios')">📋 <span data-i18n="pe_tab_overview">Scenario Analysis</span></button>
   <button class="tab-btn" onclick="showTab('calibration')">🔢 Calibration &amp; Data</button>
-  <button class="tab-btn" onclick="showTab('documentation')">📖 Model Documentation</button>
+  <button class="tab-btn" onclick="showTab('documentation')">📖 <span data-i18n="pe_tab_method">Model Documentation</span></button>
 </nav>
 
 <!-- ══════════════════════════════════════════
@@ -214,21 +215,21 @@ tr:hover td { background: #f5f8ff; }
     <div class="sim-sidebar">
 
       <div class="sec-block">
-        <div class="sec-hd">World Prices</div>
+        <div class="sec-hd" data-i18n="cge_world_prices">World Prices</div>
         <div class="prow">
           <div class="plabel"><span class="pname">wm shock (%)</span><span class="pval" id="v-wm">0.0%</span></div>
-          <div class="pdesc">World import price — e.g. energy, food</div>
+          <div class="pdesc" data-i18n="cge_wp_import">World import price — e.g. energy, food</div>
           <input type="range" id="sl-wm" min="-30" max="30" step="1" value="0" oninput="slPct(this,'v-wm')">
         </div>
         <div class="prow">
           <div class="plabel"><span class="pname">we shock (%)</span><span class="pval" id="v-we">0.0%</span></div>
-          <div class="pdesc">World export price — e.g. gold, cotton</div>
+          <div class="pdesc" data-i18n="cge_wp_export">World export price — e.g. gold, cotton</div>
           <input type="range" id="sl-we" min="-30" max="30" step="1" value="0" oninput="slPct(this,'v-we')">
         </div>
       </div>
 
       <div class="sec-block">
-        <div class="sec-hd">Trade Policy</div>
+        <div class="sec-hd" data-i18n="cge_trade_policy">Trade Policy</div>
         <div class="prow">
           <div class="plabel"><span class="pname">Import tariff tm (%)</span><span class="pval" id="v-tm">2.0%</span></div>
           <input type="range" id="sl-tm" min="0" max="30" step="0.5" value="2" oninput="slPct(this,'v-tm')">
@@ -240,7 +241,7 @@ tr:hover td { background: #f5f8ff; }
       </div>
 
       <div class="sec-block">
-        <div class="sec-hd">Fiscal Policy</div>
+        <div class="sec-hd" data-i18n="cge_fiscal">Fiscal Policy</div>
         <div class="prow">
           <div class="plabel"><span class="pname">Indirect tax ts (%)</span><span class="pval" id="v-ts">6.0%</span></div>
           <input type="range" id="sl-ts" min="0" max="20" step="0.5" value="6" oninput="slPct(this,'v-ts')">
@@ -252,7 +253,7 @@ tr:hover td { background: #f5f8ff; }
       </div>
 
       <div class="sec-block">
-        <div class="sec-hd">Macro / Fiscal</div>
+        <div class="sec-hd" data-i18n="cge_macro">Macro / Fiscal</div>
         <div class="prow">
           <div class="plabel"><span class="pname">Savings rate sy (%)</span><span class="pval" id="v-sy">38.0%</span></div>
           <input type="range" id="sl-sy" min="20" max="60" step="0.5" value="38" oninput="slPct(this,'v-sy')">

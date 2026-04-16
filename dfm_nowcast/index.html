@@ -13,6 +13,7 @@
 <script src="../shared/toast.js"></script>
 <script src="../shared/scenario-engine.js"></script>
 <script src="../shared/ai-advisor.js"></script>
+<script src="../shared/i18n.js"></script>
 <script src="dfm_data.js" onerror="window.DFM_DATA=null"></script>
 <style>
 /* Tokens inherited from design-system.css — aliases for backward compat */
@@ -151,10 +152,10 @@ tr:hover td { background: #f8f9ff; }
 </header>
 
 <nav>
-  <button class="tab-btn active" onclick="showTab('nowcast')">📈 Current Nowcast</button>
-  <button class="tab-btn" onclick="showTab('update')">🔄 Update Nowcast <span class="badge">Live KF</span></button>
-  <button class="tab-btn" onclick="showTab('factor')">⚙️ Factor & Loadings</button>
-  <button class="tab-btn" onclick="showTab('data')">📂 Data & Model</button>
+  <button class="tab-btn active" onclick="showTab('nowcast')" data-i18n="dfm_tab_nowcast">📈 Current Nowcast</button>
+  <button class="tab-btn" onclick="showTab('update')"><span data-i18n="dfm_tab_update">🔄 Update Nowcast</span> <span class="badge">Live KF</span></button>
+  <button class="tab-btn" onclick="showTab('factor')" data-i18n="dfm_tab_factor">⚙️ Factor & Loadings</button>
+  <button class="tab-btn" onclick="showTab('data')" data-i18n="dfm_tab_data">📂 Data & Model</button>
 </nav>
 
 <!-- ════════════════════════════════════════════════════════
@@ -193,12 +194,12 @@ tr:hover td { background: #f8f9ff; }
     </div>
   </div>
 
-  <div class="section-label">GDP Growth History & Nowcast</div>
+  <div class="section-label" data-i18n="dfm_section_hist">GDP Growth History & Nowcast</div>
   <div class="card" style="margin-bottom:18px">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
       <div>
-        <div class="card-title" style="margin-bottom:0">GDP Year-on-Year Growth Rate (%)</div>
-        <div class="card-subtitle" style="margin-bottom:0">Historical + DFM nowcast (highlighted) · Quarterly</div>
+        <div class="card-title" style="margin-bottom:0" data-i18n="dfm_chart_gdp">GDP Year-on-Year Growth Rate (%)</div>
+        <div class="card-subtitle" style="margin-bottom:0" data-i18n="dfm_chart_gdp_sub">Historical + DFM nowcast (highlighted) · Quarterly</div>
       </div>
       <button id="fan-toggle-btn" onclick="toggleFanChart()" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:5px 13px;font-size:12px;font-weight:600;color:#1d4ed8;cursor:pointer;display:flex;align-items:center;gap:5px;">
         📊 Show Fan Chart
