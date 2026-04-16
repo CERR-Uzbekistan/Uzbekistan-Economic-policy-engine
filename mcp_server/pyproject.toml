@@ -1,0 +1,27 @@
+[project]
+name = "uzbekistan-policy-mcp"
+version = "0.1.0"
+description = "MCP server exposing Uzbekistan's 6 macroeconomic policy models as AI-queryable tools"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp[cli]>=1.8.0",
+    "numpy>=1.26.0",
+    "scipy>=1.12.0",
+    "pydantic>=2.5.0",
+    "uvicorn>=0.30.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "ruff>=0.4.0",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[tool.ruff]
+line-length = 100

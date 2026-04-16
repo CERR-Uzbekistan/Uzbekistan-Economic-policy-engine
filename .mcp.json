@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "uzbekistan-policy": {
+      "command": "C:\\Users\\n.ortiqov\\AppData\\Local\\Python\\bin\\python3.exe",
+      "args": ["C:\\Users\\n.ortiqov\\Desktop\\Uzbekistan-Economic-policy-engine\\mcp_server\\main.py"],
+      "env": {
+        "PYTHONPATH": "C:\\Users\\n.ortiqov\\Desktop\\Uzbekistan-Economic-policy-engine\\mcp_server"
+      }
+    }
+  }
+}
