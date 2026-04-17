@@ -263,7 +263,7 @@
       </div>
     </div>
 
-    <button class="run-btn" onclick="runFPP()">▶ Run Projection</button>
+    <button class="run-btn" onclick="runFPP()" data-i18n="fpp_run_proj">▶ Run Projection</button>
     <p class="baseline-note">Default inputs = CAEM Sep 2025 baseline. Adjust to create policy scenarios.</p>
   </div>
 
@@ -271,14 +271,14 @@
   <div class="results-panel">
 
     <div class="kpi-grid">
-      <div class="kpi-card real"><div class="kpi-label">Avg GDP Growth</div><div class="kpi-val" id="kpi-gdp">—</div><div class="kpi-meta">% p.a. (2025–27)</div></div>
-      <div class="kpi-card ext"><div class="kpi-label">Reserves '27</div><div class="kpi-val" id="kpi-res">—</div><div class="kpi-meta">months import cover</div></div>
-      <div class="kpi-card fiscal"><div class="kpi-label">Fiscal Bal '27</div><div class="kpi-val" id="kpi-fb">—</div><div class="kpi-meta">% of GDP</div></div>
-      <div class="kpi-card mon"><div class="kpi-label">Inflation '27</div><div class="kpi-val" id="kpi-pi">—</div><div class="kpi-meta">% Phillips Curve</div></div>
+      <div class="kpi-card real"><div class="kpi-label" data-i18n="fpp_kpi_gdp">Avg GDP Growth</div><div class="kpi-val" id="kpi-gdp">—</div><div class="kpi-meta">% p.a. (2025–27)</div></div>
+      <div class="kpi-card ext"><div class="kpi-label" data-i18n="fpp_kpi_res">Reserves '27</div><div class="kpi-val" id="kpi-res">—</div><div class="kpi-meta">months import cover</div></div>
+      <div class="kpi-card fiscal"><div class="kpi-label" data-i18n="fpp_kpi_fb">Fiscal Bal '27</div><div class="kpi-val" id="kpi-fb">—</div><div class="kpi-meta">% of GDP</div></div>
+      <div class="kpi-card mon"><div class="kpi-label" data-i18n="fpp_kpi_pi">Inflation '27</div><div class="kpi-val" id="kpi-pi">—</div><div class="kpi-meta">% Phillips Curve</div></div>
     </div>
 
     <div class="consist-card">
-      <h3>🚦 Consistency Matrix</h3>
+      <h3 data-i18n="fpp_consist_title">🚦 Consistency Matrix</h3>
       <div class="consist-grid">
         <div class="ccheck" id="cc-growth"><div class="ccheck-icon">📊</div><div class="ccheck-name">Growth vs Potential</div><div class="ccheck-val">—</div></div>
         <div class="ccheck" id="cc-inflation"><div class="ccheck-icon">🎯</div><div class="ccheck-name">Inflation vs Target</div><div class="ccheck-val">—</div></div>
@@ -289,7 +289,7 @@
     </div>
 
     <div class="rtable-card">
-      <h3>📋 Four-Sector Projection Table</h3>
+      <h3 data-i18n="fpp_proj_title">📋 Four-Sector Projection Table</h3>
       <table class="rtable">
         <thead>
           <tr>
@@ -305,19 +305,19 @@
     </div>
 
     <div class="chart-grid">
-      <div class="chart-card"><h4>🔵 Real GDP Growth &amp; Inflation (%)</h4><div class="chart-wrap"><canvas id="chart-real"></canvas></div></div>
-      <div class="chart-card"><h4>🟢 BOP — Current Account &amp; Reserves (bln USD)</h4><div class="chart-wrap"><canvas id="chart-ext"></canvas></div></div>
-      <div class="chart-card"><h4>🟡 Fiscal Position (% GDP)</h4><div class="chart-wrap"><canvas id="chart-fiscal"></canvas></div></div>
-      <div class="chart-card"><h4>🟣 Monetary Survey — M2, NFA, NDA (% GDP)</h4><div class="chart-wrap"><canvas id="chart-mon"></canvas></div></div>
+      <div class="chart-card"><h4 data-i18n="fpp_chart_real">🔵 Real GDP Growth &amp; Inflation (%)</h4><div class="chart-wrap"><canvas id="chart-real"></canvas></div></div>
+      <div class="chart-card"><h4 data-i18n="fpp_chart_ext">🟢 BOP — Current Account &amp; Reserves (bln USD)</h4><div class="chart-wrap"><canvas id="chart-ext"></canvas></div></div>
+      <div class="chart-card"><h4 data-i18n="fpp_chart_fiscal">🟡 Fiscal Position (% GDP)</h4><div class="chart-wrap"><canvas id="chart-fiscal"></canvas></div></div>
+      <div class="chart-card"><h4 data-i18n="fpp_chart_mon">🟣 Monetary Survey — M2, NFA, NDA (% GDP)</h4><div class="chart-wrap"><canvas id="chart-mon"></canvas></div></div>
     </div>
 
     <div class="export-toolbar">
       <span>Export:</span>
-      <button class="exp-btn" onclick="fppExportCSV()">📥 CSV</button>
-      <button class="exp-btn" onclick="fppExportPNG()">🖼 PNG</button>
-      <button class="exp-btn" onclick="fppExportPDF()">📄 PDF Report</button>
-      <button class="exp-btn" onclick="fppSaveScenario()" style="background:#16a34a;color:#fff;border-color:#16a34a;">💾 Save</button>
-      <button class="exp-btn" onclick="fppAIAnalysis()" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
+      <button class="exp-btn" onclick="fppExportCSV()" data-i18n="export_csv">📊 CSV</button>
+      <button class="exp-btn" onclick="fppExportPNG()" data-i18n="export_png">🖼 PNG Chart</button>
+      <button class="exp-btn" onclick="fppExportPDF()" data-i18n="export_pdf">📄 PDF Report</button>
+      <button class="exp-btn" onclick="fppSaveScenario()" data-i18n="save_scenario" style="background:#16a34a;color:#fff;border-color:#16a34a;">💾 Save</button>
+      <button class="exp-btn" onclick="fppAIAnalysis()" data-i18n="ai_analysis" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
     </div>
 
   </div>

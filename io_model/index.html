@@ -225,11 +225,11 @@ tr:hover td{background:#fffbf3;}
 
   <div class="export-toolbar">
     <span class="export-label">Export:</span>
-    <button class="export-btn" onclick="exportOverviewCSV()">📥 CSV — Linkage Table</button>
-    <button class="export-btn" onclick="exportOverviewPNG()">🖼 PNG — Charts</button>
-    <button class="export-btn" onclick="exportOverviewPDF()">📄 PDF — Full Report</button>
-    <button class="export-btn" onclick="ioSaveScenario()" style="background:#16a34a;color:#fff;border-color:#16a34a;">💾 Save</button>
-    <button class="export-btn" onclick="ioAIAnalysis()" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
+    <button class="export-btn" onclick="exportOverviewCSV()" data-i18n="export_csv">📊 CSV</button>
+    <button class="export-btn" onclick="exportOverviewPNG()" data-i18n="export_png">🖼 PNG Chart</button>
+    <button class="export-btn" onclick="exportOverviewPDF()" data-i18n="export_pdf">📄 PDF Report</button>
+    <button class="export-btn" onclick="ioSaveScenario()" data-i18n="save_scenario" style="background:#16a34a;color:#fff;border-color:#16a34a;">💾 Save</button>
+    <button class="export-btn" onclick="ioAIAnalysis()" data-i18n="ai_analysis" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
   </div>
 
   <div class="slabel" data-i18n="io_slabel_linkages">Backward & Forward Linkages — Sector Classification</div>

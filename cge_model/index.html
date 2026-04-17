@@ -199,10 +199,10 @@ tr:hover td { background: #f5f8ff; }
 </header>
 
 <nav>
-  <button class="tab-btn active" onclick="showTab('simulator')">⚡ <span data-i18n="pe_tab_scenario">Shock Simulator</span></button>
-  <button class="tab-btn" onclick="showTab('scenarios')">📋 <span data-i18n="pe_tab_overview">Scenario Analysis</span></button>
-  <button class="tab-btn" onclick="showTab('calibration')">🔢 Calibration &amp; Data</button>
-  <button class="tab-btn" onclick="showTab('documentation')">📖 <span data-i18n="pe_tab_method">Model Documentation</span></button>
+  <button class="tab-btn active" onclick="showTab('simulator')">⚡ <span data-i18n="cge_tab_sim">Shock Simulator</span></button>
+  <button class="tab-btn" onclick="showTab('scenarios')">📋 <span data-i18n="cge_tab_scenarios">Scenario Analysis</span></button>
+  <button class="tab-btn" onclick="showTab('calibration')">🔢 <span data-i18n="cge_tab_calibration">Calibration &amp; Data</span></button>
+  <button class="tab-btn" onclick="showTab('documentation')">📖 <span data-i18n="cge_tab_docs">Model Documentation</span></button>
 </nav>
 
 <!-- ══════════════════════════════════════════
@@ -265,7 +265,7 @@ tr:hover td { background: #f5f8ff; }
       </div>
 
       <div class="sec-block">
-        <div class="sec-hd">External</div>
+        <div class="sec-hd" data-i18n="cge_external">External</div>
         <div class="prow">
           <div class="plabel"><span class="pname">Foreign savings B (% chg)</span><span class="pval" id="v-B">0.0%</span></div>
           <input type="range" id="sl-B" min="-80" max="100" step="5" value="0" oninput="slPct(this,'v-B')">
@@ -277,7 +277,7 @@ tr:hover td { background: #f5f8ff; }
       </div>
 
       <div class="sec-block">
-        <div class="sec-hd">Supply</div>
+        <div class="sec-hd" data-i18n="cge_supply">Supply</div>
         <div class="prow">
           <div class="plabel"><span class="pname">Output X (% chg)</span><span class="pval" id="v-X">0.0%</span></div>
           <input type="range" id="sl-X" min="-20" max="20" step="0.5" value="0" oninput="slPct(this,'v-X')">
@@ -288,8 +288,8 @@ tr:hover td { background: #f5f8ff; }
         </div>
       </div>
 
-      <button class="run-btn" id="runBtn" onclick="runSimulation()">▶ Run Simulation</button>
-      <button class="reset-btn" onclick="resetToBase()">↺ Reset to Base</button>
+      <button class="run-btn" id="runBtn" onclick="runSimulation()" data-i18n="cge_run_btn">▶ Run Simulation</button>
+      <button class="reset-btn" onclick="resetToBase()" data-i18n="reset_btn">↺ Reset to Base</button>
       <div style="text-align:center;margin-top:10px;font-size:.68rem;color:var(--text3)">
         Solver: <span id="solver-status" class="solver-ok">Ready</span>
       </div>
@@ -307,22 +307,22 @@ tr:hover td { background: #f5f8ff; }
       <!-- KPI cards -->
       <div class="kpis">
         <div class="kcard">
-          <div class="klbl">GDP Impact (Y)</div>
+          <div class="klbl" data-i18n="cge_kpi_y">GDP Impact (Y)</div>
           <div class="kval" id="kpi-Y" style="color:var(--navy2)">—</div>
           <div class="ksub">% change from base</div>
         </div>
         <div class="kcard">
-          <div class="klbl">Exports (E)</div>
+          <div class="klbl" data-i18n="cge_kpi_e">Exports (E)</div>
           <div class="kval" id="kpi-E" style="color:var(--green)">—</div>
           <div class="ksub">% change from base</div>
         </div>
         <div class="kcard">
-          <div class="klbl">Imports (M)</div>
+          <div class="klbl" data-i18n="cge_kpi_m">Imports (M)</div>
           <div class="kval" id="kpi-M" style="color:var(--orange)">—</div>
           <div class="ksub">% change from base</div>
         </div>
         <div class="kcard">
-          <div class="klbl">Exchange Rate (Er)</div>
+          <div class="klbl" data-i18n="cge_kpi_er">Exchange Rate (Er)</div>
           <div class="kval" id="kpi-Er" style="color:var(--purple)">—</div>
           <div class="ksub">Value (base = 1.00)</div>
         </div>
@@ -331,16 +331,16 @@ tr:hover td { background: #f5f8ff; }
       <!-- Export toolbar -->
       <div class="export-toolbar">
         <span class="export-label">Export Results:</span>
-        <button class="export-btn" onclick="exportCSV()">📊 CSV</button>
-        <button class="export-btn" onclick="exportPNG()">🖼 PNG Chart</button>
-        <button class="export-btn" onclick="exportPDF()">📄 PDF Report</button>
-        <button class="export-btn" onclick="cgeSaveScenario()" style="background:#16a34a;color:#fff;border-color:#16a34a;">💾 Save</button>
-        <button class="export-btn" onclick="cgeAIAnalysis()" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
+        <button class="export-btn" onclick="exportCSV()" data-i18n="export_csv">📊 CSV</button>
+        <button class="export-btn" onclick="exportPNG()" data-i18n="export_png">🖼 PNG Chart</button>
+        <button class="export-btn" onclick="exportPDF()" data-i18n="export_pdf">📄 PDF Report</button>
+        <button class="export-btn" onclick="cgeSaveScenario()" data-i18n="save_scenario" style="background:#16a34a;color:#fff;border-color:#16a34a;">💾 Save</button>
+        <button class="export-btn" onclick="cgeAIAnalysis()" data-i18n="ai_analysis" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
       </div>
 
       <!-- Results table -->
       <div class="card" id="results-table-card">
-        <div class="card-title">Full Results — Base vs. Experiment</div>
+        <div class="card-title" data-i18n="cge_results_hd">Full Results — Base vs. Experiment</div>
         <div class="card-sub">All values in model units (normalised to base year). Prices in UZS index (base Pd=1).</div>
         <table id="results-table">
           <thead>
