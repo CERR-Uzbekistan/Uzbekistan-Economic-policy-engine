@@ -148,6 +148,35 @@ export type MacroSnapshot = {
   references: string[]
 }
 
+export type ComparisonScenarioTag = 'preferred' | 'balanced' | 'aggressive' | 'downside_stress'
+export type ComparisonViewMode = 'level' | 'delta' | 'risk'
+
+export type ComparisonMetricDefinition = {
+  metric_id: string
+  label: string
+  unit: string
+}
+
+export type ComparisonScenario = {
+  scenario_id: string
+  scenario_name: string
+  scenario_type: ScenarioType
+  summary: string
+  initial_tag: ComparisonScenarioTag
+  values: Record<string, number>
+  macro_path: number[]
+  risk_index: number
+}
+
+export type ComparisonWorkspace = {
+  workspace_id: string
+  generated_at: string
+  metric_definitions: ComparisonMetricDefinition[]
+  scenarios: ComparisonScenario[]
+  default_baseline_id: string
+  default_selected_ids: string[]
+}
+
 export type ScenarioLabResultTab =
   | 'headline_impact'
   | 'macro_path'

@@ -219,6 +219,42 @@ Use this shape for Scenario Lab workflows so analysis work stays separate from m
 - `policy_implications`: string[]
 - `suggested_next_scenarios`: string[]
 
+## Comparison-Specific Shape (`ComparisonWorkspace`)
+
+Use this shape for the `Comparison` page so side-by-side decision analysis remains separate from monitoring (`MacroSnapshot`) and scenario construction (`ScenarioLabWorkspace`).
+
+- `workspace_id`: string
+- `generated_at`: ISO datetime string
+- `metric_definitions`: `ComparisonMetricDefinition[]`
+- `scenarios`: `ComparisonScenario[]`
+- `default_baseline_id`: string
+- `default_selected_ids`: string[] (2-4 scenario ids)
+
+## `ComparisonViewMode`
+
+- enum: `level` | `delta` | `risk`
+
+## `ComparisonScenarioTag`
+
+- enum: `preferred` | `balanced` | `aggressive` | `downside_stress`
+
+## `ComparisonMetricDefinition`
+
+- `metric_id`: string
+- `label`: string
+- `unit`: string
+
+## `ComparisonScenario`
+
+- `scenario_id`: string
+- `scenario_name`: string
+- `scenario_type`: enum (`baseline` | `alternative` | `stress`)
+- `summary`: string
+- `initial_tag`: `ComparisonScenarioTag`
+- `values`: `Record<string, number>`
+- `macro_path`: number[]
+- `risk_index`: number
+
 ## `ApiError`
 
 - `error_code`: string
