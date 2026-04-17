@@ -190,6 +190,13 @@ tr:hover td{background:#fffbf3;}
 .ql-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);}
 .ql-dot{width:10px;height:10px;border-radius:50%;}
 
+/* Multiplier type toggle */
+.mult-toggle{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#f1f5f9;}
+.mult-toggle button{padding:6px 14px;font-size:12px;font-weight:600;border:none;background:transparent;
+  cursor:pointer;color:var(--text2);font-family:inherit;transition:all .15s;}
+.mult-toggle button.active{background:#1a3a6e;color:#fff;}
+.mult-toggle-label{font-size:12px;font-weight:600;color:#64748b;margin-right:4px;}
+
 @media(max-width:900px){
   .g2,.g3,.g4{grid-template-columns:1fr;}
   .span2,.span3{grid-column:span 1;}
@@ -223,6 +230,13 @@ tr:hover td{background:#fffbf3;}
   <div class="g4" style="margin-bottom:18px;" id="kpi-row"></div>
 
   <div class="export-toolbar">
+    <span class="mult-toggle-label">Multiplier:</span>
+    <div class="mult-toggle" id="mult-toggle">
+      <button class="active" onclick="setMultType('I')">Type I</button>
+      <button onclick="setMultType('II')">Type II</button>
+    </div>
+    <span style="font-size:11px;color:var(--text3);margin-right:8px;" id="mult-toggle-hint">Direct + indirect effects</span>
+    <span style="flex:1"></span>
     <span class="export-label">Export:</span>
     <button class="export-btn" onclick="exportOverviewCSV()">📥 CSV — Linkage Table</button>
     <button class="export-btn" onclick="exportOverviewPNG()">🖼 PNG — Charts</button>
@@ -248,12 +262,12 @@ tr:hover td{background:#fffbf3;}
 
   <div class="g2" style="margin-bottom:18px;">
     <div class="card">
-      <div class="card-title">Top 20 — Output Multiplier (col sum of L)</div>
+      <div class="card-title" id="chart-out-mult-title">Top 20 — Output Multiplier (Type I)</div>
       <div class="card-sub">Total economy-wide output per 1 unit of final demand</div>
       <div class="chart-wrap" style="height:420px;"><canvas id="chart-out-mult"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-title">Top 20 — VA Multiplier (Σ v_i · L_ij)</div>
+      <div class="card-title" id="chart-va-mult-title">Top 20 — VA Multiplier (Type I)</div>
       <div class="card-sub">Gross value-added generated per unit of final demand</div>
       <div class="chart-wrap" style="height:420px;"><canvas id="chart-va-mult"></canvas></div>
     </div>
@@ -694,19 +708,59 @@ function getType(j){
   return 'weak';
 }
 
-// Sector records
-const sectors = IO_DATA.codes.map((code,j)=>({
-  j, code, name:IO_DATA.names[j],
-  bl:BL[j], fl:FL[j], type:getType(j),
-  outm:outMult[j], vam:vaMult[j],
-  empm:empMult[j], empfm:empFMult[j], empim:empIMult[j],
-  x:IO_DATA.X[j]/1e3, gva:IO_DATA.GVA[j]/1e3,
-  empT:IO_DATA.EmpTotal[j], empF:IO_DATA.EmpFormal[j], empI:IO_DATA.EmpInformal[j],
-  formalShare: IO_DATA.EmpTotal[j]>0 ? IO_DATA.EmpFormal[j]/IO_DATA.EmpTotal[j]*100 : 0
-}));
+// Sector records — include both Type I and Type II multipliers
+const sectors = IO_DATA.codes.map((code,j)=>{
+  const bl2=IO_DATA.BL_II[j], fl2=IO_DATA.FL_II[j];
+  const type2 = bl2>1&&fl2>1?'key':bl2>1&&fl2<=1?'back':bl2<=1&&fl2>1?'fwd':'weak';
+  return {
+    j, code, name:IO_DATA.names[j],
+    bl:BL[j], fl:FL[j], type:getType(j),
+    bl2, fl2, type2,
+    outm:outMult[j], vam:vaMult[j],
+    empm:empMult[j], empfm:empFMult[j], empim:empIMult[j],
+    outm2:IO_DATA.outMultII[j], vam2:IO_DATA.vaMultII[j],
+    empm2:IO_DATA.empMultII[j], empfm2:IO_DATA.empFMultII[j], empim2:IO_DATA.empIMultII[j],
+    x:IO_DATA.X[j]/1e3, gva:IO_DATA.GVA[j]/1e3,
+    empT:IO_DATA.EmpTotal[j], empF:IO_DATA.EmpFormal[j], empI:IO_DATA.EmpInformal[j],
+    formalShare: IO_DATA.EmpTotal[j]>0 ? IO_DATA.EmpFormal[j]/IO_DATA.EmpTotal[j]*100 : 0
+  };
+});
 
 const typeCounts = {key:0,back:0,fwd:0,weak:0};
 sectors.forEach(s=>typeCounts[s.type]++);
+
+// ── Active multiplier type (Type I = default) ──
+let multType = 'I';
+// Helpers to get active multiplier values from a sector object
+function abl(s)  { return multType==='II' ? s.bl2   : s.bl; }
+function afl(s)  { return multType==='II' ? s.fl2   : s.fl; }
+function atype(s){ return multType==='II' ? s.type2 : s.type; }
+function aoutm(s){ return multType==='II' ? s.outm2 : s.outm; }
+function avam(s) { return multType==='II' ? s.vam2  : s.vam; }
+function aempm(s){ return multType==='II' ? s.empm2 : s.empm; }
+
+function setMultType(t){
+  multType = t;
+  document.querySelectorAll('#mult-toggle button').forEach((b,i)=>{
+    b.classList.toggle('active', (i===0&&t==='I')||(i===1&&t==='II'));
+  });
+  const hint = document.getElementById('mult-toggle-hint');
+  if(hint) hint.textContent = t==='II'
+    ? 'Direct + indirect + induced (household spending) effects'
+    : 'Direct + indirect effects';
+  // Update chart card titles
+  const outTitle = document.getElementById('chart-out-mult-title');
+  const vaTitle  = document.getElementById('chart-va-mult-title');
+  if(outTitle) outTitle.textContent = 'Top 20 — Output Multiplier (Type '+t+')';
+  if(vaTitle)  vaTitle.textContent  = 'Top 20 — VA Multiplier (Type '+t+')';
+  // Re-render all views
+  buildLinkTable();
+  buildTopChart('chart-out-mult', sectors.slice().sort((a,b)=>aoutm(b)-aoutm(a)).slice(0,20), aoutm, 'Output Multiplier', '#1a3a6e');
+  buildTopChart('chart-va-mult',  sectors.slice().sort((a,b)=>avam(b)-avam(a)).slice(0,20),   avam,  'VA Multiplier', '#16a34a');
+  buildTopChart('chart-emp-mult', sectors.slice().sort((a,b)=>aempm(b)-aempm(a)).slice(0,20), aempm,'Emp Mult (persons/bln UZS)', '#7c3aed');
+  buildScatterChart();
+  initSectors();
+}
 
 // ═══════════════════════════════════════
 // NAVIGATION
@@ -744,22 +798,24 @@ function initOverview(){
   `;
 
   buildScatter();
-  buildTopChart('chart-out-mult', sectors.slice().sort((a,b)=>b.outm-a.outm).slice(0,20), 'outm', 'Output Multiplier', '#1a3a6e');
-  buildTopChart('chart-va-mult',  sectors.slice().sort((a,b)=>b.vam-a.vam).slice(0,20),  'vam',  'VA Multiplier', '#16a34a');
-  buildTopChart('chart-emp-mult', sectors.slice().sort((a,b)=>b.empm-a.empm).slice(0,20),'empm', 'Emp Mult (persons/bln UZS)', '#7c3aed');
+  buildTopChart('chart-out-mult', sectors.slice().sort((a,b)=>aoutm(b)-aoutm(a)).slice(0,20), aoutm, 'Output Multiplier', '#1a3a6e');
+  buildTopChart('chart-va-mult',  sectors.slice().sort((a,b)=>avam(b)-avam(a)).slice(0,20),   avam,  'VA Multiplier', '#16a34a');
+  buildTopChart('chart-emp-mult', sectors.slice().sort((a,b)=>aempm(b)-aempm(a)).slice(0,20), aempm,'Emp Mult (persons/bln UZS)', '#7c3aed');
   buildEmpShareChart();
   buildLinkTable();
 }
 
-function buildScatter(){
+let scatterChartRef = null;
+function buildScatter(){ buildScatterChart(); }
+function buildScatterChart(){
   const typeColor = {key:'#d97706',back:'#2563eb',fwd:'#16a34a',weak:'#94a3b8'};
   const typeLabel = {key:'Key Sector (BL>1, FL>1)',back:'Backward Key (BL>1, FL≤1)',fwd:'Forward Key (BL≤1, FL>1)',weak:'Weak (BL≤1, FL≤1)'};
-  // Find axis max for reference lines
-  const maxBL = Math.min(Math.ceil(Math.max(...BL))+0.5, 8);
-  const maxFL = Math.min(Math.ceil(Math.max(...FL))+0.5, 8);
+  const allBL = sectors.map(abl), allFL = sectors.map(afl);
+  const maxBL = Math.min(Math.ceil(Math.max(...allBL))+0.5, 8);
+  const maxFL = Math.min(Math.ceil(Math.max(...allFL))+0.5, 8);
   const pointDatasets = ['key','back','fwd','weak'].map(t=>({
     label: typeLabel[t],
-    data: sectors.filter(s=>s.type===t).map(s=>({x:s.bl,y:s.fl,label:s.code+' '+s.name.slice(0,30)})),
+    data: sectors.filter(s=>atype(s)===t).map(s=>({x:abl(s),y:afl(s),label:s.code+' '+s.name.slice(0,30)})),
     backgroundColor: typeColor[t]+'cc',
     borderColor: typeColor[t],
     borderWidth:1, pointRadius:4, pointHoverRadius:8,
@@ -772,7 +828,8 @@ function buildScatter(){
     { label:'_FL=1', data:[{x:0,y:1},{x:maxBL,y:1}], borderColor:'#94a3b8', borderWidth:1.5,
       borderDash:[5,5], pointRadius:0, showLine:true, type:'line', fill:false }
   ];
-  new Chart(document.getElementById('chart-scatter'),{
+  if(scatterChartRef){scatterChartRef.destroy();}
+  scatterChartRef = new Chart(document.getElementById('chart-scatter'),{
     type:'scatter',
     data:{datasets:[...pointDatasets, ...refDatasets]},
     options:{
@@ -797,12 +854,15 @@ function buildScatter(){
   });
 }
 
-function buildTopChart(canvasId, data, field, label, color){
-  new Chart(document.getElementById(canvasId),{
+const _topChartRefs = {};
+function buildTopChart(canvasId, data, accessor, label, color){
+  if(_topChartRefs[canvasId]){_topChartRefs[canvasId].destroy();}
+  const getValue = typeof accessor === 'function' ? accessor : s=>s[accessor];
+  _topChartRefs[canvasId] = new Chart(document.getElementById(canvasId),{
     type:'bar',
     data:{
       labels: data.map(s=>s.code),
-      datasets:[{label, data:data.map(s=>s[field]),
+      datasets:[{label, data:data.map(getValue),
         backgroundColor:color+'cc', borderColor:color, borderWidth:1, borderRadius:4}]
     },
     options:{
@@ -851,12 +911,12 @@ function buildLinkTable(){
       <td>${i+1}</td>
       <td><span class="code-badge">${esc(s.code)}</span></td>
       <td class="clickable" onclick="openModal(${s.j})">${esc(s.name.slice(0,45))}</td>
-      <td>${s.bl.toFixed(3)}<span class="bar-viz" style="width:${Math.min(s.bl*30,60)}px;background:#d97706aa"></span></td>
-      <td>${s.fl.toFixed(3)}<span class="bar-viz" style="width:${Math.min(s.fl*30,60)}px;background:#16a34aaa"></span></td>
-      <td>${typeBadge(s.type)}</td>
-      <td>${s.outm.toFixed(3)}</td>
-      <td>${s.vam.toFixed(3)}</td>
-      <td>${s.empm.toFixed(2)}</td>
+      <td>${abl(s).toFixed(3)}<span class="bar-viz" style="width:${Math.min(abl(s)*30,60)}px;background:#d97706aa"></span></td>
+      <td>${afl(s).toFixed(3)}<span class="bar-viz" style="width:${Math.min(afl(s)*30,60)}px;background:#16a34aaa"></span></td>
+      <td>${typeBadge(atype(s))}</td>
+      <td>${aoutm(s).toFixed(3)}</td>
+      <td>${avam(s).toFixed(3)}</td>
+      <td>${aempm(s).toFixed(2)}</td>
       <td>${fmtN(s.x)}</td>
     </tr>`).join('');
 }
@@ -866,7 +926,7 @@ function filterLinkTable(){
   const ft=document.getElementById('link-filter-type').value;
   linkData = sectors.filter(s=>{
     const match=!q||(s.name.toLowerCase().includes(q)||s.code.toLowerCase().includes(q));
-    const tm=!ft||s.type===ft;
+    const tm=!ft||atype(s)===ft;
     return match&&tm;
   });
   sortLinkTable();
@@ -874,8 +934,9 @@ function filterLinkTable(){
 function sortLinkTable(){
   const sv=document.getElementById('link-sort').value;
   const [f,dir]=sv.split('-');
-  const fieldMap={bl:'bl',fl:'fl',out:'outm',va:'vam',emp:'empm'};
-  linkData.sort((a,b)=>dir==='desc'?b[fieldMap[f]]-a[fieldMap[f]]:a[fieldMap[f]]-b[fieldMap[f]]);
+  const fieldFn={bl:abl,fl:afl,out:aoutm,va:avam,emp:aempm};
+  const fn=fieldFn[f]||(s=>s.x);
+  linkData.sort((a,b)=>dir==='desc'?fn(b)-fn(a):fn(a)-fn(b));
   buildLinkTable();
 }
 function sortBy(f){
@@ -1293,7 +1354,7 @@ function filterSectors(){
   const fieldMap={bl:'bl',fl:'fl',x:'x',emp:'empT'};
   secData=sectors.filter(s=>{
     const match=!q||(s.name.toLowerCase().includes(q)||s.code.toLowerCase().includes(q));
-    const tm=!ft||s.type===ft;
+    const tm=!ft||atype(s)===ft;
     return match&&tm;
   }).sort((a,b)=>dir==='desc'?b[fieldMap[f]]-a[fieldMap[f]]:a[fieldMap[f]]-b[fieldMap[f]]);
   buildSecTable();
@@ -1304,12 +1365,12 @@ function buildSecTable(){
       <td>${i+1}</td>
       <td><span class="code-badge">${esc(s.code)}</span></td>
       <td>${esc(s.name.slice(0,45))}</td>
-      <td>${typeBadge(s.type)}</td>
-      <td>${s.bl.toFixed(3)}</td>
-      <td>${s.fl.toFixed(3)}</td>
-      <td>${s.outm.toFixed(3)}</td>
-      <td>${s.vam.toFixed(3)}</td>
-      <td>${s.empm.toFixed(2)}</td>
+      <td>${typeBadge(atype(s))}</td>
+      <td>${abl(s).toFixed(3)}</td>
+      <td>${afl(s).toFixed(3)}</td>
+      <td>${aoutm(s).toFixed(3)}</td>
+      <td>${avam(s).toFixed(3)}</td>
+      <td>${aempm(s).toFixed(2)}</td>
       <td>${s.formalShare.toFixed(1)}%</td>
       <td>${fmtN(s.x)}</td>
       <td>${fmtN(s.gva)}</td>
@@ -1326,15 +1387,16 @@ function openModal(j){
   const s=sectors[j];
   document.getElementById('modal-code').textContent=s.code;
   document.getElementById('modal-name').textContent=s.name;
-  document.getElementById('modal-badges').innerHTML=typeBadge(s.type)+
-    ` <span class="badge badge-strong" style="margin-left:4px;">BL ${s.bl.toFixed(3)}</span>
-      <span class="badge badge-strong" style="margin-left:4px;background:#d1fae5;color:#065f46;">FL ${s.fl.toFixed(3)}</span>`;
+  const mLabel = multType==='II' ? ' (Type II)' : ' (Type I)';
+  document.getElementById('modal-badges').innerHTML=typeBadge(atype(s))+
+    ` <span class="badge badge-strong" style="margin-left:4px;">BL ${abl(s).toFixed(3)}${mLabel}</span>
+      <span class="badge badge-strong" style="margin-left:4px;background:#d1fae5;color:#065f46;">FL ${afl(s).toFixed(3)}${mLabel}</span>`;
 
   document.getElementById('modal-kpis').innerHTML=`
     <div class="card"><div class="card-title">Output</div><div class="kpi" style="font-size:22px">${fmtN(s.x)}</div><div class="kpi-unit">bln UZS</div></div>
     <div class="card"><div class="card-title">GVA</div><div class="kpi" style="font-size:22px">${fmtN(s.gva)}</div><div class="kpi-unit">bln UZS</div></div>
-    <div class="card"><div class="card-title">Output Mult</div><div class="kpi" style="font-size:22px">${s.outm.toFixed(3)}</div><div class="kpi-unit">per unit final demand</div></div>
-    <div class="card"><div class="card-title">Emp Multiplier</div><div class="kpi" style="font-size:22px">${s.empm.toFixed(2)}</div><div class="kpi-unit">persons per bln UZS</div></div>
+    <div class="card"><div class="card-title">Output Mult${mLabel}</div><div class="kpi" style="font-size:22px">${aoutm(s).toFixed(3)}</div><div class="kpi-unit">per unit final demand</div></div>
+    <div class="card"><div class="card-title">Emp Multiplier${mLabel}</div><div class="kpi" style="font-size:22px">${aempm(s).toFixed(2)}</div><div class="kpi-unit">persons per bln UZS</div></div>
   `;
 
   if(modalChartMult){modalChartMult.destroy();}
@@ -1343,7 +1405,7 @@ function openModal(j){
   modalChartMult=new Chart(document.getElementById('modal-chart-mult'),{
     type:'bar',
     data:{labels:['Output Mult','VA Mult','BL','FL'],
-      datasets:[{label:'Value',data:[s.outm,s.vam,s.bl,s.fl].map(v=>+v.toFixed(3)),
+      datasets:[{label:'Value',data:[aoutm(s),avam(s),abl(s),afl(s)].map(v=>+v.toFixed(3)),
         backgroundColor:['#1a3a6ecc','#16a34acc','#d97706cc','#7c3aedcc'],borderRadius:4}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
       scales:{y:{beginAtZero:true}}}
@@ -1379,11 +1441,12 @@ function closeModal(e){
 // OVERVIEW EXPORTS
 // ═══════════════════════════════════════
 function exportOverviewCSV(){
-  const rows=[['#','Code','Sector','BL','FL','Type','OutputMult','VAMult','EmpMult','Output_bln','GVA_bln','EmpTotal','EmpFormal','EmpInformal']];
-  sectors.forEach((s,i)=>rows.push([i+1,s.code,s.name,s.bl.toFixed(4),s.fl.toFixed(4),s.type,
-    s.outm.toFixed(4),s.vam.toFixed(4),s.empm.toFixed(4),
+  const t=multType;
+  const rows=[['#','Code','Sector','BL','FL','Type','OutputMult_'+t,'VAMult_'+t,'EmpMult_'+t,'Output_bln','GVA_bln','EmpTotal','EmpFormal','EmpInformal']];
+  sectors.forEach((s,i)=>rows.push([i+1,s.code,s.name,abl(s).toFixed(4),afl(s).toFixed(4),atype(s),
+    aoutm(s).toFixed(4),avam(s).toFixed(4),aempm(s).toFixed(4),
     s.x.toFixed(1),s.gva.toFixed(1),s.empT.toFixed(2),s.empF.toFixed(2),s.empI.toFixed(2)]));
-  downloadCSV(rows,'io_linkage_analysis.csv');
+  downloadCSV(rows,'io_linkage_analysis_type'+t+'.csv');
 }
 
 function exportOverviewPNG(){
@@ -1413,11 +1476,11 @@ function exportOverviewPDF(){
   ].forEach(([lbl,cnt])=>{doc.text(`${lbl}: ${cnt}`,14,y);y+=5;});
 
   y+=4;doc.setFontSize(10);doc.setFont(undefined,'bold');
-  doc.text('Top 20 Sectors by Output Multiplier',14,y);y+=5;
+  doc.text(`Top 20 Sectors by Output Multiplier (Type ${multType})`,14,y);y+=5;
   doc.setFontSize(7);doc.setFont(undefined,'normal');
-  const top20=sectors.slice().sort((a,b)=>b.outm-a.outm).slice(0,20);
+  const top20=sectors.slice().sort((a,b)=>aoutm(b)-aoutm(a)).slice(0,20);
   top20.forEach((s,i)=>{
-    doc.text(`${i+1}. [${s.code}] ${s.name.slice(0,50)} — Mult: ${s.outm.toFixed(3)} · BL: ${s.bl.toFixed(3)} · ${s.type}`,14,y);
+    doc.text(`${i+1}. [${s.code}] ${s.name.slice(0,50)} — Mult: ${aoutm(s).toFixed(3)} · BL: ${abl(s).toFixed(3)} · ${atype(s)}`,14,y);
     y+=4.5;
   });
 
