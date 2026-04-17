@@ -13,6 +13,8 @@
 <script src="../shared/toast.js"></script>
 <script src="../shared/scenario-engine.js"></script>
 <script src="../shared/ai-advisor.js"></script>
+<script src="../shared/registry-loader.js"></script>
+<script>window.addEventListener('load', () => EPE?.ready(() => EPE.badge()));</script>
 <style>
 /* Tokens inherited from design-system.css — aliases for backward compat */
 :root {
@@ -1125,6 +1127,23 @@ function bopStr(base) {
   return bop.toExponential(3);
 }
 
+/* ── Apply shared-registry overrides before first run ── */
+function applyRegistryOverrides() {
+  if (!window.EPE || !EPE.registry) return;
+  Object.assign(BASE, {
+    sig_q: EPE.get('cge_structural.armington_sigma_q', BASE.sig_q),
+    sig_t: EPE.get('cge_structural.cet_sigma_t',       BASE.sig_t),
+    bt:    EPE.get('cge_structural.cet_share_bt',      BASE.bt),
+    bq:    EPE.get('cge_structural.ces_share_bq',      BASE.bq),
+    tm:    EPE.get('cge_structural.import_tariff_rate',BASE.tm),
+    sy:    EPE.get('cge_structural.savings_rate',      BASE.sy),
+  });
+  // Recompute CES/CET exponents from elasticities
+  BASE.rho_t = 1 / BASE.sig_t - 1;
+  BASE.rho_q = 1 / BASE.sig_q - 1;
+  console.log('[CGE] Registry overrides applied:', {sig_q: BASE.sig_q, sig_t: BASE.sig_t});
+}
+
 /* ── Initialise sliders ── */
 (function initSliders() {
   document.querySelectorAll('input[type=range]').forEach(el => {
@@ -1132,7 +1151,12 @@ function bopStr(base) {
     el.style.setProperty('--pct', pct);
   });
   // Run base simulation on load for calibration check and initial state
-  runSimulation();
+  const start = () => runSimulation();
+  if (window.EPE) {
+    EPE.ready(() => { applyRegistryOverrides(); start(); });
+  } else {
+    start();
+  }
 })();
 
 /* ── Save Scenario & AI Analysis ── */

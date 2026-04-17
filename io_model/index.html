@@ -13,6 +13,8 @@
 <script src="../shared/toast.js"></script>
 <script src="../shared/scenario-engine.js"></script>
 <script src="../shared/ai-advisor.js"></script>
+<script src="../shared/registry-loader.js"></script>
+<script>window.addEventListener('load', () => EPE?.ready(() => EPE.badge()));</script>
 <style>
 /* Tokens inherited from design-system.css — aliases for backward compat */
 :root{
@@ -1603,6 +1605,21 @@ async function ioAIAnalysis() {
   );
   PolicyAdvisor.renderAdvisorPanel('io-ai-output',analysis);
 }
+
+// ── Registry consistency check ──
+window.addEventListener('load', () => {
+  if (!window.EPE) return;
+  EPE.ready(() => {
+    const computed = IO_DATA.outMultII.reduce((a,b)=>a+b,0) / IO_DATA.outMultII.length;
+    const registry = EPE.get('io_summary.type_ii_avg_multiplier', null);
+    if (registry == null) return;
+    const diff = Math.abs(computed - registry);
+    const tol = 0.05;
+    console.log('[IO] Registry avg Type-II multiplier: ' + registry.toFixed(2) +
+                ' | Computed from IO_DATA: ' + computed.toFixed(2) +
+                ' | ' + (diff < tol ? '✓ consistent' : '⚠ diverges by ' + diff.toFixed(2)));
+  });
+});
 </script>
 </body>
 </html>

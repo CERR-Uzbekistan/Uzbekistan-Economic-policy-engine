@@ -784,6 +784,10 @@ details[open] > .tracker-summary .tracker-chevron { transform: rotate(90deg); }
       <button class="nav-item" onclick="navigate('compare')">
         <span class="nav-icon">⚖️</span> <span data-i18n="nav_compare">Compare Scenarios</span>
       </button>
+      <button class="nav-item" onclick="navigate('synthesis')">
+        <span class="nav-icon">🧩</span> <span data-i18n="nav_synthesis">Synthesis (Cross-Model)</span>
+        <span style="margin-left:auto;font-size:9px;background:#14b8a6;color:#fff;padding:2px 6px;border-radius:10px;font-weight:700;letter-spacing:.5px;">NEW</span>
+      </button>
     </div>
 
     <div class="nav-divider"></div>
@@ -1208,6 +1212,19 @@ details[open] > .tracker-summary .tracker-chevron { transform: rotate(90deg); }
     </div>
 
     <!-- ── COMPARE ── -->
+    <div id="page-synthesis" class="page">
+      <div class="model-frame-wrap">
+        <div class="model-frame-header">
+          <span class="model-frame-pill" style="background:#ccfbf1;color:#0f766e;">SYNTHESIS</span>
+          <div>
+            <div class="model-frame-title">Cross-Model Synthesis — Phase 1 Demo</div>
+            <div class="model-frame-sub">One shock propagates through PE → IO → CGE → FPP using a shared parameter registry. Reconciliation flags cross-model disagreement.</div>
+          </div>
+        </div>
+        <iframe class="model-iframe" src="synthesis/index.html" title="Synthesis Demo" loading="lazy"></iframe>
+      </div>
+    </div>
+
     <div id="page-compare" class="page">
       <div class="compare-content">
         <div class="section-header" style="margin-bottom:8px">

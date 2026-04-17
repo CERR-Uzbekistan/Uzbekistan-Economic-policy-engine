@@ -14,6 +14,8 @@
 <script src="../shared/scenario-engine.js"></script>
 <script src="../shared/ai-advisor.js"></script>
 <script src="dfm_data.js" onerror="window.DFM_DATA=null"></script>
+<script src="../shared/registry-loader.js"></script>
+<script>window.addEventListener('load', () => EPE?.ready(() => EPE.badge()));</script>
 <style>
 /* Tokens inherited from design-system.css — aliases for backward compat */
 :root {
@@ -1311,6 +1313,23 @@ function dfmAIAnalysis() {
   PolicyAdvisor.analyzeSim(simData);
   PolicyAdvisor.renderAdvisorPanel(document.querySelector('.container'));
 }
+
+// ── Registry output-gap cross-check ──
+window.addEventListener('load', () => {
+  if (!window.EPE) return;
+  EPE.ready(() => {
+    setTimeout(() => {
+      const txt = document.getElementById('kpi-yoy')?.textContent || '';
+      const nowcast = parseFloat(txt.replace(/[^0-9.\-]/g, ''));
+      const potPct = EPE.get('macro_baseline.potential_gdp_growth', null);
+      if (potPct == null || isNaN(nowcast)) return;
+      const potential = potPct * 100;
+      const gap = nowcast - potential;
+      console.log('[DFM] Nowcast ' + nowcast.toFixed(2) + '% vs registry potential ' +
+                  potential.toFixed(2) + '% | output gap proxy: ' + gap.toFixed(2) + 'pp');
+    }, 1500);
+  });
+});
 </script>
 </body>
 </html>

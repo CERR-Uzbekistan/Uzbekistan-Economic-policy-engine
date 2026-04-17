@@ -13,6 +13,8 @@
 <script src="../shared/toast.js"></script>
 <script src="../shared/scenario-engine.js"></script>
 <script src="../shared/ai-advisor.js"></script>
+<script src="../shared/registry-loader.js"></script>
+<script>window.addEventListener('load', () => EPE?.ready(() => EPE.badge()));</script>
 <style>
 /* Reset and typography inherited from design-system.css */
 
@@ -1047,7 +1049,20 @@ async function fppAIAnalysis() {
   PolicyAdvisor.renderAdvisorPanel('fpp-ai-output',analysis);
 }
 
-window.addEventListener('load', () => runFPP());
+function applyFppRegistryOverrides() {
+  if (!window.EPE || !EPE.registry) return;
+  Object.assign(PC, {
+    l1:    EPE.get('fpp_structural.phillips_l1_persistence',   PC.l1),
+    l2:    EPE.get('fpp_structural.phillips_l2_imported',      PC.l2),
+    l3:    EPE.get('fpp_structural.phillips_l3_output_gap',    PC.l3),
+    omega: EPE.get('fpp_structural.phillips_omega_expectations', PC.omega),
+  });
+  console.log('[FPP] Registry overrides applied:', PC);
+}
+window.addEventListener('load', () => {
+  if (window.EPE) EPE.ready(() => { applyFppRegistryOverrides(); runFPP(); });
+  else runFPP();
+});
 </script>
 </body>
 </html>
