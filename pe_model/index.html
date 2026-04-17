@@ -442,7 +442,7 @@ select.ctrl-select{width:100%;padding:7px 10px;border:1px solid var(--border);bo
           • Uzbekistan customs import data (HS-10, partner country, 2022–2025)<br>
           • Applied MFN tariff schedule of Uzbekistan<br>
           • CIS Free Trade Agreement schedules<br>
-          • Import demand elasticities: WITS global database (default ε = 1.27)<br>
+          • Import demand elasticities: WITS SMART database — sector-specific per HS Section (ε = 0.38–2.80; Kee, Nicita &amp; Olarreaga, 2008)<br>
           • Uzbekistan State Customs Committee
         </p>
       </div>
@@ -475,6 +475,41 @@ select.ctrl-select{width:100%;padding:7px 10px;border:1px solid var(--border);bo
 // ════════════════════════════════════════════════════════════
 const D = PE_DATA;
 const SCALE20 = 1.0, SCALE50 = 2.5, SCALE80 = 4.0;
+
+// ── Sector-specific import demand elasticities ────────────────────────────
+// Source: WITS SMART database; weighted medians from Kee, Nicita & Olarreaga (2008).
+// pe_data.js pre-computes tc/td at a uniform ε = 1.27. The correction factor
+// rescales those values to the proper sector elasticity at runtime.
+const SECTION_ELAS = {
+  'I':   0.38,  // Live Animals & Animal Products (inelastic — food security goods)
+  'II':  0.50,  // Vegetable Products
+  'III': 0.55,  // Animal & Veg Fats and Oils
+  'IV':  0.70,  // Prepared Foodstuffs, Beverages & Tobacco
+  'V':   0.45,  // Mineral Products (energy — highly inelastic)
+  'VI':  1.10,  // Chemicals & Allied Industries
+  'VII': 1.30,  // Plastics & Rubbers
+  'VIII':1.40,  // Hides, Leather & Leather Articles
+  'IX':  1.20,  // Wood & Wood Products
+  'X':   1.15,  // Pulp, Paper & Paperboard
+  'XI':  1.60,  // Textiles & Apparel
+  'XII': 1.80,  // Footwear & Headgear
+  'XIII':1.25,  // Articles of Stone, Plaster, Glass & Ceramic
+  'XIV': 0.80,  // Precious Stones & Metals
+  'XV':  1.35,  // Base Metals & Articles
+  'XVI': 2.50,  // Machinery, Computers & Electrical Equipment (highly elastic)
+  'XVII':2.80,  // Vehicles & Transport Equipment (highest elasticity)
+  'XVIII':2.20, // Optical, Medical & Precision Instruments
+  'XIX': 0.60,  // Arms & Ammunition
+  'XX':  1.70,  // Miscellaneous Manufactured Articles
+  'XXI': 0.50   // Works of Art & Antiques
+};
+const BASE_ELAS = 1.27; // uniform elasticity baked into pe_data.js
+/**
+ * Returns the runtime elasticity correction factor for a given HS section.
+ * Multiplying pre-computed tc/td by this factor adjusts them from the
+ * uniform BASE_ELAS to the sector-specific elasticity.
+ */
+function elasAdj(secId){ return (SECTION_ELAS[secId] ?? BASE_ELAS) / BASE_ELAS; }
 
 // HS Chapter descriptions (EN) for display
 const CH_NAMES = {
@@ -733,11 +768,12 @@ function runSim(){
       if(!cd) return;
       // Regime filter: if regime-specific, scale by fraction (simplified)
       const rf = regime==='all'?1.0:0.6; // approximate 60% when filtered
+      const ef = elasAdj(s.id);          // sector-specific elasticity correction
       imp     += cd.imp*rf;
-      tc      += cd.tc*scale*rf;
-      td      += cd.td*scale*rf;
-      welfare += cd.welfare*scale*rf;
-      taxChg  += cd.taxChg*scale*rf;
+      tc      += cd.tc*scale*rf*ef;
+      td      += cd.td*scale*rf*ef;
+      welfare += cd.welfare*scale*rf*ef;
+      taxChg  += cd.taxChg*scale*rf*ef;
       mfnW    += cd.avgMfn*cd.imp*rf;
     });
     if(imp>0) rows.push({sec:s.id, name:s.name, imp, tc, td, welfare, taxChg, avgMfn:mfnW/imp});
@@ -849,9 +885,16 @@ function renderSectors(){
   document.getElementById('sec-table-title').textContent = isSec ?
     'Import & Trade Effects by Section' : 'Import & Trade Effects by HS Chapter';
 
-  const rows = isSec ? D.sections.filter(s=>s.imp>0).sort((a,b)=>b.imp-a.imp) :
-    Object.entries(D.chapters).map(([k,v])=>({id:'HS '+k, name:CH_NAMES[parseInt(k)]||('Chapter '+k), sec:v.sec, ...v}))
-      .filter(r=>r.imp>0).sort((a,b)=>b.imp-a.imp);
+  const rows = isSec ?
+    D.sections.filter(s=>s.imp>0).map(s=>{
+      const ef = elasAdj(s.id);
+      return {...s, tc:s.tc*ef, td:s.td*ef, welfare:s.welfare*ef, taxChg:s.taxChg*ef};
+    }).sort((a,b)=>b.imp-a.imp) :
+    Object.entries(D.chapters).map(([k,v])=>{
+      const ef = elasAdj(v.sec);
+      return {id:'HS '+k, name:CH_NAMES[parseInt(k)]||('Chapter '+k), sec:v.sec, ...v,
+              tc:v.tc*ef, td:v.td*ef, welfare:v.welfare*ef, taxChg:v.taxChg*ef};
+    }).filter(r=>r.imp>0).sort((a,b)=>b.imp-a.imp);
 
   const totImp = rows.reduce((a,r)=>a+r.imp,0);
   const totTC  = rows.reduce((a,r)=>a+r.tc,0);
@@ -1051,8 +1094,9 @@ function peSaveScenario() {
       if(chId!=='all' && parseInt(chId)!==ch) return;
       const cd = D.chapters[ch]; if(!cd) return;
       const rf = regime==='all'?1.0:0.6;
-      imp+=cd.imp*rf; tc+=cd.tc*scale*rf; td+=cd.td*scale*rf;
-      welfare+=cd.welfare*scale*rf; taxChg+=cd.taxChg*scale*rf;
+      const ef = elasAdj(s.id);
+      imp+=cd.imp*rf; tc+=cd.tc*scale*rf*ef; td+=cd.td*scale*rf*ef;
+      welfare+=cd.welfare*scale*rf*ef; taxChg+=cd.taxChg*scale*rf*ef;
     });
     if(imp>0) rows.push({imp,tc,td,welfare,taxChg});
   });
@@ -1104,8 +1148,9 @@ async function peAIAnalysis() {
       if(chId!=='all' && parseInt(chId)!==ch) return;
       const cd = D.chapters[ch]; if(!cd) return;
       const rf = regime==='all'?1.0:0.6;
-      imp+=cd.imp*rf; tc+=cd.tc*scale*rf; td+=cd.td*scale*rf;
-      welfare+=cd.welfare*scale*rf; taxChg+=cd.taxChg*scale*rf;
+      const ef = elasAdj(s.id);
+      imp+=cd.imp*rf; tc+=cd.tc*scale*rf*ef; td+=cd.td*scale*rf*ef;
+      welfare+=cd.welfare*scale*rf*ef; taxChg+=cd.taxChg*scale*rf*ef;
     });
     if(imp>0) rows.push({imp,tc,td,welfare,taxChg});
   });
