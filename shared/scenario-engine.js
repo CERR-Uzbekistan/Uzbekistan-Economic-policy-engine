@@ -47,7 +47,11 @@ function _load() {
  * @param {Array} scenarios
  */
 function _persist(scenarios) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(scenarios));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(scenarios));
+  } catch (_) {
+    /* localStorage unavailable (private browsing, quota exceeded) — changes live in memory only */
+  }
 }
 
 /**

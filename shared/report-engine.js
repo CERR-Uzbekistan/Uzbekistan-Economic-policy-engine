@@ -68,7 +68,11 @@
     filename = filename || 'chart.png';
     var canvas = document.getElementById(canvasId);
     if (!canvas) {
-      alert('Chart canvas not found: ' + canvasId);
+      if (window.Toast) {
+        Toast.show('Chart canvas not found: ' + canvasId, 'error');
+      } else {
+        console.error('ReportEngine: chart canvas not found —', canvasId);
+      }
       return;
     }
 
@@ -93,7 +97,11 @@
 
     var jsPDFLib = (global.jspdf && global.jspdf.jsPDF) || (global.jsPDF);
     if (!jsPDFLib) {
-      alert('jsPDF is not loaded. Please add the jsPDF CDN script to the page.');
+      if (window.Toast) {
+        Toast.show('PDF export unavailable — jsPDF library not loaded.', 'error');
+      } else {
+        console.error('ReportEngine: jsPDF not loaded');
+      }
       return;
     }
 
