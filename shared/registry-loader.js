@@ -78,6 +78,11 @@
         }
       } catch (e) { /* try next */ }
     }
+    if (window.EPE_REGISTRY_DATA) {
+      api.registry = window.EPE_REGISTRY_DATA;
+      api._source = 'embedded';
+      return;
+    }
     api._error = 'registry not reachable';
   }
 
