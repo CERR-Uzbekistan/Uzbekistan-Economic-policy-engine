@@ -148,6 +148,57 @@ export type MacroSnapshot = {
   references: string[]
 }
 
+export type ScenarioLabResultTab =
+  | 'headline_impact'
+  | 'macro_path'
+  | 'external_balance'
+  | 'fiscal_effects'
+
+export type ScenarioLabAssumptionState = Record<string, number>
+
+export type ScenarioLabAssumptionInput = {
+  key: string
+  label: string
+  description: string
+  category: AssumptionCategory
+  unit: string
+  technical_variable: string | null
+  min: number
+  max: number
+  step: number
+  default_value: number
+}
+
+export type ScenarioLabPreset = {
+  preset_id: string
+  title: string
+  summary: string
+  assumption_overrides: Record<string, number>
+}
+
+export type ScenarioLabInterpretation = {
+  what_changed: string[]
+  why_it_changed: string[]
+  key_risks: string[]
+  policy_implications: string[]
+  suggested_next_scenarios: string[]
+}
+
+export type ScenarioLabResultsBundle = {
+  headline_metrics: HeadlineMetric[]
+  charts_by_tab: Record<ScenarioLabResultTab, ChartSpec>
+  interpretation: ScenarioLabInterpretation
+}
+
+export type ScenarioLabWorkspace = {
+  workspace_id: string
+  workspace_name: string
+  generated_at: string
+  assumptions: ScenarioLabAssumptionInput[]
+  presets: ScenarioLabPreset[]
+  baseline_results: ScenarioLabResultsBundle
+}
+
 export type ScenarioResult = {
   scenario: Scenario
   headline_metrics: HeadlineMetric[]

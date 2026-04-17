@@ -166,6 +166,59 @@ Use this shape for `Overview` page data instead of `ScenarioResult` to keep moni
 - `summary`: string
 - `target_href`: string
 
+## Scenario Lab-Specific Shape (`ScenarioLabWorkspace`)
+
+Use this shape for Scenario Lab workflows so analysis work stays separate from monitoring (`MacroSnapshot`) and downstream comparison pages.
+
+- `workspace_id`: string
+- `workspace_name`: string
+- `generated_at`: ISO datetime string
+- `assumptions`: `ScenarioLabAssumptionInput[]`
+- `presets`: `ScenarioLabPreset[]`
+- `baseline_results`: `ScenarioLabResultsBundle`
+
+## `ScenarioLabAssumptionState`
+
+- `Record<string, number>` keyed by assumption `key`
+
+## `ScenarioLabResultTab`
+
+- enum: `headline_impact` | `macro_path` | `external_balance` | `fiscal_effects`
+
+## `ScenarioLabAssumptionInput`
+
+- `key`: string
+- `label`: string
+- `description`: string
+- `category`: enum (`macro` | `external` | `fiscal` | `trade` | `advanced`)
+- `unit`: string
+- `technical_variable`: string | null
+- `min`: number
+- `max`: number
+- `step`: number
+- `default_value`: number
+
+## `ScenarioLabPreset`
+
+- `preset_id`: string
+- `title`: string
+- `summary`: string
+- `assumption_overrides`: `Record<string, number>`
+
+## `ScenarioLabResultsBundle`
+
+- `headline_metrics`: `HeadlineMetric[]`
+- `charts_by_tab`: `Record<ScenarioLabResultTab, ChartSpec>`
+- `interpretation`: `ScenarioLabInterpretation`
+
+## `ScenarioLabInterpretation`
+
+- `what_changed`: string[]
+- `why_it_changed`: string[]
+- `key_risks`: string[]
+- `policy_implications`: string[]
+- `suggested_next_scenarios`: string[]
+
 ## `ApiError`
 
 - `error_code`: string
