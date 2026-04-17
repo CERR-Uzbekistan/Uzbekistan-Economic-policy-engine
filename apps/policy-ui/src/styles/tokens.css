@@ -24,6 +24,6 @@
   --radius-lg: 0.875rem;
 
   --sidebar-width: clamp(14rem, 19vw, 16.5rem);
-  --content-max-width: 76rem;
+  --content-max-width: 84rem;
   --focus-ring: 0 0 0 2px rgba(31, 54, 88, 0.25);
 }

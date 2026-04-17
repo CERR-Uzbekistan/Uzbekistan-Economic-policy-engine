@@ -1,5 +1,11 @@
 import type { ReactNode } from 'react'
 
-export function PageContainer({ children }: { children: ReactNode }) {
-  return <section className="page-container">{children}</section>
+type PageContainerProps = {
+  children: ReactNode
+  className?: string
+}
+
+export function PageContainer({ children, className }: PageContainerProps) {
+  const mergedClassName = className ? `page-container ${className}` : 'page-container'
+  return <section className={mergedClassName}>{children}</section>
 }
