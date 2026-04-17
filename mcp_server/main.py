@@ -23,9 +23,7 @@ logging.basicConfig(
 logger = logging.getLogger("uz-policy-mcp")
 
 # Initialize FastMCP server
-mcp = FastMCP(
-    "uzbekistan-policy-engine"
-)
+mcp = FastMCP("uzbekistan-policy-engine")
 
 # Data directory (model JSON files)
 DATA_DIR = Path(__file__).parent / "data"

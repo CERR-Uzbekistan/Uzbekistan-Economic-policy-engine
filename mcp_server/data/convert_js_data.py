@@ -50,6 +50,7 @@ process.stdout.write(JSON.stringify(data));
         result = subprocess.run(
             ["node", "-e", node_script],
             capture_output=True, text=True, timeout=60,
+            encoding="utf-8", errors="replace",
         )
         if result.returncode != 0:
             print(f"  ERROR: Node.js failed for {src_path.name}:")

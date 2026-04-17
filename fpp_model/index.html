@@ -398,8 +398,8 @@
     <table class="htable" style="max-width:600px">
       <thead><tr><th class="left">Parameter</th><th>Symbol</th><th>Value</th><th>Interpretation</th></tr></thead>
       <tbody>
-        <tr><td class="left">Lagged (actual) inflation</td><td>λ₁</td><td>0.05</td><td>Low inertia — past inflation has minor direct weight</td></tr>
-        <tr><td class="left">Expected inflation weight</td><td>(1−λ₁−λ₂)</td><td>0.25</td><td>Forward-looking expectations (½ past actual + ½ target)</td></tr>
+        <tr><td class="left">Lagged (actual) inflation</td><td>λ₁</td><td>0.13</td><td>Annual persistence — harmonized with QPM (0.60⁴ ≈ 0.13 annualized)</td></tr>
+        <tr><td class="left">Expected inflation weight</td><td>(1−λ₁−λ₂)</td><td>0.17</td><td>Forward-looking expectations (½ past actual + ½ target)</td></tr>
         <tr><td class="left">Imported inflation</td><td>λ₂</td><td><strong>0.70</strong></td><td>Dominant driver — NER depreciation + world prices</td></tr>
         <tr><td class="left">Output gap</td><td>λ₃</td><td>0.40</td><td>Demand pressure: 1pp gap → +0.4pp inflation</td></tr>
         <tr><td class="left">Inflation expectations weight on past</td><td>ω</td><td>0.50</td><td>π_exp = 0.5·π_{t−1} + 0.5·π_target</td></tr>
@@ -423,7 +423,7 @@
       <h3>Phillips Curve — Inflation (CAEM Sep 2025)</h3>
       <p>The CAEM calibration uses an <strong>open-economy Phillips Curve</strong> where imported inflation is the dominant driver (λ₂ = 0.70), reflecting Uzbekistan's high import dependence and exchange rate pass-through:</p>
       <div class="eq-box">
-π_t = 0.70·π_imp + 0.25·π_exp + 0.05·π_{t−1} + 0.40·y_gap
+π_t = 0.70·π_imp + 0.17·π_exp + 0.13·π_{t−1} + 0.40·y_gap
 <br><br>
 Where:
   π_imp  = NER_dep + π_US  (imported inflation)
@@ -466,7 +466,7 @@ M2_t = NGDP_t / V_t
           <code>y_gap[t] = y_gap[t-1] + (g - g_pot)</code>
           <code>π_imp = NER_dep + π_US</code>
           <code>π_exp = 0.5·π[t-1] + 0.5·π_target</code>
-          <code>π[t] = 0.70·π_imp + 0.25·π_exp + 0.05·π[t-1] + 0.40·y_gap</code>
+          <code>π[t] = 0.70·π_imp + 0.17·π_exp + 0.13·π[t-1] + 0.40·y_gap</code>
           <code>NGDP[t] = NGDP[t-1]·(1+g/100)·(1+π/100)</code>
           <code>NER[t] = NER[t-1]·(1+dep/100)</code>
           <code>GDP_USD[t] = NGDP[t] / NER[t]  [mln USD]</code>
@@ -518,7 +518,7 @@ M2_t = NGDP_t / V_t
         <li><strong>Base M2 (2024 eop):</strong> 277,065 bln UZS</li>
         <li><strong>Base GDP (2024):</strong> 1,454,574 bln UZS / 114,962 mln USD</li>
         <li><strong>Import share of GDP:</strong> ~35.5% (avg. 2022–24)</li>
-        <li><strong>Phillips Curve:</strong> λ₁=0.05, λ₂=0.70, λ₃=0.40, ω=0.50</li>
+        <li><strong>Phillips Curve:</strong> λ₁=0.13, λ₂=0.70, λ₃=0.40, ω=0.50 — <em>harmonized with QPM (a₁=0.60 quarterly → 0.60⁴≈0.13 annualized)</em></li>
         <li><strong>UIP κ:</strong> 0.70 (partial capital mobility)</li>
       </ul>
     </div>
@@ -565,8 +565,9 @@ const BASE = {
   pi_target: 5.0
 };
 
-// Phillips Curve coefficients (CAEM 1b sheet)
-const PC = { l1: 0.05, l2: 0.70, l3: 0.40, omega: 0.50 };
+// Phillips Curve coefficients (CAEM 1b sheet, harmonized with QPM)
+// λ₁=0.13: annualized QPM quarterly persistence (0.60^4 ≈ 0.13); expectation weight = 1-λ₁-λ₂ = 0.17
+const PC = { l1: 0.13, l2: 0.70, l3: 0.40, omega: 0.50 };
 const G_POT = 5.8;          // potential growth %
 const IMPORT_SHARE = 0.355; // imports G&S as % of GDP (avg 2022-24: 43624/114962)
 
@@ -822,13 +823,30 @@ function renderCharts(res) {
   const yrs = ['2024', ...res.map(r=>String(r.year))];
   const proj = ['2025','2026','2027'];
 
+  // Analytical inflation fan: σ_base=1.2pp, uncertainty grows with √h (h=forecast horizon in years)
+  const σ_pi = 1.2;
+  const piCentral = [BASE.pi, ...res.map(r => r.pi)];
   mkChart('chart-real', {
     type:'line',
     data:{
       labels: yrs,
       datasets:[
+        // Fan bands drawn first so they sit behind the central lines
+        {label:'90% fan', data: piCentral.map((v,h) => h===0 ? v : v + 1.645*σ_pi*Math.sqrt(h)),
+          borderColor:'transparent', backgroundColor:'rgba(239,68,68,.07)',
+          pointRadius:0, fill:'+1', tension:.4, borderWidth:0},
+        {label:'', data: piCentral.map((v,h) => h===0 ? v : Math.max(0.5, v - 1.645*σ_pi*Math.sqrt(h))),
+          borderColor:'transparent', backgroundColor:'transparent',
+          pointRadius:0, fill:false, tension:.4, borderWidth:0},
+        {label:'50% fan', data: piCentral.map((v,h) => h===0 ? v : v + 0.674*σ_pi*Math.sqrt(h)),
+          borderColor:'transparent', backgroundColor:'rgba(239,68,68,.15)',
+          pointRadius:0, fill:'+1', tension:.4, borderWidth:0},
+        {label:'', data: piCentral.map((v,h) => h===0 ? v : Math.max(0.5, v - 0.674*σ_pi*Math.sqrt(h))),
+          borderColor:'transparent', backgroundColor:'transparent',
+          pointRadius:0, fill:false, tension:.4, borderWidth:0},
+        // Central lines on top
         {label:'Real GDP growth (%)', data:[BASE.g,...res.map(r=>r.g)], borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,.1)', fill:true, tension:.4, pointRadius:5, borderWidth:2.5},
-        {label:'CPI Inflation (PC, %)', data:[BASE.pi,...res.map(r=>r.pi)], borderColor:'#ef4444', backgroundColor:'rgba(239,68,68,.08)', fill:true, tension:.4, pointRadius:5, borderWidth:2.5},
+        {label:'CPI Inflation (PC, %)', data:piCentral, borderColor:'#ef4444', backgroundColor:'transparent', fill:false, tension:.4, pointRadius:5, borderWidth:2.5},
         {label:'Inflation target 5%', data:yrs.map(()=>5), borderColor:'#94a3b8', borderWidth:1.5, borderDash:[5,4], pointRadius:0, fill:false}
       ]
     }
@@ -886,7 +904,10 @@ function mkChart(id, cfg) {
     data: cfg.data,
     options: {
       responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:true,labels:{font:{size:10},boxWidth:12}}},
+      plugins:{legend:{display:true,
+        labels:{font:{size:10},boxWidth:12},
+        filter: item => item.text !== ''  // hide empty-label band datasets
+      }},
       scales: Object.assign({
         x:{grid:{display:false},ticks:{font:{size:10}}},
         y:{grid:{color:'#f1f5f9'},ticks:{font:{size:10}}}
@@ -943,7 +964,7 @@ function fppExportPDF() {
       'Data source':'CAEM Uzbekistan (Sep 2025).xlsm',
       'Base year':'2024 (actual)',
       'Projection horizon':'2025–2027',
-      'Phillips Curve':'λ₁=0.05, λ₂=0.70, λ₃=0.40',
+      'Phillips Curve':'λ₁=0.13, λ₂=0.70, λ₃=0.40',
       'Potential growth':'5.8% p.a.',
       'Inflation target':'5.0% (CBU)',
       'Avg GDP growth':f1(avg('g'))+'%',
