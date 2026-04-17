@@ -23,15 +23,7 @@ logging.basicConfig(
 logger = logging.getLogger("uz-policy-mcp")
 
 # Initialize FastMCP server
-mcp = FastMCP(
-    "uzbekistan-policy-engine",
-    description=(
-        "Uzbekistan Economic Policy Engine — 6 macroeconomic models "
-        "(QPM, DFM, PE, I-O, CGE, FPP) queryable via MCP. "
-        "Run policy simulations, GDP nowcasts, trade impact analysis, "
-        "and more through natural language."
-    ),
-)
+mcp = FastMCP("uzbekistan-policy-engine")
 
 # Data directory
 DATA_DIR = Path(__file__).parent / "data"
