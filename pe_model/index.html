@@ -12,6 +12,8 @@
 <script src="../shared/toast.js"></script>
 <script src="../shared/scenario-engine.js"></script>
 <script src="../shared/ai-advisor.js"></script>
+<script src="../shared/registry-loader.js"></script>
+<script>window.addEventListener('load', () => EPE?.ready(() => EPE.badge()));</script>
 <style>
 /* Tokens inherited from design-system.css — aliases for backward compat */
 :root{
@@ -1067,13 +1069,40 @@ function sortTable(tableId, col){
 // ════════════════════════════════════════════════════════════
 // INIT
 // ════════════════════════════════════════════════════════════
+function applyPeRegistryOverrides() {
+  if (!window.EPE || !EPE.registry) return;
+  const regBase = EPE.get('pe_structural.base_import_elasticity', BASE_ELAS);
+  const hsMap = EPE.get('trade_elasticities.by_hs_chapter', {});
+  // Registry overrides for HS chapters (28-40) map to HS Section VI (28-38) and VII (39-40).
+  // Compute weighted section elasticity from registry chapter data.
+  const sectionVI = [], sectionVII = [];
+  Object.entries(hsMap).forEach(([ch, vals]) => {
+    const n = parseInt(ch, 10);
+    const e = Math.abs(vals.import_demand || 0);
+    if (n >= 28 && n <= 38) sectionVI.push(e);
+    if (n >= 39 && n <= 40) sectionVII.push(e);
+  });
+  if (sectionVI.length) SECTION_ELAS['VI'] = sectionVI.reduce((a,b)=>a+b,0) / sectionVI.length;
+  if (sectionVII.length) SECTION_ELAS['VII'] = sectionVII.reduce((a,b)=>a+b,0) / sectionVII.length;
+  console.log('[PE] Registry overrides applied:', {
+    regBaseElas: regBase,
+    peDataBaseElas: BASE_ELAS,
+    sectionVI: SECTION_ELAS['VI'],
+    sectionVII: SECTION_ELAS['VII'],
+  });
+}
+
 function init(){
+  applyPeRegistryOverrides();
   try{ renderOverview(); }catch(e){ console.error('Overview:',e); }
   try{ populateSimFilters(); runSim(); }catch(e){ console.error('Sim:',e); }
   try{ renderSectors(); }catch(e){ console.error('Sectors:',e); }
   try{ renderPartners(); }catch(e){ console.error('Partners:',e); }
 }
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.EPE) EPE.ready(init);
+  else init();
+});
 
 /* ── Save scenario ── */
 function peSaveScenario() {

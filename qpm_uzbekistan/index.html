@@ -13,6 +13,8 @@
 <script src="../shared/toast.js"></script>
 <script src="../shared/scenario-engine.js"></script>
 <script src="../shared/ai-advisor.js"></script>
+<script src="../shared/registry-loader.js"></script>
+<script>window.addEventListener('load', () => EPE?.ready(() => EPE.badge()));</script>
 <style>
 /* Tokens inherited from design-system.css */
 
@@ -961,7 +963,28 @@ function fillParamTable() {
 }
 
 // ── Init ──
-run();
+function applyQpmRegistryOverrides() {
+  if (!window.EPE || !EPE.registry) return;
+  const pairs = [
+    ['g2', EPE.get('qpm_structural.taylor_inflation',  null), 'vg2', v => v.toFixed(2)],
+    ['g3', EPE.get('qpm_structural.taylor_output_gap', null), 'vg3', v => v.toFixed(2)],
+    ['a2', EPE.get('qpm_structural.phillips_slope',    null), 'va2', v => v.toFixed(2)],
+  ];
+  pairs.forEach(([id, val, label, fmt]) => {
+    if (val == null) return;
+    const el = document.getElementById(id);
+    const lb = document.getElementById(label);
+    if (el) {
+      el.value = val;
+      const pct = ((val - +el.min) / (+el.max - +el.min) * 100).toFixed(1) + '%';
+      el.style.setProperty('--pct', pct);
+    }
+    if (lb) lb.textContent = fmt(val);
+  });
+  console.log('[QPM] Registry overrides applied (Taylor + Phillips).');
+}
+if (window.EPE) EPE.ready(() => { applyQpmRegistryOverrides(); run(); });
+else run();
 
 /* ── Export functions ── */
 const VAR_LABELS = ['CPI Inflation YoY','Output Gap','Policy Rate','NER Depreciation YoY','Real Exchange Rate Gap','Monetary Conditions Index'];

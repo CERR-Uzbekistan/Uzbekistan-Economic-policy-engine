@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Synthesis — Cross-Model Shock Propagation (Phase 1 Demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/design-system.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="../shared/registry-loader.js"></script>
+<script src="../shared/synth-engines.js"></script>
+<style>
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 28px 24px 60px; }
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 18px 24px; background: linear-gradient(135deg, var(--navy), var(--navy2));
+    color: #fff; border-radius: 0 0 12px 12px; margin-bottom: 28px;
+  }
+  .topbar h1 { font-size: 20px; margin: 0; font-weight: 700; letter-spacing: -0.2px; }
+  .topbar .tag { font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+    background: rgba(20,184,166,.18); color: #6ee7b7; padding: 4px 10px; border-radius: 20px;
+    border: 1px solid rgba(20,184,166,.35); font-weight: 600; }
+  .topbar a { color: #cbd5e1; text-decoration: none; font-size: 13px; }
+  .topbar a:hover { color: #fff; }
+
+  .intro { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; margin-bottom: 24px; box-shadow: var(--shadow-sm); }
+  .intro h2 { font-size: 15px; margin: 0 0 6px; color: var(--navy); }
+  .intro p { color: var(--text2); font-size: 13.5px; line-height: 1.55; margin: 0; }
+  .intro .steps { margin-top: 10px; font-size: 12.5px; color: var(--text2); }
+  .intro .steps b { color: var(--navy); }
+
+  .panel { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 22px; box-shadow: var(--shadow-sm); margin-bottom: 20px; }
+  .panel h3 { font-size: 14px; margin: 0 0 14px; color: var(--navy); letter-spacing: .2px; display: flex; align-items: center; gap: 8px; }
+  .panel h3 .num { display: inline-flex; width: 22px; height: 22px; background: var(--navy); color: #fff; border-radius: 50%; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+
+  .shock-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .field label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text2); font-weight: 600; margin-bottom: 6px; }
+  .field select, .field input {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--border2); border-radius: 8px;
+    font-size: 14px; font-family: inherit; background: #fff;
+  }
+  .field .slider-row { display: flex; align-items: center; gap: 10px; }
+  .field input[type=range] { flex: 1; }
+  .field .val { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--navy); min-width: 52px; text-align: right; }
+
+  .run-btn {
+    margin-top: 18px; background: var(--teal); color: #fff; border: none; padding: 12px 22px;
+    font-size: 14px; font-weight: 600; border-radius: 8px; cursor: pointer; transition: background .15s;
+  }
+  .run-btn:hover { background: var(--teal-l); }
+
+  .results-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  @media (max-width: 900px) { .results-grid { grid-template-columns: 1fr; } .shock-grid { grid-template-columns: 1fr; } }
+
+  .model-card {
+    background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 18px;
+    box-shadow: var(--shadow-sm);
+  }
+  .model-card .head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .model-card .name { font-weight: 700; color: var(--navy); font-size: 14px; }
+  .model-card .pill { font-size: 10px; background: var(--surface2); padding: 3px 8px; border-radius: 10px; color: var(--text2); font-weight: 600; letter-spacing: .5px; }
+  .model-card .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .kpi { background: var(--surface2); border-radius: 8px; padding: 10px 12px; }
+  .kpi .label { font-size: 10.5px; text-transform: uppercase; letter-spacing: .8px; color: var(--text2); font-weight: 600; }
+  .kpi .value { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; color: var(--navy); margin-top: 4px; }
+  .kpi .value.neg { color: var(--red); }
+  .kpi .value.pos { color: var(--green); }
+  .model-card .notes { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+  .reconcile { margin-top: 20px; }
+  .reconcile table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .reconcile th, .reconcile td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  .reconcile th { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text2); font-weight: 700; background: var(--surface2); }
+  .reconcile td.num { font-family: 'JetBrains Mono', monospace; text-align: right; }
+  .flag-ok { color: var(--green); font-weight: 600; }
+  .flag-warn { color: var(--amber); font-weight: 600; }
+
+  .registry-note {
+    display: flex; gap: 12px; align-items: flex-start; background: #eef6ff; border: 1px solid #c6dfff;
+    border-radius: 10px; padding: 12px 14px; font-size: 12.5px; color: #1e3a8a; margin-top: 16px;
+  }
+  .registry-note code { font-family: 'JetBrains Mono', monospace; background: rgba(37,99,235,.1); padding: 1px 6px; border-radius: 4px; }
+
+  canvas { max-height: 180px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <h1>Synthesis — Cross-Model Shock Propagation</h1>
+    <div style="font-size: 12.5px; color: #94a3b8; margin-top: 4px;">One shock → PE → IO → CGE → FPP, all reading the same parameter registry.</div>
+  </div>
+  <div style="display:flex; align-items:center; gap:14px;">
+    <span class="tag">Phase 1 Demo</span>
+    <a href="../index.html">← Back to Hub</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="intro">
+    <h2>What this proves</h2>
+    <p>A single policy shock — a tariff increase on chemicals &amp; plastics (HS 28–40) — flows through four economic models simultaneously. All four models pull their structural parameters from <code>shared/parameter-registry.json</code>, so a change in one place propagates everywhere. The Reconciliation Table at the bottom flags cross-model disagreement.</p>
+    <div class="steps"><b>Integration topology:</b> PE computes direct trade diversion → IO propagates the import-cost shock through 136 sectors → CGE reallocates resources in general equilibrium → FPP projects fiscal revenue &amp; external accounts.</div>
+  </div>
+
+  <div class="panel">
+    <h3><span class="num">1</span> Define the shock</h3>
+    <div class="shock-grid">
+      <div class="field">
+        <label for="shockType">Shock type</label>
+        <select id="shockType">
+          <option value="tariff_hs28_40">Tariff on HS 28–40 (chemicals, plastics)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="tariffSlider">Tariff increase</label>
+        <div class="slider-row">
+          <input id="tariffSlider" type="range" min="0" max="30" step="1" value="10" />
+          <span class="val" id="tariffVal">10 pp</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="horizon">Horizon</label>
+        <select id="horizon">
+          <option value="4">1 year (4 quarters)</option>
+          <option value="8" selected>2 years (8 quarters)</option>
+          <option value="12">3 years (12 quarters)</option>
+        </select>
+      </div>
+    </div>
+    <button class="run-btn" id="runBtn">Run scenario across all models ▶</button>
+    <div class="registry-note">
+      <div>📌</div>
+      <div>
+        <b>Reading from:</b> <code>shared/parameter-registry.json</code> v<span id="regVer">—</span>.
+        Every model below uses the same elasticities, Phillips curve, potential GDP, and fiscal ratios.
+        If you edit the registry, reload this page — all four cards update together.
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3><span class="num">2</span> Model outputs (running simultaneously)</h3>
+    <div class="results-grid" id="resultsGrid"></div>
+  </div>
+
+  <div class="panel">
+    <h3><span class="num">3</span> Reconciliation — do the models agree?</h3>
+    <div class="reconcile">
+      <table id="reconcileTable">
+        <thead>
+          <tr>
+            <th>Indicator</th>
+            <th style="text-align:right;">PE</th>
+            <th style="text-align:right;">IO</th>
+            <th style="text-align:right;">CGE</th>
+            <th style="text-align:right;">FPP</th>
+            <th style="text-align:right;">Spread</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <p style="font-size: 12px; color: var(--text2); margin-top: 10px;">
+        Tolerance: 15%. Disagreements larger than that are flagged for review. This is the signal that cross-model integration is working as intended — not that all models produce identical numbers, but that their disagreements are bounded and explainable.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Engines now live in shared/synth-engines.js — a single source of truth
+// used by both this page and any individual model that wants to run a
+// cross-model scenario.
+let REG = null;
+
+function loadRegistry() {
+  return new Promise(resolve => {
+    EPE.ready(() => {
+      REG = EPE.registry;
+      if (REG) document.getElementById('regVer').textContent = REG._meta.version;
+      else alert('Could not load parameter registry. Serve this page via a local HTTP server (not file://).');
+      resolve();
+    });
+  });
+}
+
+// ── RENDER ────────────────────────────────────────────────────────
+function fmt(n, digits=2, unit='') {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  const s = (n>=0?'+':'') + n.toFixed(digits) + unit;
+  return s;
+}
+
+function cls(n) { return n < 0 ? 'neg' : n > 0 ? 'pos' : ''; }
+
+function renderCards(pe, io, cge, fpp) {
+  const grid = document.getElementById('resultsGrid');
+  grid.innerHTML = `
+    <div class="model-card">
+      <div class="head"><div class="name">Partial Equilibrium (PE)</div><div class="pill">Direct trade</div></div>
+      <div class="kpis">
+        <div class="kpi"><div class="label">Import volume</div><div class="value ${cls(pe.import_volume_chg_pct)}">${fmt(pe.import_volume_chg_pct,1,'%')}</div></div>
+        <div class="kpi"><div class="label">Trade diverted</div><div class="value">${fmt(pe.trade_diverted_bln_usd,2,' B$')}</div></div>
+      </div>
+      <div class="notes">Avg import elasticity ${pe.avg_elasticity.toFixed(2)} across HS 28–40 from registry. Higher elasticity → larger volume response.</div>
+    </div>
+
+    <div class="model-card">
+      <div class="head"><div class="name">Input-Output (IO)</div><div class="pill">Type-II multiplier</div></div>
+      <div class="kpis">
+        <div class="kpi"><div class="label">Sectoral output</div><div class="value ${cls(io.sectoral_output_chg_pct)}">${fmt(io.sectoral_output_chg_pct,2,'%')}</div></div>
+        <div class="kpi"><div class="label">Multiplier</div><div class="value">${io.multiplier.toFixed(2)}×</div></div>
+      </div>
+      <div class="notes">Propagates the input-cost shock through 136 sectors. Most affected: <b>${io.most_affected}</b>.</div>
+    </div>
+
+    <div class="model-card">
+      <div class="head"><div class="name">CGE 1-2-3</div><div class="pill">General equilibrium</div></div>
+      <div class="kpis">
+        <div class="kpi"><div class="label">GDP impact</div><div class="value ${cls(cge.gdp_impact_pct)}">${fmt(cge.gdp_impact_pct,2,'%')}</div></div>
+        <div class="kpi"><div class="label">Inflation bump</div><div class="value ${cls(cge.inflation_bump_pp)}">${fmt(cge.inflation_bump_pp,2,' pp')}</div></div>
+      </div>
+      <div class="notes">Armington σ = ${cge.armington} from registry; welfare loss uses Harberger triangle approximation.</div>
+    </div>
+
+    <div class="model-card">
+      <div class="head"><div class="name">Financial Programming (FPP)</div><div class="pill">Fiscal + BoP</div></div>
+      <div class="kpis">
+        <div class="kpi"><div class="label">Tariff revenue</div><div class="value ${cls(fpp.tariff_revenue_chg_bln_usd)}">${fmt(fpp.tariff_revenue_chg_bln_usd,2,' B$')}</div></div>
+        <div class="kpi"><div class="label">Current account</div><div class="value ${cls(fpp.current_account_chg_pct_gdp)}">${fmt(fpp.current_account_chg_pct_gdp,2,'% GDP')}</div></div>
+      </div>
+      <div class="notes">Collection efficiency ${(REG.fiscal.customs_collection_efficiency*100).toFixed(0)}%; registry feeds both the tax base and the trade volume response.</div>
+    </div>
+  `;
+}
+
+function renderReconcile(pe, io, cge, fpp) {
+  const rows = [
+    { ind: 'GDP impact (%)', vals: [pe.gdp_impact_pct, io.gdp_impact_pct, cge.gdp_impact_pct, fpp.gdp_impact_pct] },
+  ];
+  const tbody = document.querySelector('#reconcileTable tbody');
+  tbody.innerHTML = rows.map(r => {
+    const mn = Math.min(...r.vals), mx = Math.max(...r.vals);
+    const spread = Math.abs(mx - mn);
+    const mean = r.vals.reduce((a,b)=>a+b,0) / r.vals.length;
+    const relSpread = Math.abs(mean) > 0.01 ? spread / Math.abs(mean) : 0;
+    const ok = relSpread < 0.15;
+    return `
+      <tr>
+        <td><b>${r.ind}</b></td>
+        ${r.vals.map(v => `<td class="num">${fmt(v,2)}</td>`).join('')}
+        <td class="num">${spread.toFixed(2)}</td>
+        <td class="${ok ? 'flag-ok' : 'flag-warn'}">${ok ? '✓ within tolerance' : '⚠ review'}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function runAll() {
+  if (!REG) return;
+  const t = parseFloat(document.getElementById('tariffSlider').value);
+  const { pe, io, cge, fpp } = SynthEngines.runAll({ tariff_pp: t });
+  renderCards(pe, io, cge, fpp);
+  renderReconcile(pe, io, cge, fpp);
+}
+
+document.getElementById('tariffSlider').addEventListener('input', (e) => {
+  document.getElementById('tariffVal').textContent = e.target.value + ' pp';
+  runAll();
+});
+document.getElementById('runBtn').addEventListener('click', runAll);
+
+loadRegistry().then(runAll);
+</script>
+</body>
+</html>
