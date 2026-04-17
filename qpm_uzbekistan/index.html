@@ -307,6 +307,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
           <button class="hbtn" onclick="setH(8)">2Y</button>
           <button class="hbtn on" onclick="setH(20)">5Y</button>
           <button class="hbtn" onclick="setH(32)">8Y</button>
+          <button class="hbtn" id="fanBtn" onclick="toggleFan(this)" title="Monte Carlo uncertainty bands (80 draws, 8% CV per parameter)">± Bands</button>
         </div>
         <button class="run-btn" style="width:auto;padding:7px 16px" onclick="run()">▶ Run</button>
       </div>
@@ -504,6 +505,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 let activeShock = 'demand';
 let charts = {};
 let lastIRF = null;
+let fanVisible = false;
+let mcBands = null;
 const f2 = v => (+v).toFixed(2);
 
 // ── Slider helper ──
@@ -667,6 +670,82 @@ function solveIRF(p, shockType, shockSize, T) {
 }
 
 // ═══════════════════════════════════════════════════════════
+//  MONTE CARLO UNCERTAINTY BANDS
+//  Perturbs each parameter with Normal(0, 8% CV) noise,
+//  runs nDraws solves, and returns {p5,p25,p75,p95} bands.
+// ═══════════════════════════════════════════════════════════
+const MC_SERIES_KEYS = ['pi4','gap','rs','d4l_s','l_z_gap','mci'];
+
+function computeMCBands(p, shockType, shockSize, T, nDraws = 80) {
+  // Box-Muller normal sample
+  const randn = () => {
+    const u1 = Math.random() + 1e-12, u2 = Math.random();
+    return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+  };
+  const paramKeys = ['b1','b2','b3','b4','a1','a2','a3','g1','g2','g3','e1'];
+  const draws = [];
+
+  for (let d = 0; d < nDraws; d++) {
+    const pp = { tar: p.tar, rrbar: p.rrbar, gdpbar: p.gdpbar };
+    paramKeys.forEach(k => {
+      pp[k] = Math.max(0.01, p[k] * (1 + 0.08 * randn()));
+    });
+    if (pp.g2 < 1.05) pp.g2 = 1.05;  // enforce Taylor principle
+    try { draws.push(solveIRF(pp, shockType, shockSize, T)); } catch(e) {}
+  }
+  if (draws.length < 10) return null;
+
+  const result = {};
+  MC_SERIES_KEYS.forEach(key => {
+    const p5 = [], p25 = [], p75 = [], p95 = [];
+    for (let t = 0; t <= T; t++) {
+      const vals = draws.map(r => r[key][t]).sort((a, b) => a - b);
+      const n = vals.length;
+      p5.push(vals[Math.floor(0.05 * n)]);
+      p25.push(vals[Math.floor(0.25 * n)]);
+      p75.push(vals[Math.floor(0.75 * n)]);
+      p95.push(vals[Math.floor(0.95 * n)]);
+    }
+    result[key] = { p5, p25, p75, p95 };
+  });
+  return result;
+}
+
+function toggleFan(btn) {
+  fanVisible = !fanVisible;
+  btn.classList.toggle('on', fanVisible);
+  mcBands = null;  // recompute on next run()
+  run();
+}
+
+// Build Chart.js datasets for one IRF panel (with optional MC bands)
+function buildIRFDatasets(data, clr, seriesIdx, zero) {
+  const fillClr = clr.slice(0, -2) + '0.12)';
+  const ds = [
+    { label: 'Deviation', data, borderColor: clr, backgroundColor: fillClr,
+      borderWidth: 2.5, pointRadius: 2.5, fill: true, tension: 0.3 },
+    { label: 'Baseline', data: zero, borderColor: 'rgba(0,0,0,.2)',
+      borderWidth: 1, borderDash: [5, 4], pointRadius: 0, fill: false },
+  ];
+  if (fanVisible && mcBands) {
+    const b = mcBands[MC_SERIES_KEYS[seriesIdx]];
+    const c90 = clr.slice(0, -2) + '0.07)';
+    const c50 = clr.slice(0, -2) + '0.17)';
+    ds.push(
+      { label: '90% CI', data: b.p95, borderColor: 'transparent', backgroundColor: c90,
+        pointRadius: 0, fill: '+1', tension: 0.3, borderWidth: 0 },
+      { label: '',        data: b.p5,  borderColor: 'transparent', backgroundColor: 'transparent',
+        pointRadius: 0, fill: false,  tension: 0.3, borderWidth: 0 },
+      { label: '50% CI', data: b.p75, borderColor: 'transparent', backgroundColor: c50,
+        pointRadius: 0, fill: '+1', tension: 0.3, borderWidth: 0 },
+      { label: '',        data: b.p25, borderColor: 'transparent', backgroundColor: 'transparent',
+        pointRadius: 0, fill: false,  tension: 0.3, borderWidth: 0 },
+    );
+  }
+  return ds;
+}
+
+// ═══════════════════════════════════════════════════════════
 //  IRF RUNNER
 // ═══════════════════════════════════════════════════════════
 const SHOCK_NAMES = {
@@ -707,6 +786,9 @@ function run() {
   lastIRF = { series, shock: activeShock, sz, T };
   const ids    = ['ch0','ch1','ch2','ch3','ch4','ch5'];
 
+  // Compute MC bands when fan chart is toggled on
+  if (fanVisible) mcBands = computeMCBands(p, activeShock, sz, T);
+
   // Peak KPIs (4 top cards)
   const kpiSeries = [r.pi4, r.gap, r.rs, r.d4l_s];
   kpiSeries.forEach((arr, i) => {
@@ -720,20 +802,10 @@ function run() {
   // Draw charts
   const zero = new Array(T+1).fill(0);
   series.forEach((data, i) => {
-    const clr = CHART_COLORS[i];
-    const fill_clr = clr.replace('1)', '0.12)');
     if (charts[i]) charts[i].destroy();
     charts[i] = new Chart(document.getElementById(ids[i]).getContext('2d'), {
       type: 'line',
-      data: {
-        labels: lbls,
-        datasets: [
-          { label: 'Deviation', data, borderColor: clr, backgroundColor: fill_clr,
-            borderWidth: 2.5, pointRadius: 2.5, fill: true, tension: 0.3 },
-          { label: 'Baseline',  data: zero, borderColor: 'rgba(0,0,0,.2)',
-            borderWidth: 1, borderDash: [5,4], pointRadius: 0, fill: false },
-        ]
-      },
+      data: { labels: lbls, datasets: buildIRFDatasets(data, CHART_COLORS[i], i, zero) },
       options: chartOpts(),
     });
   });
