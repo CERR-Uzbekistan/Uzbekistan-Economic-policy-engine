@@ -100,6 +100,7 @@ input[type=range]{flex:1;accent-color:var(--teal);height:4px;}
 .ctrl-val{font-size:13px;font-weight:800;color:var(--teal);min-width:44px;text-align:right;}
 select.ctrl-select{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:7px;
   font-size:12px;background:#fff;color:var(--text);cursor:pointer;margin-bottom:6px;}
+select.ctrl-select:disabled{background:#f8fafc;color:var(--text3);cursor:not-allowed;opacity:.6;}
 .chip-group{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
 .chip{padding:4px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;
   font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--text2);}
@@ -737,7 +738,12 @@ function updateChapterFilter(){
   const secId = document.getElementById('sim-section').value;
   const chSel = document.getElementById('sim-chapter');
   chSel.innerHTML='<option value="all">All Chapters</option>';
-  if(secId==='all') return;
+  chSel.value = 'all'; // explicit reset — prevents stale value surviving innerHTML rebuild
+  if(secId==='all'){
+    chSel.disabled = true;
+    return;
+  }
+  chSel.disabled = false;
   const sec = D.sections.find(s=>s.id===secId);
   if(!sec) return;
   sec.chapters.forEach(ch=>{
@@ -1095,7 +1101,7 @@ function applyPeRegistryOverrides() {
 function init(){
   applyPeRegistryOverrides();
   try{ renderOverview(); }catch(e){ console.error('Overview:',e); }
-  try{ populateSimFilters(); runSim(); }catch(e){ console.error('Sim:',e); }
+  try{ populateSimFilters(); updateChapterFilter(); runSim(); }catch(e){ console.error('Sim:',e); }
   try{ renderSectors(); }catch(e){ console.error('Sectors:',e); }
   try{ renderPartners(); }catch(e){ console.error('Partners:',e); }
 }
