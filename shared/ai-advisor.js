@@ -826,10 +826,28 @@
       '<polyline points="22 4 12 14.01 9 11.01"/></svg>'
     );
 
+    html += '<div style="display:flex;justify-content:flex-end;">' +
+      '<button id="advisor-publish-brief" style="' +
+      'background:' + COLORS.blue + ';color:#fff;border:1px solid ' + COLORS.blue + ';' +
+      'border-radius:8px;padding:8px 12px;font-size:12px;font-weight:600;cursor:pointer;' +
+      '">Publish as Research Brief</button>' +
+      '</div>';
+
     /* Close wrapper */
     html += '</div>';
 
     container.innerHTML = html;
+
+    var publishBtn = document.getElementById('advisor-publish-brief');
+    if (publishBtn) {
+      publishBtn.addEventListener('click', function () {
+        if (typeof global.publishAdvisorBriefFromPanel === 'function') {
+          global.publishAdvisorBriefFromPanel(analysis);
+        } else {
+          alert('Publish action is not configured in this page.');
+        }
+      });
+    }
   }
 
   /**

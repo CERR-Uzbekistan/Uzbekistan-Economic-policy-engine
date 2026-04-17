@@ -1,9 +1,9 @@
-"""MCP tool definitions and registration for all 6 economic models."""
+"""MCP tool definitions and registration for all 6 economic models + knowledge hub pipelines."""
 
 from __future__ import annotations
 
 
-def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data):
+def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str = ""):
     """Register all MCP tools with the server."""
 
     # ─── list_models ──────────────────────────────────────────────────────
@@ -106,7 +106,12 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data):
                     ],
                 },
             ],
-            "total_tools": 12,
+            "total_tools": 19,
+            "knowledge_hub_tools": [
+                "fetch_academic_papers", "curate_academic_papers", "update_literature_data",
+                "fetch_policy_reforms", "categorize_policy_reform", "update_tracker_data",
+                "save_research_article",
+            ],
             "data_sources": [
                 "Statistics Agency of Uzbekistan",
                 "Central Bank of Uzbekistan",
@@ -565,3 +570,157 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data):
                 results.append({"label": label, "model": model, "result": {"error": f"Unknown model: {model}"}})
 
         return {"comparison": results, "n_scenarios": len(results)}
+
+    # ─── Knowledge Hub: Literature Pipeline ───────────────────────────────
+
+    @mcp.tool()
+    async def fetch_academic_papers(
+        model_id: str = "all",
+        keywords: str | None = None,
+        max_results: int = 20,
+    ) -> dict:
+        """Fetch candidate academic papers from Semantic Scholar and OpenAlex APIs.
+
+        Searches for papers relevant to Uzbekistan's economic models using
+        model-specific keywords or custom queries.
+
+        Args:
+            model_id: Model to search for ("qpm", "dfm", "cge", "io", "pe", "fpp", or "all").
+            keywords: Custom search keywords. If None, uses built-in model-specific keywords.
+            max_results: Maximum papers to return per query (5 to 50).
+        """
+        from tools.literature import fetch_papers
+        return await fetch_papers(model_id=model_id, keywords=keywords, max_results=max_results)
+
+    @mcp.tool()
+    async def curate_academic_papers(
+        candidates: list[dict],
+        model_id: str,
+        api_key: str | None = None,
+    ) -> dict:
+        """Score and curate candidate papers for relevance using AI.
+
+        Takes papers from fetch_academic_papers and scores them 0-10 for relevance
+        to the specified economic model. Papers scoring >= 6 are accepted with
+        trilingual relevance notes (EN/RU/UZ).
+
+        Args:
+            candidates: List of paper dicts from fetch_academic_papers.
+            model_id: Model context for relevance scoring (qpm, dfm, cge, io, pe, fpp).
+            api_key: Anthropic API key. If None, uses ANTHROPIC_API_KEY env var.
+        """
+        from tools.literature import curate_papers
+        return await curate_papers(candidates=candidates, model_id=model_id, api_key=api_key)
+
+    @mcp.tool()
+    async def update_literature_data(
+        new_papers: list[dict],
+    ) -> dict:
+        """Merge new curated papers into shared/literature-data.js.
+
+        Deduplicates by DOI and title, preserves existing papers, and updates
+        the lastUpdated timestamp.
+
+        Args:
+            new_papers: List of curated paper dicts from curate_academic_papers.
+        """
+        from tools.literature import update_literature_file
+        return await update_literature_file(new_papers=new_papers, shared_dir=shared_dir)
+
+    # ─── Knowledge Hub: Reform Pipeline ───────────────────────────────────
+
+    @mcp.tool()
+    async def fetch_policy_reforms(
+        source: str = "all",
+        limit: int = 20,
+    ) -> dict:
+        """Fetch recent policy reforms from Uzbekistan government sources.
+
+        Checks lex.uz (government gazette), CBU announcements, and WTO working
+        party documents for new decrees, resolutions, and policy decisions.
+
+        Args:
+            source: Source to query — "lex_uz", "cbu", "wto", or "all".
+            limit: Maximum documents to return per source (5 to 50).
+        """
+        from tools.reforms import fetch_reforms
+        return await fetch_reforms(source=source, limit=limit)
+
+    @mcp.tool()
+    async def categorize_policy_reform(
+        raw_text: str,
+        source: str = "lex_uz",
+        api_key: str | None = None,
+    ) -> dict:
+        """Categorize and summarize a government document using AI.
+
+        Classifies the document by category, sector, region, and document type,
+        generates trilingual summaries, and links to relevant economic models.
+
+        Args:
+            raw_text: Raw text content of the government document.
+            source: Origin of the document ("lex_uz", "cbu", "wto").
+            api_key: Anthropic API key. If None, uses ANTHROPIC_API_KEY env var.
+        """
+        from tools.reforms import categorize_reform
+        return await categorize_reform(raw_text=raw_text, source=source, api_key=api_key)
+
+    @mcp.tool()
+    async def update_tracker_data(
+        new_reforms: list[dict],
+    ) -> dict:
+        """Merge new categorized reforms into shared/policy-tracker-data.js.
+
+        Deduplicates by title, appends new entries, and updates the
+        lastUpdated timestamp.
+
+        Args:
+            new_reforms: List of reform entry dicts from categorize_policy_reform.
+        """
+        from tools.reforms import update_tracker_file
+        return await update_tracker_file(new_reforms=new_reforms, shared_dir=shared_dir)
+
+    # ─── Knowledge Hub: Research Articles ─────────────────────────────────
+
+    @mcp.tool()
+    async def save_research_article(
+        title_en: str,
+        title_ru: str = "",
+        title_uz: str = "",
+        author: str = "CERR Research Team",
+        model: str = "",
+        topics: list[str] | None = None,
+        abstract_en: str = "",
+        abstract_ru: str = "",
+        abstract_uz: str = "",
+        body_en: str = "",
+        body_ru: str = "",
+        body_uz: str = "",
+    ) -> dict:
+        """Save a research article or policy brief to shared/research-data.js.
+
+        Used by the AI Advisor "Publish as Brief" button and for manual article
+        creation. Generates a unique ID and appends to the entries array.
+
+        Args:
+            title_en: Article title in English (required).
+            title_ru: Article title in Russian.
+            title_uz: Article title in Uzbek.
+            author: Author name or team.
+            model: Linked model ID (qpm, dfm, cge, io, pe, fpp) or empty.
+            topics: Topic tags from: trade, monetary, fiscal, growth, inflation, structural.
+            abstract_en: Short abstract in English.
+            abstract_ru: Short abstract in Russian.
+            abstract_uz: Short abstract in Uzbek.
+            body_en: Full article body in English.
+            body_ru: Full article body in Russian.
+            body_uz: Full article body in Uzbek.
+        """
+        from tools.research import save_research_article as _save
+        return await _save(
+            title_en=title_en, title_ru=title_ru, title_uz=title_uz,
+            author=author, model=model, topics=topics,
+            abstract_en=abstract_en, abstract_ru=abstract_ru, abstract_uz=abstract_uz,
+            body_en=body_en, body_ru=body_ru, body_uz=body_uz,
+            shared_dir=shared_dir,
+        )

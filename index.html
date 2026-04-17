@@ -13,6 +13,10 @@
 <script src="shared/toast.js" defer></script>
 <script src="shared/scenario-engine.js" defer></script>
 <script src="shared/ai-advisor.js" defer></script>
+<script src="shared/model-registry.js" defer></script>
+<script src="shared/policy-tracker-data.js" defer></script>
+<script src="shared/research-data.js" defer></script>
+<script src="shared/literature-data.js" defer></script>
 <style>
 /* Hub-specific tokens (extend design-system.css) */
 :root {
@@ -443,6 +447,224 @@
 .method-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
 .method-table tr:last-child td { border-bottom: none; }
 
+/* ── Knowledge Hub pages ── */
+.explorer-content, .research-content, .literature-content, .tracker-content {
+  padding: 32px 40px 60px; overflow-y: auto; flex: 1;
+}
+.hub-intro {
+  font-size: 13px; color: var(--text2); margin-bottom: 16px; line-height: 1.55;
+}
+
+/* Explorer */
+.explorer-summary-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin-bottom: 14px;
+}
+.explorer-summary-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 12px 14px; box-shadow: var(--shadow-sm);
+}
+.explorer-summary-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.explorer-summary-meta { font-size: 12px; color: var(--text2); line-height: 1.45; }
+.explorer-controls {
+  display: grid; grid-template-columns: minmax(260px, 2fr) repeat(2, minmax(140px, 1fr));
+  gap: 10px; margin-bottom: 14px;
+}
+.explorer-controls input, .explorer-controls select,
+.research-toolbar input, .research-toolbar select,
+.literature-toolbar input, .literature-toolbar select {
+  border: 1px solid var(--border); border-radius: 8px; padding: 9px 10px; font-size: 12px;
+  font-family: inherit; color: var(--text); background: var(--surface);
+}
+.explorer-table-wrap {
+  border: 1px solid var(--border); border-radius: 8px; overflow: auto; background: var(--surface); margin-bottom: 16px;
+}
+.explorer-table-wrap .method-table { margin-bottom: 0; min-width: 960px; }
+.explorer-sources-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin-bottom: 16px;
+}
+.explorer-source-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px;
+}
+.explorer-source-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.explorer-source-meta { font-size: 12px; color: var(--text2); line-height: 1.5; }
+.explorer-source-meta a { color: var(--blue); text-decoration: none; }
+.explorer-source-meta a:hover { text-decoration: underline; }
+.explorer-flow-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px;
+}
+.explorer-flow-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px;
+}
+.explorer-flow-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+.explorer-flow-chain { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.explorer-flow-node {
+  border: 1px solid var(--border); border-radius: 8px; background: var(--surface2); padding: 6px 9px;
+  font-size: 11px; font-weight: 600; color: var(--text2);
+}
+.explorer-flow-arrow { font-size: 11px; color: var(--text3); }
+.hub-empty {
+  text-align: center; color: var(--text3); font-size: 12px; border: 1px dashed var(--border2);
+  border-radius: 8px; padding: 20px;
+}
+
+/* Research */
+.research-toolbar {
+  display: grid; grid-template-columns: minmax(260px, 2fr) repeat(3, minmax(140px, 1fr)); gap: 10px; margin-bottom: 14px;
+}
+.research-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px;
+}
+.research-card {
+  border: 1px solid var(--border); border-radius: 8px; background: var(--surface); padding: 13px;
+  box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 8px;
+}
+.research-meta { font-size: 11px; color: var(--text3); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.research-title { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.4; }
+.research-abstract, .research-body { font-size: 12px; color: var(--text2); line-height: 1.55; }
+.research-topics { display: flex; flex-wrap: wrap; gap: 6px; }
+.research-topic {
+  font-size: 10px; padding: 2px 7px; border-radius: 999px; font-weight: 700; letter-spacing: .2px;
+}
+.research-actions { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.research-model-btn, .research-expand-btn, .lit-toggle-btn {
+  border: 1px solid var(--border); border-radius: 8px; background: var(--surface2); color: var(--text2);
+  font-size: 11px; font-weight: 700; padding: 5px 8px; cursor: pointer;
+}
+.research-model-btn:hover, .research-expand-btn:hover, .lit-toggle-btn:hover {
+  border-color: var(--blue); color: var(--blue);
+}
+
+/* Literature */
+.literature-toolbar {
+  display: grid; grid-template-columns: minmax(260px, 2fr) repeat(2, minmax(140px, 1fr)); gap: 10px; margin-bottom: 14px;
+}
+.lit-section {
+  border: 1px solid var(--border); border-radius: 8px; background: var(--surface); margin-bottom: 10px;
+}
+.lit-section-head {
+  display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.lit-section-title { font-size: 13px; font-weight: 700; color: var(--text); }
+.lit-section-count { font-size: 11px; color: var(--text3); }
+.lit-list { display: flex; flex-direction: column; }
+.lit-item {
+  padding: 11px 12px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px;
+}
+.lit-item:last-child { border-bottom: none; }
+.lit-item-title { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.4; }
+.lit-item-meta { font-size: 11px; color: var(--text3); }
+.lit-item-abstract, .lit-item-relevance { font-size: 12px; color: var(--text2); line-height: 1.5; }
+.lit-item a { color: var(--blue); text-decoration: none; }
+.lit-item a:hover { text-decoration: underline; }
+
+/* ── Policy Tracker page ── */
+.tracker-content { padding: 32px 40px 60px; overflow-y: auto; flex: 1; }
+.tracker-grid-top {
+  display: grid; grid-template-columns: 1.05fr 1fr; gap: 16px; margin-bottom: 16px;
+}
+.tracker-kpi-grid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;
+}
+.tracker-kpi-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 14px 16px; box-shadow: var(--shadow-sm);
+}
+.tracker-kpi-title { font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; }
+.tracker-kpi-value { font-size: 28px; font-weight: 800; color: var(--text); line-height: 1.1; margin-top: 4px; }
+.tracker-kpi-sub { font-size: 12px; color: var(--text2); margin-top: 6px; }
+.tracker-activity-card { margin-bottom: 0; }
+
+.tracker-map-domain {
+  display: grid; grid-template-columns: 1.15fr 1fr; gap: 16px; margin-bottom: 16px;
+}
+.tracker-map-card, .tracker-domain-wrap, .tracker-timeline-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px; box-shadow: var(--shadow-sm);
+}
+.tracker-panel-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+.tracker-panel-sub { font-size: 12px; color: var(--text3); margin-bottom: 12px; }
+.tracker-map {
+  width: 100%; height: 310px; border: 1px solid var(--border); border-radius: 8px; background: #f8fafc;
+}
+.map-region {
+  fill: #dbe4ef; stroke: #94a3b8; stroke-width: 1.2; cursor: pointer; transition: fill .15s ease, stroke .15s ease;
+}
+.map-region:hover { fill: #bfdbfe; stroke: #2563eb; }
+.map-region.selected { fill: #2563eb; stroke: #1d4ed8; }
+.tracker-region-chip {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 10px;
+  border: 1px solid var(--border); border-radius: 999px; padding: 4px 10px;
+  font-size: 12px; color: var(--text2); background: var(--surface2);
+}
+.tracker-domain-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px;
+}
+.tracker-domain-card {
+  border: 1px solid var(--border); border-radius: 8px; padding: 12px;
+  display: flex; flex-direction: column; gap: 8px; background: var(--surface);
+}
+.tracker-domain-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.tracker-domain-name { font-size: 13px; font-weight: 700; color: var(--text); }
+.tracker-domain-meta { font-size: 11px; color: var(--text3); line-height: 1.45; }
+.tracker-status-badge {
+  font-size: 10px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 999px;
+}
+
+.tracker-filter-wrap {
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px;
+}
+.tracker-filter {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.tracker-filter label {
+  font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; font-weight: 700;
+}
+.tracker-filter select {
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px;
+  font-size: 12px; background: var(--surface); color: var(--text);
+}
+
+.tracker-timeline {
+  display: flex; flex-direction: column; gap: 10px;
+}
+.tracker-entry {
+  border: 1px solid var(--border); border-radius: 8px; background: var(--surface);
+}
+.tracker-entry summary {
+  list-style: none; cursor: pointer; padding: 12px 12px 10px;
+}
+.tracker-entry summary::-webkit-details-marker { display: none; }
+.tracker-entry-title {
+  display: flex; gap: 8px; align-items: center; justify-content: space-between; margin-bottom: 5px;
+}
+.tracker-entry-left { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.tracker-entry-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.tracker-entry-name {
+  font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.tracker-entry-meta { font-size: 11px; color: var(--text3); display: flex; flex-wrap: wrap; gap: 6px; }
+.tracker-entry-body {
+  border-top: 1px solid var(--border); padding: 10px 12px 12px;
+}
+.tracker-entry-desc { font-size: 12px; color: var(--text2); line-height: 1.55; margin-bottom: 10px; }
+.tracker-pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.tracker-pill {
+  border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px; font-size: 10px;
+  font-weight: 700; color: var(--text2); background: var(--surface2);
+}
+.tracker-pill-btn {
+  cursor: pointer; font-family: inherit; line-height: 1.4;
+}
+.tracker-pill-btn:hover { border-color: var(--blue); color: var(--blue); }
+.tracker-entry-source a { font-size: 11px; color: var(--blue); text-decoration: none; }
+.tracker-entry-source a:hover { text-decoration: underline; }
+.tracker-empty {
+  text-align: center; color: var(--text3); font-size: 12px; border: 1px dashed var(--border2);
+  border-radius: 8px; padding: 20px;
+}
+
 /* ── Responsive ── */
 @media (max-width: 900px) {
   .sidebar { transform: translateX(-100%); }
@@ -451,8 +673,11 @@
   .menu-toggle { display: block; }
   .hero { padding: 32px 28px; }
   .hero h1 { font-size: 26px; }
-  .home-content, .compare-content, .about-content { padding: 20px; }
+  .home-content, .compare-content, .about-content, .explorer-content, .research-content, .literature-content, .tracker-content { padding: 20px; }
   .model-grid, .compare-grid { grid-template-columns: 1fr; }
+  .explorer-controls, .research-toolbar, .literature-toolbar { grid-template-columns: 1fr; }
+  .tracker-grid-top, .tracker-map-domain { grid-template-columns: 1fr; }
+  .tracker-filter-wrap { grid-template-columns: 1fr 1fr; }
   .hero-stats { flex-wrap: wrap; gap: 20px; }
 }
 </style>
@@ -536,6 +761,24 @@
       </button>
       <button class="nav-item" onclick="navigate('about')">
         <span class="nav-icon">📖</span> <span data-i18n="nav_about">Methodology</span>
+      </button>
+    </div>
+
+    <div class="nav-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label" data-i18n="nav_section_knowledge">Knowledge Hub</div>
+      <button class="nav-item" onclick="navigate('explorer')">
+        <span class="nav-icon">🔍</span> <span data-i18n="nav_explorer">Model Explorer</span>
+      </button>
+      <button class="nav-item" onclick="navigate('tracker')">
+        <span class="nav-icon">📋</span> <span data-i18n="nav_tracker">Policy Tracker</span>
+      </button>
+      <button class="nav-item" onclick="navigate('research')">
+        <span class="nav-icon">📝</span> <span data-i18n="nav_research">Research</span>
+      </button>
+      <button class="nav-item" onclick="navigate('literature')">
+        <span class="nav-icon">📚</span> <span data-i18n="nav_literature">Literature</span>
       </button>
     </div>
 
@@ -1259,6 +1502,174 @@
       </div>
     </div>
 
+    <!-- ── MODEL EXPLORER ── -->
+    <div id="page-explorer" class="page">
+      <div class="explorer-content">
+        <div class="section-header" style="margin-bottom:8px;">
+          <h2 data-i18n="explorer_title">Model Parameter Explorer</h2>
+          <span data-i18n="explorer_sub">Parameters, equations, data sources, and computation flows</span>
+        </div>
+        <p class="hub-intro" data-i18n="explorer_intro">
+          Search and inspect model assumptions across QPM, DFM, CGE, IO, PE, and FPP.
+        </p>
+
+        <div id="explorer-summary-grid" class="explorer-summary-grid"></div>
+
+        <div class="explorer-controls">
+          <input id="explorer-search" type="text" placeholder="Search parameters..." data-i18n-placeholder="explorer_search_ph" oninput="filterExplorerParams()">
+          <select id="explorer-model-filter" onchange="filterExplorerParams()"></select>
+          <select id="explorer-type-filter" onchange="filterExplorerParams()"></select>
+        </div>
+
+        <div class="explorer-table-wrap">
+          <table class="method-table">
+            <thead>
+              <tr>
+                <th data-i18n="explorer_col_model">Model</th>
+                <th data-i18n="explorer_col_name">Name</th>
+                <th data-i18n="explorer_col_symbol">Symbol</th>
+                <th data-i18n="explorer_col_value">Value</th>
+                <th data-i18n="explorer_col_range">Range</th>
+                <th data-i18n="explorer_col_type">Type</th>
+                <th data-i18n="explorer_col_equation">Equation</th>
+                <th data-i18n="explorer_col_desc">Description</th>
+              </tr>
+            </thead>
+            <tbody id="explorer-params-body"></tbody>
+          </table>
+        </div>
+
+        <div class="section-header"><h2 data-i18n="explorer_sources_title">Data Sources</h2></div>
+        <div id="explorer-sources-grid" class="explorer-sources-grid"></div>
+
+        <div class="section-header"><h2 data-i18n="explorer_flow_title">Computation Flows</h2></div>
+        <div id="explorer-flow-grid" class="explorer-flow-grid"></div>
+      </div>
+    </div>
+
+    <!-- ── POLICY TRACKER ── -->
+    <div id="page-tracker" class="page">
+      <div class="tracker-content">
+        <div class="section-header" style="margin-bottom:8px;">
+          <h2 data-i18n="tracker_title">Policy Reform Tracker</h2>
+          <span data-i18n="tracker_sub">Interactive map, timeline, and reform dashboard for Uzbekistan</span>
+        </div>
+
+        <div class="tracker-grid-top">
+          <div class="tracker-kpi-grid" id="tracker-kpi-grid"></div>
+          <div class="chart-card tracker-activity-card">
+            <div class="chart-card-header" style="margin-bottom:8px;">
+              <div>
+                <div class="chart-card-title" data-i18n="tracker_activity_title">Reform Activity by Domain</div>
+                <div class="chart-card-sub" data-i18n="tracker_activity_sub">Policy changes grouped by reform domain</div>
+              </div>
+            </div>
+            <div style="height:230px;position:relative;">
+              <canvas id="tracker-activity-chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="tracker-map-domain">
+          <div class="tracker-map-card">
+            <div class="tracker-panel-title" data-i18n="tracker_map_title">Interactive Uzbekistan Map</div>
+            <div class="tracker-panel-sub" data-i18n="tracker_map_sub">Select a region to filter reforms in the timeline</div>
+            <svg class="tracker-map" viewBox="0 0 520 320" aria-label="Uzbekistan regions map">
+              <path class="map-region" data-region="karakalpakstan" onclick="selectTrackerRegion('karakalpakstan')" d="M30 40 L170 30 L175 100 L120 120 L40 105 Z"></path>
+              <path class="map-region" data-region="khorezm" onclick="selectTrackerRegion('khorezm')" d="M40 120 L118 126 L112 182 L34 186 Z"></path>
+              <path class="map-region" data-region="bukhara" onclick="selectTrackerRegion('bukhara')" d="M120 120 L220 108 L230 172 L118 182 Z"></path>
+              <path class="map-region" data-region="navoi" onclick="selectTrackerRegion('navoi')" d="M175 58 L292 48 L300 124 L220 108 L175 102 Z"></path>
+              <path class="map-region" data-region="samarkand" onclick="selectTrackerRegion('samarkand')" d="M230 124 L306 118 L316 176 L230 172 Z"></path>
+              <path class="map-region" data-region="kashkadarya" onclick="selectTrackerRegion('kashkadarya')" d="M212 176 L304 176 L290 246 L200 234 Z"></path>
+              <path class="map-region" data-region="surkhandarya" onclick="selectTrackerRegion('surkhandarya')" d="M292 210 L350 214 L344 286 L272 280 Z"></path>
+              <path class="map-region" data-region="jizzakh" onclick="selectTrackerRegion('jizzakh')" d="M306 118 L364 116 L372 172 L316 176 Z"></path>
+              <path class="map-region" data-region="sirdarya" onclick="selectTrackerRegion('sirdarya')" d="M364 116 L408 120 L408 170 L372 172 Z"></path>
+              <path class="map-region" data-region="tashkent_region" onclick="selectTrackerRegion('tashkent_region')" d="M408 114 L468 106 L482 162 L408 170 Z"></path>
+              <path class="map-region" data-region="tashkent_city" onclick="selectTrackerRegion('tashkent_city')" d="M434 132 L448 132 L448 146 L434 146 Z"></path>
+              <path class="map-region" data-region="namangan" onclick="selectTrackerRegion('namangan')" d="M408 170 L448 168 L454 206 L414 210 Z"></path>
+              <path class="map-region" data-region="fergana" onclick="selectTrackerRegion('fergana')" d="M448 168 L496 170 L502 214 L454 208 Z"></path>
+              <path class="map-region" data-region="andijan" onclick="selectTrackerRegion('andijan')" d="M496 174 L518 178 L516 212 L500 214 Z"></path>
+            </svg>
+            <div class="tracker-region-chip" id="tracker-region-chip">Region: All</div>
+          </div>
+
+          <div class="tracker-domain-wrap">
+            <div class="tracker-panel-title" data-i18n="tracker_domains_title">Reform Domain Cards</div>
+            <div class="tracker-panel-sub" data-i18n="tracker_domains_sub">Counts, status, and source coverage by domain</div>
+            <div class="tracker-domain-grid" id="tracker-domain-grid"></div>
+          </div>
+        </div>
+
+        <div class="tracker-timeline-card">
+          <div class="tracker-panel-title" data-i18n="tracker_timeline_title">Reform Timeline</div>
+          <div class="tracker-filter-wrap">
+            <div class="tracker-filter">
+              <label data-i18n="tracker_filter_category">Category</label>
+              <select id="tracker-filter-category" onchange="filterTracker()"></select>
+            </div>
+            <div class="tracker-filter">
+              <label data-i18n="tracker_filter_status">Status</label>
+              <select id="tracker-filter-status" onchange="filterTracker()"></select>
+            </div>
+            <div class="tracker-filter">
+              <label data-i18n="tracker_filter_sector">Sector</label>
+              <select id="tracker-filter-sector" onchange="filterTracker()"></select>
+            </div>
+            <div class="tracker-filter">
+              <label data-i18n="tracker_filter_region">Region</label>
+              <select id="tracker-filter-region" onchange="filterTracker()"></select>
+            </div>
+            <div class="tracker-filter">
+              <label data-i18n="tracker_filter_doc">Document Type</label>
+              <select id="tracker-filter-doc" onchange="filterTracker()"></select>
+            </div>
+          </div>
+          <div id="tracker-timeline" class="tracker-timeline"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RESEARCH ── -->
+    <div id="page-research" class="page">
+      <div class="research-content">
+        <div class="section-header" style="margin-bottom:8px;">
+          <h2 data-i18n="research_title">Research & Analysis</h2>
+          <span data-i18n="research_sub">Policy briefs and analytical notes</span>
+        </div>
+        <p class="hub-intro" data-i18n="research_intro">
+          Filter CERR briefs by topic, model, and author.
+        </p>
+
+        <div class="research-toolbar">
+          <input id="research-search" type="text" placeholder="Search research..." data-i18n-placeholder="research_search_ph" oninput="filterResearch()">
+          <select id="research-topic-filter" onchange="filterResearch()"></select>
+          <select id="research-model-filter" onchange="filterResearch()"></select>
+          <select id="research-author-filter" onchange="filterResearch()"></select>
+        </div>
+        <div id="research-grid" class="research-grid"></div>
+      </div>
+    </div>
+
+    <!-- ── LITERATURE ── -->
+    <div id="page-literature" class="page">
+      <div class="literature-content">
+        <div class="section-header" style="margin-bottom:8px;">
+          <h2 data-i18n="literature_title">Academic Literature</h2>
+          <span data-i18n="literature_sub">Foundational and applied references by model</span>
+        </div>
+        <p class="hub-intro" data-i18n="literature_intro">
+          Browse curated literature and relevance notes connected to each model.
+        </p>
+
+        <div class="literature-toolbar">
+          <input id="lit-search" type="text" placeholder="Search papers..." data-i18n-placeholder="literature_search_ph" oninput="filterLiterature()">
+          <select id="lit-model-filter" onchange="filterLiterature()"></select>
+          <select id="lit-topic-filter" onchange="filterLiterature()"></select>
+        </div>
+        <div id="literature-sections"></div>
+      </div>
+    </div>
+
     <!-- ── INT'L ORGANIZATIONS ── -->
     <div id="page-intl" class="page">
       <div class="home-content">
@@ -1419,10 +1830,11 @@
 // ── i18n ────────────────────────────────────────────────
 const LANGS = {
   en: {
-    nav_section_overview:'Overview', nav_section_models:'Available Models', nav_section_platform:'Platform',
+    nav_section_overview:'Overview', nav_section_models:'Available Models', nav_section_platform:'Platform', nav_section_knowledge:'Knowledge Hub',
     nav_home:'Home', nav_intl:"Int'l Organizations", nav_compare:'Compare Scenarios',
     nav_qpm:'QPM Simulator', nav_dfm:'GDP Forecast', nav_pe:'Partial Equilibrium',
     nav_io:'Input-Output', nav_cge:'CGE Model', nav_fpp:'Fin. Programming', nav_about:'Methodology',
+    nav_explorer:'Model Explorer', nav_tracker:'Policy Tracker', nav_research:'Research', nav_literature:'Literature',
     snap_title:'Macro Snapshot', snap_sub:'Key indicators · Latest available data',
     snap_gdp_nom:'Nominal GDP', snap_gdp:'GDP Growth YoY', snap_gdp_fc:'GDP Forecast',
     snap_inf:'Inflation', snap_ind:'Industry Growth YoY', snap_svc:'Services Growth YoY',
@@ -1464,12 +1876,49 @@ const LANGS = {
     compare_presets_title:'Pre-Built Policy Packages',
     compare_presets_desc:'Click a preset to load it as a saved scenario with pre-configured parameters.',
     advisor_setup:'Configuration', advisor_run_title:'Run Analysis',
+    tracker_title:'Policy Reform Tracker',
+    tracker_sub:'Interactive map, timeline, and reform dashboard for Uzbekistan',
+    tracker_activity_title:'Reform Activity by Domain',
+    tracker_activity_sub:'Policy changes grouped by reform domain',
+    tracker_map_title:'Interactive Uzbekistan Map',
+    tracker_map_sub:'Select a region to filter reforms in the timeline',
+    tracker_domains_title:'Reform Domain Cards',
+    tracker_domains_sub:'Counts, status, and source coverage by domain',
+    tracker_timeline_title:'Reform Timeline',
+    tracker_filter_category:'Category', tracker_filter_status:'Status', tracker_filter_sector:'Sector',
+    tracker_filter_region:'Region', tracker_filter_doc:'Document Type',
+    tracker_all:'All', tracker_no_reforms:'No reforms found for selected filters',
+    tracker_kpi_total:'Total Reforms', tracker_kpi_completed:'Completed',
+    tracker_kpi_active:'In Progress', tracker_kpi_planned:'Planned',
+    tracker_sources:'sources', tracker_last_updated:'Last updated',
+    explorer_title:'Model Parameter Explorer',
+    explorer_sub:'Parameters, equations, data sources, and computation flows',
+    explorer_intro:'Search and inspect model assumptions across QPM, DFM, CGE, IO, PE, and FPP.',
+    explorer_search_ph:'Search parameters...',
+    explorer_col_model:'Model', explorer_col_name:'Name', explorer_col_symbol:'Symbol', explorer_col_value:'Value',
+    explorer_col_range:'Range', explorer_col_type:'Type', explorer_col_equation:'Equation', explorer_col_desc:'Description',
+    explorer_sources_title:'Data Sources', explorer_flow_title:'Computation Flows',
+    explorer_filter_model:'All Models', explorer_filter_type:'All Types',
+    explorer_no_params:'No parameters match selected filters',
+    explorer_params_count:'parameters',
+    research_title:'Research & Analysis', research_sub:'Policy briefs and analytical notes',
+    research_intro:'Filter CERR briefs by topic, model, and author.',
+    research_search_ph:'Search research...', research_filter_topic:'All Topics',
+    research_filter_model:'All Models', research_filter_author:'All Authors',
+    research_read_more:'Read More', research_show_less:'Show Less',
+    research_no_items:'No research briefs found for selected filters',
+    literature_title:'Academic Literature', literature_sub:'Foundational and applied references by model',
+    literature_intro:'Browse curated literature and relevance notes connected to each model.',
+    literature_search_ph:'Search papers...', literature_filter_model:'All Models',
+    literature_filter_topic:'All Topics', literature_toggle_show:'Expand', literature_toggle_hide:'Collapse',
+    literature_no_items:'No papers found for selected filters', literature_relevance:'Relevance',
   },
   ru: {
-    nav_section_overview:'Навигация', nav_section_models:'Доступные модели', nav_section_platform:'Платформа',
+    nav_section_overview:'Навигация', nav_section_models:'Доступные модели', nav_section_platform:'Платформа', nav_section_knowledge:'База знаний',
     nav_home:'Главная', nav_intl:'Межд. организации', nav_compare:'Сравнить сценарии',
     nav_qpm:'Симулятор КПМ', nav_dfm:'Прогноз ВВП', nav_pe:'Модель частичного равновесия',
     nav_io:'Межотраслевой баланс', nav_cge:'Модель CGE', nav_fpp:'Фин. программирование', nav_about:'Методология',
+    nav_explorer:'Обзор моделей', nav_tracker:'Трекер реформ', nav_research:'Исследования', nav_literature:'Литература',
     snap_title:'Макро-индикаторы', snap_sub:'Ключевые показатели · Последние данные',
     snap_gdp_nom:'Номинальный ВВП', snap_gdp:'Рост ВВП г/г', snap_gdp_fc:'Прогноз ВВП',
     snap_inf:'Инфляция', snap_ind:'Пром. производство г/г', snap_svc:'Услуги г/г',
@@ -1509,12 +1958,49 @@ const LANGS = {
     compare_presets_title:'Готовые пакеты политик',
     compare_presets_desc:'Нажмите на пресет, чтобы загрузить его как сохранённый сценарий с настроенными параметрами.',
     advisor_setup:'Настройка', advisor_run_title:'Запустить анализ',
+    tracker_title:'Трекер экономических реформ',
+    tracker_sub:'Интерактивная карта, таймлайн и дашборд реформ Узбекистана',
+    tracker_activity_title:'Активность реформ по доменам',
+    tracker_activity_sub:'Изменения политики по основным доменам',
+    tracker_map_title:'Интерактивная карта Узбекистана',
+    tracker_map_sub:'Выберите регион для фильтрации таймлайна',
+    tracker_domains_title:'Карточки доменов реформ',
+    tracker_domains_sub:'Количество реформ, статус и охват источников',
+    tracker_timeline_title:'Таймлайн реформ',
+    tracker_filter_category:'Категория', tracker_filter_status:'Статус', tracker_filter_sector:'Сектор',
+    tracker_filter_region:'Регион', tracker_filter_doc:'Тип документа',
+    tracker_all:'Все', tracker_no_reforms:'По выбранным фильтрам реформы не найдены',
+    tracker_kpi_total:'Всего реформ', tracker_kpi_completed:'Завершено',
+    tracker_kpi_active:'В работе', tracker_kpi_planned:'Запланировано',
+    tracker_sources:'источников', tracker_last_updated:'Обновлено',
+    explorer_title:'Обозреватель параметров моделей',
+    explorer_sub:'Параметры, уравнения, источники данных и вычислительные цепочки',
+    explorer_intro:'Ищите и сравнивайте допущения в моделях QPM, DFM, CGE, МОБ, ЧР и ФПП.',
+    explorer_search_ph:'Поиск параметров...',
+    explorer_col_model:'Модель', explorer_col_name:'Параметр', explorer_col_symbol:'Символ', explorer_col_value:'Значение',
+    explorer_col_range:'Диапазон', explorer_col_type:'Тип', explorer_col_equation:'Уравнение', explorer_col_desc:'Описание',
+    explorer_sources_title:'Источники данных', explorer_flow_title:'Вычислительные потоки',
+    explorer_filter_model:'Все модели', explorer_filter_type:'Все типы',
+    explorer_no_params:'Параметры по выбранным фильтрам не найдены',
+    explorer_params_count:'параметров',
+    research_title:'Исследования и аналитика', research_sub:'Политические брифы и аналитические заметки',
+    research_intro:'Фильтруйте материалы ЦЭИР по теме, модели и автору.',
+    research_search_ph:'Поиск исследований...', research_filter_topic:'Все темы',
+    research_filter_model:'Все модели', research_filter_author:'Все авторы',
+    research_read_more:'Подробнее', research_show_less:'Свернуть',
+    research_no_items:'По выбранным фильтрам материалы не найдены',
+    literature_title:'Академическая литература', literature_sub:'Базовые и прикладные источники по моделям',
+    literature_intro:'Изучайте подборку литературы и заметки о релевантности по каждой модели.',
+    literature_search_ph:'Поиск статей...', literature_filter_model:'Все модели',
+    literature_filter_topic:'Все темы', literature_toggle_show:'Развернуть', literature_toggle_hide:'Свернуть',
+    literature_no_items:'Статьи по выбранным фильтрам не найдены', literature_relevance:'Релевантность',
   },
   uz: {
-    nav_section_overview:'Navigatsiya', nav_section_models:'Mavjud modellar', nav_section_platform:'Platforma',
+    nav_section_overview:'Navigatsiya', nav_section_models:'Mavjud modellar', nav_section_platform:'Platforma', nav_section_knowledge:'Bilimlar markazi',
     nav_home:'Bosh sahifa', nav_intl:'Xalqaro tashkilotlar', nav_compare:'Stsenariylarni solishtirish',
     nav_qpm:"Choraklik prognoz modeli simulyatori", nav_dfm:'YaIM prognozi', nav_pe:'Qisman muvozanat modeli',
     nav_io:'Tarmoqlararo balans', nav_cge:'Umumiy muvozanat modeli', nav_fpp:'Moliyaviy dasturlash', nav_about:'Metodologiya',
+    nav_explorer:'Model eksploreri', nav_tracker:'Islohotlar trekeri', nav_research:'Tadqiqotlar', nav_literature:'Adabiyotlar',
     snap_title:"Makro ko'rsatkichlar", snap_sub:"Asosiy ko'rsatkichlar · So'nggi ma'lumotlar",
     snap_gdp_nom:'Nominal YaIM', snap_gdp:"YaIM o'sishi (y/y)", snap_gdp_fc:'YaIM prognozi',
     snap_inf:"Inflyatsiya", snap_ind:"Sanoat o'sishi (y/y)", snap_svc:"Xizmatlar o'sishi (y/y)",
@@ -1554,6 +2040,42 @@ const LANGS = {
     compare_presets_title:"Tayyor siyosat paketlari",
     compare_presets_desc:"Oldindan sozlangan parametrlar bilan saqlangan stsenariy sifatida yuklash uchun presetni bosing.",
     advisor_setup:"Sozlamalar", advisor_run_title:"Tahlilni ishga tushirish",
+    tracker_title:"Siyosiy islohotlar trekeri",
+    tracker_sub:"O'zbekiston bo'yicha interaktiv xarita, vaqt jadvali va islohotlar paneli",
+    tracker_activity_title:"Yo'nalishlar bo'yicha islohotlar faolligi",
+    tracker_activity_sub:"Siyosat o'zgarishlari yo'nalishlar kesimida",
+    tracker_map_title:"O'zbekiston interaktiv xaritasi",
+    tracker_map_sub:"Vaqt jadvalini filtrlash uchun hududni tanlang",
+    tracker_domains_title:"Islohot yo'nalishlari kartalari",
+    tracker_domains_sub:"Yo'nalishlar bo'yicha soni, holati va manbalar qamrovi",
+    tracker_timeline_title:"Islohotlar vaqt jadvali",
+    tracker_filter_category:"Kategoriya", tracker_filter_status:"Holat", tracker_filter_sector:"Tarmoq",
+    tracker_filter_region:"Hudud", tracker_filter_doc:"Hujjat turi",
+    tracker_all:"Barchasi", tracker_no_reforms:"Tanlangan filtrlar bo'yicha islohotlar topilmadi",
+    tracker_kpi_total:"Jami islohotlar", tracker_kpi_completed:"Yakunlangan",
+    tracker_kpi_active:"Jarayonda", tracker_kpi_planned:"Rejalangan",
+    tracker_sources:"manba", tracker_last_updated:"So'nggi yangilanish",
+    explorer_title:"Model parametrlar eksploreri",
+    explorer_sub:"Parametrlar, tenglamalar, ma'lumot manbalari va hisoblash oqimlari",
+    explorer_intro:"QPM, DFM, CGE, TMB, QM va MDS modellari bo'yicha taxminlarni qidiring va solishtiring.",
+    explorer_search_ph:"Parametrlarni qidiring...",
+    explorer_col_model:"Model", explorer_col_name:"Parametr", explorer_col_symbol:"Belgi", explorer_col_value:"Qiymat",
+    explorer_col_range:"Oraliq", explorer_col_type:"Turi", explorer_col_equation:"Tenglama", explorer_col_desc:"Tavsif",
+    explorer_sources_title:"Ma'lumot manbalari", explorer_flow_title:"Hisoblash oqimlari",
+    explorer_filter_model:"Barcha modellar", explorer_filter_type:"Barcha turlar",
+    explorer_no_params:"Tanlangan filtrlarga mos parametrlar topilmadi",
+    explorer_params_count:"parametrlar",
+    research_title:"Tadqiqot va tahlil", research_sub:"Siyosiy briflar va analitik materiallar",
+    research_intro:"CERR materiallarini mavzu, model va muallif bo'yicha filtrlang.",
+    research_search_ph:"Tadqiqotni qidiring...", research_filter_topic:"Barcha mavzular",
+    research_filter_model:"Barcha modellar", research_filter_author:"Barcha mualliflar",
+    research_read_more:"Batafsil", research_show_less:"Yig'ish",
+    research_no_items:"Tanlangan filtrlarga mos material topilmadi",
+    literature_title:"Akademik adabiyotlar", literature_sub:"Model bo'yicha asosiy va amaliy manbalar",
+    literature_intro:"Har bir model uchun saralangan adabiyotlar va relevans izohlarini ko'rib chiqing.",
+    literature_search_ph:"Maqolalarni qidiring...", literature_filter_model:"Barcha modellar",
+    literature_filter_topic:"Barcha mavzular", literature_toggle_show:"Ochish", literature_toggle_hide:"Yopish",
+    literature_no_items:"Tanlangan filtrlarga mos maqolalar topilmadi", literature_relevance:"Relevans",
   }
 };
 let currentLang = 'en';
@@ -1564,6 +2086,10 @@ function applyLang(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (t[key] !== undefined) el.textContent = t[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (t[key] !== undefined) el.setAttribute('placeholder', t[key]);
   });
   // Sidebar labels (no onclick, use data-i18n already set above)
   // Language button styles
@@ -1585,6 +2111,743 @@ function applyLang(lang) {
 function setLang(lang) {
   currentLang = lang;
   applyLang(lang);
+  renderExplorerPage();
+  renderTracker();
+  renderResearch();
+  renderLiterature();
+}
+
+// ── Knowledge Hub helpers ─────────────────────────────────
+const researchExpanded = {};
+const literatureCollapsed = {};
+
+function modelRegistryData() {
+  return window.MODEL_REGISTRY || { models: [] };
+}
+
+function researchHubData() {
+  return window.RESEARCH_DATA || { topics: {}, entries: [] };
+}
+
+function literatureHubData() {
+  return window.LITERATURE_DATA || { modelLabels: {}, papers: [] };
+}
+
+function modelLabelById(modelId) {
+  const fromRegistry = modelRegistryData().models.find(m => m.id === modelId);
+  if (fromRegistry && fromRegistry.name) return localize(fromRegistry.name);
+  const fromLit = (literatureHubData().modelLabels || {})[modelId];
+  if (fromLit) return localize(fromLit);
+  return (modelId || '').toUpperCase();
+}
+
+function topicLabel(topicId) {
+  const topic = (researchHubData().topics || {})[topicId];
+  if (topic && topic.label) return localize(topic.label);
+  if (!topicId) return '';
+  return topicId.charAt(0).toUpperCase() + topicId.slice(1);
+}
+
+// ── Model Explorer ───────────────────────────────────────
+function explorerRows() {
+  const models = modelRegistryData().models || [];
+  const rows = [];
+  models.forEach(model => {
+    (model.parameters || []).forEach(param => {
+      const range = (param.min != null && param.max != null) ? `${param.min} – ${param.max}` : '';
+      rows.push({
+        modelId: model.id,
+        modelName: localize(model.name),
+        ...param,
+        range,
+      });
+    });
+  });
+  return rows;
+}
+
+function renderExplorerPage() {
+  const page = document.getElementById('page-explorer');
+  if (!page) return;
+
+  const data = modelRegistryData();
+  const models = data.models || [];
+  const summaryGrid = document.getElementById('explorer-summary-grid');
+  if (summaryGrid) {
+    summaryGrid.innerHTML = models.map(m => {
+      const count = (m.parameters || []).length;
+      return `
+        <div class="explorer-summary-card">
+          <div class="explorer-summary-title">${escHtml(localize(m.name))}</div>
+          <div class="explorer-summary-meta">${escHtml(m.type || '')}</div>
+          <div class="explorer-summary-meta">${count} ${escHtml(i18nText('explorer_params_count', 'parameters'))}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  const modelFilter = document.getElementById('explorer-model-filter')?.value || 'all';
+  const typeFilter = document.getElementById('explorer-type-filter')?.value || 'all';
+  const typeSet = Array.from(new Set(explorerRows().map(r => r.type).filter(Boolean))).sort();
+
+  setSelectOptions(
+    'explorer-model-filter',
+    [{ value: 'all', label: i18nText('explorer_filter_model', 'All Models') }].concat(
+      models.map(m => ({ value: m.id, label: localize(m.name) }))
+    ),
+    modelFilter
+  );
+  setSelectOptions(
+    'explorer-type-filter',
+    [{ value: 'all', label: i18nText('explorer_filter_type', 'All Types') }].concat(
+      typeSet.map(t => ({ value: t, label: t }))
+    ),
+    typeFilter
+  );
+
+  filterExplorerParams();
+}
+
+function filterExplorerParams() {
+  const search = (document.getElementById('explorer-search')?.value || '').trim().toLowerCase();
+  const modelFilter = document.getElementById('explorer-model-filter')?.value || 'all';
+  const typeFilter = document.getElementById('explorer-type-filter')?.value || 'all';
+  const rows = explorerRows().filter(r => {
+    if (modelFilter !== 'all' && r.modelId !== modelFilter) return false;
+    if (typeFilter !== 'all' && r.type !== typeFilter) return false;
+    if (!search) return true;
+    const hay = [
+      r.modelName, r.name, r.symbol, r.type, r.equation, localize(r.description), String(r.value), String(r.range)
+    ].join(' ').toLowerCase();
+    return hay.includes(search);
+  });
+
+  const tbody = document.getElementById('explorer-params-body');
+  if (!tbody) return;
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="hub-empty">${escHtml(i18nText('explorer_no_params', 'No parameters match selected filters'))}</div></td></tr>`;
+  } else {
+    tbody.innerHTML = rows.map(r => `
+      <tr>
+        <td>${escHtml(r.modelName)}</td>
+        <td>${escHtml(r.name || '')}</td>
+        <td><code>${escHtml(r.symbol || '')}</code></td>
+        <td>${escHtml(String(r.value ?? ''))}</td>
+        <td>${escHtml(r.range || '')}</td>
+        <td>${escHtml(r.type || '')}</td>
+        <td>${escHtml(r.equation || '')}</td>
+        <td>${escHtml(localize(r.description))}</td>
+      </tr>
+    `).join('');
+  }
+
+  const selectedModel = modelFilter === 'all' ? null : modelFilter;
+  const models = (modelRegistryData().models || []).filter(m => !selectedModel || m.id === selectedModel);
+
+  const sourceGrid = document.getElementById('explorer-sources-grid');
+  if (sourceGrid) {
+    const cards = [];
+    models.forEach(m => {
+      (m.dataSources || []).forEach(s => {
+        cards.push(`
+          <div class="explorer-source-card">
+            <div class="explorer-source-title">${escHtml(localize(m.name))}</div>
+            <div class="explorer-source-meta">${escHtml(s.institution || '')}</div>
+            <div class="explorer-source-meta">${escHtml(s.description || '')}</div>
+            <div class="explorer-source-meta"><a href="${escHtml(s.url || '#')}" target="_blank" rel="noopener noreferrer">${escHtml(s.url || '')}</a></div>
+          </div>
+        `);
+      });
+    });
+    sourceGrid.innerHTML = cards.length ? cards.join('') : `<div class="hub-empty">${escHtml(i18nText('explorer_no_params', 'No parameters match selected filters'))}</div>`;
+  }
+
+  const flowGrid = document.getElementById('explorer-flow-grid');
+  if (flowGrid) {
+    flowGrid.innerHTML = models.map(m => {
+      const flow = m.flowchart || [];
+      const chain = flow.map((node, idx) => {
+        const arrow = idx < flow.length - 1 ? `<span class="explorer-flow-arrow">→</span>` : '';
+        return `<span class="explorer-flow-node">${escHtml(node)}</span>${arrow}`;
+      }).join('');
+      return `
+        <div class="explorer-flow-card">
+          <div class="explorer-flow-title">${escHtml(localize(m.name))}</div>
+          <div class="explorer-flow-chain">${chain}</div>
+        </div>
+      `;
+    }).join('');
+  }
+}
+
+// ── Research ─────────────────────────────────────────────
+function renderResearch() {
+  const page = document.getElementById('page-research');
+  if (!page) return;
+  const data = researchHubData();
+  const entries = data.entries || [];
+  const topicVal = document.getElementById('research-topic-filter')?.value || 'all';
+  const modelVal = document.getElementById('research-model-filter')?.value || 'all';
+  const authorVal = document.getElementById('research-author-filter')?.value || 'all';
+
+  setSelectOptions(
+    'research-topic-filter',
+    [{ value: 'all', label: i18nText('research_filter_topic', 'All Topics') }].concat(
+      Object.keys(data.topics || {}).map(k => ({ value: k, label: localize(data.topics[k].label) }))
+    ),
+    topicVal
+  );
+
+  const modelIds = Array.from(new Set(entries.map(e => e.model).filter(Boolean)));
+  setSelectOptions(
+    'research-model-filter',
+    [{ value: 'all', label: i18nText('research_filter_model', 'All Models') }].concat(
+      modelIds.map(m => ({ value: m, label: modelLabelById(m) }))
+    ),
+    modelVal
+  );
+
+  const authors = Array.from(new Set(entries.map(e => e.author).filter(Boolean))).sort();
+  setSelectOptions(
+    'research-author-filter',
+    [{ value: 'all', label: i18nText('research_filter_author', 'All Authors') }].concat(
+      authors.map(a => ({ value: a, label: a }))
+    ),
+    authorVal
+  );
+
+  filterResearch();
+}
+
+function filterResearch() {
+  const data = researchHubData();
+  const entries = data.entries || [];
+  const search = (document.getElementById('research-search')?.value || '').trim().toLowerCase();
+  const topic = document.getElementById('research-topic-filter')?.value || 'all';
+  const model = document.getElementById('research-model-filter')?.value || 'all';
+  const author = document.getElementById('research-author-filter')?.value || 'all';
+  const filtered = entries.filter(entry => {
+    if (topic !== 'all' && !(entry.topics || []).includes(topic)) return false;
+    if (model !== 'all' && entry.model !== model) return false;
+    if (author !== 'all' && entry.author !== author) return false;
+    if (!search) return true;
+    const hay = [
+      localize(entry.title), entry.author, localize(entry.abstract), localize(entry.body), (entry.topics || []).join(' ')
+    ].join(' ').toLowerCase();
+    return hay.includes(search);
+  }).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+  const grid = document.getElementById('research-grid');
+  if (!grid) return;
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="hub-empty">${escHtml(i18nText('research_no_items', 'No research briefs found for selected filters'))}</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(entry => {
+    const expanded = !!researchExpanded[entry.id];
+    const topics = (entry.topics || []).map(t => {
+      const topicInfo = (data.topics || {})[t] || { label: { en: t }, color: '#94a3b8' };
+      return `<span class="research-topic" style="background:${topicInfo.color}1f;color:${topicInfo.color};">${escHtml(localize(topicInfo.label))}</span>`;
+    }).join('');
+    return `
+      <article class="research-card">
+        <div class="research-meta">
+          <span>${escHtml(entry.author || '')}</span>
+          <span>${escHtml(entry.date || '')}</span>
+        </div>
+        <div class="research-title">${escHtml(localize(entry.title))}</div>
+        <div class="research-abstract">${escHtml(localize(entry.abstract))}</div>
+        ${expanded ? `<div class="research-body">${escHtml(localize(entry.body))}</div>` : ''}
+        <div class="research-topics">${topics}</div>
+        <div class="research-actions">
+          <button class="research-model-btn" onclick="navigate('${entry.model}')">${escHtml(modelLabelById(entry.model))}</button>
+          <button class="research-expand-btn" onclick="toggleResearchExpand('${entry.id}')">${escHtml(i18nText(expanded ? 'research_show_less' : 'research_read_more', expanded ? 'Show Less' : 'Read More'))}</button>
+        </div>
+      </article>
+    `;
+  }).join('');
+}
+
+function toggleResearchExpand(id) {
+  researchExpanded[id] = !researchExpanded[id];
+  filterResearch();
+}
+
+// ── Literature ───────────────────────────────────────────
+function renderLiterature() {
+  const page = document.getElementById('page-literature');
+  if (!page) return;
+  const data = literatureHubData();
+  const papers = data.papers || [];
+  const modelVal = document.getElementById('lit-model-filter')?.value || 'all';
+  const topicVal = document.getElementById('lit-topic-filter')?.value || 'all';
+
+  const modelIds = Array.from(new Set(papers.map(p => p.model).filter(Boolean)));
+  setSelectOptions(
+    'lit-model-filter',
+    [{ value: 'all', label: i18nText('literature_filter_model', 'All Models') }].concat(
+      modelIds.map(m => ({ value: m, label: modelLabelById(m) }))
+    ),
+    modelVal
+  );
+
+  const topics = Array.from(new Set(papers.map(p => p.topic).filter(Boolean)));
+  setSelectOptions(
+    'lit-topic-filter',
+    [{ value: 'all', label: i18nText('literature_filter_topic', 'All Topics') }].concat(
+      topics.map(t => ({ value: t, label: topicLabel(t) }))
+    ),
+    topicVal
+  );
+
+  filterLiterature();
+}
+
+function filterLiterature() {
+  const data = literatureHubData();
+  const papers = data.papers || [];
+  const search = (document.getElementById('lit-search')?.value || '').trim().toLowerCase();
+  const model = document.getElementById('lit-model-filter')?.value || 'all';
+  const topic = document.getElementById('lit-topic-filter')?.value || 'all';
+  const filtered = papers.filter(p => {
+    if (model !== 'all' && p.model !== model) return false;
+    if (topic !== 'all' && p.topic !== topic) return false;
+    if (!search) return true;
+    const hay = [p.title, p.authors, p.venue, p.abstract, localize(p.relevance), p.topic].join(' ').toLowerCase();
+    return hay.includes(search);
+  }).sort((a, b) => (b.year || 0) - (a.year || 0));
+
+  const host = document.getElementById('literature-sections');
+  if (!host) return;
+  if (!filtered.length) {
+    host.innerHTML = `<div class="hub-empty">${escHtml(i18nText('literature_no_items', 'No papers found for selected filters'))}</div>`;
+    return;
+  }
+
+  const byModel = {};
+  filtered.forEach(p => {
+    byModel[p.model] = byModel[p.model] || [];
+    byModel[p.model].push(p);
+  });
+
+  const sections = Object.keys(byModel).sort().map(modelId => {
+    const items = byModel[modelId];
+    const collapsed = !!literatureCollapsed[modelId];
+    const list = collapsed ? '' : `
+      <div class="lit-list">
+        ${items.map(p => `
+          <article class="lit-item">
+            <div class="lit-item-title">${escHtml(p.title)}</div>
+            <div class="lit-item-meta">${escHtml(p.authors || '')} · ${escHtml(String(p.year || ''))} · ${escHtml(p.venue || '')}</div>
+            <div class="lit-item-meta">
+              ${p.doi ? `DOI: <a href="https://doi.org/${escHtml(p.doi)}" target="_blank" rel="noopener noreferrer">${escHtml(p.doi)}</a>` : `<a href="${escHtml(p.url || '#')}" target="_blank" rel="noopener noreferrer">${escHtml(p.url || '')}</a>`}
+            </div>
+            <div class="lit-item-abstract">${escHtml(p.abstract || '')}</div>
+            <div class="lit-item-relevance"><strong>${escHtml(i18nText('literature_relevance', 'Relevance'))}:</strong> ${escHtml(localize(p.relevance))}</div>
+          </article>
+        `).join('')}
+      </div>
+    `;
+    return `
+      <section class="lit-section">
+        <div class="lit-section-head">
+          <div>
+            <div class="lit-section-title">${escHtml(modelLabelById(modelId))}</div>
+            <div class="lit-section-count">${items.length}</div>
+          </div>
+          <button class="lit-toggle-btn" onclick="toggleLitSection('${modelId}')">${escHtml(i18nText(collapsed ? 'literature_toggle_show' : 'literature_toggle_hide', collapsed ? 'Expand' : 'Collapse'))}</button>
+        </div>
+        ${list}
+      </section>
+    `;
+  });
+
+  host.innerHTML = sections.join('');
+}
+
+function toggleLitSection(modelId) {
+  literatureCollapsed[modelId] = !literatureCollapsed[modelId];
+  filterLiterature();
+}
+
+// ── Research draft publishing ────────────────────────────
+const RESEARCH_DRAFT_STORAGE_KEY = 'uz_policy_research_drafts';
+
+function normalizeModelId(raw) {
+  if (!raw) return 'qpm';
+  const text = String(raw).toLowerCase();
+  if (text.includes('qpm')) return 'qpm';
+  if (text.includes('dfm')) return 'dfm';
+  if (text.includes('cge')) return 'cge';
+  if (text.includes('io')) return 'io';
+  if (text.includes('pe')) return 'pe';
+  if (text.includes('fpp')) return 'fpp';
+  return 'qpm';
+}
+
+function getDefaultTopicsByModel(modelId) {
+  const map = {
+    qpm: ['monetary', 'inflation'],
+    dfm: ['growth'],
+    cge: ['trade', 'structural'],
+    io: ['growth', 'structural'],
+    pe: ['trade'],
+    fpp: ['fiscal', 'monetary']
+  };
+  return map[modelId] || ['growth'];
+}
+
+function loadResearchDraftsFromStorage() {
+  try {
+    const raw = localStorage.getItem(RESEARCH_DRAFT_STORAGE_KEY);
+    if (!raw || !window.RESEARCH_DATA) return;
+    const drafts = JSON.parse(raw);
+    if (!Array.isArray(drafts) || !drafts.length) return;
+    const existingIds = new Set((window.RESEARCH_DATA.entries || []).map(e => e.id));
+    drafts.forEach(draft => {
+      if (!existingIds.has(draft.id)) {
+        window.RESEARCH_DATA.entries.push(draft);
+      }
+    });
+  } catch (_) { /* ignore local storage errors */ }
+}
+
+function saveResearchDraftToStorage(entry) {
+  try {
+    const raw = localStorage.getItem(RESEARCH_DRAFT_STORAGE_KEY);
+    const drafts = raw ? JSON.parse(raw) : [];
+    if (!Array.isArray(drafts)) return;
+    if (!drafts.find(d => d.id === entry.id)) {
+      drafts.push(entry);
+      localStorage.setItem(RESEARCH_DRAFT_STORAGE_KEY, JSON.stringify(drafts));
+    }
+  } catch (_) { /* ignore local storage errors */ }
+}
+
+function publishAdvisorBriefFromPanel(analysis) {
+  if (!analysis || !window.RESEARCH_DATA || !Array.isArray(window.RESEARCH_DATA.entries)) return;
+  const modelId = normalizeModelId(analysis.model);
+  const defaultTitle = `[Draft] ${modelLabelById(modelId)} Brief — ${new Date().toISOString().slice(0, 10)}`;
+  const title = prompt('Brief title:', defaultTitle);
+  if (!title) return;
+  const summary = (analysis.summary || '').trim();
+  const fullText = (analysis.fullText || '').trim();
+  const entry = {
+    id: 'draft-' + Date.now(),
+    title: { en: title, ru: title, uz: title },
+    author: 'AI Advisor Draft',
+    date: new Date().toISOString().slice(0, 10),
+    model: modelId,
+    topics: getDefaultTopicsByModel(modelId),
+    abstract: { en: summary, ru: summary, uz: summary },
+    body: { en: fullText || summary, ru: fullText || summary, uz: fullText || summary },
+  };
+  window.RESEARCH_DATA.entries.unshift(entry);
+  saveResearchDraftToStorage(entry);
+  renderResearch();
+  navigate('research');
+  if (window.Toast) {
+    Toast.show('Research brief draft added.', 'success', 3500);
+  }
+}
+window.publishAdvisorBriefFromPanel = publishAdvisorBriefFromPanel;
+
+// ── Policy Tracker state & rendering ─────────────────────
+const trackerState = {
+  category: 'all',
+  status: 'all',
+  sector: 'all',
+  region: 'all',
+  docType: 'all'
+};
+let trackerActivityChart = null;
+
+function i18nText(key, fallback) {
+  return (LANGS[currentLang] && LANGS[currentLang][key]) || fallback || key;
+}
+
+function localize(value) {
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'string' || typeof value === 'number') return String(value);
+  return value[currentLang] || value.en || Object.values(value)[0] || '';
+}
+
+function escHtml(text) {
+  const d = document.createElement('div');
+  d.textContent = text || '';
+  return d.innerHTML;
+}
+
+function trackerData() {
+  return window.POLICY_TRACKER_DATA || {
+    categories: {}, statuses: {}, documentTypes: {}, sectors: {}, domains: [], regions: [], reforms: []
+  };
+}
+
+function trackerRegionName(regionId) {
+  const region = trackerData().regions.find(r => r.id === regionId);
+  return region ? localize(region.name) : regionId;
+}
+
+function getFilteredReforms() {
+  const data = trackerData();
+  return (data.reforms || [])
+    .filter(r => {
+      if (trackerState.category !== 'all' && r.category !== trackerState.category) return false;
+      if (trackerState.status !== 'all' && r.status !== trackerState.status) return false;
+      if (trackerState.sector !== 'all' && r.sector !== trackerState.sector) return false;
+      if (trackerState.docType !== 'all' && r.documentType !== trackerState.docType) return false;
+      if (trackerState.region !== 'all') {
+        if (trackerState.region === 'national') {
+          return r.region === 'national';
+        }
+        return r.region === trackerState.region || r.region === 'national';
+      }
+      return true;
+    })
+    .sort((a, b) => (b.startDate || '').localeCompare(a.startDate || ''));
+}
+
+function setSelectOptions(selectId, options, selectedValue) {
+  const el = document.getElementById(selectId);
+  if (!el) return;
+  el.innerHTML = options.map(o => `<option value="${escHtml(o.value)}">${escHtml(o.label)}</option>`).join('');
+  el.value = selectedValue;
+}
+
+function renderTrackerFilters() {
+  const data = trackerData();
+  const allLabel = i18nText('tracker_all', 'All');
+
+  setSelectOptions(
+    'tracker-filter-category',
+    [{ value: 'all', label: allLabel }].concat(Object.keys(data.categories).map(k => ({
+      value: k, label: `${data.categories[k].icon || ''} ${localize(data.categories[k].label)}`
+    }))),
+    trackerState.category
+  );
+
+  setSelectOptions(
+    'tracker-filter-status',
+    [{ value: 'all', label: allLabel }].concat(Object.keys(data.statuses).map(k => ({
+      value: k, label: localize(data.statuses[k].label)
+    }))),
+    trackerState.status
+  );
+
+  const sectors = data.sectors || {};
+  const sectorKeys = Object.keys(sectors).filter(k => k !== 'all');
+  setSelectOptions(
+    'tracker-filter-sector',
+    [{ value: 'all', label: allLabel }].concat(sectorKeys.map(k => ({
+      value: k, label: localize(sectors[k])
+    }))),
+    trackerState.sector
+  );
+
+  setSelectOptions(
+    'tracker-filter-region',
+    [{ value: 'all', label: allLabel }].concat((data.regions || []).map(r => ({
+      value: r.id, label: localize(r.name)
+    }))),
+    trackerState.region
+  );
+
+  setSelectOptions(
+    'tracker-filter-doc',
+    [{ value: 'all', label: allLabel }].concat(Object.keys(data.documentTypes).map(k => ({
+      value: k, label: localize(data.documentTypes[k].label)
+    }))),
+    trackerState.docType
+  );
+}
+
+function renderTrackerMapState() {
+  document.querySelectorAll('.map-region').forEach(el => {
+    el.classList.toggle('selected', trackerState.region !== 'all' && el.dataset.region === trackerState.region);
+  });
+  const chip = document.getElementById('tracker-region-chip');
+  if (chip) {
+    const regionLabel = trackerState.region === 'all' ? i18nText('tracker_all', 'All') : trackerRegionName(trackerState.region);
+    chip.textContent = `${i18nText('tracker_filter_region', 'Region')}: ${regionLabel}`;
+  }
+}
+
+function renderTrackerDashboard() {
+  const data = trackerData();
+  const rows = getFilteredReforms();
+  const statuses = rows.reduce((acc, r) => {
+    acc[r.status] = (acc[r.status] || 0) + 1;
+    return acc;
+  }, {});
+
+  const kpi = [
+    { id: 'total', label: i18nText('tracker_kpi_total', 'Total Reforms'), value: rows.length, sub: i18nText('tracker_filter_region', 'Region') + ': ' + (trackerState.region === 'all' ? i18nText('tracker_all', 'All') : trackerRegionName(trackerState.region)) },
+    { id: 'completed', label: i18nText('tracker_kpi_completed', 'Completed'), value: statuses.completed || 0, sub: localize((data.statuses.completed || {}).label || 'Completed') },
+    { id: 'active', label: i18nText('tracker_kpi_active', 'In Progress'), value: statuses.active || 0, sub: localize((data.statuses.active || {}).label || 'In Progress') },
+    { id: 'planned', label: i18nText('tracker_kpi_planned', 'Planned'), value: statuses.planned || 0, sub: localize((data.statuses.planned || {}).label || 'Planned') }
+  ];
+
+  const grid = document.getElementById('tracker-kpi-grid');
+  if (grid) {
+    grid.innerHTML = kpi.map(card => `
+      <div class="tracker-kpi-card">
+        <div class="tracker-kpi-title">${escHtml(card.label)}</div>
+        <div class="tracker-kpi-value">${card.value}</div>
+        <div class="tracker-kpi-sub">${escHtml(card.sub)}</div>
+      </div>
+    `).join('');
+  }
+
+  const byDomain = {};
+  rows.forEach(r => { byDomain[r.domain] = (byDomain[r.domain] || 0) + 1; });
+  const labels = (data.domains || []).map(d => localize(d.label));
+  const values = (data.domains || []).map(d => byDomain[d.id] || 0);
+  const colors = {
+    tax: '#0ea5e9', trade: '#14b8a6', banking: '#8b5cf6', energy: '#f59e0b',
+    digital: '#2563eb', agriculture: '#10b981', soe: '#64748b'
+  };
+  const bgs = (data.domains || []).map(d => colors[d.id] || '#94a3b8');
+
+  const c = document.getElementById('tracker-activity-chart');
+  if (c) {
+    if (trackerActivityChart) trackerActivityChart.destroy();
+    trackerActivityChart = new Chart(c, {
+      type: 'bar',
+      data: { labels, datasets: [{ data: values, backgroundColor: bgs, borderRadius: 5, borderSkipped: false }] },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { font: { size: 11 } }, grid: { display: false } },
+          y: { ticks: { precision: 0, font: { size: 11 } }, grid: { color: '#eef2f7' } }
+        }
+      }
+    });
+  }
+}
+
+function dominantStatus(items) {
+  const scores = { completed: 0, active: 0, planned: 0 };
+  items.forEach(i => { scores[i.status] = (scores[i.status] || 0) + 1; });
+  if (scores.completed >= scores.active && scores.completed >= scores.planned) return 'completed';
+  if (scores.active >= scores.planned) return 'active';
+  return 'planned';
+}
+
+function renderDomainCards() {
+  const data = trackerData();
+  const rows = getFilteredReforms();
+  const wrap = document.getElementById('tracker-domain-grid');
+  if (!wrap) return;
+
+  const cards = (data.domains || []).map(d => {
+    const items = rows.filter(r => r.domain === d.id);
+    const statusId = dominantStatus(items);
+    const status = data.statuses[statusId] || { color: '#64748b', label: statusId };
+    const sourceCount = items.reduce((sum, r) => sum + ((r.sources || []).length), 0);
+    const lastUpdated = items
+      .map(r => r.lastUpdated || r.startDate || '')
+      .filter(Boolean)
+      .sort()
+      .slice(-1)[0] || '—';
+
+    return `
+      <div class="tracker-domain-card">
+        <div class="tracker-domain-head">
+          <div class="tracker-domain-name">${escHtml((d.icon || '') + ' ' + localize(d.label))}</div>
+          <span class="tracker-status-badge" style="background:${status.color}1f;color:${status.color};">${escHtml(localize(status.label))}</span>
+        </div>
+        <div style="font-size:26px;font-weight:800;line-height:1;color:var(--text);">${items.length}</div>
+        <div class="tracker-domain-meta">
+          ${escHtml(i18nText('tracker_sources', 'sources'))}: ${sourceCount}<br>
+          ${escHtml(i18nText('tracker_last_updated', 'Last updated'))}: ${escHtml(lastUpdated)}
+        </div>
+      </div>
+    `;
+  });
+  wrap.innerHTML = cards.join('');
+}
+
+function renderTrackerTimeline() {
+  const data = trackerData();
+  const rows = getFilteredReforms();
+  const host = document.getElementById('tracker-timeline');
+  if (!host) return;
+  if (!rows.length) {
+    host.innerHTML = `<div class="tracker-empty">${escHtml(i18nText('tracker_no_reforms', 'No reforms found for selected filters'))}</div>`;
+    return;
+  }
+
+  host.innerHTML = rows.map(r => {
+    const cat = data.categories[r.category] || { color: '#94a3b8', label: r.category };
+    const status = data.statuses[r.status] || { color: '#94a3b8', label: r.status };
+    const doc = data.documentTypes[r.documentType] || { label: r.documentType };
+    const regionName = trackerRegionName(r.region);
+    const period = r.endDate ? `${r.startDate} → ${r.endDate}` : r.startDate;
+    const modelPills = (r.linkedModels || []).map(m => `<button class="tracker-pill tracker-pill-btn" onclick="navigate('${m}')">${m.toUpperCase()}</button>`).join('');
+    const sourceHtml = (r.sources || []).map(s => {
+      const title = typeof s.title === 'object' ? localize(s.title) : s.title;
+      return `<div class="tracker-entry-source"><a href="${escHtml(s.url)}" target="_blank" rel="noopener noreferrer">${escHtml(title)}</a></div>`;
+    }).join('');
+
+    return `
+      <details class="tracker-entry">
+        <summary>
+          <div class="tracker-entry-title">
+            <div class="tracker-entry-left">
+              <span class="tracker-entry-dot" style="background:${cat.color};"></span>
+              <span class="tracker-entry-name">${escHtml(localize(r.title))}</span>
+            </div>
+            <span class="tracker-status-badge" style="background:${status.color}1f;color:${status.color};">${escHtml(localize(status.label))}</span>
+          </div>
+          <div class="tracker-entry-meta">
+            <span>${escHtml(period)}</span>
+            <span>•</span>
+            <span>${escHtml(localize(doc.label))}</span>
+            <span>•</span>
+            <span>${escHtml(regionName)}</span>
+          </div>
+        </summary>
+        <div class="tracker-entry-body">
+          <div class="tracker-entry-desc">${escHtml(localize(r.summary))}</div>
+          <div class="tracker-pill-row">
+            <span class="tracker-pill">${escHtml((cat.icon || '') + ' ' + localize(cat.label))}</span>
+            <span class="tracker-pill">${escHtml(localize((data.sectors || {})[r.sector] || r.sector))}</span>
+            ${modelPills}
+          </div>
+          ${sourceHtml}
+        </div>
+      </details>
+    `;
+  }).join('');
+}
+
+function renderTracker() {
+  if (!document.getElementById('page-tracker')) return;
+  renderTrackerFilters();
+  renderTrackerMapState();
+  renderTrackerDashboard();
+  renderDomainCards();
+  renderTrackerTimeline();
+}
+
+function filterTracker() {
+  trackerState.category = document.getElementById('tracker-filter-category')?.value || 'all';
+  trackerState.status = document.getElementById('tracker-filter-status')?.value || 'all';
+  trackerState.sector = document.getElementById('tracker-filter-sector')?.value || 'all';
+  trackerState.region = document.getElementById('tracker-filter-region')?.value || 'all';
+  trackerState.docType = document.getElementById('tracker-filter-doc')?.value || 'all';
+  renderTracker();
+}
+
+function selectTrackerRegion(regionId) {
+  trackerState.region = regionId;
+  const regionSel = document.getElementById('tracker-filter-region');
+  if (regionSel) regionSel.value = regionId;
+  renderTracker();
 }
 
 // ── Int'l Orgs charts ────────────────────────────────────
@@ -1744,6 +3007,10 @@ function navigate(name) {
   document.querySelectorAll('.nav-item').forEach(b => {
     if (b.getAttribute('onclick')?.includes("'" + name + "'")) b.classList.add('active');
   });
+  if (name === 'explorer') renderExplorerPage();
+  if (name === 'tracker') renderTracker();
+  if (name === 'research') renderResearch();
+  if (name === 'literature') renderLiterature();
   // Close sidebar on mobile
   if (window.innerWidth < 900) document.getElementById('sidebar').classList.remove('open');
 }
@@ -2210,6 +3477,11 @@ window.addEventListener('DOMContentLoaded', () => {
   initIntlCharts();
   loadStatData();
   applyLang('en');
+  loadResearchDraftsFromStorage();
+  renderExplorerPage();
+  renderTracker();
+  renderResearch();
+  renderLiterature();
   // Init scenario UI
   setTimeout(() => {
     renderScenarioLibrary();

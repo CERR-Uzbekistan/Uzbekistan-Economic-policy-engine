@@ -25,8 +25,11 @@ logger = logging.getLogger("uz-policy-mcp")
 # Initialize FastMCP server
 mcp = FastMCP("uzbekistan-policy-engine")
 
-# Data directory
+# Data directory (model JSON files)
 DATA_DIR = Path(__file__).parent / "data"
+
+# Shared frontend data directory (literature, tracker, research JS files)
+SHARED_DIR = Path(__file__).parent.parent / "shared"
 
 # Lazy-loaded data caches
 _io_data = None
@@ -76,7 +79,7 @@ def get_dfm_data():
 # Register all tools
 from tools.registry import register_tools  # noqa: E402
 
-register_tools(mcp, get_io_data, get_pe_data, get_dfm_data)
+register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir=str(SHARED_DIR))
 
 if __name__ == "__main__":
     transport = os.getenv("MCP_TRANSPORT", "stdio")
