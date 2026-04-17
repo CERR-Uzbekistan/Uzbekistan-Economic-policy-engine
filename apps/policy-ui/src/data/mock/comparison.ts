@@ -24,7 +24,6 @@ export const comparisonWorkspaceMock: ComparisonWorkspace = {
         fiscal_balance: -3.1,
         exchange_rate: 12600,
       },
-      macro_path: [5.6, 5.7, 5.8, 5.8],
       risk_index: 42,
     },
     {
@@ -40,7 +39,6 @@ export const comparisonWorkspaceMock: ComparisonWorkspace = {
         fiscal_balance: -2.8,
         exchange_rate: 12480,
       },
-      macro_path: [5.7, 5.9, 6.0, 6.1],
       risk_index: 35,
     },
     {
@@ -56,7 +54,6 @@ export const comparisonWorkspaceMock: ComparisonWorkspace = {
         fiscal_balance: -4.2,
         exchange_rate: 12950,
       },
-      macro_path: [6.0, 6.3, 6.6, 6.8],
       risk_index: 68,
     },
     {
@@ -72,7 +69,6 @@ export const comparisonWorkspaceMock: ComparisonWorkspace = {
         fiscal_balance: -3.0,
         exchange_rate: 12520,
       },
-      macro_path: [5.4, 5.4, 5.5, 5.5],
       risk_index: 33,
     },
     {
@@ -88,7 +84,6 @@ export const comparisonWorkspaceMock: ComparisonWorkspace = {
         fiscal_balance: -4.8,
         exchange_rate: 13220,
       },
-      macro_path: [5.0, 4.7, 4.4, 4.2],
       risk_index: 84,
     },
   ],

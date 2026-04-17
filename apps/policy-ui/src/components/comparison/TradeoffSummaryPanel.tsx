@@ -49,9 +49,31 @@ export function TradeoffSummaryPanel({
   )
   const baselineScenario = selectedScenarios.find((scenario) => scenario.scenario_id === baselineId)
 
-  const recommendation = preferredTagged
-    ? `Current preferred tag is on ${preferredTagged.scenario_name}. Validate it against ${strongestStability.scenario_name} for stability resilience before final selection.`
-    : `Use ${compromise.scenario_name} as the working compromise, then stress test against ${strongestStability.scenario_name}.`
+  function resolveRecommendation() {
+    if (!preferredTagged) {
+      const stressCandidate =
+        strongestStability.scenario_id !== compromise.scenario_id
+          ? strongestStability
+          : strongestGrowth
+      return `Use ${compromise.scenario_name} as the working compromise, then stress test against ${stressCandidate.scenario_name}.`
+    }
+
+    const stabilityCheck = [...selectedScenarios]
+      .sort((a, b) => getStabilityScore(a) - getStabilityScore(b))
+      .find((scenario) => scenario.scenario_id !== preferredTagged.scenario_id)
+
+    if (!stabilityCheck) {
+      return `Current preferred tag is on ${preferredTagged.scenario_name}. Add another scenario to test it against.`
+    }
+
+    if (preferredTagged.scenario_id === strongestStability.scenario_id) {
+      return `${preferredTagged.scenario_name} is tagged preferred and currently the most stable option. Stress test it against ${stabilityCheck.scenario_name} before committing.`
+    }
+
+    return `Current preferred tag is on ${preferredTagged.scenario_name}. Validate it against ${strongestStability.scenario_name} for stability resilience before final selection.`
+  }
+
+  const recommendation = resolveRecommendation()
 
   return (
     <section className="comparison-panel comparison-panel--summary" aria-labelledby="comparison-summary-title">
@@ -64,14 +86,23 @@ export function TradeoffSummaryPanel({
         <article>
           <h3>Strongest growth</h3>
           <p>{strongestGrowth.scenario_name}</p>
+          <span className="comparison-summary-grid__detail">
+            GDP {getGrowthScore(strongestGrowth).toFixed(1)}%
+          </span>
         </article>
         <article>
           <h3>Strongest stability</h3>
           <p>{strongestStability.scenario_name}</p>
+          <span className="comparison-summary-grid__detail">
+            Risk index {Math.round(strongestStability.risk_index)}
+          </span>
         </article>
         <article>
           <h3>Main compromise</h3>
           <p>{compromise.scenario_name}</p>
+          <span className="comparison-summary-grid__detail">
+            GDP {getGrowthScore(compromise).toFixed(1)}%, risk {Math.round(compromise.risk_index)}
+          </span>
         </article>
       </div>
 

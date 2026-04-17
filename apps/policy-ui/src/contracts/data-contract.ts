@@ -164,7 +164,6 @@ export type ComparisonScenario = {
   summary: string
   initial_tag: ComparisonScenarioTag
   values: Record<string, number>
-  macro_path: number[]
   risk_index: number
 }
 

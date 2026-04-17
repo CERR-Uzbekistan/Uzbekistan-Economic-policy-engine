@@ -19,12 +19,17 @@ function formatValue(value: number, unit: string) {
 }
 
 function formatDelta(delta: number, unit: string) {
+  const sign = delta > 0 ? '+' : delta < 0 ? '−' : ''
   if (unit === 'UZS/USD') {
-    const sign = delta > 0 ? '+' : ''
-    return `${sign}${Math.round(delta)}`
+    return `${sign}${Math.round(Math.abs(delta))}`
   }
-  const sign = delta > 0 ? '+' : ''
-  return `${sign}${delta.toFixed(1)}`
+  return `${sign}${Math.abs(delta).toFixed(1)}`
+}
+
+function directionGlyph(delta: number) {
+  if (delta > 0) return '▲'
+  if (delta < 0) return '▼'
+  return '—'
 }
 
 function toTagLabel(tag: ComparisonScenarioTag) {
@@ -59,14 +64,16 @@ export function HeadlineComparisonTable({
           <thead>
             <tr>
               <th scope="col">Metric</th>
-              <th scope="col">
+              <th scope="col" className="comparison-headline-table__baseline-col">
                 {baseline.scenario_name}
-                <small>Baseline</small>
+                <span className="comparison-headline-table__subhead">Baseline</span>
               </th>
               {alternatives.map((scenario) => (
                 <th key={scenario.scenario_id} scope="col">
                   {scenario.scenario_name}
-                  <small>{toTagLabel(tagsByScenarioId[scenario.scenario_id] ?? scenario.initial_tag)}</small>
+                  <span className="comparison-headline-table__subhead">
+                    {toTagLabel(tagsByScenarioId[scenario.scenario_id] ?? scenario.initial_tag)}
+                  </span>
                 </th>
               ))}
             </tr>
@@ -78,16 +85,27 @@ export function HeadlineComparisonTable({
                 <tr key={metric.metric_id}>
                   <th scope="row">
                     {metric.label}
-                    <small>{metric.unit}</small>
+                    <span className="comparison-headline-table__unit">{metric.unit}</span>
                   </th>
-                  <td>{formatValue(baselineValue, metric.unit)}</td>
+                  <td className="comparison-headline-table__baseline-col">
+                    {formatValue(baselineValue, metric.unit)}
+                  </td>
                   {alternatives.map((scenario) => {
                     const value = scenario.values[metric.metric_id] ?? 0
                     const delta = value - baselineValue
+                    const deltaText = formatDelta(delta, metric.unit)
                     return (
                       <td key={scenario.scenario_id}>
-                        <span>{formatValue(value, metric.unit)}</span>
-                        <small>{formatDelta(delta, metric.unit)}</small>
+                        <span className="comparison-headline-table__value">
+                          {formatValue(value, metric.unit)}
+                        </span>
+                        <span
+                          className="comparison-headline-table__delta"
+                          aria-label={`Change vs baseline: ${deltaText}`}
+                        >
+                          <span aria-hidden="true">{directionGlyph(delta)}</span>
+                          <span>{deltaText}</span>
+                        </span>
                       </td>
                     )
                   })}

@@ -63,47 +63,83 @@ export function ComparisonChartPanel({
   }))
 
   const maxAbs = Math.max(...rows.map((row) => Math.abs(row.value)), 1)
+  const isDeltaView = viewMode === 'delta'
 
   return (
     <section className="comparison-panel comparison-panel--chart" aria-labelledby="comparison-chart-title">
       <div className="comparison-panel__head">
-        <h2 id="comparison-chart-title">Comparison chart</h2>
+        <h2 id="comparison-chart-title">Comparison chart · GDP growth</h2>
         <p>{descriptionForMode(viewMode)}</p>
       </div>
 
       <div className="comparison-view-toggle" role="tablist" aria-label="Comparison view">
-        {(Object.keys(VIEW_LABELS) as ComparisonViewMode[]).map((mode) => (
-          <button
-            key={mode}
-            type="button"
-            role="tab"
-            aria-selected={viewMode === mode}
-            className={viewMode === mode ? 'active' : ''}
-            onClick={() => onViewModeChange(mode)}
-          >
-            {VIEW_LABELS[mode]}
-          </button>
-        ))}
-      </div>
-
-      <ul className="comparison-chart-bars" aria-label="Scenario comparison values">
-        {rows.map(({ scenario, value }) => {
-          const width = (Math.abs(value) / maxAbs) * 100
-          const isBaseline = scenario.scenario_id === baselineId
+        {(Object.keys(VIEW_LABELS) as ComparisonViewMode[]).map((mode) => {
+          const isActive = viewMode === mode
           return (
-            <li key={scenario.scenario_id}>
-              <div className="comparison-chart-bars__label">
-                <span>{scenario.scenario_name}</span>
-                {isBaseline ? <small>Baseline</small> : null}
-              </div>
-              <div className={isBaseline ? 'baseline' : ''}>
-                <i style={{ width: `${Math.max(width, 6)}%` }} />
-              </div>
-              <strong>{formatValue(value, viewMode)}</strong>
-            </li>
+            <button
+              key={mode}
+              id={`comparison-view-tab-${mode}`}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              aria-controls="comparison-view-panel"
+              tabIndex={isActive ? 0 : -1}
+              className={isActive ? 'active' : ''}
+              onClick={() => onViewModeChange(mode)}
+            >
+              {VIEW_LABELS[mode]}
+            </button>
           )
         })}
-      </ul>
+      </div>
+
+      <div
+        id="comparison-view-panel"
+        role="tabpanel"
+        aria-labelledby={`comparison-view-tab-${viewMode}`}
+      >
+        <ul className="comparison-chart-bars" aria-label="Scenario comparison values">
+          {rows.map(({ scenario, value }) => {
+            const isBaseline = scenario.scenario_id === baselineId
+            const ratio = Math.abs(value) / maxAbs
+            const centredWidth = isDeltaView ? ratio * 50 : ratio * 100
+            const isNegative = isDeltaView && value < 0
+            return (
+              <li key={scenario.scenario_id}>
+                <div className="comparison-chart-bars__label">
+                  <span>{scenario.scenario_name}</span>
+                  {isBaseline ? (
+                    <span className="comparison-chart-bars__role">Baseline</span>
+                  ) : null}
+                </div>
+                <div
+                  className={`comparison-chart-bars__track ${
+                    isDeltaView ? 'comparison-chart-bars__track--centred' : ''
+                  }`}
+                  aria-hidden="true"
+                >
+                  {isDeltaView ? <span className="comparison-chart-bars__axis" /> : null}
+                  <span
+                    className={`comparison-chart-bars__fill ${
+                      isBaseline ? 'comparison-chart-bars__fill--baseline' : ''
+                    } ${
+                      isDeltaView
+                        ? isNegative
+                          ? 'comparison-chart-bars__fill--negative'
+                          : 'comparison-chart-bars__fill--positive'
+                        : ''
+                    }`}
+                    style={{ width: `${centredWidth}%` }}
+                  />
+                </div>
+                <strong className="comparison-chart-bars__value">
+                  {formatValue(value, viewMode)}
+                </strong>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
     </section>
   )
 }
