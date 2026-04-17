@@ -188,6 +188,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
       <button class="sbtn" onclick="setShock('monetary',this)">
         <div class="ico">🏦</div><div class="lbl">Monetary<br>Tightening</div>
       </button>
+      <button class="sbtn" onclick="setShock('risk',this)">
+        <div class="ico">⚠️</div><div class="lbl">Risk<br>Premium</div>
+      </button>
     </div>
     <div class="shk-size">
       <div class="shk-size-hd">Simulation Settings</div>
@@ -447,7 +450,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
         <div class="eq">IS:  gap_t = b₁·gap_{t-1} − b₂·MCI_t + b₃·gap*_t + ε_gap</div>
         <div class="eq">PC:  π_t  = a₁·π_{t-1} + (1−a₁)·Eπ_{t+1} + a₂·RMC_t + ε_π</div>
         <div class="eq">TR:  i_t  = g₁·i_{t-1} + (1−g₁)·[Eπ_{t+1} + g₂·π4_{t+4} + g₃·gap_t] + ε_i</div>
-        <div class="eq">UIP: s_t  = (1−e₁)·Es_{t+1} + e₁·s_{t-1} − i_t/4 + ε_s</div>
+        <div class="eq">UIP: s_t  = (1−e₁)·Es_{t+1} + e₁·s_{t-1} − (i_t−ρ_t)/4 + ε_s</div>
         <div class="eq">MCI  = b₄·RR_gap − (1−b₄)·Z_gap</div>
         <div class="eq">RMC  = a₃·gap + (1−a₃)·Z_gap</div>
         <div class="eq">RR_gap = RS − Eπ_{t+1} − RR_BAR</div>
@@ -553,11 +556,12 @@ function solveIRF(p, shockType, shockSize, T) {
   let rmc    = z(), s      = z(), l_cpi  = z();
   let l_z_gap= z(), d4l_s  = z();
 
-  const shk_gap = z(), shk_pi = z(), shk_s = z(), shk_rs = z();
+  const shk_gap = z(), shk_pi = z(), shk_s = z(), shk_rs = z(), shk_rho = z();
   if (shockType === 'demand')    shk_gap[ST] = shockSize;
   if (shockType === 'inflation') shk_pi[ST]  = shockSize;
   if (shockType === 'exchange')  shk_s[ST]   = shockSize;
   if (shockType === 'monetary')  shk_rs[ST]  = shockSize;
+  if (shockType === 'risk')      shk_rho[ST] = shockSize;
 
   const { b1, b2, b3, b4, a1, a2, a3, g1, g2, g3, e1 } = p;
 
@@ -573,10 +577,11 @@ function solveIRF(p, shockType, shockSize, T) {
     const gap0 = gap.slice();
 
     // ── PASS 1: Backward sweep for UIP (exchange rate) ──────
-    // UIP: s[t] = (1-e1)*s[t+1] + e1*s[t-1] - rs[t]/4 + shk_s[t]
+    // UIP: s[t] = (1-e1)*s[t+1] + e1*s[t-1] - (rs[t]-ρ[t])/4 + shk_s[t]
+    // ρ[t] = shk_rho[t]: risk premium wedge (capital flight, sovereign downgrade)
     // Sweep T→ST so that s[t+1] is already updated this pass
     for (let t = N - 2; t >= ST; t--) {
-      s[t] = (1-e1)*G(s,t+1) + e1*G(s,t-1) - rs[t]/4 + shk_s[t];
+      s[t] = (1-e1)*G(s,t+1) + e1*G(s,t-1) - (rs[t] - shk_rho[t])/4 + shk_s[t];
     }
 
     // ── PASS 2: Forward sweep for IS/PC/Taylor ───────────────
@@ -755,6 +760,7 @@ const SHOCK_NAMES = {
   inflation: 'Cost-Push Inflation Shock',
   exchange:  'UZS Depreciation Shock',
   monetary:  'Monetary Policy Tightening Shock',
+  risk:      'Risk Premium Shock',
 };
 const CHART_COLORS = [
   'rgba(192,57,43,1)',   // red   — inflation
