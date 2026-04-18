@@ -168,49 +168,28 @@ function asRun(value: unknown, issues: ScenarioLabValidationIssue[]): RawScenari
     return undefined
   }
 
+  const RESULT_TAB_KEYS = ['headline_impact', 'macro_path', 'external_balance', 'fiscal_effects'] as const
+  const toRawChart = (raw: unknown) => {
+    if (!isRecord(raw)) {
+      return undefined
+    }
+    return {
+      chartId: asString(raw.chartId),
+      title: asString(raw.title),
+      subtitle: asString(raw.subtitle),
+      chartType: asString(raw.chartType),
+      viewMode: asStringOrNull(raw.viewMode),
+      takeaway: asString(raw.takeaway),
+    }
+  }
   const chartsByTab = isRecord(value.chartsByTab)
-    ? {
-        headline_impact: isRecord(value.chartsByTab.headline_impact)
-          ? {
-              chartId: asString(value.chartsByTab.headline_impact.chartId),
-              title: asString(value.chartsByTab.headline_impact.title),
-              subtitle: asString(value.chartsByTab.headline_impact.subtitle),
-              chartType: asString(value.chartsByTab.headline_impact.chartType),
-              viewMode: asStringOrNull(value.chartsByTab.headline_impact.viewMode),
-              takeaway: asString(value.chartsByTab.headline_impact.takeaway),
-            }
-          : undefined,
-        macro_path: isRecord(value.chartsByTab.macro_path)
-          ? {
-              chartId: asString(value.chartsByTab.macro_path.chartId),
-              title: asString(value.chartsByTab.macro_path.title),
-              subtitle: asString(value.chartsByTab.macro_path.subtitle),
-              chartType: asString(value.chartsByTab.macro_path.chartType),
-              viewMode: asStringOrNull(value.chartsByTab.macro_path.viewMode),
-              takeaway: asString(value.chartsByTab.macro_path.takeaway),
-            }
-          : undefined,
-        external_balance: isRecord(value.chartsByTab.external_balance)
-          ? {
-              chartId: asString(value.chartsByTab.external_balance.chartId),
-              title: asString(value.chartsByTab.external_balance.title),
-              subtitle: asString(value.chartsByTab.external_balance.subtitle),
-              chartType: asString(value.chartsByTab.external_balance.chartType),
-              viewMode: asStringOrNull(value.chartsByTab.external_balance.viewMode),
-              takeaway: asString(value.chartsByTab.external_balance.takeaway),
-            }
-          : undefined,
-        fiscal_effects: isRecord(value.chartsByTab.fiscal_effects)
-          ? {
-              chartId: asString(value.chartsByTab.fiscal_effects.chartId),
-              title: asString(value.chartsByTab.fiscal_effects.title),
-              subtitle: asString(value.chartsByTab.fiscal_effects.subtitle),
-              chartType: asString(value.chartsByTab.fiscal_effects.chartType),
-              viewMode: asStringOrNull(value.chartsByTab.fiscal_effects.viewMode),
-              takeaway: asString(value.chartsByTab.fiscal_effects.takeaway),
-            }
-          : undefined,
-      }
+    ? RESULT_TAB_KEYS.reduce<NonNullable<NonNullable<RawScenarioLabRunPayload['run']>['chartsByTab']>>(
+        (acc, tab) => {
+          acc[tab] = toRawChart((value.chartsByTab as Record<string, unknown>)[tab])
+          return acc
+        },
+        {},
+      )
     : undefined
 
   if (value.chartsByTab !== undefined && !isRecord(value.chartsByTab)) {

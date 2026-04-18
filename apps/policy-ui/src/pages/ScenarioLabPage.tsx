@@ -80,7 +80,7 @@ export function ScenarioLabPage() {
     }
     reconciledWorkspaceRef.current = workspace
     const knownKeys = new Set(workspace.assumptions.map((assumption) => assumption.key))
-    setAssumptionValues((prev) => {
+    const reconcile = (prev: ScenarioLabAssumptionState): ScenarioLabAssumptionState => {
       const next: ScenarioLabAssumptionState = {}
       for (const assumption of workspace.assumptions) {
         next[assumption.key] = prev[assumption.key] ?? assumption.default_value
@@ -91,7 +91,9 @@ export function ScenarioLabPage() {
         }
       }
       return next
-    })
+    }
+    setAssumptionValues(reconcile)
+    setLastRunAssumptions(reconcile)
     setSelectedPresetId((prev) =>
       workspace.presets.some((preset) => preset.preset_id === prev)
         ? prev
