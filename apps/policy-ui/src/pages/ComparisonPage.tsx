@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ComparisonChartPanel } from '../components/comparison/ComparisonChartPanel'
 import { HeadlineComparisonTable } from '../components/comparison/HeadlineComparisonTable'
 import { ScenarioSelectorPanel } from '../components/comparison/ScenarioSelectorPanel'
@@ -9,8 +9,13 @@ import type {
   ComparisonScenario,
   ComparisonScenarioTag,
   ComparisonViewMode,
+  ComparisonWorkspace,
 } from '../contracts/data-contract'
-import { comparisonWorkspaceMock } from '../data/mock/comparison'
+import {
+  getInitialComparisonSourceState,
+  loadComparisonSourceState,
+} from '../data/comparison/source'
+import { beginRetry } from '../data/source-state'
 import './comparison.css'
 
 function buildScenarioMap(scenarios: ComparisonScenario[]) {
@@ -20,24 +25,104 @@ function buildScenarioMap(scenarios: ComparisonScenario[]) {
   }, {})
 }
 
+function buildInitialTags(workspace: ComparisonWorkspace): Record<string, ComparisonScenarioTag> {
+  return workspace.scenarios.reduce<Record<string, ComparisonScenarioTag>>((acc, scenario) => {
+    acc[scenario.scenario_id] = scenario.initial_tag
+    return acc
+  }, {})
+}
+
 export function ComparisonPage() {
-  const { scenarios, metric_definitions, default_baseline_id, default_selected_ids } = comparisonWorkspaceMock
-  const scenarioMap = useMemo(() => buildScenarioMap(scenarios), [scenarios])
-
-  const [selectedIds, setSelectedIds] = useState<string[]>(default_selected_ids)
-  const [baselineId, setBaselineId] = useState(default_baseline_id)
+  const [sourceState, setSourceState] = useState(getInitialComparisonSourceState)
+  const [selectedIds, setSelectedIds] = useState<string[]>([])
+  const [baselineId, setBaselineId] = useState('')
   const [viewMode, setViewMode] = useState<ComparisonViewMode>('level')
-  const [tagsByScenarioId, setTagsByScenarioId] = useState<Record<string, ComparisonScenarioTag>>(
-    scenarios.reduce<Record<string, ComparisonScenarioTag>>((acc, scenario) => {
-      acc[scenario.scenario_id] = scenario.initial_tag
-      return acc
-    }, {}),
-  )
+  const [tagsByScenarioId, setTagsByScenarioId] = useState<Record<string, ComparisonScenarioTag>>({})
 
+  useEffect(() => {
+    let cancelled = false
+    loadComparisonSourceState().then((state) => {
+      if (!cancelled) {
+        setSourceState(state)
+      }
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const workspace = sourceState.workspace
+  const scenarios = workspace?.scenarios ?? []
+  const metricDefinitions = workspace?.metric_definitions ?? []
+  const scenarioMap = useMemo(() => buildScenarioMap(scenarios), [scenarios])
   const selectedScenarios = useMemo(
     () => selectedIds.map((id) => scenarioMap[id]).filter(Boolean),
     [selectedIds, scenarioMap],
   )
+
+  useEffect(() => {
+    if (!workspace) {
+      return
+    }
+
+    const scenarioIds = new Set(workspace.scenarios.map((scenario) => scenario.scenario_id))
+    const normalizedSelected = workspace.default_selected_ids.filter((id) => scenarioIds.has(id)).slice(0, 4)
+
+    setSelectedIds(
+      normalizedSelected.length >= 2
+        ? normalizedSelected
+        : workspace.scenarios.map((scenario) => scenario.scenario_id).slice(0, 4),
+    )
+
+    const baselineFromWorkspace = scenarioIds.has(workspace.default_baseline_id)
+      ? workspace.default_baseline_id
+      : workspace.scenarios[0]?.scenario_id ?? ''
+
+    setBaselineId(baselineFromWorkspace)
+    setTagsByScenarioId(buildInitialTags(workspace))
+  }, [workspace?.workspace_id])
+
+  async function handleRetry() {
+    setSourceState((prev) => beginRetry(prev))
+    const nextState = await loadComparisonSourceState()
+    setSourceState(nextState)
+  }
+
+  if (sourceState.status === 'loading') {
+    return (
+      <PageContainer className="comparison-page">
+        <PageHeader
+          title="Comparison"
+          description="Compare baseline and alternative scenarios side by side to surface trade-offs and decision framing."
+        />
+        <p className="empty-state" role="status" aria-live="polite">
+          Loading comparison workspace...
+        </p>
+      </PageContainer>
+    )
+  }
+
+  if (sourceState.status === 'error' || !workspace) {
+    return (
+      <PageContainer className="comparison-page">
+        <PageHeader
+          title="Comparison"
+          description="Compare baseline and alternative scenarios side by side to surface trade-offs and decision framing."
+        />
+        <p className="empty-state" role="status" aria-live="polite">
+          {sourceState.error ?? 'Comparison data is currently unavailable.'}
+        </p>
+        {sourceState.canRetry ? (
+          <div>
+            <button type="button" className="ui-secondary-action" onClick={handleRetry}>
+              Retry
+            </button>
+          </div>
+        ) : null}
+      </PageContainer>
+    )
+  }
 
   function handleToggleScenario(scenarioId: string) {
     const currentlySelected = selectedIds.includes(scenarioId)
@@ -91,7 +176,7 @@ export function ComparisonPage() {
       />
 
       <HeadlineComparisonTable
-        metrics={metric_definitions}
+        metrics={metricDefinitions}
         selectedScenarios={selectedScenarios}
         baselineId={baselineId}
         tagsByScenarioId={tagsByScenarioId}
