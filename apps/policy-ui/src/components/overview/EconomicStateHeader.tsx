@@ -38,7 +38,7 @@ export function EconomicStateHeader({ summary, updatedAt, outputAction }: Econom
       <p className="overview-state-header__summary">{summary}</p>
       <div className="overview-state-header__footer">
         <p className="overview-state-header__meta">Updated {formatDateTime(updatedAt, locale)}</p>
-        <Link className="overview-secondary-action" to={outputAction.target_href}>
+        <Link className="ui-secondary-action" to={outputAction.target_href}>
           {outputAction.title}
         </Link>
       </div>

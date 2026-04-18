@@ -11,6 +11,7 @@ import {
   loadModelExplorerSourceState,
   retryModelExplorerSourceState,
 } from '../data/model-explorer/source'
+import { beginRetry } from '../data/source-state'
 import './model-explorer.css'
 
 const TAB_LABELS: Record<ModelExplorerTabId, string> = {
@@ -128,7 +129,7 @@ export function ModelExplorerPage() {
   }, [])
 
   async function handleRetry() {
-    setSourceState((prev) => ({ ...prev, status: 'loading', error: null }))
+    setSourceState((prev) => beginRetry(prev))
     const nextState = await retryModelExplorerSourceState()
     setSourceState(nextState)
     if (nextState.status === 'ready' && nextState.workspace) {
@@ -163,7 +164,7 @@ export function ModelExplorerPage() {
         </p>
         {sourceState.canRetry ? (
           <div>
-            <button type="button" className="overview-secondary-action" onClick={handleRetry}>
+            <button type="button" className="ui-secondary-action" onClick={handleRetry}>
               Retry
             </button>
           </div>

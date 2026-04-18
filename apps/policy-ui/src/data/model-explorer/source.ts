@@ -1,4 +1,11 @@
 import type { ModelExplorerWorkspace } from '../../contracts/data-contract'
+import {
+  mapTransportErrorToUserMessage,
+  reportGuardWarningsDevOnly,
+  resolveSourceRetryCapability,
+  type IntegrationSourceCore,
+  type IntegrationSourceStatus,
+} from '../source-state.js'
 import { toModelExplorerWorkspace } from '../adapters/model-explorer.js'
 import {
   validateRawModelExplorerPayload,
@@ -11,15 +18,13 @@ import {
 } from './live-client.js'
 
 export type ModelExplorerDataMode = 'mock' | 'live'
-export type ModelExplorerSourceStatus = 'loading' | 'ready' | 'error'
+export type ModelExplorerSourceStatus = IntegrationSourceStatus
 
-export type ModelExplorerSourceState = {
-  status: ModelExplorerSourceStatus
-  mode: ModelExplorerDataMode
+export type ModelExplorerSourceState = IntegrationSourceCore<
+  ModelExplorerDataMode,
+  ModelExplorerValidationIssue
+> & {
   workspace: ModelExplorerWorkspace | null
-  error: string | null
-  canRetry: boolean
-  warnings: ModelExplorerValidationIssue[]
 }
 
 function resolveModelExplorerDataMode(): ModelExplorerDataMode {
@@ -40,7 +45,7 @@ function buildReadyState(
     mode,
     workspace,
     error: null,
-    canRetry: mode === 'live',
+    canRetry: resolveSourceRetryCapability('ready', mode),
     warnings,
   }
 }
@@ -55,30 +60,21 @@ function buildErrorState(
     mode,
     workspace: null,
     error,
-    canRetry: true,
+    canRetry: resolveSourceRetryCapability('error', mode),
     warnings,
   }
 }
 
 export function getInitialModelExplorerSourceState(): ModelExplorerSourceState {
+  const mode = resolveModelExplorerDataMode()
   return {
     status: 'loading',
-    mode: resolveModelExplorerDataMode(),
+    mode,
     workspace: null,
     error: null,
-    canRetry: false,
+    canRetry: resolveSourceRetryCapability('loading', mode),
     warnings: [],
   }
-}
-
-function toTransportErrorMessage(error: ModelExplorerTransportError): string {
-  if (error.kind === 'http') {
-    return `Model Explorer API returned an unsuccessful response${error.status ? ` (${error.status}).` : '.'}`
-  }
-  if (error.kind === 'timeout') {
-    return 'Model Explorer API request timed out. Please retry.'
-  }
-  return 'Model Explorer API is unreachable. Please check your connection and retry.'
 }
 
 export async function loadModelExplorerSourceState(): Promise<ModelExplorerSourceState> {
@@ -90,6 +86,7 @@ export async function loadModelExplorerSourceState(): Promise<ModelExplorerSourc
   try {
     const rawPayload = await fetchModelExplorerLiveRawPayload()
     const validation = validateRawModelExplorerPayload(rawPayload)
+    reportGuardWarningsDevOnly('Model Explorer', validation.issues)
     if (!validation.ok) {
       const firstError = validation.issues.find((issue) => issue.severity === 'error')
       return buildErrorState(
@@ -103,7 +100,7 @@ export async function loadModelExplorerSourceState(): Promise<ModelExplorerSourc
     return buildReadyState(mode, workspace, validation.issues)
   } catch (error) {
     if (error instanceof ModelExplorerTransportError) {
-      return buildErrorState(mode, toTransportErrorMessage(error))
+      return buildErrorState(mode, mapTransportErrorToUserMessage('Model Explorer', error))
     }
 
     const message = error instanceof Error ? error.message : 'Failed to load model explorer payload.'

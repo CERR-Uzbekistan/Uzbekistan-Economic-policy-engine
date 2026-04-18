@@ -1,19 +1,21 @@
 import type { MacroSnapshot } from '../../contracts/data-contract'
+import {
+  mapTransportErrorToUserMessage,
+  reportGuardWarningsDevOnly,
+  resolveSourceRetryCapability,
+  type IntegrationSourceCore,
+  type IntegrationSourceStatus,
+} from '../source-state.js'
 import { toMacroSnapshot } from '../adapters/overview.js'
 import { validateRawOverviewPayload, type OverviewValidationIssue } from '../adapters/overview-guard.js'
 import { overviewV1Data } from '../mock/overview.js'
 import { fetchOverviewLiveRawPayload, OverviewTransportError } from './live-client.js'
 
 export type OverviewDataMode = 'mock' | 'live'
-export type OverviewSourceStatus = 'loading' | 'ready' | 'error'
+export type OverviewSourceStatus = IntegrationSourceStatus
 
-export type OverviewSourceState = {
-  status: OverviewSourceStatus
-  mode: OverviewDataMode
+export type OverviewSourceState = IntegrationSourceCore<OverviewDataMode, OverviewValidationIssue> & {
   snapshot: MacroSnapshot | null
-  error: string | null
-  canRetry: boolean
-  warnings: OverviewValidationIssue[]
 }
 
 function resolveOverviewDataMode(): OverviewDataMode {
@@ -38,7 +40,7 @@ function buildReadyState(
     mode,
     snapshot,
     error: null,
-    canRetry: mode === 'live',
+    canRetry: resolveSourceRetryCapability('ready', mode),
     warnings,
   }
 }
@@ -53,34 +55,25 @@ function buildErrorState(
     mode,
     snapshot: null,
     error,
-    canRetry: true,
+    canRetry: resolveSourceRetryCapability('error', mode),
     warnings,
   }
 }
 
 export function getInitialOverviewSourceState(): OverviewSourceState {
+  const mode = resolveOverviewDataMode()
   return {
     status: 'loading',
-    mode: resolveOverviewDataMode(),
+    mode,
     snapshot: null,
     error: null,
-    canRetry: false,
+    canRetry: resolveSourceRetryCapability('loading', mode),
     warnings: [],
   }
 }
 
 async function getRawOverviewPayload(): Promise<unknown> {
   return fetchOverviewLiveRawPayload()
-}
-
-function toTransportErrorMessage(error: OverviewTransportError): string {
-  if (error.kind === 'http') {
-    return `Overview API returned an unsuccessful response${error.status ? ` (${error.status}).` : '.'}`
-  }
-  if (error.kind === 'timeout') {
-    return 'Overview API request timed out. Please retry.'
-  }
-  return 'Overview API is unreachable. Please check your connection and retry.'
 }
 
 export async function loadOverviewSourceState(): Promise<OverviewSourceState> {
@@ -92,6 +85,7 @@ export async function loadOverviewSourceState(): Promise<OverviewSourceState> {
   try {
     const rawPayload = await getRawOverviewPayload()
     const validation = validateRawOverviewPayload(rawPayload)
+    reportGuardWarningsDevOnly('Overview', validation.issues)
     if (!validation.ok) {
       const firstError = validation.issues.find((issue) => issue.severity === 'error')
       return buildErrorState(mode, firstError?.message ?? 'Invalid overview payload.', validation.issues)
@@ -101,7 +95,7 @@ export async function loadOverviewSourceState(): Promise<OverviewSourceState> {
     return buildReadyState(mode, snapshot, validation.issues)
   } catch (error) {
     if (error instanceof OverviewTransportError) {
-      return buildErrorState(mode, toTransportErrorMessage(error))
+      return buildErrorState(mode, mapTransportErrorToUserMessage('Overview', error))
     }
 
     const message = error instanceof Error ? error.message : 'Failed to load overview payload.'

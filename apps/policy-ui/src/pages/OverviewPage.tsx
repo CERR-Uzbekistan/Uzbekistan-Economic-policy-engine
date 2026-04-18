@@ -11,6 +11,7 @@ import {
   loadOverviewSourceState,
   retryOverviewSourceState,
 } from '../data/overview/source'
+import { beginRetry } from '../data/source-state'
 import './overview.css'
 
 export function OverviewPage() {
@@ -30,7 +31,7 @@ export function OverviewPage() {
   }, [])
 
   async function handleRetry() {
-    setSourceState((prev) => ({ ...prev, status: 'loading', error: null }))
+    setSourceState((prev) => beginRetry(prev))
     const nextState = await retryOverviewSourceState()
     setSourceState(nextState)
   }
@@ -61,7 +62,7 @@ export function OverviewPage() {
         </p>
         {sourceState.canRetry ? (
           <div>
-            <button type="button" className="overview-secondary-action" onClick={handleRetry}>
+            <button type="button" className="ui-secondary-action" onClick={handleRetry}>
               Retry
             </button>
           </div>
