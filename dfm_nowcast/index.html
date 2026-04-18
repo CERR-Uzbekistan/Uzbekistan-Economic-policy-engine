@@ -148,7 +148,7 @@ tr:hover td { background: #f8f9ff; }
   <div class="logo">📊</div>
   <div class="header-title">
     <h1>GDP Nowcasting — Uzbekistan</h1>
-    <p>Policy Engine · Dynamic Factor Model · 3 Factors</p>
+    <p>Policy Engine · Dynamic Factor Model</p>
   </div>
   <div class="header-badge">DFM</div>
 </header>
@@ -156,7 +156,7 @@ tr:hover td { background: #f8f9ff; }
 <nav>
   <button class="tab-btn active" onclick="showTab('nowcast')" data-i18n="dfm_tab_nowcast">📈 Current Nowcast</button>
   <button class="tab-btn" onclick="showTab('update')"><span data-i18n="dfm_tab_update">🔄 Update Nowcast</span> <span class="badge">Live KF</span></button>
-  <button class="tab-btn" onclick="showTab('factor')" data-i18n="dfm_tab_factor">⚙️ Factors &amp; Loadings <span class="badge">3F</span></button>
+  <button class="tab-btn" onclick="showTab('factor')" data-i18n="dfm_tab_factor">⚙️ Factor & Loadings</button>
   <button class="tab-btn" onclick="showTab('data')" data-i18n="dfm_tab_data">📂 Data & Model</button>
 </nav>
 
@@ -173,36 +173,26 @@ tr:hover td { background: #f8f9ff; }
     </div>
   </div>
 
-  <!-- KPI row: GDP nowcast + 3 factor cards + model status -->
-  <div class="grid-4" id="kpi-row" style="grid-template-columns:1.6fr 1fr 1fr 1fr">
+  <div class="grid-3" id="kpi-row">
     <div class="card">
       <div class="card-title" data-i18n="dfm_kpi_yoy">GDP Nowcast YoY</div>
       <div class="kpi-value kpi-green" id="kpi-yoy">—</div>
       <div class="kpi-unit">Year-on-year growth (%)</div>
       <div class="kpi-period" id="kpi-yoy-period">—</div>
-      <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border)">
-        <div class="kpi-unit" id="kpi-iter">—</div>
-        <div class="kpi-period" id="kpi-loglik">—</div>
-        <div class="kpi-value" id="kpi-status" style="font-size:15px;margin-top:4px">—</div>
+    </div>
+    <div class="card">
+      <div class="card-title" data-i18n="dfm_kpi_factor">Common Factor (Latest)</div>
+      <div class="kpi-value kpi-orange" id="kpi-factor">—</div>
+      <div class="kpi-unit" id="kpi-factor-unit">Economic momentum index (standardized)</div>
+      <div class="kpi-period" id="kpi-factor-period" style="margin-top:10px;font-size:11px;color:var(--text2);line-height:1.5">
+        Values near <strong>0</strong> = average momentum · <strong>&gt;0</strong> = above-trend activity · <strong>&lt;0</strong> = below-trend
       </div>
     </div>
-    <div class="card" style="border-top:3px solid #1a3a6e">
-      <div class="card-title" style="color:#1a3a6e">F1 — Real Activity</div>
-      <div class="kpi-value kpi-blue" id="kpi-f1" style="font-size:28px">—</div>
-      <div class="kpi-unit" style="font-size:10px;color:#888">Production · Services · Construction</div>
-      <div id="kpi-f1-bar" style="margin-top:8px;height:4px;border-radius:2px;background:#e2e8f0"></div>
-    </div>
-    <div class="card" style="border-top:3px solid #059669">
-      <div class="card-title" style="color:#059669">F2 — External Sector</div>
-      <div class="kpi-value kpi-green" id="kpi-f2" style="font-size:28px">—</div>
-      <div class="kpi-unit" style="font-size:10px;color:#888">Trade · Remittances · FX</div>
-      <div id="kpi-f2-bar" style="margin-top:8px;height:4px;border-radius:2px;background:#e2e8f0"></div>
-    </div>
-    <div class="card" style="border-top:3px solid #d97706">
-      <div class="card-title" style="color:#d97706">F3 — Financial Conditions</div>
-      <div class="kpi-value kpi-orange" id="kpi-f3" style="font-size:28px">—</div>
-      <div class="kpi-unit" style="font-size:10px;color:#888">Credit · Rates · Prices</div>
-      <div id="kpi-f3-bar" style="margin-top:8px;height:4px;border-radius:2px;background:#e2e8f0"></div>
+    <div class="card">
+      <div class="card-title" data-i18n="dfm_kpi_status">Model Status</div>
+      <div class="kpi-value" id="kpi-status" style="font-size:20px;margin-top:6px">—</div>
+      <div class="kpi-unit" id="kpi-iter">—</div>
+      <div class="kpi-period" id="kpi-loglik">—</div>
     </div>
   </div>
 
@@ -229,20 +219,11 @@ tr:hover td { background: #f8f9ff; }
     </div>
   </div>
 
-  <div class="grid-2" style="margin-bottom:18px">
-    <div class="card">
-      <div class="card-title" data-i18n="dfm_chart_decomp">Growth Decomposition — Latest Nowcast</div>
-      <div class="card-subtitle" data-i18n="dfm_chart_decomp_sub">Contribution of each indicator to latest GDP nowcast (pp)</div>
-      <div class="chart-wrap" style="height:260px">
-        <canvas id="chart-decomp"></canvas>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">Factor Contribution to GDP Nowcast</div>
-      <div class="card-subtitle">Monthly contribution of each latent factor to GDP growth (pp) · 3-factor decomposition</div>
-      <div class="chart-wrap" style="height:260px">
-        <canvas id="chart-factor-contrib"></canvas>
-      </div>
+  <div class="card">
+    <div class="card-title" data-i18n="dfm_chart_decomp">Growth Decomposition — Latest Nowcast</div>
+    <div class="card-subtitle" data-i18n="dfm_chart_decomp_sub">Contribution of each indicator to latest GDP nowcast (pp)</div>
+    <div class="chart-wrap" style="height:260px">
+      <canvas id="chart-decomp"></canvas>
     </div>
   </div>
 
@@ -336,62 +317,34 @@ tr:hover td { background: #f8f9ff; }
 </div>
 
 <!-- ════════════════════════════════════════════════════════
-     PAGE 3: FACTORS & LOADINGS (3-factor)
+     PAGE 3: FACTOR & LOADINGS
 ════════════════════════════════════════════════════════ -->
 <div id="page-factor" class="page">
   <div class="alert alert-info" style="margin-bottom:18px">
     <span class="alert-icon">💡</span>
     <div>
-      <strong>Three latent factors — richer GDP decomposition (Issue #32)</strong><br>
-      The expanded DFM extracts <em>3 common factors</em> from 35 monthly indicators to capture <strong>sectoral divergence</strong>:
-      when agriculture booms while industry contracts, a single factor misses this. Each factor targets a distinct economic channel:<br><br>
-      <span style="font-weight:700;color:#1a3a6e">F1 — Real Activity:</span> Production, construction, services — domestic real-sector momentum.<br>
-      <span style="font-weight:700;color:#059669">F2 — External Sector:</span> Trade flows, FX transactions, remittances — external account dynamics.<br>
-      <span style="font-weight:700;color:#d97706">F3 — Financial Conditions:</span> Credit growth, interest rates, inflation — monetary-cycle tightening/easing.<br><br>
-      <em>All factors are in standardized units (mean=0). Values &gt;+1 signal above-trend, &lt;−1 below-trend conditions. Reference: Banbura &amp; Modugno (2014), Giannone, Reichlin &amp; Small (2008).</em>
+      <strong>What is the Common Factor?</strong><br>
+      The DFM extracts a single latent variable — the <em>common factor</em> — that captures shared economic momentum across all 34 monthly indicators simultaneously.
+      Think of it as a real-time pulse of the economy: it rises when most indicators are growing above trend and falls when they are slowing down.<br><br>
+      <strong>How to read the value:</strong>
+      The factor is in <em>standardized units</em> (mean = 0, std ≈ 1 over the sample).
+      A value of <strong>−0.068</strong> means conditions are very slightly below the historical average — essentially neutral.
+      Values above <strong>+1</strong> signal a strong broad-based expansion; values below <strong>−1</strong> signal a broad-based slowdown.
+      The <strong>path</strong> below shows how this economic momentum has evolved since 2017 — peaks correspond to expansions, the 2020 trough to the COVID shock.
     </div>
   </div>
-
-  <!-- All-3 factor paths chart -->
   <div class="card" style="margin-bottom:18px">
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:6px">
-      <div>
-        <div class="card-title" style="margin-bottom:0">Factor Paths — All 3 Factors</div>
-        <div class="card-subtitle" style="margin-bottom:0">Latent factors extracted from 35 indicators · Standardized units · Monthly</div>
-      </div>
-      <div style="display:flex;gap:8px;font-size:11px;flex-wrap:wrap">
-        <span style="display:flex;align-items:center;gap:4px"><span style="width:18px;height:3px;background:#1a3a6e;display:inline-block;border-radius:2px"></span>F1 Real Activity</span>
-        <span style="display:flex;align-items:center;gap:4px"><span style="width:18px;height:3px;background:#059669;display:inline-block;border-radius:2px"></span>F2 External</span>
-        <span style="display:flex;align-items:center;gap:4px"><span style="width:18px;height:3px;background:#d97706;display:inline-block;border-radius:2px"></span>F3 Financial</span>
-      </div>
-    </div>
-    <div class="chart-wrap" style="height:300px">
+    <div class="card-title">Common Factor Path</div>
+    <div class="card-subtitle">Latent common factor extracted from all 34 monthly indicators · Standardized units (0 = historical average)</div>
+    <div class="chart-wrap" style="height:280px">
       <canvas id="chart-factor"></canvas>
     </div>
   </div>
 
-  <!-- Factor contribution to GDP -->
-  <div class="section-label">Factor Contributions to GDP</div>
-  <div class="card" style="margin-bottom:18px">
-    <div class="card-title">Stacked Factor Contributions to GDP Nowcast (pp)</div>
-    <div class="card-subtitle">Monthly contribution of each factor to GDP growth — stacked area · Positive = growth-enhancing, Negative = drag</div>
-    <div class="chart-wrap" style="height:280px">
-      <canvas id="chart-factor-contrib2"></canvas>
-    </div>
-  </div>
-
-  <!-- Per-factor loadings selector -->
   <div class="section-label">Factor Loadings by Indicator</div>
   <div class="card" style="margin-bottom:18px">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
-      <div class="card-title" style="margin-bottom:0">Factor Loadings (C matrix)</div>
-      <div style="display:flex;gap:6px;margin-left:auto;flex-wrap:wrap">
-        <button id="lbtn-1" class="btn btn-primary" style="padding:5px 14px;font-size:11px" onclick="showLoadingsFactor(1)">F1 Real Activity</button>
-        <button id="lbtn-2" class="btn" style="padding:5px 14px;font-size:11px;background:#e2e8f0;color:#334155" onclick="showLoadingsFactor(2)">F2 External</button>
-        <button id="lbtn-3" class="btn" style="padding:5px 14px;font-size:11px;background:#e2e8f0;color:#334155" onclick="showLoadingsFactor(3)">F3 Financial</button>
-      </div>
-    </div>
-    <div class="card-subtitle" id="loadings-subtitle">Higher absolute loading = stronger co-movement with the Real Activity factor</div>
+    <div class="card-title">Factor Loadings (C matrix, first column)</div>
+    <div class="card-subtitle">Higher loading = stronger co-movement with the common GDP factor</div>
     <div class="chart-wrap" style="height:420px">
       <canvas id="chart-loadings"></canvas>
     </div>
@@ -405,15 +358,13 @@ tr:hover td { background: #f8f9ff; }
           <th>#</th>
           <th>Indicator</th>
           <th>Category</th>
-          <th>Freq</th>
-          <th style="color:#1a3a6e">F1 Real Activity</th>
-          <th style="color:#059669">F2 External</th>
-          <th style="color:#d97706">F3 Financial</th>
-          <th>Dominant Factor</th>
+          <th>Frequency</th>
+          <th>Loading</th>
+          <th>Bar</th>
         </tr>
       </thead>
       <tbody id="loadings-tbody">
-        <tr><td colspan="8" style="text-align:center;color:#aaa;padding:24px">Loading data...</td></tr>
+        <tr><td colspan="6" style="text-align:center;color:#aaa;padding:24px">Loading data...</td></tr>
       </tbody>
     </table>
   </div>
@@ -773,25 +724,12 @@ function renderNowcastPage() {
       ? `${latestForecastQ} — DFM Nowcast`
       : `${latestActualKey} — StatOffice`;
 
-  // 3-Factor KPI cards
-  const paths = (D.factor.paths || [D.factor.path, D.factor.path, D.factor.path]).map(p => p.map(Number));
-  const fColors = [['kpi-blue','#1a3a6e'], ['kpi-green','#059669'], ['kpi-orange','#d97706']];
-  ['f1','f2','f3'].forEach((fid, fi) => {
-    const fp = paths[fi];
-    const val = fp[fp.length - 1];
-    const el = document.getElementById(`kpi-${fid}`);
-    if (!el) return;
-    el.textContent = val?.toFixed(3) ?? '—';
-    el.className = 'kpi-value ' + fColors[fi][0];
-    // mini trend bar
-    const barEl = document.getElementById(`kpi-${fid}-bar`);
-    if (barEl) {
-      const recent = fp.slice(-12);
-      const minV = Math.min(...recent), maxV = Math.max(...recent);
-      const pct = maxV > minV ? ((val - minV) / (maxV - minV)) * 100 : 50;
-      barEl.style.background = `linear-gradient(to right, ${fColors[fi][1]} ${pct.toFixed(0)}%, #e2e8f0 ${pct.toFixed(0)}%)`;
-    }
-  });
+  // Factor KPI
+  const fp = D.factor.path.map(Number);
+  const latestFactor = fp[fp.length - 1];
+  const factorEl = document.getElementById('kpi-factor');
+  factorEl.textContent = latestFactor?.toFixed(3) ?? '—';
+  factorEl.className = 'kpi-value ' + (latestFactor > 0.1 ? 'kpi-green' : latestFactor < -0.1 ? 'kpi-red' : 'kpi-orange');
 
   // Model status
   const m = D.meta;
@@ -803,7 +741,7 @@ function renderNowcastPage() {
     statusEl.innerHTML = '<span class="status-dot orange"></span>Max iter';
     statusEl.className = 'kpi-value kpi-orange';
   }
-  document.getElementById('kpi-iter').textContent   = `${m.n_iter} EM iterations · ${m.n_factors || 1} factor${m.n_factors > 1 ? 's' : ''}`;
+  document.getElementById('kpi-iter').textContent   = `${m.n_iter} EM iterations`;
   document.getElementById('kpi-loglik').textContent = `LogLik: ${m.loglik?.toFixed(2)}`;
 
   // GDP YoY chart — show last 16 quarters of StatOffice + all forecast bars
@@ -978,48 +916,6 @@ function renderNowcastPage() {
   makeHorzBarChart('chart-decomp',
     combined.map(x => x.label.length > 22 ? x.label.slice(0,20)+'…' : x.label),
     combined.map(x => x.v), dColors);
-
-  // Factor Contribution Chart (page 1 mini version — last 24 months)
-  renderFactorContribChart('chart-factor-contrib', 24);
-}
-
-function renderFactorContribChart(canvasId, showLast) {
-  if (!D || !D.factor.contributions) return;
-  const fc = D.factor.contributions;
-  const T = fc.f1.length;
-  const from = showLast ? Math.max(0, T - showLast) : 0;
-  const fdates = fc.dates.slice(from).map(ds => {
-    const d = new Date(ds); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-  });
-  const f1v = fc.f1.slice(from).map(Number);
-  const f2v = fc.f2.slice(from).map(Number);
-  const f3v = fc.f3.slice(from).map(Number);
-
-  destroyChart(canvasId);
-  const ctx = document.getElementById(canvasId);
-  if (!ctx) return;
-  charts[canvasId] = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: fdates,
-      datasets: [
-        { label: 'F1 Real Activity',      data: f1v, backgroundColor: 'rgba(26,58,110,0.75)',  stack: 'stack' },
-        { label: 'F2 External Sector',    data: f2v, backgroundColor: 'rgba(5,150,105,0.75)',   stack: 'stack' },
-        { label: 'F3 Financial Cond.',    data: f3v, backgroundColor: 'rgba(217,119,6,0.75)',   stack: 'stack' }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: true, position: 'top', labels: { font: {size:11}, usePointStyle:true } },
-        tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${c.raw?.toFixed(3)} pp` } }
-      },
-      scales: {
-        x: { stacked: true, ticks: { maxRotation: 45, font:{size:9} }, grid:{display:false} },
-        y: { stacked: true, ticks: { font:{size:10}, callback: v => v.toFixed(2)+' pp' }, grid:{color:'#f0f0f0'} }
-      }
-    }
-  });
 }
 
 // ── PAGE 2: Update (interactive KF) ────────────────────────────────────
@@ -1143,27 +1039,18 @@ function clearInputs() {
     '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:24px">Enter data above and click Run Update</td></tr>';
 }
 
-// ── PAGE 3: Factors & Loadings (3-factor) ─────────────────────────────────
-let _activeLoadingsFactor = 1; // 1, 2, or 3
-
+// ── PAGE 3: Factor & Loadings ───────────────────────────────────────────
 function renderFactorPage() {
   if (!D) return;
 
-  // ── Multi-factor path chart ──────────────────────────────────────────
-  const paths   = (D.factor.paths || [D.factor.path]).map(p => p.map(Number));
-  const fdates  = D.factor.dates.map(ds => {
+  // Factor path
+  const fp     = D.factor.path.map(Number);
+  const fdates = D.factor.dates.map(ds => {
     const d = new Date(ds); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
   });
-  const n = paths[0].length;
+  const n = fp.length;
   const stepN = Math.max(1, Math.floor(n / 24));
   const fLabels = fdates.map((d, i) => i % stepN === 0 ? d : '');
-  const fNames  = D.factor.names || ['Real Activity','External Sector','Financial Conditions'];
-
-  const FACTOR_COLORS = [
-    {border:'rgba(26,58,110,0.9)',  bg:'rgba(26,58,110,0.07)'},
-    {border:'rgba(5,150,105,0.9)',  bg:'rgba(5,150,105,0.07)'},
-    {border:'rgba(217,119,6,0.9)',  bg:'rgba(217,119,6,0.07)'}
-  ];
 
   destroyChart('chart-factor');
   const ctx = document.getElementById('chart-factor');
@@ -1172,80 +1059,35 @@ function renderFactorPage() {
       type: 'line',
       data: {
         labels: fLabels,
-        datasets: paths.map((fp, fi) => ({
-          label: fNames[fi],
+        datasets: [{
           data: fp,
-          borderColor: FACTOR_COLORS[fi].border,
-          backgroundColor: FACTOR_COLORS[fi].bg,
-          fill: false, borderWidth: 2.2, pointRadius: 0, tension: 0.3
-        }))
+          borderColor: 'rgba(26,58,110,0.9)', backgroundColor: 'rgba(26,58,110,0.08)',
+          fill: true, borderWidth: 2, pointRadius: 0, tension: 0.3
+        }]
       },
       options: {
         responsive:true, maintainAspectRatio:false,
-        plugins:{
-          legend:{ display:true, position:'top', labels:{font:{size:11}, usePointStyle:true} },
-          tooltip:{ callbacks:{ label: c => ` ${c.dataset.label}: ${c.raw?.toFixed(3)}` } }
-        },
+        plugins:{legend:{display:false}},
         scales:{
           x:{ticks:{font:{size:10}}, grid:{display:false}},
-          y:{ticks:{font:{size:10}}, grid:{color:'#f0f0f0'},
-            title:{display:true, text:'Standardized units (σ)', font:{size:10}}}
+          y:{ticks:{font:{size:10}}, grid:{color:'#f0f0f0'}}
         }
       }
     });
   }
 
-  // ── Factor contribution to GDP (full history, page 3) ───────────────
-  renderFactorContribChart('chart-factor-contrib2', null);
-
-  // ── Loadings chart (default: F1) ─────────────────────────────────────
-  showLoadingsFactor(_activeLoadingsFactor);
-
-  // ── Loadings detail table (all 3 factors) ────────────────────────────
-  renderLoadingsTable();
-}
-
-function showLoadingsFactor(fi) {
-  if (!D) return;
-  _activeLoadingsFactor = fi;
-
-  // Update button styles
-  [1,2,3].forEach(k => {
-    const btn = document.getElementById(`lbtn-${k}`);
-    if (!btn) return;
-    if (k === fi) {
-      btn.className = 'btn btn-primary';
-      btn.style.padding = '5px 14px'; btn.style.fontSize = '11px';
-    } else {
-      btn.className = 'btn';
-      btn.style.cssText = 'padding:5px 14px;font-size:11px;background:#e2e8f0;color:#334155';
-    }
-  });
-
-  const FACTOR_NAMES = D.factor.names || ['Real Activity','External Sector','Financial Conditions'];
-  const fKey = ['f1','f2','f3'][fi-1];
-  const loadingsVec = (D.loadings[fKey] || D.loadings.values || []).map(Number);
+  // Loadings (exclude GDP)
+  const gdpIdx = D._gdpIdx;
+  const allLoadings = D.loadings.values.map(Number);
   const allLabels   = D.loadings.labels.map(String);
   const allNames    = D.loadings.names.map(String);
+  const cats        = D.vars.categories.map(String);
 
-  // Subtitle
-  const subtitleEl = document.getElementById('loadings-subtitle');
-  if (subtitleEl) subtitleEl.textContent = `Higher absolute loading = stronger co-movement with the ${FACTOR_NAMES[fi-1]} factor`;
-
-  const FACTOR_COLORS_BAR = [
-    {pos:'rgba(26,58,110,0.80)',  neg:'rgba(192,57,43,0.75)'},
-    {pos:'rgba(5,150,105,0.80)',  neg:'rgba(192,57,43,0.75)'},
-    {pos:'rgba(217,119,6,0.80)', neg:'rgba(192,57,43,0.75)'}
-  ];
-
-  const filtered = loadingsVec.map((v, i) => ({v, label: allLabels[i], name: allNames[i], i}))
+  const filtered = allLoadings.map((v, i) => ({v, label: allLabels[i], name: allNames[i], cat: cats[i], i}))
     .filter(x => x.name !== 'gdp')
     .sort((a, b) => b.v - a.v);
 
-  const lColors = filtered.map(x =>
-    x.v >= 0 ? FACTOR_COLORS_BAR[fi-1].pos : FACTOR_COLORS_BAR[fi-1].neg
-  );
-
+  const lColors = filtered.map(x => x.v >= 0 ? 'rgba(26,58,110,0.75)' : 'rgba(192,57,43,0.75)');
   destroyChart('chart-loadings');
   const lCtx = document.getElementById('chart-loadings');
   if (lCtx) {
@@ -1253,15 +1095,11 @@ function showLoadingsFactor(fi) {
       type: 'bar',
       data: {
         labels: filtered.map(x => x.label.length > 26 ? x.label.slice(0,24)+'…' : x.label),
-        datasets: [{ data: filtered.map(x => x.v), backgroundColor: lColors, borderRadius: 3 }]
+        datasets: [{data: filtered.map(x => x.v), backgroundColor: lColors, borderRadius: 3}]
       },
       options: {
         indexAxis:'y', responsive:true, maintainAspectRatio:false,
-        plugins:{
-          legend:{display:false},
-          tooltip:{callbacks:{label:c=>` ${c.raw?.toFixed(4)}`}},
-          title:{display:true, text:`F${fi}: ${FACTOR_NAMES[fi-1]} loadings`, font:{size:12}}
-        },
+        plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>` ${c.raw?.toFixed(4)}`}}},
         scales:{
           x:{ticks:{font:{size:10}}, grid:{color:'#f0f0f0'}},
           y:{ticks:{font:{size:9}}}
@@ -1269,43 +1107,27 @@ function showLoadingsFactor(fi) {
       }
     });
   }
-}
 
-function renderLoadingsTable() {
-  if (!D) return;
-  const tbody   = document.getElementById('loadings-tbody');
-  const allLabels = D.loadings.labels.map(String);
-  const allNames  = D.loadings.names.map(String);
-  const cats      = D.vars.categories.map(String);
-
-  const lf1 = (D.loadings.f1 || D.loadings.values || []).map(Number);
-  const lf2 = (D.loadings.f2 || D.loadings.values || []).map(Number);
-  const lf3 = (D.loadings.f3 || D.loadings.values || []).map(Number);
-  const FACTOR_NAMES = D.factor.names || ['F1','F2','F3'];
-
-  const rows = allLabels.map((lbl, i) => {
-    if (allNames[i] === 'gdp') return null;
-    const v1 = lf1[i], v2 = lf2[i], v3 = lf3[i];
-    // Dominant factor
-    const absArr = [Math.abs(v1), Math.abs(v2), Math.abs(v3)];
-    const domIdx = absArr.indexOf(Math.max(...absArr));
-    const domLabel = FACTOR_NAMES[domIdx];
-    const domColors = ['#1a3a6e','#059669','#d97706'];
-    const fmtLoading = (v) => {
-      const cls = v >= 0 ? 'pos' : 'neg';
-      return `<td class="${cls}" style="font-weight:600;font-size:12px">${v?.toFixed(4)}</td>`;
-    };
+  // Loadings table
+  const tbody = document.getElementById('loadings-tbody');
+  const maxAbs = Math.max(...filtered.map(x => Math.abs(x.v)));
+  tbody.innerHTML = filtered.map((x, idx) => {
+    const barW = Math.round((Math.abs(x.v) / maxAbs) * 100);
+    const barClass = x.v >= 0 ? 'pos-bar' : 'neg-bar';
     return `<tr>
-      <td style="font-size:11px;color:#aaa">${i+1}</td>
-      <td><strong style="font-size:12px">${lbl}</strong><br><span style="font-size:10px;color:#aaa">${allNames[i]}</span></td>
-      <td style="color:var(--text2);font-size:11px">${cats[i]}</td>
-      <td style="font-size:11px">${D.vars.quarterly[i] ? 'Q' : 'M'}</td>
-      ${fmtLoading(v1)}${fmtLoading(v2)}${fmtLoading(v3)}
-      <td><span style="background:${domColors[domIdx]};color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px">${domLabel}</span></td>
+      <td>${idx+1}</td>
+      <td><strong>${x.label}</strong><br><span style="font-size:10px;color:#aaa">${x.name}</span></td>
+      <td style="color:var(--text2);font-size:11px">${x.cat}</td>
+      <td>${D.vars.quarterly[x.i] ? 'Quarterly' : 'Monthly'}</td>
+      <td class="${x.v>=0?'pos':'neg'}" style="font-weight:700">${x.v.toFixed(4)}</td>
+      <td>
+        <div class="loading-bar-wrap">
+          <div class="loading-bar ${barClass}" style="width:${barW}px"></div>
+          <span style="font-size:10px;color:#aaa">${x.v.toFixed(3)}</span>
+        </div>
+      </td>
     </tr>`;
-  }).filter(Boolean);
-
-  tbody.innerHTML = rows.join('');
+  }).join('');
 }
 
 // ── PAGE 4: Data & Model ────────────────────────────────────────────────
@@ -1316,7 +1138,7 @@ function renderDataPage() {
     ['Sample start', m.start_date],
     ['Last data date', m.last_data_date],
     ['Exported at', m.exported_at],
-    ['Number of factors', `${m.n_factors} (Real Activity · External Sector · Financial Conditions)`],
+    ['Number of factors', m.n_factors],
     ['Monthly variables', m.n_monthly],
     ['Quarterly variables', m.n_quarterly],
     ['Prediction horizon', m.months_ahead + ' months'],
@@ -1396,11 +1218,9 @@ function dfmExportPNG() {
 }
 
 function dfmExportPDF() {
-  const latestYoY    = document.getElementById('kpi-yoy')?.textContent || '—';
+  const latestYoY = document.getElementById('kpi-yoy')?.textContent || '—';
   const latestPeriod = document.getElementById('kpi-yoy-period')?.textContent || '—';
-  const f1     = document.getElementById('kpi-f1')?.textContent || '—';
-  const f2     = document.getElementById('kpi-f2')?.textContent || '—';
-  const f3     = document.getElementById('kpi-f3')?.textContent || '—';
+  const factor = document.getElementById('kpi-factor')?.textContent || '—';
   const status = document.getElementById('kpi-status')?.textContent || '—';
 
   const soKeys = Object.keys(STATOFFICE_YOY).sort();
@@ -1420,19 +1240,17 @@ function dfmExportPDF() {
     title: 'DFM Nowcasting — GDP Growth Forecast',
     subtitle: 'Dynamic Factor Model — Mixed-frequency — Uzbekistan',
     date: new Date().toISOString().slice(0, 10),
-    modelInfo: 'Dynamic Factor Model (Bańbura & Modugno, 2014; Giannone, Reichlin & Small, 2008). 35 monthly indicators + quarterly GDP. 3 common factors (Real Activity, External Sector, Financial Conditions), Kalman smoother. Historical data from Statistics Agency of Uzbekistan; nowcast from fitted DFM parameters.',
+    modelInfo: 'Dynamic Factor Model (Bańbura & Modugno, 2014). 34 monthly indicators + quarterly GDP. 1 common factor, Kalman smoother. Historical data from Statistics Agency of Uzbekistan; nowcast from fitted DFM parameters.',
     assumptions: [
       { name: 'Model type',    value: 'Dynamic Factor Model (DFM)' },
-      { name: 'Reference',     value: 'Bańbura & Modugno (2014); Giannone et al. (2008)' },
-      { name: 'Indicators',    value: '35 monthly + 1 quarterly (GDP)' },
-      { name: 'Common factors', value: '3 (Real Activity · External · Financial)' },
+      { name: 'Reference',     value: 'Bańbura & Modugno (2014)' },
+      { name: 'Indicators',    value: '34 monthly + 1 quarterly (GDP)' },
+      { name: 'Common factors', value: '1' },
     ],
     kpis: [
-      { label: 'GDP YoY Nowcast',         value: latestYoY,  note: latestPeriod },
-      { label: 'F1 Real Activity',         value: document.getElementById('kpi-f1')?.textContent || '—', note: 'Production · Construction · Services' },
-      { label: 'F2 External Sector',       value: document.getElementById('kpi-f2')?.textContent || '—', note: 'Trade · Remittances · FX' },
-      { label: 'F3 Financial Conditions',  value: document.getElementById('kpi-f3')?.textContent || '—', note: 'Credit · Rates · Prices' },
-      { label: 'Model Status',             value: status,     note: 'Kalman filter convergence' },
+      { label: 'GDP YoY Nowcast',    value: latestYoY,  note: latestPeriod },
+      { label: 'Common Factor',      value: factor,     note: '>0 above trend, <0 below trend' },
+      { label: 'Model Status',       value: status,     note: 'Kalman filter convergence' },
     ],
     tableHeaders,
     tableRows,
@@ -1444,29 +1262,27 @@ function dfmExportPDF() {
 /* ── Save Scenario & AI Analysis ── */
 function dfmSaveScenario() {
   const latestYoY = document.getElementById('kpi-yoy')?.textContent || '—';
-  const f1 = document.getElementById('kpi-f1')?.textContent || '—';
-  const f2 = document.getElementById('kpi-f2')?.textContent || '—';
-  const f3 = document.getElementById('kpi-f3')?.textContent || '—';
+  const factor = document.getElementById('kpi-factor')?.textContent || '—';
   const status = document.getElementById('kpi-status')?.textContent || '—';
   const latestPeriod = document.getElementById('kpi-yoy-period')?.textContent || '—';
   if (latestYoY === '—') { Toast.show('No nowcast data available yet.', 'warning'); return; }
   const scenario = {
     modelId: 'dfm',
     params: {
-      model_type: 'Dynamic Factor Model (DFM) — 3 factors',
-      reference: 'Bańbura & Modugno (2014); Giannone et al. (2008)',
-      indicators: '35 monthly + 1 quarterly (GDP)',
-      common_factors: '3 (Real Activity · External · Financial)',
+      model_type: 'Dynamic Factor Model (DFM)',
+      reference: 'Bańbura & Modugno (2014)',
+      indicators: '34 monthly + 1 quarterly (GDP)',
+      common_factors: '1',
       nowcast_period: latestPeriod,
       indicator_weights: D && D.loadings ? 'Available (' + D.loadings.names.length + ' indicators)' : 'Not loaded'
     },
     kpis: {
       gdp_yoy_nowcast: latestYoY,
-      f1_real_activity: f1, f2_external: f2, f3_financial: f3,
+      common_factor: factor,
       model_status: status,
       nowcast_period: latestPeriod
     },
-    tags: ['dfm', 'nowcast', 'gdp', '3-factor']
+    tags: ['dfm', 'nowcast', 'gdp']
   };
   ScenarioEngine.save(scenario);
   Toast.show('Scenario saved successfully!', 'success');
@@ -1474,28 +1290,26 @@ function dfmSaveScenario() {
 
 function dfmAIAnalysis() {
   const latestYoY = document.getElementById('kpi-yoy')?.textContent || '—';
-  const f1 = document.getElementById('kpi-f1')?.textContent || '—';
-  const f2 = document.getElementById('kpi-f2')?.textContent || '—';
-  const f3 = document.getElementById('kpi-f3')?.textContent || '—';
+  const factor = document.getElementById('kpi-factor')?.textContent || '—';
   const status = document.getElementById('kpi-status')?.textContent || '—';
   const latestPeriod = document.getElementById('kpi-yoy-period')?.textContent || '—';
   if (latestYoY === '—') { Toast.show('No nowcast data available yet.', 'warning'); return; }
   const simData = {
     modelId: 'dfm',
-    modelName: 'DFM Nowcasting — GDP Growth Forecast (3-factor)',
+    modelName: 'DFM Nowcasting — GDP Growth Forecast',
     params: {
-      model_type: 'Dynamic Factor Model (DFM) — 3 factors',
-      reference: 'Bańbura & Modugno (2014); Giannone et al. (2008)',
-      indicators: '35 monthly + 1 quarterly (GDP)',
-      common_factors: '3 (Real Activity · External · Financial)',
+      model_type: 'Dynamic Factor Model (DFM)',
+      reference: 'Bańbura & Modugno (2014)',
+      indicators: '34 monthly + 1 quarterly (GDP)',
+      common_factors: '1',
       nowcast_period: latestPeriod
     },
     kpis: {
       gdp_yoy_nowcast: latestYoY,
-      f1_real_activity: f1, f2_external_sector: f2, f3_financial_conditions: f3,
+      common_factor: factor,
       model_status: status
     },
-    tags: ['dfm', 'nowcast', 'gdp', '3-factor']
+    tags: ['dfm', 'nowcast', 'gdp']
   };
   PolicyAdvisor.analyzeSim(simData);
   PolicyAdvisor.renderAdvisorPanel(document.querySelector('.container'));
