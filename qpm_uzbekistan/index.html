@@ -260,6 +260,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
       <div class="pdesc" data-i18n="qpm_a3_desc">Domestic vs imported inflation</div>
       <input type="range" id="a3" min="0.2" max="0.9" step="0.05" value="0.65" oninput="sl(this,'va3',f2)">
     </div>
+    <div class="prow">
+      <div class="plabel"><span class="pname" data-i18n="qpm_a4">a₄ — Direct import pass-through<span class="ptip" data-tip="Fraction of the quarterly import price change (exchange rate + world prices) that passes directly to CPI within one quarter. Uzbekistan imports ≈35% of absorption; calibrated at 0.12 (Campa &amp; Goldberg 2005)." data-tip-ru="Доля квартального изменения цен импорта (курс + мировые цены), непосредственно переходящая в ИПЦ в течение квартала. Узбекистан: импорт ≈35% поглощения; калибровка 0.12." data-tip-uz="Har chorak import narxlari o'zgarishining (kurs + jahon narxlari) IFKga to'g'ridan-to'g'ri o'tish ulushi. O'zbekiston: import ≈35% yutilish; 0.12 ga kalibrlangan.">i</span></span><span class="pval" id="va4">0.12</span></div>
+      <div class="pdesc" data-i18n="qpm_a4_desc">Direct quarterly import price pass-through</div>
+      <input type="range" id="a4" min="0.00" max="0.30" step="0.01" value="0.12" oninput="sl(this,'va4',f2)">
+    </div>
   </div>
 
   <div class="sec">
@@ -460,7 +465,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
       <div class="acard">
         <h3 data-i18n="qpm_eq_hd">Core Equations</h3>
         <div class="eq">IS:  gap_t = b₁·gap_{t-1} − b₂·MCI_t + b₃·gap*_t + ε_gap</div>
-        <div class="eq">PC:  π_t  = a₁·π_{t-1} + (1−a₁)·Eπ_{t+1} + a₂·RMC_t + ε_π</div>
+        <div class="eq">PC:  π_t  = a₁·π_{t-1} + (1−a₁)·Eπ_{t+1} + a₂·RMC_t + a₄·Δpm_t + ε_π</div>
+        <div class="eq">     Δpm_t = Δs_t  (quarterly import price change; world price dev=0)</div>
         <div class="eq">TR:  i_t  = g₁·i_{t-1} + (1−g₁)·[Eπ_{t+1} + g₂·π4_{t+4} + g₃·gap_t] + ε_i</div>
         <div class="eq">UIP: s_t  = (1−e₁)·Es_{t+1} + e₁·s_{t-1} − (i_t−ρ_t)/4 + ε_s</div>
         <div class="eq">MCI  = b₄·RR_gap − (1−b₄)·Z_gap</div>
@@ -492,6 +498,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
         <ul>
           <li><strong>a₂ = 0.20</strong> (updated from 0.15) — stronger marginal cost pass-through reflecting rising wage pressures</li>
           <li><strong>a₃ = 0.65</strong> (updated from 0.60) — higher domestic cost share as structural reforms deepen</li>
+          <li><strong>a₄ = 0.12</strong> — direct import price pass-through (Campa &amp; Goldberg 2005); Uzbekistan imports ≈35% of absorption, so a 10% UZS depreciation → +1.2pp CPI within one quarter via this channel alone</li>
           <li><strong>e₁ = 0.70</strong> — UZS is largely backward-looking due to limited FX market depth</li>
           <li><strong>g₁ = 0.80</strong> — CBU rate gradualism</li>
           <li><strong>π* = 5%</strong> — CBU medium-term inflation target</li>
@@ -544,7 +551,7 @@ function P() {
   const g = id => +document.getElementById(id).value;
   return {
     b1: g('b1'), b2: g('b2'), b3: g('b3'), b4: g('b4'),
-    a1: g('a1'), a2: g('a2'), a3: g('a3'),
+    a1: g('a1'), a2: g('a2'), a3: g('a3'), a4: g('a4'),
     g1: g('g1'), g2: g('g2'), g3: g('g3'),
     e1: g('e1'),
     tar:    g('ssTar'),
@@ -566,7 +573,7 @@ function solveIRF(p, shockType, shockSize, T, initConds) {
   let gap    = z(), pi     = z(), pi4    = z();
   let rs     = z(), rr_gap = z(), mci    = z();
   let rmc    = z(), s      = z(), l_cpi  = z();
-  let l_z_gap= z(), d4l_s  = z();
+  let l_z_gap= z(), d4l_s  = z(), dpm   = z();
 
   // Pre-fill deviation-form initial conditions so baseline uses the same model as IRF
   if (hasInit) {
@@ -591,7 +598,7 @@ function solveIRF(p, shockType, shockSize, T, initConds) {
   if (shockType === 'monetary')  shk_rs[ST]  = shockSize;
   if (shockType === 'risk')      shk_rho[ST] = shockSize;
 
-  const { b1, b2, b3, b4, a1, a2, a3, g1, g2, g3, e1 } = p;
+  const { b1, b2, b3, b4, a1, a2, a3, a4, g1, g2, g3, e1 } = p;
 
   // Safe array accessor (zero outside bounds)
   const G = (arr, t) => (t >= 0 && t < N) ? arr[t] : 0;
@@ -625,12 +632,15 @@ function solveIRF(p, shockType, shockSize, T, initConds) {
       // => z_gap[t] = s[t] - l_cpi[t]
       l_z_gap[t] = G(s,t) - l_cpi[t];
 
+      // Direct import price change: Δpm = Δs (world price dev=0 in deviation form)
+      dpm[t] = G(s,t) - G(s,t-1);
+
       // Real Marginal Cost: RMC = a3*gap + (1-a3)*z_gap
       rmc[t] = a3 * G(gap,t-1) + (1-a3) * l_z_gap[t];
 
-      // Phillips curve (hybrid NK):
-      // π_t = a1*π_{t-1} + (1-a1)*Eπ_{t+1} + a2*RMC + shk
-      pi[t] = a1*G(pi,t-1) + (1-a1)*G(pi,t+1) + a2*rmc[t] + shk_pi[t];
+      // Phillips curve (hybrid NK + direct import pass-through):
+      // π_t = a1*π_{t-1} + (1-a1)*Eπ_{t+1} + a2*RMC + a4*Δpm + shk
+      pi[t] = a1*G(pi,t-1) + (1-a1)*G(pi,t+1) + a2*rmc[t] + a4*dpm[t] + shk_pi[t];
 
       // Refresh l_cpi and z_gap with updated π[t]
       l_cpi[t]   = l_cpi[t-1] + pi[t] / 4;
@@ -657,7 +667,7 @@ function solveIRF(p, shockType, shockSize, T, initConds) {
 
       // Final refresh: update RMC and Phillips with realised gap
       rmc[t]     = a3*gap[t] + (1-a3)*l_z_gap[t];
-      pi[t]      = a1*G(pi,t-1) + (1-a1)*G(pi,t+1) + a2*rmc[t] + shk_pi[t];
+      pi[t]      = a1*G(pi,t-1) + (1-a1)*G(pi,t+1) + a2*rmc[t] + a4*dpm[t] + shk_pi[t];
       l_cpi[t]   = l_cpi[t-1] + pi[t] / 4;
       l_z_gap[t] = G(s,t) - l_cpi[t];
       pi4[t]     = (G(pi,t)+G(pi,t-1)+G(pi,t-2)+G(pi,t-3)) / 4;
@@ -717,7 +727,7 @@ function computeMCBands(p, shockType, shockSize, T, nDraws = 80) {
     const u1 = Math.random() + 1e-12, u2 = Math.random();
     return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
   };
-  const paramKeys = ['b1','b2','b3','b4','a1','a2','a3','g1','g2','g3','e1'];
+  const paramKeys = ['b1','b2','b3','b4','a1','a2','a3','a4','g1','g2','g3','e1'];
   const draws = [];
 
   for (let d = 0; d < nDraws; d++) {
@@ -1010,6 +1020,10 @@ function fillParamTable() {
       'Share of domestic costs in CPI basket; (1−a₃) = import-driven component.',
       'Доля внутренних затрат в корзине CPI; (1−a₃) = импортная инфляция. Узбекистан: ~65% внутр.',
       "IFK savatchasida ichki xarajatlar ulushi; (1−a₃) = import inflyatsiyasi. O'zbekiston: ~65% ichki."],
+    ['a₄','a4', p.a4.toFixed(2), 'qpm_pt_a4', 'Direct import pass-through',    'Phillips',    true,
+      'Fraction of quarterly import price change (Δs) that passes directly to CPI. Uzbekistan calibration: 0.12 (Campa & Goldberg 2005).',
+      'Доля квартального изменения цен импорта (Δs), непосредственно влияющая на ИПЦ. Калибровка Узбекистана: 0.12.',
+      "Har chorak import narxlari o'zgarishining (Δs) IFKga to'g'ridan-to'g'ri o'tish ulushi. O'zbekiston: 0.12."],
     ['g₁','g1', p.g1.toFixed(2), 'qpm_pt_g1', 'Interest rate smoothing',       'Taylor rule', false,
       'CBU gradualism: how slowly rates are adjusted each quarter.',
       'Постепенность ЦБУ: насколько медленно корректируются ставки каждый квартал.',
@@ -1184,7 +1198,7 @@ function qpmExportPDF() {
     [RL.horizon,     T + ' Q'],
     [RL.model,       'QPM \u2014 New-Keynesian DSGE'],
     ['b\u2081 / b\u2082 / b\u2083 / b\u2084', `${p.b1.toFixed(2)} / ${p.b2.toFixed(2)} / ${p.b3.toFixed(2)} / ${p.b4.toFixed(2)}`],
-    ['a\u2081 / a\u2082 / a\u2083',           `${p.a1.toFixed(2)} / ${p.a2.toFixed(2)} / ${p.a3.toFixed(2)}`],
+    ['a\u2081 / a\u2082 / a\u2083 / a\u2084', `${p.a1.toFixed(2)} / ${p.a2.toFixed(2)} / ${p.a3.toFixed(2)} / ${p.a4.toFixed(2)}`],
     ['g\u2081 / g\u2082 / g\u2083',           `${p.g1.toFixed(2)} / ${p.g2.toFixed(2)} / ${p.g3.toFixed(2)}`],
     ['e\u2081 / \u03c0* / r\u0304 / \u0233',  `${p.e1.toFixed(2)} / ${p.tar.toFixed(1)}% / ${p.rrbar.toFixed(1)}% / ${p.gdpbar.toFixed(1)}%`],
   ];
@@ -1436,7 +1450,7 @@ function buildQPMExpertAnalysis() {
       risks: [
         `Inflation persistence risk: a₁=${p.a1.toFixed(2)} implies inflation expectations are ${(p.a1 * 100).toFixed(0)}% backward-looking. A ${f3(pi)}pp overshoot may take ${Math.round(Math.abs(pi) / 0.3)} quarters to fully dissipate even after the CBU responds.`,
         `Pro-cyclical fiscal risk: if the demand shock originates from fiscal expansion during an already positive output gap, the economy risks overheating. Public debt sustainability should be monitored.`,
-        `Exchange rate pass-through risk: the ${abs(ner)}pp currency movement may generate ${(Math.abs(ner) * (1 - p.a3) * p.a2).toFixed(3)}pp of additional imported inflation via the Phillips curve import share (1−a₃=${(1 - p.a3).toFixed(2)}).`,
+        `Exchange rate pass-through risk: the ${abs(ner)}pp currency movement may generate ~${(Math.abs(ner) * (1 - p.a3) * p.a2).toFixed(3)}pp via the indirect RMC channel (1−a₃=${(1 - p.a3).toFixed(2)}) plus ~${(Math.abs(ner) * p.a4).toFixed(3)}pp via the direct import price channel (a₄=${p.a4.toFixed(2)}), totalling ~${(Math.abs(ner) * ((1 - p.a3) * p.a2 + p.a4)).toFixed(3)}pp additional CPI inflation.`,
       ],
       recommendations: [
         `Pre-emptive monetary tightening: the CBU should begin rate normalisation ahead of the peak output gap to prevent inflation expectations from de-anchoring. A front-loaded approach reduces the total policy rate adjustment needed.`,
@@ -1468,7 +1482,7 @@ function buildQPMExpertAnalysis() {
     exchange: {
       summary: `A ${sz.toFixed(2)}pp UZS depreciation shock (capital outflow, import demand surge, FX intervention reduction) generates peak CPI inflation of ${f3(pi)}pp at ${piQ} (import pass-through), peak output effect of ${f3(gap)}pp at ${gapQ}, requires a rate response of ${f3(rs)}pp at ${rsQ}, and the NER effect peaks at ${f3(ner)}pp at ${nerQ}.`,
       findings: [
-        `Import price pass-through: the depreciation shock feeds into CPI at rate (1−a₃)=${(1 - p.a3).toFixed(2)} per unit of exchange rate change. At the peak, the ${sz.toFixed(2)}pp depreciation generates ~${(sz * (1 - p.a3) * p.a2).toFixed(3)}pp of direct inflation via the import channel.`,
+        `Import price pass-through: the depreciation shock feeds into CPI via two channels — indirect RMC at (1−a₃)=${(1 - p.a3).toFixed(2)} generating ~${(sz * (1 - p.a3) * p.a2).toFixed(3)}pp, and direct quarterly pass-through at a₄=${p.a4.toFixed(2)} generating ~${(sz * p.a4).toFixed(3)}pp — total ~${(sz * ((1 - p.a3) * p.a2 + p.a4)).toFixed(3)}pp in Q0.`,
         `Output gap response (${f3(gap)}pp at ${gapQ}) reflects two competing forces: the competitiveness boost (exports cheaper → higher output) vs. higher import costs compressing real incomes. Net effect: ${gap > 0 ? 'positive — export competitiveness dominates' : 'negative — real income compression dominates'}.`,
         `The CBU's UIP-based exchange rate equation has backward weight e₁=${p.e1.toFixed(2)} — ${(p.e1 * 100).toFixed(0)}% of exchange rate expectations are backward-looking. This means depreciation expectations can be self-fulfilling if not countered by rate hikes.`,
         `The Taylor Rule response (${f3(rs)}pp at ${rsQ}) is the CBU's defensive reaction to the inflation generated by the weaker UZS, not a proactive stance — distinguishing this from a domestic demand shock.`,
@@ -1546,7 +1560,7 @@ function buildQPMExpertAnalysis() {
     exchange: {
       summary: `Шок обесценения UZS на ${sz.toFixed(2)} пп (отток капитала, снижение FX интервенций) вызывает пик инфляции ИПЦ ${f3(pi)} пп в ${piQ} (импортный переброс), эффект выпуска ${f3(gap)} пп в ${gapQ}, требует ставки ${f3(rs)} пп в ${rsQ}.`,
       findings: [
-        `Импортный переброс: обесценение влияет на ИПЦ через канал (1−a₃)=${(1-p.a3).toFixed(2)}. При шоке ${sz.toFixed(2)} пп прямой импортный эффект составляет ~${(sz*(1-p.a3)*p.a2).toFixed(3)} пп инфляции.`,
+        `Импортный переброс: обесценение влияет на ИПЦ через два канала — косвенный RMC (1−a₃)=${(1-p.a3).toFixed(2)} даёт ~${(sz*(1-p.a3)*p.a2).toFixed(3)} пп, прямой переброс a₄=${p.a4.toFixed(2)} даёт ~${(sz*p.a4).toFixed(3)} пп — итого ~${(sz*((1-p.a3)*p.a2+p.a4)).toFixed(3)} пп в Q0.`,
         `Обратный вес UIP e₁=${p.e1.toFixed(2)}: ${(p.e1*100).toFixed(0)}% ожиданий курса — адаптивные. Это делает обесценение самоподдерживающимся без вмешательства ставки.`,
         `Ответ Тейлора (${f3(rs)} пп в ${rsQ}) — оборонительная реакция на инфляцию от слабого UZS, а не проактивная позиция.`,
       ],
@@ -1618,7 +1632,7 @@ function buildQPMExpertAnalysis() {
     exchange: {
       summary: `${sz.toFixed(2)} pp UZS qadrsizlanishi shoki (kapital chiqishi, chet el valutasi intervensiyasining kamaytirish) YoY inflyatsiyani ${f3(pi)} pp gacha ko'taradi (${piQ}), chiqarish tafovutini ${f3(gap)} pp ta'sir qiladi (${gapQ}), ${f3(rs)} pp stavka javobini talab qiladi (${rsQ}).`,
       findings: [
-        `Import o'tish: qadrsizlanish ИПЦга (1−a₃)=${(1-p.a3).toFixed(2)} nisbatda ta'sir qiladi. ${sz.toFixed(2)} pp shokda to'g'ridan-to'g'ri import effekti ~${(sz*(1-p.a3)*p.a2).toFixed(3)} pp inflyatsiya.`,
+        `Import o'tish: qadrsizlanish IFKga ikki kanal orqali ta'sir qiladi — bilvosita RMC (1−a₃)=${(1-p.a3).toFixed(2)} ~${(sz*(1-p.a3)*p.a2).toFixed(3)} pp, to'g'ridan-to'g'ri a₄=${p.a4.toFixed(2)} ~${(sz*p.a4).toFixed(3)} pp — jami Q0 da ~${(sz*((1-p.a3)*p.a2+p.a4)).toFixed(3)} pp.`,
         `UIP orqaga og'irlik e₁=${p.e1.toFixed(2)}: kurs kutishlarining ${(p.e1*100).toFixed(0)}% adaptiv. Bu qadrsizlanishni MB aralashuvisiz o'z-o'zini qo'llab-quvvatlovchi qiladi.`,
         `Teylor javobi (${f3(rs)} pp, ${rsQ}) — zaif UZS tug'dirgan inflyatsiyaga himoya munosabati, proaktiv emas.`,
       ],
@@ -1694,7 +1708,7 @@ async function qpmAIAnalysis() {
     analysis = await PolicyAdvisor.analyzeSim('qpm', {
       shockType: SHOCK_NAMES[shock], shockSize: sz, horizon: T,
       IS: { b1: p.b1, b2: p.b2, b3: p.b3, b4: p.b4 },
-      Phillips: { a1: p.a1, a2: p.a2, a3: p.a3 },
+      Phillips: { a1: p.a1, a2: p.a2, a3: p.a3, a4: p.a4 },
       Taylor: { g1: p.g1, g2: p.g2, g3: p.g3 },
       steadyState: { pi_ss: p.pi_ss, rs_ss: p.rs_ss, g_ss: p.g_ss }
     }, {
