@@ -12,6 +12,7 @@
 <script src="../shared/toast.js"></script>
 <script src="../shared/scenario-engine.js"></script>
 <script src="../shared/ai-advisor.js"></script>
+<script src="../shared/i18n.js"></script>
 <script src="../shared/registry-loader.js"></script>
 <script>window.addEventListener('load', () => EPE?.ready(() => EPE.badge()));</script>
 <style>
@@ -167,29 +168,29 @@ select.ctrl-select:disabled{background:#f8fafc;color:var(--text3);cursor:not-all
 </header>
 
 <nav>
-  <button class="tab active" onclick="showTab('overview',this)">Overview</button>
-  <button class="tab" onclick="showTab('simulator',this)">Scenario Simulator</button>
-  <button class="tab" onclick="showTab('sectors',this)">Sector Analysis</button>
-  <button class="tab" onclick="showTab('partners',this)">Trade Partners</button>
-  <button class="tab" onclick="showTab('methodology',this)">Methodology</button>
+  <button class="tab active" onclick="showTab('overview',this)" data-i18n="pe_tab_overview">Overview</button>
+  <button class="tab" onclick="showTab('simulator',this)" data-i18n="pe_tab_scenario">Scenario Simulator</button>
+  <button class="tab" onclick="showTab('sectors',this)" data-i18n="pe_tab_sector">Sector Analysis</button>
+  <button class="tab" onclick="showTab('partners',this)" data-i18n="pe_tab_partners">Trade Partners</button>
+  <button class="tab" onclick="showTab('methodology',this)" data-i18n="pe_tab_method">Methodology</button>
 </nav>
 
 <!-- ════════════════════════ OVERVIEW ════════════════════════ -->
 <div id="tab-overview" class="page active">
 
-  <div class="slabel">Trade Statistics — Import Overview</div>
+  <div class="slabel" data-i18n="pe_trade_stats">Trade Statistics — Import Overview</div>
   <div id="ov-kpis" class="g4" style="margin-bottom:16px;"></div>
 
   <div class="g2" style="margin-bottom:16px;">
     <div class="card">
-      <div class="card-title">Import by HS Section</div>
+      <div class="card-title" data-i18n="pe_import_hs">Import by HS Section</div>
       <div class="card-sub">Total import value (thous. USD) — all HS codes</div>
       <div style="position:relative;height:300px;">
         <canvas id="ov-section-chart"></canvas>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">Import by Trade Regime</div>
+      <div class="card-title" data-i18n="pe_import_regime">Import by Trade Regime</div>
       <div class="card-sub">MFN (Most-Favoured-Nation) vs FTA (Free Trade Agreement)</div>
       <div style="position:relative;height:300px;">
         <canvas id="ov-regime-chart"></canvas>
@@ -199,7 +200,7 @@ select.ctrl-select:disabled{background:#f8fafc;color:var(--text3);cursor:not-all
 
   <div class="g2" style="margin-bottom:16px;">
     <div class="card">
-      <div class="card-title">Top 15 Import Partners</div>
+      <div class="card-title" data-i18n="pe_top_partners">Top 15 Import Partners</div>
       <div class="card-sub">By import value (thous. USD)</div>
       <div style="position:relative;height:320px;">
         <canvas id="ov-country-chart"></canvas>
@@ -237,7 +238,7 @@ select.ctrl-select:disabled{background:#f8fafc;color:var(--text3);cursor:not-all
 <div id="tab-simulator" class="page">
 
   <div class="sim-controls">
-    <h3>Scenario Configuration</h3>
+    <h3 data-i18n="pe_scenario_title">Scenario Configuration</h3>
     <div class="ctrl-grid">
 
       <!-- Tariff cut -->
@@ -299,10 +300,10 @@ select.ctrl-select:disabled{background:#f8fafc;color:var(--text3);cursor:not-all
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
       <div class="card-title" style="margin:0;">Simulation Results by Sector</div>
       <div style="flex:1;"></div>
-      <button class="btn btn-ghost no-print" onclick="exportCSV('sim')">⬇ Export CSV</button>
+      <button class="btn btn-ghost no-print" onclick="exportCSV('sim')" data-i18n="export_csv">📊 CSV</button>
       <button class="btn btn-primary no-print" onclick="printSection('sim')">🖨 Print</button>
-      <button class="btn btn-ghost no-print" onclick="peSaveScenario()" style="background:#16a34a;color:#fff;border-color:#16a34a;">💾 Save</button>
-      <button class="btn btn-ghost no-print" onclick="peAIAnalysis()" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
+      <button class="btn btn-ghost no-print" onclick="peSaveScenario()" data-i18n="save_scenario" style="background:#16a34a;color:#fff;border-color:#16a34a;">💾 Save</button>
+      <button class="btn btn-ghost no-print" onclick="peAIAnalysis()" data-i18n="ai_analysis" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
     </div>
     <table id="sim-table">
       <thead><tr>
@@ -757,7 +758,20 @@ function updateChapterFilter(){
 }
 
 function runSim(){
-  const cut = parseInt(document.getElementById('sim-cut').value);
+  let cut = parseInt(document.getElementById('sim-cut').value);
+
+  // ── Validate: tariff cut cannot exceed 100% or be negative ──
+  if (cut > 100) {
+    cut = 100;
+    document.getElementById('sim-cut').value = 100;
+    Toast.show('Tariff cut capped at 100% \u2014 cannot exceed full tariff removal', 'warning');
+  }
+  if (cut < 0) {
+    cut = 0;
+    document.getElementById('sim-cut').value = 0;
+    Toast.show('Tariff cut cannot be negative \u2014 reset to 0%', 'warning');
+  }
+
   document.getElementById('sim-cut-val').textContent = cut;
   const scale = cut / 20;
   const regime = document.getElementById('sim-regime').value;
@@ -943,8 +957,9 @@ function renderSectors(){
   document.getElementById('sec-thead').innerHTML = thRow;
 
   document.getElementById('sec-tbody').innerHTML = rows.map(r=>{
-    const maxImp = rows[0].imp;
-    const barW = Math.round(r.imp/maxImp*100);
+    // Guard: prevent division-by-zero if leading row has zero imports
+    const maxImp = (rows[0] && rows[0].imp > 0) ? rows[0].imp : 1;
+    const barW = Math.round(r.imp / maxImp * 100);
     const col2 = isSec ? `<td style="max-width:220px;">${(r.name||'').substring(0,40)}</td>`
                        : `<td><span class="badge badge-mfn" style="font-size:9px;">${r.sec||''}</span></td>`;
     return `<tr>
@@ -1100,10 +1115,10 @@ function applyPeRegistryOverrides() {
 
 function init(){
   applyPeRegistryOverrides();
-  try{ renderOverview(); }catch(e){ console.error('Overview:',e); }
-  try{ populateSimFilters(); updateChapterFilter(); runSim(); }catch(e){ console.error('Sim:',e); }
-  try{ renderSectors(); }catch(e){ console.error('Sectors:',e); }
-  try{ renderPartners(); }catch(e){ console.error('Partners:',e); }
+  try{ renderOverview(); }catch(e){ console.error('PE Overview error:',e); Toast.show('Error rendering overview \u2014 check console for details', 'error'); }
+  try{ populateSimFilters(); updateChapterFilter(); runSim(); }catch(e){ console.error('PE Simulation error:',e); Toast.show('Error running simulation \u2014 check console for details', 'error'); }
+  try{ renderSectors(); }catch(e){ console.error('PE Sectors error:',e); Toast.show('Error rendering sector data \u2014 check console for details', 'error'); }
+  try{ renderPartners(); }catch(e){ console.error('PE Partners error:',e); Toast.show('Error rendering partner data \u2014 check console for details', 'error'); }
 }
 document.addEventListener('DOMContentLoaded', () => {
   if (window.EPE) EPE.ready(init);

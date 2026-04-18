@@ -13,6 +13,7 @@
 <script src="../shared/toast.js"></script>
 <script src="../shared/scenario-engine.js"></script>
 <script src="../shared/ai-advisor.js"></script>
+<script src="../shared/i18n.js"></script>
 <script src="../shared/registry-loader.js"></script>
 <script>window.addEventListener('load', () => EPE?.ready(() => EPE.badge()));</script>
 <style>
@@ -200,10 +201,10 @@ tr:hover td { background: #f5f8ff; }
 </header>
 
 <nav>
-  <button class="tab-btn active" onclick="showTab('simulator')">⚡ Shock Simulator</button>
-  <button class="tab-btn" onclick="showTab('scenarios')">📋 Scenario Analysis</button>
-  <button class="tab-btn" onclick="showTab('calibration')">🔢 Calibration &amp; Data</button>
-  <button class="tab-btn" onclick="showTab('documentation')">📖 Model Documentation</button>
+  <button class="tab-btn active" onclick="showTab('simulator')">⚡ <span data-i18n="cge_tab_sim">Shock Simulator</span></button>
+  <button class="tab-btn" onclick="showTab('scenarios')">📋 <span data-i18n="cge_tab_scenarios">Scenario Analysis</span></button>
+  <button class="tab-btn" onclick="showTab('calibration')">🔢 <span data-i18n="cge_tab_calibration">Calibration &amp; Data</span></button>
+  <button class="tab-btn" onclick="showTab('documentation')">📖 <span data-i18n="cge_tab_docs">Model Documentation</span></button>
 </nav>
 
 <!-- ══════════════════════════════════════════
@@ -216,21 +217,21 @@ tr:hover td { background: #f5f8ff; }
     <div class="sim-sidebar">
 
       <div class="sec-block">
-        <div class="sec-hd">World Prices</div>
+        <div class="sec-hd" data-i18n="cge_world_prices">World Prices</div>
         <div class="prow">
           <div class="plabel"><span class="pname">wm shock (%)</span><span class="pval" id="v-wm">0.0%</span></div>
-          <div class="pdesc">World import price — e.g. energy, food</div>
+          <div class="pdesc" data-i18n="cge_wp_import">World import price — e.g. energy, food</div>
           <input type="range" id="sl-wm" min="-30" max="30" step="1" value="0" oninput="slPct(this,'v-wm')">
         </div>
         <div class="prow">
           <div class="plabel"><span class="pname">we shock (%)</span><span class="pval" id="v-we">0.0%</span></div>
-          <div class="pdesc">World export price — e.g. gold, cotton</div>
+          <div class="pdesc" data-i18n="cge_wp_export">World export price — e.g. gold, cotton</div>
           <input type="range" id="sl-we" min="-30" max="30" step="1" value="0" oninput="slPct(this,'v-we')">
         </div>
       </div>
 
       <div class="sec-block">
-        <div class="sec-hd">Trade Policy</div>
+        <div class="sec-hd" data-i18n="cge_trade_policy">Trade Policy</div>
         <div class="prow">
           <div class="plabel"><span class="pname">Import tariff tm (%)</span><span class="pval" id="v-tm">2.0%</span></div>
           <input type="range" id="sl-tm" min="0" max="30" step="0.5" value="2" oninput="slPct(this,'v-tm')">
@@ -242,7 +243,7 @@ tr:hover td { background: #f5f8ff; }
       </div>
 
       <div class="sec-block">
-        <div class="sec-hd">Fiscal Policy</div>
+        <div class="sec-hd" data-i18n="cge_fiscal">Fiscal Policy</div>
         <div class="prow">
           <div class="plabel"><span class="pname">Indirect tax ts (%)</span><span class="pval" id="v-ts">6.0%</span></div>
           <input type="range" id="sl-ts" min="0" max="20" step="0.5" value="6" oninput="slPct(this,'v-ts')">
@@ -254,7 +255,7 @@ tr:hover td { background: #f5f8ff; }
       </div>
 
       <div class="sec-block">
-        <div class="sec-hd">Macro / Fiscal</div>
+        <div class="sec-hd" data-i18n="cge_macro">Macro / Fiscal</div>
         <div class="prow">
           <div class="plabel"><span class="pname">Savings rate sy (%)</span><span class="pval" id="v-sy">38.0%</span></div>
           <input type="range" id="sl-sy" min="20" max="60" step="0.5" value="38" oninput="slPct(this,'v-sy')">
@@ -266,7 +267,7 @@ tr:hover td { background: #f5f8ff; }
       </div>
 
       <div class="sec-block">
-        <div class="sec-hd">External</div>
+        <div class="sec-hd" data-i18n="cge_external">External</div>
         <div class="prow">
           <div class="plabel"><span class="pname">Foreign savings B (% chg)</span><span class="pval" id="v-B">0.0%</span></div>
           <input type="range" id="sl-B" min="-80" max="100" step="5" value="0" oninput="slPct(this,'v-B')">
@@ -278,7 +279,7 @@ tr:hover td { background: #f5f8ff; }
       </div>
 
       <div class="sec-block">
-        <div class="sec-hd">Supply</div>
+        <div class="sec-hd" data-i18n="cge_supply">Supply</div>
         <div class="prow">
           <div class="plabel"><span class="pname">Output X (% chg)</span><span class="pval" id="v-X">0.0%</span></div>
           <input type="range" id="sl-X" min="-20" max="20" step="0.5" value="0" oninput="slPct(this,'v-X')">
@@ -289,8 +290,8 @@ tr:hover td { background: #f5f8ff; }
         </div>
       </div>
 
-      <button class="run-btn" id="runBtn" onclick="runSimulation()">▶ Run Simulation</button>
-      <button class="reset-btn" onclick="resetToBase()">↺ Reset to Base</button>
+      <button class="run-btn" id="runBtn" onclick="runSimulation()" data-i18n="cge_run_btn">▶ Run Simulation</button>
+      <button class="reset-btn" onclick="resetToBase()" data-i18n="reset_btn">↺ Reset to Base</button>
       <div style="text-align:center;margin-top:10px;font-size:.68rem;color:var(--text3)">
         Solver: <span id="solver-status" class="solver-ok">Ready</span>
       </div>
@@ -308,22 +309,22 @@ tr:hover td { background: #f5f8ff; }
       <!-- KPI cards -->
       <div class="kpis">
         <div class="kcard">
-          <div class="klbl">GDP Impact (Y)</div>
+          <div class="klbl" data-i18n="cge_kpi_y">GDP Impact (Y)</div>
           <div class="kval" id="kpi-Y" style="color:var(--navy2)">—</div>
           <div class="ksub">% change from base</div>
         </div>
         <div class="kcard">
-          <div class="klbl">Exports (E)</div>
+          <div class="klbl" data-i18n="cge_kpi_e">Exports (E)</div>
           <div class="kval" id="kpi-E" style="color:var(--green)">—</div>
           <div class="ksub">% change from base</div>
         </div>
         <div class="kcard">
-          <div class="klbl">Imports (M)</div>
+          <div class="klbl" data-i18n="cge_kpi_m">Imports (M)</div>
           <div class="kval" id="kpi-M" style="color:var(--orange)">—</div>
           <div class="ksub">% change from base</div>
         </div>
         <div class="kcard">
-          <div class="klbl">Exchange Rate (Er)</div>
+          <div class="klbl" data-i18n="cge_kpi_er">Exchange Rate (Er)</div>
           <div class="kval" id="kpi-Er" style="color:var(--purple)">—</div>
           <div class="ksub">Value (base = 1.00)</div>
         </div>
@@ -332,16 +333,16 @@ tr:hover td { background: #f5f8ff; }
       <!-- Export toolbar -->
       <div class="export-toolbar">
         <span class="export-label">Export Results:</span>
-        <button class="export-btn" onclick="exportCSV()">📊 CSV</button>
-        <button class="export-btn" onclick="exportPNG()">🖼 PNG Chart</button>
-        <button class="export-btn" onclick="exportPDF()">📄 PDF Report</button>
-        <button class="export-btn" onclick="cgeSaveScenario()" style="background:#16a34a;color:#fff;border-color:#16a34a;">💾 Save</button>
-        <button class="export-btn" onclick="cgeAIAnalysis()" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
+        <button class="export-btn" onclick="exportCSV()" data-i18n="export_csv">📊 CSV</button>
+        <button class="export-btn" onclick="exportPNG()" data-i18n="export_png">🖼 PNG Chart</button>
+        <button class="export-btn" onclick="exportPDF()" data-i18n="export_pdf">📄 PDF Report</button>
+        <button class="export-btn" onclick="cgeSaveScenario()" data-i18n="save_scenario" style="background:#16a34a;color:#fff;border-color:#16a34a;">💾 Save</button>
+        <button class="export-btn" onclick="cgeAIAnalysis()" data-i18n="ai_analysis" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
       </div>
 
       <!-- Results table -->
       <div class="card" id="results-table-card">
-        <div class="card-title">Full Results — Base vs. Experiment</div>
+        <div class="card-title" data-i18n="cge_results_hd">Full Results — Base vs. Experiment</div>
         <div class="card-sub">All values in model units (normalised to base year). Prices in UZS index (base Pd=1).</div>
         <table id="results-table">
           <thead>
@@ -686,9 +687,9 @@ function solveCGE(params) {
   const inner_q = bq * Math.pow(M, -rho_q) + (1 - bq) * Math.pow(Ds, -rho_q);
   const Q = aq * Math.pow(inner_q, -1.0 / rho_q);
 
-  // Prices
-  const Pq = (Pm * M + Pd * Ds) / Q;
-  const Pt = (Pe * E + Pd * Ds) / X;
+  // Prices (guard: Q and X must be > 0 to avoid division-by-zero)
+  const Pq = Q > 1e-12 ? (Pm * M + Pd * Ds) / Q : 0;
+  const Pt = X > 1e-12 ? (Pe * E + Pd * Ds) / X : 0;
   const Px = Pf * Pt;
 
   // Fiscal/macro aggregates
@@ -901,6 +902,9 @@ function runSimulation() {
     if (base.error || exp.error) {
       solverEl.textContent = 'Solver error — BoP did not converge';
       solverEl.className = 'solver-err';
+      // Show user-facing toast (not just status bar)
+      const which = base.error ? 'baseline' : 'experiment';
+      Toast.show(`CGE solver did not converge (${which} run) \u2014 try a smaller shock or reset parameters`, 'error');
       return;
     }
 
@@ -953,7 +957,7 @@ function resetToBase() {
 
 /* ── Export functions ── */
 function exportCSV() {
-  if (!lastBase || !lastExp) { alert('Run the simulation first.'); return; }
+  if (!lastBase || !lastExp) { Toast.show('Run the simulation first', 'warning'); return; }
   const headers = ['Indicator', 'Description', 'Base (2021)', 'Experiment', '% Change'];
   const rows = ROWS_DEF.map(row => {
     const bv = lastBase[row.sym], ev = lastExp[row.sym];
@@ -964,12 +968,12 @@ function exportCSV() {
 }
 
 function exportPNG() {
-  if (!mainChart) { alert('Run the simulation first to generate the chart.'); return; }
+  if (!mainChart) { Toast.show('Run the simulation first to generate the chart', 'warning'); return; }
   ReportEngine.downloadChartPNG('chart-main', 'cge_chart.png');
 }
 
 function exportPDF() {
-  if (!lastBase || !lastExp) { alert('Run the simulation first.'); return; }
+  if (!lastBase || !lastExp) { Toast.show('Run the simulation first', 'warning'); return; }
   const assumptions = [
     { name: 'wm (world import price shock)', value: document.getElementById('v-wm').textContent },
     { name: 'we (world export price shock)', value: document.getElementById('v-we').textContent },

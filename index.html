@@ -52,6 +52,33 @@
   letter-spacing: .5px; text-transform: uppercase; border: 1px solid rgba(255,255,255,.15);
 }
 .header-pill.live { background: rgba(16,185,129,.15); color: #6ee7b7; border-color: rgba(16,185,129,.3); }
+
+/* Language picker dropdown */
+.lang-picker { position: relative; }
+.lang-current {
+  background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.35);
+  border-radius: 10px; padding: 5px 11px; cursor: pointer;
+  display: flex; align-items: center; gap: 6px; color: #fff; font-size: 18px;
+}
+.lang-current:hover { background: rgba(255,255,255,.28); }
+.lang-code { font-size: 13px; font-weight: 700; color: #fff; letter-spacing: .5px; }
+.lang-caret { font-size: 10px; color: rgba(255,255,255,.85); line-height: 1; }
+.lang-dropdown {
+  display: none; position: absolute; right: 0; top: calc(100% + 6px);
+  background: #1e293b; border: 1px solid rgba(255,255,255,.18);
+  border-radius: 10px; padding: 5px; z-index: 9999; min-width: 80px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.45); flex-direction: column; gap: 2px;
+}
+.lang-dropdown.open { display: flex; }
+.lang-opt {
+  background: none; border: none; cursor: pointer; border-radius: 7px;
+  padding: 7px 12px; font-size: 18px; transition: background .15s;
+  display: flex; align-items: center; gap: 8px;
+}
+.lang-opt-code { font-size: 12px; font-weight: 700; color: #e2e8f0; letter-spacing: .5px; }
+.lang-opt:hover { background: rgba(255,255,255,.12); }
+.lang-opt:hover .lang-opt-code { color: #fff; }
+
 .menu-toggle {
   display: none; background: none; border: none; color: #fff; font-size: 20px; padding: 4px 8px;
 }
@@ -758,10 +785,16 @@ details[open] > .tracker-summary .tracker-chevron { transform: rotate(90deg); }
   <div class="header-right">
     <div class="header-pill live">● Live Models: 6</div>
     <div class="header-pill">Beta v0.4</div>
-    <div style="display:flex;gap:6px;align-items:center;margin-left:4px;">
-      <button onclick="setLang('en')" id="lang-en" style="background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.4);border-radius:8px;padding:5px 14px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px;line-height:1.2;"><span style="font-size:18px;">🇬🇧</span> EN</button>
-      <button onclick="setLang('ru')" id="lang-ru" style="background:none;border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:5px 14px;font-size:13px;font-weight:700;color:rgba(255,255,255,.65);cursor:pointer;display:flex;align-items:center;gap:6px;line-height:1.2;"><span style="font-size:18px;">🇷🇺</span> RU</button>
-      <button onclick="setLang('uz')" id="lang-uz" style="background:none;border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:5px 14px;font-size:13px;font-weight:700;color:rgba(255,255,255,.65);cursor:pointer;display:flex;align-items:center;gap:6px;line-height:1.2;"><span style="font-size:18px;">🇺🇿</span> UZ</button>
+    <div class="lang-picker" id="lang-picker">
+      <button class="lang-current" id="lang-current-btn" onclick="toggleLangPicker(event)" title="Switch language">
+        <span id="lang-code" class="lang-code">EN</span>
+        <span class="lang-caret">▾</span>
+      </button>
+      <div class="lang-dropdown" id="lang-dropdown">
+        <button class="lang-opt" onclick="setLang('en');closeLangPicker()"><span class="lang-opt-code">EN</span></button>
+        <button class="lang-opt" onclick="setLang('ru');closeLangPicker()"><span class="lang-opt-code">RU</span></button>
+        <button class="lang-opt" onclick="setLang('uz');closeLangPicker()"><span class="lang-opt-code">UZ</span></button>
+      </div>
     </div>
   </div>
 </header>
@@ -1712,8 +1745,8 @@ details[open] > .tracker-summary .tracker-chevron { transform: rotate(90deg); }
           </div>
           <div class="macro-card" style="border-top:3px solid #1a56db;">
             <div class="macro-label">GDP Forecast 2026</div>
-            <div class="macro-val" style="color:var(--blue);font-size:26px">+6.0%</div>
-            <div class="macro-sub">IMF Art. IV Nov 2025</div>
+            <div class="macro-val" style="color:var(--blue);font-size:26px">+6.8%</div>
+            <div class="macro-sub">IMF Art. IV Apr 2026</div>
             <div class="macro-badge up">IMF</div>
           </div>
           <div class="macro-card" style="border-top:3px solid #057a55;">
@@ -1741,10 +1774,10 @@ details[open] > .tracker-summary .tracker-chevron { transform: rotate(90deg); }
             <div class="macro-badge flat">CBU</div>
           </div>
           <div class="macro-card" style="border-top:3px solid var(--navy);">
-            <div class="macro-label">Fiscal Balance</div>
-            <div class="macro-val" style="color:var(--red);font-size:26px">−3.4%</div>
-            <div class="macro-sub">% of GDP · 2025</div>
-            <div class="macro-badge down">IMF / WB</div>
+            <div class="macro-label">Fiscal Balance 2025</div>
+            <div class="macro-val" style="color:var(--red);font-size:26px">−2.1%</div>
+            <div class="macro-sub">% of GDP · IMF Apr 2026</div>
+            <div class="macro-badge down">IMF</div>
           </div>
           <div class="macro-card" style="border-top:3px solid var(--purple);">
             <div class="macro-label">Poverty Rate</div>
@@ -1792,15 +1825,15 @@ details[open] > .tracker-summary .tracker-chevron { transform: rotate(90deg); }
             </thead>
             <tbody>
               <tr style="background:#f0fdf4"><td><strong>Real GDP Growth 2024</strong></td><td>7.5%</td><td>7.2%</td><td>7.0%</td><td>7.0%</td><td>Stat Agency / WEO Oct 25 / WB Apr 26 / EBRD Mar 26</td></tr>
-              <tr><td><strong>Real GDP Growth 2025</strong></td><td><strong style="color:var(--green)">7.7%</strong></td><td>6.5%</td><td>6.5%</td><td>6.2%</td><td>Stat Agency (official) / IMF Art IV Nov 25 / WB Apr 26 / EBRD Mar 26</td></tr>
-              <tr style="background:#f0fdf4"><td><strong>Real GDP Growth 2026f</strong></td><td>—</td><td>6.0%</td><td>6.4%</td><td>6.5%</td><td>IMF Art IV Nov 25 / WB Apr 26 / EBRD Mar 26</td></tr>
-              <tr><td><strong>Real GDP Growth 2027f</strong></td><td>—</td><td>5.8%</td><td>6.7%</td><td>—</td><td>IMF Art IV Nov 25 / WB Apr 26</td></tr>
+              <tr><td><strong>Real GDP Growth 2025</strong></td><td><strong style="color:var(--green)">7.7%</strong></td><td>7.7%</td><td>6.5%</td><td>6.2%</td><td>Stat Agency (official) / IMF Art IV Apr 26 / WB Apr 26 / EBRD Mar 26</td></tr>
+              <tr style="background:#f0fdf4"><td><strong>Real GDP Growth 2026f</strong></td><td>—</td><td>6.8%</td><td>6.4%</td><td>6.5%</td><td>IMF Art IV Apr 26 / WB Apr 26 / EBRD Mar 26</td></tr>
+              <tr><td><strong>Real GDP Growth 2027f</strong></td><td>—</td><td>6.0%</td><td>6.7%</td><td>—</td><td>IMF Art IV Apr 26 / WB Apr 26</td></tr>
               <tr style="background:#f0fdf4"><td><strong>Inflation 2024 (avg)</strong></td><td>10.0%</td><td>9.9%</td><td>9.5%</td><td>9.8%</td><td>CBU/Stat Agency</td></tr>
-              <tr><td><strong>Inflation 2025 (avg)</strong></td><td><strong style="color:var(--amber)">7.3%</strong></td><td>7.5%</td><td>7.5%</td><td>7.5%</td><td>CBU/Stat Agency (official)</td></tr>
+              <tr><td><strong>Inflation 2025 (avg)</strong></td><td><strong style="color:var(--amber)">7.3%</strong></td><td>7.3%</td><td>7.5%</td><td>7.5%</td><td>CBU/Stat Agency (official) / IMF Art IV Apr 26</td></tr>
               <tr style="background:#f0fdf4"><td><strong>Inflation Mar 2026 (YoY)</strong></td><td><strong style="color:var(--amber)">7.1%</strong></td><td>—</td><td>—</td><td>—</td><td>CBU latest reading</td></tr>
-              <tr><td><strong>Current Account (% GDP) 2025</strong></td><td>—</td><td>−5.0%</td><td>−5.5%</td><td>—</td><td>IMF Art IV Nov 25 / WB Apr 26</td></tr>
-              <tr style="background:#f0fdf4"><td><strong>Fiscal Balance (% GDP) 2025</strong></td><td>−3.4%</td><td>−3.5%</td><td>−3.2%</td><td>—</td><td>MoF / IMF Nov 25 / WB Apr 26</td></tr>
-              <tr><td><strong>Public Debt (% GDP) 2025</strong></td><td>~34%</td><td>36%</td><td>35%</td><td>—</td><td>MoF / IMF Nov 25 / WB Apr 26</td></tr>
+              <tr><td><strong>Current Account (% GDP) 2025</strong></td><td>—</td><td>−3.9%</td><td>−5.5%</td><td>—</td><td>IMF Art IV Apr 26 / WB Apr 26</td></tr>
+              <tr style="background:#f0fdf4"><td><strong>Fiscal Balance (% GDP) 2025</strong></td><td>—</td><td>−2.1%</td><td>−3.2%</td><td>—</td><td>IMF Art IV Apr 26 / WB Apr 26</td></tr>
+              <tr><td><strong>Public Debt (% GDP) 2025</strong></td><td>—</td><td>28.6%</td><td>35%</td><td>—</td><td>IMF Art IV Apr 26 / WB Apr 26</td></tr>
               <tr style="background:#f0fdf4"><td><strong>Poverty Rate ($6.85 PPP)</strong></td><td>—</td><td>—</td><td>~11%</td><td>—</td><td>WB Poverty Brief 2024</td></tr>
             </tbody>
           </table>
@@ -1812,7 +1845,7 @@ details[open] > .tracker-summary .tracker-chevron { transform: rotate(90deg); }
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;border-left:4px solid #1a56db;">
             <div style="font-size:18px;font-weight:800;color:#1a56db;margin-bottom:6px;">🏛 IMF</div>
             <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">International Monetary Fund</div>
-            <div style="font-size:12.5px;color:var(--text2);line-height:1.6;">Annual Article IV consultations · World Economic Outlook · FSAP. Latest: Art. IV Nov 2025 — 2025 GDP revised up to 6.5%, 2026 forecast 6.0%; inflation easing to ~7.5%; recommends continued fiscal consolidation, monetary tightening and exchange rate flexibility to anchor inflation expectations.</div>
+            <div style="font-size:12.5px;color:var(--text2);line-height:1.6;">Annual Article IV consultations · World Economic Outlook · FSAP. Latest: Art. IV Apr 2026 — 2025 GDP confirmed at 7.7%, 2026 forecast raised to 6.8%, 2027 at ~6.0%; inflation eased to 7.3% in 2025, 2026f 6.8%; CA deficit narrowed to −3.9% of GDP; fiscal balance −2.1%; public debt 28.6% of GDP. Recommends continued fiscal consolidation, monetary easing as inflation declines, and structural reforms to sustain growth.</div>
           </div>
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;border-left:4px solid #057a55;">
             <div style="font-size:18px;font-weight:800;color:#057a55;margin-bottom:6px;">🌍 World Bank</div>
@@ -2126,9 +2159,19 @@ function applyLang(lang) {
   });
 }
 
+const LANG_FLAGS = { en: '🇬🇧', ru: '🇷🇺', uz: '🇺🇿' };
+const LANG_CODES = { en: 'EN', ru: 'RU', uz: 'UZ' };
+
 function setLang(lang) {
   currentLang = lang;
   applyLang(lang);
+  // Update the lang code shown on the picker button
+  const codeEl = document.getElementById('lang-code');
+  if (codeEl) codeEl.textContent = LANG_CODES[lang] || 'EN';
+  // Broadcast language change to all embedded model iframes
+  document.querySelectorAll('iframe').forEach(function(iframe) {
+    try { iframe.contentWindow.postMessage({ type: 'setLang', lang: lang }, '*'); } catch(e) {}
+  });
   renderExplorerPage();
   renderTracker();
   renderResearch();
@@ -2870,6 +2913,18 @@ function renderTracker() {
   renderTrackerEntries();
 }
 
+function toggleLangPicker(e) {
+  e.stopPropagation();
+  document.getElementById('lang-dropdown').classList.toggle('open');
+}
+
+function closeLangPicker() {
+  document.getElementById('lang-dropdown').classList.remove('open');
+}
+
+// Close picker when clicking outside
+document.addEventListener('click', function() { closeLangPicker(); });
+
 // ── Int'l Orgs charts ────────────────────────────────────
 function initIntlCharts() {
   // GDP Growth comparison chart
@@ -2881,7 +2936,7 @@ function initIntlCharts() {
         labels: ['2023', '2024', '2025 actual', '2026f', '2027f'],
         datasets: [
           { label: 'Actual (Stat Agency)', data: [6.3, 7.5, 7.7, null, null], backgroundColor: 'rgba(22,163,74,.85)',   borderRadius: 5 },
-          { label: 'IMF',                  data: [null, null, null, 6.0, 5.8], backgroundColor: 'rgba(26,86,219,.8)',   borderRadius: 5 },
+          { label: 'IMF (Apr 2026)',       data: [null, null, null, 6.8, 6.0], backgroundColor: 'rgba(26,86,219,.8)',   borderRadius: 5 },
           { label: 'World Bank',           data: [null, null, null, 6.4, 6.7], backgroundColor: 'rgba(5,122,85,.8)',    borderRadius: 5 },
           { label: 'EBRD',                 data: [null, null, null, 6.5, null], backgroundColor: 'rgba(144,97,249,.8)', borderRadius: 5 },
         ]
@@ -2909,7 +2964,7 @@ function initIntlCharts() {
         labels: ['2023', '2024', '2025 actual', '2026f', '2027f'],
         datasets: [
           { label: 'Actual (CBU/Stat)', data: [11.5, 10.0, 7.3, null, null], borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,.08)',  tension: 0.3, fill: false, pointRadius: 5 },
-          { label: 'IMF',               data: [null, null, null, 6.5, 5.5],  borderColor: '#1a56db', backgroundColor: 'rgba(26,86,219,.08)',  tension: 0.3, fill: false, pointRadius: 5 },
+          { label: 'IMF (Apr 2026)',    data: [null, null, null, 6.8, null], borderColor: '#1a56db', backgroundColor: 'rgba(26,86,219,.08)',  tension: 0.3, fill: false, pointRadius: 5 },
           { label: 'World Bank',        data: [null, null, null, 6.8, 5.8],  borderColor: '#057a55', backgroundColor: 'rgba(5,122,85,.08)',   tension: 0.3, fill: false, pointRadius: 5 },
         ]
       },

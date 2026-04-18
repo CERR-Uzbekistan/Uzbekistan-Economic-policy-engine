@@ -13,6 +13,7 @@
 <script src="../shared/toast.js"></script>
 <script src="../shared/scenario-engine.js"></script>
 <script src="../shared/ai-advisor.js"></script>
+<script src="../shared/i18n.js"></script>
 <script src="../shared/registry-loader.js"></script>
 <script>window.addEventListener('load', () => EPE?.ready(() => EPE.badge()));</script>
 <style>
@@ -227,10 +228,10 @@ tr:hover td{background:#fffbf3;}
 </header>
 
 <nav>
-  <button class="tab active" onclick="showTab('overview',this)" data-i18n="tab_overview">📊 Overview & Linkages</button>
-  <button class="tab" onclick="showTab('demand',this)" data-i18n="tab_demand">⚡ Demand Simulator</button>
-  <button class="tab" onclick="showTab('price',this)" data-i18n="tab_price">💰 Price Model</button>
-  <button class="tab" onclick="showTab('sectors',this)" data-i18n="tab_sectors">🔍 Sector Explorer</button>
+  <button class="tab active" onclick="showTab('overview',this)">📊 <span data-i18n="io_tab_overview">Overview & Linkages</span></button>
+  <button class="tab" onclick="showTab('demand',this)">⚡ <span data-i18n="io_tab_demand">Demand Simulator</span></button>
+  <button class="tab" onclick="showTab('price',this)">💰 <span data-i18n="io_tab_price">Price Model</span></button>
+  <button class="tab" onclick="showTab('sectors',this)">🔍 <span data-i18n="io_tab_sectors">Sector Explorer</span></button>
 </nav>
 
 <!-- ═══════════════════════════════════════
@@ -249,23 +250,23 @@ tr:hover td{background:#fffbf3;}
     <span style="font-size:11px;color:var(--text3);margin-right:8px;" id="mult-toggle-hint">Direct + indirect effects</span>
     <span style="flex:1"></span>
     <span class="export-label">Export:</span>
-    <button class="export-btn" onclick="exportOverviewCSV()">📥 CSV — Linkage Table</button>
-    <button class="export-btn" onclick="exportOverviewPNG()">🖼 PNG — Charts</button>
-    <button class="export-btn" onclick="exportOverviewPDF()">📄 PDF — Full Report</button>
-    <button class="export-btn" onclick="ioSaveScenario()" style="background:#16a34a;color:#fff;border-color:#16a34a;">💾 Save</button>
-    <button class="export-btn" onclick="ioAIAnalysis()" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
+    <button class="export-btn" onclick="exportOverviewCSV()" data-i18n="export_csv">📊 CSV</button>
+    <button class="export-btn" onclick="exportOverviewPNG()" data-i18n="export_png">🖼 PNG Chart</button>
+    <button class="export-btn" onclick="exportOverviewPDF()" data-i18n="export_pdf">📄 PDF Report</button>
+    <button class="export-btn" onclick="ioSaveScenario()" data-i18n="save_scenario" style="background:#16a34a;color:#fff;border-color:#16a34a;">💾 Save</button>
+    <button class="export-btn" onclick="ioAIAnalysis()" data-i18n="ai_analysis" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
   </div>
 
-  <div class="slabel" data-i18n="slabel_linkage">Backward & Forward Linkages — Sector Classification</div>
+  <div class="slabel" data-i18n="io_slabel_linkages">Backward & Forward Linkages — Sector Classification</div>
   <div class="g2" style="margin-bottom:18px;">
     <div class="card span2">
-      <div class="card-title" data-i18n="scatter_title">Linkage Scatter — Rasmussen Classification</div>
-      <div class="card-sub" data-i18n="scatter_sub">Backward linkage (BL) on X-axis; Forward linkage (FL) on Y-axis. Dashed lines at BL=1 / FL=1 divide four quadrants.</div>
+      <div class="card-title" data-i18n="io_scatter_title">Linkage Scatter — Rasmussen Classification</div>
+      <div class="card-sub" data-i18n="io_scatter_sub">Backward linkage (BL) on X-axis; Forward linkage (FL) on Y-axis. Dashed lines at BL=1 / FL=1 divide four quadrants.</div>
       <div class="quadrant-legend">
-        <span class="ql-item"><span class="ql-dot" style="background:#d97706"></span><span data-i18n="badge_key">Key Sector (BL>1, FL>1)</span></span>
-        <span class="ql-item"><span class="ql-dot" style="background:#2563eb"></span><span data-i18n="badge_back">Backward Key (BL>1, FL≤1)</span></span>
-        <span class="ql-item"><span class="ql-dot" style="background:#16a34a"></span><span data-i18n="badge_fwd">Forward Key (BL≤1, FL>1)</span></span>
-        <span class="ql-item"><span class="ql-dot" style="background:#94a3b8"></span><span data-i18n="badge_weak">Weak (BL≤1, FL≤1)</span></span>
+        <span class="ql-item"><span class="ql-dot" style="background:#d97706"></span><span data-i18n="io_key_sector">Key Sector (BL>1, FL>1)</span></span>
+        <span class="ql-item"><span class="ql-dot" style="background:#2563eb"></span><span data-i18n="io_backward_key">Backward Key (BL>1, FL≤1)</span></span>
+        <span class="ql-item"><span class="ql-dot" style="background:#16a34a"></span><span data-i18n="io_forward_key">Forward Key (BL≤1, FL>1)</span></span>
+        <span class="ql-item"><span class="ql-dot" style="background:#94a3b8"></span><span data-i18n="io_weak">Weak (BL≤1, FL≤1)</span></span>
       </div>
       <div class="chart-wrap" style="height:400px;"><canvas id="chart-scatter"></canvas></div>
     </div>
@@ -297,7 +298,7 @@ tr:hover td{background:#fffbf3;}
     </div>
   </div>
 
-  <div class="slabel" data-i18n="slabel_linktable">Full Linkage Table (136 Sectors)</div>
+  <div class="slabel" data-i18n="io_slabel_full_table">Full Linkage Table (136 Sectors)</div>
   <div class="card">
     <div class="search-row">
       <input class="search-input" id="link-search" data-i18n-placeholder="search_placeholder" placeholder="Search sector name or code…" oninput="filterLinkTable()">

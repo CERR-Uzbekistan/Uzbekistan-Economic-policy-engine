@@ -13,6 +13,7 @@
 <script src="../shared/toast.js"></script>
 <script src="../shared/scenario-engine.js"></script>
 <script src="../shared/ai-advisor.js"></script>
+<script src="../shared/i18n.js"></script>
 <script src="dfm_data.js" onerror="window.DFM_DATA=null"></script>
 <script src="../shared/registry-loader.js"></script>
 <script>window.addEventListener('load', () => EPE?.ready(() => EPE.badge()));</script>
@@ -153,10 +154,10 @@ tr:hover td { background: #f8f9ff; }
 </header>
 
 <nav>
-  <button class="tab-btn active" onclick="showTab('nowcast')">📈 Current Nowcast</button>
-  <button class="tab-btn" onclick="showTab('update')">🔄 Update Nowcast <span class="badge">Live KF</span></button>
-  <button class="tab-btn" onclick="showTab('factor')">⚙️ Factor & Loadings</button>
-  <button class="tab-btn" onclick="showTab('data')">📂 Data & Model</button>
+  <button class="tab-btn active" onclick="showTab('nowcast')" data-i18n="dfm_tab_nowcast">📈 Current Nowcast</button>
+  <button class="tab-btn" onclick="showTab('update')"><span data-i18n="dfm_tab_update">🔄 Update Nowcast</span> <span class="badge">Live KF</span></button>
+  <button class="tab-btn" onclick="showTab('factor')" data-i18n="dfm_tab_factor">⚙️ Factor & Loadings</button>
+  <button class="tab-btn" onclick="showTab('data')" data-i18n="dfm_tab_data">📂 Data & Model</button>
 </nav>
 
 <!-- ════════════════════════════════════════════════════════
@@ -174,13 +175,13 @@ tr:hover td { background: #f8f9ff; }
 
   <div class="grid-3" id="kpi-row">
     <div class="card">
-      <div class="card-title">GDP Nowcast YoY</div>
+      <div class="card-title" data-i18n="dfm_kpi_yoy">GDP Nowcast YoY</div>
       <div class="kpi-value kpi-green" id="kpi-yoy">—</div>
       <div class="kpi-unit">Year-on-year growth (%)</div>
       <div class="kpi-period" id="kpi-yoy-period">—</div>
     </div>
     <div class="card">
-      <div class="card-title">Common Factor (Latest)</div>
+      <div class="card-title" data-i18n="dfm_kpi_factor">Common Factor (Latest)</div>
       <div class="kpi-value kpi-orange" id="kpi-factor">—</div>
       <div class="kpi-unit" id="kpi-factor-unit">Economic momentum index (standardized)</div>
       <div class="kpi-period" id="kpi-factor-period" style="margin-top:10px;font-size:11px;color:var(--text2);line-height:1.5">
@@ -188,21 +189,21 @@ tr:hover td { background: #f8f9ff; }
       </div>
     </div>
     <div class="card">
-      <div class="card-title">Model Status</div>
+      <div class="card-title" data-i18n="dfm_kpi_status">Model Status</div>
       <div class="kpi-value" id="kpi-status" style="font-size:20px;margin-top:6px">—</div>
       <div class="kpi-unit" id="kpi-iter">—</div>
       <div class="kpi-period" id="kpi-loglik">—</div>
     </div>
   </div>
 
-  <div class="section-label">GDP Growth History & Nowcast</div>
+  <div class="section-label" data-i18n="dfm_section_hist">GDP Growth History & Nowcast</div>
   <div class="card" style="margin-bottom:18px">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
       <div>
-        <div class="card-title" style="margin-bottom:0">GDP Year-on-Year Growth Rate (%)</div>
-        <div class="card-subtitle" style="margin-bottom:0">Historical + DFM nowcast (highlighted) · Quarterly</div>
+        <div class="card-title" style="margin-bottom:0" data-i18n="dfm_chart_gdp">GDP Year-on-Year Growth Rate (%)</div>
+        <div class="card-subtitle" style="margin-bottom:0" data-i18n="dfm_chart_gdp_sub">Historical + DFM nowcast (highlighted) · Quarterly</div>
       </div>
-      <button id="fan-toggle-btn" onclick="toggleFanChart()" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:5px 13px;font-size:12px;font-weight:600;color:#1d4ed8;cursor:pointer;display:flex;align-items:center;gap:5px;">
+      <button id="fan-toggle-btn" onclick="toggleFanChart()" data-i18n="show_fan" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:5px 13px;font-size:12px;font-weight:600;color:#1d4ed8;cursor:pointer;display:flex;align-items:center;gap:5px;">
         📊 Show Fan Chart
       </button>
     </div>
@@ -219,8 +220,8 @@ tr:hover td { background: #f8f9ff; }
   </div>
 
   <div class="card">
-    <div class="card-title">Growth Decomposition — Latest Nowcast</div>
-    <div class="card-subtitle">Contribution of each indicator to latest GDP nowcast (pp)</div>
+    <div class="card-title" data-i18n="dfm_chart_decomp">Growth Decomposition — Latest Nowcast</div>
+    <div class="card-subtitle" data-i18n="dfm_chart_decomp_sub">Contribution of each indicator to latest GDP nowcast (pp)</div>
     <div class="chart-wrap" style="height:260px">
       <canvas id="chart-decomp"></canvas>
     </div>
@@ -229,11 +230,11 @@ tr:hover td { background: #f8f9ff; }
   <!-- Export toolbar -->
   <div class="export-toolbar">
     <span class="export-label">Export Results:</span>
-    <button class="export-btn" onclick="dfmExportCSV()">📊 CSV</button>
-    <button class="export-btn" onclick="dfmExportPNG()">🖼 PNG Chart</button>
-    <button class="export-btn" onclick="dfmExportPDF()">📄 PDF Report</button>
-    <button class="export-btn" onclick="dfmSaveScenario()" style="background:#16a34a;color:#fff;border-color:#16a34a;">💾 Save</button>
-    <button class="export-btn" onclick="dfmAIAnalysis()" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
+    <button class="export-btn" onclick="dfmExportCSV()" data-i18n="export_csv">📊 CSV</button>
+    <button class="export-btn" onclick="dfmExportPNG()" data-i18n="export_png">🖼 PNG Chart</button>
+    <button class="export-btn" onclick="dfmExportPDF()" data-i18n="export_pdf">📄 PDF Report</button>
+    <button class="export-btn" onclick="dfmSaveScenario()" data-i18n="save_scenario" style="background:#16a34a;color:#fff;border-color:#16a34a;">💾 Save</button>
+    <button class="export-btn" onclick="dfmAIAnalysis()" data-i18n="ai_analysis" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
   </div>
 </div>
 
