@@ -13,26 +13,48 @@ Interactive macroeconomic policy simulation platform for analyzing Uzbekistan's 
 | **CGE 1-2-3 Model** | Computable General Equilibrium model for sectoral shock simulation (2021 data) |
 | **Financial Programming** | IMF 4-sector framework for macroeconomic consistency checks |
 
+## Repository Structure
+
+- `index.html` + model folders (`qpm_uzbekistan`, `dfm_nowcast`, `pe_model`, `io_model`, `cge_model`, `fpp_model`): legacy static application and model pages.
+- `apps/policy-ui`: React + TypeScript replatform frontend.
+- `mcp_server`: Python MCP server exposing model tools.
+- `shared`: shared JS registries, engines, i18n, and data assets used by the static app.
+
 ## Getting Started
 
-This is a static web application — no server or build tools required.
+### Legacy static app
 
-1. Clone or download the repository
-2. Open `index.html` in a web browser
-3. Navigate between models using the sidebar or model cards
+1. Clone or download the repository.
+2. Open `index.html` in a web browser.
+3. Navigate between models using the sidebar or model cards.
 
-### For Development
+### Replatform frontend (`apps/policy-ui`)
 
-- Each model is self-contained in its own folder with an `index.html`
-- Shared utilities are in `shared/report-engine.js`
-- Data files (`*_data.js`, `*_data.json`) are auto-generated from R scripts
+1. `cd apps/policy-ui`
+2. `npm ci`
+3. `npm run dev` (or `npm run build` / `npm run test`)
+
+### MCP server (`mcp_server`)
+
+1. Install Python 3.11+
+2. `cd mcp_server`
+3. `pip install -e ".[dev]"`
+4. `python -m pytest -q`
+5. `python main.py`
+
+### Development Notes
+
+- Legacy model pages are self-contained and use folder-level `index.html` files.
+- Shared UI/report utilities live in `shared/report-engine.js` and related modules.
+- Data files (`*_data.js`, `*_data.json`) are generated from upstream R/data workflows.
 
 ## Tech Stack
 
-- **Frontend:** HTML5, CSS3, Vanilla JavaScript
+- **Frontend:** HTML5/CSS3/Vanilla JS (legacy) + React 19/TypeScript/Vite (`apps/policy-ui`)
 - **Charts:** Chart.js 4.4.0
 - **Export:** jsPDF 2.5.1 (PDF), XLSX 0.18.5 (Excel)
 - **Modeling:** R (data processing and model computation)
+- **Tooling/Backend:** Python MCP server (`mcp_server`)
 - **Fonts:** Inter, JetBrains Mono (Google Fonts)
 
 ## Features

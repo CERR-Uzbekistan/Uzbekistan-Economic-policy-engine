@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [main]
   push:
-    branches: [main]
+    branches: [main, epic/frontend-replatform]
 
 jobs:
   html-check:
@@ -93,3 +93,54 @@ jobs:
           if [ "$i18n_count" -lt 10 ]; then
             echo "::warning::Hub page has very few i18n tags ($i18n_count) — check translations"
           fi
+
+  policy-ui-check:
+    name: Policy UI Quality Gate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/policy-ui
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: apps/policy-ui/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+
+  mcp-server-check:
+    name: MCP Server Quality Gate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mcp_server
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Ruff
+        run: python -m ruff check .
+
+      - name: Pytest
+        run: python -m pytest -q
