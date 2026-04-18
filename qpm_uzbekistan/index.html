@@ -13,6 +13,7 @@
 <script src="../shared/toast.js"></script>
 <script src="../shared/scenario-engine.js"></script>
 <script src="../shared/ai-advisor.js"></script>
+<script src="../shared/i18n.js"></script>
 <script src="../shared/registry-loader.js"></script>
 <script>window.addEventListener('load', () => EPE?.ready(() => EPE.badge()));</script>
 <style>
@@ -53,10 +54,21 @@ nav{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;displ
 
 /* Sliders */
 .prow{margin-bottom:12px}
-.plabel{display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:3px}
-.pname{font-weight:500}
+.plabel{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;margin-bottom:3px}
+.pname{font-weight:500;display:flex;align-items:center;gap:4px}
 .pval{color:var(--blue);font-weight:700;min-width:34px;text-align:right}
 .pdesc{font-size:.65rem;color:var(--text2);margin-bottom:3px}
+
+/* ── Parameter info tooltip ── */
+.ptip{position:relative;display:inline-flex;align-items:center;justify-content:center;
+      width:13px;height:13px;background:var(--text2);color:#fff;border-radius:50%;
+      font-size:8px;font-weight:800;cursor:help;flex-shrink:0;margin-left:2px;line-height:1}
+.ptip::after{content:attr(data-tip);position:absolute;bottom:130%;left:50%;transform:translateX(-50%);
+             background:#1e293b;color:#f1f5f9;padding:7px 10px;border-radius:8px;font-size:11px;
+             line-height:1.55;white-space:normal;width:210px;max-width:260px;opacity:0;
+             pointer-events:none;z-index:9999;transition:opacity .15s;
+             box-shadow:0 6px 20px rgba(0,0,0,.35);font-weight:400}
+.ptip:hover::after{opacity:1}
 input[type=range]{width:100%;height:4px;border-radius:2px;outline:none;-webkit-appearance:none;cursor:pointer;
   background:linear-gradient(to right,var(--blue) 0%,var(--blue) var(--pct,50%),#d0dce9 var(--pct,50%),#d0dce9 100%)}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;
@@ -157,14 +169,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
       </svg>
     </div>
     <div>
-      <div class="brand-title">QPM Uzbekistan</div>
-      <div class="brand-sub">CERR Macroeconomic Simulator</div>
+      <div class="brand-title" data-i18n="qpm_title">QPM Uzbekistan</div>
+      <div class="brand-sub" data-i18n="qpm_sub">CERR Macroeconomic Simulator</div>
     </div>
   </div>
   <div class="nav-tabs">
-    <button class="ntab on" onclick="showPage('irf',this)">Shock Analysis <span class="badge">IRF</span></button>
-    <button class="ntab" onclick="showPage('baseline',this)">Baseline Forecast</button>
-    <button class="ntab" onclick="showPage('about',this)">Model</button>
+    <button class="ntab on" onclick="showPage('irf',this)"><span data-i18n="qpm_tab_irf">Shock Analysis</span> <span class="badge">IRF</span></button>
+    <button class="ntab" onclick="showPage('baseline',this)" data-i18n="qpm_tab_baseline">Baseline Forecast</button>
+    <button class="ntab" onclick="showPage('about',this)" data-i18n="qpm_tab_model">Model</button>
   </div>
 </nav>
 
@@ -174,30 +186,33 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 <aside class="sidebar">
 
   <div class="sec">
-    <div class="sec-hd">Shock Type</div>
+    <div class="sec-hd" data-i18n="qpm_shock_type">Shock Type</div>
     <div class="shock-grid">
       <button class="sbtn on" onclick="setShock('demand',this)">
-        <div class="ico">📊</div><div class="lbl">Aggregate<br>Demand</div>
+        <div class="ico">📊</div><div class="lbl" data-i18n="qpm_shock_demand">Aggregate<br>Demand</div>
       </button>
       <button class="sbtn" onclick="setShock('inflation',this)">
-        <div class="ico">🔥</div><div class="lbl">Cost-Push<br>Inflation</div>
+        <div class="ico">🔥</div><div class="lbl" data-i18n="qpm_shock_inflation">Cost-Push<br>Inflation</div>
       </button>
       <button class="sbtn" onclick="setShock('exchange',this)">
-        <div class="ico">💱</div><div class="lbl">UZS<br>Depreciation</div>
+        <div class="ico">💱</div><div class="lbl" data-i18n="qpm_shock_exchange">UZS<br>Depreciation</div>
       </button>
       <button class="sbtn" onclick="setShock('monetary',this)">
-        <div class="ico">🏦</div><div class="lbl">Monetary<br>Tightening</div>
+        <div class="ico">🏦</div><div class="lbl" data-i18n="qpm_shock_monetary">Monetary<br>Tightening</div>
+      </button>
+      <button class="sbtn" onclick="setShock('risk',this)">
+        <div class="ico">⚠️</div><div class="lbl">Risk<br>Premium</div>
       </button>
     </div>
     <div class="shk-size">
-      <div class="shk-size-hd">Simulation Settings</div>
+      <div class="shk-size-hd" data-i18n="qpm_sim_settings">Simulation Settings</div>
       <div class="prow">
-        <div class="plabel"><span class="pname">Shock size</span><span class="pval" id="vShkSz">1.0 pp</span></div>
+        <div class="plabel"><span class="pname" data-i18n="qpm_shock_size">Shock size</span><span class="pval" id="vShkSz">1.0 pp</span></div>
         <input type="range" id="shkSz" min="0.25" max="5" step="0.25" value="1"
                oninput="sl(this,'vShkSz',v=>v.toFixed(2)+' pp');run()">
       </div>
       <div class="prow">
-        <div class="plabel"><span class="pname">Horizon</span><span class="pval" id="vHorizon">20 Q</span></div>
+        <div class="plabel"><span class="pname" data-i18n="qpm_horizon">Horizon</span><span class="pval" id="vHorizon">20 Q</span></div>
         <input type="range" id="horizon" min="8" max="32" step="4" value="20"
                oninput="sl(this,'vHorizon',v=>v+' Q');run()">
       </div>
@@ -205,89 +220,89 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   </div>
 
   <div class="sec">
-    <div class="sec-hd">IS Curve — Aggregate Demand</div>
+    <div class="sec-hd" data-i18n="qpm_is_hd">IS Curve — Aggregate Demand</div>
     <div class="prow">
-      <div class="plabel"><span class="pname">b₁ — Gap persistence</span><span class="pval" id="vb1">0.70</span></div>
-      <div class="pdesc">Inertia in output gap dynamics</div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_b1">b₁ — Gap persistence<span class="ptip" data-tip="Controls how quickly the GDP gap closes. Higher b₁ = more inertia, slower recovery from shocks." data-tip-ru="Контролирует скорость закрытия разрыва ВВП. Высокий b₁ = больше инерции, медленнее восстановление после шоков." data-tip-uz="YaIM bo'shlig'i qanchalik tez yopilishini boshqaradi. Yuqori b₁ = ko'proq inersiya, sekinroq tiklanish.">i</span></span><span class="pval" id="vb1">0.70</span></div>
+      <div class="pdesc" data-i18n="qpm_b1_desc">Inertia in output gap dynamics</div>
       <input type="range" id="b1" min="0.3" max="0.95" step="0.05" value="0.7" oninput="sl(this,'vb1',f2)">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname">b₂ — MCI sensitivity</span><span class="pval" id="vb2">0.20</span></div>
-      <div class="pdesc">Monetary policy transmission to demand</div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_b2">b₂ — MCI sensitivity<span class="ptip" data-tip="How strongly monetary conditions (interest rate + exchange rate) affect output gap. Key monetary transmission parameter." data-tip-ru="Насколько денежные условия (ставка + курс) влияют на разрыв выпуска. Ключевой параметр денежной трансмиссии." data-tip-uz="Pul-kredit shartlari chiqarish bo'shlig'iga ta'sir kuchi. Asosiy monetar transmissiya parametri.">i</span></span><span class="pval" id="vb2">0.20</span></div>
+      <div class="pdesc" data-i18n="qpm_b2_desc">Monetary policy transmission to demand</div>
       <input type="range" id="b2" min="0.05" max="0.6" step="0.05" value="0.2" oninput="sl(this,'vb2',f2)">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname">b₃ — External demand</span><span class="pval" id="vb3">0.30</span></div>
-      <div class="pdesc">Foreign output gap spillover</div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_b3">b₃ — External demand<span class="ptip" data-tip="Sensitivity of domestic output to foreign economic cycles. Important for Uzbekistan as an open economy with significant trade and remittances." data-tip-ru="Чувствительность внутреннего выпуска к внешним экономическим циклам. Важно для открытой экономики Узбекистана с торговлей и денежными переводами." data-tip-uz="Ichki chiqarish tashqi iqtisodiy tsikllarga sezgirligi. Savdo va pul o'tkazmalari bo'lgan ochiq iqtisodiyot uchun muhim.">i</span></span><span class="pval" id="vb3">0.30</span></div>
+      <div class="pdesc" data-i18n="qpm_b3_desc">Foreign output gap spillover</div>
       <input type="range" id="b3" min="0.05" max="0.6" step="0.05" value="0.3" oninput="sl(this,'vb3',f2)">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname">b₄ — IR weight in MCI</span><span class="pval" id="vb4">0.60</span></div>
-      <div class="pdesc">Interest rate vs exchange rate (1-b₄) in MCI</div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_b4">b₄ — IR weight in MCI<span class="ptip" data-tip="Share of interest rate in the Monetary Conditions Index. Remaining (1−b₄) is the exchange rate weight. Calibrated to Uzbekistan's financial structure." data-tip-ru="Доля процентной ставки в индексе денежных условий. Остаток (1−b₄) — вес обменного курса. Откалибровано для Узбекистана." data-tip-uz="Pul-kredit shartlari indeksida foiz stavkasi ulushi. Qolgan (1−b₄) — valyuta kursi og'irligi. O'zbekiston uchun kalibrlangan.">i</span></span><span class="pval" id="vb4">0.60</span></div>
+      <div class="pdesc" data-i18n="qpm_b4_desc">Interest rate vs exchange rate (1-b₄) in MCI</div>
       <input type="range" id="b4" min="0.1" max="0.9" step="0.1" value="0.6" oninput="sl(this,'vb4',f2)">
     </div>
   </div>
 
   <div class="sec">
-    <div class="sec-hd">Phillips Curve — Inflation</div>
+    <div class="sec-hd" data-i18n="qpm_pc_hd">Phillips Curve — Inflation</div>
     <div class="prow">
-      <div class="plabel"><span class="pname">a₁ — Inflation persistence</span><span class="pval" id="va1">0.60</span></div>
-      <div class="pdesc">Backward-looking share of expectations</div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_a1">a₁ — Inflation persistence<span class="ptip" data-tip="Share of inflation driven by past inflation (backward-looking expectations). High a₁ = inflation is hard to anchor; low = expectations are more forward-looking and responsive to CBU signals." data-tip-ru="Доля инфляции, обусловленная прошлой инфляцией. Высокий a₁ = инфляцию трудно сдержать; низкий = ожидания более перспективные и реагируют на сигналы ЦБУ." data-tip-uz="O'tgan inflyatsiya bilan bog'liq inflyatsiya ulushi. Yuqori a₁ = inflyatsiyani jilovlash qiyin; past = kutishlar CBU signallariga ko'proq sezgir.">i</span></span><span class="pval" id="va1">0.60</span></div>
+      <div class="pdesc" data-i18n="qpm_a1_desc">Backward-looking share of expectations</div>
       <input type="range" id="a1" min="0.3" max="0.9" step="0.05" value="0.6" oninput="sl(this,'va1',f2)">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname">a₂ — Marginal cost pass-through</span><span class="pval" id="va2">0.20</span></div>
-      <div class="pdesc">RMC impact on inflation ★ updated</div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_a2">a₂ — Marginal cost pass-through<span class="ptip" data-tip="Pass-through from real marginal cost (output gap) to CPI inflation. Higher a₂ = stronger demand-pull inflation pressures at each unit of economic overheating." data-tip-ru="Передача реальных предельных издержек в инфляцию CPI. Высокий a₂ = сильное инфляционное давление со стороны спроса при перегреве экономики." data-tip-uz="Haqiqiy chegaraviy xarajatlardan CPI inflyatsiyasiga o'tish. Yuqori a₂ = iqtisodiyot qizib ketganda kuchliroq inflyatsion bosim.">i</span></span><span class="pval" id="va2">0.20</span></div>
+      <div class="pdesc" data-i18n="qpm_a2_desc">RMC impact on inflation</div>
       <input type="range" id="a2" min="0.05" max="0.5" step="0.05" value="0.20" oninput="sl(this,'va2',f2)">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname">a₃ — Domestic cost share</span><span class="pval" id="va3">0.65</span></div>
-      <div class="pdesc">Domestic vs imported inflation ★ updated</div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_a3">a₃ — Domestic cost share<span class="ptip" data-tip="Share of domestically driven costs in the CPI basket. Remaining (1−a₃) is the imported inflation component. Uzbekistan: ~65% domestic, ~35% import-driven." data-tip-ru="Доля внутренних затрат в корзине CPI. Остаток (1−a₃) = импортная инфляция. Узбекистан: ~65% внутренние, ~35% импорт." data-tip-uz="IFK savatchasida ichki xarajatlar ulushi. Qolgan (1−a₃) = import inflyatsiyasi. O'zbekiston: ~65% ichki, ~35% import.">i</span></span><span class="pval" id="va3">0.65</span></div>
+      <div class="pdesc" data-i18n="qpm_a3_desc">Domestic vs imported inflation</div>
       <input type="range" id="a3" min="0.2" max="0.9" step="0.05" value="0.65" oninput="sl(this,'va3',f2)">
     </div>
   </div>
 
   <div class="sec">
-    <div class="sec-hd">Taylor Rule — Monetary Policy</div>
+    <div class="sec-hd" data-i18n="qpm_tr_hd">Taylor Rule — Monetary Policy</div>
     <div class="prow">
-      <div class="plabel"><span class="pname">g₁ — Rate smoothing</span><span class="pval" id="vg1">0.80</span></div>
-      <div class="pdesc">CBU gradualism in rate adjustments</div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_g1">g₁ — Rate smoothing<span class="ptip" data-tip="Central bank gradualism: how slowly the CBU adjusts rates. High g₁ (≈0.8) = gradual, predictable changes. Low g₁ = aggressive, volatile rate moves." data-tip-ru="Постепенность ЦБУ: насколько медленно корректируются ставки. Высокий g₁ (≈0.8) = плавные, предсказуемые изменения. Низкий g₁ = агрессивные движения ставок." data-tip-uz="Markaziy bank gradualizmi: CBU stavkalarni qanchalik sekin moslashtiradi. Yuqori g₁ (≈0.8) = asta-sekin, bashoratli o'zgarishlar. Past g₁ = tajovuzkor stavka harakatlari.">i</span></span><span class="pval" id="vg1">0.80</span></div>
+      <div class="pdesc" data-i18n="qpm_g1_desc">CBU gradualism in rate adjustments</div>
       <input type="range" id="g1" min="0.3" max="0.95" step="0.05" value="0.8" oninput="sl(this,'vg1',f2)">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname">g₂ — Inflation response</span><span class="pval" id="vg2">1.50</span></div>
-      <div class="pdesc">Taylor principle: must be &gt; 1 for stability</div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_g2">g₂ — Inflation response<span class="ptip" data-tip="Taylor Principle: must exceed 1 for inflation stability. g₂=1.5 means the CBU raises the nominal rate by 150bp for every 1pp inflation overshoot — ensuring the real rate rises to cool demand." data-tip-ru="Принцип Тейлора: должен превышать 1 для стабильности инфляции. g₂=1.5: ЦБУ повышает ставку на 150 б.п. при каждом 1 п.п. превышения инфляции." data-tip-uz="Teylor printsipi: inflyatsiya barqarorligi uchun 1 dan katta bo'lishi shart. g₂=1.5: har 1 p.p. inflyatsiya ortiqchaligida CBU stavkani 150 b.p. ko'taradi.">i</span></span><span class="pval" id="vg2">1.50</span></div>
+      <div class="pdesc" data-i18n="qpm_g2_desc">Taylor principle: must be &gt; 1 for stability</div>
       <input type="range" id="g2" min="1.0" max="3.0" step="0.1" value="1.5" oninput="sl(this,'vg2',f2)">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname">g₃ — Output gap response</span><span class="pval" id="vg3">0.50</span></div>
-      <div class="pdesc">Weight on economic activity</div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_g3">g₃ — Output gap response<span class="ptip" data-tip="How much the CBU reacts to economic slack or overheating. Higher g₃ = more activist, dual-mandate style policy; lower = pure inflation targeter." data-tip-ru="Насколько ЦБУ реагирует на перегрев или спад экономики. Высокий g₃ = активная политика двойного мандата; низкий = чистое таргетирование инфляции." data-tip-uz="CBU iqtisodiy qizib ketish yoki tangliqqa qanchalik reaksiya qiladi. Yuqori g₃ = ikki mandatli faolroq siyosat; past = toza inflyatsiya targetingi.">i</span></span><span class="pval" id="vg3">0.50</span></div>
+      <div class="pdesc" data-i18n="qpm_g3_desc">Weight on economic activity</div>
       <input type="range" id="g3" min="0.1" max="1.5" step="0.1" value="0.5" oninput="sl(this,'vg3',f2)">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname">e₁ — UIP backward weight</span><span class="pval" id="ve1">0.70</span></div>
-      <div class="pdesc">Exchange rate backward-looking share</div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_e1">e₁ — UIP backward weight<span class="ptip" data-tip="Share of exchange rate expectations that are backward-looking (based on past rates). Lower e₁ = more forward-looking expectations, stronger UIP arbitrage discipline on the UZS." data-tip-ru="Доля ожиданий обменного курса, основанных на прошлых значениях. Низкий e₁ = более перспективные ожидания, более сильная дисциплина UIP для UZS." data-tip-uz="O'tgan kurslarga asoslangan valyuta kursi kutishlari ulushi. Past e₁ = ko'proq istiqbolga yo'nalgan kutishlar, UZS uchun kuchliroq UIP intizomi.">i</span></span><span class="pval" id="ve1">0.70</span></div>
+      <div class="pdesc" data-i18n="qpm_e1_desc">Exchange rate backward-looking share</div>
       <input type="range" id="e1" min="0.1" max="0.9" step="0.1" value="0.7" oninput="sl(this,'ve1',f2)">
     </div>
   </div>
 
   <div class="sec">
-    <div class="sec-hd">Steady-State Values</div>
+    <div class="sec-hd" data-i18n="qpm_ss_hd">Steady-State Values</div>
     <div class="prow">
-      <div class="plabel"><span class="pname">Inflation Target π* (%)</span><span class="pval" id="vtar">5.0</span></div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_target">Inflation Target π* (%)<span class="ptip" data-tip="Long-run CBU inflation goal. Official target: 5% for 2024–2026. The Taylor Rule anchors the nominal rate to keep inflation near this value." data-tip-ru="Долгосрочная цель ЦБУ по инфляции. Официальная цель: 5% на 2024–2026 гг. Правило Тейлора удерживает номинальную ставку вблизи этого значения." data-tip-uz="CBUning uzoq muddatli inflyatsiya maqsadi. Rasmiy maqsad: 2024–2026 yillar uchun 5%. Teylor qoidasi nominal stavkani ushbu qiymat atrofida saqlaydi.">i</span></span><span class="pval" id="vtar">5.0</span></div>
       <input type="range" id="ssTar" min="3" max="12" step="0.5" value="5" oninput="sl(this,'vtar',v=>v.toFixed(1))">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname">Neutral Real Rate r̄ (%)</span><span class="pval" id="vrrbar">3.5</span></div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_rrbar">Neutral Real Rate r̄ (%)<span class="ptip" data-tip="Equilibrium real interest rate: neither expansionary nor contractionary. Estimated at 3–4% for Uzbekistan based on trend growth and external balance conditions." data-tip-ru="Равновесная реальная ставка: ни стимулирующая, ни сдерживающая. Оценивается в 3–4% для Узбекистана на основе трендового роста и условий внешнего баланса." data-tip-uz="Muvozanat haqiqiy foiz stavkasi: na kengaytiruvchi, na cheklovchi. O'zbekiston uchun trend o'sishi va tashqi muvozanat sharoitlari asosida 3–4% deb baholanadi.">i</span></span><span class="pval" id="vrrbar">3.5</span></div>
       <input type="range" id="ssRRbar" min="1" max="8" step="0.5" value="3.5" oninput="sl(this,'vrrbar',v=>v.toFixed(1))">
     </div>
     <div class="prow">
-      <div class="plabel"><span class="pname">Potential Growth ȳ (%)</span><span class="pval" id="vgdpbar">6.0</span></div>
+      <div class="plabel"><span class="pname" data-i18n="qpm_gdpbar">Potential Growth ȳ (%)<span class="ptip" data-tip="Trend GDP growth consistent with stable inflation and full employment. Uzbekistan's structural growth potential: ~6% (CERR, IMF estimates)." data-tip-ru="Потенциальный рост ВВП при стабильной инфляции и полной занятости. Структурный потенциал Узбекистана: ~6% (CERR, МВФ)." data-tip-uz="Barqaror inflyatsiya va to'liq bandlik bilan muvofiq YaIM o'sishi. O'zbekistonning strukturaviy salohiyati: ~6% (CERR, IMF).">i</span></span><span class="pval" id="vgdpbar">6.0</span></div>
       <input type="range" id="ssGdpbar" min="2" max="10" step="0.5" value="6" oninput="sl(this,'vgdpbar',v=>v.toFixed(1))">
     </div>
   </div>
 
-  <button class="run-btn" onclick="run()">▶ &nbsp;Run Simulation</button>
+  <button class="run-btn" onclick="run()">▶ &nbsp;<span data-i18n="run_btn">Run Simulation</span></button>
   <div style="text-align:center;margin-top:8px;font-size:.68rem;color:var(--text2)">
     Solver: <span id="solverTag" class="solver-tag solver-ok">Ready</span>
   </div>
@@ -317,62 +332,62 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 
     <div class="kpis">
       <div class="kcard">
-        <div class="klbl">Peak Inflation (D4L_CPI)</div>
+        <div class="klbl" data-i18n="qpm_kpi_inflation">Peak Inflation (D4L_CPI)</div>
         <div class="kval" id="kpi0" style="color:var(--red)">—</div>
-        <div class="ksub" id="kpi0s">at quarter —</div>
+        <div class="ksub" id="kpi0s">—</div>
       </div>
       <div class="kcard">
-        <div class="klbl">Peak Output Gap (L_GDP_GAP)</div>
+        <div class="klbl" data-i18n="qpm_kpi_gap">Peak Output Gap (L_GDP_GAP)</div>
         <div class="kval" id="kpi1" style="color:var(--blue)">—</div>
-        <div class="ksub" id="kpi1s">at quarter —</div>
+        <div class="ksub" id="kpi1s">—</div>
       </div>
       <div class="kcard">
-        <div class="klbl">Peak Policy Rate (RS)</div>
+        <div class="klbl" data-i18n="qpm_kpi_rate">Peak Policy Rate (RS)</div>
         <div class="kval" id="kpi2" style="color:var(--navy)">—</div>
-        <div class="ksub" id="kpi2s">at quarter —</div>
+        <div class="ksub" id="kpi2s">—</div>
       </div>
       <div class="kcard">
-        <div class="klbl">Peak NER Depreciation (D4L_S)</div>
+        <div class="klbl" data-i18n="qpm_kpi_ner">Peak NER Depreciation (D4L_S)</div>
         <div class="kval" id="kpi3" style="color:var(--amber)">—</div>
-        <div class="ksub" id="kpi3s">at quarter —</div>
+        <div class="ksub" id="kpi3s">—</div>
       </div>
     </div>
 
     <div class="cgrid">
       <div class="ccard">
-        <div class="ctitle">CPI Inflation YoY</div>
+        <div class="ctitle" data-i18n="qpm_ch0_title">CPI Inflation YoY</div>
         <div class="cvar">D4L_CPI = L_CPI − L_CPI{−4}</div>
-        <div class="csub">Year-on-year inflation deviation, percentage points</div>
+        <div class="csub" data-i18n="qpm_ch0_sub">Year-on-year inflation deviation, pp</div>
         <div class="cwrap"><canvas id="ch0"></canvas></div>
       </div>
       <div class="ccard">
-        <div class="ctitle">Output Gap</div>
+        <div class="ctitle" data-i18n="qpm_ch1_title">Output Gap</div>
         <div class="cvar">L_GDP_GAP = L_GDP − L_GDP_BAR</div>
-        <div class="csub">Deviation of GDP from potential, percent</div>
+        <div class="csub" data-i18n="qpm_ch1_sub">Deviation of GDP from potential, %</div>
         <div class="cwrap"><canvas id="ch1"></canvas></div>
       </div>
       <div class="ccard">
-        <div class="ctitle">Nominal Policy Rate</div>
+        <div class="ctitle" data-i18n="qpm_ch2_title">Nominal Policy Rate</div>
         <div class="cvar">RS — CBU Key Rate</div>
-        <div class="csub">Deviation from neutral rate, percentage points</div>
+        <div class="csub" data-i18n="qpm_ch2_sub">Deviation from neutral rate, pp</div>
         <div class="cwrap"><canvas id="ch2"></canvas></div>
       </div>
       <div class="ccard">
-        <div class="ctitle">Nominal Exchange Rate Depreciation YoY</div>
+        <div class="ctitle" data-i18n="qpm_ch3_title">NER Depreciation YoY</div>
         <div class="cvar">D4L_S = L_S − L_S{−4}</div>
-        <div class="csub">Annual UZS/USD depreciation deviation, pp (+ = weaker UZS)</div>
+        <div class="csub" data-i18n="qpm_ch3_sub">Annual UZS/USD depreciation, pp (+ = weaker UZS)</div>
         <div class="cwrap"><canvas id="ch3"></canvas></div>
       </div>
       <div class="ccard">
-        <div class="ctitle">Real Exchange Rate Gap</div>
+        <div class="ctitle" data-i18n="qpm_ch4_title">Real Exchange Rate Gap</div>
         <div class="cvar">L_Z_GAP = (L_S + L_CPI_RW − L_CPI) − L_Z_BAR</div>
-        <div class="csub">RER deviation from equilibrium (+ = undervalued UZS)</div>
+        <div class="csub" data-i18n="qpm_ch4_sub">RER deviation from equilibrium (+ = undervalued UZS)</div>
         <div class="cwrap"><canvas id="ch4"></canvas></div>
       </div>
       <div class="ccard">
-        <div class="ctitle">Real Monetary Conditions Index</div>
+        <div class="ctitle" data-i18n="qpm_ch5_title">Monetary Conditions Index</div>
         <div class="cvar">MCI = b₄·RR_GAP − (1−b₄)·L_Z_GAP</div>
-        <div class="csub">Combined monetary tightness (+ = tighter conditions)</div>
+        <div class="csub" data-i18n="qpm_ch5_sub">Combined monetary tightness (+ = tighter)</div>
         <div class="cwrap"><canvas id="ch5"></canvas></div>
       </div>
     </div>
@@ -392,45 +407,45 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   <!-- BASELINE PAGE -->
   <div class="page" id="page-baseline">
     <div class="shdr">
-      <div class="stitle">Baseline Macroeconomic Forecast</div>
+      <div class="stitle" data-i18n="qpm_bl_title">Baseline Macroeconomic Forecast</div>
       <div class="sbadge">2024Q1 – 2027Q4</div>
     </div>
     <div class="fix-note">
-      <strong>ℹ Baseline method:</strong> Uses current initial conditions and runs the model forward toward steady state.
+      <strong data-i18n="qpm_bl_method">ℹ Baseline method:</strong> Uses current initial conditions and runs the model forward toward steady state.
       Set starting values below to match your latest data observation.
     </div>
     <div class="bl-ctrls">
-      <div class="cgrp"><div class="clbl">Inflation YoY (%)</div>
+      <div class="cgrp"><div class="clbl" data-i18n="qpm_bl_pi_lbl">Inflation YoY (%)</div>
         <input class="cinput" type="number" id="bl_pi" value="10.5" step="0.5" oninput="runBL()"></div>
-      <div class="cgrp"><div class="clbl">Policy Rate (%)</div>
+      <div class="cgrp"><div class="clbl" data-i18n="qpm_bl_rs_lbl">Policy Rate (%)</div>
         <input class="cinput" type="number" id="bl_rs" value="13.5" step="0.25" oninput="runBL()"></div>
-      <div class="cgrp"><div class="clbl">Output Gap (%)</div>
+      <div class="cgrp"><div class="clbl" data-i18n="qpm_bl_gap_lbl">Output Gap (%)</div>
         <input class="cinput" type="number" id="bl_gap" value="-1.5" step="0.25" oninput="runBL()"></div>
-      <div class="cgrp"><div class="clbl">NER Depreciation YoY (%)</div>
+      <div class="cgrp"><div class="clbl" data-i18n="qpm_bl_ner_lbl">NER Depreciation YoY (%)</div>
         <input class="cinput" type="number" id="bl_d4ls" value="8.0" step="0.5" oninput="runBL()"></div>
     </div>
     <div class="kpis">
-      <div class="kcard"><div class="klbl">Inflation 2025 avg (%)</div>
-        <div class="kval" id="bk0" style="color:var(--red)">—</div><div class="ksub">YoY annual avg</div></div>
-      <div class="kcard"><div class="klbl">Policy Rate at Q8 (%)</div>
-        <div class="kval" id="bk1" style="color:var(--navy)">—</div><div class="ksub">8 quarters ahead</div></div>
-      <div class="kcard"><div class="klbl">GDP Growth 2025 (%)</div>
-        <div class="kval" id="bk2" style="color:var(--teal)">—</div><div class="ksub">Potential + gap</div></div>
-      <div class="kcard"><div class="klbl">NER Deprec. at Q8 (%)</div>
-        <div class="kval" id="bk3" style="color:var(--amber)">—</div><div class="ksub">Annual rate</div></div>
+      <div class="kcard"><div class="klbl" data-i18n="qpm_bl_kpi0">Inflation 2025 avg (%)</div>
+        <div class="kval" id="bk0" style="color:var(--red)">—</div><div class="ksub" data-i18n="qpm_bl_kpi0s">YoY annual avg</div></div>
+      <div class="kcard"><div class="klbl" data-i18n="qpm_bl_kpi1">Policy Rate at Q8 (%)</div>
+        <div class="kval" id="bk1" style="color:var(--navy)">—</div><div class="ksub" data-i18n="qpm_bl_kpi1s">8 quarters ahead</div></div>
+      <div class="kcard"><div class="klbl" data-i18n="qpm_bl_kpi2">GDP Growth 2025 (%)</div>
+        <div class="kval" id="bk2" style="color:var(--teal)">—</div><div class="ksub" data-i18n="qpm_bl_kpi2s">Potential + gap</div></div>
+      <div class="kcard"><div class="klbl" data-i18n="qpm_bl_kpi3">NER Deprec. at Q8 (%)</div>
+        <div class="kval" id="bk3" style="color:var(--amber)">—</div><div class="ksub" data-i18n="qpm_bl_kpi3s">Annual rate</div></div>
     </div>
     <div class="cgrid">
-      <div class="ccard"><div class="ctitle">CPI Inflation Path</div>
-        <div class="csub">YoY, percent — converging to target</div>
+      <div class="ccard"><div class="ctitle" data-i18n="qpm_bl_c0_title">CPI Inflation Path</div>
+        <div class="csub" data-i18n="qpm_bl_c0_sub">YoY, percent — converging to target</div>
         <div class="cwrap"><canvas id="blc0"></canvas></div></div>
-      <div class="ccard"><div class="ctitle">CBU Policy Rate Path</div>
-        <div class="csub">Nominal, percent per annum</div>
+      <div class="ccard"><div class="ctitle" data-i18n="qpm_bl_c1_title">CBU Policy Rate Path</div>
+        <div class="csub" data-i18n="qpm_bl_c1_sub">Nominal, percent per annum</div>
         <div class="cwrap"><canvas id="blc1"></canvas></div></div>
-      <div class="ccard"><div class="ctitle">Output Gap Closure</div>
-        <div class="csub">Cyclical position of economy, percent</div>
+      <div class="ccard"><div class="ctitle" data-i18n="qpm_bl_c2_title">Output Gap Closure</div>
+        <div class="csub" data-i18n="qpm_bl_c2_sub">Cyclical position of economy, percent</div>
         <div class="cwrap"><canvas id="blc2"></canvas></div></div>
-      <div class="ccard"><div class="ctitle">NER Depreciation Path</div>
-        <div class="csub">Annual UZS/USD depreciation, percent</div>
+      <div class="ccard"><div class="ctitle" data-i18n="qpm_bl_c3_title">NER Depreciation Path</div>
+        <div class="csub" data-i18n="qpm_bl_c3_sub">Annual UZS/USD depreciation, percent</div>
         <div class="cwrap"><canvas id="blc3"></canvas></div></div>
     </div>
   </div>
@@ -438,16 +453,16 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   <!-- ABOUT PAGE -->
   <div class="page" id="page-about">
     <div class="shdr">
-      <div class="stitle">QPM Model — Structure & Parameters</div>
+      <div class="stitle" data-i18n="qpm_model_title">QPM Model — Structure & Parameters</div>
       <div class="sbadge">Uzbekistan Calibration</div>
     </div>
     <div class="agrid">
       <div class="acard">
-        <h3>Core Equations</h3>
+        <h3 data-i18n="qpm_eq_hd">Core Equations</h3>
         <div class="eq">IS:  gap_t = b₁·gap_{t-1} − b₂·MCI_t + b₃·gap*_t + ε_gap</div>
         <div class="eq">PC:  π_t  = a₁·π_{t-1} + (1−a₁)·Eπ_{t+1} + a₂·RMC_t + ε_π</div>
         <div class="eq">TR:  i_t  = g₁·i_{t-1} + (1−g₁)·[Eπ_{t+1} + g₂·π4_{t+4} + g₃·gap_t] + ε_i</div>
-        <div class="eq">UIP: s_t  = (1−e₁)·Es_{t+1} + e₁·s_{t-1} − i_t/4 + ε_s</div>
+        <div class="eq">UIP: s_t  = (1−e₁)·Es_{t+1} + e₁·s_{t-1} − (i_t−ρ_t)/4 + ε_s</div>
         <div class="eq">MCI  = b₄·RR_gap − (1−b₄)·Z_gap</div>
         <div class="eq">RMC  = a₃·gap + (1−a₃)·Z_gap</div>
         <div class="eq">RR_gap = RS − Eπ_{t+1} − RR_BAR</div>
@@ -456,24 +471,24 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
         <div class="eq">D4L_CPI= L_CPI − L_CPI{−4} (YoY inflation)</div>
       </div>
       <div class="acard">
-        <h3>Calibrated Parameters</h3>
+        <h3 data-i18n="qpm_param_hd">Calibrated Parameters</h3>
         <table class="ptable"><thead><tr><th>Param</th><th>Value</th><th>Description</th></tr></thead>
         <tbody id="ptbody"></tbody></table>
       </div>
       <div class="acard">
-        <h3>Solver: Bidirectional Gauss-Seidel</h3>
-        <p>The rational expectations model is solved by iterating between:</p><br>
+        <h3 data-i18n="qpm_solver_hd">Solver: Bidirectional Gauss-Seidel</h3>
+        <p data-i18n="qpm_solver_intro">The rational expectations model is solved by iterating between:</p><br>
         <ul>
-          <li><strong>Backward sweep (T→0):</strong> UIP exchange rate equation — s[t] depends on s[t+1] (forward-looking). Sweeping backward ensures s[t+1] is already updated in the current pass.</li>
-          <li><strong>Forward sweep (0→T):</strong> IS curve, Phillips curve, Taylor rule — depend on lagged values gap[t-1], π[t-1]. Also uses current-period RS in rr_gap (not lagged).</li>
-          <li><strong>RER gap:</strong> Properly computed as Z_gap = s[t] − ΣΔπ[k]/4 (CPI level cumulated from QoQ inflation).</li>
-          <li><strong>Convergence:</strong> ‖Δπ‖, ‖Δs‖, ‖Δgap‖ &lt; 10⁻¹⁰ (max 600 iterations)</li>
+          <li data-i18n="qpm_solver_li1"><strong>Backward sweep (T→0):</strong> UIP exchange rate equation — s[t] depends on s[t+1] (forward-looking). Sweeping backward ensures s[t+1] is already updated in the current pass.</li>
+          <li data-i18n="qpm_solver_li2"><strong>Forward sweep (0→T):</strong> IS curve, Phillips curve, Taylor rule — depend on lagged values gap[t-1], π[t-1]. Also uses current-period RS in rr_gap (not lagged).</li>
+          <li data-i18n="qpm_solver_li3"><strong>RER gap:</strong> Properly computed as Z_gap = s[t] − ΣΔπ[k]/4 (CPI level cumulated from QoQ inflation).</li>
+          <li data-i18n="qpm_solver_li4"><strong>Convergence:</strong> ‖Δπ‖, ‖Δs‖, ‖Δgap‖ &lt; 10⁻¹⁰ (max 600 iterations)</li>
         </ul>
         <br>
-        <p>Q0 on all charts = the shock-impact period (same convention as MATLAB/IRIS).</p>
+        <p data-i18n="qpm_solver_q0">Q0 on all charts = the shock-impact period (same convention as MATLAB/IRIS).</p>
       </div>
       <div class="acard">
-        <h3>Uzbekistan-Specific Notes</h3>
+        <h3 data-i18n="qpm_notes_hd">Uzbekistan-Specific Notes</h3>
         <ul>
           <li><strong>a₂ = 0.20</strong> (updated from 0.15) — stronger marginal cost pass-through reflecting rising wage pressures</li>
           <li><strong>a₃ = 0.65</strong> (updated from 0.60) — higher domestic cost share as structural reforms deepen</li>
@@ -541,11 +556,11 @@ function P() {
 // ═══════════════════════════════════════════════════════════
 //  CORE QPM SOLVER — Bidirectional Gauss-Seidel
 // ═══════════════════════════════════════════════════════════
-function solveIRF(p, shockType, shockSize, T) {
-  // N = total array length; shock lands at index SHOCK_T = 1
-  // Chart shows indices [SHOCK_T .. SHOCK_T+T] as Q0..QT
-  const N = T + 8;          // buffer for t+4 lookups
-  const ST = 1;             // shock period index = Q0
+function solveIRF(p, shockType, shockSize, T, initConds) {
+  // initConds (optional) = {gap, pi, rs, d4ls} — deviation-form initial state for baseline runs
+  const hasInit = !!initConds;
+  const ST = hasInit ? 5 : 1;   // pre-history depth (5 quarters for baseline warmup)
+  const N  = T + ST + 10;       // buffer for t+4 lookups
 
   const z = () => new Float64Array(N);
   let gap    = z(), pi     = z(), pi4    = z();
@@ -553,11 +568,28 @@ function solveIRF(p, shockType, shockSize, T) {
   let rmc    = z(), s      = z(), l_cpi  = z();
   let l_z_gap= z(), d4l_s  = z();
 
-  const shk_gap = z(), shk_pi = z(), shk_s = z(), shk_rs = z();
+  // Pre-fill deviation-form initial conditions so baseline uses the same model as IRF
+  if (hasInit) {
+    const { gap: g0, pi: p0, rs: r0, d4ls: d0 } = initConds;
+    for (let t = 0; t < ST; t++) {
+      gap[t] = g0;
+      pi[t]  = p0;
+      rs[t]  = r0;
+      // Linear s ramp so that d4l_s[ST-1] = d0  (d4l_s[t] = s[t] - s[t-4])
+      s[t] = d0 * t / (ST - 1);
+    }
+    for (let t = 1; t < ST; t++) {
+      l_cpi[t]   = l_cpi[t-1] + pi[t-1] / 4;
+      l_z_gap[t] = s[t] - l_cpi[t];
+    }
+  }
+
+  const shk_gap = z(), shk_pi = z(), shk_s = z(), shk_rs = z(), shk_rho = z();
   if (shockType === 'demand')    shk_gap[ST] = shockSize;
   if (shockType === 'inflation') shk_pi[ST]  = shockSize;
   if (shockType === 'exchange')  shk_s[ST]   = shockSize;
   if (shockType === 'monetary')  shk_rs[ST]  = shockSize;
+  if (shockType === 'risk')      shk_rho[ST] = shockSize;
 
   const { b1, b2, b3, b4, a1, a2, a3, g1, g2, g3, e1 } = p;
 
@@ -573,10 +605,11 @@ function solveIRF(p, shockType, shockSize, T) {
     const gap0 = gap.slice();
 
     // ── PASS 1: Backward sweep for UIP (exchange rate) ──────
-    // UIP: s[t] = (1-e1)*s[t+1] + e1*s[t-1] - rs[t]/4 + shk_s[t]
+    // UIP: s[t] = (1-e1)*s[t+1] + e1*s[t-1] - (rs[t]-ρ[t])/4 + shk_s[t]
+    // ρ[t] = shk_rho[t]: risk premium wedge (capital flight, sovereign downgrade)
     // Sweep T→ST so that s[t+1] is already updated this pass
     for (let t = N - 2; t >= ST; t--) {
-      s[t] = (1-e1)*G(s,t+1) + e1*G(s,t-1) - rs[t]/4 + shk_s[t];
+      s[t] = (1-e1)*G(s,t+1) + e1*G(s,t-1) - (rs[t] - shk_rho[t])/4 + shk_s[t];
     }
 
     // ── PASS 2: Forward sweep for IS/PC/Taylor ───────────────
@@ -641,9 +674,9 @@ function solveIRF(p, shockType, shockSize, T) {
       d4l_s[t] = G(s,t) - G(s,t-4);
     }
 
-    // ── Convergence check ────────────────────────────────────
+    // ── Convergence check (forecast period only; pre-history is fixed) ──
     let diff = 0;
-    for (let t = 0; t < N; t++) {
+    for (let t = ST; t < N; t++) {
       diff = Math.max(diff,
         Math.abs(pi[t]  - pi0[t]),
         Math.abs(s[t]   - s0[t]),
@@ -724,9 +757,9 @@ function toggleFan(btn) {
 function buildIRFDatasets(data, clr, seriesIdx, zero) {
   const fillClr = clr.slice(0, -2) + '0.12)';
   const ds = [
-    { label: 'Deviation', data, borderColor: clr, backgroundColor: fillClr,
+    { label: t('qpm_deviation', 'Deviation'), data, borderColor: clr, backgroundColor: fillClr,
       borderWidth: 2.5, pointRadius: 2.5, fill: true, tension: 0.3 },
-    { label: 'Baseline', data: zero, borderColor: 'rgba(0,0,0,.2)',
+    { label: t('qpm_baseline', 'Baseline'), data: zero, borderColor: 'rgba(0,0,0,.2)',
       borderWidth: 1, borderDash: [5, 4], pointRadius: 0, fill: false },
   ];
   if (fanVisible && mcBands) {
@@ -755,7 +788,22 @@ const SHOCK_NAMES = {
   inflation: 'Cost-Push Inflation Shock',
   exchange:  'UZS Depreciation Shock',
   monetary:  'Monetary Policy Tightening Shock',
+  risk:      'Risk Premium Shock',
 };
+// Localised helpers: pull from window.MODEL_LANGS if available
+function t(key, fallback) {
+  const lang = document.documentElement.getAttribute('lang') || 'en';
+  return (window.MODEL_LANGS && window.MODEL_LANGS[lang] && window.MODEL_LANGS[lang][key]) || fallback || key;
+}
+function getShockName(shock) {
+  const map = {
+    demand:    'qpm_shock_demand_full',
+    inflation: 'qpm_shock_inflation_full',
+    exchange:  'qpm_shock_exchange_full',
+    monetary:  'qpm_shock_monetary_full',
+  };
+  return t(map[shock], SHOCK_NAMES[shock]);
+}
 const CHART_COLORS = [
   'rgba(192,57,43,1)',   // red   — inflation
   'rgba(36,113,163,1)',  // blue  — gap
@@ -780,9 +828,9 @@ function run() {
   // Labels: Q0..QT
   const lbls = Array.from({length: T+1}, (_, i) => `Q${i}`);
 
-  // Update header
-  document.getElementById('irfTitle').textContent = SHOCK_NAMES[activeShock] + ' — Impulse Response Functions';
-  document.getElementById('irfDesc').textContent  = `Shock = ${sz.toFixed(2)} pp  ·  Horizon = ${T} Q  ·  Q0 = shock period`;
+  // Update header (translated)
+  document.getElementById('irfTitle').textContent = getShockName(activeShock) + ' ' + t('qpm_irf_suffix','— Impulse Response Functions');
+  document.getElementById('irfDesc').textContent  = t('qpm_shock_param_lbl','Shock') + ` = ${sz.toFixed(2)} pp  ·  ` + t('qpm_horizon','Horizon') + ` = ${T} Q  ·  Q0 = ` + t('qpm_shock_period','shock period');
 
   const series = [r.pi4, r.gap, r.rs, r.d4l_s, r.l_z_gap, r.mci];
   lastIRF = { series, shock: activeShock, sz, T };
@@ -793,12 +841,13 @@ function run() {
 
   // Peak KPIs (4 top cards)
   const kpiSeries = [r.pi4, r.gap, r.rs, r.d4l_s];
+  const atQ = t('qpm_at_quarter', 'at quarter');
   kpiSeries.forEach((arr, i) => {
     let pk = arr[0], qi = 0;
     arr.forEach((v, j) => { if (Math.abs(v) > Math.abs(pk)) { pk = v; qi = j; } });
     const sign = pk >= 0 ? '+' : '';
     document.getElementById(`kpi${i}`).textContent = `${sign}${pk.toFixed(3)} pp`;
-    document.getElementById(`kpi${i}s`).textContent = `at quarter Q${qi}`;
+    document.getElementById(`kpi${i}s`).textContent = `${atQ} Q${qi}`;
   });
 
   // Draw charts
@@ -817,71 +866,63 @@ function run() {
 //  BASELINE FORECAST
 // ═══════════════════════════════════════════════════════════
 function runBL() {
-  const p   = P();
-  const T   = 16;
-  const pi0 = +document.getElementById('bl_pi').value;
-  const rs0 = +document.getElementById('bl_rs').value;
-  const g0  = +document.getElementById('bl_gap').value;
-  const d0  = +document.getElementById('bl_d4ls').value;
-  const tar = p.tar;
-  const neutral_nominal = p.rrbar + tar;
+  const p       = P();
+  const T       = 16;
+  const tar     = p.tar;
+  const neutral = p.rrbar + tar;
 
-  let pi  = new Float64Array(T+2);
-  let rs  = new Float64Array(T+2);
-  let gap = new Float64Array(T+2);
-  let dep = new Float64Array(T+2);
+  const bl_pi   = +document.getElementById('bl_pi').value;
+  const bl_rs   = +document.getElementById('bl_rs').value;
+  const bl_gap  = +document.getElementById('bl_gap').value;
+  const bl_d4ls = +document.getElementById('bl_d4ls').value;
 
-  pi[0] = pi0; rs[0] = rs0; gap[0] = g0; dep[0] = d0;
+  // Run the same Gauss-Seidel solver as IRF — no more separate model universe.
+  // Convert level inputs to deviation form (SS: π=tar, RS=rrbar+tar, gap=0, dep≈tar).
+  const r = solveIRF(p, null, 0, T, {
+    pi:   bl_pi   - tar,
+    rs:   bl_rs   - neutral,
+    gap:  bl_gap,
+    d4ls: bl_d4ls - tar,
+  });
 
-  for (let t = 1; t <= T; t++) {
-    const pi_f = pi[t-1] * 0.75 + tar * 0.25;
-    const pi_gap = pi[t-1] - tar;
-
-    rs[t]  = p.g1 * rs[t-1] + (1-p.g1) * (neutral_nominal + p.g2 * pi_gap + p.g3 * gap[t-1]);
-    const rr = rs[t-1] - pi[t-1];
-    gap[t] = p.b1 * gap[t-1] - p.b2 * Math.max(0, rr - p.rrbar) * 0.4;
-    const rmc = p.a3 * gap[t];
-    pi[t]  = p.a1 * pi[t-1] + (1-p.a1) * pi_f + p.a2 * rmc * 3;
-    dep[t] = Math.max(0, dep[t-1] * 0.65 + Math.max(0, pi[t-1] - tar) * 0.6);
-  }
+  // Convert deviations back to levels for display
+  const slPi  = r.pi4.map(v  => v + tar);
+  const slRS  = r.rs.map(v   => v + neutral);
+  const slGap = Array.from(r.gap);
+  const slDep = r.d4l_s.map(v => v + tar);
 
   const lbls = [];
-  for (let t = 0; t < T; t++) {
-    lbls.push(['Q1','Q2','Q3','Q4'][t%4] + ' ' + (2024 + Math.floor(t/4)));
+  for (let t = 0; t <= T; t++) {
+    lbls.push(['Q1','Q2','Q3','Q4'][t % 4] + ' ' + (2024 + Math.floor(t / 4)));
   }
 
-  const slPi  = Array.from(pi.slice(0,T));
-  const slRS  = Array.from(rs.slice(0,T));
-  const slGap = Array.from(gap.slice(0,T));
-  const slDep = Array.from(dep.slice(0,T));
-
-  const avg2025 = slPi.slice(4,8).reduce((a,b)=>a+b,0)/4;
-  document.getElementById('bk0').textContent = avg2025.toFixed(1)+'%';
-  document.getElementById('bk1').textContent = slRS[Math.min(7,T-1)].toFixed(2)+'%';
-  document.getElementById('bk2').textContent = (p.gdpbar + slGap[Math.min(7,T-1)]).toFixed(1)+'%';
-  document.getElementById('bk3').textContent = slDep[Math.min(7,T-1)].toFixed(1)+'%';
+  const avg2025 = slPi.slice(4, 8).reduce((a, b) => a + b, 0) / 4;
+  document.getElementById('bk0').textContent = avg2025.toFixed(1) + '%';
+  document.getElementById('bk1').textContent = slRS[Math.min(7, T)].toFixed(2) + '%';
+  document.getElementById('bk2').textContent = (p.gdpbar + slGap[Math.min(7, T)]).toFixed(1) + '%';
+  document.getElementById('bk3').textContent = slDep[Math.min(7, T)].toFixed(1) + '%';
 
   const blDefs = [
-    { id:'blc0', data:slPi,  lbl:'Inflation YoY (%)', clr:'rgba(192,57,43,.9)',  tar: tar },
-    { id:'blc1', data:slRS,  lbl:'Policy Rate (%)',   clr:'rgba(26,58,92,.9)',   tar: null },
-    { id:'blc2', data:slGap, lbl:'Output Gap (%)',    clr:'rgba(36,113,163,.9)', tar: 0 },
-    { id:'blc3', data:slDep, lbl:'NER Deprec. (%)',   clr:'rgba(214,137,16,.9)', tar: null },
+    { id: 'blc0', data: slPi,  lbl: t('qpm_bl_pi_lbl', 'Inflation YoY (%)'), clr: 'rgba(192,57,43,.9)',  tar: tar },
+    { id: 'blc1', data: slRS,  lbl: t('qpm_bl_rs_lbl', 'Policy Rate (%)'),   clr: 'rgba(26,58,92,.9)',   tar: null },
+    { id: 'blc2', data: slGap, lbl: t('qpm_bl_gap_lbl', 'Output Gap (%)'),   clr: 'rgba(36,113,163,.9)', tar: 0 },
+    { id: 'blc3', data: slDep, lbl: t('qpm_bl_ner_lbl', 'NER Deprec. (%)'),  clr: 'rgba(214,137,16,.9)', tar: null },
   ];
 
   blDefs.forEach(d => {
-    const k = 'bl_'+d.id;
+    const k = 'bl_' + d.id;
     if (charts[k]) charts[k].destroy();
     const ds = [{
       label: d.lbl, data: d.data, borderColor: d.clr,
-      backgroundColor: d.clr.replace('.9)','.1)'),
+      backgroundColor: d.clr.replace('.9)', '.1)'),
       borderWidth: 2.5, pointRadius: 2, fill: true, tension: 0.3,
     }];
     if (d.tar !== null) ds.push({
-      label: 'Target', data: new Array(T).fill(d.tar),
-      borderColor:'rgba(0,0,0,.25)', borderWidth:1.2, borderDash:[5,4], pointRadius:0,
+      label: t('qpm_target_lbl', 'Target'), data: new Array(T + 1).fill(d.tar),
+      borderColor: 'rgba(0,0,0,.25)', borderWidth: 1.2, borderDash: [5, 4], pointRadius: 0,
     });
     charts[k] = new Chart(document.getElementById(d.id).getContext('2d'), {
-      type:'line', data:{labels:lbls, datasets:ds}, options:chartOpts(),
+      type: 'line', data: { labels: lbls, datasets: ds }, options: chartOpts(),
     });
   });
 }
@@ -939,27 +980,72 @@ function showPage(name, btn) {
 
 function fillParamTable() {
   const p = P();
+  // [symbol, domId, value, i18nKey, fallbackDesc, blockLabel, isChanged, tipEN, tipRU, tipUZ]
   const rows = [
-    ['b₁','b1', p.b1.toFixed(2), 'Output gap persistence',      'IS curve',    false],
-    ['b₂','b2', p.b2.toFixed(2), 'MCI → output sensitivity',     'IS curve',    false],
-    ['b₃','b3', p.b3.toFixed(2), 'External demand weight',        'IS curve',    false],
-    ['b₄','b4', p.b4.toFixed(2), 'IR weight in MCI',              'MCI',         false],
-    ['a₁','a1', p.a1.toFixed(2), 'Inflation persistence',         'Phillips',    false],
-    ['a₂','a2', p.a2.toFixed(2), 'Marginal cost pass-through',    'Phillips',    true ],
-    ['a₃','a3', p.a3.toFixed(2), 'Domestic cost share',           'Phillips',    true ],
-    ['g₁','g1', p.g1.toFixed(2), 'Interest rate smoothing',       'Taylor rule', false],
-    ['g₂','g2', p.g2.toFixed(2), 'Inflation response (>1)',       'Taylor rule', false],
-    ['g₃','g3', p.g3.toFixed(2), 'Output gap response',           'Taylor rule', false],
-    ['e₁','e1', p.e1.toFixed(2), 'UIP backward-looking weight',   'UIP',         false],
-    ['π*','—',  p.tar.toFixed(1)+'%', 'Inflation target',         'SS',          false],
-    ['r̄', '—',  p.rrbar.toFixed(1)+'%','Neutral real rate',       'SS',          false],
-    ['ȳ', '—',  p.gdpbar.toFixed(1)+'%','Potential GDP growth',   'SS',          false],
+    ['b₁','b1', p.b1.toFixed(2), 'qpm_pt_b1', 'Output gap persistence',      'IS curve',    false,
+      'Controls how quickly the GDP gap closes. Higher b₁ = more inertia.',
+      'Контролирует скорость закрытия разрыва ВВП. Высокий b₁ = больше инерции, медленнее восстановление.',
+      "YaIM bo'shlig'i qanchalik tez yopilishini boshqaradi. Yuqori b₁ = ko'proq inersiya, sekinroq tiklanish."],
+    ['b₂','b2', p.b2.toFixed(2), 'qpm_pt_b2', 'MCI → output sensitivity',     'IS curve',    false,
+      'How strongly monetary conditions affect the output gap.',
+      'Насколько денежные условия (ставка + курс) влияют на разрыв выпуска. Ключевой параметр трансмиссии.',
+      "Pul-kredit shartlari chiqarish bo'shlig'iga ta'sir kuchi. Asosiy monetar transmissiya parametri."],
+    ['b₃','b3', p.b3.toFixed(2), 'qpm_pt_b3', 'External demand weight',        'IS curve',    false,
+      'Sensitivity to foreign output gap — trade and remittance channel.',
+      'Чувствительность к внешнему разрыву выпуска — торговля и денежные переводы.',
+      "Tashqi chiqarish bo'shlig'iga sezgirlik — savdo va pul o'tkazmalari kanali."],
+    ['b₄','b4', p.b4.toFixed(2), 'qpm_pt_b4', 'IR weight in MCI',              'MCI',         false,
+      'Share of interest rate in the Monetary Conditions Index; (1−b₄) = FX weight.',
+      'Доля процентной ставки в индексе денежных условий; (1−b₄) = вес обменного курса.',
+      "Pul-kredit shartlari indeksida foiz stavkasi ulushi; (1−b₄) = valyuta kursi og'irligi."],
+    ['a₁','a1', p.a1.toFixed(2), 'qpm_pt_a1', 'Inflation persistence',         'Phillips',    false,
+      'Backward-looking share of expectations. High a₁ = hard to disinflate.',
+      'Доля инфляции, обусловленная прошлой инфляцией. Высокий a₁ = инфляцию трудно сдержать.',
+      "O'tgan inflyatsiya bilan bog'liq inflyatsiya ulushi. Yuqori a₁ = inflyatsiyani jilovlash qiyin."],
+    ['a₂','a2', p.a2.toFixed(2), 'qpm_pt_a2', 'Marginal cost pass-through',    'Phillips',    true,
+      'Pass-through from real marginal cost (output gap) to CPI inflation.',
+      'Передача реальных предельных издержек в инфляцию CPI. Высокий a₂ = сильное инфляционное давление.',
+      "Haqiqiy chegaraviy xarajatlardan CPI inflyatsiyasiga o'tish. Yuqori a₂ = kuchliroq inflyatsion bosim."],
+    ['a₃','a3', p.a3.toFixed(2), 'qpm_pt_a3', 'Domestic cost share',           'Phillips',    true,
+      'Share of domestic costs in CPI basket; (1−a₃) = import-driven component.',
+      'Доля внутренних затрат в корзине CPI; (1−a₃) = импортная инфляция. Узбекистан: ~65% внутр.',
+      "IFK savatchasida ichki xarajatlar ulushi; (1−a₃) = import inflyatsiyasi. O'zbekiston: ~65% ichki."],
+    ['g₁','g1', p.g1.toFixed(2), 'qpm_pt_g1', 'Interest rate smoothing',       'Taylor rule', false,
+      'CBU gradualism: how slowly rates are adjusted each quarter.',
+      'Постепенность ЦБУ: насколько медленно корректируются ставки каждый квартал.',
+      "CBU gradualizmi: har chorakda stavkalar qanchalik sekin moslanadi."],
+    ['g₂','g2', p.g2.toFixed(2), 'qpm_pt_g2', 'Inflation response (>1)',       'Taylor rule', false,
+      'Taylor Principle: must exceed 1 for inflation stability.',
+      'Принцип Тейлора: должен превышать 1 для стабильности инфляции. g₂=1.5: +150 б.п. при каждом +1 п.п. инфляции.',
+      "Teylor printsipi: inflyatsiya barqarorligi uchun 1 dan katta bo'lishi shart. g₂=1.5: +1 p.p. inflyatsiyada +150 b.p. stavka."],
+    ['g₃','g3', p.g3.toFixed(2), 'qpm_pt_g3', 'Output gap response',           'Taylor rule', false,
+      'How much the CBU reacts to economic slack or overheating.',
+      'Насколько ЦБУ реагирует на экономический спад или перегрев. Высокий g₃ = политика двойного мандата.',
+      "CBU iqtisodiy tangliq yoki qizib ketishga qanchalik reaksiya qiladi. Yuqori g₃ = ikki mandatli siyosat."],
+    ['e₁','e1', p.e1.toFixed(2), 'qpm_pt_e1', 'UIP backward-looking weight',   'UIP',         false,
+      'Share of exchange rate expectations that are backward-looking (past rates).',
+      'Доля ожиданий обменного курса, основанных на прошлых значениях. Низкий e₁ = более перспективные ожидания.',
+      "O'tgan kurslarga asoslangan valyuta kursi kutishlari ulushi. Past e₁ = ko'proq istiqbolga yo'nalgan."],
+    ['π*','—',  p.tar.toFixed(1)+'%',  'qpm_pt_pi_ss', 'Inflation target',      'SS',          false,
+      'CBU official medium-term inflation target (5% for 2024–2026).',
+      'Официальная среднесрочная цель ЦБУ по инфляции (5% на 2024–2026 гг.).',
+      "CBUning rasmiy o'rta muddatli inflyatsiya maqsadi (2024–2026 yillar uchun 5%)."],
+    ['r̄', '—',  p.rrbar.toFixed(1)+'%','qpm_pt_rrbar', 'Neutral real rate',    'SS',          false,
+      'Equilibrium real rate: neither expansionary nor contractionary.',
+      'Равновесная реальная ставка: ни стимулирующая, ни сдерживающая. Оценивается в 3–4% для Узбекистана.',
+      "Muvozanat haqiqiy stavka: na kengaytiruvchi, na cheklovchi. O'zbekiston uchun 3–4% deb baholanadi."],
+    ['ȳ', '—',  p.gdpbar.toFixed(1)+'%','qpm_pt_gdpbar','Potential GDP growth', 'SS',          false,
+      'Trend GDP growth consistent with stable inflation and full employment.',
+      'Потенциальный рост ВВП при стабильной инфляции и полной занятости. Структурный потенциал: ~6%.',
+      "Barqaror inflyatsiya va to'liq bandlik bilan muvofiq YaIM o'sishi. Salohiyat: ~6%."],
   ];
-  document.getElementById('ptbody').innerHTML = rows.map(([sym,_,val,desc,blk,chg]) =>
-    `<tr><td><strong>${sym}</strong></td>
+  const lang = document.documentElement.getAttribute('lang') || 'en';
+  document.getElementById('ptbody').innerHTML = rows.map(([sym,_,val,key,desc,blk,chg,tipEN,tipRU,tipUZ]) => {
+    const tip = lang === 'ru' ? tipRU : lang === 'uz' ? tipUZ : tipEN;
+    return `<tr><td><strong>${sym}</strong></td>
          <td class="${chg?'changed':''}"><strong>${val}</strong>${chg?' ★':''}</td>
-         <td>${desc} <span style="color:var(--text2);font-size:.65rem">[${blk}]</span></td></tr>`
-  ).join('');
+         <td>${t(key,desc)} <span class="ptip" data-tip="${tip}" data-tip-en="${tipEN}" data-tip-ru="${tipRU}" data-tip-uz="${tipUZ}">i</span> <span style="color:var(--text2);font-size:.65rem">[${blk}]</span></td></tr>`;
+  }).join('');
 }
 
 // ── Init ──
@@ -1009,35 +1095,272 @@ function qpmExportPNG() {
 function qpmExportPDF() {
   if (!lastIRF) { alert('Run the simulation first.'); return; }
   const { series, shock, sz, T } = lastIRF;
-  const shockName = SHOCK_NAMES[shock] || shock;
-  const kpis = [
-    { label: 'Peak Inflation (CPI YoY)', value: document.getElementById('kpi0')?.textContent || '—', note: document.getElementById('kpi0s')?.textContent || '' },
-    { label: 'Peak Output Gap',          value: document.getElementById('kpi1')?.textContent || '—', note: document.getElementById('kpi1s')?.textContent || '' },
-    { label: 'Peak Policy Rate',         value: document.getElementById('kpi2')?.textContent || '—', note: document.getElementById('kpi2s')?.textContent || '' },
-    { label: 'Peak NER Depreciation',    value: document.getElementById('kpi3')?.textContent || '—', note: document.getElementById('kpi3s')?.textContent || '' },
-  ];
-  const tableHeaders = ['Quarter', ...VAR_LABELS.slice(0, 4)];
-  const tableRows = [];
-  for (let q = 0; q <= Math.min(T, 20); q++) {
-    tableRows.push(['Q' + q, ...series.slice(0, 4).map(s => s[q] != null ? s[q].toFixed(3) : '')]);
-  }
-  ReportEngine.generatePDF({
-    title: 'QPM Shock Analysis — ' + shockName,
-    subtitle: 'Quarterly Projection Model — New-Keynesian DSGE — Uzbekistan',
-    date: new Date().toISOString().slice(0, 10),
-    modelInfo: 'QPM is a New-Keynesian DSGE model for Uzbekistan with IS/Phillips/Taylor/UIP equations. Gauss-Seidel solver, parameters a2=0.20, a3=0.65. Shock size: ' + sz.toFixed(2) + ' pp, Horizon: ' + T + ' quarters.',
-    assumptions: [
-      { name: 'Shock type', value: shockName },
-      { name: 'Shock size', value: sz.toFixed(2) + ' percentage points' },
-      { name: 'Horizon',    value: T + ' quarters' },
-      { name: 'Model',      value: 'QPM — New-Keynesian DSGE' },
-    ],
-    kpis,
-    tableHeaders,
-    tableRows,
-    chartCanvasId: 'ch0',
-    filename: 'qpm_shock_report.pdf'
+  const p = P();
+  const lang = document.documentElement.getAttribute('lang') || 'en';
+
+  // ── Multilingual labels (browser renders HTML, so all Unicode works) ──
+  const RL_ALL = {
+    en: {
+      title: 'QPM Shock Analysis Report',
+      subtitle: 'Quarterly Projection Model — New-Keynesian DSGE — Uzbekistan',
+      overview: 'Scenario Overview', results: 'Key Results',
+      exec: 'Executive Summary', findings: 'Key Findings',
+      risks: 'Risk Flags', recs: 'Policy Recommendations',
+      app_charts: 'Appendix A — Impulse Response Functions',
+      app_table: 'Appendix B — Full Results Table',
+      shock_type: 'Shock type', shock_size: 'Shock size',
+      horizon: 'Horizon', model: 'Model', generated: 'Generated',
+      chart_titles: ['CPI Inflation YoY','Output Gap','Policy Rate (RS)','NER Depreciation','Real Exchange Rate Gap','Monetary Conditions Index (MCI)'],
+      chart_vars:   ['D4L_CPI','L_GDP_GAP','RS','D4L_S','L_Z_GAP','MCI'],
+      tbl_heads: ['Q','CPI YoY','Output Gap','Policy Rate','NER Depr.','RER Gap','MCI'],
+      kpi_labels: ['Peak Inflation (D4L_CPI)','Peak Output Gap (L_GDP_GAP)','Peak Policy Rate (RS)','Peak NER Depreciation (D4L_S)'],
+      save_hint: 'In the print dialog, choose "Save as PDF" to download.',
+    },
+    ru: {
+      title: 'Отчёт по шоковому анализу QPM',
+      subtitle: 'Квартальная проекционная модель — Новокейнсианская DSGE — Узбекистан',
+      overview: 'Описание сценария', results: 'Ключевые результаты',
+      exec: 'Краткое изложение', findings: 'Основные выводы',
+      risks: 'Риски', recs: 'Рекомендации',
+      app_charts: 'Приложение А — Функции импульсных откликов',
+      app_table: 'Приложение Б — Полная таблица результатов',
+      shock_type: 'Тип шока', shock_size: 'Размер шока',
+      horizon: 'Горизонт', model: 'Модель', generated: 'Сформировано',
+      chart_titles: ['ИПЦ (год к году)','Разрыв выпуска','Ставка политики (RS)','Обесценение NER','Разрыв реального курса','Индекс денежных условий (МДУ)'],
+      chart_vars:   ['D4L_CPI','L_GDP_GAP','RS','D4L_S','L_Z_GAP','MCI'],
+      tbl_heads: ['Кв.','ИПЦ (г/г)','Разрыв ВВП','Ставка ЦБ','Обесц. NER','Разрыв RER','МДУ'],
+      kpi_labels: ['Пик инфляции (D4L_CPI)','Пик разрыва ВВП (L_GDP_GAP)','Пик ставки ЦБ (RS)','Пик обесц. NER (D4L_S)'],
+      save_hint: 'В диалоге печати выберите «Сохранить как PDF».',
+    },
+    uz: {
+      title: "QPM Shok Tahlili Hisoboti",
+      subtitle: "Choraklik prognoz modeli — Yangi-Keynschi DSGE — O\u2018zbekiston",
+      overview: 'Stsenariy tavsifi', results: 'Asosiy natijalar',
+      exec: 'Qisqacha xulosa', findings: 'Asosiy topilmalar',
+      risks: 'Xavf omillari', recs: 'Siyosat tavsiyalari',
+      app_charts: 'Ilova A — Impuls javob funksiyalari',
+      app_table: "Ilova B — To\u2018liq natijalar jadvali",
+      shock_type: 'Shok turi', shock_size: 'Shok hajmi',
+      horizon: 'Gorizont', model: 'Model', generated: 'Yaratildi',
+      chart_titles: ["YaIM inflyatsiyasi (yil/yil)","Chiqarish bo\u2018shlig\u2018i","Siyosat stavkasi (RS)","NER qadrsizlanishi","Haqiqiy kurs bo\u2018shlig\u2018i","Pul-kredit shartlari indeksi (PKSh)"],
+      chart_vars:   ['D4L_CPI','L_GDP_GAP','RS','D4L_S','L_Z_GAP','MCI'],
+      tbl_heads: ["Ch.","IFK (y/y)","YaIM bo\u2018shlig\u2018i","Siyosat stavkasi","NER qadrs.","RER bo\u2018shlig\u2018i","PKSh"],
+      kpi_labels: ["Inflyatsiya cho\u2018qqisi (D4L_CPI)","Chiqarish bo\u2018shlig\u2018i cho\u2018qqisi","Siyosat stavkasi cho\u2018qqisi (RS)","NER qadrsizlanish cho\u2018qqisi"],
+      save_hint: "Chop etish oynasida «PDF sifatida saqlash»ni tanlang.",
+    },
+  };
+  const RL = RL_ALL[lang] || RL_ALL.en;
+
+  const shockName = getShockName(shock);
+  const analysis  = buildQPMExpertAnalysis();
+
+  // ── Capture charts with WHITE background ──
+  const chartIds = ['ch0','ch1','ch2','ch3','ch4','ch5'];
+  const chartImages = chartIds.map(id => {
+    const canvas = document.getElementById(id);
+    if (!canvas) return '';
+    try {
+      const tmp = document.createElement('canvas');
+      tmp.width  = canvas.width;
+      tmp.height = canvas.height;
+      const ctx = tmp.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, tmp.width, tmp.height);
+      ctx.drawImage(canvas, 0, 0);
+      return tmp.toDataURL('image/png');
+    } catch(e) { return ''; }
   });
+
+  // ── KPI values from DOM ──
+  const kpiVals = ['kpi0','kpi1','kpi2','kpi3'].map(id => document.getElementById(id)?.textContent || '—');
+  const kpiSubs = ['kpi0s','kpi1s','kpi2s','kpi3s'].map(id => document.getElementById(id)?.textContent || '');
+  const kpiColors = ['#c0392b','#1a3a5c','#2471a3','#d68910'];
+
+  const today = new Date().toISOString().slice(0,10);
+
+  const overviewRows = [
+    [RL.shock_type, shockName],
+    [RL.shock_size,  sz.toFixed(2) + ' pp'],
+    [RL.horizon,     T + ' Q'],
+    [RL.model,       'QPM \u2014 New-Keynesian DSGE'],
+    ['b\u2081 / b\u2082 / b\u2083 / b\u2084', `${p.b1.toFixed(2)} / ${p.b2.toFixed(2)} / ${p.b3.toFixed(2)} / ${p.b4.toFixed(2)}`],
+    ['a\u2081 / a\u2082 / a\u2083',           `${p.a1.toFixed(2)} / ${p.a2.toFixed(2)} / ${p.a3.toFixed(2)}`],
+    ['g\u2081 / g\u2082 / g\u2083',           `${p.g1.toFixed(2)} / ${p.g2.toFixed(2)} / ${p.g3.toFixed(2)}`],
+    ['e\u2081 / \u03c0* / r\u0304 / \u0233',  `${p.e1.toFixed(2)} / ${p.tar.toFixed(1)}% / ${p.rrbar.toFixed(1)}% / ${p.gdpbar.toFixed(1)}%`],
+  ];
+
+  const tableRows = [];
+  for (let q = 0; q <= T; q++) {
+    tableRows.push([`<strong>${RL.tbl_heads[0].replace('.','') + q}</strong>`,
+      ...series.map(s => s[q] != null ? `<span style="color:${s[q]>=0?'#1a6b3a':'#8b1a1a'}">${s[q]>=0?'+':''}${s[q].toFixed(3)}</span>` : '&mdash;')]);
+  }
+
+  // ── Build print HTML ──
+  const html = `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+<meta charset="UTF-8">
+<title>${RL.title}</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter','Segoe UI',Arial,sans-serif;font-size:11px;color:#1e2d3d;background:#fff;line-height:1.5}
+.cover{background:linear-gradient(135deg,#1a3a5c 0%,#1e6090 100%);color:#fff;padding:52px 44px 44px;position:relative}
+.cover-tag{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);
+  padding:3px 12px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:1.2px;
+  text-transform:uppercase;margin-bottom:22px}
+.cover-accent{position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#14a0a0,#1fd8c8)}
+.cover-title{font-size:26px;font-weight:800;margin-bottom:10px;line-height:1.2}
+.cover-sub{font-size:12px;opacity:.75;margin-bottom:20px}
+.cover-shock{font-size:17px;font-weight:700;color:#7ed6d6;margin-bottom:6px}
+.cover-meta{font-size:11px;opacity:.65}
+.cover-date{margin-top:30px;display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.12);padding:7px 16px;border-radius:8px;font-size:10px;font-weight:600}
+.content{padding:28px 40px}
+.sec-hd{background:#1e5e8c;color:#fff;padding:7px 12px;font-size:11px;font-weight:700;
+  margin:22px 0 10px;border-radius:5px;letter-spacing:.3px}
+.ov-table{width:100%;border-collapse:collapse;margin-bottom:4px}
+.ov-table tr:nth-child(even) td{background:#f5f8fc}
+.ov-table td{padding:5.5px 8px;border-bottom:1px solid #e8eef5;font-size:10.5px}
+.ov-table td:first-child{font-weight:700;color:#1a3a5c;width:42%}
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpi-card{border:1px solid #d5e3f0;border-radius:8px;padding:13px 15px;background:#f7fafd}
+.kpi-lbl{font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;font-weight:600}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:3px}
+.kpi-sub{font-size:9px;color:#94a3b8}
+.summary{color:#334155;line-height:1.75;margin-bottom:2px}
+.bullet{display:flex;gap:9px;margin-bottom:7px;align-items:flex-start}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.dot-blue{background:#1e5e8c}.dot-red{background:#c0392b}.dot-teal{background:#14a0a0}
+.bullet-text{flex:1;line-height:1.7;color:#334155}
+.risk-text{flex:1;line-height:1.7;color:#7f1d1d}
+.numbered{display:flex;gap:9px;margin-bottom:9px;align-items:flex-start}
+.num{background:#14a0a0;color:#fff;min-width:20px;height:20px;border-radius:50%;
+  font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.num-text{flex:1;line-height:1.7;color:#334155}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chart-box{border:1px solid #d5e3f0;border-radius:8px;overflow:hidden}
+.chart-cap{background:#f0f6fc;border-bottom:1px solid #d5e3f0;padding:7px 11px}
+.chart-cap-title{font-size:10px;font-weight:700;color:#1a3a5c}
+.chart-cap-var{font-size:9px;color:#2471a3;font-family:'Courier New',monospace;margin-top:1px}
+.chart-img{width:100%;display:block}
+.data-table{width:100%;border-collapse:collapse;font-size:9.5px}
+.data-table th{background:#1e5e8c;color:#fff;padding:6px 5px;text-align:center;
+  font-weight:700;font-size:9px;border-right:1px solid rgba(255,255,255,.25)}
+.data-table td{padding:4.5px 5px;text-align:center;border-bottom:1px solid #edf2f8;
+  border-right:1px solid #edf2f8}
+.data-table tr:nth-child(even) td{background:#f7fafd}
+.data-table td:first-child{font-weight:700;color:#1a3a5c;background:#edf4fb!important}
+.footer{margin-top:28px;padding-top:10px;border-top:1px solid #e2ecf5;font-size:9px;
+  color:#94a3b8;display:flex;justify-content:space-between}
+.hint-bar{background:#fffbeb;border:1px solid #fde68a;border-radius:6px;
+  padding:8px 14px;font-size:10px;color:#92400e;margin:12px 0 0;display:flex;align-items:center;gap:8px}
+@media print{
+  body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .cover{page-break-after:always}
+  .app-break{page-break-before:always}
+  .no-print{display:none!important}
+  @page{margin:12mm 14mm;size:A4}
+}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-tag">CERR &middot; QPM DSGE &middot; Uzbekistan</div>
+  <div class="cover-title">${RL.title}</div>
+  <div class="cover-sub">${RL.subtitle}</div>
+  <div class="cover-shock">${shockName}</div>
+  <div class="cover-meta">${RL.shock_size}: <strong>${sz.toFixed(2)} pp</strong> &nbsp;&middot;&nbsp; ${RL.horizon}: <strong>${T} Q</strong></div>
+  <div class="cover-date">&#128197; ${RL.generated}: ${today}</div>
+  <div class="cover-accent"></div>
+</div>
+
+<!-- MAIN -->
+<div class="content">
+
+<div class="hint-bar no-print">&#128073; ${RL.save_hint}</div>
+
+<!-- SCENARIO OVERVIEW -->
+<div class="sec-hd">${RL.overview}</div>
+<table class="ov-table">
+  ${overviewRows.map(([l,v],i)=>`<tr><td>${l}</td><td>${v}</td></tr>`).join('')}
+</table>
+
+<!-- KEY RESULTS -->
+<div class="sec-hd">${RL.results}</div>
+<div class="kpi-grid">
+  ${kpiVals.map((val,i)=>`
+  <div class="kpi-card">
+    <div class="kpi-lbl">${RL.kpi_labels[i]||''}</div>
+    <div class="kpi-val" style="color:${kpiColors[i]}">${val}</div>
+    <div class="kpi-sub">${kpiSubs[i]||''}</div>
+  </div>`).join('')}
+</div>
+
+<!-- EXECUTIVE SUMMARY -->
+<div class="sec-hd">${RL.exec}</div>
+<p class="summary">${(analysis&&analysis.summary)||''}</p>
+
+<!-- KEY FINDINGS -->
+<div class="sec-hd">${RL.findings}</div>
+${((analysis&&analysis.findings)||[]).map(f=>`
+<div class="bullet"><div class="dot dot-blue"></div><div class="bullet-text">${f}</div></div>`).join('')}
+
+<!-- RISK FLAGS -->
+<div class="sec-hd">${RL.risks}</div>
+${((analysis&&analysis.risks)||[]).map(r=>`
+<div class="bullet"><div class="dot dot-red"></div><div class="risk-text">${r}</div></div>`).join('')}
+
+<!-- POLICY RECOMMENDATIONS -->
+<div class="sec-hd">${RL.recs}</div>
+${((analysis&&analysis.recommendations)||[]).map((r,i)=>`
+<div class="numbered"><div class="num">${i+1}</div><div class="num-text">${r}</div></div>`).join('')}
+
+<!-- APPENDIX A: CHARTS -->
+<div class="sec-hd app-break">${RL.app_charts}</div>
+<div class="chart-grid">
+  ${chartImages.map((img,i)=>img?`
+  <div class="chart-box">
+    <div class="chart-cap">
+      <div class="chart-cap-title">${RL.chart_titles[i]||''}</div>
+      <div class="chart-cap-var">${RL.chart_vars[i]||''}</div>
+    </div>
+    <img class="chart-img" src="${img}" alt="${RL.chart_titles[i]||''}">
+  </div>`:'' ).join('')}
+</div>
+
+<!-- APPENDIX B: DATA TABLE -->
+<div class="sec-hd app-break">${RL.app_table}</div>
+<table class="data-table">
+  <thead><tr>${RL.tbl_heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+  <tbody>
+    ${tableRows.map(row=>`<tr>${row.map(v=>`<td>${v}</td>`).join('')}</tr>`).join('')}
+  </tbody>
+</table>
+
+<div class="footer">
+  <span>CERR &mdash; Center for Economic Research and Reforms, Uzbekistan</span>
+  <span>${RL.title} &middot; ${today}</span>
+</div>
+
+</div><!-- /content -->
+
+<script>
+window.addEventListener('load', function(){ setTimeout(function(){ window.print(); }, 600); });
+<\/script>
+</body></html>`;
+
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const win  = window.open(url, '_blank', 'width=960,height=750');
+  if (!win) {
+    Toast.show('Allow pop-ups to generate the PDF report', 'warning');
+  } else {
+    Toast.show('Report opened — use "Save as PDF" in print dialog', 'success');
+  }
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
 }
 
 /* ── Save scenario ── */
@@ -1075,6 +1398,280 @@ function qpmSaveScenario() {
   Toast.show('Scenario saved: ' + name, 'success');
 }
 
+/* ── QPM Expert Analysis builder ─────────────────────────── */
+function buildQPMExpertAnalysis() {
+  if (!lastIRF) return null;
+  const { shock, sz, T } = lastIRF;
+  const p = P();
+  const lang = document.documentElement.getAttribute('lang') || 'en';
+
+  // Parse KPI values from DOM
+  function kpiVal(id) {
+    const txt = document.getElementById(id)?.textContent || '0';
+    return parseFloat(txt.replace(/[^-0-9.]/g, '')) || 0;
+  }
+  function kpiQ(id) {
+    const txt = document.getElementById(id + 's')?.textContent || 'Q?';
+    return (txt.match(/Q\d+/) || ['Q?'])[0];
+  }
+  const pi  = kpiVal('kpi0'), piQ  = kpiQ('kpi0');
+  const gap = kpiVal('kpi1'), gapQ = kpiQ('kpi1');
+  const rs  = kpiVal('kpi2'), rsQ  = kpiQ('kpi2');
+  const ner = kpiVal('kpi3'), nerQ = kpiQ('kpi3');
+
+  const f3 = v => (v >= 0 ? '+' : '') + v.toFixed(3);
+  const abs = v => Math.abs(v).toFixed(3);
+
+  // ── English content ──────────────────────────────────────
+  const CONTENT = {
+    demand: {
+      summary: `A ${sz.toFixed(2)}pp positive aggregate demand shock (fiscal expansion, surge in investment or domestic spending) generates peak CPI inflation of ${f3(pi)}pp at ${piQ}, output gap peak of ${f3(gap)}pp at ${gapQ}, and requires the CBU to raise the policy rate by ${f3(rs)}pp at ${rsQ}. The UZS ${ner >= 0 ? 'depreciates' : 'appreciates'} by ${abs(ner)}pp at ${nerQ}.`,
+      findings: [
+        `Output gap peaks at ${f3(gap)}pp (${gapQ}) — the economy overheats. With IS persistence b₁=${p.b1.toFixed(2)}, the gap takes approximately ${Math.round(T * p.b1)} quarters to fully close after peaking.`,
+        `Inflation overshoots by ${f3(pi)}pp at ${piQ}. High a₁=${p.a1.toFixed(2)} (backward-looking expectations) means second-round effects persist — disinflation will require sustained monetary tightening beyond the initial shock.`,
+        `The CBU's Taylor Rule response peaks at ${f3(rs)}pp (${rsQ}). With g₂=${p.g2.toFixed(2)}, the real policy rate rises by ~${((p.g2 - 1) * Math.abs(pi)).toFixed(3)}pp above the inflation shock, satisfying the Taylor Principle.`,
+        `The UZS ${ner >= 0 ? 'depreciates' : 'appreciates'} by ${abs(ner)}pp at ${nerQ} — the exchange rate channel ${ner >= 0 ? 'amplifies imported inflation' : 'partially offsets the demand shock via import competition, restraining price pressures'}.`,
+        `The Monetary Conditions Index (MCI) tightens as both the rate and exchange rate work together. With b₄=${p.b4.toFixed(2)}, interest rate has ${(p.b4 * 100).toFixed(0)}% weight and the exchange rate ${((1 - p.b4) * 100).toFixed(0)}% weight in MCI.`,
+      ],
+      risks: [
+        `Inflation persistence risk: a₁=${p.a1.toFixed(2)} implies inflation expectations are ${(p.a1 * 100).toFixed(0)}% backward-looking. A ${f3(pi)}pp overshoot may take ${Math.round(Math.abs(pi) / 0.3)} quarters to fully dissipate even after the CBU responds.`,
+        `Pro-cyclical fiscal risk: if the demand shock originates from fiscal expansion during an already positive output gap, the economy risks overheating. Public debt sustainability should be monitored.`,
+        `Exchange rate pass-through risk: the ${abs(ner)}pp currency movement may generate ${(Math.abs(ner) * (1 - p.a3) * p.a2).toFixed(3)}pp of additional imported inflation via the Phillips curve import share (1−a₃=${(1 - p.a3).toFixed(2)}).`,
+      ],
+      recommendations: [
+        `Pre-emptive monetary tightening: the CBU should begin rate normalisation ahead of the peak output gap to prevent inflation expectations from de-anchoring. A front-loaded approach reduces the total policy rate adjustment needed.`,
+        `Fiscal coordination: fiscal authorities should signal consolidation plans to anchor medium-term expectations, particularly if the demand shock is policy-induced (spending surge or tax cuts).`,
+        `Communication strategy: CBU forward guidance should emphasise the temporary nature of the demand shock and the commitment to the 5% inflation target to keep a₁ from rising further.`,
+        `Monitor import pass-through: track monthly CPI components for signs of exchange-rate pass-through feeding into core inflation beyond the model's (1−a₃)=${(1 - p.a3).toFixed(2)} assumption.`,
+      ],
+    },
+    inflation: {
+      summary: `A ${sz.toFixed(2)}pp cost-push inflation shock (energy price spike, supply disruption, import price surge) drives CPI inflation to a peak of ${f3(pi)}pp at ${piQ}, compresses the output gap to ${f3(gap)}pp at ${gapQ} (stagflationary), requires a CBU rate response of ${f3(rs)}pp at ${rsQ}, and causes UZS ${ner >= 0 ? 'depreciation' : 'appreciation'} of ${abs(ner)}pp at ${nerQ}.`,
+      findings: [
+        `Cost-push stagflation: the shock simultaneously raises inflation (${f3(pi)}pp) and reduces output (gap ${f3(gap)}pp at ${gapQ}), placing the CBU in a classic policy dilemma — tightening to fight inflation risks deepening the output contraction.`,
+        `Inflation persistence is driven by a₁=${p.a1.toFixed(2)}: ${(p.a1 * 100).toFixed(0)}% of current inflation is anchored to past inflation, meaning a temporary supply shock can generate persistent above-target CPI even after the initial cost pressure subsides.`,
+        `The Taylor Rule forces a ${f3(rs)}pp rate increase (${rsQ}) despite negative output gap. This reflects g₂=${p.g2.toFixed(2)} — the CBU's inflation mandate dominates the output stabilisation goal.`,
+        `Domestic inflation share a₃=${p.a3.toFixed(2)} means ${(p.a3 * 100).toFixed(0)}% of the shock stays in domestic prices. The remaining ${((1 - p.a3) * 100).toFixed(0)}% is absorbed via the import price channel, limiting the exchange rate amplification.`,
+      ],
+      risks: [
+        `Stagflation trap: with output already negative (${f3(gap)}pp at ${gapQ}), aggressive monetary tightening could deepen the recession. The optimal path requires balancing the inflation overshoot (${f3(pi)}pp) against output costs.`,
+        `Second-round wage-price spiral: high backward-looking share a₁=${p.a1.toFixed(2)} means wage negotiations anchored to past high inflation could entrench the supply shock into persistent core inflation.`,
+        `Reserve adequacy: if the cost-push shock stems from global commodity prices, import costs rise sharply, pressuring the current account and FX reserves. Uzbekistan's gold-heavy reserves (≈30% of total) provide a natural buffer but require monitoring.`,
+      ],
+      recommendations: [
+        `Graduated tightening: avoid over-tightening into a negative output gap. A moderate rate increase (capped below the full Taylor response) combined with strong forward guidance may be more efficient than sharp hikes that deepen the contraction.`,
+        `Supply-side interventions: targeted fiscal measures (fuel subsidies, strategic food reserves) can directly address the source of the cost shock, reducing the monetary tightening burden.`,
+        `Expectation anchoring: increase transparency of CBU decisions and publish updated inflation forecasts to keep medium-term expectations near the 5% target, preventing a₁ from rising.`,
+        `Exchange rate flexibility: allow the UZS to absorb some shock via managed depreciation, which reduces the domestic price of exports (competitiveness gain) while partially offsetting the imported cost-push through higher import prices — use only if inflationary pass-through is limited.`,
+      ],
+    },
+    exchange: {
+      summary: `A ${sz.toFixed(2)}pp UZS depreciation shock (capital outflow, import demand surge, FX intervention reduction) generates peak CPI inflation of ${f3(pi)}pp at ${piQ} (import pass-through), peak output effect of ${f3(gap)}pp at ${gapQ}, requires a rate response of ${f3(rs)}pp at ${rsQ}, and the NER effect peaks at ${f3(ner)}pp at ${nerQ}.`,
+      findings: [
+        `Import price pass-through: the depreciation shock feeds into CPI at rate (1−a₃)=${(1 - p.a3).toFixed(2)} per unit of exchange rate change. At the peak, the ${sz.toFixed(2)}pp depreciation generates ~${(sz * (1 - p.a3) * p.a2).toFixed(3)}pp of direct inflation via the import channel.`,
+        `Output gap response (${f3(gap)}pp at ${gapQ}) reflects two competing forces: the competitiveness boost (exports cheaper → higher output) vs. higher import costs compressing real incomes. Net effect: ${gap > 0 ? 'positive — export competitiveness dominates' : 'negative — real income compression dominates'}.`,
+        `The CBU's UIP-based exchange rate equation has backward weight e₁=${p.e1.toFixed(2)} — ${(p.e1 * 100).toFixed(0)}% of exchange rate expectations are backward-looking. This means depreciation expectations can be self-fulfilling if not countered by rate hikes.`,
+        `The Taylor Rule response (${f3(rs)}pp at ${rsQ}) is the CBU's defensive reaction to the inflation generated by the weaker UZS, not a proactive stance — distinguishing this from a domestic demand shock.`,
+      ],
+      risks: [
+        `Depreciation-inflation spiral: e₁=${p.e1.toFixed(2)} backward expectations + a₁=${p.a1.toFixed(2)} inflation persistence create a dangerous self-reinforcing loop where each depreciation wave feeds next period's inflation expectations, requiring ever-larger rate hikes to break.`,
+        `Reserve depletion risk: defending the UZS against continued depreciation pressure requires FX sales from CBU reserves. At an assumed intervention cost of $50–100M per 1pp of UZS stabilisation, sustained shocks could deplete usable reserves within 12–18 months.`,
+        `Dollarisation risk: repeated UZS depreciation episodes increase household demand for USD savings (de facto currency substitution), weakening the CBU's monetary transmission and effectiveness of the interest rate channel.`,
+      ],
+      recommendations: [
+        `Rate defense with clear communication: raise the key rate ahead of market panic to arrest depreciation expectations. Explicitly reference the 5% inflation target as the anchor. Signal that the rate will be reduced once FX stability is restored.`,
+        `Controlled FX intervention: use FX reserves to smooth volatility — not defend a fixed rate. Target a predictable depreciation path (e.g. 1–2% per quarter) to reduce uncertainty for importers and corporate borrowers.`,
+        `Capital flow management: consider temporary macro-prudential tools (FX deposit restrictions for non-residents, FX surrender requirements for exporters) to stabilise short-term capital outflows without raising rates excessively.`,
+        `Export revenue capture: coordinate with major gold and gas exporters (state enterprises) to front-load FX sales during depreciation episodes, providing a natural supply-side buffer in the FX market.`,
+      ],
+    },
+    monetary: {
+      summary: `A ${sz.toFixed(2)}pp monetary policy tightening shock (CBU key rate hike above the Taylor Rule path) reduces the output gap by ${f3(gap)}pp at ${gapQ}, brings CPI inflation down by ${f3(pi)}pp at ${piQ}, and generates UZS ${ner >= 0 ? 'depreciation' : 'appreciation'} of ${abs(ner)}pp at ${nerQ} via the UIP channel.`,
+      findings: [
+        `Monetary transmission via MCI: with b₂=${p.b2.toFixed(2)} (MCI sensitivity) and b₄=${p.b4.toFixed(2)} (IR share in MCI), the policy rate tightening transmits to output with force b₂·b₄=${(p.b2 * p.b4).toFixed(3)}, generating a ${f3(gap)}pp output gap at ${gapQ}.`,
+        `Disinflation: the policy tightening reduces inflation by ${f3(pi)}pp at ${piQ}. The disinflation is gradual due to inflation persistence a₁=${p.a1.toFixed(2)} — CBU must sustain elevated rates for ~${Math.round(Math.abs(pi) / 0.15)} quarters to achieve full convergence back to the 5% target.`,
+        `UIP channel: the ${sz.toFixed(2)}pp rate hike makes UZS assets more attractive, causing ${ner < 0 ? 'UZS appreciation of ' + abs(ner) + 'pp — consistent with the interest rate parity condition' : 'currency pressure of ' + abs(ner) + 'pp'}. With e₁=${p.e1.toFixed(2)}, ${(p.e1 * 100).toFixed(0)}% of exchange rate expectations are backward-looking, slowing the appreciation.`,
+        `Rate smoothing: g₁=${p.g1.toFixed(2)} means the CBU's optimal rate path is heavily smoothed. The tightening is spread over ${Math.round(1 / (1 - p.g1))} quarters, preventing sharp market dislocations but also delaying the full anti-inflationary impact.`,
+      ],
+      risks: [
+        `Recession risk: the ${f3(gap)}pp output contraction at ${gapQ} implies above-normal unemployment pressure. If the tightening is too aggressive (g₂>${p.g2.toFixed(2)}), the recovery could be delayed by ${Math.round(T * p.b1 * 0.5)} additional quarters.`,
+        `Financial stability risk: higher rates increase debt-servicing costs for corporates and households. Uzbekistan's rapid credit expansion (15–20% YoY) means a rate shock could trigger NPL spikes in construction and retail sectors.`,
+        `Premature easing risk: once inflation begins declining, political pressure to cut rates may intensify before disinflation is complete. With a₁=${p.a1.toFixed(2)}, premature easing could re-ignite inflation expectations, requiring a more costly second tightening cycle.`,
+      ],
+      recommendations: [
+        `Data-dependent gradualism: implement the tightening in measured 50bp steps (consistent with g₁=${p.g1.toFixed(2)} smoothing) while monitoring real-time inflation expectations from CBU surveys and bond market break-evens.`,
+        `Complementary macroprudential measures: supplement rate hikes with targeted credit growth caps on the highest-risk lending segments (unsecured consumer credit, FX loans to unhedged borrowers) to reduce the rate level needed for equivalent tightening.`,
+        `Banking sector stress-testing: with rates elevated by ${sz.toFixed(2)}pp above neutral, commission targeted NPL stress tests for banks with high exposure to construction and real estate to identify potential fragility before it materialises.`,
+        `Clear forward guidance: communicate the conditions for future rate reductions (e.g., "we will begin reducing the rate when core inflation has been below 7% for three consecutive months") to reduce uncertainty and lower long-term yields without sacrificing short-term credibility.`,
+      ],
+    },
+  };
+
+  // ── Russian content ──────────────────────────────────────
+  const CONTENT_RU = {
+    demand: {
+      summary: `Положительный шок совокупного спроса в ${sz.toFixed(2)} пп (фискальная экспансия, рост инвестиций) вызывает пик инфляции ИПЦ ${f3(pi)} пп в ${piQ}, разрыв выпуска ${f3(gap)} пп в ${gapQ} и требует повышения ключевой ставки ЦБ на ${f3(rs)} пп в ${rsQ}. Курс UZS ${ner >= 0 ? 'обесценивается' : 'укрепляется'} на ${abs(ner)} пп в ${nerQ}.`,
+      findings: [
+        `Разрыв выпуска достигает пика ${f3(gap)} пп (${gapQ}). При инерции IS b₁=${p.b1.toFixed(2)} экономика перегревается на ~${Math.round(T * p.b1)} кварталов.`,
+        `Инфляция превышает цель на ${f3(pi)} пп в ${piQ}. Высокая адаптивность a₁=${p.a1.toFixed(2)} означает устойчивые вторичные эффекты — необходимо длительное ужесточение ДКП.`,
+        `Реакция ставки по правилу Тейлора: пик ${f3(rs)} пп в ${rsQ}. При g₂=${p.g2.toFixed(2)} реальная ставка растёт на ~${((p.g2-1)*Math.abs(pi)).toFixed(3)} пп сверх инфляционного шока.`,
+      ],
+      risks: [
+        `Риск инфляционной инерции: a₁=${p.a1.toFixed(2)} означает, что ${(p.a1*100).toFixed(0)}% инфляции определяется прошлым периодом. Перегрев ${f3(pi)} пп может сохраняться ~${Math.round(Math.abs(pi)/0.3)} кварталов.`,
+        `Процикличный фискальный риск: дополнительный спрос при уже положительном разрыве выпуска ускоряет инфляцию и долговую нагрузку.`,
+      ],
+      recommendations: [
+        `Превентивное ужесточение: ЦБ должен начать нормализацию ставки до пика разрыва выпуска, чтобы предотвратить де-анкеровку инфляционных ожиданий.`,
+        `Фискальная координация: бюджетные органы должны сигнализировать о планах консолидации для стабилизации долгосрочных ожиданий.`,
+        `Коммуникационная стратегия: форвардные ориентиры ЦБ должны подчёркивать временный характер шока и приверженность цели 5%.`,
+      ],
+    },
+    inflation: {
+      summary: `Инфляционный шок издержек ${sz.toFixed(2)} пп (рост цен на энергоносители, нарушение поставок) поднимает ИПЦ до пика ${f3(pi)} пп в ${piQ}, сжимает разрыв выпуска до ${f3(gap)} пп в ${gapQ} (стагфляция), требует ставки ${f3(rs)} пп в ${rsQ}.`,
+      findings: [
+        `Стагфляция: рост инфляции (${f3(pi)} пп) при отрицательном выпуске (${f3(gap)} пп в ${gapQ}) создаёт классическую дилемму ЦБ.`,
+        `Инерция инфляции a₁=${p.a1.toFixed(2)}: временный шок предложения генерирует устойчивый рост ИПЦ выше цели даже после исчезновения первопричины.`,
+        `Доля внутренних издержек a₃=${p.a3.toFixed(2)}: ${(p.a3*100).toFixed(0)}% шока остаётся во внутренних ценах, ${((1-p.a3)*100).toFixed(0)}% поглощается через импортный канал.`,
+      ],
+      risks: [
+        `Риск стагфляционной ловушки: агрессивное ужесточение при уже отрицательном разрыве выпуска (${f3(gap)} пп) углубляет спад и замедляет восстановление.`,
+        `Спираль цены-заработные платы: высокая доля адаптивных ожиданий a₁=${p.a1.toFixed(2)} повышает риск закрепления временного ценового шока в постоянном росте заработных плат.`,
+      ],
+      recommendations: [
+        `Постепенное ужесточение: избегать полного ответа по правилу Тейлора при отрицательном разрыве выпуска — умеренный рост ставки плюс форвардные ориентиры.`,
+        `Меры на стороне предложения: целевые фискальные инструменты (топливные субсидии, стратегические резервы) прямо устраняют источник шока издержек.`,
+        `Якорение ожиданий: публикация обновлённых прогнозов инфляции ЦБ удерживает среднесрочные ожидания вблизи цели 5%.`,
+      ],
+    },
+    exchange: {
+      summary: `Шок обесценения UZS на ${sz.toFixed(2)} пп (отток капитала, снижение FX интервенций) вызывает пик инфляции ИПЦ ${f3(pi)} пп в ${piQ} (импортный переброс), эффект выпуска ${f3(gap)} пп в ${gapQ}, требует ставки ${f3(rs)} пп в ${rsQ}.`,
+      findings: [
+        `Импортный переброс: обесценение влияет на ИПЦ через канал (1−a₃)=${(1-p.a3).toFixed(2)}. При шоке ${sz.toFixed(2)} пп прямой импортный эффект составляет ~${(sz*(1-p.a3)*p.a2).toFixed(3)} пп инфляции.`,
+        `Обратный вес UIP e₁=${p.e1.toFixed(2)}: ${(p.e1*100).toFixed(0)}% ожиданий курса — адаптивные. Это делает обесценение самоподдерживающимся без вмешательства ставки.`,
+        `Ответ Тейлора (${f3(rs)} пп в ${rsQ}) — оборонительная реакция на инфляцию от слабого UZS, а не проактивная позиция.`,
+      ],
+      risks: [
+        `Спираль обесценения-инфляции: e₁=${p.e1.toFixed(2)} адаптивные ожидания + a₁=${p.a1.toFixed(2)} инерция инфляции создают самоусиливающийся цикл, требующий всё более высоких ставок.`,
+        `Риск долларизации: повторные эпизоды обесценения UZS повышают спрос на USD-сбережения, ослабляя трансмиссионный механизм ДКП.`,
+      ],
+      recommendations: [
+        `Защита ставкой с чёткой коммуникацией: повышение ключевой ставки до начала рыночной паники для остановки ожиданий обесценения.`,
+        `Контролируемые FX интервенции: сглаживание волатильности — не защита фиксированного курса — с предсказуемым путём обесценения.`,
+        `Управление потоками капитала: временные макропруденциальные инструменты для стабилизации краткосрочных оттоков без чрезмерного роста ставок.`,
+      ],
+    },
+    monetary: {
+      summary: `Шок ужесточения ДКП на ${sz.toFixed(2)} пп (повышение ставки сверх пути Тейлора) сокращает разрыв выпуска на ${f3(gap)} пп в ${gapQ}, снижает ИПЦ на ${f3(pi)} пп в ${piQ}, вызывает ${ner < 0 ? 'укрепление' : 'давление на'} UZS на ${abs(ner)} пп в ${nerQ}.`,
+      findings: [
+        `Передача через MCI: при b₂=${p.b2.toFixed(2)} и b₄=${p.b4.toFixed(2)} сила передачи ставки на выпуск b₂·b₄=${(p.b2*p.b4).toFixed(3)}, что даёт разрыв выпуска ${f3(gap)} пп в ${gapQ}.`,
+        `Дезинфляция: ставка снижает инфляцию на ${f3(pi)} пп в ${piQ}. Постепенность определяется a₁=${p.a1.toFixed(2)} — ЦБ должен удерживать ставки ~${Math.round(Math.abs(pi)/0.15)} кварталов.`,
+        `Канал UIP: рост ставки на ${sz.toFixed(2)} пп делает UZS-активы привлекательнее, вызывая ${ner < 0 ? 'укрепление курса ' + abs(ner) + ' пп' : 'давление ' + abs(ner) + ' пп'}. При e₁=${p.e1.toFixed(2)} реакция замедлена адаптивными ожиданиями.`,
+      ],
+      risks: [
+        `Риск рецессии: сокращение выпуска ${f3(gap)} пп в ${gapQ} создаёт давление на рынок труда. Излишне агрессивное ужесточение задерживает восстановление.`,
+        `Финансовая стабильность: рост ставок повышает расходы на обслуживание долга. При быстром кредитном росте (15–20% г/г) возможен скачок NPL в строительстве и рознице.`,
+      ],
+      recommendations: [
+        `Дозированная постепенность: ужесточение шагами по 50 бп (соответствует g₁=${p.g1.toFixed(2)}) с мониторингом инфляционных ожиданий в реальном времени.`,
+        `Макропруденциальные дополнения: ограничения роста кредита в высокорисковых сегментах снижают требуемый уровень ставки.`,
+        `Чёткие форвардные ориентиры: условия снижения ставки (например, «инфляция < 7% три месяца подряд») уменьшают неопределённость и долгосрочные доходности.`,
+      ],
+    },
+  };
+
+  // ── Uzbek content ──────────────────────────────────────
+  const CONTENT_UZ = {
+    demand: {
+      summary: `${sz.toFixed(2)} pp yalpi talab shoki (fiskal kengayish, investitsiyalar o'sishi) YoY inflyatsiyani ${f3(pi)} pp gacha ko'taradi (${piQ}), chiqarish tafovutini ${f3(gap)} pp ga yetkazadi (${gapQ}), MB stavkasini ${f3(rs)} pp ko'tarishni talab qiladi (${rsQ}). UZS ${ner >= 0 ? 'qadrsizlanadi' : 'kuchayadi'} ${abs(ner)} pp (${nerQ}).`,
+      findings: [
+        `Chiqarish tafovuti ${f3(gap)} pp (${gapQ}) — iqtisodiyot qizib ketdi. IS inersiyasi b₁=${p.b1.toFixed(2)} bilan tafovut yopilishi ~${Math.round(T * p.b1)} chorak davom etadi.`,
+        `Inflyatsiya ${f3(pi)} pp oshdi (${piQ}). a₁=${p.a1.toFixed(2)} adaptiv kutishlar ulushi yuqori — ikkilamchi ta'sirlar uzoq davom etadi, pul siyosatini mustahkam ushlab turish zarur.`,
+        `Teylor qoidasi bo'yicha stavka javobi: cho'qqi ${f3(rs)} pp (${rsQ}). g₂=${p.g2.toFixed(2)} bilan real stavka ~${((p.g2-1)*Math.abs(pi)).toFixed(3)} pp inflyatsiya shokidan yuqori ko'tariladi.`,
+      ],
+      risks: [
+        `Inflyatsiya inersiyasi xavfi: a₁=${p.a1.toFixed(2)} — ${(p.a1*100).toFixed(0)}% inflyatsiya o'tgan davrga bog'liq. ${f3(pi)} pp oshiqcha ~${Math.round(Math.abs(pi)/0.3)} chorak davom etishi mumkin.`,
+        `Protsiklik fiskal xavf: allaqachon ijobiy chiqarish tafovuti fonida qo'shimcha talab iqtisodiyotni yanada qizdiradi.`,
+      ],
+      recommendations: [
+        `Oldini oluvchi qattiqlashuv: MB chiqarish tafovutining cho'qqisidan oldin stavkani normallashtirishi kerak — inflyatsiya kutishlarini belgilangan darajada ushlab turish uchun.`,
+        `Fiskal muvofiqlashtirish: byudjet organlari o'rta muddatli konsolidatsiya rejalarini e'lon qilishi lozim.`,
+        `Kommunikatsiya strategiyasi: MB kelajakka yo'naltirilgan ko'rsatkichlari shok vaqtinchaligini va 5% maqsadga sodiqlikni ta'kidlashi kerak.`,
+      ],
+    },
+    inflation: {
+      summary: `${sz.toFixed(2)} pp xarajat inflyatsiyasi shoki (energiya narxlari o'sishi, ta'minot uzilishi) YoY inflyatsiyani ${f3(pi)} pp gacha ko'taradi (${piQ}), chiqarish tafovutini ${f3(gap)} pp ga qisqartiradi (${gapQ}, stagflyatsiya), ${f3(rs)} pp stavka javobini talab qiladi (${rsQ}).`,
+      findings: [
+        `Stagflyatsiya: bir vaqtda inflyatsiya o'sishi (${f3(pi)} pp) va chiqarish qisqarishi (${f3(gap)} pp, ${gapQ}) MB uchun klassik dilemma yaratadi.`,
+        `Inflyatsiya inersiyasi a₁=${p.a1.toFixed(2)}: vaqtinchalik taklif shoki maqsaddan yuqori inflyatsiyani boshlang'ich sababdan keyin ham saqlab turadi.`,
+        `Ichki xarajatlar ulushi a₃=${p.a3.toFixed(2)}: shokining ${(p.a3*100).toFixed(0)}% ichki narxlarda qoladi, ${((1-p.a3)*100).toFixed(0)}% import kanali orqali so'riladi.`,
+      ],
+      risks: [
+        `Stagflyatsiya tuzoq xavfi: salbiy chiqarish tafovuti (${f3(gap)} pp) fonida tajovuzkor qattiqlashuv retsessiyani chuqurlashtiradi.`,
+        `Narx-ish haqi spirali: yuqori a₁=${p.a1.toFixed(2)} vaqtinchalik narx shokini doimiy asosiy inflyatsiyaga aylantirish xavfini kuchaytiradi.`,
+      ],
+      recommendations: [
+        `Bosqichma-bosqich qattiqlashuv: salbiy chiqarish tafovutida to'liq Teylor javobidan qoching — mo''tadil stavka o'sishi va kuchli kelajakka yo'naltirish.`,
+        `Taklif tomoni choralari: maqsadli fiskal vositalar (yonilg'i subsidiyalari, strategik zaxiralar) xarajat shokining manbaini to'g'ridan-to'g'ri bartaraf etadi.`,
+        `Kutishlarni anchoring qilish: MB yangilangan inflyatsiya prognozlarini e'lon qilishi o'rta muddatli kutishlarni 5% maqsad yaqinida ushlab turadi.`,
+      ],
+    },
+    exchange: {
+      summary: `${sz.toFixed(2)} pp UZS qadrsizlanishi shoki (kapital chiqishi, chet el valutasi intervensiyasining kamaytirish) YoY inflyatsiyani ${f3(pi)} pp gacha ko'taradi (${piQ}), chiqarish tafovutini ${f3(gap)} pp ta'sir qiladi (${gapQ}), ${f3(rs)} pp stavka javobini talab qiladi (${rsQ}).`,
+      findings: [
+        `Import o'tish: qadrsizlanish ИПЦга (1−a₃)=${(1-p.a3).toFixed(2)} nisbatda ta'sir qiladi. ${sz.toFixed(2)} pp shokda to'g'ridan-to'g'ri import effekti ~${(sz*(1-p.a3)*p.a2).toFixed(3)} pp inflyatsiya.`,
+        `UIP orqaga og'irlik e₁=${p.e1.toFixed(2)}: kurs kutishlarining ${(p.e1*100).toFixed(0)}% adaptiv. Bu qadrsizlanishni MB aralashuvisiz o'z-o'zini qo'llab-quvvatlovchi qiladi.`,
+        `Teylor javobi (${f3(rs)} pp, ${rsQ}) — zaif UZS tug'dirgan inflyatsiyaga himoya munosabati, proaktiv emas.`,
+      ],
+      risks: [
+        `Qadrsizlanish-inflyatsiya spirali: e₁=${p.e1.toFixed(2)} adaptiv kutishlar + a₁=${p.a1.toFixed(2)} inersiya o'zini kuchaytiradigan tsiklni yaratadi.`,
+        `Dollarlashtirish xavfi: takroriy UZS qadrsizlanish epizodlari xonadonlarning dollar jamg'armasiga talabini oshiradi, MB o'tkazuvchanligini zaiflashadi.`,
+      ],
+      recommendations: [
+        `Aniq kommunikatsiya bilan stavka mudofaasi: bozor vahimasidan oldin kalit stavkani oshirish orqali qadrsizlanish kutishlarini to'xtatish.`,
+        `Nazorat ostidagi FX interventsiya: barqaror qadrsizlanish yo'lini ta'minlash — qat'iy kursni himoya qilmaslik — eksportchilar va qarz oluvchilar uchun noaniqlikni kamaytirish.`,
+        `Kapital oqimlarini boshqarish: qisqa muddatli kapital chiqishini barqarorlashtirish uchun vaqtinchalik makroihtiyo vositalari.`,
+      ],
+    },
+    monetary: {
+      summary: `${sz.toFixed(2)} pp pul siyosati qattiqlashuvi shoki (Teylor yo'lidan yuqori stavka ko'tarilishi) chiqarish tafovutini ${f3(gap)} pp kamaytiradi (${gapQ}), YoY inflyatsiyani ${f3(pi)} pp tushiradi (${piQ}), UZS ${ner < 0 ? 'kuchayishini' : 'bosimini'} ${abs(ner)} pp (${nerQ}) ta'minlaydi.`,
+      findings: [
+        `MCI orqali uzatish: b₂=${p.b2.toFixed(2)} va b₄=${p.b4.toFixed(2)} bilan stavka ta'sirining kuchi b₂·b₄=${(p.b2*p.b4).toFixed(3)}, bu chiqarish tafovutini ${f3(gap)} pp qiladi (${gapQ}).`,
+        `Inflyatsiyani pasaytirish: qattiqlashuv inflyatsiyani ${f3(pi)} pp kamaytiradi (${piQ}). a₁=${p.a1.toFixed(2)} tufayli MB ~${Math.round(Math.abs(pi)/0.15)} chorak boyunturuq ushlab turishi kerak.`,
+        `UIP kanali: ${sz.toFixed(2)} pp stavka o'sishi UZS aktivlarini jozibadorroq qiladi, ${ner < 0 ? abs(ner) + ' pp kuchayish' : abs(ner) + ' pp bosim'} vujudga keladi. e₁=${p.e1.toFixed(2)} bilan ta'sir sekinlashadi.`,
+      ],
+      risks: [
+        `Retsessiya xavfi: ${f3(gap)} pp chiqarish qisqarishi (${gapQ}) mehnat bozoriga bosim yaratadi. Haddan ortiq qattiqlashuv tiklanishni kechiktiradi.`,
+        `Moliyaviy barqarorlik: yuqori stavkalar korporativ va xonadon qarzlarini xizmat qilish xarajatlarini oshiradi; qurilish va chakana savdoda NPL o'sishi mumkin.`,
+      ],
+      recommendations: [
+        `Ma'lumotlarga asoslangan bosqichlilik: real vaqtdagi inflyatsiya kutishlarini kuzatgan holda 50 bp qadamlar bilan (g₁=${p.g1.toFixed(2)} bilan mos) qattiqlashish.`,
+        `Makroihtiyo choralari: eng xavfli kredit segmentlarida maqsadli kredit o'sish chegaralari talab qilinadigan stavka darajasini kamaytiradi.`,
+        `Aniq kelajakka yo'naltirish: stavka kamayishi shartlarini e'lon qilish (masalan, «uch oy ketma-ket asosiy inflyatsiya 7% dan past»).`,
+      ],
+    },
+  };
+
+  let C, langContent;
+  if (lang === 'ru') {
+    langContent = CONTENT_RU;
+  } else if (lang === 'uz') {
+    langContent = CONTENT_UZ;
+  } else {
+    langContent = CONTENT;
+  }
+  C = langContent[shock] || langContent.demand;
+  return {
+    summary: C.summary,
+    findings: C.findings,
+    risks: C.risks,
+    recommendations: C.recommendations,
+    fullText: '',
+    language: lang,
+    model: 'qpm-expert-template',
+    timestamp: new Date().toISOString(),
+  };
+}
+
 /* ── AI analysis ── */
 async function qpmAIAnalysis() {
   if (!lastIRF) { Toast.show('Run the simulation first', 'warning'); return; }
@@ -1088,22 +1685,33 @@ async function qpmAIAnalysis() {
     container.style.cssText = 'margin-top:20px;';
     document.querySelector('.main')?.appendChild(container);
   }
-  container.innerHTML = '<div style="display:flex;align-items:center;gap:10px;padding:20px;font-size:13px;color:#475569;"><span style="display:inline-block;width:20px;height:20px;border:3px solid #e2e8f0;border-top-color:#2563eb;border-radius:50%;animation:spin .8s linear infinite;"></span> Analyzing with AI...</div>';
+  container.innerHTML = '<div style="display:flex;align-items:center;gap:10px;padding:20px;font-size:13px;color:#475569;"><span style="display:inline-block;width:20px;height:20px;border:3px solid #e2e8f0;border-top-color:#2563eb;border-radius:50%;animation:spin .8s linear infinite;"></span> Analyzing...</div>';
   container.scrollIntoView({ behavior: 'smooth' });
-  const analysis = await PolicyAdvisor.analyzeSim('qpm', {
-    shockType: SHOCK_NAMES[shock], shockSize: sz, horizon: T,
-    IS: { b1: p.b1, b2: p.b2, b3: p.b3, b4: p.b4 },
-    Phillips: { a1: p.a1, a2: p.a2, a3: p.a3 },
-    Taylor: { g1: p.g1, g2: p.g2, g3: p.g3 },
-    steadyState: { pi_ss: p.pi_ss, rs_ss: p.rs_ss, g_ss: p.g_ss }
-  }, {
-    kpis: [
-      { label: 'Peak Inflation', value: document.getElementById('kpi0')?.textContent || '—' },
-      { label: 'Peak Output Gap', value: document.getElementById('kpi1')?.textContent || '—' },
-      { label: 'Peak Policy Rate', value: document.getElementById('kpi2')?.textContent || '—' },
-      { label: 'Peak NER Depreciation', value: document.getElementById('kpi3')?.textContent || '—' },
-    ]
-  });
+
+  // Try API-powered analysis first; fall back to expert template
+  let analysis;
+  try {
+    analysis = await PolicyAdvisor.analyzeSim('qpm', {
+      shockType: SHOCK_NAMES[shock], shockSize: sz, horizon: T,
+      IS: { b1: p.b1, b2: p.b2, b3: p.b3, b4: p.b4 },
+      Phillips: { a1: p.a1, a2: p.a2, a3: p.a3 },
+      Taylor: { g1: p.g1, g2: p.g2, g3: p.g3 },
+      steadyState: { pi_ss: p.pi_ss, rs_ss: p.rs_ss, g_ss: p.g_ss }
+    }, {
+      kpis: [
+        { label: 'Peak Inflation', value: document.getElementById('kpi0')?.textContent || '—' },
+        { label: 'Peak Output Gap', value: document.getElementById('kpi1')?.textContent || '—' },
+        { label: 'Peak Policy Rate', value: document.getElementById('kpi2')?.textContent || '—' },
+        { label: 'Peak NER Depreciation', value: document.getElementById('kpi3')?.textContent || '—' },
+      ]
+    });
+    // If it's a generic template (no API), override with expert version
+    if (analysis.model === 'template-fallback') {
+      analysis = buildQPMExpertAnalysis() || analysis;
+    }
+  } catch(e) {
+    analysis = buildQPMExpertAnalysis();
+  }
   PolicyAdvisor.renderAdvisorPanel('qpm-ai-output', analysis);
 }
 </script>
