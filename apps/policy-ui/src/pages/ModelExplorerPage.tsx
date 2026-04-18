@@ -9,7 +9,6 @@ import type {
 import {
   getInitialModelExplorerSourceState,
   loadModelExplorerSourceState,
-  retryModelExplorerSourceState,
 } from '../data/model-explorer/source'
 import { beginRetry } from '../data/source-state'
 import './model-explorer.css'
@@ -130,7 +129,7 @@ export function ModelExplorerPage() {
 
   async function handleRetry() {
     setSourceState((prev) => beginRetry(prev))
-    const nextState = await retryModelExplorerSourceState()
+    const nextState = await loadModelExplorerSourceState()
     setSourceState(nextState)
     if (nextState.status === 'ready' && nextState.workspace) {
       const fallbackModelId = nextState.workspace.models[0]?.model_id ?? ''

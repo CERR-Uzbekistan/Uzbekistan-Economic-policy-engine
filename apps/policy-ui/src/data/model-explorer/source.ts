@@ -1,10 +1,11 @@
 import type { ModelExplorerWorkspace } from '../../contracts/data-contract'
 import {
+  createErrorSourceCore,
+  createLoadingSourceCore,
+  createReadySourceCore,
   mapTransportErrorToUserMessage,
   reportGuardWarningsDevOnly,
-  resolveSourceRetryCapability,
   type IntegrationSourceCore,
-  type IntegrationSourceStatus,
 } from '../source-state.js'
 import { toModelExplorerWorkspace } from '../adapters/model-explorer.js'
 import {
@@ -18,7 +19,6 @@ import {
 } from './live-client.js'
 
 export type ModelExplorerDataMode = 'mock' | 'live'
-export type ModelExplorerSourceStatus = IntegrationSourceStatus
 
 export type ModelExplorerSourceState = IntegrationSourceCore<
   ModelExplorerDataMode,
@@ -41,12 +41,8 @@ function buildReadyState(
   warnings: ModelExplorerValidationIssue[] = [],
 ): ModelExplorerSourceState {
   return {
-    status: 'ready',
-    mode,
+    ...createReadySourceCore<ModelExplorerDataMode, ModelExplorerValidationIssue>(mode, warnings),
     workspace,
-    error: null,
-    canRetry: resolveSourceRetryCapability('ready', mode),
-    warnings,
   }
 }
 
@@ -56,24 +52,16 @@ function buildErrorState(
   warnings: ModelExplorerValidationIssue[] = [],
 ): ModelExplorerSourceState {
   return {
-    status: 'error',
-    mode,
+    ...createErrorSourceCore<ModelExplorerDataMode, ModelExplorerValidationIssue>(mode, error, warnings),
     workspace: null,
-    error,
-    canRetry: resolveSourceRetryCapability('error', mode),
-    warnings,
   }
 }
 
 export function getInitialModelExplorerSourceState(): ModelExplorerSourceState {
   const mode = resolveModelExplorerDataMode()
   return {
-    status: 'loading',
-    mode,
+    ...createLoadingSourceCore<ModelExplorerDataMode, ModelExplorerValidationIssue>(mode),
     workspace: null,
-    error: null,
-    canRetry: resolveSourceRetryCapability('loading', mode),
-    warnings: [],
   }
 }
 
@@ -106,8 +94,4 @@ export async function loadModelExplorerSourceState(): Promise<ModelExplorerSourc
     const message = error instanceof Error ? error.message : 'Failed to load model explorer payload.'
     return buildErrorState(mode, message)
   }
-}
-
-export async function retryModelExplorerSourceState(): Promise<ModelExplorerSourceState> {
-  return loadModelExplorerSourceState()
 }

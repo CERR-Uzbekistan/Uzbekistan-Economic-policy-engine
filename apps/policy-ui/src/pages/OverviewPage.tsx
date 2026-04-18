@@ -9,7 +9,6 @@ import { PageHeader } from '../components/layout/PageHeader'
 import {
   getInitialOverviewSourceState,
   loadOverviewSourceState,
-  retryOverviewSourceState,
 } from '../data/overview/source'
 import { beginRetry } from '../data/source-state'
 import './overview.css'
@@ -32,7 +31,7 @@ export function OverviewPage() {
 
   async function handleRetry() {
     setSourceState((prev) => beginRetry(prev))
-    const nextState = await retryOverviewSourceState()
+    const nextState = await loadOverviewSourceState()
     setSourceState(nextState)
   }
 

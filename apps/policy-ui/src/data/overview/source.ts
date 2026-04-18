@@ -1,10 +1,11 @@
 import type { MacroSnapshot } from '../../contracts/data-contract'
 import {
+  createErrorSourceCore,
+  createLoadingSourceCore,
+  createReadySourceCore,
   mapTransportErrorToUserMessage,
   reportGuardWarningsDevOnly,
-  resolveSourceRetryCapability,
   type IntegrationSourceCore,
-  type IntegrationSourceStatus,
 } from '../source-state.js'
 import { toMacroSnapshot } from '../adapters/overview.js'
 import { validateRawOverviewPayload, type OverviewValidationIssue } from '../adapters/overview-guard.js'
@@ -12,7 +13,6 @@ import { overviewV1Data } from '../mock/overview.js'
 import { fetchOverviewLiveRawPayload, OverviewTransportError } from './live-client.js'
 
 export type OverviewDataMode = 'mock' | 'live'
-export type OverviewSourceStatus = IntegrationSourceStatus
 
 export type OverviewSourceState = IntegrationSourceCore<OverviewDataMode, OverviewValidationIssue> & {
   snapshot: MacroSnapshot | null
@@ -36,12 +36,8 @@ function buildReadyState(
   warnings: OverviewValidationIssue[] = [],
 ): OverviewSourceState {
   return {
-    status: 'ready',
-    mode,
+    ...createReadySourceCore<OverviewDataMode, OverviewValidationIssue>(mode, warnings),
     snapshot,
-    error: null,
-    canRetry: resolveSourceRetryCapability('ready', mode),
-    warnings,
   }
 }
 
@@ -51,24 +47,16 @@ function buildErrorState(
   warnings: OverviewValidationIssue[] = [],
 ): OverviewSourceState {
   return {
-    status: 'error',
-    mode,
+    ...createErrorSourceCore<OverviewDataMode, OverviewValidationIssue>(mode, error, warnings),
     snapshot: null,
-    error,
-    canRetry: resolveSourceRetryCapability('error', mode),
-    warnings,
   }
 }
 
 export function getInitialOverviewSourceState(): OverviewSourceState {
   const mode = resolveOverviewDataMode()
   return {
-    status: 'loading',
-    mode,
+    ...createLoadingSourceCore<OverviewDataMode, OverviewValidationIssue>(mode),
     snapshot: null,
-    error: null,
-    canRetry: resolveSourceRetryCapability('loading', mode),
-    warnings: [],
   }
 }
 
@@ -101,8 +89,4 @@ export async function loadOverviewSourceState(): Promise<OverviewSourceState> {
     const message = error instanceof Error ? error.message : 'Failed to load overview payload.'
     return buildErrorState(mode, message)
   }
-}
-
-export async function retryOverviewSourceState(): Promise<OverviewSourceState> {
-  return loadOverviewSourceState()
 }

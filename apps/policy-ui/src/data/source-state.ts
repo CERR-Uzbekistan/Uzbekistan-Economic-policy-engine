@@ -19,6 +19,9 @@ export type IntegrationValidationIssue = {
   severity: 'error' | 'warning'
 }
 
+// Pre-integration policy: keep guard warnings internal (dev-only) until a shared UX surface is needed.
+const GUARD_WARNING_SURFACE = 'dev-only' as const
+
 export function resolveSourceRetryCapability(
   status: IntegrationSourceStatus,
   mode: 'mock' | 'live',
@@ -30,6 +33,45 @@ export function resolveSourceRetryCapability(
     return mode === 'live'
   }
   return true
+}
+
+export function createLoadingSourceCore<TMode extends 'mock' | 'live', TWarning>(
+  mode: TMode,
+): IntegrationSourceCore<TMode, TWarning> {
+  return {
+    status: 'loading',
+    mode,
+    error: null,
+    canRetry: resolveSourceRetryCapability('loading', mode),
+    warnings: [],
+  }
+}
+
+export function createReadySourceCore<TMode extends 'mock' | 'live', TWarning>(
+  mode: TMode,
+  warnings: TWarning[] = [],
+): IntegrationSourceCore<TMode, TWarning> {
+  return {
+    status: 'ready',
+    mode,
+    error: null,
+    canRetry: resolveSourceRetryCapability('ready', mode),
+    warnings,
+  }
+}
+
+export function createErrorSourceCore<TMode extends 'mock' | 'live', TWarning>(
+  mode: TMode,
+  error: string,
+  warnings: TWarning[] = [],
+): IntegrationSourceCore<TMode, TWarning> {
+  return {
+    status: 'error',
+    mode,
+    error,
+    canRetry: resolveSourceRetryCapability('error', mode),
+    warnings,
+  }
 }
 
 export function beginRetry<TState extends { status: IntegrationSourceStatus; error: string | null }>(
@@ -65,6 +107,10 @@ export function reportGuardWarningsDevOnly(
   sourceLabel: string,
   issues: IntegrationValidationIssue[],
 ): void {
+  if (GUARD_WARNING_SURFACE !== 'dev-only') {
+    return
+  }
+
   if (!isDevelopmentEnvironment()) {
     return
   }

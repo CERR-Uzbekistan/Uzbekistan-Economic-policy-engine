@@ -293,6 +293,7 @@ body {
   padding: var(--space-md);
 }
 
+/* Shared secondary action pattern (legacy overview-specific naming removed). */
 .ui-secondary-action {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
