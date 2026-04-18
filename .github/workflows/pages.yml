@@ -1,0 +1,74 @@
+name: Deploy Pages
+
+on:
+  push:
+    branches:
+      - epic/frontend-replatform
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: apps/policy-ui/package-lock.json
+
+      - name: Install policy-ui
+        working-directory: apps/policy-ui
+        run: npm ci
+
+      - name: Build policy-ui
+        working-directory: apps/policy-ui
+        env:
+          POLICY_UI_BASE: /Uzbekistan-Economic-policy-engine/policy-ui/
+        run: npm run build
+
+      - name: SPA 404 fallback
+        run: cp apps/policy-ui/dist/index.html apps/policy-ui/dist/404.html
+
+      - name: Assemble _site
+        run: |
+          mkdir -p _site
+          rsync -a --delete \
+            --exclude='/apps' \
+            --exclude='/node_modules' \
+            --exclude='/.git' \
+            --exclude='/.github' \
+            --exclude='/claude-logs' \
+            --exclude='/mcp_server' \
+            --exclude='/scripts' \
+            --exclude='/synthesis' \
+            --exclude='/_site' \
+            --exclude='/_tmp_*' \
+            ./ _site/
+          mkdir -p _site/policy-ui
+          cp -r apps/policy-ui/dist/. _site/policy-ui/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
