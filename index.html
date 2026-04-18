@@ -2168,7 +2168,7 @@ function setLang(lang) {
   // Update the lang code shown on the picker button
   const codeEl = document.getElementById('lang-code');
   if (codeEl) codeEl.textContent = LANG_CODES[lang] || 'EN';
-  // Broadcast to all embedded model iframes
+  // Broadcast language change to all embedded model iframes
   document.querySelectorAll('iframe').forEach(function(iframe) {
     try { iframe.contentWindow.postMessage({ type: 'setLang', lang: lang }, '*'); } catch(e) {}
   });
