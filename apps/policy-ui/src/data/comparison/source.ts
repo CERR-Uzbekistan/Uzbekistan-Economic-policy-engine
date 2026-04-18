@@ -78,6 +78,13 @@ export async function loadComparisonSourceState(): Promise<ComparisonSourceState
     }
 
     const workspace = toComparisonWorkspace(validation.value)
+    if (!workspace) {
+      return buildErrorState(
+        mode,
+        'Comparison payload contained fewer than two usable scenarios.',
+        validation.issues,
+      )
+    }
     return buildReadyState(mode, workspace, validation.issues)
   } catch (error) {
     if (error instanceof ComparisonTransportError) {

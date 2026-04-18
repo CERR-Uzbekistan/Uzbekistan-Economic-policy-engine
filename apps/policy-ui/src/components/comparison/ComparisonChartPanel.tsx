@@ -16,16 +16,26 @@ const VIEW_LABELS: Record<ComparisonViewMode, string> = {
   risk: 'Risk view',
 }
 
-function buildValue(scenario: ComparisonScenario, baseline: ComparisonScenario, mode: ComparisonViewMode) {
-  if (mode === 'delta') {
-    const scenarioValue = scenario.values.gdp_growth ?? 0
-    const baselineValue = baseline.values.gdp_growth ?? 0
-    return scenarioValue - baselineValue
-  }
+function buildValue(
+  scenario: ComparisonScenario,
+  baseline: ComparisonScenario,
+  mode: ComparisonViewMode,
+): number | null {
   if (mode === 'risk') {
     return scenario.risk_index
   }
-  return scenario.values.gdp_growth ?? 0
+  const scenarioValue = scenario.values.gdp_growth
+  if (typeof scenarioValue !== 'number') {
+    return null
+  }
+  if (mode === 'delta') {
+    const baselineValue = baseline.values.gdp_growth
+    if (typeof baselineValue !== 'number') {
+      return null
+    }
+    return scenarioValue - baselineValue
+  }
+  return scenarioValue
 }
 
 function descriptionForMode(mode: ComparisonViewMode) {
@@ -70,7 +80,23 @@ export function ComparisonChartPanel({
     value: buildValue(scenario, baseline, viewMode),
   }))
 
-  const maxAbs = Math.max(...rows.map((row) => Math.abs(row.value)), 1)
+  const measurableRows = rows.filter(
+    (row): row is { scenario: ComparisonScenario; value: number } => row.value !== null,
+  )
+
+  if (measurableRows.length === 0) {
+    return (
+      <section className="comparison-panel comparison-panel--chart" aria-labelledby="comparison-chart-title">
+        <div className="comparison-panel__head page-section-head">
+          <h2 id="comparison-chart-title">Comparison Chart · GDP Growth</h2>
+          <p>{descriptionForMode(viewMode)}</p>
+        </div>
+        <p className="empty-state">GDP growth values are unavailable for the selected scenarios.</p>
+      </section>
+    )
+  }
+
+  const maxAbs = Math.max(...measurableRows.map((row) => Math.abs(row.value)), 1)
   const isDeltaView = viewMode === 'delta'
 
   return (
@@ -107,7 +133,7 @@ export function ComparisonChartPanel({
         aria-labelledby={`comparison-view-tab-${viewMode}`}
       >
         <ul className="comparison-chart-bars" aria-label="Scenario comparison values">
-          {rows.map(({ scenario, value }) => {
+          {measurableRows.map(({ scenario, value }) => {
             const isBaseline = scenario.scenario_id === baselineId
             const ratio = Math.abs(value) / maxAbs
             const centredWidth = isDeltaView ? ratio * 50 : ratio * 100

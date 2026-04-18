@@ -95,7 +95,8 @@ export function HeadlineComparisonTable({
           </thead>
           <tbody>
             {metrics.map((metric) => {
-              const baselineValue = baseline.values[metric.metric_id] ?? 0
+              const baselineValue = baseline.values[metric.metric_id]
+              const baselineHasValue = typeof baselineValue === 'number'
               return (
                 <tr key={metric.metric_id}>
                   <th scope="row">
@@ -103,10 +104,36 @@ export function HeadlineComparisonTable({
                     <span className="comparison-headline-table__unit">{metric.unit}</span>
                   </th>
                   <td className="comparison-headline-table__baseline-col">
-                    {formatValue(baselineValue, metric.unit)}
+                    {baselineHasValue ? formatValue(baselineValue, metric.unit) : '—'}
                   </td>
                   {alternatives.map((scenario) => {
-                    const value = scenario.values[metric.metric_id] ?? 0
+                    const value = scenario.values[metric.metric_id]
+                    const scenarioHasValue = typeof value === 'number'
+                    if (!scenarioHasValue) {
+                      return (
+                        <td key={scenario.scenario_id}>
+                          <span className="comparison-headline-table__value" aria-label="Not available">
+                            —
+                          </span>
+                        </td>
+                      )
+                    }
+                    if (!baselineHasValue) {
+                      return (
+                        <td key={scenario.scenario_id}>
+                          <span className="comparison-headline-table__value">
+                            {formatValue(value, metric.unit)}
+                          </span>
+                          <span
+                            className="comparison-headline-table__delta"
+                            aria-label="Baseline value unavailable; no delta computed"
+                          >
+                            <span aria-hidden="true">—</span>
+                            <span>n/a</span>
+                          </span>
+                        </td>
+                      )
+                    }
                     const delta = value - baselineValue
                     const deltaText = formatDelta(delta, metric.unit)
                     return (

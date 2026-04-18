@@ -5,7 +5,6 @@ import type {
   ComparisonWorkspace,
   ScenarioType,
 } from '../../contracts/data-contract'
-import { comparisonWorkspaceMock } from '../mock/comparison.js'
 
 export type RawComparisonHeadlineMetric = {
   metricId?: string
@@ -178,10 +177,6 @@ function toMetricDefinitions(
     }
   }
 
-  if (discoveredMetricIds.size === 0) {
-    return comparisonWorkspaceMock.metric_definitions
-  }
-
   return Array.from(discoveredMetricIds).map((metricId) => ({
     metric_id: metricId,
     label: metricId.replace(/_/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase()),
@@ -224,7 +219,7 @@ function toDefaultSelectedIds(
   return Array.from(new Set([baselineId, ...fallback])).filter(Boolean).slice(0, 4)
 }
 
-export function toComparisonWorkspace(raw: RawComparisonPayload): ComparisonWorkspace {
+export function toComparisonWorkspace(raw: RawComparisonPayload): ComparisonWorkspace | null {
   const fallbackGeneratedAt = new Date().toISOString()
   const generatedAt = toIsoOrFallback(raw.generatedAt, fallbackGeneratedAt)
 
@@ -256,7 +251,9 @@ export function toComparisonWorkspace(raw: RawComparisonPayload): ComparisonWork
     .filter((scenario): scenario is ComparisonScenario => scenario !== null)
 
   if (scenarios.length < 2) {
-    return comparisonWorkspaceMock
+    // MVP rule: never silently substitute mock for an undersized live payload.
+    // Caller (source layer) surfaces this as an honest error rather than a fake "ready" state.
+    return null
   }
 
   const metricDefinitions = toMetricDefinitions(raw.metricDefinitions, scenarios)
@@ -264,7 +261,7 @@ export function toComparisonWorkspace(raw: RawComparisonPayload): ComparisonWork
   const defaultSelectedIds = toDefaultSelectedIds(scenarios, baselineId, raw.defaultSelectedIds)
 
   return {
-    workspace_id: raw.workspaceId ?? comparisonWorkspaceMock.workspace_id,
+    workspace_id: raw.workspaceId ?? `comparison-live-${generatedAt}`,
     generated_at: generatedAt,
     metric_definitions: metricDefinitions,
     scenarios,

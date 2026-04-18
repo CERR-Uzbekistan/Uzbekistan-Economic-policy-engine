@@ -2,7 +2,6 @@ import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 import { toComparisonWorkspace, type RawComparisonPayload } from '../../../src/data/adapters/comparison.js'
 import { validateRawComparisonPayload } from '../../../src/data/adapters/comparison-guard.js'
-import { comparisonWorkspaceMock } from '../../../src/data/mock/comparison.js'
 
 describe('comparison adapter', () => {
   it('maps happy-path payload into Comparison workspace contract', () => {
@@ -49,6 +48,7 @@ describe('comparison adapter', () => {
 
     const workspace = toComparisonWorkspace(raw)
 
+    assert.ok(workspace, 'Expected workspace to be returned')
     assert.equal(workspace.workspace_id, 'cmp-live-1')
     assert.equal(workspace.metric_definitions.length, 2)
     assert.equal(workspace.scenarios.length, 2)
@@ -56,7 +56,7 @@ describe('comparison adapter', () => {
     assert.equal(workspace.scenarios[1]?.values.gdp_growth, 6.2)
   })
 
-  it('falls back safely when payload is degraded and cannot form a valid comparison set', () => {
+  it('returns null when payload is degraded and cannot form a valid comparison set (no silent mock swap)', () => {
     const workspace = toComparisonWorkspace({
       workspaceId: 'cmp-partial',
       scenarios: [
@@ -69,8 +69,7 @@ describe('comparison adapter', () => {
       ],
     })
 
-    assert.equal(workspace.workspace_id, comparisonWorkspaceMock.workspace_id)
-    assert.equal(workspace.scenarios.length, comparisonWorkspaceMock.scenarios.length)
+    assert.equal(workspace, null)
   })
 
   it('drops live labeled series without usable numeric values instead of backfilling under that live label', () => {
@@ -118,6 +117,7 @@ describe('comparison adapter', () => {
       defaultSelectedIds: ['baseline', 'valid-alt'],
     })
 
+    assert.ok(workspace, 'Expected workspace to be returned')
     assert.equal(workspace.workspace_id, 'cmp-series-rule')
     assert.equal(workspace.scenarios.some((scenario) => scenario.scenario_id === 'empty-live-series'), false)
     assert.equal(workspace.scenarios.length, 2)

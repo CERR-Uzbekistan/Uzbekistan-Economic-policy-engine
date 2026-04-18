@@ -9,16 +9,25 @@ type TradeoffSummaryPanelProps = {
   tagsByScenarioId: Record<string, ComparisonScenarioTag>
 }
 
+function hasGrowth(scenario: ComparisonScenario) {
+  return typeof scenario.values.gdp_growth === 'number'
+}
+
 function getGrowthScore(scenario: ComparisonScenario) {
   return scenario.values.gdp_growth ?? 0
 }
 
 function getStabilityScore(scenario: ComparisonScenario) {
-  const inflation = scenario.values.inflation ?? 0
-  const fiscal = scenario.values.fiscal_balance ?? 0
-  const inflationGap = Math.abs(inflation - 8)
-  const fiscalGap = Math.abs(fiscal + 3)
-  return scenario.risk_index + inflationGap * 5 + fiscalGap * 4
+  const inflation = scenario.values.inflation
+  const fiscal = scenario.values.fiscal_balance
+  let score = scenario.risk_index
+  if (typeof inflation === 'number') {
+    score += Math.abs(inflation - 8) * 5
+  }
+  if (typeof fiscal === 'number') {
+    score += Math.abs(fiscal + 3) * 4
+  }
+  return score
 }
 
 function getBalanceScore(scenario: ComparisonScenario) {
@@ -32,53 +41,61 @@ export function TradeoffSummaryPanel({
   baselineId,
   tagsByScenarioId,
 }: TradeoffSummaryPanelProps) {
-  if (selectedScenarios.length === 0) {
+  const rankableScenarios = selectedScenarios.filter(hasGrowth)
+
+  if (selectedScenarios.length === 0 || rankableScenarios.length === 0) {
     return (
       <section className="comparison-panel comparison-panel--summary" aria-labelledby="comparison-summary-title">
         <div className="comparison-panel__head page-section-head">
           <h2 id="comparison-summary-title">Trade-off summary</h2>
           <p>Quick decision framing from selected scenarios.</p>
         </div>
-        <p className="empty-state">Select at least one scenario to generate a summary.</p>
+        <p className="empty-state">
+          {selectedScenarios.length === 0
+            ? 'Select at least one scenario to generate a summary.'
+            : 'Selected scenarios do not include GDP growth values; trade-off summary unavailable.'}
+        </p>
       </section>
     )
   }
 
-  const strongestGrowth = [...selectedScenarios].sort(
+  const strongestGrowth = [...rankableScenarios].sort(
     (a, b) => getGrowthScore(b) - getGrowthScore(a),
   )[0]
-  const strongestStability = [...selectedScenarios].sort(
+  const strongestStability = [...rankableScenarios].sort(
     (a, b) => getStabilityScore(a) - getStabilityScore(b),
   )[0]
-  const compromise = [...selectedScenarios].sort((a, b) => getBalanceScore(b) - getBalanceScore(a))[0]
+  const compromise = [...rankableScenarios].sort((a, b) => getBalanceScore(b) - getBalanceScore(a))[0]
 
-  const preferredTagged = selectedScenarios.find(
+  const preferredTagged = rankableScenarios.find(
     (scenario) => tagsByScenarioId[scenario.scenario_id] === 'preferred',
   )
   const baselineScenario = selectedScenarios.find((scenario) => scenario.scenario_id === baselineId)
 
   function resolveRecommendation() {
     if (!preferredTagged) {
-      const stressCandidate =
-        strongestStability.scenario_id !== compromise.scenario_id
-          ? strongestStability
-          : strongestGrowth
-      return `Use ${compromise.scenario_name} as the working compromise, then stress test against ${stressCandidate.scenario_name}.`
+      const stressCandidate = [strongestStability, strongestGrowth].find(
+        (candidate) => candidate.scenario_id !== compromise.scenario_id,
+      )
+      if (!stressCandidate) {
+        return `${compromise.scenario_name} is the only candidate that ranks on growth and stability here; add another scenario before committing.`
+      }
+      return `Consider ${compromise.scenario_name} as a working compromise; stress test against ${stressCandidate.scenario_name} before committing.`
     }
 
-    const stabilityCheck = [...selectedScenarios]
+    const stabilityCheck = [...rankableScenarios]
       .sort((a, b) => getStabilityScore(a) - getStabilityScore(b))
       .find((scenario) => scenario.scenario_id !== preferredTagged.scenario_id)
 
     if (!stabilityCheck) {
-      return `Current preferred tag is on ${preferredTagged.scenario_name}. Add another scenario to test it against.`
+      return `Preferred tag is on ${preferredTagged.scenario_name}. Add another scenario to test it against.`
     }
 
     if (preferredTagged.scenario_id === strongestStability.scenario_id) {
-      return `${preferredTagged.scenario_name} is tagged preferred and currently the most stable option. Stress test it against ${stabilityCheck.scenario_name} before committing.`
+      return `${preferredTagged.scenario_name} is tagged preferred and ranks most stable on this selection. Stress test against ${stabilityCheck.scenario_name} before committing.`
     }
 
-    return `Current preferred tag is on ${preferredTagged.scenario_name}. Validate it against ${strongestStability.scenario_name} for stability resilience before final selection.`
+    return `Preferred tag is on ${preferredTagged.scenario_name}. Validate against ${strongestStability.scenario_name} for stability before committing.`
   }
 
   const recommendation = resolveRecommendation()
