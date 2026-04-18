@@ -11,5 +11,12 @@
     "outDir": "./.test-dist",
     "rootDir": "."
   },
-  "include": ["tests/**/*.ts", "src/data/adapters/**/*.ts", "src/contracts/**/*.ts"]
+  "include": [
+    "tests/**/*.ts",
+    "src/data/adapters/**/*.ts",
+    "src/data/mock/**/*.ts",
+    "src/data/overview/**/*.ts",
+    "src/data/raw/**/*.ts",
+    "src/contracts/**/*.ts"
+  ]
 }

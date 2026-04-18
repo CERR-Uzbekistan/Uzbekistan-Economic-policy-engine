@@ -1,11 +1,8 @@
 import type { MacroSnapshot } from '../../contracts/data-contract'
-import {
-  toMacroSnapshot,
-  validateRawOverviewPayload,
-  type OverviewValidationIssue,
-} from '../adapters'
-import { overviewV1Data } from '../mock/overview'
-import { overviewLiveRawMock } from '../raw/overview-live'
+import { toMacroSnapshot } from '../adapters/overview.js'
+import { validateRawOverviewPayload, type OverviewValidationIssue } from '../adapters/overview-guard.js'
+import { overviewV1Data } from '../mock/overview.js'
+import { fetchOverviewLiveRawPayload, OverviewTransportError } from './live-client.js'
 
 export type OverviewDataMode = 'mock' | 'live'
 export type OverviewSourceStatus = 'loading' | 'ready' | 'error'
@@ -20,7 +17,11 @@ export type OverviewSourceState = {
 }
 
 function resolveOverviewDataMode(): OverviewDataMode {
-  return import.meta.env.VITE_OVERVIEW_DATA_MODE === 'live' ? 'live' : 'mock'
+  const envMode = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env
+    ?.VITE_OVERVIEW_DATA_MODE
+  const processMode = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process
+    ?.env?.VITE_OVERVIEW_DATA_MODE
+  return envMode === 'live' || processMode === 'live' ? 'live' : 'mock'
 }
 
 export function getOverviewDataMode(): OverviewDataMode {
@@ -69,7 +70,17 @@ export function getInitialOverviewSourceState(): OverviewSourceState {
 }
 
 async function getRawOverviewPayload(): Promise<unknown> {
-  return overviewLiveRawMock
+  return fetchOverviewLiveRawPayload()
+}
+
+function toTransportErrorMessage(error: OverviewTransportError): string {
+  if (error.kind === 'http') {
+    return `Overview API returned an unsuccessful response${error.status ? ` (${error.status}).` : '.'}`
+  }
+  if (error.kind === 'timeout') {
+    return 'Overview API request timed out. Please retry.'
+  }
+  return 'Overview API is unreachable. Please check your connection and retry.'
 }
 
 export async function loadOverviewSourceState(): Promise<OverviewSourceState> {
@@ -89,6 +100,10 @@ export async function loadOverviewSourceState(): Promise<OverviewSourceState> {
     const snapshot = toMacroSnapshot(validation.value)
     return buildReadyState(mode, snapshot, validation.issues)
   } catch (error) {
+    if (error instanceof OverviewTransportError) {
+      return buildErrorState(mode, toTransportErrorMessage(error))
+    }
+
     const message = error instanceof Error ? error.message : 'Failed to load overview payload.'
     return buildErrorState(mode, message)
   }
