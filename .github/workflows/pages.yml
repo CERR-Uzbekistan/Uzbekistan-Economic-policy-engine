@@ -32,6 +32,14 @@ jobs:
         working-directory: apps/policy-ui
         run: npm ci
 
+      - name: Lint policy-ui
+        working-directory: apps/policy-ui
+        run: npm run lint
+
+      - name: Test policy-ui
+        working-directory: apps/policy-ui
+        run: npm run test
+
       - name: Build policy-ui
         working-directory: apps/policy-ui
         env:

@@ -119,12 +119,35 @@ export function ScenarioLabPage() {
     })
   }
 
-  useEffect(() => {
-    void runScenario({
-      assumptions: assumptionValues,
-      selectedPresetId,
-      scenarioName,
+  async function runScenarioSilently(nextParams: ScenarioRunParams) {
+    latestRunParamsRef.current = nextParams
+    const runId = activeRunIdRef.current + 1
+    activeRunIdRef.current = runId
+    const nextState = await loadScenarioLabSourceState(nextParams)
+    if (activeRunIdRef.current !== runId) {
+      return
+    }
+    setLastRunAssumptions(nextParams.assumptions)
+    setSourceState((prev) => {
+      if (nextState.status === 'error' && prev.results && prev.workspace) {
+        return { ...nextState, workspace: prev.workspace, results: prev.results }
+      }
+      return nextState
     })
+  }
+
+  useEffect(() => {
+    const timerId = window.setTimeout(() => {
+      void runScenarioSilently({
+        assumptions: assumptionValues,
+        selectedPresetId,
+        scenarioName,
+      })
+    }, 0)
+
+    return () => {
+      window.clearTimeout(timerId)
+    }
     // Intentional mount-only initial run to separate editable assumptions from run lifecycle.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

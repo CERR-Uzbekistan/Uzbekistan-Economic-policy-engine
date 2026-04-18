@@ -34,10 +34,12 @@ function buildInitialTags(workspace: ComparisonWorkspace): Record<string, Compar
 
 export function ComparisonPage() {
   const [sourceState, setSourceState] = useState(getInitialComparisonSourceState)
-  const [selectedIds, setSelectedIds] = useState<string[]>([])
-  const [baselineId, setBaselineId] = useState('')
+  const [selectedIdsOverride, setSelectedIdsOverride] = useState<string[] | null>(null)
+  const [baselineIdOverride, setBaselineIdOverride] = useState<string | null>(null)
   const [viewMode, setViewMode] = useState<ComparisonViewMode>('level')
-  const [tagsByScenarioId, setTagsByScenarioId] = useState<Record<string, ComparisonScenarioTag>>({})
+  const [tagsByScenarioIdOverride, setTagsByScenarioIdOverride] = useState<
+    Record<string, ComparisonScenarioTag> | null
+  >(null)
 
   useEffect(() => {
     let cancelled = false
@@ -53,35 +55,81 @@ export function ComparisonPage() {
   }, [])
 
   const workspace = sourceState.workspace
-  const scenarios = workspace?.scenarios ?? []
-  const metricDefinitions = workspace?.metric_definitions ?? []
+  const scenarios = useMemo(() => workspace?.scenarios ?? [], [workspace])
+  const metricDefinitions = useMemo(() => workspace?.metric_definitions ?? [], [workspace])
+
+  const defaultSelectedIds = useMemo(() => {
+    if (!workspace) {
+      return []
+    }
+
+    const scenarioIds = new Set(workspace.scenarios.map((scenario) => scenario.scenario_id))
+    const normalized = workspace.default_selected_ids.filter((id) => scenarioIds.has(id)).slice(0, 4)
+    return normalized.length >= 2
+      ? normalized
+      : workspace.scenarios.map((scenario) => scenario.scenario_id).slice(0, 4)
+  }, [workspace])
+
+  const selectedIds = useMemo(() => {
+    if (!workspace) {
+      return []
+    }
+
+    if (!selectedIdsOverride) {
+      return defaultSelectedIds
+    }
+
+    const scenarioIds = new Set(workspace.scenarios.map((scenario) => scenario.scenario_id))
+    const normalized = selectedIdsOverride.filter((id) => scenarioIds.has(id)).slice(0, 4)
+    return normalized.length >= 2 ? normalized : defaultSelectedIds
+  }, [workspace, selectedIdsOverride, defaultSelectedIds])
+
+  const defaultBaselineId = useMemo(() => {
+    if (!workspace) {
+      return ''
+    }
+
+    const scenarioIds = new Set(workspace.scenarios.map((scenario) => scenario.scenario_id))
+    return scenarioIds.has(workspace.default_baseline_id)
+      ? workspace.default_baseline_id
+      : workspace.scenarios[0]?.scenario_id ?? ''
+  }, [workspace])
+
+  const baselineId = useMemo(() => {
+    if (!workspace) {
+      return ''
+    }
+
+    const candidate = baselineIdOverride ?? defaultBaselineId
+    return selectedIds.includes(candidate) ? candidate : selectedIds[0] ?? ''
+  }, [workspace, baselineIdOverride, defaultBaselineId, selectedIds])
+
+  const tagsByScenarioId = useMemo(() => {
+    if (!workspace) {
+      return {}
+    }
+
+    const defaults = buildInitialTags(workspace)
+    if (!tagsByScenarioIdOverride) {
+      return defaults
+    }
+
+    return Object.entries(tagsByScenarioIdOverride).reduce<Record<string, ComparisonScenarioTag>>(
+      (acc, [scenarioId, tag]) => {
+        if (scenarioId in acc) {
+          acc[scenarioId] = tag
+        }
+        return acc
+      },
+      defaults,
+    )
+  }, [workspace, tagsByScenarioIdOverride])
+
   const scenarioMap = useMemo(() => buildScenarioMap(scenarios), [scenarios])
   const selectedScenarios = useMemo(
     () => selectedIds.map((id) => scenarioMap[id]).filter(Boolean),
     [selectedIds, scenarioMap],
   )
-
-  useEffect(() => {
-    if (!workspace) {
-      return
-    }
-
-    const scenarioIds = new Set(workspace.scenarios.map((scenario) => scenario.scenario_id))
-    const normalizedSelected = workspace.default_selected_ids.filter((id) => scenarioIds.has(id)).slice(0, 4)
-
-    setSelectedIds(
-      normalizedSelected.length >= 2
-        ? normalizedSelected
-        : workspace.scenarios.map((scenario) => scenario.scenario_id).slice(0, 4),
-    )
-
-    const baselineFromWorkspace = scenarioIds.has(workspace.default_baseline_id)
-      ? workspace.default_baseline_id
-      : workspace.scenarios[0]?.scenario_id ?? ''
-
-    setBaselineId(baselineFromWorkspace)
-    setTagsByScenarioId(buildInitialTags(workspace))
-  }, [workspace?.workspace_id])
 
   async function handleRetry() {
     setSourceState((prev) => beginRetry(prev))
@@ -131,31 +179,42 @@ export function ComparisonPage() {
       if (scenarioId === baselineId || selectedIds.length <= 2) {
         return
       }
-      setSelectedIds((prev) => prev.filter((id) => id !== scenarioId))
+      setSelectedIdsOverride((prev) => {
+        const current = prev ?? selectedIds
+        return current.filter((id) => id !== scenarioId)
+      })
       return
     }
 
     if (selectedIds.length >= 4) {
       return
     }
-    setSelectedIds((prev) => [...prev, scenarioId])
+
+    setSelectedIdsOverride((prev) => {
+      const current = prev ?? selectedIds
+      return [...current, scenarioId]
+    })
   }
 
   function handleBaselineChange(nextBaselineId: string) {
     if (!selectedIds.includes(nextBaselineId)) {
-      setSelectedIds((prev) => {
-        if (prev.length < 4) {
-          return [...prev, nextBaselineId]
+      setSelectedIdsOverride((prev) => {
+        const current = prev ?? selectedIds
+        if (current.length < 4) {
+          return [...current, nextBaselineId]
         }
-        const removable = prev.find((id) => id !== baselineId)
-        return removable ? [...prev.filter((id) => id !== removable), nextBaselineId] : prev
+        const removable = current.find((id) => id !== baselineId)
+        return removable ? [...current.filter((id) => id !== removable), nextBaselineId] : current
       })
     }
-    setBaselineId(nextBaselineId)
+    setBaselineIdOverride(nextBaselineId)
   }
 
   function handleTagChange(scenarioId: string, tag: ComparisonScenarioTag) {
-    setTagsByScenarioId((prev) => ({ ...prev, [scenarioId]: tag }))
+    setTagsByScenarioIdOverride((prev) => {
+      const current = prev ?? tagsByScenarioId
+      return { ...current, [scenarioId]: tag }
+    })
   }
 
   return (
