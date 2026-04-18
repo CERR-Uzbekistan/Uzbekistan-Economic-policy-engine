@@ -140,6 +140,58 @@ tr:hover td { background: #f8f9ff; }
   border-radius:8px;font-size:12px;cursor:pointer;color:#334155;
   display:inline-flex;align-items:center;gap:6px;transition:all 0.15s;font-family:inherit;}
 .export-btn:hover{background:#1a3a6e;color:white;border-color:#1a3a6e;}
+
+/* ── Briefing panel ── */
+.briefing-panel { font-family: 'Inter', sans-serif; }
+.briefing-section { margin-bottom: 22px; }
+.briefing-section-title {
+  font-size: 10.5px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.2px; color: var(--text2); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.briefing-section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+.briefing-section-icon { font-size: 15px; }
+.briefing-text {
+  font-size: 14px; line-height: 1.75; color: var(--text);
+  background: #f8fafc; border-left: 3px solid var(--navy2);
+  padding: 14px 18px; border-radius: 0 8px 8px 0;
+}
+.briefing-text .num { font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+.briefing-text .pos-num { font-weight: 700; color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+.briefing-text .neg-num { font-weight: 700; color: var(--accent3); font-family: 'JetBrains Mono', monospace; }
+.briefing-text .neu-num { font-weight: 700; color: var(--accent2); font-family: 'JetBrains Mono', monospace; }
+.anomaly-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.anomaly-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 14px; border-radius: 8px; font-size: 13px; line-height: 1.5;
+}
+.anomaly-item.anom-high { background: #fff7ed; border: 1px solid #fed7aa; }
+.anomaly-item.anom-low  { background: #fef2f2; border: 1px solid #fecaca; }
+.anomaly-item.anom-ok   { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+.anomaly-badge {
+  font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+  padding: 2px 7px; border-radius: 10px; white-space: nowrap; margin-top: 2px;
+}
+.badge-high { background: #fb923c; color: #fff; }
+.badge-low  { background: #ef4444; color: #fff; }
+.badge-ok   { background: #22c55e; color: #fff; }
+.change-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; background: #f8fafc; border-radius: 8px;
+  border: 1px solid var(--border); font-size: 13px;
+}
+.change-arrow { font-size: 22px; }
+.briefing-toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+.briefing-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 18px; border-radius: 8px; font-size: 12px; font-weight: 700;
+  cursor: pointer; border: 1px solid var(--border); background: white;
+  color: var(--text); transition: all 0.15s; font-family: inherit;
+}
+.briefing-btn:hover { background: var(--navy2); color: white; border-color: var(--navy2); }
+.briefing-btn.primary { background: var(--navy2); color: white; border-color: var(--navy2); font-size: 13px; padding: 10px 22px; }
+.briefing-btn.primary:hover { background: #2563eb; }
+#briefing-timestamp { font-size: 11px; color: #aaa; margin-left: auto; }
 </style>
 </head>
 <body>
@@ -158,6 +210,7 @@ tr:hover td { background: #f8f9ff; }
   <button class="tab-btn" onclick="showTab('update')"><span data-i18n="dfm_tab_update">🔄 Update Nowcast</span> <span class="badge">Live KF</span></button>
   <button class="tab-btn" onclick="showTab('factor')" data-i18n="dfm_tab_factor">⚙️ Factor & Loadings</button>
   <button class="tab-btn" onclick="showTab('data')" data-i18n="dfm_tab_data">📂 Data & Model</button>
+  <button class="tab-btn" onclick="showTab('briefing')">📋 Auto Briefing <span class="badge">NEW</span></button>
 </nav>
 
 <!-- ════════════════════════════════════════════════════════
@@ -429,6 +482,84 @@ tr:hover td { background: #f8f9ff; }
 </div>
 
 <!-- ════════════════════════════════════════════════════════
+     PAGE 5: AUTOMATED BRIEFING (Issue #17)
+════════════════════════════════════════════════════════ -->
+<div id="page-briefing" class="page">
+
+  <!-- Header row -->
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+    <div>
+      <h2 style="font-size:17px;font-weight:800;margin:0 0 4px">Automated Nowcast Briefing</h2>
+      <p style="font-size:12px;color:var(--text2);margin:0">
+        Auto-generated plain-language summary · GDP tracking · Drivers · Anomalies · Change tracking
+      </p>
+    </div>
+    <div class="briefing-toolbar" style="margin-top:0">
+      <button class="briefing-btn primary" onclick="generateBriefing()">⚡ Generate Briefing</button>
+      <button class="briefing-btn" onclick="copyBriefing()">📋 Copy Text</button>
+      <button class="briefing-btn" onclick="exportBriefingTXT()">⬇ Download .txt</button>
+      <span id="briefing-timestamp"></span>
+    </div>
+  </div>
+
+  <!-- Placeholder before generation -->
+  <div id="briefing-placeholder" class="alert alert-info">
+    <span class="alert-icon">📋</span>
+    <div>
+      <strong>Ready to generate.</strong> Click <em>Generate Briefing</em> above to auto-produce a
+      plain-language economic briefing from the loaded DFM nowcast data.
+      The briefing covers GDP tracking, key drivers, factor signals, anomalies, and change vs last month.
+    </div>
+  </div>
+
+  <!-- Generated briefing output -->
+  <div id="briefing-output" style="display:none" class="briefing-panel">
+
+    <!-- ① GDP Tracking -->
+    <div class="card briefing-section" id="brief-section-gdp">
+      <div class="briefing-section-title">
+        <span class="briefing-section-icon">📈</span> GDP Tracking
+      </div>
+      <div class="briefing-text" id="brief-gdp-text">—</div>
+    </div>
+
+    <!-- ② Key Drivers -->
+    <div class="card briefing-section" id="brief-section-drivers">
+      <div class="briefing-section-title">
+        <span class="briefing-section-icon">🔍</span> Indicator Contribution Decomposition
+      </div>
+      <div class="briefing-text" id="brief-drivers-text">—</div>
+    </div>
+
+    <!-- ③ Common Factor Signal -->
+    <div class="card briefing-section" id="brief-section-factor">
+      <div class="briefing-section-title">
+        <span class="briefing-section-icon">⚙️</span> Common Factor Signal
+      </div>
+      <div class="briefing-text" id="brief-factor-text">—</div>
+    </div>
+
+    <!-- ④ Anomaly Detection -->
+    <div class="card briefing-section" id="brief-section-anomaly">
+      <div class="briefing-section-title">
+        <span class="briefing-section-icon">🚨</span> Anomaly Detection
+        <span id="anomaly-count-badge" style="font-size:10px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:10px;font-weight:700;text-transform:none;letter-spacing:0"></span>
+      </div>
+      <ul class="anomaly-list" id="brief-anomaly-list"></ul>
+    </div>
+
+    <!-- ⑤ Change Tracking -->
+    <div class="card briefing-section" id="brief-section-change">
+      <div class="briefing-section-title">
+        <span class="briefing-section-icon">📊</span> Change vs Previous Briefing
+      </div>
+      <div id="brief-change-content">—</div>
+    </div>
+
+  </div><!-- /briefing-output -->
+</div><!-- /page-briefing -->
+
+<!-- ════════════════════════════════════════════════════════
      JAVASCRIPT
 ════════════════════════════════════════════════════════ -->
 <script>
@@ -442,7 +573,7 @@ let kfState = null;    // {Z, V} — current Kalman filter state
 // ── Navigation ─────────────────────────────────────────────────────────
 function showTab(name) {
   document.querySelectorAll('.tab-btn').forEach((b, i) => {
-    const names = ['nowcast','update','factor','data'];
+    const names = ['nowcast','update','factor','data','briefing'];
     b.classList.toggle('active', names[i] === name);
   });
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1313,6 +1444,325 @@ function dfmAIAnalysis() {
   };
   PolicyAdvisor.analyzeSim(simData);
   PolicyAdvisor.renderAdvisorPanel(document.querySelector('.container'));
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// ── AUTOMATED NOWCAST NARRATIVES — Issue #17 ───────────────────────────
+// Generates plain-language monthly economic briefings from DFM model data.
+// Pure template-based: no API key required.
+// ════════════════════════════════════════════════════════════════════════
+
+const BRIEFING_STORE_KEY = 'dfm_briefing_prev_snapshot';
+
+// ── Helper: describe factor level ────────────────────────────────────────
+function describeFactorLevel(v) {
+  if (v >  1.5) return 'strongly above trend';
+  if (v >  0.5) return 'above trend';
+  if (v >  0.1) return 'slightly above average';
+  if (v >= -0.1) return 'near-neutral (around its historical average)';
+  if (v >= -0.5) return 'slightly below average';
+  if (v >= -1.5) return 'below trend';
+  return 'significantly below trend';
+}
+
+// ── Helper: colour-code a number as HTML ─────────────────────────────────
+function numHtml(v, dec = 2, unit = '%') {
+  const cls = v > 0 ? 'pos-num' : v < 0 ? 'neg-num' : 'neu-num';
+  const sign = v > 0 ? '+' : '';
+  return `<span class="${cls}">${sign}${v.toFixed(dec)}${unit}</span>`;
+}
+
+// ── ① GDP Tracking paragraph ─────────────────────────────────────────────
+function buildGDPSummary() {
+  const soKeys = Object.keys(STATOFFICE_YOY).sort();
+  const lastSOKey  = soKeys[soKeys.length - 1];
+  const lastSOVal  = STATOFFICE_YOY[lastSOKey];
+
+  const dfmDates = D.gdp.dates.map(fmtQ);
+  const dfmYoY   = D.gdp.grw_yoy.map(v => v === null ? null : +v);
+  const forecastEntries = dfmDates
+    .map((q, i) => ({q, v: dfmYoY[i]}))
+    .filter(({q, v}) => q > lastSOKey && v !== null);
+
+  const nowcastVal = forecastEntries.length > 0
+    ? forecastEntries[forecastEntries.length - 1].v
+    : lastSOVal;
+  const nowcastQ   = forecastEntries.length > 0
+    ? forecastEntries[forecastEntries.length - 1].q
+    : lastSOKey;
+
+  const diffFromOfficial = nowcastVal - lastSOVal;
+  const trackerWord = nowcastVal >= 6.5 ? 'solid' : nowcastVal >= 5 ? 'moderate' : 'below-target';
+  const trendWord = diffFromOfficial > 0.3 ? 'above' : diffFromOfficial < -0.3 ? 'below' : 'in line with';
+
+  return {
+    html: `GDP growth is tracking at ${numHtml(nowcastVal)} year-on-year as of <strong>${nowcastQ}</strong> (DFM nowcast),
+    reflecting <strong>${trackerWord}</strong> economic momentum. This is ${trendWord} the latest official StatOffice reading of
+    ${numHtml(lastSOVal)} recorded in <strong>${lastSOKey}</strong> — a gap of ${numHtml(diffFromOfficial)} pp.
+    The model converged in <strong>${D.meta.n_iter}</strong> EM iterations
+    (log-likelihood: <span class="num">${D.meta.loglik?.toFixed(1)}</span>), drawing on
+    <strong>${D.meta.n_monthly}</strong> monthly and <strong>${D.meta.n_quarterly}</strong> quarterly indicator${D.meta.n_quarterly !== 1 ? 's' : ''}.`,
+    nowcastVal,
+    nowcastQ
+  };
+}
+
+// ── ② Indicator Contribution Decomposition ───────────────────────────────
+function buildDriversText() {
+  const contrib = D.loadings.contributions.map(Number);
+  const labels  = D.loadings.labels.map(String);
+  const cats    = D.vars.categories.map(String);
+
+  const drivers = contrib
+    .map((v, i) => ({ v, label: labels[i], cat: cats[i] }))
+    .filter(x => !isNaN(x.v) && x.label !== 'GDP (Quarterly)' && x.label !== 'GDP')
+    .sort((a, b) => b.v - a.v);
+
+  const top3pos = drivers.filter(x => x.v > 0).slice(0, 3);
+  const top3neg = drivers.filter(x => x.v < 0).slice(0, 3);
+
+  const posText = top3pos.length > 0
+    ? top3pos.map(x => `<strong>${x.label}</strong> (${numHtml(x.v, 4, ' pp')})`).join(', ')
+    : 'no significant positive contributors detected';
+
+  const negText = top3neg.length > 0
+    ? top3neg.map(x => `<strong>${x.label}</strong> (${numHtml(x.v, 4, ' pp')})`).join(', ')
+    : 'no significant drags detected';
+
+  const totalPositive = top3pos.reduce((s, x) => s + x.v, 0);
+  const totalNegative = top3neg.reduce((s, x) => s + x.v, 0);
+
+  return `Growth is primarily <strong>supported</strong> by ${posText}.
+  These top three indicators together contribute ${numHtml(totalPositive, 3, ' pp')} to the GDP nowcast.
+  On the downside, the main <strong>drags</strong> are ${negText},
+  collectively weighing ${numHtml(totalNegative, 3, ' pp')} on growth.
+  The net indicator contribution from all ${drivers.filter(x => x.v !== 0).length} active indicators
+  sums to ${numHtml(totalPositive + totalNegative, 3, ' pp')}.`;
+}
+
+// ── ③ Common Factor Signal ───────────────────────────────────────────────
+function buildFactorSignalText() {
+  const fp   = D.factor.path.map(Number);
+  const val  = fp[fp.length - 1];
+  const prev = fp[fp.length - 2] ?? val;
+  const dir  = val > prev + 0.05 ? 'rising' : val < prev - 0.05 ? 'falling' : 'stable';
+
+  // 12-month stats
+  const recent12 = fp.slice(-12);
+  const avg12 = recent12.reduce((s, v) => s + v, 0) / recent12.length;
+  const description = describeFactorLevel(val);
+
+  const momentum = val > 0
+    ? 'Economic momentum is <strong>positive</strong>, consistent with above-average real sector activity.'
+    : 'Economic momentum is <strong>subdued</strong>, signalling below-average broad-based activity.';
+
+  const covid_low = Math.min(...fp);
+  const sample_high = Math.max(...fp);
+  const percentile = ((val - covid_low) / (sample_high - covid_low) * 100).toFixed(0);
+
+  return `The common economic factor currently stands at <span class="${val > 0 ? 'pos-num' : val < 0 ? 'neg-num' : 'neu-num'}">${val.toFixed(3)}</span>
+  — <strong>${description}</strong> — and is <strong>${dir}</strong>
+  (previous month: <span class="num">${prev.toFixed(3)}</span>).
+  Over the past 12 months the factor has averaged <span class="num">${avg12.toFixed(3)}</span>.
+  Its current value sits at approximately the <strong>${percentile}th percentile</strong> of the full sample range
+  (sample low: <span class="neg-num">${covid_low.toFixed(3)}</span> during the 2020 COVID shock,
+  sample high: <span class="pos-num">${sample_high.toFixed(3)}</span>).
+  ${momentum}`;
+}
+
+// ── ④ Anomaly Detection ──────────────────────────────────────────────────
+// An indicator is anomalous if its |contribution| > mean + 1.5 × std
+// across the full sample of contributions.
+function detectAnomalies() {
+  const contrib = D.loadings.contributions.map(Number);
+  const labels  = D.loadings.labels.map(String);
+  const cats    = D.vars.categories.map(String);
+
+  // Compute sample mean and std of absolute contributions (non-GDP vars)
+  const items = contrib
+    .map((v, i) => ({ v, label: labels[i], cat: cats[i] }))
+    .filter(x => !isNaN(x.v) && x.label !== 'GDP (Quarterly)' && x.label !== 'GDP');
+
+  const absVals = items.map(x => Math.abs(x.v));
+  const mean = absVals.reduce((s, v) => s + v, 0) / absVals.length;
+  const std  = Math.sqrt(absVals.map(v => (v - mean) ** 2).reduce((s, v) => s + v, 0) / absVals.length);
+
+  const threshold = mean + 1.5 * std;
+  const anomalies = items
+    .filter(x => Math.abs(x.v) > threshold)
+    .sort((a, b) => Math.abs(b.v) - Math.abs(a.v));
+
+  return { anomalies, mean, std, threshold };
+}
+
+function renderAnomalyList(anomalies, mean, std, threshold) {
+  const listEl = document.getElementById('brief-anomaly-list');
+  const badgeEl = document.getElementById('anomaly-count-badge');
+
+  if (anomalies.length === 0) {
+    badgeEl.textContent = '0 flagged';
+    listEl.innerHTML = `<li class="anomaly-item anom-ok">
+      <span class="anomaly-badge badge-ok">Clear</span>
+      <span>No unusual indicator movements detected. All contributions are within normal bounds
+      (threshold: ±${threshold.toFixed(4)} pp, mean: ${mean.toFixed(4)} pp, 1.5σ: ${std.toFixed(4)} pp).</span>
+    </li>`;
+    return;
+  }
+
+  badgeEl.textContent = `${anomalies.length} flagged`;
+  listEl.innerHTML = anomalies.map(x => {
+    const isHigh = x.v > 0;
+    const cls    = isHigh ? 'anom-high' : 'anom-low';
+    const badge  = isHigh ? 'badge-high' : 'badge-low';
+    const word   = isHigh ? 'Unusually HIGH' : 'Unusually LOW';
+    const sigmas = ((Math.abs(x.v) - mean) / std).toFixed(1);
+    return `<li class="anomaly-item ${cls}">
+      <span class="anomaly-badge ${badge}">${word}</span>
+      <span><strong>${x.label}</strong> (${x.cat}) is showing an abnormally
+      ${isHigh ? 'large positive' : 'large negative'} contribution of
+      ${numHtml(x.v, 4, ' pp')} — <strong>${sigmas}σ</strong> away from the sample mean.
+      Threshold: ±${threshold.toFixed(4)} pp.</span>
+    </li>`;
+  }).join('');
+}
+
+// ── ⑤ Change Tracking (localStorage) ────────────────────────────────────
+function getStoredSnapshot() {
+  try { return JSON.parse(localStorage.getItem(BRIEFING_STORE_KEY) || 'null'); } catch { return null; }
+}
+function saveSnapshot(nowcastVal, nowcastQ) {
+  localStorage.setItem(BRIEFING_STORE_KEY, JSON.stringify({
+    val: nowcastVal, quarter: nowcastQ,
+    generatedAt: new Date().toISOString()
+  }));
+}
+
+function renderChangeTracking(nowcastVal, nowcastQ) {
+  const el  = document.getElementById('brief-change-content');
+  const prev = getStoredSnapshot();
+
+  if (!prev) {
+    el.innerHTML = `<div class="change-row">
+      <span class="change-arrow">📌</span>
+      <span>This is the <strong>first briefing</strong> stored for this session.
+      Future briefings will show the revision relative to today's nowcast of
+      ${numHtml(nowcastVal)} for <strong>${nowcastQ}</strong>.</span>
+    </div>`;
+    return;
+  }
+
+  const delta = nowcastVal - prev.val;
+  const prevDate = new Date(prev.generatedAt).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+  const arrow = delta > 0.05 ? '▲' : delta < -0.05 ? '▼' : '≈';
+  const color = delta > 0.05 ? 'var(--accent)' : delta < -0.05 ? 'var(--accent3)' : 'var(--accent2)';
+  const word  = delta > 0.05 ? 'risen' : delta < -0.05 ? 'fallen' : 'remained broadly stable';
+
+  el.innerHTML = `<div class="change-row">
+    <span class="change-arrow" style="color:${color}">${arrow}</span>
+    <div>
+      The GDP nowcast has <strong>${word}</strong> by
+      ${numHtml(delta, 2, ' pp')} since the previous briefing generated on
+      <strong>${prevDate}</strong>
+      (previous: ${numHtml(prev.val)} for <strong>${prev.quarter}</strong> →
+      current: ${numHtml(nowcastVal)} for <strong>${nowcastQ}</strong>).
+      ${Math.abs(delta) < 0.05
+        ? 'The nowcast is broadly unchanged, suggesting the incoming data flow has not materially shifted the GDP growth outlook.'
+        : `A revision of ${numHtml(delta, 2, ' pp')} is ${Math.abs(delta) > 0.3 ? 'material and warrants attention' : 'within the typical monthly revision range'}.`}
+    </div>
+  </div>`;
+}
+
+// ── Main entry point ──────────────────────────────────────────────────────
+function generateBriefing() {
+  if (!D) {
+    Toast.show('No model data loaded. Please load dfm_data.js first.', 'warning');
+    return;
+  }
+
+  // Show output, hide placeholder
+  document.getElementById('briefing-placeholder').style.display = 'none';
+  document.getElementById('briefing-output').style.display      = 'block';
+
+  // ① GDP Tracking
+  const { html: gdpHtml, nowcastVal, nowcastQ } = buildGDPSummary();
+  document.getElementById('brief-gdp-text').innerHTML = gdpHtml;
+
+  // ② Drivers
+  document.getElementById('brief-drivers-text').innerHTML = buildDriversText();
+
+  // ③ Factor Signal
+  document.getElementById('brief-factor-text').innerHTML = buildFactorSignalText();
+
+  // ④ Anomalies
+  const { anomalies, mean, std, threshold } = detectAnomalies();
+  renderAnomalyList(anomalies, mean, std, threshold);
+
+  // ⑤ Change tracking (compare with stored; then save current)
+  renderChangeTracking(nowcastVal, nowcastQ);
+  saveSnapshot(nowcastVal, nowcastQ);
+
+  // Timestamp
+  const ts = new Date().toLocaleString('en-GB', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  document.getElementById('briefing-timestamp').textContent = `Generated: ${ts}`;
+
+  Toast.show('Briefing generated successfully!', 'success');
+}
+
+// ── Copy to clipboard ─────────────────────────────────────────────────────
+function copyBriefing() {
+  if (!D) { Toast.show('Generate a briefing first.', 'warning'); return; }
+
+  // Build plain-text version (strip HTML tags)
+  const stripHtml = h => h.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+
+  const sections = [
+    ['GDP TRACKING',                   'brief-gdp-text'],
+    ['INDICATOR DECOMPOSITION',        'brief-drivers-text'],
+    ['COMMON FACTOR SIGNAL',           'brief-factor-text'],
+    ['ANOMALY DETECTION',              'brief-anomaly-list'],
+    ['CHANGE VS PREVIOUS BRIEFING',    'brief-change-content'],
+  ];
+
+  const ts = document.getElementById('briefing-timestamp')?.textContent || '';
+  let text = `UZBEKISTAN GDP NOWCAST — AUTOMATED ECONOMIC BRIEFING\n${ts}\n${'─'.repeat(60)}\n\n`;
+
+  sections.forEach(([title, id]) => {
+    const el = document.getElementById(id);
+    if (el) text += `▌ ${title}\n${stripHtml(el.innerHTML)}\n\n`;
+  });
+
+  navigator.clipboard.writeText(text)
+    .then(() => Toast.show('Briefing copied to clipboard!', 'success'))
+    .catch(() => Toast.show('Clipboard copy failed — try the Download button.', 'error'));
+}
+
+// ── Download as .txt ──────────────────────────────────────────────────────
+function exportBriefingTXT() {
+  if (!D) { Toast.show('Generate a briefing first.', 'warning'); return; }
+
+  const stripHtml = h => h.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  const sections = [
+    ['GDP TRACKING',                   'brief-gdp-text'],
+    ['INDICATOR DECOMPOSITION',        'brief-drivers-text'],
+    ['COMMON FACTOR SIGNAL',           'brief-factor-text'],
+    ['ANOMALY DETECTION',              'brief-anomaly-list'],
+    ['CHANGE VS PREVIOUS BRIEFING',    'brief-change-content'],
+  ];
+
+  const ts = document.getElementById('briefing-timestamp')?.textContent || '';
+  let text = `UZBEKISTAN GDP NOWCAST — AUTOMATED ECONOMIC BRIEFING\n${ts}\n${'─'.repeat(60)}\n\n`;
+  sections.forEach(([title, id]) => {
+    const el = document.getElementById(id);
+    if (el) text += `▌ ${title}\n${stripHtml(el.innerHTML)}\n\n`;
+  });
+
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `dfm_briefing_${new Date().toISOString().slice(0,10)}.txt`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  Toast.show('Briefing downloaded!', 'success');
 }
 
 // ── Registry output-gap cross-check ──
