@@ -15,6 +15,8 @@ type AssumptionsPanelProps = {
   onPresetChange: (presetId: string) => void
   onScenarioNameChange: (name: string) => void
   onAssumptionChange: (key: string, value: number) => void
+  onRunScenario: () => void
+  isRunPending: boolean
   onSaveScenario: () => void
   saveStatus: string | null
 }
@@ -71,6 +73,8 @@ export function AssumptionsPanel({
   onPresetChange,
   onScenarioNameChange,
   onAssumptionChange,
+  onRunScenario,
+  isRunPending,
   onSaveScenario,
   saveStatus,
 }: AssumptionsPanelProps) {
@@ -124,6 +128,9 @@ export function AssumptionsPanel({
         <div className="scenario-session-controls__actions">
           <button type="button" onClick={onSaveScenario}>
             Save draft
+          </button>
+          <button type="button" onClick={onRunScenario} disabled={isRunPending}>
+            {isRunPending ? 'Running...' : 'Run scenario'}
           </button>
           {saveStatus ? (
             <p role="status" aria-live="polite">
