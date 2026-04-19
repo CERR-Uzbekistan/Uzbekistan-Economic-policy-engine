@@ -8,7 +8,7 @@ export function KnowledgeHubPage() {
   return (
     <PageContainer>
       <PageHeader title={t('pages.knowledgeHub.title')} description={t('pages.knowledgeHub.description')} />
-      <div className="placeholder-card">Knowledge Hub v1 scaffold</div>
+      <div className="placeholder-card">{t('pages.knowledgeHub.placeholder')}</div>
     </PageContainer>
   )
 }

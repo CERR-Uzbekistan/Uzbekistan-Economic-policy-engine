@@ -14,27 +14,29 @@ import {
 import { beginRetry } from '../data/source-state'
 import './model-explorer.css'
 
-const TAB_LABELS: Record<ModelExplorerTabId, string> = {
-  assumptions: 'Assumptions',
-  equations: 'Equations',
-  caveats: 'Caveats',
-  data_sources: 'Data sources',
+const TAB_LABEL_KEYS: Record<ModelExplorerTabId, string> = {
+  assumptions: 'pages.modelExplorer.tabs.assumptions',
+  equations: 'pages.modelExplorer.tabs.equations',
+  caveats: 'pages.modelExplorer.tabs.caveats',
+  data_sources: 'pages.modelExplorer.tabs.dataSources',
 }
 
 function formatSeverityLabel(value: string) {
   return `${value.charAt(0).toUpperCase()}${value.slice(1)}`
 }
 
-const STATUS_LABELS: Record<ModelRunStatus, string> = {
-  active: 'Active',
-  staging: 'Staging',
-  paused: 'Paused',
+const STATUS_LABEL_KEYS: Record<ModelRunStatus, string> = {
+  active: 'pages.modelExplorer.status.active',
+  staging: 'pages.modelExplorer.status.staging',
+  paused: 'pages.modelExplorer.status.paused',
 }
 
 function DetailPanelContent({ tab, detail }: { tab: ModelExplorerTabId; detail: ModelExplorerModelDetail }) {
+  const { t } = useTranslation()
+
   if (tab === 'assumptions') {
     if (detail.assumptions.length === 0) {
-      return <p className="empty-state">No assumptions are documented for this model.</p>
+      return <p className="empty-state">{t('pages.modelExplorer.detail.empty.assumptions')}</p>
     }
     return (
       <div className="model-explorer-list">
@@ -51,7 +53,7 @@ function DetailPanelContent({ tab, detail }: { tab: ModelExplorerTabId; detail: 
 
   if (tab === 'equations') {
     if (detail.equations.length === 0) {
-      return <p className="empty-state">No equations are documented for this model.</p>
+      return <p className="empty-state">{t('pages.modelExplorer.detail.empty.equations')}</p>
     }
     return (
       <div className="model-explorer-list">
@@ -70,17 +72,23 @@ function DetailPanelContent({ tab, detail }: { tab: ModelExplorerTabId; detail: 
 
   if (tab === 'caveats') {
     if (detail.caveats.length === 0) {
-      return <p className="empty-state">No caveats are documented for this model.</p>
+      return <p className="empty-state">{t('pages.modelExplorer.detail.empty.caveats')}</p>
     }
     return (
       <div className="model-explorer-list">
         {detail.caveats.map((caveat) => (
           <article key={caveat.caveat_id} className="model-explorer-item">
             <h3>
-              <span className="ui-chip ui-chip--neutral">{formatSeverityLabel(caveat.severity)}</span>
+              <span className="ui-chip ui-chip--neutral">
+                {t(`pages.modelExplorer.severity.${caveat.severity}`, {
+                  defaultValue: formatSeverityLabel(caveat.severity),
+                })}
+              </span>
             </h3>
             <p>{caveat.message}</p>
-            <p className="model-explorer-item__value">Implication: {caveat.implication}</p>
+            <p className="model-explorer-item__value">
+              {t('pages.modelExplorer.detail.implicationPrefix')}: {caveat.implication}
+            </p>
           </article>
         ))}
       </div>
@@ -88,7 +96,7 @@ function DetailPanelContent({ tab, detail }: { tab: ModelExplorerTabId; detail: 
   }
 
   if (detail.data_sources.length === 0) {
-    return <p className="empty-state">No data sources are documented for this model.</p>
+    return <p className="empty-state">{t('pages.modelExplorer.detail.empty.dataSources')}</p>
   }
 
   return (
@@ -187,13 +195,13 @@ export function ModelExplorerPage() {
       />
 
       {models.length === 0 || !selectedModel || !selectedDetail ? (
-        <p className="empty-state">No model metadata is available in this workspace.</p>
+        <p className="empty-state">{t('pages.modelExplorer.emptyState')}</p>
       ) : (
         <div className="model-explorer-layout">
           <section className="model-explorer-panel" aria-labelledby="model-catalog-title">
             <div className="page-section-head">
-              <h2 id="model-catalog-title">Model catalog</h2>
-              <p>Select one model to inspect technical assumptions and caveats.</p>
+              <h2 id="model-catalog-title">{t('pages.modelExplorer.catalogTitle')}</h2>
+              <p>{t('pages.modelExplorer.catalogHint')}</p>
             </div>
 
             <div className="model-explorer-catalog">
@@ -211,7 +219,7 @@ export function ModelExplorerPage() {
                   >
                     <div className="model-explorer-model-button__head">
                       <strong>{model.model_name}</strong>
-                      <span className="ui-chip ui-chip--neutral">{STATUS_LABELS[model.status]}</span>
+                      <span className="ui-chip ui-chip--neutral">{t(STATUS_LABEL_KEYS[model.status])}</span>
                     </div>
                     <p className="model-explorer-model-button__meta">
                       {model.model_type} · {model.frequency}
@@ -229,8 +237,12 @@ export function ModelExplorerPage() {
               <p>{selectedDetail.overview}</p>
             </div>
 
-            <div className="segmented-control" role="tablist" aria-label="Model detail tabs">
-              {(Object.keys(TAB_LABELS) as ModelExplorerTabId[]).map((tab) => {
+            <div
+              className="segmented-control"
+              role="tablist"
+              aria-label={t('pages.modelExplorer.detailTabsAria')}
+            >
+              {(Object.keys(TAB_LABEL_KEYS) as ModelExplorerTabId[]).map((tab) => {
                 const isActive = tab === activeTab
                 return (
                   <button
@@ -244,7 +256,7 @@ export function ModelExplorerPage() {
                     className={isActive ? 'active' : ''}
                     onClick={() => setActiveTab(tab)}
                   >
-                    {TAB_LABELS[tab]}
+                    {t(TAB_LABEL_KEYS[tab])}
                   </button>
                 )
               })}

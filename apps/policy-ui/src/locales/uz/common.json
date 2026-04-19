@@ -1,15 +1,15 @@
 {
   "shell": {
-    "skipToMainContent": "Асосий контентга ўтиш",
-    "workspaceNavigationAria": "Иш майдони навигацияси",
-    "primaryNavigationAria": "Асосий навигация",
-    "workspaceLabel": "Иш майдони",
+    "skipToMainContent": "Asosiy kontentga o'tish",
+    "workspaceNavigationAria": "Ish maydoni navigatsiyasi",
+    "primaryNavigationAria": "Asosiy navigatsiya",
+    "workspaceLabel": "Ish maydoni",
     "brandEyebrow": "Uzbekistan Economic Policy Engine",
     "brandTitle": "Policy Analysis Workspace"
   },
   "languageSwitcher": {
-    "label": "Тил",
-    "ariaLabel": "Интерфейс тилини танланг"
+    "label": "Til",
+    "ariaLabel": "Interfeys tilini tanlang"
   },
   "nav": {
     "overview": "Umumiy ko'rinish",
@@ -25,7 +25,7 @@
     },
     "scenarioLab": {
       "title": "Stsenariy simulyatori",
-      "description": "Сиёсат таъсирини баҳолаш учун тахминларни мослаб, сценарийни ишга туширинг."
+      "description": "Siyosat ta'sirini baholash uchun taxminlarni moslab, stsenariyni ishga tushiring."
     },
     "comparison": {
       "title": "Stsenariylarni solishtirish",
@@ -33,41 +33,74 @@
     },
     "modelExplorer": {
       "title": "Model eksploreri",
-      "description": "Parametrlar, tenglamalar, ma'lumot manbalari va hisoblash oqimlari"
+      "description": "Parametrlar, tenglamalar, ma'lumot manbalari va hisoblash oqimlari",
+      "catalogTitle": "Model katalogi",
+      "catalogHint": "Texnik taxminlar va cheklovlarni ko'rish uchun bitta modelni tanlang.",
+      "emptyState": "Ushbu ish maydonida model metama'lumotlari mavjud emas.",
+      "detailTabsAria": "Model tafsilotlari tablari",
+      "tabs": {
+        "assumptions": "Taxminlar",
+        "equations": "Tenglamalar",
+        "caveats": "Cheklovlar",
+        "dataSources": "Ma'lumot manbalari"
+      },
+      "status": {
+        "active": "Faol",
+        "staging": "Sinov",
+        "paused": "To'xtatilgan"
+      },
+      "severity": {
+        "low": "Past",
+        "medium": "O'rta",
+        "high": "Yuqori"
+      },
+      "detail": {
+        "empty": {
+          "assumptions": "Ushbu model uchun taxminlar hujjatlashtirilmagan.",
+          "equations": "Ushbu model uchun tenglamalar hujjatlashtirilmagan.",
+          "caveats": "Ushbu model uchun cheklovlar hujjatlashtirilmagan.",
+          "dataSources": "Ushbu model uchun ma'lumot manbalari hujjatlashtirilmagan."
+        },
+        "implicationPrefix": "Ta'sir"
+      }
     },
     "knowledgeHub": {
       "title": "Bilimlar markazi",
-      "description": "lex.uz'dagi davlat qarorlari va xalqaro tashkilotlar baholari"
+      "description": "lex.uz'dagi davlat qarorlari va xalqaro tashkilotlar baholari",
+      "placeholder": "Knowledge Hub v1 karkasi"
     }
   },
   "buttons": {
     "save": "Saqlash",
     "run": "Simulyatsiyani ishga tushirish",
-    "retry": "Қайта уриниш",
-    "cancel": "Бекор қилиш",
-    "saveDraft": "Қораламани сақлаш",
-    "runScenario": "Сценарийни ишга тушириш",
-    "retryRun": "Қайта ишга тушириш"
+    "retry": "Qayta urinish",
+    "cancel": "Bekor qilish",
+    "saveDraft": "Qoralamani saqlash",
+    "runScenario": "Stsenariyni ishga tushirish",
+    "retryRun": "Qayta ishga tushirish"
   },
   "states": {
     "loading": {
-      "overview": "Сўнгги шарҳ ҳолати юкланмоқда...",
-      "comparison": "Солиштириш иш майдони юкланмоқда...",
-      "modelExplorer": "Модел метамаълумотлари юкланмоқда...",
-      "scenarioLabRun": "Жорий тахминлар билан сценарий ишга туширилмоқда..."
+      "overview": "So'nggi sharh holati yuklanmoqda...",
+      "comparison": "Solishtirish ish maydoni yuklanmoqda...",
+      "modelExplorer": "Model metama'lumotlari yuklanmoqda...",
+      "scenarioLabRun": "Joriy taxminlar bilan stsenariy ishga tushirilmoqda..."
     },
     "error": {
-      "overviewUnavailable": "Шарҳ маълумотлари ҳозирча мавжуд эмас.",
-      "comparisonUnavailable": "Солиштириш маълумотлари ҳозирча мавжуд эмас.",
-      "modelExplorerUnavailable": "Модел метамаълумотлари ҳозирча мавжуд эмас.",
-      "scenarioRunFailed": "Сценарий ишга тушмади. Илтимос, қайта уриниб кўринг."
+      "overviewUnavailable": "Sharh ma'lumotlari hozircha mavjud emas.",
+      "comparisonUnavailable": "Solishtirish ma'lumotlari hozircha mavjud emas.",
+      "modelExplorerUnavailable": "Model metama'lumotlari hozircha mavjud emas.",
+      "scenarioRunFailed": "Stsenariy ishga tushmadi. Iltimos, qayta urinib ko'ring."
     },
     "stale": {
-      "scenarioResults": "Натижалар олдинги ишга туширишга тегишли. Жорий тахминлар билан янгилаш учун сценарийни қайта ишга туширинг."
+      "scenarioResults": "Natijalar oldingi ishga tushirishga tegishli. Joriy taxminlar bilan yangilash uchun stsenariyni qayta ishga tushiring."
     },
     "empty": {
-      "scenarioRunToView": "Натижаларни кўриш учун сценарийни ишга туширинг.",
-      "scenarioInterpretationAfterRun": "Талқин муваффақиятли ишга туширишдан кейин кўринади."
+      "scenarioRunToView": "Natijalarni ko'rish uchun stsenariyni ishga tushiring.",
+      "scenarioInterpretationAfterRun": "Talqin muvaffaqiyatli ishga tushirishdan keyin ko'rinadi."
+    },
+    "success": {
+      "savedToLocalSessionAt": "Mahalliy sessiyaga {{timestamp}} da saqlandi."
     }
   }
 }

@@ -54,7 +54,7 @@ function assumptionsEqual(a: ScenarioLabAssumptionState, b: ScenarioLabAssumptio
 }
 
 export function ScenarioLabPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [sourceState, setSourceState] = useState(getInitialScenarioLabSourceState)
   const [selectedPresetId, setSelectedPresetId] = useState(scenarioLabWorkspaceMock.presets[0]?.preset_id ?? '')
   const [scenarioName, setScenarioName] = useState('Scenario 1')
@@ -170,13 +170,13 @@ export function ScenarioLabPage() {
   }
 
   function handleSaveScenario() {
-    const timestamp = new Intl.DateTimeFormat('en-GB', {
+    const timestamp = new Intl.DateTimeFormat(i18n.resolvedLanguage ?? 'en', {
       hour: '2-digit',
       minute: '2-digit',
       day: '2-digit',
       month: 'short',
     }).format(new Date())
-    setSaveStatus(`Saved to local session at ${timestamp}.`)
+    setSaveStatus(t('states.success.savedToLocalSessionAt', { timestamp }))
   }
 
   function handleRunScenario() {

@@ -33,11 +33,41 @@
     },
     "modelExplorer": {
       "title": "Model Explorer",
-      "description": "Basic model catalog and technical reference for assumptions, equations, caveats, and sources."
+      "description": "Basic model catalog and technical reference for assumptions, equations, caveats, and sources.",
+      "catalogTitle": "Model catalog",
+      "catalogHint": "Select one model to inspect technical assumptions and caveats.",
+      "emptyState": "No model metadata is available in this workspace.",
+      "detailTabsAria": "Model detail tabs",
+      "tabs": {
+        "assumptions": "Assumptions",
+        "equations": "Equations",
+        "caveats": "Caveats",
+        "dataSources": "Data sources"
+      },
+      "status": {
+        "active": "Active",
+        "staging": "Staging",
+        "paused": "Paused"
+      },
+      "severity": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "detail": {
+        "empty": {
+          "assumptions": "No assumptions are documented for this model.",
+          "equations": "No equations are documented for this model.",
+          "caveats": "No caveats are documented for this model.",
+          "dataSources": "No data sources are documented for this model."
+        },
+        "implicationPrefix": "Implication"
+      }
     },
     "knowledgeHub": {
       "title": "Knowledge Hub",
-      "description": "Policy context and references scaffold (post-MVP expansion area)."
+      "description": "Policy context and references scaffold (post-MVP expansion area).",
+      "placeholder": "Knowledge Hub v1 scaffold"
     }
   },
   "buttons": {
@@ -68,6 +98,9 @@
     "empty": {
       "scenarioRunToView": "Run a scenario to view results.",
       "scenarioInterpretationAfterRun": "Interpretation appears after a successful scenario run."
+    },
+    "success": {
+      "savedToLocalSessionAt": "Saved to local session at {{timestamp}}."
     }
   }
 }
