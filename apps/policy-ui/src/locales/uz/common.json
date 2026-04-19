@@ -1,0 +1,73 @@
+{
+  "shell": {
+    "skipToMainContent": "Асосий контентга ўтиш",
+    "workspaceNavigationAria": "Иш майдони навигацияси",
+    "primaryNavigationAria": "Асосий навигация",
+    "workspaceLabel": "Иш майдони",
+    "brandEyebrow": "Uzbekistan Economic Policy Engine",
+    "brandTitle": "Policy Analysis Workspace"
+  },
+  "languageSwitcher": {
+    "label": "Тил",
+    "ariaLabel": "Интерфейс тилини танланг"
+  },
+  "nav": {
+    "overview": "Umumiy ko'rinish",
+    "scenarioLab": "Stsenariy simulyatori",
+    "comparison": "Stsenariylarni solishtirish",
+    "modelExplorer": "Model eksploreri",
+    "knowledgeHub": "Bilimlar markazi"
+  },
+  "pages": {
+    "overview": {
+      "title": "Umumiy ko'rinish",
+      "description": "Asosiy ko'rsatkichlar · So'nggi ma'lumotlar"
+    },
+    "scenarioLab": {
+      "title": "Stsenariy simulyatori",
+      "description": "Сиёсат таъсирини баҳолаш учун тахминларни мослаб, сценарийни ишга туширинг."
+    },
+    "comparison": {
+      "title": "Stsenariylarni solishtirish",
+      "description": "Simulyatsiyalarni saqlang va natijalarni yonma-yon solishtiring"
+    },
+    "modelExplorer": {
+      "title": "Model eksploreri",
+      "description": "Parametrlar, tenglamalar, ma'lumot manbalari va hisoblash oqimlari"
+    },
+    "knowledgeHub": {
+      "title": "Bilimlar markazi",
+      "description": "lex.uz'dagi davlat qarorlari va xalqaro tashkilotlar baholari"
+    }
+  },
+  "buttons": {
+    "save": "Saqlash",
+    "run": "Simulyatsiyani ishga tushirish",
+    "retry": "Қайта уриниш",
+    "cancel": "Бекор қилиш",
+    "saveDraft": "Қораламани сақлаш",
+    "runScenario": "Сценарийни ишга тушириш",
+    "retryRun": "Қайта ишга тушириш"
+  },
+  "states": {
+    "loading": {
+      "overview": "Сўнгги шарҳ ҳолати юкланмоқда...",
+      "comparison": "Солиштириш иш майдони юкланмоқда...",
+      "modelExplorer": "Модел метамаълумотлари юкланмоқда...",
+      "scenarioLabRun": "Жорий тахминлар билан сценарий ишга туширилмоқда..."
+    },
+    "error": {
+      "overviewUnavailable": "Шарҳ маълумотлари ҳозирча мавжуд эмас.",
+      "comparisonUnavailable": "Солиштириш маълумотлари ҳозирча мавжуд эмас.",
+      "modelExplorerUnavailable": "Модел метамаълумотлари ҳозирча мавжуд эмас.",
+      "scenarioRunFailed": "Сценарий ишга тушмади. Илтимос, қайта уриниб кўринг."
+    },
+    "stale": {
+      "scenarioResults": "Натижалар олдинги ишга туширишга тегишли. Жорий тахминлар билан янгилаш учун сценарийни қайта ишга туширинг."
+    },
+    "empty": {
+      "scenarioRunToView": "Натижаларни кўриш учун сценарийни ишга туширинг.",
+      "scenarioInterpretationAfterRun": "Талқин муваффақиятли ишга туширишдан кейин кўринади."
+    }
+  }
+}

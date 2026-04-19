@@ -1,0 +1,73 @@
+{
+  "shell": {
+    "skipToMainContent": "Skip to main content",
+    "workspaceNavigationAria": "Workspace navigation",
+    "primaryNavigationAria": "Primary",
+    "workspaceLabel": "Workspace",
+    "brandEyebrow": "Uzbekistan Economic Policy Engine",
+    "brandTitle": "Policy Analysis Workspace"
+  },
+  "languageSwitcher": {
+    "label": "Language",
+    "ariaLabel": "Select interface language"
+  },
+  "nav": {
+    "overview": "Overview",
+    "scenarioLab": "Scenario Lab",
+    "comparison": "Comparison",
+    "modelExplorer": "Model Explorer",
+    "knowledgeHub": "Knowledge Hub"
+  },
+  "pages": {
+    "overview": {
+      "title": "Overview",
+      "description": "Decision-first macro snapshot designed to show what changed, why it matters, and where to test next."
+    },
+    "scenarioLab": {
+      "title": "Scenario Lab",
+      "description": "Build policy scenarios by adjusting assumptions, then review impacts and interpretation in one operational workspace."
+    },
+    "comparison": {
+      "title": "Comparison",
+      "description": "Compare baseline and alternative scenarios side by side to surface trade-offs and decision framing."
+    },
+    "modelExplorer": {
+      "title": "Model Explorer",
+      "description": "Basic model catalog and technical reference for assumptions, equations, caveats, and sources."
+    },
+    "knowledgeHub": {
+      "title": "Knowledge Hub",
+      "description": "Policy context and references scaffold (post-MVP expansion area)."
+    }
+  },
+  "buttons": {
+    "save": "Save",
+    "run": "Run",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "saveDraft": "Save draft",
+    "runScenario": "Run scenario",
+    "retryRun": "Retry run"
+  },
+  "states": {
+    "loading": {
+      "overview": "Loading latest overview snapshot...",
+      "comparison": "Loading comparison workspace...",
+      "modelExplorer": "Loading model metadata...",
+      "scenarioLabRun": "Running scenario with current assumptions..."
+    },
+    "error": {
+      "overviewUnavailable": "Overview data is currently unavailable.",
+      "comparisonUnavailable": "Comparison data is currently unavailable.",
+      "modelExplorerUnavailable": "Model metadata is currently unavailable.",
+      "scenarioRunFailed": "Scenario run failed. Please retry."
+    },
+    "stale": {
+      "scenarioResults": "Results reflect the previous run. Run scenario to update with current assumptions."
+    },
+    "empty": {
+      "scenarioRunToView": "Run a scenario to view results.",
+      "scenarioInterpretationAfterRun": "Interpretation appears after a successful scenario run."
+    }
+  }
+}
