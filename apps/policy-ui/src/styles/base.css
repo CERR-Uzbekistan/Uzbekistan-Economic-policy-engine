@@ -256,6 +256,28 @@ h2 {
   color: var(--color-brand);
 }
 
+.attribution-badge {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+  color: var(--color-text-muted);
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  padding: 0.16rem 0.38rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.attribution-badge--active {
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+}
+
 .segmented-control {
   background: var(--color-surface-muted);
   border: 1px solid var(--color-border);
