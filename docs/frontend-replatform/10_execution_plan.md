@@ -77,7 +77,7 @@ Source material: the `i18n` object in the prototype's inline JavaScript contains
 **Depends on.** None.  
 **Blocks.** TA-5 (Scenario Lab assumption labels will render in policy language — better to have translation machinery present before adding text volume).  
 **Size.** 2 days.  
-**Owner.** TBD.
+**Owner.** Nozimjon Ortiqov.
 
 _Live verification notes:_
 - Confirmed entirely greenfield. `package.json` has no `i18next`/`react-i18next` dependency; `grep` over `src/` returns no `i18next`, `t(`, or `useTranslation` references.
@@ -107,7 +107,7 @@ Do **not** redesign the sidebar. Do **not** replace Source Sans 3 in body. This 
 **Depends on.** None.  
 **Blocks.** TA-7 (Model Explorer relies on the AttributionBadge for model catalog cards).  
 **Size.** 1 day.  
-**Owner.** TBD.
+**Owner.** Nozimjon Ortiqov.
 
 _Live verification notes:_
 - `tokens.css` defines only `--font-sans: "Source Sans 3", …` — no `--font-display`, no serif `@import`, no `@font-face` declarations. Inspecting the live `<h1>` confirms `font-family: "Source Sans 3", "Noto Sans", "Helvetica Neue", sans-serif` and `font-weight: 650` for both h1 and h2. Criterion #1 entirely unsatisfied.
@@ -146,7 +146,7 @@ Wire the renderer into two places as the first consumers: `NowcastForecastBlock`
 **Depends on.** TA-1b (soft — the AttributionBadge is from that step, though the two can ship together).  
 **Blocks.** TA-4, TA-5, TA-6.  
 **Size.** 2 days (day 1: renderer + Overview; day 2: Scenario Lab + polish).  
-**Owner.** TBD.
+**Owner.** Nozimjon Ortiqov.
 
 _Live verification notes:_
 - Greenfield. `package.json` has no charting library; grep returns no `recharts`, `echarts`, `chart.js`, or `d3` import.
@@ -180,7 +180,7 @@ Wire the Comparison page's `ScenarioSelectorPanel` to read from the store so the
 **Depends on.** None. *(Soft alignment with TB-P2 when that memo lands.)*  
 **Blocks.** TA-4 (Overview feed block reads from the store), TA-6 (Comparison depends on store for real scenario selection).  
 **Size.** 1 day.  
-**Owner.** TBD.
+**Owner.** Nozimjon Ortiqov.
 
 _Live verification notes:_
 - Confirmed greenfield. `src/state/` contains only `language-context.ts`, `language-provider.tsx`, `useLanguage.ts` — no scenario store. Grep returns zero `scenarioStore`, `localStorage` references in `src/`.
@@ -220,7 +220,7 @@ The prototype's "quick actions" block is **not** part of this step — it mixes 
 **Depends on.** TA-2, TA-3.  
 **Blocks.** None.  
 **Size.** 2 days.  
-**Owner.** TBD.
+**Owner.** Nozimjon Ortiqov.
 
 _Live verification notes:_
 - Live capture of `/overview`: blocks present today are EconomicStateHeader (✓), KpiStrip (✓ with 8 indicators), NowcastForecastBlock (table form, ✗ no chart), RiskPanel (3 risks, no Test→ wiring), QuickActions (renders the deprecated block — this plan correctly skips it). The three feed blocks (reforms / data refreshes / saved scenarios) are entirely absent.
@@ -269,7 +269,7 @@ _Live verification notes:_
 **Depends on.** TA-1a, TA-2, TB-P3.  
 **Blocks.** None.  
 **Size.** 3 days.  
-**Owner.** TBD.
+**Owner.** Nozimjon Ortiqov.
 
 _Live verification notes:_
 - **Already satisfied — state honesty.** `ScenarioLabPage.tsx` keeps `activeRunIdRef`, separate `assumptionValues` vs `lastRunAssumptions`, the `beginRetry` helper, and `assumptionsEqual` comparison. Live render shows the stale banner ("Results reflect the previous run…") when an assumption differs from the last run. `<details>` advanced section is in `AssumptionsPanel.tsx`.
@@ -303,7 +303,7 @@ The "best-on-metric" indicator from the prototype (★) is acceptable only with 
 **Depends on.** TA-3, TA-2.  
 **Blocks.** None.  
 **Size.** 2 days.  
-**Owner.** TBD.
+**Owner.** Nozimjon Ortiqov.
 
 _Live verification notes:_
 - **Partially satisfied — selector + delta table.** `ScenarioSelectorPanel` already enforces 2–4 active scenarios and a baseline pick. `HeadlineComparisonTable.tsx` renders baseline + delta columns with arrow glyph + signed magnitude. Live render confirms all of this. The gap is criterion #1's *source*: chips read from the mock workspace, not from a user store.
@@ -343,7 +343,7 @@ Do **not** add LaTeX rendering. The HTML-math / styled-text approach is sufficie
 **Depends on.** TA-1b.  
 **Blocks.** TA-8 cross-links if deep-linking is required.  
 **Size.** 2 days.  
-**Owner.** TBD.
+**Owner.** Nozimjon Ortiqov.
 
 _Live verification notes:_
 - Live count of catalog cards: 3, not 6. Current seeded models are QPM Uzbekistan, DFM Nowcast, FPP Fiscal Block.
@@ -414,7 +414,7 @@ No AI generation logic is built in this step. No export logic is built in this s
 **Depends on.** TB-P3 must be written, adopted, and signed off.  
 **Blocks.** None. This is the last UI step.  
 **Size.** 2 days.  
-**Owner.** TBD.
+**Owner.** Nozimjon Ortiqov.
 
 _Live verification notes:_
 - Confirmed greenfield. `NarrativeGenerationMode` is declared in `data-contract.ts` but no component branches on it. Everything renders as if template today.
