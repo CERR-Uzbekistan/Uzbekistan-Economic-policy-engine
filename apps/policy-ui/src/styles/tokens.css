@@ -10,6 +10,9 @@
   --color-text-muted: #4d5d74;
   --color-brand: #1f3658;
   --color-brand-soft: #e7edf6;
+  --color-downside: #9b3b2e;
+  --color-upside: #3e6b45;
+  --color-uncertainty: rgba(77, 93, 116, 0.25);
 
   --font-sans: "Source Sans 3", "Noto Sans", "Helvetica Neue", sans-serif;
   --font-display: "IBM Plex Serif", "Times New Roman", serif;
