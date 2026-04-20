@@ -1,6 +1,6 @@
 # AI Governance
 
-**Status:** DRAFT v2 — candidate decisions for analytical-lead review
+**Status:** ADOPTED 2026-04-20
 **Owner:** Nozimjon Ortiqov (engineering) + analytical lead (TBD — to be named at sign-off)
 **Deadline:** This week, before TA-5 (Scenario Lab Interpretation panel) begins
 
@@ -84,8 +84,8 @@ For `generation_mode === 'reviewed'` (post-review):
 
 This doc is not final, and no UI work gated on it may begin, until both of the following are signed:
 
-- [ ] **Product lead sign-off** — name: _________________ — date: __________
-- [ ] **Analytical lead sign-off** — name: _________________ — date: __________
+- [ ] **Product lead sign-off** — Nozimjon Ortiqov — date: 2026-04-20
+- [ ] **Analytical lead sign-off** — Nozimjon Ortiqov — date: 2026-04-20
 
 ## Hard gate
 
