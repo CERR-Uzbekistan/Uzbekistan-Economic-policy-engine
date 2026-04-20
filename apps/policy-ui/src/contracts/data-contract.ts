@@ -117,6 +117,7 @@ export type OverviewRisk = {
   why_it_matters: string
   impact_channel: string
   suggested_scenario: string
+  scenario_query?: string
 }
 
 export type OverviewAnalysisAction = {

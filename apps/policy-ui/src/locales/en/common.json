@@ -70,6 +70,71 @@
       "placeholder": "Knowledge Hub v1 scaffold"
     }
   },
+  "overview": {
+    "common": {
+      "middleDot": "·"
+    },
+    "topbar": {
+      "freshness": "Data · {{days}}d ago"
+    },
+    "meta": {
+      "eyebrow": "Overview metadata",
+      "vintageLabel": "Vintage",
+      "modelsLabel": "Models",
+      "modelsLive": "{{count}} live",
+      "lastRefreshLabel": "Last refresh"
+    },
+    "header": {
+      "kicker": "Economic State",
+      "modelListFallback": "MODEL SET",
+      "draftedFrom": "State narrative · drafted from {{models}} baseline",
+      "updatedAt": "Updated {{date}}"
+    },
+    "kpi": {
+      "title": "Core indicators",
+      "description": "Current values and period-over-period change. Interpretation depends on the metric.",
+      "empty": "No headline indicators are available for this snapshot.",
+      "deltaSrLabel": "{{direction}} by {{delta}} versus prior period",
+      "noPrior": "No prior value",
+      "notAvailable": "n/a",
+      "freshness": "Updated {{date}}",
+      "direction": {
+        "up": "higher",
+        "down": "lower",
+        "flat": "unchanged"
+      }
+    },
+    "risks": {
+      "title": "Top Risks to Monitor",
+      "description": "Three near-term risks that most affect baseline interpretation.",
+      "empty": "No active risks are flagged for this snapshot.",
+      "hitsPrefix": "Hits · ",
+      "testAction": "Test →"
+    },
+    "quickActions": {
+      "title": "Quick actions",
+      "description": "Direct entry points from monitoring to scenario analysis.",
+      "empty": "No quick actions are configured for this snapshot.",
+      "kindAnalysis": "Analysis"
+    },
+    "feeds": {
+      "sectionAria": "Overview feed panels",
+      "reforms": {
+        "title": "Reforms",
+        "empty": "Content coming from Knowledge Hub."
+      },
+      "dataRefreshes": {
+        "title": "Data refreshes",
+        "empty": "No fresh model data available.",
+        "refreshSuffix": "refresh"
+      },
+      "savedScenarios": {
+        "title": "Your saved scenarios",
+        "empty": "Saved scenarios will appear here after you save a draft in Scenario Lab.",
+        "youShort": "YOU"
+      }
+    }
+  },
   "buttons": {
     "save": "Save",
     "run": "Run",

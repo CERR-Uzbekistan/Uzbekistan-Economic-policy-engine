@@ -1,10 +1,12 @@
 import { LanguageSwitcher } from '../../components/system/LanguageSwitcher'
 import { NavLink, Outlet } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { usePageFreshness } from '../../state/pageFreshness'
 import { PRIMARY_NAV_ITEMS } from './nav'
 
 export function AppShell() {
   const { t } = useTranslation()
+  const freshness = usePageFreshness()
 
   return (
     <div className="app-shell">
@@ -40,7 +42,15 @@ export function AppShell() {
       <div className="app-shell__main">
         <header className="app-shell__topbar" aria-label="Global utilities">
           <div className="app-shell__topbar-inner">
-            <LanguageSwitcher />
+            <div className="topbar-utilities">
+              {freshness ? (
+                <span className="freshness">
+                  <span className="dot" aria-hidden="true"></span>
+                  {t('overview.topbar.freshness', { days: freshness.ageInDays })}
+                </span>
+              ) : null}
+              <LanguageSwitcher />
+            </div>
           </div>
         </header>
         <main id="main-content" tabIndex={-1} className="app-shell__content">

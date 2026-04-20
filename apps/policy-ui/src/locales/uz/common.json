@@ -70,6 +70,71 @@
       "placeholder": "Knowledge Hub v1 karkasi"
     }
   },
+  "overview": {
+    "common": {
+      "middleDot": "·"
+    },
+    "topbar": {
+      "freshness": "Ma'lumotlar · {{days}} kun oldin"
+    },
+    "meta": {
+      "eyebrow": "Umumiy ko'rinish metama'lumoti",
+      "vintageLabel": "Vintaj",
+      "modelsLabel": "Modellar",
+      "modelsLive": "{{count}} ta faol",
+      "lastRefreshLabel": "So'nggi yangilanish"
+    },
+    "header": {
+      "kicker": "Iqtisodiy holat",
+      "modelListFallback": "MODELLAR TO'PLAMI",
+      "draftedFrom": "Holat narrativi · {{models}} bazasidan tuzilgan",
+      "updatedAt": "Yangilangan: {{date}}"
+    },
+    "kpi": {
+      "title": "Asosiy ko'rsatkichlar",
+      "description": "Joriy qiymatlar va oldingi davrga nisbatan o'zgarish. Talqin ko'rsatkichga bog'liq.",
+      "empty": "Bu snapshot uchun asosiy ko'rsatkichlar mavjud emas.",
+      "deltaSrLabel": "{{direction}}: oldingi davrga nisbatan {{delta}}",
+      "noPrior": "Oldingi qiymat yo'q",
+      "notAvailable": "mavjud emas",
+      "freshness": "Yangilangan: {{date}}",
+      "direction": {
+        "up": "yuqoriroq",
+        "down": "pastroq",
+        "flat": "o'zgarmagan"
+      }
+    },
+    "risks": {
+      "title": "Kuzatish uchun asosiy risklar",
+      "description": "Bazaviy talqinga eng ko'p ta'sir qiladigan 3 ta yaqin muddatli risk.",
+      "empty": "Bu snapshot uchun faol risklar belgilanmagan.",
+      "hitsPrefix": "Ta'sir kanali · ",
+      "testAction": "Sinov →"
+    },
+    "quickActions": {
+      "title": "Tezkor amallar",
+      "description": "Monitoringdan stsenariy tahliliga to'g'ridan-to'g'ri o'tish nuqtalari.",
+      "empty": "Bu snapshot uchun tezkor amallar sozlanmagan.",
+      "kindAnalysis": "Tahlil"
+    },
+    "feeds": {
+      "sectionAria": "Umumiy ko'rinish lentasi panellari",
+      "reforms": {
+        "title": "Islohotlar",
+        "empty": "Kontent Bilimlar markazidan keladi."
+      },
+      "dataRefreshes": {
+        "title": "Ma'lumot yangilanishlari",
+        "empty": "Yangi model ma'lumotlari mavjud emas.",
+        "refreshSuffix": "yangilanishi"
+      },
+      "savedScenarios": {
+        "title": "Saqlangan stsenariylaringiz",
+        "empty": "Stsenariy simulyatorida qoralama saqlaganingizdan keyin stsenariylar shu yerda ko'rinadi.",
+        "youShort": "SIZ"
+      }
+    }
+  },
   "buttons": {
     "save": "Saqlash",
     "run": "Simulyatsiyani ishga tushirish",

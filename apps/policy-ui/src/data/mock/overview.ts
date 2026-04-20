@@ -205,17 +205,19 @@ export const overviewV1Data: MacroSnapshot = {
   top_risks: [
     {
       risk_id: 'risk-external-slowdown',
-      title: 'External slowdown risk',
-      why_it_matters: 'Lower trading-partner demand would pressure export volumes and growth.',
-      impact_channel: 'Exports, FX inflows, and industrial output.',
+      title: 'Russia slowdown via remittances',
+      why_it_matters: 'Lower regional demand and remittance inflows would pressure household spending.',
+      impact_channel: 'Consumption demand, FX inflows, and near-term growth.',
       suggested_scenario: 'External slowdown stress',
+      scenario_query: 'preset=external-slowdown',
     },
     {
       risk_id: 'risk-inflation-persistence',
-      title: 'Inflation persistence risk',
-      why_it_matters: 'Food and regulated-price shocks can keep inflation above target for longer.',
+      title: 'Inflation persistence above target',
+      why_it_matters: 'Food and administered-price shocks can keep inflation elevated for longer.',
       impact_channel: 'Real incomes, policy-rate path, and fiscal costs.',
       suggested_scenario: 'Inflation persistence stress',
+      scenario_query: 'preset=inflation-persistence',
     },
     {
       risk_id: 'risk-fiscal-slippage',
@@ -223,6 +225,7 @@ export const overviewV1Data: MacroSnapshot = {
       why_it_matters: 'Broader-than-planned spending can complicate disinflation and debt dynamics.',
       impact_channel: 'Fiscal balance, financing need, and policy credibility.',
       suggested_scenario: 'Fiscal discipline stress',
+      scenario_query: 'preset=fiscal-consolidation',
     },
   ],
   analysis_actions: [
