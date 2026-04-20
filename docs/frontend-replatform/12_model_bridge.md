@@ -1,9 +1,8 @@
 # 12 — Model Bridge Decision
 
-**Status:** READY FOR SIGN-OFF
-**Owner (engineering lead, execution):** Nozimjon Ortiqov
-**Owner (product lead, sign-off):** CERR policy-engine product lead
-**Decision meeting:** 2026-04-23
+**Status:** ADOPTED 2026-04-20 — Option B
+**Owner (engineering + modelling):** Nozimjon Ortiqov
+**Target:** bridge-live by **2026-05-22** (QPM + DFM subset by 2026-05-08)
 **Target:** bridge-live by **2026-05-08** (end of Sprint 2)
 
 *Note: Numbered 12 rather than 11 to avoid collision with `11_phase0_readiness.md`.*
@@ -181,13 +180,21 @@ Under Option C, `synth-engines.js` is replaced by the TS port.
 
 ## Decision
 
-**Chosen option:** [TBD — decision meeting 2026-04-23]
+**Chosen option:** **Option B** — Nightly R-to-JSON static regeneration via GitHub Actions.
 
-**Rationale:** [TBD — if Option B is confirmed, rationale is the one in §Recommendation above, to be referenced by meeting minutes]
+**Rationale:** Option B as described in §Recommendation. The repo already has the `dfm_nowcast/dfm_data.js` pattern as a proof of concept; extending it to the other five models is a natural pattern extension rather than new operational capability. Option A's always-on backend and Option C's client-side TS ports both introduce ongoing maintenance cost that does not fit current capacity (solo engineering + modelling). Option B fails loudly via stale `data_version` surfaced in TA-3's scenario store, which is the right failure mode for this project stage.
 
-**Implementation owner:** [TBD — expected: Nozimjon Ortiqov]
+**Implementation owner:** Nozimjon Ortiqov (engineering + modelling — same person through this phase).
 
-**Estimated timeline to bridge-live:** **2026-05-08** (end of Sprint 2) under Option B
+**Modelling lead commitment:** `export_*.R` scripts for all six models authored by the same owner, ordered by priority: QPM + DFM first (Sprint 2 Week 3), then PE + I-O + CGE + FPP (Sprint 2 Week 4 or Sprint 3 Week 5).
+
+**Estimated timeline to bridge-live:**
+- **2026-05-08** — QPM + DFM live via `export_*.R` (nightly cron); overview and scenario-lab surfaces consume real data.
+- **2026-05-22** — remaining four models ported; all surfaces consume real data.
+
+**Fallback trigger:** unchanged from §Recommendation above. If during Sprint 2 a Scenario Lab flow requires continuous parameter sweep that static JSON cannot serve at acceptable size or that `synth-engines.js` interpolation visibly misrepresents the underlying R model, escalate to Option A and re-plan.
+
+**Adopted:** 2026-04-20 (ahead of the 2026-04-23 target date; decision meeting not required since engineering and modelling responsibilities are held by the same person this phase).
 
 ---
 
