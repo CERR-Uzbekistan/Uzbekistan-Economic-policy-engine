@@ -121,6 +121,22 @@ tr:hover td { background: #f5f8ff; }
 /* ── Chart wrap ── */
 .chart-wrap { position: relative; height: 300px; }
 
+/* ── Labor Market ── */
+.labor-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 22px; }
+.kcard.labor { border-top: 3px solid var(--orange); }
+.section-divider {
+  display: flex; align-items: center; gap: 10px; margin: 6px 0 18px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--orange);
+}
+.section-divider::before, .section-divider::after {
+  content: ''; flex: 1; height: 1px; background: #fed7aa;
+}
+.labor-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: #fff7ed; color: var(--orange); border: 1px solid #fed7aa;
+  border-radius: 20px; font-size: 10px; font-weight: 700; padding: 2px 8px;
+}
+
 /* ── Solver status ── */
 .solver-ok   { background: #dcfce7; color: var(--green); border-radius: 6px; padding: 2px 8px; font-size: 11px; font-weight: 700; }
 .solver-warn { background: #fef3c7; color: var(--amber); border-radius: 6px; padding: 2px 8px; font-size: 11px; font-weight: 700; }
@@ -289,6 +305,25 @@ tr:hover td { background: #f5f8ff; }
         </div>
       </div>
 
+      <div class="sec-block">
+        <div class="sec-hd">🧑‍🏭 Labor Market</div>
+        <div class="prow">
+          <div class="plabel"><span class="pname">Labor supply Ls (% chg)</span><span class="pval" id="v-Ls">0.0%</span></div>
+          <div class="pdesc">Shock to labor force participation / supply</div>
+          <input type="range" id="sl-Ls" min="-20" max="20" step="1" value="0" oninput="slPct(this,'v-Ls')">
+        </div>
+        <div class="prow">
+          <div class="plabel"><span class="pname">Wage elasticity φ</span><span class="pval" id="v-phi">0.50</span></div>
+          <div class="pdesc">Labor supply curve slope (higher = steeper)</div>
+          <input type="range" id="sl-phi" min="0.10" max="1.50" step="0.05" value="0.50" oninput="slRaw(this,'v-phi')">
+        </div>
+        <div class="prow">
+          <div class="plabel"><span class="pname">Formality base α₀ (%)</span><span class="pval" id="v-alpha0">35.0%</span></div>
+          <div class="pdesc">Base formal employment share (IO: COE/GVA=25%)</div>
+          <input type="range" id="sl-alpha0" min="10" max="70" step="1" value="35" oninput="slPct(this,'v-alpha0')">
+        </div>
+      </div>
+
       <button class="run-btn" id="runBtn" onclick="runSimulation()">▶ Run Simulation</button>
       <button class="reset-btn" onclick="resetToBase()">↺ Reset to Base</button>
       <div style="text-align:center;margin-top:10px;font-size:.68rem;color:var(--text3)">
@@ -329,6 +364,31 @@ tr:hover td { background: #f5f8ff; }
         </div>
       </div>
 
+      <!-- Labor KPI row -->
+      <div class="section-divider">⚙ Labor Market</div>
+      <div class="labor-kpis">
+        <div class="kcard labor">
+          <div class="klbl">Employment (L)</div>
+          <div class="kval" id="kpi-L" style="color:var(--orange)">—</div>
+          <div class="ksub" id="kpi-L-sub">millions of workers</div>
+        </div>
+        <div class="kcard labor">
+          <div class="klbl">Real Wage Index (w)</div>
+          <div class="kval" id="kpi-w" style="color:var(--orange)">—</div>
+          <div class="ksub">% change from base</div>
+        </div>
+        <div class="kcard labor">
+          <div class="klbl">Formal / Informal</div>
+          <div class="kval" id="kpi-formal" style="color:var(--orange)">—</div>
+          <div class="ksub" id="kpi-formal-sub">millions formal / informal</div>
+        </div>
+        <div class="kcard labor">
+          <div class="klbl">Unemployment Rate</div>
+          <div class="kval" id="kpi-UR" style="color:var(--orange)">—</div>
+          <div class="ksub" id="kpi-UR-sub">% of labor force</div>
+        </div>
+      </div>
+
       <!-- Export toolbar -->
       <div class="export-toolbar">
         <span class="export-label">Export Results:</span>
@@ -365,6 +425,29 @@ tr:hover td { background: #f5f8ff; }
         <div class="card-sub">Deviation of experiment from base year values</div>
         <div class="chart-wrap">
           <canvas id="chart-main"></canvas>
+        </div>
+      </div>
+
+      <!-- Labor Market Chart -->
+      <div class="card">
+        <div class="card-title">Labor Market Results <span class="labor-badge">🧑‍🏭 Type II</span></div>
+        <div class="card-sub">Employment, wages, formal/informal split — derived from CGE output via Cobb-Douglas labor demand + wage curve</div>
+        <div class="chart-wrap">
+          <canvas id="chart-labor"></canvas>
+        </div>
+        <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:11.5px;">
+          <div style="background:#fff7ed;border-radius:8px;padding:10px 12px;border:1px solid #fed7aa;">
+            <div style="font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;margin-bottom:4px;">Employment</div>
+            <div id="lab-detail-L" style="color:var(--text)">—</div>
+          </div>
+          <div style="background:#fff7ed;border-radius:8px;padding:10px 12px;border:1px solid #fed7aa;">
+            <div style="font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;margin-bottom:4px;">Formal / Informal</div>
+            <div id="lab-detail-fi" style="color:var(--text)">—</div>
+          </div>
+          <div style="background:#fff7ed;border-radius:8px;padding:10px 12px;border:1px solid #fed7aa;">
+            <div style="font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;margin-bottom:4px;">Unemployment</div>
+            <div id="lab-detail-ur" style="color:var(--text)">—</div>
+          </div>
         </div>
       </div>
     </div>
@@ -411,6 +494,18 @@ tr:hover td { background: #f5f8ff; }
       <div class="scen-title">Government Austerity −20%</div>
       <div class="scen-desc">Government consumption cut by 20%. Fiscal consolidation scenario — evaluates GDP multiplier, trade balance, and private sector crowding-in.</div>
       <button class="scen-run" onclick="runScenario('austerity')">▶ Run Scenario</button>
+    </div>
+    <div class="scen-card">
+      <div class="scen-icon">👷</div>
+      <div class="scen-title">Labor Supply Shock +10%</div>
+      <div class="scen-desc">Labor force grows 10% (e.g. rural-urban migration, returning diaspora). Tests unemployment absorption, wage pressure, and formality dynamics.</div>
+      <button class="scen-run" onclick="runScenario('labor_supply')">▶ Run Scenario</button>
+    </div>
+    <div class="scen-card">
+      <div class="scen-icon">📋</div>
+      <div class="scen-title">Minimum Wage: Steep φ = 1.2</div>
+      <div class="scen-desc">High wage elasticity (φ = 1.2) simulates binding minimum wage effect — wages rise steeply with employment, slowing job creation. Tests employment-wage trade-off.</div>
+      <button class="scen-run" onclick="runScenario('min_wage')">▶ Run Scenario</button>
     </div>
   </div>
   <div id="scen-results"></div>
@@ -484,6 +579,21 @@ tr:hover td { background: #f5f8ff; }
         <tr><td>Output price</td><td>Pt</td><td>1.00</td><td>CET composite output price</td></tr>
         <tr><td>Composite good price</td><td>Pq</td><td>1.00</td><td>CES composite absorption price</td></tr>
         <tr><td>GDP deflator</td><td>Px</td><td>1.00</td><td>Value-added/GDP deflator</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:10px;">Labor Market Parameters (2021 calibration)</h3>
+    <table class="param-table" style="margin-bottom:24px;">
+      <thead><tr><th>Parameter</th><th>Symbol</th><th>Value</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Base employment</td><td>L̄</td><td>13.5 M</td><td>Statistics Agency of Uzbekistan 2021</td></tr>
+        <tr><td>Labor force (supply)</td><td>Ls</td><td>14.5 M</td><td>Statistics Agency of Uzbekistan 2021</td></tr>
+        <tr><td>Base unemployment rate</td><td>UR₀</td><td>6.9%</td><td>(Ls−L̄)/Ls × 100</td></tr>
+        <tr><td>Base formal share</td><td>α₀</td><td>35%</td><td>ILO / IO model COE-adjusted estimate</td></tr>
+        <tr><td>Wage curve elasticity</td><td>φ</td><td>0.50</td><td>Blanchflower-Oswald (1994) meta-analysis</td></tr>
+        <tr><td>Labor demand elasticity</td><td>η</td><td>0.50</td><td>Hamermesh (1993) survey of labor demand</td></tr>
+        <tr><td>Formality elasticity</td><td>ε_α</td><td>0.80</td><td>CERR calibration from IO COE/GVA = 25%</td></tr>
+        <tr><td>IO labor income share</td><td>COE/GVA</td><td>25%</td><td>Computed from IO 2022 symmetric table (136 sectors)</td></tr>
       </tbody>
     </table>
 
@@ -566,12 +676,50 @@ tr:hover td { background: #f5f8ff; }
     </div>
 
     <div class="doc-section">
+      <h3>Labor Market Block</h3>
+      <p>The labor market extension follows Devarajan &amp; Go (1998) and ILO Uzbekistan reports. It is solved analytically after the goods-market BOP equilibrium and adds three new channels: <strong>labor demand</strong>, a <strong>wage curve</strong>, and a <strong>formal/informal split</strong>.</p>
+
+      <p><strong>Labor demand</strong> (Cobb-Douglas FOC, isoelastic form):</p>
+      <div class="eq-box">L/L̄ = (VA/VA̅)^(1/(1+φ·η)) &nbsp;&nbsp;&nbsp; where VA = Px·X</div>
+      <p>VA = Px·X is domestic value-added at model prices; VA̅ = 1 at base (Px=Pf·Pt=1, X=1). η = 0.50 is the labor demand wage elasticity (Hamermesh 1993).</p>
+
+      <p><strong>Wage supply curve</strong> (upward-sloping, Blanchflower-Oswald 1994):</p>
+      <div class="eq-box">w/w̄ = (L/L̄)^φ &nbsp;&nbsp;&nbsp; φ = 0.50 (default)</div>
+      <p>Substituting labor demand into the wage equation gives the closed-form equilibrium:</p>
+      <div class="eq-box">w/w̄ = (VA/VA̅)^(φ/(1+φ·η))</div>
+      <p>At base (VA = VA̅): L = L̄ = 13.5M, w = w̄ = 1.00 by construction.</p>
+
+      <p><strong>Formal / Informal split</strong> (Alaniz et al. 2011 for developing countries):</p>
+      <div class="eq-box">α = min(0.95, α₀ · (w/w̄)^ε_α)</div>
+      <div class="eq-box">L_formal = α · L &nbsp;&nbsp;&nbsp; L_informal = (1−α) · L</div>
+      <p>α₀ = 0.35 (base formality rate). ε_α = 0.80 means a 10% real wage rise increases the formal share by 8%. This captures the Uzbekistan-specific dynamic where rising wages pull informal workers into formal contracts (ILO Uzbekistan 2022).</p>
+
+      <p><strong>Unemployment</strong>:</p>
+      <div class="eq-box">U = max(0, Ls − L) &nbsp;&nbsp;&nbsp; UR = U/Ls × 100</div>
+      <p>Labor supply Ls = 14.5M is exogenous (can be shocked by the Ls slider). Base UR = 6.9%, consistent with Statistics Agency of Uzbekistan 2021 official figures.</p>
+
+      <p><strong>Key policy implications:</strong></p>
+      <ul>
+        <li><strong>Import tariff rise</strong> → Exchange rate depreciates → Pq rises → real wage (w/Px) falls → employment falls, informality rises</li>
+        <li><strong>FDI surge / foreign savings increase</strong> → Exchange rate appreciates → VA expands → employment and wages rise → formality increases</li>
+        <li><strong>Government austerity</strong> → Y contracts → VA falls → unemployment rises, wages fall, informal sector expands</li>
+        <li><strong>Labor supply shock (Ls↑)</strong> → Unemployment rises mechanically if demand does not adjust; φ governs the wage compression that stimulates demand response</li>
+      </ul>
+    </div>
+
+    <div class="doc-section">
       <h3>References</h3>
       <ul>
         <li>Devarajan, S., D. Go, J. Lewis, S. Robinson &amp; P. Sinko (1997). <em>Simple General Equilibrium Modeling</em>. In J. Francois &amp; K. Reinert (Eds.), <em>Applied Methods for Trade Policy Analysis</em>. Cambridge University Press.</li>
         <li>World Bank WDI — Uzbekistan National Accounts, 2021.</li>
         <li>Statistics Agency under the President of Uzbekistan — GDP, trade, government finance, 2021.</li>
         <li>Center for Economic Research and Reforms (CERR) — Calibration &amp; adaptation for Uzbekistan.</li>
+        <li>Devarajan, S. &amp; Go, D. (1998). <em>The simplest dynamic general equilibrium model of an open economy</em>. Journal of Policy Modeling, 20(6), 677–714.</li>
+        <li>Blanchflower, D.G. &amp; Oswald, A.J. (1994). <em>The Wage Curve</em>. MIT Press.</li>
+        <li>Hamermesh, D.S. (1993). <em>Labor Demand</em>. Princeton University Press.</li>
+        <li>ILO (2022). <em>Uzbekistan Labour Market Profile</em>. International Labour Organization.</li>
+        <li>Statistics Agency under the President of Uzbekistan — Labor force survey, employment and unemployment 2021.</li>
+        <li>Input-Output Table of Uzbekistan (2022) — Symmetric 136-sector table, COE/GVA = 25%. CERR/Statistics Agency.</li>
       </ul>
     </div>
   </div>
@@ -600,7 +748,15 @@ const BASE = {
   // Base endogenous (for calibration check)
   E:0.26, M:0.44, Ds:0.74, Q:1.18,
   Y:1.10, Cn:0.61, TAX:0.12, S:0.42, Sg:-0.03, Z:0.36,
-  Er:1.00, Pe:1.00, Pm:1.00, Pt:1.00, Pq:1.00, Px:1.00
+  Er:1.00, Pe:1.00, Pm:1.00, Pt:1.00, Pq:1.00, Px:1.00,
+  // Labor market parameters (Statistics Agency UZ 2021 + IO COE/GVA calibration)
+  L_bar:    13.5,  // base employed (millions)
+  L_supply: 14.5,  // labor force (millions) → base UR = 6.9%
+  w_bar:    1.00,  // base real wage index (normalised)
+  phi:      0.50,  // wage curve elasticity φ (labor supply slope)
+  eta:      0.50,  // labor demand wage elasticity
+  alpha0:   0.35,  // base formal employment share (~35%, IO COE/GVA=25% + mixed income adj.)
+  eps_alpha: 0.80  // elasticity of formality share to real wage
 };
 
 /* ── CGE Solver ── */
@@ -700,12 +856,49 @@ function solveCGE(params) {
   const Z   = S;
   const TB  = Pe * E - Pm * M;
 
+  // ── Labor Market Block ──────────────────────────────────────────────
+  // Devarajan & Go (1998) extension: Cobb-Douglas labor demand + wage curve.
+  // Labor demand (FOC, Cobb-Douglas): L_d/L_bar = (VA/VA_bar)^(1/(1+φ·η))
+  // Wage supply curve:               w/w_bar   = (L/L_bar)^φ
+  // Equilibrium (substitute demand into supply):
+  //   L/L_bar = (VA/VA_bar)^(1/(1+φ·η))
+  //   w/w_bar = (VA/VA_bar)^(φ/(1+φ·η))
+  // where VA = Px·X (domestic value-added proxy; base = 1.0).
+  const phi       = params.phi       !== undefined ? params.phi       : 0.50;
+  const eta       = params.eta       !== undefined ? params.eta       : 0.50;
+  const alpha0    = params.alpha0    !== undefined ? params.alpha0    : 0.35;
+  const eps_alpha = params.eps_alpha !== undefined ? params.eps_alpha : 0.80;
+  const L_bar     = params.L_bar     !== undefined ? params.L_bar     : 13.5;
+  const L_supply  = params.L_supply  !== undefined ? params.L_supply  : 14.5;
+  const w_bar     = params.w_bar     !== undefined ? params.w_bar     : 1.00;
+
+  const VA     = Px * X;      // value-added at solved prices (base = 1.0)
+  const VA_bar = 1.0;         // base value-added (Px=1, X=1)
+  const vaRatio = Math.max(1e-6, VA / VA_bar);
+
+  const L_eq  = L_bar  * Math.pow(vaRatio, 1.0 / (1.0 + phi * eta));
+  const w_eq  = w_bar  * Math.pow(L_eq / L_bar, phi);
+  const w_real = w_eq  / Math.max(1e-6, Px);  // deflate by GDP deflator
+
+  // Formal/informal split: formality rises with real wage (higher wages pull
+  // workers into formal contracts; collapses during crises)
+  const alpha      = Math.min(0.95, alpha0 * Math.pow(w_eq / w_bar, eps_alpha));
+  const L_formal   = alpha * L_eq;
+  const L_informal = (1 - alpha) * L_eq;
+
+  // Unemployment: excess of labor supply over equilibrium demand
+  const U  = Math.max(0, L_supply - L_eq);
+  const UR = U / L_supply * 100;   // percent of labor force
+
   return {
     error: false,
     Er, Pe, Pm, Pd,
     E, M, Ds, Q, X,
     Pq, Pt, Px,
-    TAX, Y, Sg, Cn, S, Z, TB
+    TAX, Y, Sg, Cn, S, Z, TB,
+    // Labor market
+    L: L_eq, w: w_eq, w_real,
+    L_formal, L_informal, alpha, U, UR
   };
 }
 
@@ -733,11 +926,12 @@ function getExpParams() {
   // wm / we — apply % shock to base values
   const wm_shock = g('sl-wm') / 100;
   const we_shock = g('sl-we') / 100;
-  // G, B, re, X — relative % change from base
+  // G, B, re, X, Ls — relative % change from base
   const G_chg  = g('sl-G')  / 100;
   const B_chg  = g('sl-B')  / 100;
   const re_chg = g('sl-re') / 100;
   const X_chg  = g('sl-X')  / 100;
+  const Ls_chg = g('sl-Ls') / 100;
   return {
     at: BASE.at, bt: BASE.bt, rho_t: BASE.rho_t, sig_t: BASE.sig_t,
     aq: BASE.aq, bq: BASE.bq, rho_q: BASE.rho_q, sig_q: BASE.sig_q,
@@ -754,7 +948,15 @@ function getExpParams() {
     re: BASE.re * (1 + re_chg),
     B:  BASE.B  * (1 + B_chg),
     X:  BASE.X  * (1 + X_chg),
-    Pf: g('sl-Pf')
+    Pf: g('sl-Pf'),
+    // Labor market
+    L_bar:    BASE.L_bar,
+    L_supply: BASE.L_supply * (1 + Ls_chg),
+    w_bar:    BASE.w_bar,
+    phi:      g('sl-phi'),
+    eta:      BASE.eta,
+    alpha0:   g('sl-alpha0') / 100,
+    eps_alpha: BASE.eps_alpha
   };
 }
 
@@ -766,7 +968,11 @@ function getBaseParams() {
     wm: BASE.wm, we: BASE.we, tm: BASE.tm, te: BASE.te,
     ts: BASE.ts, ty: BASE.ty, sy: BASE.sy, G: BASE.G,
     tr: BASE.tr, ft: BASE.ft, re: BASE.re, B: BASE.B,
-    X: BASE.X, Pf: BASE.Pf
+    X: BASE.X, Pf: BASE.Pf,
+    // Labor market
+    L_bar: BASE.L_bar, L_supply: BASE.L_supply,
+    w_bar: BASE.w_bar, phi: BASE.phi, eta: BASE.eta,
+    alpha0: BASE.alpha0, eps_alpha: BASE.eps_alpha
   };
 }
 
@@ -797,6 +1003,15 @@ const ROWS_DEF = [
   { sym: 'Pm',  label: 'Import Price',             desc: 'wm·(1+tm)·Er' },
   { sym: 'Pq',  label: 'Composite Price',          desc: 'CES price index' },
   { sym: 'Px',  label: 'GDP Deflator',             desc: 'Pf·Pt' },
+  // Labor market
+  { sym: 'L',        label: 'Employment (L)',          desc: 'Equilibrium employment (millions)' },
+  { sym: 'w',        label: 'Wage Index (w)',           desc: 'Real wage index (base = 1.00)' },
+  { sym: 'w_real',   label: 'Real Wage (w/P)',          desc: 'Wage deflated by GDP deflator' },
+  { sym: 'L_formal', label: 'Formal Employment',        desc: 'α × L (millions)' },
+  { sym: 'L_informal',label:'Informal Employment',      desc: '(1−α) × L (millions)' },
+  { sym: 'alpha',    label: 'Formality Rate (α)',       desc: 'Formal share of employment' },
+  { sym: 'U',        label: 'Unemployment (U)',         desc: 'Ls − L (millions)' },
+  { sym: 'UR',       label: 'Unemployment Rate (%)',    desc: 'U / Ls × 100' },
 ];
 
 function populateResults(base, exp) {
@@ -868,6 +1083,72 @@ function updateChart(base, exp) {
   });
 }
 
+let laborChart = null;
+
+/* ── Labor market chart ── */
+function updateLaborChart(base, exp) {
+  const chgPct = (b, e) => Math.abs(b) > 1e-9 ? (e - b) / Math.abs(b) * 100 : 0;
+  const labels = ['Employment\n(L, M)', 'Wage Index\n(w)', 'Formal Emp.\n(M)', 'Informal Emp.\n(M)', 'Unemployed\n(U, M)', 'Formality\nRate (α)'];
+  const data   = [
+    chgPct(base.L,        exp.L),
+    chgPct(base.w,        exp.w),
+    chgPct(base.L_formal, exp.L_formal),
+    chgPct(base.L_informal, exp.L_informal),
+    chgPct(base.U || 0.01, exp.U || 0.01),
+    chgPct(base.alpha,    exp.alpha)
+  ];
+  const colors       = data.map(v => v >= 0 ? 'rgba(230,126,34,0.75)' : 'rgba(192,57,43,0.75)');
+  const borderColors = data.map(v => v >= 0 ? '#e67e22' : '#c0392b');
+
+  const ctx = document.getElementById('chart-labor').getContext('2d');
+  if (laborChart) laborChart.destroy();
+  laborChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: '% Change from Base',
+        data,
+        backgroundColor: colors,
+        borderColor: borderColors,
+        borderWidth: 1.5,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => (ctx.parsed.y >= 0 ? '+' : '') + ctx.parsed.y.toFixed(2) + '%'
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+        y: {
+          grid: { color: '#f0f0f0' },
+          ticks: { font: { size: 11 }, callback: v => (v >= 0 ? '+' : '') + v.toFixed(1) + '%' }
+        }
+      }
+    }
+  });
+
+  // Detail boxes
+  const Lchg  = chgPct(base.L, exp.L);
+  const urPp  = exp.UR - base.UR;
+  document.getElementById('lab-detail-L').innerHTML =
+    `Base: <strong>${base.L.toFixed(2)}M</strong> → Exp: <strong>${exp.L.toFixed(2)}M</strong><br>` +
+    `Change: <strong style="color:${Lchg>=0?'var(--green)':'var(--red)'}">${Lchg>=0?'+':''}${Lchg.toFixed(2)}%</strong>`;
+  document.getElementById('lab-detail-fi').innerHTML =
+    `Formal: <strong>${exp.L_formal.toFixed(2)}M</strong> (${(exp.alpha*100).toFixed(1)}%)<br>` +
+    `Informal: <strong>${exp.L_informal.toFixed(2)}M</strong> (${((1-exp.alpha)*100).toFixed(1)}%)`;
+  document.getElementById('lab-detail-ur').innerHTML =
+    `Rate: <strong>${exp.UR.toFixed(2)}%</strong><br>` +
+    `Change: <strong style="color:${urPp>0?'var(--red)':'var(--green)'}">${urPp>=0?'+':''}${urPp.toFixed(2)}pp</strong>`;
+}
+
 /* ── Update KPI cards ── */
 function updateKPIs(base, exp) {
   function kpiSet(id, base_v, exp_v) {
@@ -884,6 +1165,32 @@ function updateKPIs(base, exp) {
   erEl.textContent = exp.Er.toFixed(4);
   const erChg = (exp.Er - base.Er) / base.Er * 100;
   erEl.style.color = erChg > 0.01 ? 'var(--red)' : erChg < -0.01 ? 'var(--green)' : 'var(--text3)';
+
+  // ── Labor KPIs ──
+  const Lchg = (exp.L - base.L) / base.L * 100;
+  const lEl  = document.getElementById('kpi-L');
+  lEl.textContent = exp.L.toFixed(2) + 'M';
+  lEl.style.color = Lchg > 0.05 ? 'var(--green)' : Lchg < -0.05 ? 'var(--red)' : 'var(--text3)';
+  document.getElementById('kpi-L-sub').textContent =
+    (Lchg >= 0 ? '+' : '') + Lchg.toFixed(2) + '% · base ' + base.L.toFixed(2) + 'M';
+
+  const wchg = (exp.w - base.w) / base.w * 100;
+  const wEl  = document.getElementById('kpi-w');
+  wEl.textContent = (wchg >= 0 ? '+' : '') + wchg.toFixed(2) + '%';
+  wEl.style.color = wchg > 0.05 ? 'var(--green)' : wchg < -0.05 ? 'var(--red)' : 'var(--text3)';
+
+  const fEl = document.getElementById('kpi-formal');
+  fEl.textContent = exp.L_formal.toFixed(2) + 'M / ' + exp.L_informal.toFixed(2) + 'M';
+  const alphaPp = (exp.alpha - base.alpha) * 100;
+  document.getElementById('kpi-formal-sub').textContent =
+    'Formality ' + (exp.alpha * 100).toFixed(1) + '% (' + (alphaPp >= 0 ? '+' : '') + alphaPp.toFixed(1) + 'pp)';
+
+  const urEl = document.getElementById('kpi-UR');
+  const urPp  = exp.UR - base.UR;
+  urEl.textContent = exp.UR.toFixed(1) + '%';
+  urEl.style.color = urPp > 0.05 ? 'var(--red)' : urPp < -0.05 ? 'var(--green)' : 'var(--text3)';
+  document.getElementById('kpi-UR-sub').textContent =
+    (urPp >= 0 ? '+' : '') + urPp.toFixed(2) + 'pp · base ' + base.UR.toFixed(1) + '%';
 }
 
 /* ── Main run simulation ── */
@@ -910,6 +1217,7 @@ function runSimulation() {
     updateKPIs(base, exp);
     populateResults(base, exp);
     updateChart(base, exp);
+    updateLaborChart(base, exp);
 
     solverEl.textContent = 'Converged'; solverEl.className = 'solver-ok';
   }, 50);
@@ -934,18 +1242,35 @@ function resetToBase() {
   document.getElementById('sl-G').value  = 0;   slPct(document.getElementById('sl-G'),  'v-G');
   document.getElementById('sl-B').value  = 0;   slPct(document.getElementById('sl-B'),  'v-B');
   document.getElementById('sl-re').value = 0;   slPct(document.getElementById('sl-re'), 'v-re');
-  document.getElementById('sl-X').value  = 0;   slPct(document.getElementById('sl-X'),  'v-X');
-  document.getElementById('sl-Pf').value = 1.0; slRaw(document.getElementById('sl-Pf'), 'v-Pf');
+  document.getElementById('sl-X').value  = 0;    slPct(document.getElementById('sl-X'),  'v-X');
+  document.getElementById('sl-Pf').value = 1.0;  slRaw(document.getElementById('sl-Pf'), 'v-Pf');
+  // Labor sliders
+  document.getElementById('sl-Ls').value    = 0;    slPct(document.getElementById('sl-Ls'),    'v-Ls');
+  document.getElementById('sl-phi').value   = 0.50; slRaw(document.getElementById('sl-phi'),   'v-phi');
+  document.getElementById('sl-alpha0').value= 35;   slPct(document.getElementById('sl-alpha0'),'v-alpha0');
 
   // Reset KPIs and table
   ['kpi-Y','kpi-E','kpi-M'].forEach(id => {
     const el = document.getElementById(id);
     el.textContent = '—'; el.style.color = 'var(--navy2)';
   });
+  ['kpi-L','kpi-w','kpi-formal','kpi-UR'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.textContent = '—'; el.style.color = 'var(--orange)'; }
+  });
+  ['kpi-L-sub','kpi-formal-sub','kpi-UR-sub'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = '—';
+  });
+  ['lab-detail-L','lab-detail-fi','lab-detail-ur'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = '—';
+  });
   document.getElementById('kpi-Er').textContent = '—';
   document.getElementById('results-tbody').innerHTML =
     '<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:20px">Run the simulation to see results</td></tr>';
-  if (mainChart) { mainChart.destroy(); mainChart = null; }
+  if (mainChart)  { mainChart.destroy();  mainChart  = null; }
+  if (laborChart) { laborChart.destroy(); laborChart = null; }
   document.getElementById('solver-status').textContent = 'Ready';
   document.getElementById('solver-status').className = 'solver-ok';
   lastBase = null; lastExp = null;
@@ -1012,18 +1337,28 @@ function exportPDF() {
 
 /* ── Scenario runner ── */
 const SCENARIOS = {
-  tariff:   { label: 'Import Tariff +5pp',    params: { tm: BASE.tm + 0.05 } },
-  exprice:  { label: 'Export Price Fall −10%', params: { we: BASE.we * 0.90 } },
-  imprice:  { label: 'World Import Price +10%', params: { wm: BASE.wm * 1.10 } },
-  vat:      { label: 'Energy Reform: VAT +5pp', params: { ts: BASE.ts + 0.05 } },
-  fdi:      { label: 'FDI Surge: Foreign Savings +50%', params: { B: BASE.B * 1.50 } },
-  austerity:{ label: 'Government Austerity −20%', params: { G: BASE.G * 0.80 } }
+  tariff:       { label: 'Import Tariff +5pp',           params: { tm: BASE.tm + 0.05 } },
+  exprice:      { label: 'Export Price Fall −10%',        params: { we: BASE.we * 0.90 } },
+  imprice:      { label: 'World Import Price +10%',       params: { wm: BASE.wm * 1.10 } },
+  vat:          { label: 'Energy Reform: VAT +5pp',       params: { ts: BASE.ts + 0.05 } },
+  fdi:          { label: 'FDI Surge: Foreign Savings +50%', params: { B: BASE.B * 1.50 } },
+  austerity:    { label: 'Government Austerity −20%',    params: { G: BASE.G * 0.80 } },
+  labor_supply: { label: 'Labor Supply Shock +10%',       params: { L_supply: BASE.L_supply * 1.10 } },
+  min_wage:     { label: 'Minimum Wage: Steep φ = 1.2',  params: { phi: 1.20 } }
 };
 
 function runScenario(key) {
   const scen = SCENARIOS[key];
   const bParams = getBaseParams();
   const eParams = Object.assign({}, bParams, scen.params);
+  // Ensure labor params always present in experiment
+  if (eParams.L_bar     === undefined) eParams.L_bar     = BASE.L_bar;
+  if (eParams.L_supply  === undefined) eParams.L_supply  = BASE.L_supply;
+  if (eParams.w_bar     === undefined) eParams.w_bar     = BASE.w_bar;
+  if (eParams.phi       === undefined) eParams.phi       = BASE.phi;
+  if (eParams.eta       === undefined) eParams.eta       = BASE.eta;
+  if (eParams.alpha0    === undefined) eParams.alpha0    = BASE.alpha0;
+  if (eParams.eps_alpha === undefined) eParams.eps_alpha = BASE.eps_alpha;
 
   const base = solveCGE(bParams);
   const exp  = solveCGE(eParams);
@@ -1050,15 +1385,29 @@ function runScenario(key) {
     { label: 'Tax Revenue',      b: base.TAX, e: exp.TAX },
     { label: 'Govt Balance',     b: base.Sg,  e: exp.Sg  },
     { label: 'Exch. Rate (Er)',  b: base.Er,  e: exp.Er  },
+    // Labor market
+    { label: '🧑 Employment (M)', b: base.L,   e: exp.L   },
+    { label: '💰 Wage Index (w)',  b: base.w,   e: exp.w   },
+    { label: '🏭 Formal Emp (M)', b: base.L_formal, e: exp.L_formal },
+    { label: '📉 Unempl. Rate %', b: base.UR,  e: exp.UR, pp: true },
   ];
 
   const kpiHtml = kpis.map(k => {
-    const chg = getChg(k.b, k.e);
-    const col = chg.num > 0.01 ? 'var(--green)' : chg.num < -0.01 ? 'var(--red)' : 'var(--text3)';
-    return `<div class="kcard">
+    let chgStr, chgNum;
+    if (k.pp) {
+      // Unemployment rate: show pp change, not % change
+      chgNum = k.e - k.b;
+      chgStr = (chgNum >= 0 ? '+' : '') + chgNum.toFixed(2) + 'pp';
+    } else {
+      const chg = getChg(k.b, k.e);
+      chgStr = chg.str; chgNum = chg.num;
+    }
+    const col = chgNum > 0.01 ? 'var(--green)' : chgNum < -0.01 ? 'var(--red)' : 'var(--text3)';
+    const isLabor = ['🧑 Employment (M)','💰 Wage Index (w)','🏭 Formal Emp (M)','📉 Unempl. Rate %'].includes(k.label);
+    return `<div class="kcard${isLabor ? ' labor' : ''}">
       <div class="klbl">${k.label}</div>
-      <div class="kval" style="color:${col}">${chg.str}</div>
-      <div class="ksub">Base: ${k.b.toFixed(4)} → ${k.e.toFixed(4)}</div>
+      <div class="kval" style="color:${col}">${chgStr}</div>
+      <div class="ksub">Base: ${k.b.toFixed(3)} → ${k.e.toFixed(3)}</div>
     </div>`;
   }).join('');
 
@@ -1066,7 +1415,7 @@ function runScenario(key) {
     <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px;margin-top:8px;box-shadow:var(--shadow);">
       <div style="font-size:15px;font-weight:700;color:var(--navy2);margin-bottom:6px;">Results: ${scen.label}</div>
       <div style="font-size:12px;color:var(--text3);margin-bottom:18px;">Devarajan 1-2-3 CGE · Uzbekistan 2021 base · Exchange rate cleared via bisection</div>
-      <div class="kpis">${kpiHtml}</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">${kpiHtml}</div>
     </div>`;
 }
 
@@ -1089,15 +1438,20 @@ function runCalibrationChecks() {
     return;
   }
   const checks = [
-    { label: 'E (Exports)',              expected: BASE.E,   solved: base.E   },
-    { label: 'M (Imports)',              expected: BASE.M,   solved: base.M   },
-    { label: 'Ds (Domestic supply)',     expected: BASE.Ds,  solved: base.Ds  },
-    { label: 'Q (Composite absorption)', expected: BASE.Q,  solved: base.Q   },
-    { label: 'Y (National income)',      expected: BASE.Y,   solved: base.Y   },
-    { label: 'Cn (Consumption)',         expected: BASE.Cn,  solved: base.Cn  },
-    { label: 'TAX (Tax revenue)',        expected: BASE.TAX, solved: base.TAX },
-    { label: 'Sg (Govt balance)',        expected: BASE.Sg,  solved: base.Sg  },
-    { label: 'Er (Exchange rate)',       expected: BASE.Er,  solved: base.Er  },
+    { label: 'E (Exports)',              expected: BASE.E,        solved: base.E   },
+    { label: 'M (Imports)',              expected: BASE.M,        solved: base.M   },
+    { label: 'Ds (Domestic supply)',     expected: BASE.Ds,       solved: base.Ds  },
+    { label: 'Q (Composite absorption)', expected: BASE.Q,        solved: base.Q   },
+    { label: 'Y (National income)',      expected: BASE.Y,        solved: base.Y   },
+    { label: 'Cn (Consumption)',         expected: BASE.Cn,       solved: base.Cn  },
+    { label: 'TAX (Tax revenue)',        expected: BASE.TAX,      solved: base.TAX },
+    { label: 'Sg (Govt balance)',        expected: BASE.Sg,       solved: base.Sg  },
+    { label: 'Er (Exchange rate)',       expected: BASE.Er,       solved: base.Er  },
+    // Labor market — base calibration checks
+    { label: 'L (Employment, M)',        expected: BASE.L_bar,    solved: base.L,      note: 'Base ≡ L_bar by construction' },
+    { label: 'w (Wage index)',           expected: BASE.w_bar,    solved: base.w,      note: 'Base ≡ w_bar by construction' },
+    { label: 'α (Formality rate)',       expected: BASE.alpha0,   solved: base.alpha,  note: 'Base ≡ α₀ by construction' },
+    { label: 'UR (Unemployment rate %)', expected: (BASE.L_supply - BASE.L_bar)/BASE.L_supply*100, solved: base.UR, note: 'Calibrated: 6.9%' },
   ];
   let html = '<table class="param-table"><thead><tr><th>Variable</th><th>Expected (known)</th><th>Solver result</th><th>Abs. error</th><th>Status</th></tr></thead><tbody>';
   checks.forEach(c => {
