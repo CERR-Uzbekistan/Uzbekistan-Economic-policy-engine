@@ -5,7 +5,7 @@ export type Confidence = 'high' | 'medium' | 'low'
 export type ChartType = 'line' | 'bar' | 'area' | 'combo'
 export type ChartViewMode = 'level' | 'delta' | 'risk'
 export type ChartSemanticRole = 'baseline' | 'alternative' | 'downside' | 'upside' | 'other'
-export type NarrativeGenerationMode = 'template' | 'assisted'
+export type NarrativeGenerationMode = 'template' | 'assisted' | 'reviewed'
 export type CaveatSeverity = 'info' | 'warning' | 'critical'
 export type ApiErrorSeverity = 'info' | 'warning' | 'error'
 
@@ -101,6 +101,8 @@ export type NarrativeBlock = {
   uncertainty_note: string
   generated_at: string
   generation_mode: NarrativeGenerationMode
+  reviewer_name?: string
+  reviewed_at?: string
 }
 
 export type Caveat = {

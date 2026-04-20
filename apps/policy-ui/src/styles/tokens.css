@@ -12,6 +12,8 @@
   --color-brand-soft: #e7edf6;
   --color-downside: #9b3b2e;
   --color-upside: #3e6b45;
+  --color-success: #3e6b45;
+  --color-success-soft: #e8f3ec;
   --color-uncertainty: rgba(77, 93, 116, 0.25);
 
   --font-sans: "Source Sans 3", "Noto Sans", "Helvetica Neue", sans-serif;

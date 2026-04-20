@@ -145,7 +145,23 @@
     "retryRun": "Qayta ishga tushirish"
   },
   "scenarioLab": {
+    "header": {
+      "eyebrow": "Stsenariy konstruksiyasi",
+      "meta": {
+        "activeModelsLabel": "Faol modellar",
+        "runLifecycleLabel": "Ishga tushirish sikli",
+        "dataVintageLabel": "Ma'lumot vintaji",
+        "runLifecycleStatus": {
+          "loading": "Ishlamoqda",
+          "ready": "Tayyor",
+          "error": "Qayta urinish kerak"
+        }
+      }
+    },
     "form": {
+      "preset": "Preset",
+      "scenarioName": "Stsenariy nomi",
+      "scenarioNamePlaceholder": "Stsenariy nomi",
       "scenarioType": "Stsenariy turi",
       "description": "Tavsif",
       "descriptionPlaceholder": "Ixtiyoriy stsenariy tavsifi",
@@ -161,6 +177,42 @@
         "external": "Tashqi",
         "trade": "Savdo",
         "inflation": "Inflyatsiya"
+      }
+    },
+    "assumptions": {
+      "title": "Taxminlar",
+      "description": "Siyosat va shok taxminlarini sodda tilda belgilang.",
+      "showTechnical": "Texnik o'zgaruvchi nomlarini ko'rsatish",
+      "technicalPrefix": "Texnik o'zgaruvchi: {{variable}}",
+      "categories": {
+        "macro": "Makro taxminlar",
+        "external": "Tashqi taxminlar",
+        "fiscal": "Fiskal taxminlar",
+        "trade": "Savdo taxminlari",
+        "advanced": "Kengaytirilgan taxminlar"
+      },
+      "emptyCategory": "Bu toifada taxminlar mavjud emas.",
+      "emptyAdvanced": "Hozircha kengaytirilgan taxminlar sozlanmagan."
+    },
+    "interpretation": {
+      "title": "Talqin",
+      "description": "Model natijalarini qaror qabul qilish tiliga o'tkazing.",
+      "sections": {
+        "whatChanged": "Nima o'zgardi",
+        "whyItChanged": "Nima uchun o'zgardi",
+        "keyRisks": "Asosiy risklar",
+        "policyImplications": "Siyosiy xulosalar",
+        "suggestedNextScenarios": "Keyingi tavsiya etilgan stsenariylar"
+      },
+      "aiAttribution": {
+        "assisted": {
+          "title": "AI-assisted · Ko'rib chiqilmagan qoralama",
+          "body": "AI-assisted qoralama. Model chiqishi asosida yaratilgan, CERR tahlil xodimlari tomonidan hali ko'rib chiqilmagan. Iqtibos qilmang, eksport qilmang va tashqariga ulashmang."
+        },
+        "reviewed": {
+          "title": "AI-assisted · Ko'rib chiqilgan {{reviewed_at}}",
+          "body": "AI-assisted matn, {{reviewer_name}} tomonidan {{review_date}} kuni ko'rib chiqilgan. Ichki foydalanish va iqtibos uchun tasdiqlangan."
+        }
       }
     },
     "saved": {

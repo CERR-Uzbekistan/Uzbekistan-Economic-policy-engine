@@ -2,6 +2,7 @@ import type {
   ChartSpec,
   HeadlineMetric,
   ModelAttribution,
+  NarrativeGenerationMode,
   ScenarioLabAssumptionState,
   ScenarioLabInterpretation,
   ScenarioLabPreset,
@@ -49,6 +50,18 @@ const PRESETS: ScenarioLabPreset[] = [
       tax_revenue_change: 1.2,
     },
   },
+  {
+    preset_id: 'exchange-rate-shock',
+    title: 'Exchange-rate shock',
+    summary: 'Sharper depreciation stress to test inflation and external-balance sensitivity.',
+    assumption_overrides: {
+      exchange_rate_change: 10,
+      pass_through_adjustment: 0.2,
+    },
+  },
+  // TA-5 mock: 'assisted' mode seeded here for visual verification
+  // of the TB-P3 attribution block. Real AI output will replace
+  // this in TA-9.
   {
     preset_id: 'inflation-persistence',
     title: 'Inflation persistence',
@@ -414,6 +427,17 @@ function buildChartSeries(
 }
 
 function buildInterpretation(values: ScenarioLabAssumptionState): ScenarioLabInterpretation {
+  const interpretation = buildInterpretationCore(values)
+  return interpretation
+}
+
+type InterpretationWithGenerationMode = ScenarioLabInterpretation & {
+  generation_mode?: NarrativeGenerationMode
+  reviewer_name?: string
+  reviewed_at?: string
+}
+
+function buildInterpretationCore(values: ScenarioLabAssumptionState): InterpretationWithGenerationMode {
   const core = getMetricCore(values)
   const majorDrivers = Object.entries(values)
     .filter(([, value]) => Math.abs(value) > 0.01)
@@ -449,14 +473,23 @@ function buildInterpretation(values: ScenarioLabAssumptionState): ScenarioLabInt
       'Inflation persistence with stronger policy-rate response.',
       'Exchange-rate shock with remittance downside stress.',
     ],
+    generation_mode: 'template',
   }
 }
 
-export function buildScenarioLabResults(values: ScenarioLabAssumptionState): ScenarioLabResultsBundle {
+function resolveInterpretationGenerationMode(presetId: string | undefined): NarrativeGenerationMode {
+  return presetId === 'inflation-persistence' ? 'assisted' : 'template'
+}
+
+export function buildScenarioLabResults(
+  values: ScenarioLabAssumptionState,
+  options?: { selectedPresetId?: string },
+): ScenarioLabResultsBundle {
   const baselineCore = getMetricCore(getDefaultAssumptionState())
   const scenarioCore = getMetricCore(values)
   const headlineMetrics = buildHeadlineMetrics(values)
-  const interpretation = buildInterpretation(values)
+  const interpretation = buildInterpretation(values) as InterpretationWithGenerationMode
+  interpretation.generation_mode = resolveInterpretationGenerationMode(options?.selectedPresetId)
 
   return {
     headline_metrics: headlineMetrics,
