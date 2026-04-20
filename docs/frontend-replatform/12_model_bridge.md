@@ -1,57 +1,201 @@
-﻿# 12 — Model Bridge Decision
+# 12 — Model Bridge Decision
 
-**Status:** DRAFT
-**Owner:** Nozimjon Ortiqov + engineering lead TBD
-**Deadline:** Before TA-3 begins (end of Week 1)
+**Status:** ADOPTED 2026-04-20 — Option B
+**Owner (engineering + modelling):** Nozimjon Ortiqov
+**Target:** bridge-live by **2026-05-22** (QPM + DFM subset by 2026-05-08)
+**Target:** bridge-live by **2026-05-08** (end of Sprint 2)
 
 *Note: Numbered 12 rather than 11 to avoid collision with `11_phase0_readiness.md`.*
 
+---
+
 ## The decision
 
-How will `apps/policy-ui` consume real model output from the R scripts?
+How will `apps/policy-ui` consume real model output from the R scripts that today power the legacy static site (`qpm_uzbekistan/index.html`, `dfm_nowcast/index.html`, `io_model/index.html`, `pe_model/index.html`, `cge_model/index.html`, `fpp_model/index.html`)?
 
-## Options
+Three options are on the table. The [`live-client.ts`](../../apps/policy-ui/src/data/overview/live-client.ts) files already assume an HTTP contract (`/api/overview`, `/api/scenario-lab/run`, etc.); that assumption is an artefact of the adapter layer, not a commitment. Any of the three options below can be satisfied by pointing those clients at a static JSON asset, a real backend, or replacing them with an in-process TypeScript computation.
 
-### Option A — Thin backend (FastAPI / plumber / Express)
+---
 
-A small server that wraps R and exposes HTTP endpoints matching the `live-client.ts` assumptions (`/api/overview`, `/api/scenario-lab`, etc.).
+## Option A — Thin backend (FastAPI / plumber / Express)
 
-**Pros:** on-demand scenario runs, matches existing code assumption, supports future auth.
-**Cons:** adds a persistent backend to run and deploy.
+A small server wraps the R scripts and serves HTTP endpoints matching the `live-client.ts` URLs. On-demand scenario runs trigger `Rscript` or `plumber` calls behind the endpoint.
 
-### Option B — Nightly R-to-JSON static regeneration (RECOMMENDED)
+### Architecture sketch
 
-Extend the existing `shared/` registry approach. R scripts run nightly via GitHub Actions, emit JSON to static files, consumed by the existing data-contract adapter layer.
+```
+User ──► React (policy-ui) ──► HTTPS ──► API server (FastAPI/plumber)
+                                            │
+                                            ├─► Rscript qpm_irf.R  (warm pool)
+                                            ├─► Rscript dfm_kalman.R
+                                            └─► shared/registry + cache
+Output: JSON matching data-contract, ModelAttribution.data_version
+         stamped by backend from git SHA + last-R-run timestamp.
+```
 
-**Pros:** no backend, keeps deployment static, extends current pattern naturally.
-**Cons:** no on-demand parameter changes — scenario runs pre-computed or client-side approximated.
+### Effort estimate (first real scenario loads)
 
-### Option C — Client-side TypeScript model ports
+**10–14 engineer-days.** Breakdown: 2d stand up FastAPI skeleton with one endpoint (`/api/overview`); 3d wire `Rscript` subprocess with warm pool + timeout; 2d port `ModelAttribution` stamping; 2d auth/CORS/reverse-proxy for GitHub Pages; 2d deployment (Fly.io or Render free tier); 1–3d for stabilisation.
 
-Port core model math (IRF for QPM, Kalman for DFM) to TypeScript. R stays for calibration and batch work.
+### Operational cost
 
-**Pros:** instant scenario runs, zero backend.
-**Cons:** large TS port for QPM and CGE, code duplication risk, numerical precision questions.
+One always-on container (≈256 MB RAM idle, 1 GB under QPM run), HTTPS certificate renewal, a log pipeline, and a person on call if R crashes. Owner would be engineering lead plus whoever holds the Fly.io/Render account. Not free: realistically $5–20/month on a small plan, more if R cold-starts are unacceptable and we pin memory.
+
+### Failure modes (first six months)
+
+1. **R process leaks memory** across requests — needs a subprocess-per-request strategy or scheduled restart; if missed, service OOMs silently on Fridays.
+2. **Auth/CORS drift** — GitHub Pages origin is static, backend origin is dynamic; one mis-set header and the whole UI shows spinners with no console hint users can action.
+3. **R dependency rot** — `forecast`/`vars` package updates break `qpm_irf.R` at 3am; without a pinned Docker image, the first sign is a 500 in production.
+
+### Upgrade path
+
+Option B (static JSON) can be **added on top** of Option A with no rework — the backend just writes the same JSON artefact to a CDN bucket on a cron, and the frontend falls back to static when the backend is down. Option C (client-side TS ports) is independent of Option A and can be introduced later per-model for latency-sensitive surfaces.
+
+---
+
+## Option B — Nightly R-to-JSON static regeneration (RECOMMENDED)
+
+Extend the pattern already in the repo: [`dfm_nowcast/dfm_data.js`](../../dfm_nowcast/dfm_data.js) starts with `// Auto-generated by export_dfm_for_web.R` and ships 90 KB of factor loadings, matrices, and metadata. Do the same for QPM, CGE, FPP, IO, PE — nightly via GitHub Actions — and point the `live-client.ts` calls at those static JSONs.
+
+### Architecture sketch
+
+```
+GitHub Actions (nightly cron, runs-on ubuntu + r-lib/setup-r)
+   │
+   ├─► Rscript scripts/export_qpm.R   ──► apps/policy-ui/public/data/qpm.json
+   ├─► Rscript scripts/export_dfm.R   ──► .../dfm.json
+   ├─► Rscript scripts/export_overview.R ──► .../overview.json
+   │   (each JSON includes data_version = git SHA + UTC timestamp)
+   └─► git commit + push to epic/frontend-replatform
+          │
+          └─► pages.yml (existing) rebuilds and deploys to GitHub Pages
+React ──► fetch('/policy-ui/data/overview.json') (via live-client.ts)
+```
+
+### Effort estimate (first real scenario loads)
+
+**4–6 engineer-days.** Breakdown: 1d carve out `scripts/export_*.R` from existing model HTML inline scripts; 1d add `data_version` stamping and JSON schema sanity checks; 1d new GitHub Actions workflow (`data-regen.yml`) with nightly cron + `workflow_dispatch`; 1d switch `live-client.ts` default URL from `/api/overview` to `/policy-ui/data/overview.json` via env var; 1–2d for validation against the data-contract and reconciliation with existing `dfm_data.js`.
+
+### Operational cost
+
+**Near zero.** GitHub Actions minutes (estimate: ~4 min/night = ~120 min/month, inside the free tier). No server, no auth, no uptime to monitor. Owner is whoever merges to the epic branch — CI enforces freshness via `validate.yml`. Staleness is visible to users through the `data_version` badge (TA-3 requirement).
+
+### Failure modes (first six months)
+
+1. **Nightly job silently fails** (R package update, API rate limit on data source) and the JSON goes stale — users see yesterday-data forever. Mitigation: alert on `data_version` older than N days at the React layer (TA-3 already surfaces `data_version`, so this is a toast, not a new system).
+2. **JSON payload grows** past a comfortable download size (QPM full IRF grid across policy-rate × horizon × variable can easily hit several MB). Mitigation: ship one JSON per surface (overview, scenario-lab presets, comparison) rather than one giant bundle; lazy-load on route.
+3. **Scenario Lab users want parameters we didn't pre-compute** — e.g. a tariff of 17.5% when we shipped 5/10/15/20. This is the **defining limitation** of Option B and the most likely trigger to escalate to Option A.
+
+### Upgrade path
+
+**Strong.** The data-contract (`docs/frontend-replatform/02_data_contract.md`) is transport-agnostic. Moving from Option B to Option A later is a URL swap in env vars — static JSON becomes a fallback, the backend becomes the primary. `shared/synth-engines.js` stays useful as the interpolation layer between the discrete scenario grid shipped in JSON and whatever slider value the user picks in Scenario Lab; under Option A it is retired.
+
+---
+
+## Option C — Client-side TypeScript model ports
+
+Port the core numerical routines — QPM impulse response solver, DFM Kalman filter, IO Leontief inversion, CGE Armington welfare math — into TypeScript. R continues to own calibration, estimation, and batch validation; runtime math runs in the browser.
+
+### Architecture sketch
+
+```
+R (offline)  ──► estimated parameters (small JSON, ~kB) ──► git
+                                                             │
+Build time: Vite bundles parameters + TS solver ─────────────┘
+                           │
+User ──► React ──► ts-solver.runIRF(params, shock) ──► chart
+data_version: compile-time constant baked in by Vite at build.
+```
+
+### Effort estimate (first real scenario loads)
+
+**18–30 engineer-days, wide variance.** QPM IRF solver alone is 4–6d if done carefully (the existing `solveIRF()` in `qpm_uzbekistan/index.html` is reusable as a starting point — but the [ROADMAP Phase 1B](../../ROADMAP.md#phase-1b-model-methodology-improvements-april-2026-audit) calls out a pending reconciliation between `runBL()` and `solveIRF()`; porting before that reconciliation locks the bug into two codebases). DFM Kalman filter is another 4–6d plus numerical-stability work. CGE and FPP are 3–5d each. IO and PE are small. [`shared/synth-engines.js`](../../shared/synth-engines.js) is the prototype; it is *not* a real solver — it applies scalar coefficients to ramp curves.
+
+### Operational cost
+
+Zero runtime cost. High ongoing cost: every parameter change in R must be mirrored in TS, and every Phase 1B methodology fix (QPM `a4·Δpm`, IO Type II multipliers, sector-specific PE elasticities) has to be implemented twice. This is a tax on the modelling team, who are not TypeScript engineers.
+
+### Failure modes (first six months)
+
+1. **TS and R drift numerically** — floating-point order-of-operations differences, library choice (no native `solve()`, no `Matrix` package), and the published chart no longer matches the R chart it claims to replicate. Stakeholders notice.
+2. **Phase 1B methodology fixes land in R but not TS** because the modeller doesn't own the TS file — the web app silently serves the old model. `data_version` is a compile-time constant and doesn't catch this.
+3. **Numerical-stability bug in the ported Kalman filter** produces plausible-looking but wrong nowcasts for a quarter before anyone notices (DFM is the model most sensitive to this, since it's the only one whose output is itself a forecast users might cite).
+
+### Upgrade path
+
+**Weak.** Once the TS port exists, two codebases must be maintained until one is retired. Moving to Option A means throwing away the TS work; moving to Option B means throwing away the TS work *and* accepting pre-computed scenarios. Option C is the hardest to reverse.
+
+---
 
 ## Recommendation
 
-**Option B** for the internal-demo phase. Lowest risk, fastest to ship, keeps existing deployment model.
+**Option B.** Nightly R-to-JSON via GitHub Actions, consumed through the existing data-contract adapter.
 
-Option A or C can come later when on-demand runs become a real requirement.
+Over Option A: Option B needs no persistent server, no auth surface, no uptime responsibility, and no per-request R process management. The failure mode is loud — a stale `data_version` badge is visible in the UI — rather than the silent 500 or memory leak that Option A ships with. GitHub Actions is already the delivery mechanism for the site ([`pages.yml`](../../.github/workflows/pages.yml), [`validate.yml`](../../.github/workflows/validate.yml)); adding one more workflow is a pattern extension, not a new operational capability.
 
-## Decision
+Over Option C: Option B keeps a single source of truth in R. Every Phase 1B methodology improvement (QPM `a4·Δpm` pass-through, IO Type II multipliers, PE sector-specific elasticities) lands once and propagates to the web on the next nightly run. Option C would force every modelling fix to be implemented twice and risks numerical drift that users cannot see but can cite.
 
-**Chosen option:** [TBD — decision meeting 2026-04-23]
+Option B also has the strongest upgrade path: moving to A later is an env-var swap plus a backend stand-up, with the static JSON naturally becoming a fallback. Option C is the hardest to reverse and is the option we should only adopt if on-demand scenario math becomes a hard requirement that static JSON cannot approximate via `shared/synth-engines.js` interpolation.
 
-**Rationale:** [TBD]
+### Fallback trigger
 
-**Implementation owner:** [TBD]
+**If, during Sprint 2, a Scenario Lab user flow requires a continuous parameter sweep that static JSON cannot serve at acceptable size (> 5 MB per surface) or that `synth-engines.js` interpolation visibly misrepresents the underlying R model, escalate to Option A.** The concrete trigger to watch: Scenario Lab tariff/policy-rate sliders where users expect smooth response curves between the discrete values we pre-compute, and the interpolated curve diverges from an R spot-check by more than the tolerance set in TA-3's scenario store.
 
-**Estimated timeline to bridge-live:** [TBD]
+### Decision ownership
+
+- **Engineering lead (executes, owns delivery to 2026-05-08):** Nozimjon Ortiqov
+- **Product lead (signs off, owns the fallback trigger call):** CERR policy-engine product lead
+- **Modelling lead (owns `export_*.R` scripts):** to be named by 2026-04-23
+
+---
+
+## Relationship to TA-3 `data_version`
+
+TA-3's scenario store captures `data_version` from the last model run's `ModelAttribution.data_version`. The field's meaning — and what "correct" looks like — differs per option:
+
+| Option | Source of `data_version` | What "correct" means | Failure signature |
+|---|---|---|---|
+| A | Backend response; stamped at request time from git SHA + last-R-run timestamp | Newer than the calibration commit; monotonic across requests | Backend down → no `data_version` at all; client shows transport error |
+| **B (recommended)** | Baked into the static JSON at generation time by the nightly `export_*.R` run | Within N days of today (UI can warn if older); matches the git SHA of the workflow run that produced the JSON | Nightly job failed → `data_version` frozen; TA-3 toast warns on age |
+| C | Compile-time constant baked in by Vite at build | Matches the TS port's commit SHA, **not** the R calibration SHA | Parameters changed in R but TS wasn't rebuilt → `data_version` looks fresh but model is stale (silent) |
+
+Under the recommended Option B, TA-3 should:
+
+1. Treat `data_version` as an ISO-8601 timestamp plus a git SHA, both emitted by `export_*.R`.
+2. Surface a user-visible warning if `data_version` is older than 7 days (this is the loud failure mode that makes Option B safe).
+3. Persist the `data_version` into saved scenarios so that reopening a scenario shows which nightly artefact it was built against.
+
+---
 
 ## Relationship to `shared/synth-engines.js`
 
-The existing `shared/synth-engines.js` is already experimenting with client-side synthesis. Decision on whether this work continues under Option B or C, or is retired under Option A, is part of the above decision.
+[`shared/synth-engines.js`](../../shared/synth-engines.js) is currently a client-side interpolator that applies scalar coefficients (`horizon_ramp`, `armington_sigma_q`, `exchange_rate_pass_through`) to produce approximate shock responses. It is not a real solver.
+
+Under **Option B**, it has a real job: bridging the discrete scenario grid shipped in JSON to the continuous sliders in Scenario Lab. When a user picks a tariff of 17.5% and we shipped 15% and 20%, `synth-engines.js` interpolates. The contract becomes: *static JSON is authoritative at grid points; `synth-engines.js` is an explicit, labelled interpolation between them.* The UI should mark interpolated values visually (TA-3 scope) so users don't mistake them for R output.
+
+Under Option A, `synth-engines.js` is retired — the backend computes the exact value.
+Under Option C, `synth-engines.js` is replaced by the TS port.
 
 ---
-*Draft committed 2026-04-19. To be finalized with engineering and modeling leads by end of Week 1.*
+
+## Decision
+
+**Chosen option:** **Option B** — Nightly R-to-JSON static regeneration via GitHub Actions.
+
+**Rationale:** Option B as described in §Recommendation. The repo already has the `dfm_nowcast/dfm_data.js` pattern as a proof of concept; extending it to the other five models is a natural pattern extension rather than new operational capability. Option A's always-on backend and Option C's client-side TS ports both introduce ongoing maintenance cost that does not fit current capacity (solo engineering + modelling). Option B fails loudly via stale `data_version` surfaced in TA-3's scenario store, which is the right failure mode for this project stage.
+
+**Implementation owner:** Nozimjon Ortiqov (engineering + modelling — same person through this phase).
+
+**Modelling lead commitment:** `export_*.R` scripts for all six models authored by the same owner, ordered by priority: QPM + DFM first (Sprint 2 Week 3), then PE + I-O + CGE + FPP (Sprint 2 Week 4 or Sprint 3 Week 5).
+
+**Estimated timeline to bridge-live:**
+- **2026-05-08** — QPM + DFM live via `export_*.R` (nightly cron); overview and scenario-lab surfaces consume real data.
+- **2026-05-22** — remaining four models ported; all surfaces consume real data.
+
+**Fallback trigger:** unchanged from §Recommendation above. If during Sprint 2 a Scenario Lab flow requires continuous parameter sweep that static JSON cannot serve at acceptable size or that `synth-engines.js` interpolation visibly misrepresents the underlying R model, escalate to Option A and re-plan.
+
+**Adopted:** 2026-04-20 (ahead of the 2026-04-23 target date; decision meeting not required since engineering and modelling responsibilities are held by the same person this phase).
+
+---
+
+*Draft v1 committed 2026-04-19. Expanded to v2 (meeting-ready) 2026-04-20 with implementation detail, effort estimates, failure modes, upgrade paths, fallback trigger, and TA-3 `data_version` crosswalk. To be finalised with engineering and modelling leads on 2026-04-23.*
