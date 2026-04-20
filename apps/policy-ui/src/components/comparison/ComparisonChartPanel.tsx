@@ -68,15 +68,25 @@ function formatSigned(value: number): string {
   return `${sign}${value.toFixed(1)}`
 }
 
+function isPercentComparableMetric(metric: ComparisonMetricDefinition): boolean {
+  return metric.unit.includes('%')
+}
+
 function buildTakeaway(
   selectedScenarios: ComparisonScenario[],
   baseline: ComparisonScenario,
   metricDefinitions: ComparisonMetricDefinition[],
   viewMode: ComparisonViewMode,
+  excludedMetricLabels: string[],
 ): string {
+  const exclusionNote =
+    excludedMetricLabels.length > 0
+      ? ` ${excludedMetricLabels.join(', ')} excluded from chart due to non-comparable units; see table for levels.`
+      : ''
+
   if (viewMode === 'risk') {
     const lowestRisk = [...selectedScenarios].sort((a, b) => a.risk_index - b.risk_index)[0]
-    return `${lowestRisk.scenario_name} has the lowest composite risk index (${lowestRisk.risk_index.toFixed(0)}).`
+    return `${lowestRisk.scenario_name} has the lowest composite risk index (${lowestRisk.risk_index.toFixed(0)}).${exclusionNote}`
   }
 
   const scoredScenarios = selectedScenarios.map((scenario) => {
@@ -106,14 +116,14 @@ function buildTakeaway(
     .sort((a, b) => b.score - a.score)
 
   if (ranked.length === 0) {
-    return 'The selected scenarios have limited overlap across chart metrics.'
+    return `The selected scenarios have limited overlap across chart metrics.${exclusionNote}`
   }
 
   const leader = ranked[0]
   if (viewMode === 'delta') {
-    return `${leader.scenario.scenario_name} leads on average delta (${formatSigned(leader.score)}).`
+    return `${leader.scenario.scenario_name} leads on average delta (${formatSigned(leader.score)}).${exclusionNote}`
   }
-  return `${leader.scenario.scenario_name} shows the strongest average level across plotted metrics (${leader.score.toFixed(1)}).`
+  return `${leader.scenario.scenario_name} shows the strongest average level across plotted metrics (${leader.score.toFixed(1)}).${exclusionNote}`
 }
 
 function buildComparisonSpec(
@@ -127,7 +137,20 @@ function buildComparisonSpec(
     return null
   }
 
-  const metrics = metricDefinitions.slice(0, 5)
+  const filteredMetrics =
+    viewMode === 'risk'
+      ? metricDefinitions
+      : metricDefinitions.filter(isPercentComparableMetric)
+  const metrics = filteredMetrics.slice(0, 5)
+  const excludedMetricLabels =
+    viewMode === 'risk'
+      ? []
+      : metricDefinitions
+          .filter((metric) => !isPercentComparableMetric(metric))
+          .map((metric) => metric.label)
+  if (viewMode !== 'risk' && metrics.length === 0) {
+    return null
+  }
   const xValues =
     viewMode === 'risk'
       ? ['Macro risk index']
@@ -186,7 +209,7 @@ function buildComparisonSpec(
     series,
     view_mode: viewMode,
     uncertainty: [],
-    takeaway: buildTakeaway(selectedScenarios, baseline, metrics, viewMode),
+    takeaway: buildTakeaway(selectedScenarios, baseline, metrics, viewMode, excludedMetricLabels),
     model_attribution: [COMPARISON_ATTRIBUTION],
   }
 }

@@ -36,12 +36,7 @@ export function NowcastForecastBlock({ chart }: NowcastForecastBlockProps) {
   const summary = getLatestSummary(chart)
 
   return (
-    <section className="overview-panel overview-panel--primary" aria-labelledby="overview-nowcast-title">
-      <div className="overview-section-head page-section-head">
-        <h2 id="overview-nowcast-title">{chart.title}</h2>
-        <p>{chart.subtitle}</p>
-      </div>
-
+    <section className="overview-panel overview-panel--primary" aria-label="Nowcast and forecast">
       {summary ? (
         <div className="overview-nowcast-summary">
           <div>

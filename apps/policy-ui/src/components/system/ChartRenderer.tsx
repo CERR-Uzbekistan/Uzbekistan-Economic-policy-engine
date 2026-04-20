@@ -11,9 +11,10 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  Cell,
+  ComposedChart,
   Legend,
   Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -37,7 +38,7 @@ type SeriesMeta = {
 type BandMeta = {
   band: UncertaintyBand
   lowerKey: string
-  rangeKey: string
+  upperKey: string
   name: string
   patternId: string
 }
@@ -107,7 +108,7 @@ function toBandMeta(spec: ChartSpec): BandMeta[] {
   return spec.uncertainty.map((band) => ({
     band,
     lowerKey: `band__${band.series_id}__lower`,
-    rangeKey: `band__${band.series_id}__range`,
+    upperKey: `band__${band.series_id}__upper`,
     name: band.is_illustrative
       ? `(illustrative) ${band.confidence_level}% ${band.methodology_label}`
       : `${band.confidence_level}% ${band.methodology_label}`,
@@ -142,11 +143,30 @@ function buildChartData(spec: ChartSpec, seriesMeta: SeriesMeta[], bandMeta: Ban
         continue
       }
       row[item.lowerKey] = lower
-      row[item.rangeKey] = upper - lower
+      row[item.upperKey] = upper
     }
 
     return row
   })
+}
+
+function toYAxisDomain(spec: ChartSpec): ['auto', 'auto'] | [number, number] {
+  const seriesValues = spec.series.flatMap((series) => series.values.filter(isFiniteNumber))
+  const uncertaintyBounds = spec.uncertainty.flatMap((band) => [
+    ...band.lower.filter(isFiniteNumber),
+    ...band.upper.filter(isFiniteNumber),
+  ])
+  const values = [...seriesValues, ...uncertaintyBounds]
+
+  if (values.length === 0) {
+    return ['auto', 'auto']
+  }
+
+  const minValue = Math.min(...values)
+  const maxValue = Math.max(...values)
+  const range = maxValue - minValue
+  const padding = Math.max(range * 0.15, 0.5)
+  return [minValue - padding, maxValue + padding]
 }
 
 function getFreshness(spec: ChartSpec): string | null {
@@ -194,6 +214,7 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
   const bandMeta = toBandMeta(spec)
   const data = buildChartData(spec, seriesMeta, bandMeta)
   const yUnit = spec.y.unit
+  const yDomain = toYAxisDomain(spec)
   const screenReaderSummary = buildScreenReaderSummary(spec)
   const hasIllustrativeBand = bandMeta.some((item) => item.band.is_illustrative)
 
@@ -212,6 +233,7 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
       />
       <YAxis
         axisLine={false}
+        domain={yDomain}
         tick={Y_AXIS_TICK_STYLE}
         tickFormatter={(value) => {
           if (!isFiniteNumber(value)) {
@@ -248,56 +270,57 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
         verticalAlign="bottom"
         wrapperStyle={{ paddingTop: 10 }}
       />
-      {bandMeta.map((item) => (
-        <Area
-          key={`${item.band.series_id}-lower`}
-          dataKey={item.lowerKey}
-          hide
-          isAnimationActive={false}
-          stackId={item.band.series_id}
-          stroke="none"
-        />
-      ))}
-      {bandMeta.map((item) => (
-        <Area
-          key={`${item.band.series_id}-range`}
-          dataKey={item.rangeKey}
-          fill={item.band.is_illustrative ? `url(#${item.patternId})` : 'var(--color-uncertainty)'}
-          fillOpacity={item.band.is_illustrative ? 1 : 0.35}
-          isAnimationActive={false}
-          name={item.name}
-          stackId={item.band.series_id}
-          stroke="var(--color-border-strong)"
-          strokeDasharray={item.band.is_illustrative ? '5 3' : undefined}
-          strokeWidth={1}
-          type="monotone"
-        />
-      ))}
     </>
   )
 
+  const uncertaintyPatterns = hasIllustrativeBand ? (
+    <defs>
+      {bandMeta
+        .filter((item) => item.band.is_illustrative)
+        .map((item) => (
+          <pattern
+            id={item.patternId}
+            key={item.patternId}
+            width={8}
+            height={8}
+            patternUnits="userSpaceOnUse"
+            patternTransform="rotate(35)"
+          >
+            <rect width={8} height={8} fill="rgba(77, 93, 116, 0.14)" />
+            <line x1={0} y1={0} x2={0} y2={8} stroke="rgba(77, 93, 116, 0.55)" strokeWidth={2} />
+          </pattern>
+        ))}
+    </defs>
+  ) : null
+
+  const uncertaintyBands = bandMeta.map((item) => (
+    <Area
+      key={`${item.band.series_id}-band`}
+      dataKey={(datum: ChartDatum) => {
+        const lower = datum[item.lowerKey]
+        const upper = datum[item.upperKey]
+        if (!isFiniteNumber(lower) || !isFiniteNumber(upper) || upper < lower) {
+          return null
+        }
+        return [lower, upper]
+      }}
+      fill={item.band.is_illustrative ? `url(#${item.patternId})` : 'var(--color-uncertainty)'}
+      fillOpacity={item.band.is_illustrative ? 1 : 0.3}
+      isAnimationActive={false}
+      legendType="rect"
+      name={item.name}
+      stroke="var(--color-border-strong)"
+      strokeDasharray={item.band.is_illustrative ? '5 3' : undefined}
+      strokeWidth={1}
+      type="monotone"
+    />
+  ))
+
   const lineChartBody = (
-    <LineChart data={data} margin={{ top: 8, right: 8, bottom: 6, left: 6 }}>
-      {hasIllustrativeBand ? (
-        <defs>
-          {bandMeta
-            .filter((item) => item.band.is_illustrative)
-            .map((item) => (
-              <pattern
-                id={item.patternId}
-                key={item.patternId}
-                width={8}
-                height={8}
-                patternUnits="userSpaceOnUse"
-                patternTransform="rotate(35)"
-              >
-                <rect width={8} height={8} fill="rgba(77, 93, 116, 0.14)" />
-                <line x1={0} y1={0} x2={0} y2={8} stroke="rgba(77, 93, 116, 0.55)" strokeWidth={2} />
-              </pattern>
-            ))}
-        </defs>
-      ) : null}
+    <ComposedChart data={data} margin={{ top: 8, right: 8, bottom: 6, left: 6 }}>
+      {uncertaintyPatterns}
       {commonChartChildren}
+      {uncertaintyBands}
       {seriesMeta.map((item) => (
         <Line
           key={item.series.series_id}
@@ -310,43 +333,41 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
           type="monotone"
         />
       ))}
-    </LineChart>
+    </ComposedChart>
   )
 
-  const barChartBody = (
-    <BarChart data={data} margin={{ top: 8, right: 8, bottom: 6, left: 6 }}>
-      {hasIllustrativeBand ? (
-        <defs>
-          {bandMeta
-            .filter((item) => item.band.is_illustrative)
-            .map((item) => (
-              <pattern
-                id={item.patternId}
-                key={item.patternId}
-                width={8}
-                height={8}
-                patternUnits="userSpaceOnUse"
-                patternTransform="rotate(35)"
-              >
-                <rect width={8} height={8} fill="rgba(77, 93, 116, 0.14)" />
-                <line x1={0} y1={0} x2={0} y2={8} stroke="rgba(77, 93, 116, 0.55)" strokeWidth={2} />
-              </pattern>
-            ))}
-        </defs>
-      ) : null}
-      {commonChartChildren}
-      {seriesMeta.map((item) => (
-        <Bar
-          key={item.series.series_id}
-          dataKey={item.key}
+  const barSeries = seriesMeta.map((item) => (
+    <Bar
+      key={item.series.series_id}
+      dataKey={item.key}
+      fill={item.color}
+      isAnimationActive={false}
+      name={item.series.label}
+      radius={[3, 3, 0, 0]}
+    >
+      {data.map((row, index) => (
+        <Cell
+          key={`${item.series.series_id}-${row[X_KEY]?.toString() ?? index}`}
           fill={item.color}
-          isAnimationActive={false}
-          name={item.series.label}
-          radius={[3, 3, 0, 0]}
         />
       ))}
-    </BarChart>
-  )
+    </Bar>
+  ))
+
+  const barChartBody =
+    bandMeta.length > 0 ? (
+      <ComposedChart data={data} margin={{ top: 8, right: 8, bottom: 6, left: 6 }}>
+        {uncertaintyPatterns}
+        {commonChartChildren}
+        {uncertaintyBands}
+        {barSeries}
+      </ComposedChart>
+    ) : (
+      <BarChart data={data} margin={{ top: 8, right: 8, bottom: 6, left: 6 }}>
+        {commonChartChildren}
+        {barSeries}
+      </BarChart>
+    )
 
   let chartBody: JSX.Element
   if (spec.chart_type === 'line') {
