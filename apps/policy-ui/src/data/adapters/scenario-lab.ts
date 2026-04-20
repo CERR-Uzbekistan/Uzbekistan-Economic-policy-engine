@@ -77,6 +77,9 @@ type RawScenarioLabInterpretation = {
   keyRisks?: string[]
   policyImplications?: string[]
   suggestedNextScenarios?: string[]
+  generationMode?: string
+  reviewerName?: string
+  reviewedAt?: string
 }
 
 export type RawScenarioLabRunPayload = {
@@ -278,6 +281,7 @@ function toWorkspace(raw: RawScenarioLabRunPayload['workspace'] | undefined): Sc
 export function toScenarioLabData(raw: RawScenarioLabRunPayload): ScenarioLabAdaptedData {
   const fallbackResults = buildScenarioLabResults(getDefaultAssumptionState())
   const generatedAt = toIsoOrFallback(raw.run?.generatedAt, new Date().toISOString())
+  const rawInterpretation = raw.run?.interpretation
 
   return {
     workspace: toWorkspace(raw.workspace),
@@ -297,7 +301,18 @@ export function toScenarioLabData(raw: RawScenarioLabRunPayload): ScenarioLabAda
         suggested_next_scenarios:
           raw.run?.interpretation?.suggestedNextScenarios ??
           fallbackResults.interpretation.suggested_next_scenarios,
-      },
+        ...(rawInterpretation?.generationMode === 'template' ||
+        rawInterpretation?.generationMode === 'assisted' ||
+        rawInterpretation?.generationMode === 'reviewed'
+          ? { generation_mode: rawInterpretation.generationMode }
+          : {}),
+        ...(typeof rawInterpretation?.reviewerName === 'string'
+          ? { reviewer_name: rawInterpretation.reviewerName }
+          : {}),
+        ...(typeof rawInterpretation?.reviewedAt === 'string'
+          ? { reviewed_at: rawInterpretation.reviewedAt }
+          : {}),
+      } as ScenarioLabResultsBundle['interpretation'],
     },
   }
 }

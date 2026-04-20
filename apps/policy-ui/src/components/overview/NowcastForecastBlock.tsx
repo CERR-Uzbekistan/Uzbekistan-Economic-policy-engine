@@ -1,4 +1,5 @@
 import type { ChartSpec } from '../../contracts/data-contract'
+import { ChartRenderer } from '../system/ChartRenderer'
 
 type NowcastForecastBlockProps = {
   chart: ChartSpec
@@ -35,12 +36,7 @@ export function NowcastForecastBlock({ chart }: NowcastForecastBlockProps) {
   const summary = getLatestSummary(chart)
 
   return (
-    <section className="overview-panel overview-panel--primary" aria-labelledby="overview-nowcast-title">
-      <div className="overview-section-head page-section-head">
-        <h2 id="overview-nowcast-title">{chart.title}</h2>
-        <p>{chart.subtitle}</p>
-      </div>
-
+    <section className="overview-panel overview-panel--primary" aria-label="Nowcast and forecast">
       {summary ? (
         <div className="overview-nowcast-summary">
           <div>
@@ -58,31 +54,36 @@ export function NowcastForecastBlock({ chart }: NowcastForecastBlockProps) {
         </div>
       ) : null}
 
-      <table className="overview-nowcast-series">
-        <caption>Estimate path (real GDP growth, %)</caption>
-        <thead>
-          <tr>
-            <th scope="col">Period</th>
-            <th scope="col">Latest</th>
-            <th scope="col">Prior</th>
-          </tr>
-        </thead>
-        <tbody>
-          {chart.x.values.map((period, index) => {
-            const latest = chart.series[0]?.values[index]
-            const prior = chart.series[1]?.values[index]
-            return (
-              <tr key={period.toString()}>
-                <th scope="row">{period}</th>
-                <td>{latest?.toFixed(1)}%</td>
-                <td>{prior?.toFixed(1)}%</td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
+      <ChartRenderer
+        spec={chart}
+        ariaLabel={`${chart.title}. ${chart.takeaway}`}
+      />
 
-      <p className="overview-panel-takeaway">{chart.takeaway}</p>
+      <div className="sr-only">
+        <table className="overview-nowcast-series">
+          <caption>Estimate path (real GDP growth, %)</caption>
+          <thead>
+            <tr>
+              <th scope="col">Period</th>
+              <th scope="col">Latest</th>
+              <th scope="col">Prior</th>
+            </tr>
+          </thead>
+          <tbody>
+            {chart.x.values.map((period, index) => {
+              const latest = chart.series[0]?.values[index]
+              const prior = chart.series[1]?.values[index]
+              return (
+                <tr key={period.toString()}>
+                  <th scope="row">{period}</th>
+                  <td>{latest?.toFixed(1)}%</td>
+                  <td>{prior?.toFixed(1)}%</td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
     </section>
   )
 }

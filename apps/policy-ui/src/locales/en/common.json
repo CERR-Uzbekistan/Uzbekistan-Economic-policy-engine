@@ -1,0 +1,256 @@
+{
+  "shell": {
+    "skipToMainContent": "Skip to main content",
+    "workspaceNavigationAria": "Workspace navigation",
+    "primaryNavigationAria": "Primary",
+    "workspaceLabel": "Workspace",
+    "brandEyebrow": "Uzbekistan Economic Policy Engine",
+    "brandTitle": "Policy Analysis Workspace"
+  },
+  "languageSwitcher": {
+    "label": "Language",
+    "ariaLabel": "Select interface language"
+  },
+  "nav": {
+    "overview": "Overview",
+    "scenarioLab": "Scenario Lab",
+    "comparison": "Comparison",
+    "modelExplorer": "Model Explorer",
+    "knowledgeHub": "Knowledge Hub"
+  },
+  "pages": {
+    "overview": {
+      "title": "Overview",
+      "description": "Decision-first macro snapshot designed to show what changed, why it matters, and where to test next."
+    },
+    "scenarioLab": {
+      "title": "Scenario Lab",
+      "description": "Build policy scenarios by adjusting assumptions, then review impacts and interpretation in one operational workspace."
+    },
+    "comparison": {
+      "title": "Comparison",
+      "description": "Compare baseline and alternative scenarios side by side to surface trade-offs and decision framing."
+    },
+    "modelExplorer": {
+      "title": "Model Explorer",
+      "description": "Basic model catalog and technical reference for assumptions, equations, caveats, and sources.",
+      "catalogTitle": "Model catalog",
+      "catalogHint": "Select one model to inspect technical assumptions and caveats.",
+      "emptyState": "No model metadata is available in this workspace.",
+      "detailTabsAria": "Model detail tabs",
+      "tabs": {
+        "assumptions": "Assumptions",
+        "equations": "Equations",
+        "caveats": "Caveats",
+        "dataSources": "Data sources"
+      },
+      "status": {
+        "active": "Active",
+        "staging": "Staging",
+        "paused": "Paused"
+      },
+      "severity": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "detail": {
+        "empty": {
+          "assumptions": "No assumptions are documented for this model.",
+          "equations": "No equations are documented for this model.",
+          "caveats": "No caveats are documented for this model.",
+          "dataSources": "No data sources are documented for this model."
+        },
+        "implicationPrefix": "Implication"
+      }
+    },
+    "knowledgeHub": {
+      "title": "Knowledge Hub",
+      "description": "Policy context and references scaffold (post-MVP expansion area).",
+      "placeholder": "Knowledge Hub v1 scaffold"
+    }
+  },
+  "overview": {
+    "common": {
+      "middleDot": "·"
+    },
+    "topbar": {
+      "freshness": "Data · {{days}}d ago"
+    },
+    "meta": {
+      "eyebrow": "Overview metadata",
+      "vintageLabel": "Vintage",
+      "modelsLabel": "Models",
+      "modelsLive": "{{count}} live",
+      "lastRefreshLabel": "Last refresh"
+    },
+    "header": {
+      "kicker": "Economic State",
+      "modelListFallback": "MODEL SET",
+      "draftedFrom": "State narrative · drafted from {{models}} baseline",
+      "updatedAt": "Updated {{date}}"
+    },
+    "kpi": {
+      "title": "Core indicators",
+      "description": "Current values and period-over-period change. Interpretation depends on the metric.",
+      "empty": "No headline indicators are available for this snapshot.",
+      "deltaSrLabel": "{{direction}} by {{delta}} versus prior period",
+      "noPrior": "No prior value",
+      "notAvailable": "n/a",
+      "freshness": "Updated {{date}}",
+      "direction": {
+        "up": "higher",
+        "down": "lower",
+        "flat": "unchanged"
+      }
+    },
+    "risks": {
+      "title": "Top Risks to Monitor",
+      "description": "Three near-term risks that most affect baseline interpretation.",
+      "empty": "No active risks are flagged for this snapshot.",
+      "hitsPrefix": "Hits · ",
+      "testAction": "Test →"
+    },
+    "quickActions": {
+      "title": "Quick actions",
+      "description": "Direct entry points from monitoring to scenario analysis.",
+      "empty": "No quick actions are configured for this snapshot.",
+      "kindAnalysis": "Analysis"
+    },
+    "feeds": {
+      "sectionAria": "Overview feed panels",
+      "reforms": {
+        "title": "Reforms",
+        "empty": "Content coming from Knowledge Hub."
+      },
+      "dataRefreshes": {
+        "title": "Data refreshes",
+        "empty": "No fresh model data available.",
+        "refreshSuffix": "refresh"
+      },
+      "savedScenarios": {
+        "title": "Your saved scenarios",
+        "empty": "Saved scenarios will appear here after you save a draft in Scenario Lab.",
+        "youShort": "YOU"
+      }
+    }
+  },
+  "buttons": {
+    "save": "Save",
+    "run": "Run",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "saveDraft": "Save draft",
+    "runScenario": "Run scenario",
+    "retryRun": "Retry run"
+  },
+  "scenarioLab": {
+    "header": {
+      "eyebrow": "Scenario construction",
+      "meta": {
+        "activeModelsLabel": "Active models",
+        "runLifecycleLabel": "Run lifecycle",
+        "dataVintageLabel": "Data vintage",
+        "runLifecycleStatus": {
+          "loading": "Running",
+          "ready": "Ready",
+          "error": "Retry needed"
+        }
+      }
+    },
+    "form": {
+      "preset": "Preset",
+      "scenarioName": "Scenario name",
+      "scenarioNamePlaceholder": "Scenario name",
+      "scenarioType": "Scenario type",
+      "description": "Description",
+      "descriptionPlaceholder": "Optional scenario description",
+      "tags": "Tags",
+      "scenarioTypeOptions": {
+        "baseline": "Baseline",
+        "alternative": "Alternative",
+        "stress": "Stress"
+      },
+      "tagOptions": {
+        "monetary": "Monetary",
+        "fiscal": "Fiscal",
+        "external": "External",
+        "trade": "Trade",
+        "inflation": "Inflation"
+      }
+    },
+    "assumptions": {
+      "title": "Assumptions",
+      "description": "Define policy and shock assumptions in plain language.",
+      "showTechnical": "Show technical variable names",
+      "technicalPrefix": "Technical: {{variable}}",
+      "categories": {
+        "macro": "Macro assumptions",
+        "external": "External assumptions",
+        "fiscal": "Fiscal assumptions",
+        "trade": "Trade assumptions",
+        "advanced": "Advanced assumptions"
+      },
+      "emptyCategory": "No assumptions available in this category.",
+      "emptyAdvanced": "No advanced assumptions are currently configured."
+    },
+    "interpretation": {
+      "title": "Interpretation",
+      "description": "Translate model outputs into decision language.",
+      "sections": {
+        "whatChanged": "What changed",
+        "whyItChanged": "Why it changed",
+        "keyRisks": "Key risks",
+        "policyImplications": "Policy implications",
+        "suggestedNextScenarios": "Suggested next scenarios"
+      },
+      "aiAttribution": {
+        "assisted": {
+          "title": "AI-assisted · Unreviewed draft",
+          "body": "AI-assisted draft. Generated by model output, not yet reviewed by CERR analytical staff. Do not cite, export, or share externally."
+        },
+        "reviewed": {
+          "title": "AI-assisted · Reviewed {{reviewed_at}}",
+          "body": "AI-assisted narrative, reviewed by {{reviewer_name}} on {{review_date}}. Cleared for internal use and citation."
+        }
+      }
+    },
+    "saved": {
+      "title": "Saved scenarios",
+      "empty": "No saved scenarios yet.",
+      "load": "Load",
+      "delete": "Delete",
+      "confirmDelete": "Delete saved scenario \"{{scenarioName}}\"?"
+    }
+  },
+  "states": {
+    "loading": {
+      "overview": "Loading latest overview snapshot...",
+      "comparison": "Loading comparison workspace...",
+      "modelExplorer": "Loading model metadata...",
+      "scenarioLabRun": "Running scenario with current assumptions..."
+    },
+    "error": {
+      "overviewUnavailable": "Overview data is currently unavailable.",
+      "comparisonUnavailable": "Comparison data is currently unavailable.",
+      "modelExplorerUnavailable": "Model metadata is currently unavailable.",
+      "scenarioRunFailed": "Scenario run failed. Please retry.",
+      "scenarioSaveFailed": "Could not save scenario to local storage.",
+      "savedScenarioLoadFailed": "Saved scenario could not be loaded.",
+      "savedScenarioDeleteFailed": "Saved scenario could not be deleted.",
+      "scenarioModelIdsUnavailable": "Scenario model attribution is unavailable. Run scenario before saving."
+    },
+    "stale": {
+      "scenarioResults": "Results reflect the previous run. Run scenario to update with current assumptions."
+    },
+    "empty": {
+      "scenarioRunToView": "Run a scenario to view results.",
+      "scenarioInterpretationAfterRun": "Interpretation appears after a successful scenario run."
+    },
+    "success": {
+      "savedToLocalSessionAt": "Saved to local session at {{timestamp}}.",
+      "savedScenarioLoaded": "Loaded \"{{scenarioName}}\" into Scenario Lab.",
+      "savedScenarioDeleted": "Deleted \"{{scenarioName}}\" from saved scenarios."
+    }
+  }
+}

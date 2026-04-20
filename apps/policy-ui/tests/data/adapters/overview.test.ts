@@ -36,7 +36,16 @@ describe('overview adapter', () => {
         points: [{ period: '2026 Q1', latest: 5.8, prior: 5.5 }],
         takeaway: 'Takeaway',
       },
-      risks: [{ id: 'risk-1', title: 'Risk', why: 'Why', channel: 'Channel', suggestedScenario: 'Scenario' }],
+      risks: [
+        {
+          id: 'risk-1',
+          title: 'Risk',
+          why: 'Why',
+          channel: 'Channel',
+          suggestedScenario: 'Scenario',
+          scenarioQuery: 'preset=external-slowdown',
+        },
+      ],
       actions: [{ id: 'action-1', title: 'Action', summary: 'Action summary', scenarioQuery: 'preset=test' }],
       output: { id: 'out-1', title: 'Output', summary: 'Output summary', targetHref: '/scenario-lab?preset=test' },
       caveats: [{ id: 'c-1', severity: 'warning', message: 'Caveat', affectedMetrics: ['gdp_growth'], affectedModels: ['qpm'] }],
@@ -50,6 +59,7 @@ describe('overview adapter', () => {
     assert.equal(snapshot.headline_metrics.length, 1)
     assert.ok(Math.abs((snapshot.headline_metrics[0].delta_abs ?? 0) - 0.3) < 1e-6)
     assert.equal(snapshot.headline_metrics[0].direction, 'up')
+    assert.equal(snapshot.top_risks[0].scenario_query, 'preset=external-slowdown')
     assert.equal(snapshot.nowcast_forecast.series[0].series_id, 'latest_estimate')
     assert.equal(snapshot.nowcast_forecast.series[1].series_id, 'prior_estimate')
   })

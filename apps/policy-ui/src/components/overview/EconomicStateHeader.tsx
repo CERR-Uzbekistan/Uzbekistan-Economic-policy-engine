@@ -1,12 +1,15 @@
 import { Link } from 'react-router-dom'
-import type { OverviewOutputAction } from '../../contracts/data-contract'
-import type { LanguageCode } from '../../state/language-context'
-import { useLanguage } from '../../state/useLanguage'
+import { useTranslation } from 'react-i18next'
+import type { OverviewOutputAction } from '../../contracts/data-contract.js'
+import type { LanguageCode } from '../../state/language-context.js'
+import { useLanguage } from '../../state/useLanguage.js'
 
 type EconomicStateHeaderProps = {
   summary: string
   updatedAt: string
+  modelIds: string[]
   outputAction: OverviewOutputAction
+  reviewerInfo?: { reviewerName: string; reviewedAt: string }
 }
 
 const LOCALE_BY_LANGUAGE: Record<LanguageCode, string> = {
@@ -26,22 +29,50 @@ function formatDateTime(value: string, locale: string) {
   }).format(date)
 }
 
-export function EconomicStateHeader({ summary, updatedAt, outputAction }: EconomicStateHeaderProps) {
+function toModelCode(modelId: string): string {
+  const normalized = modelId.trim()
+  if (!normalized) {
+    return ''
+  }
+  const compact = normalized.toUpperCase()
+  if (/^[A-Z0-9]{2,8}$/.test(compact)) {
+    return compact
+  }
+  const head = normalized.split(/[_-\s]+/).find(Boolean) ?? normalized
+  return head.replace(/[^a-zA-Z0-9]/g, '').toUpperCase()
+}
+
+export function EconomicStateHeader({
+  summary,
+  updatedAt,
+  modelIds,
+  outputAction,
+  reviewerInfo,
+}: EconomicStateHeaderProps) {
+  const { t } = useTranslation()
   const { language } = useLanguage()
   const locale = LOCALE_BY_LANGUAGE[language]
+  const renderedModelList = modelIds.map(toModelCode).filter(Boolean).join(' + ')
+  const modelList = renderedModelList.length > 0 ? renderedModelList : t('overview.header.modelListFallback')
+  const formattedUpdatedAt = formatDateTime(updatedAt, locale)
 
   return (
-    <section className="overview-state-header" aria-labelledby="overview-state-header-title">
+    <section className="state-header overview-state-header" aria-labelledby="overview-state-header-title">
       <p id="overview-state-header-title" className="overview-section-kicker">
-        Economic State
+        {t('overview.header.kicker')}
       </p>
-      <p className="overview-state-header__summary">{summary}</p>
-      <div className="overview-state-header__footer">
-        <p className="overview-state-header__meta">Updated {formatDateTime(updatedAt, locale)}</p>
+      <div className="state-header__body overview-state-header__body">
+        <p className="overview-state-header__summary">{summary}</p>
         <Link className="ui-secondary-action" to={outputAction.target_href}>
           {outputAction.title}
         </Link>
       </div>
+      <p className="state-header__meta overview-state-header__meta">
+        <span>{t('overview.header.draftedFrom', { models: modelList })}</span>
+        <span>{t('overview.header.updatedAt', { date: formattedUpdatedAt })}</span>
+      </p>
+      {/* TA-9 / TB-P3 gate: reviewerInfo is intentionally not rendered until governance adoption. */}
+      {reviewerInfo ? null : null}
     </section>
   )
 }

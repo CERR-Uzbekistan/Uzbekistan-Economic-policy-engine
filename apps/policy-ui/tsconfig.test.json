@@ -4,7 +4,8 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "esnext",
     "moduleResolution": "bundler",
-    "types": ["node"],
+    "types": ["node", "react"],
+    "jsx": "react-jsx",
     "skipLibCheck": true,
     "strict": true,
     "noEmit": false,
@@ -13,10 +14,21 @@
   },
   "include": [
     "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "src/vite-env.d.ts",
+    "src/components/layout/**/*.tsx",
+    "src/components/scenario-lab/**/*.ts",
+    "src/components/scenario-lab/**/*.tsx",
+    "src/components/system/**/*.tsx",
     "src/data/adapters/**/*.ts",
     "src/data/mock/**/*.ts",
     "src/data/overview/**/*.ts",
     "src/data/raw/**/*.ts",
-    "src/contracts/**/*.ts"
+    "src/data/scenario-lab/**/*.ts",
+    "src/data/source-state.ts",
+    "src/contracts/**/*.ts",
+    "src/pages/**/*.ts",
+    "src/pages/**/*.tsx",
+    "src/state/**/*.ts"
   ]
 }

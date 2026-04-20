@@ -18,6 +18,8 @@ const TAB_LABELS: Record<ScenarioLabResultTab, string> = {
   fiscal_effects: 'Fiscal effects',
 }
 
+const HEADLINE_METRIC_ORDER = ['gdp_growth', 'inflation', 'current_account', 'policy_rate'] as const
+
 function formatMetricValue(metric: HeadlineMetric) {
   if (metric.unit === 'UZS/USD') {
     return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(metric.value)
@@ -117,6 +119,13 @@ function ScenarioMainChart({ chart }: { chart: ChartSpec }) {
 
 export function ResultsPanel({ activeTab, onTabChange, results }: ResultsPanelProps) {
   const activeChart = results.charts_by_tab[activeTab]
+  const preferredHeadlineMetrics = HEADLINE_METRIC_ORDER.map((metricId) =>
+    results.headline_metrics.find((metric) => metric.metric_id === metricId),
+  ).filter((metric): metric is HeadlineMetric => Boolean(metric))
+  const headlineMetrics =
+    preferredHeadlineMetrics.length === HEADLINE_METRIC_ORDER.length
+      ? preferredHeadlineMetrics
+      : results.headline_metrics.slice(0, HEADLINE_METRIC_ORDER.length)
 
   return (
     <section className="scenario-panel scenario-panel--results" aria-labelledby="scenario-results-title">
@@ -146,18 +155,18 @@ export function ResultsPanel({ activeTab, onTabChange, results }: ResultsPanelPr
         })}
       </div>
 
-      <div className="scenario-headline-grid">
-        {results.headline_metrics.map((metric) => {
+      <div className="scenario-headline-grid hmetric-strip">
+        {headlineMetrics.map((metric) => {
           const deltaText = formatSignedDelta(metric.delta_abs, metric.unit)
           const glyph = DIRECTION_GLYPH[metric.direction]
           return (
-            <article key={metric.metric_id} className="scenario-headline-card">
-              <p className="scenario-headline-card__label">{metric.label}</p>
-              <p className="scenario-headline-card__value">
+            <article key={metric.metric_id} className="scenario-headline-card hmetric">
+              <p className="scenario-headline-card__label hmetric__label">{metric.label}</p>
+              <p className="scenario-headline-card__value hmetric__value">
                 {formatMetricValue(metric)} <span>{metric.unit}</span>
               </p>
               <span
-                className="scenario-headline-card__delta"
+                className="scenario-headline-card__delta hmetric__delta"
                 aria-label={`Change vs baseline: ${deltaText}`}
               >
                 <span aria-hidden="true">{glyph}</span>

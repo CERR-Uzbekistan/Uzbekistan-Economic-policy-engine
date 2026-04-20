@@ -181,6 +181,7 @@ export function validateRawOverviewPayload(input: unknown): OverviewValidationRe
       why: asString(risk.why),
       channel: asString(risk.channel),
       suggestedScenario: asString(risk.suggestedScenario),
+      scenarioQuery: asString(risk.scenarioQuery),
     })),
     actions: asObjectArray(input.actions, issues, 'actions', (action) => ({
       id: asString(action.id),

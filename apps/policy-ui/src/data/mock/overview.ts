@@ -10,6 +10,16 @@ const commonAttribution = {
   timestamp: '2026-04-17T09:00:00+05:00',
 }
 
+const nowcastAttribution = {
+  model_id: 'DFM',
+  model_name: 'Dynamic Factor Model',
+  module: 'nowcast',
+  version: '2.4.1',
+  run_id: 'dfm-run-2026-04-17-0730',
+  data_version: '2026Q1',
+  timestamp: '2026-04-17T07:30:00+05:00',
+}
+
 const headlineMetrics: HeadlineMetric[] = [
   {
     metric_id: 'gdp_growth',
@@ -127,38 +137,60 @@ const headlineMetrics: HeadlineMetric[] = [
 
 const nowcastChart: ChartSpec = {
   chart_id: 'gdp_nowcast_revision',
-  title: 'Nowcast revision (real GDP growth)',
-  subtitle: 'Latest estimate vs prior estimate',
+  title: 'Estimate path (real GDP growth, %)',
+  subtitle: 'Latest DFM estimate versus prior estimate with a 70% empirical uncertainty band',
   chart_type: 'line',
   x: {
     label: 'Period',
     unit: '',
-    values: ['2025 Q4', '2026 Q1', '2026 Q2'],
+    values: [
+      '2024 Q1',
+      '2024 Q2',
+      '2024 Q3',
+      '2024 Q4',
+      '2025 Q1',
+      '2025 Q2',
+      '2025 Q3',
+      '2025 Q4',
+      '2026 Q1',
+      '2026 Q2',
+      '2026 Q3',
+      '2026 Q4',
+    ],
   },
   y: {
     label: 'Growth',
     unit: '%',
-    values: [5.2, 5.8, 5.9],
+    values: [5.0, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9, 6.0, 6.1, 6.2],
   },
   series: [
     {
       series_id: 'latest_estimate',
       label: 'Latest estimate',
       semantic_role: 'baseline',
-      values: [5.2, 5.8, 5.9],
+      values: [5.0, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9, 6.0, 6.1, 6.2],
     },
     {
       series_id: 'prior_estimate',
       label: 'Prior estimate',
       semantic_role: 'alternative',
-      values: [5.1, 5.5, 5.7],
+      values: [4.9, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.6, 5.7, 5.8, 5.9, 6.0],
     },
   ],
   view_mode: 'level',
-  uncertainty: [],
+  uncertainty: [
+    {
+      series_id: 'latest_estimate',
+      lower: [4.8, 5.0, 5.1, 5.15, 5.25, 5.35, 5.45, 5.55, 5.65, 5.75, 5.85, 5.95],
+      upper: [5.2, 5.4, 5.5, 5.65, 5.75, 5.85, 5.95, 6.05, 6.15, 6.25, 6.35, 6.45],
+      confidence_level: 70,
+      methodology_label: 'DFM empirical interval',
+      is_illustrative: false,
+    },
+  ],
   takeaway:
-    'The Q1 estimate was revised up by 0.3 pp, mainly reflecting stronger service activity and import compression.',
-  model_attribution: [commonAttribution],
+    'Growth remains near 5.9% in early 2026 with a mild upward revision versus the prior estimate.',
+  model_attribution: [nowcastAttribution],
 }
 
 export const overviewV1Data: MacroSnapshot = {
@@ -173,17 +205,19 @@ export const overviewV1Data: MacroSnapshot = {
   top_risks: [
     {
       risk_id: 'risk-external-slowdown',
-      title: 'External slowdown risk',
-      why_it_matters: 'Lower trading-partner demand would pressure export volumes and growth.',
-      impact_channel: 'Exports, FX inflows, and industrial output.',
+      title: 'Russia slowdown via remittances',
+      why_it_matters: 'Lower regional demand and remittance inflows would pressure household spending.',
+      impact_channel: 'Consumption demand, FX inflows, and near-term growth.',
       suggested_scenario: 'External slowdown stress',
+      scenario_query: 'preset=external-slowdown',
     },
     {
       risk_id: 'risk-inflation-persistence',
-      title: 'Inflation persistence risk',
-      why_it_matters: 'Food and regulated-price shocks can keep inflation above target for longer.',
+      title: 'Inflation persistence above target',
+      why_it_matters: 'Food and administered-price shocks can keep inflation elevated for longer.',
       impact_channel: 'Real incomes, policy-rate path, and fiscal costs.',
       suggested_scenario: 'Inflation persistence stress',
+      scenario_query: 'preset=inflation-persistence',
     },
     {
       risk_id: 'risk-fiscal-slippage',
@@ -191,6 +225,7 @@ export const overviewV1Data: MacroSnapshot = {
       why_it_matters: 'Broader-than-planned spending can complicate disinflation and debt dynamics.',
       impact_channel: 'Fiscal balance, financing need, and policy credibility.',
       suggested_scenario: 'Fiscal discipline stress',
+      scenario_query: 'preset=fiscal-consolidation',
     },
   ],
   analysis_actions: [

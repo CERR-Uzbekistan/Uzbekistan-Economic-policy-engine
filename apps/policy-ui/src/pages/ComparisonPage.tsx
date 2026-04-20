@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ComparisonChartPanel } from '../components/comparison/ComparisonChartPanel'
 import { HeadlineComparisonTable } from '../components/comparison/HeadlineComparisonTable'
 import { ScenarioSelectorPanel } from '../components/comparison/ScenarioSelectorPanel'
@@ -9,13 +10,14 @@ import type {
   ComparisonScenario,
   ComparisonScenarioTag,
   ComparisonViewMode,
-  ComparisonWorkspace,
 } from '../contracts/data-contract'
 import {
   getInitialComparisonSourceState,
   loadComparisonSourceState,
 } from '../data/comparison/source'
 import { beginRetry } from '../data/source-state'
+import { toComparisonScenario } from '../state/scenarioComparisonAdapter'
+import { listScenarios, subscribeScenarioStore } from '../state/scenarioStore'
 import './comparison.css'
 
 function buildScenarioMap(scenarios: ComparisonScenario[]) {
@@ -25,14 +27,15 @@ function buildScenarioMap(scenarios: ComparisonScenario[]) {
   }, {})
 }
 
-function buildInitialTags(workspace: ComparisonWorkspace): Record<string, ComparisonScenarioTag> {
-  return workspace.scenarios.reduce<Record<string, ComparisonScenarioTag>>((acc, scenario) => {
+function buildInitialTags(scenarios: ComparisonScenario[]): Record<string, ComparisonScenarioTag> {
+  return scenarios.reduce<Record<string, ComparisonScenarioTag>>((acc, scenario) => {
     acc[scenario.scenario_id] = scenario.initial_tag
     return acc
   }, {})
 }
 
 export function ComparisonPage() {
+  const { t } = useTranslation()
   const [sourceState, setSourceState] = useState(getInitialComparisonSourceState)
   const [selectedIdsOverride, setSelectedIdsOverride] = useState<string[] | null>(null)
   const [baselineIdOverride, setBaselineIdOverride] = useState<string | null>(null)
@@ -40,6 +43,7 @@ export function ComparisonPage() {
   const [tagsByScenarioIdOverride, setTagsByScenarioIdOverride] = useState<
     Record<string, ComparisonScenarioTag> | null
   >(null)
+  const savedScenarios = useSyncExternalStore(subscribeScenarioStore, listScenarios, () => [])
 
   useEffect(() => {
     let cancelled = false
@@ -55,7 +59,21 @@ export function ComparisonPage() {
   }, [])
 
   const workspace = sourceState.workspace
-  const scenarios = useMemo(() => workspace?.scenarios ?? [], [workspace])
+  const scenarios = useMemo(() => {
+    const workspaceScenarios = workspace?.scenarios ?? []
+    if (savedScenarios.length === 0) {
+      return workspaceScenarios
+    }
+    const merged = new Map<string, ComparisonScenario>()
+    for (const scenario of workspaceScenarios) {
+      merged.set(scenario.scenario_id, scenario)
+    }
+    for (const savedScenario of savedScenarios) {
+      const mapped = toComparisonScenario(savedScenario)
+      merged.set(mapped.scenario_id, mapped)
+    }
+    return Array.from(merged.values())
+  }, [workspace, savedScenarios])
   const metricDefinitions = useMemo(() => workspace?.metric_definitions ?? [], [workspace])
 
   const defaultSelectedIds = useMemo(() => {
@@ -63,12 +81,12 @@ export function ComparisonPage() {
       return []
     }
 
-    const scenarioIds = new Set(workspace.scenarios.map((scenario) => scenario.scenario_id))
+    const scenarioIds = new Set(scenarios.map((scenario) => scenario.scenario_id))
     const normalized = workspace.default_selected_ids.filter((id) => scenarioIds.has(id)).slice(0, 4)
     return normalized.length >= 2
       ? normalized
-      : workspace.scenarios.map((scenario) => scenario.scenario_id).slice(0, 4)
-  }, [workspace])
+      : scenarios.map((scenario) => scenario.scenario_id).slice(0, 4)
+  }, [workspace, scenarios])
 
   const selectedIds = useMemo(() => {
     if (!workspace) {
@@ -79,21 +97,21 @@ export function ComparisonPage() {
       return defaultSelectedIds
     }
 
-    const scenarioIds = new Set(workspace.scenarios.map((scenario) => scenario.scenario_id))
+    const scenarioIds = new Set(scenarios.map((scenario) => scenario.scenario_id))
     const normalized = selectedIdsOverride.filter((id) => scenarioIds.has(id)).slice(0, 4)
     return normalized.length >= 2 ? normalized : defaultSelectedIds
-  }, [workspace, selectedIdsOverride, defaultSelectedIds])
+  }, [workspace, scenarios, selectedIdsOverride, defaultSelectedIds])
 
   const defaultBaselineId = useMemo(() => {
     if (!workspace) {
       return ''
     }
 
-    const scenarioIds = new Set(workspace.scenarios.map((scenario) => scenario.scenario_id))
+    const scenarioIds = new Set(scenarios.map((scenario) => scenario.scenario_id))
     return scenarioIds.has(workspace.default_baseline_id)
       ? workspace.default_baseline_id
-      : workspace.scenarios[0]?.scenario_id ?? ''
-  }, [workspace])
+      : scenarios[0]?.scenario_id ?? ''
+  }, [workspace, scenarios])
 
   const baselineId = useMemo(() => {
     if (!workspace) {
@@ -109,7 +127,7 @@ export function ComparisonPage() {
       return {}
     }
 
-    const defaults = buildInitialTags(workspace)
+    const defaults = buildInitialTags(scenarios)
     if (!tagsByScenarioIdOverride) {
       return defaults
     }
@@ -123,7 +141,7 @@ export function ComparisonPage() {
       },
       defaults,
     )
-  }, [workspace, tagsByScenarioIdOverride])
+  }, [workspace, scenarios, tagsByScenarioIdOverride])
 
   const scenarioMap = useMemo(() => buildScenarioMap(scenarios), [scenarios])
   const selectedScenarios = useMemo(
@@ -140,12 +158,9 @@ export function ComparisonPage() {
   if (sourceState.status === 'loading') {
     return (
       <PageContainer className="comparison-page">
-        <PageHeader
-          title="Comparison"
-          description="Compare baseline and alternative scenarios side by side to surface trade-offs and decision framing."
-        />
+        <PageHeader title={t('pages.comparison.title')} description={t('pages.comparison.description')} />
         <p className="empty-state" role="status" aria-live="polite">
-          Loading comparison workspace...
+          {t('states.loading.comparison')}
         </p>
       </PageContainer>
     )
@@ -154,17 +169,14 @@ export function ComparisonPage() {
   if (sourceState.status === 'error' || !workspace) {
     return (
       <PageContainer className="comparison-page">
-        <PageHeader
-          title="Comparison"
-          description="Compare baseline and alternative scenarios side by side to surface trade-offs and decision framing."
-        />
+        <PageHeader title={t('pages.comparison.title')} description={t('pages.comparison.description')} />
         <p className="empty-state" role="alert">
-          {sourceState.error ?? 'Comparison data is currently unavailable.'}
+          {sourceState.error ?? t('states.error.comparisonUnavailable')}
         </p>
         {sourceState.canRetry ? (
           <div>
             <button type="button" className="ui-secondary-action" onClick={handleRetry}>
-              Retry
+              {t('buttons.retry')}
             </button>
           </div>
         ) : null}
@@ -219,10 +231,7 @@ export function ComparisonPage() {
 
   return (
     <PageContainer className="comparison-page">
-      <PageHeader
-        title="Comparison"
-        description="Compare baseline and alternative scenarios side by side to surface trade-offs and decision framing."
-      />
+      <PageHeader title={t('pages.comparison.title')} description={t('pages.comparison.description')} />
 
       <ScenarioSelectorPanel
         scenarios={scenarios}
@@ -244,6 +253,7 @@ export function ComparisonPage() {
       <div className="comparison-bottom-grid">
         <ComparisonChartPanel
           selectedScenarios={selectedScenarios}
+          metricDefinitions={metricDefinitions}
           baselineId={baselineId}
           viewMode={viewMode}
           onViewModeChange={setViewMode}

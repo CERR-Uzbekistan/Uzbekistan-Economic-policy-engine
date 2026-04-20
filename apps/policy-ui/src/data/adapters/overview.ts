@@ -40,6 +40,7 @@ type RawOverviewRisk = {
   why?: string
   channel?: string
   suggestedScenario?: string
+  scenarioQuery?: string
 }
 
 type RawOverviewAction = {
@@ -219,6 +220,7 @@ export function toMacroSnapshot(raw: RawOverviewPayload): MacroSnapshot {
       why_it_matters: risk.why ?? 'No rationale provided.',
       impact_channel: risk.channel ?? 'Not specified',
       suggested_scenario: risk.suggestedScenario ?? 'Not specified',
+      scenario_query: risk.scenarioQuery,
     })),
     analysis_actions: (raw.actions ?? []).map((action, index) => ({
       action_id: action.id ?? `action-${index + 1}`,

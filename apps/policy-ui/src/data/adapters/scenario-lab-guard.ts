@@ -307,6 +307,9 @@ function asRun(value: unknown, issues: ScenarioLabValidationIssue[]): RawScenari
           issues,
           'run.interpretation.suggestedNextScenarios',
         ),
+        generationMode: asString(value.interpretation.generationMode),
+        reviewerName: asString(value.interpretation.reviewerName),
+        reviewedAt: asString(value.interpretation.reviewedAt),
       }
     : undefined
 

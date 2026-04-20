@@ -97,7 +97,11 @@ export async function loadScenarioLabSourceState(params: {
   const mode = resolveScenarioLabDataMode()
 
   if (mode === 'mock') {
-    return buildReadyState(mode, scenarioLabWorkspaceMock, buildScenarioLabResults(params.assumptions))
+    return buildReadyState(
+      mode,
+      scenarioLabWorkspaceMock,
+      buildScenarioLabResults(params.assumptions, { selectedPresetId: params.selectedPresetId }),
+    )
   }
 
   try {

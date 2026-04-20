@@ -1,12 +1,12 @@
 export type NavItem = {
-  label: string
+  labelKey: string
   path: string
 }
 
 export const PRIMARY_NAV_ITEMS: NavItem[] = [
-  { label: 'Overview', path: '/overview' },
-  { label: 'Scenario Lab', path: '/scenario-lab' },
-  { label: 'Comparison', path: '/comparison' },
-  { label: 'Model Explorer', path: '/model-explorer' },
-  { label: 'Knowledge Hub', path: '/knowledge-hub' },
+  { labelKey: 'nav.overview', path: '/overview' },
+  { labelKey: 'nav.scenarioLab', path: '/scenario-lab' },
+  { labelKey: 'nav.comparison', path: '/comparison' },
+  { labelKey: 'nav.modelExplorer', path: '/model-explorer' },
+  { labelKey: 'nav.knowledgeHub', path: '/knowledge-hub' },
 ]
