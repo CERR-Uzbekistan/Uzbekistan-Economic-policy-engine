@@ -19,6 +19,12 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+h1,
+h2 {
+  font-family: var(--font-display);
+  font-weight: 650;
+}
+
 .skip-link {
   background: var(--color-surface);
   border: 1px solid var(--color-border-strong);
@@ -207,6 +213,17 @@ body {
   max-width: 68ch;
 }
 
+.page-header__meta {
+  color: var(--color-text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  gap: var(--space-xl);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .page-section-head {
   display: grid;
   gap: var(--space-xs);
@@ -247,6 +264,28 @@ body {
 .ui-chip--accent {
   background: var(--color-brand-soft);
   border-color: var(--color-border-strong);
+  color: var(--color-brand);
+}
+
+.attribution-badge {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+  color: var(--color-text-muted);
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  padding: 0.16rem 0.38rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.attribution-badge--active {
+  border-color: var(--color-brand);
   color: var(--color-brand);
 }
 

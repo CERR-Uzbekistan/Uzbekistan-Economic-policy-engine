@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Serif:wght@600&display=swap");
+
 :root {
   --color-bg: #f4f2ee;
   --color-surface: #ffffff;
@@ -10,6 +12,8 @@
   --color-brand-soft: #e7edf6;
 
   --font-sans: "Source Sans 3", "Noto Sans", "Helvetica Neue", sans-serif;
+  --font-display: "IBM Plex Serif", "Times New Roman", serif;
+  --font-mono: "IBM Plex Mono", "SF Mono", Menlo, monospace;
 
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
