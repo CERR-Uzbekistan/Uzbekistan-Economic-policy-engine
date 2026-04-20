@@ -213,6 +213,17 @@ h2 {
   max-width: 68ch;
 }
 
+.page-header__meta {
+  color: var(--color-text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  gap: var(--space-xl);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .page-section-head {
   display: grid;
   gap: var(--space-xs);
