@@ -88,6 +88,7 @@ _Live verification notes:_
 - Sequencing OK as written: TA-1a is genuinely Day-1 work and remains a blocker for TA-5 text volume.
 - **Phase 0 readiness pass (2026-04-19, commit c65eacc):** Re-confirmed via live app on port 5180. Switched `LanguageSwitcher` select to `ru` — nav labels (`Overview`, `Scenario Lab`, `Comparison`, `Model Explorer`, `Knowledge Hub`), h1, page descriptions, and `<html lang>` all stayed English. Criterion #3 and #5 remain unsatisfied; criteria as written are correct and testable. Outcome: **Correct as written.**
 
+
 ---
 
 ### TA-1b · Editorial shell polish
@@ -229,6 +230,14 @@ _Live verification notes:_
 - `headline_metrics[i].model_attribution[].data_version` is already populated in the live mock payload — data-refresh feed can be assembled today without TB-P2 closing first.
 - **Phase 0 readiness pass (2026-04-19, commit c65eacc):** Risk rail **is already partially wired** — Overview risks render as anchors with `href="/scenario-lab?preset=external-slowdown"`, `.../preset=tariff-change`, `.../preset=inflation-risk`, etc., plus Quick Actions anchors with the same shape. Navigating to `/scenario-lab?preset=exchange-rate-shock` directly, however, leaves the preset `<select>` on "Balanced baseline" — **ScenarioLabPage does not yet read the URL query param**. So the existing note "nothing routes to Scenario Lab" should be narrowed: Overview-side links exist; Scenario Lab-side query-param consumption is the actual gap. Flagging as scope clarification, not a rewrite. Acceptance criterion #3 remains valid. Outcome: **Correct as written (with scope clarification above).**
 
+**Phase 0 drift alignment (2026-04-20, post-TA-2 merge):**
+
+- Economic state header needs attribution/provenance line per spec §9.1.A — drafted-from / AI-assisted / reviewed-by pattern (e.g., "State narrative · drafted from DFM + QPM baseline · AI-assisted · reviewed 16 Apr · M. Usmanov"). Current version only has update timestamp.
+- Quick actions tiles need explicit kind labels (Analysis / Output) above titles per prototype.
+- Verify feed blocks (Reforms / Data refreshes / Recent saved scenarios) exist below the fold; if not, add per spec §9.1.F.
+- Small vertical-alignment CSS fix on Overview two-column (chart + risk rail) layout — columns start at different y-positions currently.
+- Topbar polish (spec §7.3): add data freshness indicator, saved scenarios count, and export/help utilities — current topbar is language switcher only.
+
 ---
 
 ### TA-5 · Scenario Lab enrichment
@@ -280,6 +289,13 @@ _Live verification notes:_
 - Keyboard nav for chip-row presets will be net-new and should be manually tested.
 - **Phase 0 readiness pass (2026-04-19, commit c65eacc):** Confirmed in live DOM — `<select>` with four options (`Balanced baseline`, `External slowdown`, `Fiscal consolidation`, `Inflation persistence`), `<details><summary>Advanced assumptions</summary>`, `Save draft` and `Run scenario` buttons, `Show technical variable names` toggle, and all five interpretation headings (`What changed`, `Why it changed`, `Key risks`, `Policy implications`, `Suggested next scenarios`) all present. Source grep confirms stale banner copy "Results reflect the previous run. Run scenario to update with current assumptions." exists at `ScenarioLabPage.tsx:243` behind `hasPendingEdits`. Criteria as written remain correct. Outcome: **Correct as written.**
 
+**Phase 0 drift alignment (2026-04-20, post-TA-2 merge):**
+
+- Preset chips replace `<select>` dropdown (already in main acceptance criteria — reiterated for emphasis).
+- `/scenario-lab?preset=*` URL consumption: ScenarioLabPage must read the `preset` query param and hydrate assumption values (Phase 0 pass confirmed Overview-side anchors already emit these URLs; consumption side is the gap).
+- Headline metrics area: render as 4×1 horizontal strip, not 3×2 grid.
+- AI attribution block on Interpretation rail (blocked on TB-P3 adoption before this slice opens).
+- Stale banner verification once TA-3 scenario store ships.
 ---
 
 ### TA-6 · Comparison page enrichment
@@ -314,6 +330,13 @@ _Live verification notes:_
 - Trade-off summary panel exists today (`TradeoffSummaryPanel`) and produces generated text; this is acceptable for now as long as the summary remains explicit and honest.
 - **Phase 0 readiness pass (2026-04-19, commit c65eacc):** Live `/comparison` renders headings `Scenario selector`, `Headline comparison`, `Comparison Chart · GDP Growth`, `Trade-off summary` (with `Strongest growth`, `Strongest stability`, `Main compromise` subsections). Scenario chip labels include `Baseline`, `Alternative`, `Stress`. View toggles `Level view / Delta view / Risk view` render. No SVG chart, no `—` dash cells, no star/best-on-metric indicator, no tooltip content. Criteria as written remain correct. Outcome: **Correct as written.**
 
+**Phase 0 drift alignment (2026-04-20, post-TA-2 merge):**
+
+- Scenario cards need semantic border-top color by role: baseline slate / alternative blue / stress red.
+- Comparison chart bar colors: semantically distinct per `toSemanticRole` — currently all three scenarios render in similar blue shades, should differentiate by semantic role.
+- ★ best-on-metric indicator on Headline comparison table, with "policy judgment separate" tooltip.
+- Fix "Comparison Chart · GDP Growth" title — misleading since chart shows 4 metrics, not just GDP growth.
+- Optional: card-row overview above Headline comparison table per prototype §9.3.
 ---
 
 ### TA-7 · Model Explorer presentation pass
@@ -355,6 +378,18 @@ _Live verification notes:_
 - **Not satisfied — vintage in monospace.** Vintage is still plain body text.
 - **Phase 0 readiness pass (2026-04-19, commit c65eacc):** Live `/model-explorer` renders three catalog entries: `QPM Uzbekistan` (Active), `DFM Nowcast` (Active), `FPP Fiscal Block` (Staging). Tab list present with `Assumptions`, `Equations`, `Caveats`, `Data sources`. No `.attribution-badge` anywhere; no `<pre>`/`<code>` equation blocks visible on default catalog pane. Criteria as written remain correct; six-model parity is correctly scoped as an "optional stretch." Outcome: **Correct as written.**
 
+
+**Phase 0 drift alignment (2026-04-20, post-TA-2 merge):**
+
+- Seed PE (Partial Equilibrium), I-O (Input-Output), and CGE 1-2-3 models into catalog mock data. Current app shows only QPM, DFM, FPP — 3 of 6 expected models.
+- `<AttributionBadge>` on each catalog card (component already exists from TA-1b).
+- Status badges with severity-coded methodology-issue counts per ROADMAP — not just Active/Staging. Examples: QPM shows "2 Fixes" linking issues #23 and #25; PE shows "Fix" linking #24; CGE shows "Gap"; FPP shows "CA exog." linking #30.
+- Rich equation tab: 4 equations per model in monospaced blocks with italic serif variables (IS, Phillips, Taylor, UIP for QPM and analogous sets for other models).
+- Severity-coded caveat list tying to ROADMAP known-methodology-issues.
+- Parameter table with symbol / name / value / range / description columns per spec §9.4.
+- Data sources list with institution / frequency / vintage / notes columns.
+
+**TA-7 parallel coordination required:** R modeling team should produce the analytical content (equations, parameter tables, caveats, source lists) before this slice opens. This is analytical content, not engineering — Codex cannot invent it. Start the content-sourcing conversation by end of Week 1 so content is ready when TA-7 opens in Sprint 2.
 ---
 
 ### TA-8 · Knowledge Hub content port
