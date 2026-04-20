@@ -19,6 +19,8 @@ const ATTRIBUTION: ModelAttribution = {
   timestamp: '2026-04-17T11:00:00+05:00',
 }
 
+export const scenarioLabBaseDataVersion = ATTRIBUTION.data_version
+
 const PERIODS = ['2026 Q1', '2026 Q2', '2026 Q3', '2026 Q4']
 
 const PRESETS: ScenarioLabPreset[] = [
@@ -58,6 +60,13 @@ const PRESETS: ScenarioLabPreset[] = [
     },
   },
 ]
+
+export const scenarioLabPresetModelIds: Record<string, string[]> = PRESETS.reduce<
+  Record<string, string[]>
+>((acc, preset) => {
+  acc[preset.preset_id] = [ATTRIBUTION.model_id]
+  return acc
+}, {})
 
 const SCENARIO_ASSUMPTIONS = [
   {

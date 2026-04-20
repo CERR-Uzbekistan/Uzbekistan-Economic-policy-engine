@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AssumptionsPanel } from '../components/scenario-lab/AssumptionsPanel'
 import { InterpretationPanel } from '../components/scenario-lab/InterpretationPanel'
@@ -6,12 +6,18 @@ import { ResultsPanel } from '../components/scenario-lab/ResultsPanel'
 import { PageContainer } from '../components/layout/PageContainer'
 import { PageHeader } from '../components/layout/PageHeader'
 import type {
+  Assumption,
+  ModelAttribution,
   ScenarioLabAssumptionState,
   ScenarioLabResultTab,
+  ScenarioLabResultsBundle,
   ScenarioLabWorkspace,
+  ScenarioType,
 } from '../contracts/data-contract'
 import {
   buildScenarioLabResults,
+  scenarioLabBaseDataVersion,
+  scenarioLabPresetModelIds,
   scenarioLabWorkspaceMock,
 } from '../data/mock/scenario-lab'
 import {
@@ -19,6 +25,13 @@ import {
   loadScenarioLabSourceState,
 } from '../data/scenario-lab/source'
 import { beginRetry } from '../data/source-state'
+import {
+  deleteScenario,
+  listScenarios,
+  loadScenario,
+  saveScenario,
+  subscribeScenarioStore,
+} from '../state/scenarioStore'
 import './scenario-lab.css'
 
 type ScenarioRunParams = {
@@ -26,6 +39,8 @@ type ScenarioRunParams = {
   selectedPresetId: string
   scenarioName: string
 }
+
+const SCENARIO_TAG_OPTIONS = ['monetary', 'fiscal', 'external', 'trade', 'inflation']
 
 function getDefaultValuesFromWorkspace(workspace: ScenarioLabWorkspace): ScenarioLabAssumptionState {
   return workspace.assumptions.reduce<ScenarioLabAssumptionState>((acc, assumption) => {
@@ -53,11 +68,76 @@ function assumptionsEqual(a: ScenarioLabAssumptionState, b: ScenarioLabAssumptio
   return true
 }
 
+function buildAssumptions(
+  workspace: ScenarioLabWorkspace,
+  values: ScenarioLabAssumptionState,
+): Assumption[] {
+  return workspace.assumptions.map((assumption) => ({
+    key: assumption.key,
+    label: assumption.label,
+    value: values[assumption.key] ?? assumption.default_value,
+    unit: assumption.unit,
+    category: assumption.category,
+    technical_variable: assumption.technical_variable,
+  }))
+}
+
+function extractAttribution(results: ScenarioLabResultsBundle | null): ModelAttribution[] {
+  if (!results) {
+    return []
+  }
+
+  const byRunId = new Map<string, ModelAttribution>()
+  for (const metric of results.headline_metrics) {
+    for (const attribution of metric.model_attribution) {
+      byRunId.set(attribution.run_id, attribution)
+    }
+  }
+  for (const chart of Object.values(results.charts_by_tab)) {
+    for (const attribution of chart.model_attribution) {
+      byRunId.set(attribution.run_id, attribution)
+    }
+  }
+  return Array.from(byRunId.values())
+}
+
+function pickLatestAttribution(attributions: ModelAttribution[]): ModelAttribution | null {
+  if (attributions.length === 0) {
+    return null
+  }
+  return attributions.reduce((latest, current) => {
+    const latestMs = Number.isFinite(Date.parse(latest.timestamp))
+      ? Date.parse(latest.timestamp)
+      : Number.NEGATIVE_INFINITY
+    const currentMs = Number.isFinite(Date.parse(current.timestamp))
+      ? Date.parse(current.timestamp)
+      : Number.NEGATIVE_INFINITY
+    return currentMs > latestMs ? current : latest
+  })
+}
+
+function toAssumptionValues(
+  workspace: ScenarioLabWorkspace,
+  assumptions: Assumption[],
+): ScenarioLabAssumptionState {
+  const base = getDefaultValuesFromWorkspace(workspace)
+  for (const assumption of assumptions) {
+    if (typeof assumption.value === 'number') {
+      base[assumption.key] = assumption.value
+    }
+  }
+  return base
+}
+
 export function ScenarioLabPage() {
   const { t, i18n } = useTranslation()
   const [sourceState, setSourceState] = useState(getInitialScenarioLabSourceState)
   const [selectedPresetId, setSelectedPresetId] = useState(scenarioLabWorkspaceMock.presets[0]?.preset_id ?? '')
   const [scenarioName, setScenarioName] = useState('Scenario 1')
+  const [scenarioType, setScenarioType] = useState<ScenarioType>('alternative')
+  const [scenarioDescription, setScenarioDescription] = useState('')
+  const [scenarioTags, setScenarioTags] = useState<string[]>([])
+  const [currentScenarioId, setCurrentScenarioId] = useState<string | null>(null)
   const [assumptionValues, setAssumptionValues] = useState<ScenarioLabAssumptionState>(
     getPresetValuesFromWorkspace(scenarioLabWorkspaceMock, selectedPresetId),
   )
@@ -71,6 +151,8 @@ export function ScenarioLabPage() {
   })
   const activeRunIdRef = useRef(0)
   const reconciledWorkspaceRef = useRef<ScenarioLabWorkspace | null>(null)
+  const latestSuccessfulAttributionRef = useRef<ModelAttribution[]>([])
+  const savedScenarios = useSyncExternalStore(subscribeScenarioStore, listScenarios, () => [])
 
   const workspace = sourceState.workspace ?? scenarioLabWorkspaceMock
   const fallbackResults = useMemo(() => buildScenarioLabResults(assumptionValues), [assumptionValues])
@@ -102,6 +184,12 @@ export function ScenarioLabPage() {
         : workspace.presets[0]?.preset_id ?? '',
     )
   }, [workspace])
+
+  useEffect(() => {
+    if (sourceState.status === 'ready') {
+      latestSuccessfulAttributionRef.current = extractAttribution(sourceState.results)
+    }
+  }, [sourceState.status, sourceState.results])
 
   async function runScenario(nextParams: ScenarioRunParams) {
     latestRunParamsRef.current = nextParams
@@ -164,19 +252,107 @@ export function ScenarioLabPage() {
     setSaveStatus(null)
   }
 
+  function handleScenarioNameChange(nextScenarioName: string) {
+    setScenarioName(nextScenarioName)
+    setSaveStatus(null)
+  }
+
   function handleAssumptionChange(key: string, value: number) {
     setAssumptionValues((prev) => ({ ...prev, [key]: value }))
     setSaveStatus(null)
   }
 
+  function handleScenarioTypeChange(nextScenarioType: ScenarioType) {
+    setScenarioType(nextScenarioType)
+    setSaveStatus(null)
+  }
+
+  function handleScenarioDescriptionChange(nextScenarioDescription: string) {
+    setScenarioDescription(nextScenarioDescription)
+    setSaveStatus(null)
+  }
+
+  function handleScenarioTagToggle(tag: string) {
+    setScenarioTags((prev) =>
+      prev.includes(tag) ? prev.filter((existingTag) => existingTag !== tag) : [...prev, tag],
+    )
+    setSaveStatus(null)
+  }
+
   function handleSaveScenario() {
-    const timestamp = new Intl.DateTimeFormat(i18n.resolvedLanguage ?? 'en', {
-      hour: '2-digit',
-      minute: '2-digit',
-      day: '2-digit',
-      month: 'short',
-    }).format(new Date())
-    setSaveStatus(t('states.success.savedToLocalSessionAt', { timestamp }))
+    const latestAttribution = pickLatestAttribution(latestSuccessfulAttributionRef.current)
+    const modelIdsFromRun = latestSuccessfulAttributionRef.current
+      .map((attribution) => attribution.model_id)
+      .filter((modelId, index, ids) => modelId.length > 0 && ids.indexOf(modelId) === index)
+    const modelIdsFromPreset = scenarioLabPresetModelIds[selectedPresetId] ?? []
+    const modelIds = modelIdsFromRun.length > 0 ? modelIdsFromRun : modelIdsFromPreset
+    const dataVersion = latestAttribution?.data_version ?? scenarioLabBaseDataVersion
+
+    if (modelIds.length === 0) {
+      setSaveStatus(t('states.error.scenarioModelIdsUnavailable'))
+      return
+    }
+
+    try {
+      const record = saveScenario({
+        scenario_id: currentScenarioId ?? globalThis.crypto.randomUUID(),
+        scenario_name: scenarioName,
+        scenario_type: scenarioType,
+        description: scenarioDescription,
+        tags: scenarioTags,
+        assumptions: buildAssumptions(workspace, assumptionValues),
+        model_ids: modelIds,
+        data_version: dataVersion,
+        created_at: '',
+        updated_at: '',
+        created_by: '',
+      })
+      const timestamp = new Intl.DateTimeFormat(i18n.resolvedLanguage ?? 'en', {
+        hour: '2-digit',
+        minute: '2-digit',
+        day: '2-digit',
+        month: 'short',
+      }).format(new Date(record.stored_at))
+      setCurrentScenarioId(record.scenario_id)
+      setSaveStatus(t('states.success.savedToLocalSessionAt', { timestamp }))
+    } catch {
+      setSaveStatus(t('states.error.scenarioSaveFailed'))
+    }
+  }
+
+  function handleLoadSavedScenario(scenarioId: string) {
+    const record = loadScenario(scenarioId)
+    if (!record) {
+      setSaveStatus(t('states.error.savedScenarioLoadFailed'))
+      return
+    }
+
+    setScenarioName(record.scenario_name)
+    setScenarioType(record.scenario_type)
+    setScenarioDescription(record.description)
+    setScenarioTags(record.tags)
+    setCurrentScenarioId(record.scenario_id)
+    setAssumptionValues(toAssumptionValues(workspace, record.assumptions))
+    setSaveStatus(t('states.success.savedScenarioLoaded', { scenarioName: record.scenario_name }))
+  }
+
+  function handleDeleteSavedScenario(scenarioId: string) {
+    const record = loadScenario(scenarioId)
+    const scenarioLabel = record?.scenario_name ?? scenarioId
+    const confirmed = window.confirm(t('scenarioLab.saved.confirmDelete', { scenarioName: scenarioLabel }))
+    if (!confirmed) {
+      return
+    }
+
+    const wasDeleted = deleteScenario(scenarioId)
+    if (!wasDeleted) {
+      setSaveStatus(t('states.error.savedScenarioDeleteFailed'))
+      return
+    }
+    if (currentScenarioId === scenarioId) {
+      setCurrentScenarioId(null)
+    }
+    setSaveStatus(t('states.success.savedScenarioDeleted', { scenarioName: scenarioLabel }))
   }
 
   function handleRunScenario() {
@@ -208,12 +384,22 @@ export function ScenarioLabPage() {
           presets={workspace.presets}
           selectedPresetId={selectedPresetId}
           scenarioName={scenarioName}
+          scenarioType={scenarioType}
+          scenarioDescription={scenarioDescription}
+          scenarioTags={scenarioTags}
+          availableScenarioTags={SCENARIO_TAG_OPTIONS}
           onPresetChange={handlePresetChange}
-          onScenarioNameChange={setScenarioName}
+          onScenarioNameChange={handleScenarioNameChange}
+          onScenarioTypeChange={handleScenarioTypeChange}
+          onScenarioDescriptionChange={handleScenarioDescriptionChange}
+          onScenarioTagToggle={handleScenarioTagToggle}
           onAssumptionChange={handleAssumptionChange}
           onRunScenario={handleRunScenario}
           isRunPending={sourceState.status === 'loading'}
           onSaveScenario={handleSaveScenario}
+          savedScenarios={savedScenarios}
+          onLoadScenario={handleLoadSavedScenario}
+          onDeleteScenario={handleDeleteSavedScenario}
           saveStatus={saveStatus}
         />
 

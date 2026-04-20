@@ -79,6 +79,33 @@
     "runScenario": "Run scenario",
     "retryRun": "Retry run"
   },
+  "scenarioLab": {
+    "form": {
+      "scenarioType": "Scenario type",
+      "description": "Description",
+      "descriptionPlaceholder": "Optional scenario description",
+      "tags": "Tags",
+      "scenarioTypeOptions": {
+        "baseline": "Baseline",
+        "alternative": "Alternative",
+        "stress": "Stress"
+      },
+      "tagOptions": {
+        "monetary": "Monetary",
+        "fiscal": "Fiscal",
+        "external": "External",
+        "trade": "Trade",
+        "inflation": "Inflation"
+      }
+    },
+    "saved": {
+      "title": "Saved scenarios",
+      "empty": "No saved scenarios yet.",
+      "load": "Load",
+      "delete": "Delete",
+      "confirmDelete": "Delete saved scenario \"{{scenarioName}}\"?"
+    }
+  },
   "states": {
     "loading": {
       "overview": "Loading latest overview snapshot...",
@@ -90,7 +117,11 @@
       "overviewUnavailable": "Overview data is currently unavailable.",
       "comparisonUnavailable": "Comparison data is currently unavailable.",
       "modelExplorerUnavailable": "Model metadata is currently unavailable.",
-      "scenarioRunFailed": "Scenario run failed. Please retry."
+      "scenarioRunFailed": "Scenario run failed. Please retry.",
+      "scenarioSaveFailed": "Could not save scenario to local storage.",
+      "savedScenarioLoadFailed": "Saved scenario could not be loaded.",
+      "savedScenarioDeleteFailed": "Saved scenario could not be deleted.",
+      "scenarioModelIdsUnavailable": "Scenario model attribution is unavailable. Run scenario before saving."
     },
     "stale": {
       "scenarioResults": "Results reflect the previous run. Run scenario to update with current assumptions."
@@ -100,7 +131,9 @@
       "scenarioInterpretationAfterRun": "Interpretation appears after a successful scenario run."
     },
     "success": {
-      "savedToLocalSessionAt": "Saved to local session at {{timestamp}}."
+      "savedToLocalSessionAt": "Saved to local session at {{timestamp}}.",
+      "savedScenarioLoaded": "Loaded \"{{scenarioName}}\" into Scenario Lab.",
+      "savedScenarioDeleted": "Deleted \"{{scenarioName}}\" from saved scenarios."
     }
   }
 }

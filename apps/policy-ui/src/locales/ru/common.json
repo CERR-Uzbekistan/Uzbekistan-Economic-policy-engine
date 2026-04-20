@@ -79,6 +79,33 @@
     "runScenario": "Запустить сценарий",
     "retryRun": "Повторить запуск"
   },
+  "scenarioLab": {
+    "form": {
+      "scenarioType": "Тип сценария",
+      "description": "Описание",
+      "descriptionPlaceholder": "Необязательное описание сценария",
+      "tags": "Теги",
+      "scenarioTypeOptions": {
+        "baseline": "Базовый",
+        "alternative": "Альтернативный",
+        "stress": "Стресс"
+      },
+      "tagOptions": {
+        "monetary": "Денежная политика",
+        "fiscal": "Фискальная политика",
+        "external": "Внешний сектор",
+        "trade": "Торговля",
+        "inflation": "Инфляция"
+      }
+    },
+    "saved": {
+      "title": "Сохранённые сценарии",
+      "empty": "Сохранённых сценариев пока нет.",
+      "load": "Загрузить",
+      "delete": "Удалить",
+      "confirmDelete": "Удалить сохранённый сценарий \"{{scenarioName}}\"?"
+    }
+  },
   "states": {
     "loading": {
       "overview": "Загрузка последнего снимка обзора...",
@@ -90,7 +117,11 @@
       "overviewUnavailable": "Данные обзора сейчас недоступны.",
       "comparisonUnavailable": "Данные сравнения сейчас недоступны.",
       "modelExplorerUnavailable": "Метаданные моделей сейчас недоступны.",
-      "scenarioRunFailed": "Запуск сценария не удался. Повторите попытку."
+      "scenarioRunFailed": "Запуск сценария не удался. Повторите попытку.",
+      "scenarioSaveFailed": "Не удалось сохранить сценарий в локальном хранилище.",
+      "savedScenarioLoadFailed": "Не удалось загрузить сохранённый сценарий.",
+      "savedScenarioDeleteFailed": "Не удалось удалить сохранённый сценарий.",
+      "scenarioModelIdsUnavailable": "Атрибуция моделей недоступна. Запустите сценарий перед сохранением."
     },
     "stale": {
       "scenarioResults": "Результаты отражают предыдущий запуск. Запустите сценарий, чтобы обновить результаты с текущими допущениями."
@@ -100,7 +131,9 @@
       "scenarioInterpretationAfterRun": "Интерпретация появится после успешного запуска сценария."
     },
     "success": {
-      "savedToLocalSessionAt": "Сохранено в локальной сессии в {{timestamp}}."
+      "savedToLocalSessionAt": "Сохранено в локальной сессии в {{timestamp}}.",
+      "savedScenarioLoaded": "Сценарий \"{{scenarioName}}\" загружен в Симулятор.",
+      "savedScenarioDeleted": "Сценарий \"{{scenarioName}}\" удалён из сохранённых."
     }
   }
 }

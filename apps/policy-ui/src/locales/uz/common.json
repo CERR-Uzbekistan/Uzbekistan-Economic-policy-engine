@@ -79,6 +79,33 @@
     "runScenario": "Stsenariyni ishga tushirish",
     "retryRun": "Qayta ishga tushirish"
   },
+  "scenarioLab": {
+    "form": {
+      "scenarioType": "Stsenariy turi",
+      "description": "Tavsif",
+      "descriptionPlaceholder": "Ixtiyoriy stsenariy tavsifi",
+      "tags": "Teglar",
+      "scenarioTypeOptions": {
+        "baseline": "Bazaviy",
+        "alternative": "Muqobil",
+        "stress": "Stress"
+      },
+      "tagOptions": {
+        "monetary": "Pul-kredit",
+        "fiscal": "Fiskal",
+        "external": "Tashqi",
+        "trade": "Savdo",
+        "inflation": "Inflyatsiya"
+      }
+    },
+    "saved": {
+      "title": "Saqlangan stsenariylar",
+      "empty": "Hozircha saqlangan stsenariy yo'q.",
+      "load": "Yuklash",
+      "delete": "O'chirish",
+      "confirmDelete": "\"{{scenarioName}}\" saqlangan stsenariyini o'chirasizmi?"
+    }
+  },
   "states": {
     "loading": {
       "overview": "So'nggi sharh holati yuklanmoqda...",
@@ -90,7 +117,11 @@
       "overviewUnavailable": "Sharh ma'lumotlari hozircha mavjud emas.",
       "comparisonUnavailable": "Solishtirish ma'lumotlari hozircha mavjud emas.",
       "modelExplorerUnavailable": "Model metama'lumotlari hozircha mavjud emas.",
-      "scenarioRunFailed": "Stsenariy ishga tushmadi. Iltimos, qayta urinib ko'ring."
+      "scenarioRunFailed": "Stsenariy ishga tushmadi. Iltimos, qayta urinib ko'ring.",
+      "scenarioSaveFailed": "Stsenariyni localStorage'ga saqlab bo'lmadi.",
+      "savedScenarioLoadFailed": "Saqlangan stsenariyni yuklab bo'lmadi.",
+      "savedScenarioDeleteFailed": "Saqlangan stsenariyni o'chirib bo'lmadi.",
+      "scenarioModelIdsUnavailable": "Model atributsiyasi mavjud emas. Saqlashdan oldin stsenariyni ishga tushiring."
     },
     "stale": {
       "scenarioResults": "Natijalar oldingi ishga tushirishga tegishli. Joriy taxminlar bilan yangilash uchun stsenariyni qayta ishga tushiring."
@@ -100,7 +131,9 @@
       "scenarioInterpretationAfterRun": "Talqin muvaffaqiyatli ishga tushirishdan keyin ko'rinadi."
     },
     "success": {
-      "savedToLocalSessionAt": "Mahalliy sessiyaga {{timestamp}} da saqlandi."
+      "savedToLocalSessionAt": "Mahalliy sessiyaga {{timestamp}} da saqlandi.",
+      "savedScenarioLoaded": "\"{{scenarioName}}\" stsenariyi Stsenariy simulyatoriga yuklandi.",
+      "savedScenarioDeleted": "\"{{scenarioName}}\" stsenariyi saqlangan ro'yxatdan o'chirildi."
     }
   }
 }
