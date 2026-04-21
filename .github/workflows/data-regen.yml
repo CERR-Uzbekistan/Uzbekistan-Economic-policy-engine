@@ -1,0 +1,54 @@
+name: Data Regeneration — QPM nightly
+
+on:
+  schedule:
+    # 21:00 UTC = 02:00 Asia/Tashkent. Daily.
+    # Chosen so the regen lands before a Tashkent workday start.
+    - cron: '0 21 * * *'
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Why this manual run (for audit log)'
+        required: false
+
+jobs:
+  export-qpm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.4.1'
+
+      - name: Install R packages
+        run: |
+          Rscript -e 'install.packages("jsonlite", repos = "https://cloud.r-project.org")'
+
+      - name: Run QPM export
+        run: Rscript scripts/export_qpm.R
+
+      - name: Check whether qpm.json changed
+        id: diff
+        run: |
+          if git diff --quiet apps/policy-ui/public/data/qpm.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "[data-regen] qpm.json unchanged; nothing to commit."
+          else
+            echo "changed=true"  >> "$GITHUB_OUTPUT"
+            echo "[data-regen] qpm.json changed; will commit."
+          fi
+
+      - name: Commit updated JSON
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps/policy-ui/public/data/qpm.json
+          git commit -m "data(qpm): nightly regeneration $(date -u +%Y-%m-%d)"
+          git push
