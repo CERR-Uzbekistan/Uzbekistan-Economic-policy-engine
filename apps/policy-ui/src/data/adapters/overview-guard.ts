@@ -198,6 +198,55 @@ export function validateRawOverviewPayload(input: unknown): OverviewValidationRe
       affectedModels: asStringArray(caveat.affectedModels, issues, 'caveats[].affectedModels'),
     })),
     references: asStringArray(input.references, issues, 'references'),
+    activityFeed: (() => {
+      if (!isRecord(input.activityFeed)) {
+        issues.push({
+          path: 'activityFeed',
+          message: 'Required field is missing or not an object.',
+          severity: 'error',
+        })
+        return undefined
+      }
+      return {
+          policyActions: asObjectArray(
+            input.activityFeed.policyActions,
+            issues,
+            'activityFeed.policyActions',
+            (action) => ({
+              id: asString(action.id),
+              title: asString(action.title),
+              institution: asString(action.institution),
+              actionType: asString(action.actionType),
+              occurredAt: asString(action.occurredAt),
+              url: asString(action.url),
+            }),
+          ),
+          dataRefreshes: asObjectArray(
+            input.activityFeed.dataRefreshes,
+            issues,
+            'activityFeed.dataRefreshes',
+            (refresh) => ({
+              id: asString(refresh.id),
+              dataSource: asString(refresh.dataSource),
+              modelId: asString(refresh.modelId),
+              refreshedAt: asString(refresh.refreshedAt),
+              summary: asString(refresh.summary),
+            }),
+          ),
+          savedScenarios: asObjectArray(
+            input.activityFeed.savedScenarios,
+            issues,
+            'activityFeed.savedScenarios',
+            (activity) => ({
+              id: asString(activity.id),
+              scenarioName: asString(activity.scenarioName),
+              scenarioId: asString(activity.scenarioId),
+              author: asString(activity.author),
+              savedAt: asString(activity.savedAt),
+            }),
+          ),
+      }
+    })(),
   }
 
   const hasErrors = issues.some((issue) => issue.severity === 'error')

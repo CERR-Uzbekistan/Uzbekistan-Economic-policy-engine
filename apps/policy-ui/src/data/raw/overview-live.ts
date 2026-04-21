@@ -142,5 +142,48 @@ export const overviewLiveRawMock: RawOverviewPayload = {
     },
   ],
   references: ['Internal macro monitoring feed (staging sample)'],
+  activityFeed: {
+    policyActions: [
+      {
+        id: 'cbu-rate-2026-04-15',
+        title: 'CBU holds policy rate at 14.0%',
+        institution: 'Central Bank of Uzbekistan',
+        actionType: 'rate_decision',
+        occurredAt: '2026-04-15T10:00:00+05:00',
+      },
+      {
+        id: 'mef-fiscal-plan-2026-04-10',
+        title: 'Ministry of Economy publishes fiscal plan update',
+        institution: 'Ministry of Economy and Finance',
+        actionType: 'announcement',
+        occurredAt: '2026-04-10T14:00:00+05:00',
+      },
+    ],
+    dataRefreshes: [
+      {
+        id: 'dfm-2026-04-18',
+        dataSource: 'DFM nowcast',
+        modelId: 'dfm_nowcast',
+        refreshedAt: '2026-04-18T03:00:00Z',
+        summary: 'Q2 2026 nowcast updated with latest industrial production print.',
+      },
+      {
+        id: 'qpm-2026-04-17',
+        dataSource: 'QPM quarterly run',
+        modelId: 'qpm_uzbekistan',
+        refreshedAt: '2026-04-17T21:00:00Z',
+        summary: 'April 2026 calibration refresh.',
+      },
+    ],
+    savedScenarios: [
+      {
+        id: 'scen-2026-04-16-rate-hold',
+        scenarioName: 'Rate hold through Q2 (review)',
+        scenarioId: 'scenario-uuid-live-1',
+        author: 'CERR Macro Desk',
+        savedAt: '2026-04-16T11:30:00+05:00',
+      },
+    ],
+  },
 }
 

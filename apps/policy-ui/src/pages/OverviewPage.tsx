@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { CaveatPanel } from '../components/overview/CaveatPanel'
 import { EconomicStateHeader } from '../components/overview/EconomicStateHeader'
 import { KpiStrip } from '../components/overview/KpiStrip'
 import { NowcastForecastBlock } from '../components/overview/NowcastForecastBlock'
 import { OverviewFeeds } from '../components/overview/OverviewFeeds'
 import { QuickActions } from '../components/overview/QuickActions'
+import { ReferencesFooter } from '../components/overview/ReferencesFooter'
 import { RiskPanel } from '../components/overview/RiskPanel'
 import { PageContainer } from '../components/layout/PageContainer'
 import { PageHeader } from '../components/layout/PageHeader'
@@ -83,12 +85,7 @@ export function OverviewPage() {
     }
   }, [latestAttributionTimestamp, overviewData, sourceState.status])
 
-  const uniqueModelsInMetrics = useMemo(() => {
-    const modelIds = headlineMetrics.flatMap((metric) =>
-      metric.model_attribution.map((attribution) => attribution.model_id),
-    )
-    return Array.from(new Set(modelIds)).length
-  }, [headlineMetrics])
+  const uniqueModelsInMetrics = overviewData?.model_ids.length ?? 0
 
   if (sourceState.status === 'loading') {
     return (
@@ -128,6 +125,9 @@ export function OverviewPage() {
     top_risks,
     analysis_actions,
     output_action,
+    caveats,
+    references,
+    activity_feed,
   } = overviewData
 
 
@@ -171,8 +171,10 @@ export function OverviewPage() {
         </div>
       ) : null}
 
+      <CaveatPanel caveats={caveats} />
       <QuickActions actions={analysis_actions} />
-      <OverviewFeeds headlineMetrics={headline_metrics} />
+      <OverviewFeeds activityFeed={activity_feed} />
+      <ReferencesFooter references={references} />
     </PageContainer>
   )
 }

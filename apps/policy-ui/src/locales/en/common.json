@@ -121,7 +121,13 @@
       "sectionAria": "Overview feed panels",
       "reforms": {
         "title": "Reforms",
-        "empty": "Content coming from Knowledge Hub."
+        "empty": "No recent policy actions on file.",
+        "actionType": {
+          "rate_decision": "Rate decision",
+          "regulation": "Regulation",
+          "announcement": "Announcement",
+          "other": "Other"
+        }
       },
       "dataRefreshes": {
         "title": "Data refreshes",
@@ -130,9 +136,21 @@
       },
       "savedScenarios": {
         "title": "Your saved scenarios",
-        "empty": "Saved scenarios will appear here after you save a draft in Scenario Lab.",
-        "youShort": "YOU"
+        "empty": "Saved scenarios will appear here after you save a draft in Scenario Lab."
       }
+    },
+    "caveats": {
+      "title": "Model caveats",
+      "description": "Known limitations affecting the metrics above. Read before citing.",
+      "affectedMetrics": "Affects: {{metrics}}",
+      "severity": {
+        "critical": "Critical",
+        "warning": "Warning",
+        "info": "Info"
+      }
+    },
+    "references": {
+      "title": "Sources and references"
     }
   },
   "buttons": {

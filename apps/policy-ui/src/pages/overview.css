@@ -447,3 +447,111 @@
     text-align: start;
   }
 }
+
+/* ─── Caveats panel ─── */
+
+.overview-caveats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.overview-caveats__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.overview-caveat {
+  border-left: 3px solid var(--color-border);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-surface-muted);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.overview-caveat--critical {
+  border-left-color: #b91c1c;
+  background: #fef2f2;
+}
+
+.overview-caveat--warning {
+  border-left-color: #b45309;
+  background: #fffbeb;
+}
+
+.overview-caveat--info {
+  border-left-color: #1d4ed8;
+  background: #eff6ff;
+}
+
+.overview-caveat__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.overview-caveat__severity {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.overview-caveat__severity--critical { color: #b91c1c; }
+.overview-caveat__severity--warning  { color: #b45309; }
+.overview-caveat__severity--info     { color: #1d4ed8; }
+
+.overview-caveat__models {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.overview-caveat__message {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.overview-caveat__metrics {
+  margin: var(--space-xs) 0 0 0;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* ─── References footer ─── */
+
+.overview-references {
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.overview-references__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 var(--space-sm) 0;
+}
+
+.overview-references__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.overview-references__item {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}

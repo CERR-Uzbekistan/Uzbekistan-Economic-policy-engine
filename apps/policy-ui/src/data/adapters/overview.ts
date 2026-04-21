@@ -65,6 +65,37 @@ type RawOverviewCaveat = {
   affectedModels?: string[]
 }
 
+type RawPolicyAction = {
+  id?: string
+  title?: string
+  institution?: string
+  actionType?: string
+  occurredAt?: string
+  url?: string
+}
+
+type RawDataRefresh = {
+  id?: string
+  dataSource?: string
+  modelId?: string
+  refreshedAt?: string
+  summary?: string
+}
+
+type RawSavedScenarioActivity = {
+  id?: string
+  scenarioName?: string
+  scenarioId?: string
+  author?: string
+  savedAt?: string
+}
+
+type RawOverviewActivityFeed = {
+  policyActions?: RawPolicyAction[]
+  dataRefreshes?: RawDataRefresh[]
+  savedScenarios?: RawSavedScenarioActivity[]
+}
+
 export type RawOverviewPayload = {
   id?: string
   name?: string
@@ -87,6 +118,7 @@ export type RawOverviewPayload = {
   output?: RawOverviewOutputAction
   caveats?: RawOverviewCaveat[]
   references?: string[]
+  activityFeed?: RawOverviewActivityFeed
 }
 
 function toIsoOrFallback(value: string | undefined, fallback: string): string {
@@ -245,5 +277,40 @@ export function toMacroSnapshot(raw: RawOverviewPayload): MacroSnapshot {
       affected_models: caveat.affectedModels ?? [],
     })),
     references: raw.references ?? [],
+    // activity_feed is required per the contract; the guard returns
+    // an error-severity issue when raw.activityFeed is missing. This
+    // adapter still defensively returns empty streams so consumer UI
+    // does not crash on malformed input — but the error in guard
+    // issues is the operative signal.
+    activity_feed: {
+      policy_actions: (raw.activityFeed?.policyActions ?? []).map((action, index) => ({
+        action_id: action.id ?? `policy-action-${index + 1}`,
+        title: action.title ?? 'Untitled policy action',
+        institution: action.institution ?? 'Unknown institution',
+        action_type:
+          action.actionType === 'rate_decision' ||
+          action.actionType === 'regulation' ||
+          action.actionType === 'announcement' ||
+          action.actionType === 'other'
+            ? action.actionType
+            : 'other',
+        occurred_at: toIsoOrFallback(action.occurredAt, generatedAt),
+        url: action.url,
+      })),
+      data_refreshes: (raw.activityFeed?.dataRefreshes ?? []).map((refresh, index) => ({
+        refresh_id: refresh.id ?? `refresh-${index + 1}`,
+        data_source: refresh.dataSource ?? 'Unknown data source',
+        model_id: refresh.modelId ?? 'unknown',
+        refreshed_at: toIsoOrFallback(refresh.refreshedAt, generatedAt),
+        summary: refresh.summary,
+      })),
+      saved_scenarios: (raw.activityFeed?.savedScenarios ?? []).map((activity, index) => ({
+        activity_id: activity.id ?? `saved-scenario-${index + 1}`,
+        scenario_name: activity.scenarioName ?? 'Untitled scenario',
+        scenario_id: activity.scenarioId ?? 'unknown-scenario',
+        author: activity.author ?? 'Unknown author',
+        saved_at: toIsoOrFallback(activity.savedAt, generatedAt),
+      })),
+    },
   }
 }

@@ -97,6 +97,48 @@ describe('overview adapter', () => {
     assert.equal(isIsoDateString(snapshot.headline_metrics[0].last_updated), true)
   })
 
+  it('copies activity_feed through from the raw payload with all three streams', () => {
+    const snapshot = toMacroSnapshot({
+      activityFeed: {
+        policyActions: [
+          {
+            id: 'pa-1',
+            title: 'Test action',
+            institution: 'CBU',
+            actionType: 'rate_decision',
+            occurredAt: '2026-04-15T10:00:00+05:00',
+          },
+        ],
+        dataRefreshes: [
+          {
+            id: 'dr-1',
+            dataSource: 'DFM',
+            modelId: 'dfm_nowcast',
+            refreshedAt: '2026-04-18T03:00:00Z',
+          },
+        ],
+        savedScenarios: [
+          {
+            id: 'ss-1',
+            scenarioName: 'Test scenario',
+            scenarioId: 'sc-uuid',
+            author: 'Test',
+            savedAt: '2026-04-16T11:30:00+05:00',
+          },
+        ],
+      },
+    })
+
+    assert.equal(snapshot.activity_feed.policy_actions.length, 1)
+    assert.equal(snapshot.activity_feed.policy_actions[0].action_id, 'pa-1')
+    assert.equal(snapshot.activity_feed.policy_actions[0].action_type, 'rate_decision')
+    assert.equal(snapshot.activity_feed.data_refreshes.length, 1)
+    assert.equal(snapshot.activity_feed.data_refreshes[0].model_id, 'dfm_nowcast')
+    assert.equal(snapshot.activity_feed.saved_scenarios.length, 1)
+    assert.equal(snapshot.activity_feed.saved_scenarios[0].author, 'Test')
+    assert.equal(snapshot.activity_feed.saved_scenarios[0].scenario_name, 'Test scenario')
+  })
+
   it('handles partial payloads with fallback defaults', () => {
     const snapshot = toMacroSnapshot({
       nowcast: {
@@ -132,6 +174,11 @@ describe('overview runtime guard', () => {
       nowcast: {
         points: [1, 2, { period: '2026 Q1', latest: 5.1 }],
       },
+      activityFeed: {
+        policyActions: [],
+        dataRefreshes: [],
+        savedScenarios: [],
+      },
     }
 
     const result = validateRawOverviewPayload(raw)
@@ -139,6 +186,43 @@ describe('overview runtime guard', () => {
     assert.equal(result.value.id, 'overview-1')
     assert.ok(result.issues.length > 0)
     assert.equal(Array.isArray(result.value.nowcast?.points), true)
+  })
+
+  it('flags missing activityFeed as error severity', () => {
+    const result = validateRawOverviewPayload({
+      id: 'overview-missing-activity',
+    })
+
+    const activityFeedErrors = result.issues.filter(
+      (issue) => issue.path === 'activityFeed' && issue.severity === 'error',
+    )
+    assert.ok(
+      activityFeedErrors.length >= 1,
+      `expected error-severity issue on 'activityFeed'; got ${JSON.stringify(
+        result.issues.filter((i) => i.path === 'activityFeed'),
+      )}`,
+    )
+    assert.equal(result.ok, false)
+  })
+
+  it('accepts populated activityFeed without activity-feed errors', () => {
+    const result = validateRawOverviewPayload({
+      id: 'overview-activity-ok',
+      activityFeed: {
+        policyActions: [],
+        dataRefreshes: [],
+        savedScenarios: [],
+      },
+    })
+
+    const activityFeedErrors = result.issues.filter(
+      (issue) => issue.path === 'activityFeed' && issue.severity === 'error',
+    )
+    assert.equal(
+      activityFeedErrors.length,
+      0,
+      `unexpected activity-feed errors: ${JSON.stringify(activityFeedErrors)}`,
+    )
   })
 })
 

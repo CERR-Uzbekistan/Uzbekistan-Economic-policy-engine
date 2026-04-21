@@ -1,17 +1,7 @@
 import type { ChartSpec, HeadlineMetric, MacroSnapshot } from '../../contracts/data-contract'
 
-const commonAttribution = {
-  model_id: 'multi-model-overview',
-  model_name: 'Cross-Model Overview Synthesis',
-  module: 'synthesis',
-  version: '0.1.0',
-  run_id: 'run-2026-04-17-0900',
-  data_version: '2026Q1',
-  timestamp: '2026-04-17T09:00:00+05:00',
-}
-
-const nowcastAttribution = {
-  model_id: 'DFM',
+const dfmAttribution = {
+  model_id: 'dfm_nowcast',
   model_name: 'Dynamic Factor Model',
   module: 'nowcast',
   version: '2.4.1',
@@ -19,6 +9,28 @@ const nowcastAttribution = {
   data_version: '2026Q1',
   timestamp: '2026-04-17T07:30:00+05:00',
 }
+
+const qpmAttribution = {
+  model_id: 'qpm_uzbekistan',
+  model_name: 'Quarterly Projection Model',
+  module: 'monetary',
+  version: '1.8.0',
+  run_id: 'qpm-run-2026-04-17-0800',
+  data_version: '2026Q1',
+  timestamp: '2026-04-17T08:00:00+05:00',
+}
+
+const peAttribution = {
+  model_id: 'pe_model',
+  model_name: 'Partial Equilibrium Trade Model',
+  module: 'external',
+  version: '1.2.3',
+  run_id: 'pe-run-2026-04-16-1800',
+  data_version: '2026Q1',
+  timestamp: '2026-04-16T18:00:00+05:00',
+}
+
+const nowcastAttribution = dfmAttribution
 
 const headlineMetrics: HeadlineMetric[] = [
   {
@@ -33,7 +45,7 @@ const headlineMetrics: HeadlineMetric[] = [
     direction: 'up',
     confidence: 'medium',
     last_updated: '2026-04-16T17:30:00+05:00',
-    model_attribution: [commonAttribution],
+    model_attribution: [dfmAttribution],
   },
   {
     metric_id: 'inflation',
@@ -47,7 +59,7 @@ const headlineMetrics: HeadlineMetric[] = [
     direction: 'down',
     confidence: 'high',
     last_updated: '2026-04-16T17:30:00+05:00',
-    model_attribution: [commonAttribution],
+    model_attribution: [qpmAttribution],
   },
   {
     metric_id: 'policy_rate',
@@ -61,7 +73,7 @@ const headlineMetrics: HeadlineMetric[] = [
     direction: 'down',
     confidence: 'high',
     last_updated: '2026-04-15T10:00:00+05:00',
-    model_attribution: [commonAttribution],
+    model_attribution: [qpmAttribution],
   },
   {
     metric_id: 'exchange_rate',
@@ -75,7 +87,7 @@ const headlineMetrics: HeadlineMetric[] = [
     direction: 'up',
     confidence: 'medium',
     last_updated: '2026-04-17T08:50:00+05:00',
-    model_attribution: [commonAttribution],
+    model_attribution: [qpmAttribution],
   },
   {
     metric_id: 'current_account',
@@ -89,7 +101,7 @@ const headlineMetrics: HeadlineMetric[] = [
     direction: 'up',
     confidence: 'low',
     last_updated: '2026-04-14T18:20:00+05:00',
-    model_attribution: [commonAttribution],
+    model_attribution: [peAttribution],
   },
   {
     metric_id: 'fiscal_balance',
@@ -103,7 +115,7 @@ const headlineMetrics: HeadlineMetric[] = [
     direction: 'down',
     confidence: 'medium',
     last_updated: '2026-04-16T12:15:00+05:00',
-    model_attribution: [commonAttribution],
+    model_attribution: [qpmAttribution],
   },
   {
     metric_id: 'reserves',
@@ -117,7 +129,7 @@ const headlineMetrics: HeadlineMetric[] = [
     direction: 'up',
     confidence: 'high',
     last_updated: '2026-04-16T16:40:00+05:00',
-    model_attribution: [commonAttribution],
+    model_attribution: [peAttribution],
   },
   {
     metric_id: 'public_debt',
@@ -131,7 +143,7 @@ const headlineMetrics: HeadlineMetric[] = [
     direction: 'down',
     confidence: 'medium',
     last_updated: '2026-04-13T14:00:00+05:00',
-    model_attribution: [commonAttribution],
+    model_attribution: [qpmAttribution],
   },
 ]
 
@@ -261,13 +273,104 @@ export const overviewV1Data: MacroSnapshot = {
   },
   caveats: [
     {
-      caveat_id: 'cav-001',
+      caveat_id: 'qpm-b3-inactive',
       severity: 'warning',
       message:
-        'Near-term external balances are sensitive to remittance assumptions not fully observed in real time.',
-      affected_metrics: ['current_account', 'exchange_rate'],
+        'External demand channel (b3) is inactive in the QPM scenario builder; Russia/China slowdown effects are approximated via remittance proxies.',
+      affected_metrics: ['gdp_growth'],
+      affected_models: ['qpm_uzbekistan'],
+    },
+    {
+      caveat_id: 'dfm-single-factor',
+      severity: 'info',
+      message:
+        'DFM nowcast currently uses a single common factor; sectoral divergence will emerge as additional factors are calibrated.',
+      affected_metrics: ['gdp_growth'],
       affected_models: ['dfm_nowcast'],
     },
+    {
+      caveat_id: 'pe-uniform-elasticity',
+      severity: 'warning',
+      message:
+        'PE model uses uniform trade elasticities across sectors; food vs. machinery substitution effects are not yet differentiated.',
+      affected_metrics: ['current_account'],
+      affected_models: ['pe_model'],
+    },
   ],
-  references: ['Internal macro monitoring note, April 2026'],
+  references: [
+    'Central Bank of Uzbekistan, Monetary Policy Report 2026 Q1',
+    'Ministry of Economy and Finance, Quarterly Macroeconomic Review',
+    'IMF Article IV Consultation, April 2026',
+  ],
+  activity_feed: {
+    policy_actions: [
+      {
+        action_id: 'cbu-rate-2026-04-15',
+        title: 'CBU holds policy rate at 14.0%',
+        institution: 'Central Bank of Uzbekistan',
+        action_type: 'rate_decision',
+        occurred_at: '2026-04-15T10:00:00+05:00',
+      },
+      {
+        action_id: 'mof-budget-2026-04-12',
+        title: 'Ministry of Finance publishes mid-year budget revision',
+        institution: 'Ministry of Economy and Finance',
+        action_type: 'announcement',
+        occurred_at: '2026-04-12T14:30:00+05:00',
+      },
+      {
+        action_id: 'cbu-reserve-req-2026-04-08',
+        title: 'CBU tightens reserve requirements on FX deposits',
+        institution: 'Central Bank of Uzbekistan',
+        action_type: 'regulation',
+        occurred_at: '2026-04-08T09:15:00+05:00',
+      },
+    ],
+    data_refreshes: [
+      {
+        refresh_id: 'dfm-2026-04-20',
+        data_source: 'DFM nowcast',
+        model_id: 'dfm_nowcast',
+        refreshed_at: '2026-04-20T03:00:00Z',
+        summary: 'Q1 2026 nowcast updated with March industrial production print.',
+      },
+      {
+        refresh_id: 'qpm-2026-04-18',
+        data_source: 'QPM baseline forecast',
+        model_id: 'qpm_uzbekistan',
+        refreshed_at: '2026-04-18T06:00:00Z',
+        summary: 'Baseline re-ran after CBU rate decision.',
+      },
+      {
+        refresh_id: 'pe-2026-04-15',
+        data_source: 'PE trade elasticities',
+        model_id: 'pe_model',
+        refreshed_at: '2026-04-15T12:00:00Z',
+        summary: 'Refreshed WITS tariff snapshot for HS codes 28–40.',
+      },
+    ],
+    saved_scenarios: [
+      {
+        activity_id: 'scen-2026-04-19-rate-cut',
+        scenario_name: 'Policy rate cut −100 bp (review)',
+        scenario_id: 'scenario-uuid-1',
+        author: 'CERR Macro Desk',
+        saved_at: '2026-04-19T14:22:00+05:00',
+      },
+      {
+        activity_id: 'scen-2026-04-17-remittance',
+        scenario_name: 'Remittance downside 2026',
+        scenario_id: 'scenario-uuid-2',
+        author: 'External Sector Team',
+        saved_at: '2026-04-17T11:05:00+05:00',
+      },
+      {
+        activity_id: 'scen-2026-04-14-fiscal',
+        scenario_name: 'Fiscal consolidation path',
+        scenario_id: 'scenario-uuid-3',
+        author: 'Fiscal Policy Desk',
+        saved_at: '2026-04-14T16:40:00+05:00',
+      },
+    ],
+  },
 }

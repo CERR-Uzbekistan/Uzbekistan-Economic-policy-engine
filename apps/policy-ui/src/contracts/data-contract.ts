@@ -136,6 +136,37 @@ export type OverviewOutputAction = {
   target_href: string
 }
 
+export type PolicyAction = {
+  action_id: string
+  title: string
+  institution: string
+  action_type: 'rate_decision' | 'regulation' | 'announcement' | 'other'
+  occurred_at: string
+  url?: string
+}
+
+export type DataRefresh = {
+  refresh_id: string
+  data_source: string
+  model_id: string
+  refreshed_at: string
+  summary?: string
+}
+
+export type SavedScenarioActivity = {
+  activity_id: string
+  scenario_name: string
+  scenario_id: string
+  author: string
+  saved_at: string
+}
+
+export type OverviewActivityFeed = {
+  policy_actions: PolicyAction[]
+  data_refreshes: DataRefresh[]
+  saved_scenarios: SavedScenarioActivity[]
+}
+
 export type MacroSnapshot = {
   snapshot_id: string
   snapshot_name: string
@@ -149,6 +180,7 @@ export type MacroSnapshot = {
   output_action: OverviewOutputAction
   caveats: Caveat[]
   references: string[]
+  activity_feed: OverviewActivityFeed
 }
 
 export type ComparisonScenarioTag = 'preferred' | 'balanced' | 'aggressive' | 'downside_stress'

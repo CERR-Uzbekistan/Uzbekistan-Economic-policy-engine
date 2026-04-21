@@ -121,7 +121,13 @@
       "sectionAria": "Umumiy ko'rinish lentasi panellari",
       "reforms": {
         "title": "Islohotlar",
-        "empty": "Kontent Bilimlar markazidan keladi."
+        "empty": "So'nggi siyosiy qarorlar yo'q.",
+        "actionType": {
+          "rate_decision": "Stavka qarori",
+          "regulation": "Qoida",
+          "announcement": "Bayonot",
+          "other": "Boshqa"
+        }
       },
       "dataRefreshes": {
         "title": "Ma'lumot yangilanishlari",
@@ -130,9 +136,21 @@
       },
       "savedScenarios": {
         "title": "Saqlangan stsenariylaringiz",
-        "empty": "Stsenariy simulyatorida qoralama saqlaganingizdan keyin stsenariylar shu yerda ko'rinadi.",
-        "youShort": "SIZ"
+        "empty": "Stsenariy simulyatorida qoralama saqlaganingizdan keyin stsenariylar shu yerda ko'rinadi."
       }
+    },
+    "caveats": {
+      "title": "Model bo'yicha izohlar",
+      "description": "Yuqoridagi ko'rsatkichlarga ta'sir qiluvchi ma'lum cheklovlar. Iqtibos qilishdan oldin o'qing.",
+      "affectedMetrics": "Ta'sir qiladi: {{metrics}}",
+      "severity": {
+        "critical": "Kritik",
+        "warning": "Ogohlantirish",
+        "info": "Ma'lumot"
+      }
+    },
+    "references": {
+      "title": "Manbalar va havolalar"
     }
   },
   "buttons": {
