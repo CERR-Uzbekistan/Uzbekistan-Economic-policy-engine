@@ -125,6 +125,8 @@ function renderPanelMarkup(selectedPresetId: string) {
           onRunScenario={() => {}}
           isRunPending={false}
           onSaveScenario={() => {}}
+          canSaveScenario={true}
+          saveDisabledReason={null}
           savedScenarios={[]}
           onLoadScenario={() => {}}
           onDeleteScenario={() => {}}

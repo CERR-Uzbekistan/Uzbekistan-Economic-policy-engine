@@ -256,7 +256,8 @@
       "scenarioSaveFailed": "Could not save scenario to local storage.",
       "savedScenarioLoadFailed": "Saved scenario could not be loaded.",
       "savedScenarioDeleteFailed": "Saved scenario could not be deleted.",
-      "scenarioModelIdsUnavailable": "Scenario model attribution is unavailable. Run scenario before saving."
+      "scenarioModelIdsUnavailable": "Run scenario to save results",
+      "scenarioSaveStaleEdits": "Run scenario to save with current edits"
     },
     "stale": {
       "scenarioResults": "Results reflect the previous run. Run scenario to update with current assumptions."
@@ -268,6 +269,7 @@
     "success": {
       "savedToLocalSessionAt": "Saved to local session at {{timestamp}}.",
       "savedScenarioLoaded": "Loaded \"{{scenarioName}}\" into Scenario Lab.",
+      "savedScenarioLoadedWithResults": "Loaded \"{{scenarioName}}\" with persisted run results.",
       "savedScenarioDeleted": "Deleted \"{{scenarioName}}\" from saved scenarios."
     }
   }

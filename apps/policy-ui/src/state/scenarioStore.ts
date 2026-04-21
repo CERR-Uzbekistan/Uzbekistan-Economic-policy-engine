@@ -1,6 +1,19 @@
-import type { Assumption, Scenario, ScenarioType } from '../contracts/data-contract'
+import type {
+  Assumption,
+  ChartAxis,
+  ChartSpec,
+  HeadlineMetric,
+  ModelAttribution,
+  NarrativeGenerationMode,
+  Scenario,
+  ScenarioLabInterpretation,
+  ScenarioLabResultTab,
+  ScenarioType,
+} from '../contracts/data-contract'
 
-const SCENARIO_KEY_PREFIX = 'policy-ui:scenario:'
+// v2 key prefix. v1 entries under `policy-ui:scenario:` are intentionally left untouched —
+// no silent migration; they sit inert until manually cleared. The store only reads/writes v2.
+const SCENARIO_KEY_PREFIX = 'policy-ui:scenario.v2:'
 const SESSION_ID_KEY = 'policy-ui:session-id'
 const STORE_EVENT = 'policy-ui:scenario-store-updated'
 let cachedSnapshot: SavedScenarioRecord[] = []
@@ -11,9 +24,33 @@ type ScenarioWithDataVersion = Scenario & {
   data_version: string
 }
 
+// Interpretation as emitted by the Scenario Lab source pipeline (TB-P3 extension).
+// Mirrors the `InterpretationWithMetadata` intersection already consumed by
+// `InterpretationPanel`; governance fields are carried on this extension,
+// not on `NarrativeBlock`.
+export type PersistedScenarioInterpretation = ScenarioLabInterpretation & {
+  generation_mode?: NarrativeGenerationMode
+  reviewer_name?: string
+  reviewed_at?: string
+}
+
+export type PersistedRunResults = {
+  headline_metrics: HeadlineMetric[]
+  charts_by_tab: Record<ScenarioLabResultTab, ChartSpec>
+}
+
 export type SavedScenarioRecord = ScenarioWithDataVersion & {
   stored_at: string
+  // Optional output snapshot fields (run artifact). Absent on records that predate the snapshot
+  // feature or were saved without a successful run having produced results.
+  run_id?: string
+  run_saved_at?: string
+  run_results?: PersistedRunResults
+  run_interpretation?: PersistedScenarioInterpretation
+  run_attribution?: ModelAttribution[]
 }
+
+export type { ScenarioWithDataVersion }
 
 type StorageLike = Pick<Storage, 'getItem' | 'setItem' | 'removeItem' | 'key' | 'length'>
 
@@ -47,12 +84,142 @@ function isAssumption(value: unknown): value is Assumption {
   )
 }
 
+function isModelAttribution(value: unknown): value is ModelAttribution {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<ModelAttribution>
+  return (
+    typeof candidate.model_id === 'string' &&
+    typeof candidate.model_name === 'string' &&
+    typeof candidate.module === 'string' &&
+    typeof candidate.version === 'string' &&
+    typeof candidate.run_id === 'string' &&
+    typeof candidate.data_version === 'string' &&
+    typeof candidate.timestamp === 'string'
+  )
+}
+
+function isHeadlineMetric(value: unknown): value is HeadlineMetric {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<HeadlineMetric>
+  return (
+    typeof candidate.metric_id === 'string' &&
+    typeof candidate.label === 'string' &&
+    typeof candidate.value === 'number' &&
+    typeof candidate.unit === 'string' &&
+    typeof candidate.period === 'string' &&
+    typeof candidate.last_updated === 'string' &&
+    Array.isArray(candidate.model_attribution) &&
+    candidate.model_attribution.every(isModelAttribution)
+  )
+}
+
+function isChartAxis(value: unknown): value is ChartAxis {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<ChartAxis>
+  return (
+    typeof candidate.label === 'string' &&
+    typeof candidate.unit === 'string' &&
+    Array.isArray(candidate.values)
+  )
+}
+
+function isChartSpec(value: unknown): value is ChartSpec {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<ChartSpec>
+  return (
+    typeof candidate.chart_id === 'string' &&
+    typeof candidate.title === 'string' &&
+    typeof candidate.subtitle === 'string' &&
+    typeof candidate.chart_type === 'string' &&
+    isChartAxis(candidate.x) &&
+    isChartAxis(candidate.y) &&
+    Array.isArray(candidate.series) &&
+    Array.isArray(candidate.uncertainty) &&
+    typeof candidate.takeaway === 'string' &&
+    Array.isArray(candidate.model_attribution) &&
+    candidate.model_attribution.every(isModelAttribution)
+  )
+}
+
+// ScenarioLabResultTab is a closed set of four tab ids. The ResultsPanel dereferences
+// charts_by_tab[activeTab] unguarded, so a persisted snapshot missing any of these
+// tabs would crash the page on navigation. Require the full set at validation time.
+const REQUIRED_CHART_TABS: readonly ScenarioLabResultTab[] = [
+  'headline_impact',
+  'macro_path',
+  'external_balance',
+  'fiscal_effects',
+]
+
+function isPersistedRunResults(value: unknown): value is PersistedRunResults {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<PersistedRunResults>
+  if (!Array.isArray(candidate.headline_metrics) || !candidate.headline_metrics.every(isHeadlineMetric)) {
+    return false
+  }
+  if (typeof candidate.charts_by_tab !== 'object' || candidate.charts_by_tab === null) {
+    return false
+  }
+  const chartsByTab = candidate.charts_by_tab as Record<string, unknown>
+  for (const tab of REQUIRED_CHART_TABS) {
+    if (!isChartSpec(chartsByTab[tab])) {
+      return false
+    }
+  }
+  return true
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item) => typeof item === 'string')
+}
+
+function isPersistedScenarioInterpretation(value: unknown): value is PersistedScenarioInterpretation {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<PersistedScenarioInterpretation>
+  if (
+    !isStringArray(candidate.what_changed) ||
+    !isStringArray(candidate.why_it_changed) ||
+    !isStringArray(candidate.key_risks) ||
+    !isStringArray(candidate.policy_implications) ||
+    !isStringArray(candidate.suggested_next_scenarios)
+  ) {
+    return false
+  }
+  if (
+    candidate.generation_mode !== undefined &&
+    candidate.generation_mode !== 'template' &&
+    candidate.generation_mode !== 'assisted' &&
+    candidate.generation_mode !== 'reviewed'
+  ) {
+    return false
+  }
+  if (candidate.reviewer_name !== undefined && typeof candidate.reviewer_name !== 'string') {
+    return false
+  }
+  if (candidate.reviewed_at !== undefined && typeof candidate.reviewed_at !== 'string') {
+    return false
+  }
+  return true
+}
+
 function isSavedScenarioRecord(value: unknown): value is SavedScenarioRecord {
   if (typeof value !== 'object' || value === null) {
     return false
   }
   const candidate = value as Partial<SavedScenarioRecord>
-  return (
+  const baseValid =
     typeof candidate.scenario_id === 'string' &&
     typeof candidate.scenario_name === 'string' &&
     isScenarioType(candidate.scenario_type) &&
@@ -70,7 +237,34 @@ function isSavedScenarioRecord(value: unknown): value is SavedScenarioRecord {
     typeof candidate.data_version === 'string' &&
     candidate.data_version.length > 0 &&
     typeof candidate.stored_at === 'string'
-  )
+
+  if (!baseValid) {
+    return false
+  }
+
+  // Optional output-snapshot fields: validate when present, tolerate when absent.
+  if (candidate.run_id !== undefined && typeof candidate.run_id !== 'string') {
+    return false
+  }
+  if (candidate.run_saved_at !== undefined && typeof candidate.run_saved_at !== 'string') {
+    return false
+  }
+  if (candidate.run_results !== undefined && !isPersistedRunResults(candidate.run_results)) {
+    return false
+  }
+  if (
+    candidate.run_interpretation !== undefined &&
+    !isPersistedScenarioInterpretation(candidate.run_interpretation)
+  ) {
+    return false
+  }
+  if (
+    candidate.run_attribution !== undefined &&
+    !(Array.isArray(candidate.run_attribution) && candidate.run_attribution.every(isModelAttribution))
+  ) {
+    return false
+  }
+  return true
 }
 
 function buildScenarioKey(scenarioId: string): string {
@@ -124,7 +318,15 @@ function safeParseRecord(rawValue: string, scenarioId: string): SavedScenarioRec
   }
 }
 
-export function saveScenario(scenario: ScenarioWithDataVersion): SavedScenarioRecord {
+export type SaveScenarioInput = ScenarioWithDataVersion & {
+  run_id?: string
+  run_saved_at?: string
+  run_results?: PersistedRunResults
+  run_interpretation?: PersistedScenarioInterpretation
+  run_attribution?: ModelAttribution[]
+}
+
+export function saveScenario(scenario: SaveScenarioInput): SavedScenarioRecord {
   const storage = getStorage()
   if (!storage) {
     throw new Error('Local storage is unavailable in this environment.')
@@ -152,6 +354,22 @@ export function saveScenario(scenario: ScenarioWithDataVersion): SavedScenarioRe
     model_ids: scenario.model_ids,
     data_version: scenario.data_version,
     stored_at: nowIso,
+  }
+
+  if (scenario.run_id !== undefined) {
+    normalizedRecord.run_id = scenario.run_id
+  }
+  if (scenario.run_saved_at !== undefined) {
+    normalizedRecord.run_saved_at = scenario.run_saved_at
+  }
+  if (scenario.run_results !== undefined) {
+    normalizedRecord.run_results = scenario.run_results
+  }
+  if (scenario.run_interpretation !== undefined) {
+    normalizedRecord.run_interpretation = scenario.run_interpretation
+  }
+  if (scenario.run_attribution !== undefined) {
+    normalizedRecord.run_attribution = scenario.run_attribution
   }
 
   storage.setItem(buildScenarioKey(normalizedRecord.scenario_id), JSON.stringify(normalizedRecord))

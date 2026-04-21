@@ -29,6 +29,8 @@ type AssumptionsPanelProps = {
   onRunScenario: () => void
   isRunPending: boolean
   onSaveScenario: () => void
+  canSaveScenario: boolean
+  saveDisabledReason: string | null
   savedScenarios: SavedScenarioRecord[]
   onLoadScenario: (scenarioId: string) => void
   onDeleteScenario: (scenarioId: string) => void
@@ -140,6 +142,8 @@ export function AssumptionsPanel({
   onRunScenario,
   isRunPending,
   onSaveScenario,
+  canSaveScenario,
+  saveDisabledReason,
   savedScenarios,
   onLoadScenario,
   onDeleteScenario,
@@ -254,9 +258,20 @@ export function AssumptionsPanel({
         </fieldset>
 
         <div className="scenario-session-controls__actions">
-          <button type="button" onClick={onSaveScenario}>
+          <button
+            type="button"
+            onClick={onSaveScenario}
+            disabled={!canSaveScenario}
+            title={saveDisabledReason ?? undefined}
+            aria-describedby={saveDisabledReason ? 'scenario-save-disabled-reason' : undefined}
+          >
             {t('buttons.saveDraft')}
           </button>
+          {saveDisabledReason ? (
+            <span id="scenario-save-disabled-reason" className="sr-only">
+              {saveDisabledReason}
+            </span>
+          ) : null}
           <button type="button" onClick={onRunScenario} disabled={isRunPending}>
             {isRunPending ? `${t('buttons.run')}...` : t('buttons.runScenario')}
           </button>

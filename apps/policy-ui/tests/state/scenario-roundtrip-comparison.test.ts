@@ -11,6 +11,49 @@ import {
 } from '../../src/state/scenarioStore.js'
 import { installMemoryStorage } from '../helpers/memory-storage.js'
 
+const sentinelAttribution = {
+  model_id: 'scenario-lab-mock-engine',
+  model_name: 'Scenario Lab Mock',
+  module: 'scenario-lab',
+  version: '1.0.0',
+  run_id: 'run-sentinel',
+  data_version: '2025Q4',
+  timestamp: '2026-04-01T12:00:00Z',
+}
+
+function buildSentinelChart() {
+  return {
+    chart_id: 'sentinel-chart',
+    title: 'Sentinel',
+    subtitle: '',
+    chart_type: 'line' as const,
+    x: { label: 'Year', unit: '', values: ['2026'] },
+    y: { label: '%', unit: '%', values: [] },
+    series: [{ series_id: 's1', label: 'Alt', semantic_role: 'alternative' as const, values: [42] }],
+    view_mode: 'level' as const,
+    uncertainty: [],
+    takeaway: 'Sentinel',
+    model_attribution: [sentinelAttribution],
+  }
+}
+
+function buildSentinelHeadlineMetric(metricId: string, value: number) {
+  return {
+    metric_id: metricId,
+    label: metricId,
+    value,
+    unit: '%',
+    period: '2026',
+    baseline_value: 0,
+    delta_abs: value,
+    delta_pct: null,
+    direction: 'up' as const,
+    confidence: 'medium' as const,
+    last_updated: '2026-04-01T12:00:00Z',
+    model_attribution: [sentinelAttribution],
+  }
+}
+
 function buildIntegrationScenario() {
   return {
     scenario_id: 'scenario-integration-1',
@@ -31,6 +74,21 @@ function buildIntegrationScenario() {
     created_at: '',
     updated_at: '',
     created_by: '',
+    run_id: 'run-sentinel',
+    run_saved_at: '2026-04-01T12:00:00Z',
+    run_results: {
+      headline_metrics: [
+        buildSentinelHeadlineMetric('gdp_growth', 42),
+        buildSentinelHeadlineMetric('inflation', -7),
+      ],
+      charts_by_tab: {
+        headline_impact: buildSentinelChart(),
+        macro_path: buildSentinelChart(),
+        external_balance: buildSentinelChart(),
+        fiscal_effects: buildSentinelChart(),
+      },
+    },
+    run_attribution: [sentinelAttribution],
   }
 }
 
@@ -71,8 +129,10 @@ describe('scenario store to comparison round trip', () => {
     assert.ok(savedInComparison)
     assert.equal(savedInComparison.scenario_name, savedRecord.scenario_name)
     assert.equal(savedInComparison.scenario_type, savedRecord.scenario_type)
-    assert.ok(typeof savedInComparison.values.gdp_growth === 'number')
-    assert.ok(typeof savedInComparison.values.inflation === 'number')
+    // Sentinel values from the persisted snapshot — the re-run path would never produce these,
+    // so their presence confirms the adapter reads from persisted run_results, not assumptions.
+    assert.equal(savedInComparison.values.gdp_growth, 42)
+    assert.equal(savedInComparison.values.inflation, -7)
 
     assert.equal(deleteScenario(savedRecord.scenario_id), true)
     const mergedAfterDelete = mergeScenariosForComparison()

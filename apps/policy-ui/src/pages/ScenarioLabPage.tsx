@@ -32,6 +32,8 @@ import {
   loadScenario,
   saveScenario,
   subscribeScenarioStore,
+  type PersistedRunResults,
+  type PersistedScenarioInterpretation,
 } from '../state/scenarioStore'
 import {
   findPreset,
@@ -317,14 +319,36 @@ export function ScenarioLabPage() {
     const modelIds = modelIdsFromRun.length > 0 ? modelIdsFromRun : modelIdsFromPreset
     const dataVersion = latestAttribution?.data_version ?? scenarioLabBaseDataVersion
 
+    // Defensive: the save button is disabled when no attribution is available, so this branch
+    // should be unreachable under normal flow. Kept to preserve the existing save-failure UX.
     if (modelIds.length === 0) {
-      setSaveStatus(t('states.error.scenarioModelIdsUnavailable'))
       return
     }
 
+    const scenarioId = currentScenarioId ?? globalThis.crypto.randomUUID()
+    // run_id: prefer the attribution-provided run_id (deduped by `extractAttribution`) when
+    // present; fall back to a composed `${scenario_id}:${stored_at}` so saved records remain
+    // self-identifying even in the pre-bridge mock flow where attribution run_ids are
+    // session-scoped rather than globally unique.
+    const runId = latestAttribution?.run_id ?? `${scenarioId}:${new Date().toISOString()}`
+    const runSavedAt = latestAttribution?.timestamp ?? new Date().toISOString()
+    const runResults: PersistedRunResults | undefined = sourceState.results
+      ? {
+          headline_metrics: sourceState.results.headline_metrics,
+          charts_by_tab: sourceState.results.charts_by_tab,
+        }
+      : undefined
+    const runInterpretation: PersistedScenarioInterpretation | undefined = sourceState.results
+      ? (sourceState.results.interpretation as PersistedScenarioInterpretation)
+      : undefined
+    const runAttribution =
+      latestSuccessfulAttributionRef.current.length > 0
+        ? latestSuccessfulAttributionRef.current
+        : undefined
+
     try {
       const record = saveScenario({
-        scenario_id: currentScenarioId ?? globalThis.crypto.randomUUID(),
+        scenario_id: scenarioId,
         scenario_name: scenarioName,
         scenario_type: scenarioType,
         description: scenarioDescription,
@@ -335,6 +359,11 @@ export function ScenarioLabPage() {
         created_at: '',
         updated_at: '',
         created_by: '',
+        run_id: runId,
+        run_saved_at: runSavedAt,
+        run_results: runResults,
+        run_interpretation: runInterpretation,
+        run_attribution: runAttribution,
       })
       const timestamp = new Intl.DateTimeFormat(i18n.resolvedLanguage ?? 'en', {
         hour: '2-digit',
@@ -361,7 +390,48 @@ export function ScenarioLabPage() {
     setScenarioDescription(record.description)
     setScenarioTags(record.tags)
     setCurrentScenarioId(record.scenario_id)
-    setAssumptionValues(toAssumptionValues(workspace, record.assumptions))
+    const restoredAssumptions = toAssumptionValues(workspace, record.assumptions)
+    setAssumptionValues(restoredAssumptions)
+    // Sync last-run baseline so hasPendingEdits stays false on load (user didn't edit anything).
+    setLastRunAssumptions(restoredAssumptions)
+
+    if (record.run_results) {
+      const persistedInterpretation =
+        record.run_interpretation ?? sourceState.results?.interpretation ?? fallbackResults.interpretation
+      const restoredBundle: ScenarioLabResultsBundle = {
+        headline_metrics: record.run_results.headline_metrics,
+        charts_by_tab: record.run_results.charts_by_tab,
+        interpretation: persistedInterpretation,
+      }
+      latestSuccessfulAttributionRef.current = record.run_attribution ?? extractAttribution(restoredBundle)
+      // Cancel any in-flight run so it cannot overwrite the restored snapshot.
+      activeRunIdRef.current += 1
+      setSourceState((prev) => ({
+        ...prev,
+        status: 'ready',
+        error: null,
+        workspace: prev.workspace ?? scenarioLabWorkspaceMock,
+        results: restoredBundle,
+      }))
+      setSaveStatus(
+        t('states.success.savedScenarioLoadedWithResults', { scenarioName: record.scenario_name }),
+      )
+      return
+    }
+
+    // No persisted run snapshot — put the page in a true "no run yet" state so Save
+    // disables until the user reruns. Without this, the previous scenario's results
+    // and attribution would remain live and could be persisted alongside the newly
+    // loaded assumptions (silent corruption; ANCHOR-3).
+    activeRunIdRef.current += 1
+    latestSuccessfulAttributionRef.current = []
+    setSourceState((prev) => ({
+      ...prev,
+      status: 'ready',
+      error: null,
+      workspace: prev.workspace ?? scenarioLabWorkspaceMock,
+      results: null,
+    }))
     setSaveStatus(t('states.success.savedScenarioLoaded', { scenarioName: record.scenario_name }))
   }
 
@@ -403,6 +473,22 @@ export function ScenarioLabPage() {
     !assumptionsEqual(assumptionValues, lastRunAssumptions)
 
   const currentAttribution = extractAttribution(currentResults)
+  // Save is gated on a successful run producing attribution. Derived from rendered state
+  // (not latestSuccessfulAttributionRef) so React can reconcile the disabled attribute
+  // without ref-during-render warnings.
+  const successfulRunAttribution = sourceState.results ? extractAttribution(sourceState.results) : []
+  // Save is gated on (a) a successful run producing attribution AND (b) no pending edits since
+  // that run. Gate (b) prevents the silent-drift failure where a user runs, edits an assumption,
+  // and clicks Save — which would otherwise persist the prior run's results alongside the newly
+  // edited assumptions, producing a record that falsely claims those assumptions produced those
+  // results.
+  const canSaveScenario = successfulRunAttribution.length > 0 && !hasPendingEdits
+  const saveDisabledReason =
+    successfulRunAttribution.length === 0
+      ? t('states.error.scenarioModelIdsUnavailable')
+      : hasPendingEdits
+        ? t('states.error.scenarioSaveStaleEdits')
+        : null
   const modelIdsForHeader =
     currentAttribution.length > 0
       ? currentAttribution.map((entry) => entry.model_id)
@@ -467,6 +553,8 @@ export function ScenarioLabPage() {
           onRunScenario={handleRunScenario}
           isRunPending={sourceState.status === 'loading'}
           onSaveScenario={handleSaveScenario}
+          canSaveScenario={canSaveScenario}
+          saveDisabledReason={saveDisabledReason}
           savedScenarios={savedScenarios}
           onLoadScenario={handleLoadSavedScenario}
           onDeleteScenario={handleDeleteSavedScenario}

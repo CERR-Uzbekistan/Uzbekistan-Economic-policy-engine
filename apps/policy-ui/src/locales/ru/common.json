@@ -256,7 +256,8 @@
       "scenarioSaveFailed": "Не удалось сохранить сценарий в локальном хранилище.",
       "savedScenarioLoadFailed": "Не удалось загрузить сохранённый сценарий.",
       "savedScenarioDeleteFailed": "Не удалось удалить сохранённый сценарий.",
-      "scenarioModelIdsUnavailable": "Атрибуция моделей недоступна. Запустите сценарий перед сохранением."
+      "scenarioModelIdsUnavailable": "Запустите сценарий, чтобы сохранить результаты",
+      "scenarioSaveStaleEdits": "Запустите сценарий, чтобы сохранить с текущими правками"
     },
     "stale": {
       "scenarioResults": "Результаты отражают предыдущий запуск. Запустите сценарий, чтобы обновить результаты с текущими допущениями."
@@ -268,6 +269,7 @@
     "success": {
       "savedToLocalSessionAt": "Сохранено в локальной сессии в {{timestamp}}.",
       "savedScenarioLoaded": "Сценарий \"{{scenarioName}}\" загружен в Симулятор.",
+      "savedScenarioLoadedWithResults": "Сценарий \"{{scenarioName}}\" загружен вместе с сохранёнными результатами запуска.",
       "savedScenarioDeleted": "Сценарий \"{{scenarioName}}\" удалён из сохранённых."
     }
   }

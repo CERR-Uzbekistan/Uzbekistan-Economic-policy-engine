@@ -256,7 +256,8 @@
       "scenarioSaveFailed": "Stsenariyni localStorage'ga saqlab bo'lmadi.",
       "savedScenarioLoadFailed": "Saqlangan stsenariyni yuklab bo'lmadi.",
       "savedScenarioDeleteFailed": "Saqlangan stsenariyni o'chirib bo'lmadi.",
-      "scenarioModelIdsUnavailable": "Model atributsiyasi mavjud emas. Saqlashdan oldin stsenariyni ishga tushiring."
+      "scenarioModelIdsUnavailable": "Natijalarni saqlash uchun ssenariyni ishga tushiring",
+      "scenarioSaveStaleEdits": "Joriy o'zgartirishlar bilan saqlash uchun ssenariyni qayta ishga tushiring"
     },
     "stale": {
       "scenarioResults": "Natijalar oldingi ishga tushirishga tegishli. Joriy taxminlar bilan yangilash uchun stsenariyni qayta ishga tushiring."
@@ -268,6 +269,7 @@
     "success": {
       "savedToLocalSessionAt": "Mahalliy sessiyaga {{timestamp}} da saqlandi.",
       "savedScenarioLoaded": "\"{{scenarioName}}\" stsenariyi Stsenariy simulyatoriga yuklandi.",
+      "savedScenarioLoadedWithResults": "\"{{scenarioName}}\" stsenariyi saqlangan ishga tushirish natijalari bilan yuklandi.",
       "savedScenarioDeleted": "\"{{scenarioName}}\" stsenariyi saqlangan ro'yxatdan o'chirildi."
     }
   }
