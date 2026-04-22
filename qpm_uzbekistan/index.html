@@ -44,6 +44,7 @@ nav{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;displ
 
 /* Shock buttons */
 .shock-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.shock-grid .sbtn:last-child:nth-child(odd){grid-column:span 2}
 .sbtn{border:2px solid var(--border);background:#fff;border-radius:10px;padding:10px 7px;
       cursor:pointer;transition:all .15s;text-align:center}
 .sbtn:hover{border-color:var(--blue)}
@@ -457,6 +458,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
         <div class="eq">Z_gap  = (L_S + L_CPI_RW − L_CPI) − L_Z_BAR</div>
         <div class="eq">D4L_S  = L_S − L_S{−4}   (YoY NER)</div>
         <div class="eq">D4L_CPI= L_CPI − L_CPI{−4} (YoY inflation)</div>
+        <div class="eq">gap*_t = 0.75·gap*_{t-1} + ε_ext  (foreign output gap AR(1))</div>
       </div>
       <div class="acard">
         <h3>Calibrated Parameters</h3>
@@ -485,6 +487,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
           <li><strong>π* = 5%</strong> — CBU medium-term inflation target</li>
           <li><strong>r̄ = 3.5%</strong> — neutral real rate (structural premium over EM average)</li>
           <li><strong>Balassa-Samuelson:</strong> RER trend appreciation of −1% p.a. from productivity catch-up</li>
+          <li><strong>b₃ = 0.30 (active):</strong> External demand shock transmits via IS curve (Russia/China slowdown); gap*_t follows AR(1) with ρ=0.75</li>
         </ul>
       </div>
     </div>
@@ -999,7 +1002,7 @@ else run();
 const VAR_LABELS = ['CPI Inflation YoY','Output Gap','Policy Rate','NER Depreciation YoY','Real Exchange Rate Gap','Monetary Conditions Index'];
 
 function qpmExportCSV() {
-  if (!lastIRF) { alert('Run the simulation first.'); return; }
+  if (!lastIRF) { Toast.show('Run the simulation first', 'warning'); return; }
   const { series, shock, T } = lastIRF;
   const headers = ['Quarter', ...VAR_LABELS];
   const rows = [];
@@ -1011,12 +1014,12 @@ function qpmExportCSV() {
 }
 
 function qpmExportPNG() {
-  if (!lastIRF) { alert('Run the simulation first.'); return; }
+  if (!lastIRF) { Toast.show('Run the simulation first', 'warning'); return; }
   ReportEngine.downloadChartPNG('ch0', 'qpm_inflation_irf.png');
 }
 
 function qpmExportPDF() {
-  if (!lastIRF) { alert('Run the simulation first.'); return; }
+  if (!lastIRF) { Toast.show('Run the simulation first', 'warning'); return; }
   const { series, shock, sz, T } = lastIRF;
   const shockName = SHOCK_NAMES[shock] || shock;
   const kpis = [
