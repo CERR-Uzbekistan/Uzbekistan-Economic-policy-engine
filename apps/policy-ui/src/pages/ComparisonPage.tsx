@@ -9,16 +9,22 @@ import { PageHeader } from '../components/layout/PageHeader'
 import type {
   ComparisonScenario,
   ComparisonScenarioTag,
-  ComparisonViewMode,
 } from '../contracts/data-contract'
+import { QPM_CANONICAL_SCENARIO_ORDER } from '../data/bridge/qpm-types'
 import {
   getInitialComparisonSourceState,
   loadComparisonSourceState,
 } from '../data/comparison/source'
 import { beginRetry } from '../data/source-state'
 import { toComparisonScenario } from '../state/scenarioComparisonAdapter'
-import { listScenarios, subscribeScenarioStore } from '../state/scenarioStore'
+import {
+  listScenarios,
+  subscribeScenarioStore,
+  type SavedScenarioRecord,
+} from '../state/scenarioStore'
 import './comparison.css'
+
+const COMPARISON_SLOT_LIMIT = 3
 
 function buildScenarioMap(scenarios: ComparisonScenario[]) {
   return scenarios.reduce<Record<string, ComparisonScenario>>((acc, scenario) => {
@@ -39,7 +45,6 @@ export function ComparisonPage() {
   const [sourceState, setSourceState] = useState(getInitialComparisonSourceState)
   const [selectedIdsOverride, setSelectedIdsOverride] = useState<string[] | null>(null)
   const [baselineIdOverride, setBaselineIdOverride] = useState<string | null>(null)
-  const [viewMode, setViewMode] = useState<ComparisonViewMode>('level')
   const [tagsByScenarioIdOverride, setTagsByScenarioIdOverride] = useState<
     Record<string, ComparisonScenarioTag> | null
   >(null)
@@ -58,22 +63,50 @@ export function ComparisonPage() {
     }
   }, [])
 
+  useEffect(() => {
+    if (sourceState.status !== 'ready' || sourceState.mode !== 'mock') {
+      return
+    }
+    console.warn('[Comparison] QPM bridge unavailable; using mock fallback workspace.')
+  }, [sourceState.mode, sourceState.status])
+
   const workspace = sourceState.workspace
+  const workspaceScenarios = useMemo(() => workspace?.scenarios ?? [], [workspace])
+  const savedComparisonScenarios = useMemo(
+    () => savedScenarios.map((savedScenario) => toComparisonScenario(savedScenario)),
+    [savedScenarios],
+  )
   const scenarios = useMemo(() => {
-    const workspaceScenarios = workspace?.scenarios ?? []
-    if (savedScenarios.length === 0) {
+    if (savedComparisonScenarios.length === 0) {
       return workspaceScenarios
     }
     const merged = new Map<string, ComparisonScenario>()
     for (const scenario of workspaceScenarios) {
       merged.set(scenario.scenario_id, scenario)
     }
-    for (const savedScenario of savedScenarios) {
-      const mapped = toComparisonScenario(savedScenario)
-      merged.set(mapped.scenario_id, mapped)
+    for (const savedScenario of savedComparisonScenarios) {
+      merged.set(savedScenario.scenario_id, savedScenario)
     }
     return Array.from(merged.values())
-  }, [workspace, savedScenarios])
+  }, [savedComparisonScenarios, workspaceScenarios])
+
+  const qpmReferenceScenarios = useMemo(() => {
+    if (sourceState.qpmPayload) {
+      const byId = new Map(workspaceScenarios.map((scenario) => [scenario.scenario_id, scenario]))
+      return QPM_CANONICAL_SCENARIO_ORDER.map((scenarioId) => byId.get(scenarioId)).filter(
+        (scenario): scenario is ComparisonScenario => Boolean(scenario),
+      )
+    }
+    return workspaceScenarios
+  }, [sourceState.qpmPayload, workspaceScenarios])
+
+  const savedScenariosById = useMemo(() => {
+    return savedScenarios.reduce<Record<string, SavedScenarioRecord>>((acc, scenario) => {
+      acc[scenario.scenario_id] = scenario
+      return acc
+    }, {})
+  }, [savedScenarios])
+
   const metricDefinitions = useMemo(() => workspace?.metric_definitions ?? [], [workspace])
 
   const defaultSelectedIds = useMemo(() => {
@@ -82,10 +115,12 @@ export function ComparisonPage() {
     }
 
     const scenarioIds = new Set(scenarios.map((scenario) => scenario.scenario_id))
-    const normalized = workspace.default_selected_ids.filter((id) => scenarioIds.has(id)).slice(0, 4)
+    const normalized = workspace.default_selected_ids
+      .filter((id) => scenarioIds.has(id))
+      .slice(0, COMPARISON_SLOT_LIMIT)
     return normalized.length >= 2
       ? normalized
-      : scenarios.map((scenario) => scenario.scenario_id).slice(0, 4)
+      : scenarios.map((scenario) => scenario.scenario_id).slice(0, COMPARISON_SLOT_LIMIT)
   }, [workspace, scenarios])
 
   const selectedIds = useMemo(() => {
@@ -98,7 +133,9 @@ export function ComparisonPage() {
     }
 
     const scenarioIds = new Set(scenarios.map((scenario) => scenario.scenario_id))
-    const normalized = selectedIdsOverride.filter((id) => scenarioIds.has(id)).slice(0, 4)
+    const normalized = selectedIdsOverride
+      .filter((id) => scenarioIds.has(id))
+      .slice(0, COMPARISON_SLOT_LIMIT)
     return normalized.length >= 2 ? normalized : defaultSelectedIds
   }, [workspace, scenarios, selectedIdsOverride, defaultSelectedIds])
 
@@ -198,7 +235,7 @@ export function ComparisonPage() {
       return
     }
 
-    if (selectedIds.length >= 4) {
+    if (selectedIds.length >= COMPARISON_SLOT_LIMIT) {
       return
     }
 
@@ -212,7 +249,7 @@ export function ComparisonPage() {
     if (!selectedIds.includes(nextBaselineId)) {
       setSelectedIdsOverride((prev) => {
         const current = prev ?? selectedIds
-        if (current.length < 4) {
+        if (current.length < COMPARISON_SLOT_LIMIT) {
           return [...current, nextBaselineId]
         }
         const removable = current.find((id) => id !== baselineId)
@@ -234,7 +271,8 @@ export function ComparisonPage() {
       <PageHeader title={t('pages.comparison.title')} description={t('pages.comparison.description')} />
 
       <ScenarioSelectorPanel
-        scenarios={scenarios}
+        qpmScenarios={qpmReferenceScenarios}
+        savedScenarios={savedComparisonScenarios}
         selectedIds={selectedIds}
         baselineId={baselineId}
         tagsByScenarioId={tagsByScenarioId}
@@ -250,20 +288,14 @@ export function ComparisonPage() {
         tagsByScenarioId={tagsByScenarioId}
       />
 
-      <div className="comparison-bottom-grid">
-        <ComparisonChartPanel
-          selectedScenarios={selectedScenarios}
-          metricDefinitions={metricDefinitions}
-          baselineId={baselineId}
-          viewMode={viewMode}
-          onViewModeChange={setViewMode}
-        />
-        <TradeoffSummaryPanel
-          selectedScenarios={selectedScenarios}
-          baselineId={baselineId}
-          tagsByScenarioId={tagsByScenarioId}
-        />
-      </div>
+      <ComparisonChartPanel
+        selectedScenarios={selectedScenarios}
+        selectedIds={selectedIds}
+        baselineId={baselineId}
+        qpmPayload={sourceState.qpmPayload}
+        savedScenariosById={savedScenariosById}
+      />
+      <TradeoffSummaryPanel selectedScenarios={selectedScenarios} baselineId={baselineId} />
     </PageContainer>
   )
 }

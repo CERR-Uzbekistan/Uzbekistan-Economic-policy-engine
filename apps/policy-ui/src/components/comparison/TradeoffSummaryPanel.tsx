@@ -1,142 +1,88 @@
-import type {
-  ComparisonScenario,
-  ComparisonScenarioTag,
-} from '../../contracts/data-contract'
+import { useTranslation } from 'react-i18next'
+import type { ComparisonScenario } from '../../contracts/data-contract'
 
 type TradeoffSummaryPanelProps = {
   selectedScenarios: ComparisonScenario[]
   baselineId: string
-  tagsByScenarioId: Record<string, ComparisonScenarioTag>
 }
 
-function hasGrowth(scenario: ComparisonScenario) {
-  return typeof scenario.values.gdp_growth === 'number'
+const DELTA_THRESHOLD = 0.05
+
+function formatSignedDelta(delta: number): string {
+  const sign = delta >= 0 ? '+' : '−'
+  return `${sign}${Math.abs(delta).toFixed(1)}pp`
 }
 
-function getGrowthScore(scenario: ComparisonScenario) {
-  return scenario.values.gdp_growth ?? 0
-}
+export function TradeoffSummaryPanel({ selectedScenarios, baselineId }: TradeoffSummaryPanelProps) {
+  const { t } = useTranslation()
+  const baseline = selectedScenarios.find((scenario) => scenario.scenario_id === baselineId)
+  const alternatives = selectedScenarios.filter((scenario) => scenario.scenario_id !== baselineId)
 
-function getStabilityScore(scenario: ComparisonScenario) {
-  const inflation = scenario.values.inflation
-  const fiscal = scenario.values.fiscal_balance
-  let score = scenario.risk_index
-  if (typeof inflation === 'number') {
-    score += Math.abs(inflation - 8) * 5
-  }
-  if (typeof fiscal === 'number') {
-    score += Math.abs(fiscal + 3) * 4
-  }
-  return score
-}
-
-function getBalanceScore(scenario: ComparisonScenario) {
-  const growth = scenario.values.gdp_growth ?? 0
-  const stabilityPenalty = getStabilityScore(scenario)
-  return growth * 10 - stabilityPenalty * 0.5
-}
-
-export function TradeoffSummaryPanel({
-  selectedScenarios,
-  baselineId,
-  tagsByScenarioId,
-}: TradeoffSummaryPanelProps) {
-  const rankableScenarios = selectedScenarios.filter(hasGrowth)
-
-  if (selectedScenarios.length === 0 || rankableScenarios.length === 0) {
+  if (!baseline || alternatives.length === 0) {
     return (
       <section className="comparison-panel comparison-panel--summary" aria-labelledby="comparison-summary-title">
         <div className="comparison-panel__head page-section-head">
-          <h2 id="comparison-summary-title">Trade-off summary</h2>
-          <p>Quick decision framing from selected scenarios.</p>
+          <h2 id="comparison-summary-title">{t('comparison.tradeoff.title')}</h2>
+          <p>{t('comparison.tradeoff.description')}</p>
         </div>
-        <p className="empty-state">
-          {selectedScenarios.length === 0
-            ? 'Select at least one scenario to generate a summary.'
-            : 'Selected scenarios do not include GDP growth values; trade-off summary unavailable.'}
-        </p>
+        <p className="empty-state">{t('comparison.tradeoff.empty')}</p>
       </section>
     )
   }
 
-  const strongestGrowth = [...rankableScenarios].sort(
-    (a, b) => getGrowthScore(b) - getGrowthScore(a),
-  )[0]
-  const strongestStability = [...rankableScenarios].sort(
-    (a, b) => getStabilityScore(a) - getStabilityScore(b),
-  )[0]
-  const compromise = [...rankableScenarios].sort((a, b) => getBalanceScore(b) - getBalanceScore(a))[0]
-
-  const preferredTagged = rankableScenarios.find(
-    (scenario) => tagsByScenarioId[scenario.scenario_id] === 'preferred',
-  )
-  const baselineScenario = selectedScenarios.find((scenario) => scenario.scenario_id === baselineId)
-
-  function resolveRecommendation() {
-    if (!preferredTagged) {
-      const stressCandidate = [strongestStability, strongestGrowth].find(
-        (candidate) => candidate.scenario_id !== compromise.scenario_id,
-      )
-      if (!stressCandidate) {
-        return `${compromise.scenario_name} is the only candidate that ranks on growth and stability here; add another scenario before committing.`
-      }
-      return `Consider ${compromise.scenario_name} as a working compromise; stress test against ${stressCandidate.scenario_name} before committing.`
-    }
-
-    const stabilityCheck = [...rankableScenarios]
-      .sort((a, b) => getStabilityScore(a) - getStabilityScore(b))
-      .find((scenario) => scenario.scenario_id !== preferredTagged.scenario_id)
-
-    if (!stabilityCheck) {
-      return `Preferred tag is on ${preferredTagged.scenario_name}. Add another scenario to test it against.`
-    }
-
-    if (preferredTagged.scenario_id === strongestStability.scenario_id) {
-      return `${preferredTagged.scenario_name} is tagged preferred and ranks most stable on this selection. Stress test against ${stabilityCheck.scenario_name} before committing.`
-    }
-
-    return `Preferred tag is on ${preferredTagged.scenario_name}. Validate against ${strongestStability.scenario_name} for stability before committing.`
-  }
-
-  const recommendation = resolveRecommendation()
-
   return (
     <section className="comparison-panel comparison-panel--summary" aria-labelledby="comparison-summary-title">
       <div className="comparison-panel__head page-section-head">
-        <h2 id="comparison-summary-title">Trade-off summary</h2>
-        <p>Quick decision framing from selected scenarios.</p>
+        <h2 id="comparison-summary-title">{t('comparison.tradeoff.title')}</h2>
+        <p>{t('comparison.tradeoff.description')}</p>
       </div>
 
-      <div className="comparison-summary-grid">
-        <article>
-          <h3>Strongest growth</h3>
-          <p>{strongestGrowth.scenario_name}</p>
-          <span className="comparison-summary-grid__detail">
-            GDP {getGrowthScore(strongestGrowth).toFixed(1)}%
-          </span>
-        </article>
-        <article>
-          <h3>Strongest stability</h3>
-          <p>{strongestStability.scenario_name}</p>
-          <span className="comparison-summary-grid__detail">
-            Risk index {Math.round(strongestStability.risk_index)}
-          </span>
-        </article>
-        <article>
-          <h3>Main compromise</h3>
-          <p>{compromise.scenario_name}</p>
-          <span className="comparison-summary-grid__detail">
-            GDP {getGrowthScore(compromise).toFixed(1)}%, risk {Math.round(compromise.risk_index)}
-          </span>
-        </article>
-      </div>
+      <div className="comparison-tradeoff-list">
+        {alternatives.map((scenario) => {
+          const metricDeltas = {
+            gdp_growth: (scenario.values.gdp_growth ?? baseline.values.gdp_growth ?? 0) - (baseline.values.gdp_growth ?? 0),
+            inflation: (scenario.values.inflation ?? baseline.values.inflation ?? 0) - (baseline.values.inflation ?? 0),
+            policy_rate: (scenario.values.policy_rate ?? baseline.values.policy_rate ?? 0) - (baseline.values.policy_rate ?? 0),
+          }
 
-      <p className="comparison-summary-recommendation">{recommendation}</p>
-      {baselineScenario ? (
-        <p className="comparison-summary-baseline">
-          Baseline reference: {baselineScenario.scenario_name}.
-        </p>
-      ) : null}
+          const included = ([
+            ['gdp_growth', metricDeltas.gdp_growth],
+            ['inflation', metricDeltas.inflation],
+            ['policy_rate', metricDeltas.policy_rate],
+          ] as const).filter(([, delta]) => Math.abs(delta) >= DELTA_THRESHOLD)
+
+          if (included.length === 0) {
+            return (
+              <p key={scenario.scenario_id} className="comparison-tradeoff-sentence">
+                {t('comparison.tradeoff.negligible', { scenario_name: scenario.scenario_name })}
+              </p>
+            )
+          }
+
+          const chunks = {
+            gdp_growth: '',
+            inflation: '',
+            policy_rate: '',
+          }
+
+          included.forEach(([metricId, delta], index) => {
+            const metricLabel = t(`comparison.tradeoff.metric.${metricId}`)
+            const phrase = `${metricLabel} ${t('comparison.tradeoff.by')} ${formatSignedDelta(delta)}`
+            chunks[metricId] = `${index === 0 ? `${t('comparison.tradeoff.shifts')} ` : ', '}${phrase}`
+          })
+
+          return (
+            <p key={scenario.scenario_id} className="comparison-tradeoff-sentence">
+              {t('comparison.tradeoff.template', {
+                scenario_name: scenario.scenario_name,
+                delta_gdp: chunks.gdp_growth,
+                delta_inf: chunks.inflation,
+                delta_rate: chunks.policy_rate,
+              })}
+            </p>
+          )
+        })}
+      </div>
     </section>
   )
 }

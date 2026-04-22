@@ -241,6 +241,63 @@
       "confirmDelete": "\"{{scenarioName}}\" saqlangan stsenariyini o'chirasizmi?"
     }
   },
+  "comparison": {
+    "selector": {
+      "title": "Stsenariy tanlagich",
+      "description": "2-3 ta stsenariyni tanlang va deltalarni talqin qilish uchun bitta bazaviy stsenariyni belgilang.",
+      "empty": "Solishtirish uchun stsenariylar mavjud emas.",
+      "selectedCount": "Tanlangan: {{count}} / {{max}}",
+      "baselineLabel": "Bazaviy",
+      "baselineBadge": "Bazaviy",
+      "tagLabel": "Stsenariy tegi",
+      "qpmSection": "QPM etalon stsenariylari",
+      "savedSection": "Saqlangan ishga tushirishlar",
+      "savedEmpty": "Hali saqlangan ishga tushirishlar yo'q. Stsenariy simulyatorida stsenariyni ishga tushirib saqlang.",
+      "scenarioType": {
+        "baseline": "Bazaviy",
+        "alternative": "Muqobil",
+        "stress": "Stress"
+      },
+      "tag": {
+        "preferred": "Afzal",
+        "balanced": "Muvozanatli",
+        "aggressive": "Agressiv",
+        "downside_stress": "Pastga stress"
+      }
+    },
+    "chart": {
+      "title": "Qiyosiy grafiklar",
+      "description": "Tanlangan yo'nalish bo'yicha stsenariylar kesimidagi kichik-multipllar.",
+      "emptySelection": "Grafiklarni ko'rsatish uchun bazaviy va kamida bitta muqobil stsenariyni tanlang.",
+      "tabSwitcherAria": "Solishtirish grafik tablari",
+      "tabSwitcher": {
+        "headline_impact": "Asosiy ta'sir",
+        "macro_path": "Makro trayektoriya",
+        "external_balance": "Tashqi balans",
+        "fiscal_effects": "Fiskal ta'sirlar"
+      },
+      "miniTitle": "{{scenario_name}}",
+      "miniSubtitle": "{{tab_label}}",
+      "miniTakeaway": "Tanlangan stsenariy va tab uchun trayektoriya ko'rinishi.",
+      "slotAria": "{{tab_label}} tabidagi {{scenario_name}} grafigi",
+      "savedRunEmpty": "Grafik mavjud emas — to'liq run persistence dan oldin saqlangan",
+      "unavailable": "Ushbu stsenariy va tab uchun grafik mavjud emas."
+    },
+    "tradeoff": {
+      "title": "Trade-off xulosasi",
+      "description": "Har bir muqobil stsenariy uchun shablon asosidagi qiyosiy jumlalar.",
+      "empty": "Xulosani yaratish uchun bazaviy va kamida bitta muqobil stsenariyni tanlang.",
+      "shifts": "siljitadi",
+      "by": "ga",
+      "metric": {
+        "gdp_growth": "YaIMni",
+        "inflation": "inflyatsiyani",
+        "policy_rate": "siyosat stavkasini"
+      },
+      "template": "Bazaviyga nisbatan, {{scenario_name}} {{delta_gdp}}{{delta_inf}}{{delta_rate}}.",
+      "negligible": "Bazaviyga nisbatan, {{scenario_name}} asosiy ko'rsatkichlar bo'yicha deyarli farq ko'rsatmaydi."
+    }
+  },
   "states": {
     "loading": {
       "overview": "So'nggi sharh holati yuklanmoqda...",

@@ -54,6 +54,19 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.comparison-selector-section-heading {
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.comparison-selector-section-empty {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  margin: 0;
+}
+
 .comparison-scenario-row {
   background: var(--color-surface-muted);
   border: 1px solid var(--color-border);
@@ -180,6 +193,12 @@
   display: block;
 }
 
+.comparison-headline-table__star {
+  color: #b45309;
+  font-size: 0.78rem;
+  margin-left: 0.35rem;
+}
+
 .comparison-headline-table__delta {
   align-items: center;
   color: var(--color-text-muted);
@@ -203,130 +222,51 @@
   align-self: start;
 }
 
-.comparison-chart-bars {
+.comparison-small-multiples {
   display: grid;
-  gap: var(--space-sm);
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  gap: var(--space-md);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.comparison-chart-bars li {
-  align-items: center;
-  display: grid;
-  gap: var(--space-sm);
-  grid-template-columns: 10rem 1fr 5rem;
-}
-
-.comparison-chart-bars__label {
-  display: grid;
-  gap: 0.1rem;
-}
-
-.comparison-chart-bars__label span {
-  font-size: 0.83rem;
-}
-
-.comparison-chart-bars__role {
-  color: var(--color-text-muted);
-  font-size: 0.72rem;
-}
-
-.comparison-chart-bars__track {
+.comparison-small-multiples__slot {
   background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  height: 0.78rem;
-  position: relative;
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
 }
 
-.comparison-chart-bars__fill {
-  background: var(--color-border-strong);
-  border-radius: var(--radius-sm);
-  bottom: 0;
-  position: absolute;
-  top: 0;
+.comparison-small-multiples__slot h3 {
+  font-size: 0.88rem;
+  margin: 0;
 }
 
-.comparison-chart-bars__fill--baseline {
-  background: var(--color-brand);
+.comparison-small-multiples__slot .chart-renderer {
+  margin: 0;
 }
 
-.comparison-chart-bars__track--centred .comparison-chart-bars__fill--positive {
-  left: 50%;
-}
-
-.comparison-chart-bars__track--centred .comparison-chart-bars__fill--negative {
-  right: 50%;
-}
-
-.comparison-chart-bars__track:not(.comparison-chart-bars__track--centred) .comparison-chart-bars__fill {
-  left: 0;
-}
-
-.comparison-chart-bars__axis {
-  background: var(--color-border-strong);
-  bottom: -0.15rem;
-  left: 50%;
-  position: absolute;
-  top: -0.15rem;
-  width: 1px;
-}
-
-.comparison-chart-bars__value {
-  font-size: 0.82rem;
-  font-variant-numeric: tabular-nums;
-  text-align: end;
+.comparison-small-multiples__slot .chart-renderer__body {
+  min-height: 200px;
 }
 
 .comparison-panel--summary {
   background: var(--color-surface-muted);
 }
 
-.comparison-summary-grid {
+.comparison-tradeoff-list {
   display: grid;
   gap: var(--space-sm);
 }
 
-.comparison-summary-grid article {
+.comparison-tradeoff-sentence {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  padding: var(--space-sm);
-}
-
-.comparison-summary-grid h3 {
-  color: var(--color-text-muted);
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  margin: 0 0 0.2rem;
-  text-transform: uppercase;
-}
-
-.comparison-summary-grid p {
-  font-size: 0.92rem;
-  font-weight: 600;
-  margin: 0;
-}
-
-.comparison-summary-grid__detail {
-  color: var(--color-text-muted);
-  display: block;
-  font-size: 0.78rem;
-  font-variant-numeric: tabular-nums;
-  margin-top: 0.15rem;
-}
-
-.comparison-summary-recommendation {
   font-size: 0.86rem;
-  line-height: 1.4;
+  line-height: 1.5;
   margin: 0;
-}
-
-.comparison-summary-baseline {
-  color: var(--color-text-muted);
-  font-size: 0.79rem;
-  margin: 0;
+  padding: var(--space-sm);
 }
 
 @media (max-width: 1120px) {
@@ -334,13 +274,7 @@
     grid-template-columns: 1fr;
   }
 
-  .comparison-bottom-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 760px) {
-  .comparison-chart-bars li {
+  .comparison-small-multiples {
     grid-template-columns: 1fr;
   }
 }

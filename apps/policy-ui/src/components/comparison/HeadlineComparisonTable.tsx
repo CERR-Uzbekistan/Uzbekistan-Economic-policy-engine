@@ -11,6 +11,8 @@ type HeadlineComparisonTableProps = {
   tagsByScenarioId: Record<string, ComparisonScenarioTag>
 }
 
+const TIE_TOLERANCE = 1e-9
+
 function formatValue(value: number, unit: string) {
   if (unit === 'UZS/USD') {
     return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value)
@@ -37,6 +39,32 @@ function toTagLabel(tag: ComparisonScenarioTag) {
     return 'Downside stress'
   }
   return `${tag.charAt(0).toUpperCase()}${tag.slice(1)}`
+}
+
+function isLowerBetterMetric(metricId: string): boolean {
+  return metricId === 'inflation' || metricId === 'policy_rate' || metricId === 'exchange_rate'
+}
+
+function resolveBestValue(metricId: string, selectedScenarios: ComparisonScenario[]): number | null {
+  const values = selectedScenarios
+    .map((scenario) => scenario.values[metricId])
+    .filter((value): value is number => typeof value === 'number' && Number.isFinite(value))
+
+  if (values.length === 0) {
+    return null
+  }
+
+  if (isLowerBetterMetric(metricId)) {
+    return Math.min(...values)
+  }
+  return Math.max(...values)
+}
+
+function isBestValue(value: number, bestValue: number | null): boolean {
+  if (bestValue === null) {
+    return false
+  }
+  return Math.abs(value - bestValue) <= TIE_TOLERANCE
 }
 
 export function HeadlineComparisonTable({
@@ -97,6 +125,7 @@ export function HeadlineComparisonTable({
             {metrics.map((metric) => {
               const baselineValue = baseline.values[metric.metric_id]
               const baselineHasValue = typeof baselineValue === 'number'
+              const bestValue = resolveBestValue(metric.metric_id, selectedScenarios)
               return (
                 <tr key={metric.metric_id}>
                   <th scope="row">
@@ -104,7 +133,18 @@ export function HeadlineComparisonTable({
                     <span className="comparison-headline-table__unit">{metric.unit}</span>
                   </th>
                   <td className="comparison-headline-table__baseline-col">
-                    {baselineHasValue ? formatValue(baselineValue, metric.unit) : '—'}
+                    {baselineHasValue ? (
+                      <>
+                        {formatValue(baselineValue, metric.unit)}
+                        {isBestValue(baselineValue, bestValue) ? (
+                          <span className="comparison-headline-table__star" aria-hidden="true">
+                            ★
+                          </span>
+                        ) : null}
+                      </>
+                    ) : (
+                      '—'
+                    )}
                   </td>
                   {alternatives.map((scenario) => {
                     const value = scenario.values[metric.metric_id]
@@ -140,6 +180,11 @@ export function HeadlineComparisonTable({
                       <td key={scenario.scenario_id}>
                         <span className="comparison-headline-table__value">
                           {formatValue(value, metric.unit)}
+                          {isBestValue(value, bestValue) ? (
+                            <span className="comparison-headline-table__star" aria-hidden="true">
+                              ★
+                            </span>
+                          ) : null}
                         </span>
                         <span
                           className="comparison-headline-table__delta"

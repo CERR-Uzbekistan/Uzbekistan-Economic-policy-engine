@@ -241,6 +241,63 @@
       "confirmDelete": "Delete saved scenario \"{{scenarioName}}\"?"
     }
   },
+  "comparison": {
+    "selector": {
+      "title": "Scenario selector",
+      "description": "Select 2-3 scenarios and define one baseline for delta interpretation.",
+      "empty": "No scenarios are available to compare.",
+      "selectedCount": "Selected: {{count}} / {{max}}",
+      "baselineLabel": "Baseline",
+      "baselineBadge": "Baseline",
+      "tagLabel": "Scenario tag",
+      "qpmSection": "QPM reference scenarios",
+      "savedSection": "Saved runs",
+      "savedEmpty": "No saved runs yet. Run and save a scenario in Scenario Lab to compare it here.",
+      "scenarioType": {
+        "baseline": "Baseline",
+        "alternative": "Alternative",
+        "stress": "Stress"
+      },
+      "tag": {
+        "preferred": "Preferred",
+        "balanced": "Balanced",
+        "aggressive": "Aggressive",
+        "downside_stress": "Downside stress"
+      }
+    },
+    "chart": {
+      "title": "Comparative charts",
+      "description": "Small multiples by scenario for the selected comparison dimension.",
+      "emptySelection": "Select at least one baseline and one alternative scenario to populate charts.",
+      "tabSwitcherAria": "Comparison chart tabs",
+      "tabSwitcher": {
+        "headline_impact": "Headline impact",
+        "macro_path": "Macro path",
+        "external_balance": "External balance",
+        "fiscal_effects": "Fiscal effects"
+      },
+      "miniTitle": "{{scenario_name}}",
+      "miniSubtitle": "{{tab_label}}",
+      "miniTakeaway": "Path view for the selected scenario and tab.",
+      "slotAria": "{{scenario_name}} chart in {{tab_label}} tab",
+      "savedRunEmpty": "Chart unavailable — saved before full run persistence",
+      "unavailable": "Chart unavailable for this scenario and tab."
+    },
+    "tradeoff": {
+      "title": "Trade-off summary",
+      "description": "Template-based comparison sentences for each alternative scenario.",
+      "empty": "Select a baseline and at least one alternative scenario to generate a trade-off summary.",
+      "shifts": "shifts",
+      "by": "by",
+      "metric": {
+        "gdp_growth": "GDP",
+        "inflation": "inflation",
+        "policy_rate": "policy rate"
+      },
+      "template": "Compared to baseline, {{scenario_name}} {{delta_gdp}}{{delta_inf}}{{delta_rate}}.",
+      "negligible": "Compared to baseline, {{scenario_name}} shows negligible differences across headline metrics."
+    }
+  },
   "states": {
     "loading": {
       "overview": "Loading latest overview snapshot...",
