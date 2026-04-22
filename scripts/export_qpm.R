@@ -477,48 +477,48 @@ build_caveats <- function() {
       caveat_id        = "qpm-b3-inactive",
       severity         = "warning",
       message          = "External demand shock parameter b3 is inactive in the UI scenario builder; the Russia/China slowdown channel cannot be simulated directly. The remittance-downside scenario uses a gap_shock proxy until this is activated.",
-      affected_metrics = c("gdp_growth"),
-      affected_models  = c("QPM"),
+      affected_metrics = I(c("gdp_growth")),
+      affected_models  = I(c("QPM")),
       source           = "ROADMAP.md Phase 1B QPM item 1"
     ),
     list(
       caveat_id        = "qpm-baseline-irf-reconciliation",
       severity         = "warning",
       message          = "Legacy runBL() baseline forecast historically used an ad-hoc a2*rmc*3 scaling that is inconsistent with solveIRF(). The v2 legacy solver unified both paths through solveIRF(), and this R port matches the unified v2 solver; any residual divergence with older chart snapshots is expected.",
-      affected_metrics = c("gdp_growth", "inflation", "policy_rate", "exchange_rate"),
-      affected_models  = c("QPM"),
+      affected_metrics = I(c("gdp_growth", "inflation", "policy_rate", "exchange_rate")),
+      affected_models  = I(c("QPM")),
       source           = "ROADMAP.md Phase 1B QPM item 3"
     ),
     list(
       caveat_id        = "qpm-uip-no-risk-premium",
       severity         = "info",
       message          = "The UIP block contains no persistent country-risk premium; sovereign-risk or capital-flight episodes are approximated only by a one-period rho shock (risk shock type).",
-      affected_metrics = c("exchange_rate", "inflation"),
-      affected_models  = c("QPM"),
+      affected_metrics = I(c("exchange_rate", "inflation")),
+      affected_models  = I(c("QPM")),
       source           = "ROADMAP.md Phase 1B QPM item 4"
     ),
     list(
       caveat_id        = "qpm-direct-import-passthrough",
       severity         = "info",
       message          = "Direct quarterly import-price pass-through a4=0.12 is calibrated from Campa & Goldberg (2005) with Uzbekistan's ~35% import share of absorption; a 10% UZS depreciation adds about +1.2 pp to CPI within one quarter through this channel alone.",
-      affected_metrics = c("inflation"),
-      affected_models  = c("QPM"),
+      affected_metrics = I(c("inflation")),
+      affected_models  = I(c("QPM")),
       source           = "qpm_uzbekistan/index.html Uzbekistan-Specific Notes"
     ),
     list(
       caveat_id        = "qpm-no-uncertainty-bands",
       severity         = "info",
       message          = "Parameter-uncertainty fan charts are not included in this JSON export. The legacy UI provides Monte Carlo bands (8% CV, 80 draws) interactively; adding them to export requires TA decision (ROADMAP cross-model item).",
-      affected_metrics = c("gdp_growth", "inflation", "policy_rate", "exchange_rate"),
-      affected_models  = c("QPM"),
+      affected_metrics = I(c("gdp_growth", "inflation", "policy_rate", "exchange_rate")),
+      affected_models  = I(c("QPM")),
       source           = "ROADMAP.md Phase 1B cross-model item 2"
     ),
     list(
       caveat_id        = "qpm-baseline-disinflation-overshoot",
       severity         = "info",
       message          = "From Q1 2026 initial conditions (inflation 10.5%, policy rate 13.5%), the baseline disinflation path overshoots the 5% target and plateaus near 3.4% by the 8-quarter horizon. This is a hybrid-NK model dynamic (forward-looking Phillips + Taylor response), not a bug: disinflation overshoots are documented in calibrated open-economy QPMs. Reviewers should read the baseline path as a transition to target, not as a steady-state level.",
-      affected_metrics = c("inflation", "policy_rate"),
-      affected_models  = c("QPM"),
+      affected_metrics = I(c("inflation", "policy_rate")),
+      affected_models  = I(c("QPM")),
       source           = "Model dynamics; documented 2026-04-20 Sprint 2 bridge review"
     )
   )
