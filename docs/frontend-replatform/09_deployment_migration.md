@@ -224,13 +224,13 @@ date. A decision is considered committed once the owner ticks the box in
 the merged version of this document.
 
 - [ ] **Decision 1 — Preview URL on Vercel, password-gated.**
-      Owner: Nozimjon Ortiqov. Target: **2026-04-24**.
+      Owner: Nozimjon Ortiqov. Target: **TBD — deferred pending Sprint 3+ headcount and pilot assignment (per 2026-04-22 project status)**.
 - [ ] **Decision 2 — Composite rollout criterion (scope + pilot + rehearsal).**
       Owner: CERR epic sponsor (analytical lead).
-      Target commitment date: **2026-04-26**.
+      Target commitment date: **TBD — deferred pending Sprint 3+ headcount and pilot assignment (per 2026-04-22 project status)**.
 - [ ] **Decision 3 — Legacy content freeze 2026-05-31, announcement by 2026-05-17.**
       Owner: CERR content lead (in consultation with Nozimjon Ortiqov).
-      Target commitment date: **2026-04-26**.
+      Target commitment date: **TBD — deferred pending Sprint 3+ headcount and pilot assignment (per 2026-04-22 project status)**.
 
 ---
 *Draft v1 committed 2026-04-19. v2 expanded with recommendations and

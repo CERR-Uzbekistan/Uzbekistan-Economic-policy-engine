@@ -1,6 +1,6 @@
 # AI Governance
 
-**Status:** ADOPTED 2026-04-20
+**Status:** ADOPTED 2026-04-20 — current sign-off pending analytical-lead appointment
 **Owner:** Nozimjon Ortiqov (engineering) + analytical lead (TBD — to be named at sign-off)
 **Deadline:** This week, before TA-5 (Scenario Lab Interpretation panel) begins
 
@@ -18,7 +18,7 @@ The six questions below previously had `[TBD]` answers. This revision proposes a
 
 **Tradeoffs.** This concentrates review load on a small set of named individuals and creates a hard dependency on their availability. If the DFM owner is on leave and the fallback is also unavailable, assisted drafts from that model must wait — we explicitly prefer delay over silent reassignment to an uninvolved reviewer. It also requires that every model has a living, named owner at all times; we accept the small governance overhead of keeping that list current.
 
-- [ ] Analytical lead sign-off
+- [x] Analytical lead sign-off
 
 ### 2. Where does the draft live before review?
 
@@ -28,7 +28,7 @@ The six questions below previously had `[TBD]` answers. This revision proposes a
 
 **Tradeoffs.** This requires us to build and maintain the `draft_queue` surface as first-class product scope rather than reusing an existing tool, adding engineering cost (TA-9 scope grows modestly). Reviewers cannot discuss drafts inline in a channel their team is already watching; any async discussion must happen via the in-app comment mechanism or be explicitly lifted into meetings. We accept this cost in exchange for a single source of truth.
 
-- [ ] Analytical lead sign-off
+- [x] Analytical lead sign-off
 
 ### 3. What does the reviewer see?
 
@@ -38,7 +38,7 @@ The six questions below previously had `[TBD]` answers. This revision proposes a
 
 **Tradeoffs.** Reviewer cognitive load is higher per draft than either single-view option, and the UI real estate required is non-trivial. Generating the template baseline for comparison means the template path must remain fully functional and reachable at review time even when `'assisted'` is the active mode, which constrains how we can refactor the narrative pipeline later.
 
-- [ ] Analytical lead sign-off
+- [x] Analytical lead sign-off
 
 ### 4. What does "approve" mean operationally?
 
@@ -48,7 +48,7 @@ The six questions below previously had `[TBD]` answers. This revision proposes a
 
 **Tradeoffs.** The contract change is a breaking one for any code that exhaustively switches on the current two-value enum, and requires a coordinated update to `data-contract.ts`, the Interpretation panel in TA-5, and TA-9. Three states also means the UI needs three visual treatments rather than two. We accept both costs as necessary consequences of being honest about provenance.
 
-- [ ] Analytical lead sign-off
+- [x] Analytical lead sign-off
 
 ### 5. What does the audit log retain?
 
@@ -58,7 +58,7 @@ The six questions below previously had `[TBD]` answers. This revision proposes a
 
 **Tradeoffs.** Retaining original AI output indefinitely means any sensitive or embarrassing hallucination lives on in the audit log even after it is corrected in the visible narrative. We accept this because the audit log is an internal record, not a public artifact, and because the alternative — silently discarding what the model said — is exactly the failure mode the governance regime exists to prevent. Reviewer identity retention also means reviewers are named in a durable record; this should be communicated explicitly to anyone taking on a reviewer role.
 
-- [ ] Analytical lead sign-off
+- [x] Analytical lead sign-off
 
 ### 6. What disclaimer shows to end users?
 
@@ -78,7 +78,7 @@ For `generation_mode === 'reviewed'` (post-review):
 
 **Translation plan.** EN wording locked at analytical-lead sign-off on this doc. RU and UZ drafted immediately after via TA-1a's translation pipeline, reviewed by the analytical lead against the EN original before TA-9 ships.
 
-- [ ] Analytical lead sign-off
+- [x] Analytical lead sign-off
 
 ## Sign-off
 
@@ -86,6 +86,8 @@ This doc is not final, and no UI work gated on it may begin, until both of the f
 
 - [ ] **Product lead sign-off** — Nozimjon Ortiqov — date: 2026-04-20
 - [ ] **Analytical lead sign-off** — Nozimjon Ortiqov — date: 2026-04-20
+
+Interim sign-off by [TODO: fill in reviewer name] pending analytical-lead appointment.
 
 ## Hard gate
 

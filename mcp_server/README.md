@@ -14,7 +14,19 @@ An MCP (Model Context Protocol) server that exposes 6 macroeconomic models for U
 | **FPP** (IMF) | `fpp_project` | 4-sector financial programming framework (2025-2027) |
 | Cross-model | `list_models`, `scenario_compare` | Discovery and multi-scenario comparison |
 
-**Total: 12 tools**
+### Knowledge Hub & curation tools
+
+| Group | Tools | Description |
+|-------|-------|-------------|
+| **Academic literature pipeline** | `fetch_academic_papers` | Fetch candidate papers from Semantic Scholar and OpenAlex using model-specific or custom keywords |
+| | `curate_academic_papers` | AI-score candidates 0–10 for model relevance and attach trilingual (EN/RU/UZ) relevance notes |
+| | `update_literature_data` | Merge curated papers into `shared/literature-data.js`; dedup by DOI and title, preserve existing papers, refresh `lastUpdated` |
+| **Policy reform tracker** | `fetch_policy_reforms` | Pull recent government documents from lex.uz, CBU announcements, and WTO working-party sources |
+| | `categorize_policy_reform` | AI-classify a document by category, sector, region, and document type; generate trilingual summaries and link to relevant economic models |
+| | `update_tracker_data` | Merge categorized reforms into `shared/policy-tracker-data.js`; dedup by title, append new entries, refresh `lastUpdated` |
+| **Research article storage** | `save_research_article` | Save a research article or policy brief to `shared/research-data.js` with a generated unique ID; used by the AI Advisor "Publish as Brief" button and for manual article creation |
+
+**Total: 19 tools**
 
 ## Quick Start
 
