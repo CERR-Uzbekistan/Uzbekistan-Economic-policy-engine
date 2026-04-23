@@ -275,9 +275,18 @@ tr:hover td { background: #f8f9ff; }
   <div class="card">
     <div class="card-title" data-i18n="dfm_chart_decomp">Growth Decomposition — Latest Nowcast</div>
     <div class="card-subtitle" data-i18n="dfm_chart_decomp_sub">Contribution of each indicator to latest GDP nowcast (pp)</div>
-    <div class="chart-wrap" style="height:260px">
+    <div class="decomp-legend" style="display:flex;gap:16px;flex-wrap:wrap;margin:6px 0 8px;font-size:12px;">
+      <span><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:rgba(39,174,96,0.85);vertical-align:middle;margin-right:4px;"></span>Above historical trend</span>
+      <span><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:rgba(234,179,8,0.85);vertical-align:middle;margin-right:4px;"></span>Growing but below trend</span>
+      <span><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:rgba(192,57,43,0.85);vertical-align:middle;margin-right:4px;"></span>Contracting (negative growth)</span>
+    </div>
+    <div class="decomp-sign-note" style="font-size:11px;color:#64748b;margin-bottom:8px;font-style:italic;">
+      ℹ️ Bar sign = deviation from historical baseline. Green bars mean the indicator is running hotter than its own average (lifts GDP). Red bars mean the indicator is actually contracting. Amber = positive but below its historical average.
+    </div>
+    <div class="chart-wrap" style="height:280px">
       <canvas id="chart-decomp"></canvas>
     </div>
+    <div id="decomp-detail-table" style="margin-top:14px;overflow-x:auto;"></div>
   </div>
 
   <!-- Export toolbar -->
@@ -1036,17 +1045,126 @@ function renderNowcastPage() {
     if (leg) leg.style.display = fanVisible ? 'flex' : 'none';
   };
 
-  // Decomposition chart
-  const contrib = D.loadings.contributions.map(Number);
-  const labels  = D.loadings.labels.map(String);
-  const combined = contrib.map((v, i) => ({v, label: labels[i]}))
-    .filter(x => !isNaN(x.v) && x.label !== 'GDP (Quarterly)')
-    .sort((a, b) => Math.abs(b.v) - Math.abs(a.v)).slice(0, 12);
+  // Decomposition chart — 3-tier colour + detail table
+  renderDecompChart();
+}
 
-  const dColors = combined.map(x => x.v >= 0 ? 'rgba(39,174,96,0.8)' : 'rgba(192,57,43,0.8)');
-  makeHorzBarChart('chart-decomp',
-    combined.map(x => x.label.length > 22 ? x.label.slice(0,20)+'…' : x.label),
-    combined.map(x => x.v), dColors);
+function getDecompTier(latestVal, contrib) {
+  // Tier 1 – RED: indicator is actually contracting (raw growth < 0)
+  if (latestVal !== null && latestVal < 0) return 'contracting';
+  // Tier 2 – AMBER: indicator is growing but pulling GDP below its own trend
+  if (contrib < 0) return 'below-trend';
+  // Tier 3 – GREEN: above historical trend, lifting GDP
+  return 'above-trend';
+}
+
+function renderDecompChart() {
+  if (!D) return;
+  const contrib  = D.loadings.contributions.map(Number);
+  const labels   = D.loadings.labels.map(String);
+  const names    = D.vars.names.map(String);
+  const latestV  = D.latest.values || {};
+
+  // Build enriched rows
+  const rows = contrib.map((v, i) => ({
+    v,
+    label:  labels[i],
+    name:   names[i],
+    rawVal: latestV[names[i]] !== undefined ? Number(latestV[names[i]]) : null
+  }))
+    .filter(x => !isNaN(x.v) && x.label !== 'GDP (Quarterly)')
+    .sort((a, b) => Math.abs(b.v) - Math.abs(a.v))
+    .slice(0, 12);
+
+  // 3-tier colours
+  const COLORS = {
+    'contracting':  'rgba(192,57,43,0.85)',
+    'below-trend':  'rgba(234,179,8,0.85)',
+    'above-trend':  'rgba(39,174,96,0.85)'
+  };
+  const dColors = rows.map(r => COLORS[getDecompTier(r.rawVal, r.v)]);
+
+  // Destroy old chart if exists
+  destroyChart('chart-decomp');
+  const ctx = document.getElementById('chart-decomp');
+  if (ctx) {
+    charts['chart-decomp'] = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: rows.map(r => r.label.length > 26 ? r.label.slice(0,24)+'…' : r.label),
+        datasets: [{
+          data: rows.map(r => r.v),
+          backgroundColor: dColors,
+          borderRadius: 4
+        }]
+      },
+      options: {
+        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+                const r = rows[ctx.dataIndex];
+                const tier = getDecompTier(r.rawVal, r.v);
+                const tierLabel = tier === 'contracting' ? 'Contracting'
+                  : tier === 'below-trend' ? 'Growing but below trend'
+                  : 'Above historical trend';
+                const rawStr = r.rawVal !== null ? ` | Latest: ${r.rawVal >= 0 ? '+' : ''}${r.rawVal.toFixed(2)}%` : '';
+                return ` Contribution: ${r.v >= 0 ? '+' : ''}${r.v.toFixed(4)} pp${rawStr} | ${tierLabel}`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: { ticks: { font: { size: 9 } }, grid: { color: '#f0f0f0' } },
+          y: { ticks: { font: { size: 10 } } }
+        }
+      }
+    });
+  }
+
+  // Detail table
+  renderDecompDetailTable(rows);
+}
+
+function renderDecompDetailTable(rows) {
+  const el = document.getElementById('decomp-detail-table');
+  if (!el) return;
+
+  const STATUS_ICON = { 'contracting': '🔴', 'below-trend': '🟡', 'above-trend': '🟢' };
+  const STATUS_TEXT = { 'contracting': 'Contracting', 'below-trend': 'Growing · Below Trend', 'above-trend': 'Growing · Above Trend' };
+
+  const trs = rows.map(r => {
+    const tier    = getDecompTier(r.rawVal, r.v);
+    const rawDisp = r.rawVal !== null ? `${r.rawVal >= 0 ? '+' : ''}${r.rawVal.toFixed(2)}%` : '—';
+    const contribDisp = `${r.v >= 0 ? '+' : ''}${r.v.toFixed(4)} pp`;
+    const rowColor = tier === 'contracting' ? '#fff5f5' : tier === 'below-trend' ? '#fffbeb' : '#f0fdf4';
+    return `<tr style="background:${rowColor}">
+      <td style="padding:5px 8px;font-size:12px;">${r.label}</td>
+      <td style="padding:5px 8px;font-size:12px;text-align:right;">${rawDisp}</td>
+      <td style="padding:5px 8px;font-size:12px;">${STATUS_ICON[tier]} ${STATUS_TEXT[tier]}</td>
+      <td style="padding:5px 8px;font-size:12px;text-align:right;font-family:monospace;">${contribDisp}</td>
+    </tr>`;
+  }).join('');
+
+  el.innerHTML = `
+    <details open>
+      <summary style="cursor:pointer;font-size:12px;font-weight:600;color:#374151;padding:6px 0;user-select:none;">
+        📋 Indicator Detail Table <span style="font-weight:400;color:#64748b;">(top 12 by contribution magnitude)</span>
+      </summary>
+      <table style="width:100%;border-collapse:collapse;margin-top:6px;font-size:12px;">
+        <thead>
+          <tr style="background:#f8fafc;border-bottom:2px solid #e2e8f0;">
+            <th style="padding:6px 8px;text-align:left;font-weight:600;color:#475569;">Indicator</th>
+            <th style="padding:6px 8px;text-align:right;font-weight:600;color:#475569;">Latest Growth Rate</th>
+            <th style="padding:6px 8px;text-align:left;font-weight:600;color:#475569;">Status</th>
+            <th style="padding:6px 8px;text-align:right;font-weight:600;color:#475569;">Contribution (pp)</th>
+          </tr>
+        </thead>
+        <tbody>${trs}</tbody>
+      </table>
+    </details>`;
 }
 
 // ── PAGE 2: Update (interactive KF) ────────────────────────────────────
