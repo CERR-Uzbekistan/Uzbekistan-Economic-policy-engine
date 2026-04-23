@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { ChartRenderer } from '../../../src/components/system/ChartRenderer.js'
+import { ChartRenderer, toBandMeta } from '../../../src/components/system/ChartRenderer.js'
 import type { ChartSpec } from '../../../src/contracts/data-contract.js'
 
 const modelAttribution = {
@@ -64,6 +64,32 @@ describe('ChartRenderer', () => {
     assert.match(markup, /Illustrative uncertainty band \(hatched\)\./)
     assert.match(markup, /<strong>Takeaway\.<\/strong>/)
     assert.match(markup, />DFM</)
+  })
+
+  it('emits distinct lower/upper data keys for each band when one series has multiple confidence levels', () => {
+    // Regression: three-band DFM output shares a series_id but differs by
+    // confidence_level. Keys must differentiate by confidence_level, otherwise
+    // buildChartData overwrites earlier bands with the last band's values and
+    // all three Areas render as a single envelope.
+    const threeBand: ChartSpec = {
+      ...chartSpecWithIllustrativeBand,
+      chart_id: 'test-three-band',
+      uncertainty: [50, 70, 90].map((level) => ({
+        series_id: 'baseline-path',
+        lower: [5.1, 5.4],
+        upper: [5.7, 6.1],
+        confidence_level: level,
+        methodology_label: 'fan',
+        is_illustrative: false,
+      })),
+    }
+
+    const meta = toBandMeta(threeBand)
+    const lowerKeys = new Set(meta.map((m) => m.lowerKey))
+    const upperKeys = new Set(meta.map((m) => m.upperKey))
+    assert.equal(lowerKeys.size, 3)
+    assert.equal(upperKeys.size, 3)
+    assert.equal(meta.length, 3)
   })
 
   it('renders empty state when series data is unavailable', () => {

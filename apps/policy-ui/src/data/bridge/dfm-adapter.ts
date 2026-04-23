@@ -171,21 +171,6 @@ export function toDfmAdapterOutput(payload: DfmBridgePayload): DfmAdapterOutput 
   }
 }
 
-/**
- * The DFM fan-chart methodology label in the source JSON is ASCII-only
- * for diff stability: "Out-of-sample RMSE fan chart, sigma = 0.45 pp *
- * sqrt(h), h=1". When the label surfaces in a user-visible chart
- * caption or tooltip, pretty-print it to Unicode (σ for sigma, × for *,
- * √ for sqrt). Technical metadata strings (attribution logs, console
- * output) stay ASCII.
- *
- * Exported standalone; the adapter transform does NOT invoke this —
- * bridge payload flows through with ASCII labels intact. PR 3 wires
- * the call site when Overview's label display is touched.
- */
-export function prettyPrintMethodologyLabel(raw: string): string {
-  return raw
-    .replace(/\bsqrt\(/g, '√(')
-    .replace(/\bsigma\b/g, 'σ')
-    .replace(/ \* /g, ' × ')
-}
+// Canonical implementation lives in components/system/chart-label-utils.
+// Re-export preserves PR 2's public API for existing tests and consumers.
+export { prettyPrintMethodologyLabel } from '../../components/system/chart-label-utils.js'

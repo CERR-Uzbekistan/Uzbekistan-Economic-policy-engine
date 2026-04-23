@@ -14,9 +14,30 @@ import {
   getInitialOverviewSourceState,
   loadOverviewSourceState,
 } from '../data/overview/source'
+import { useDfmNowcast } from '../data/overview/useDfmNowcast'
+import { NowcastBanner, type NowcastBannerErrorKind } from '../components/overview/NowcastBanner'
+import { DfmTransportError, DfmValidationError } from '../data/bridge/dfm-client'
 import { beginRetry } from '../data/source-state'
 import { setPageFreshness } from '../state/pageFreshness'
 import './overview.css'
+
+function dfmErrorKind(error: DfmTransportError | DfmValidationError): NowcastBannerErrorKind {
+  return error instanceof DfmValidationError ? 'validation' : 'transport'
+}
+
+function dfmErrorDetail(error: DfmTransportError | DfmValidationError): string | undefined {
+  if (error instanceof DfmTransportError) {
+    if (error.kind === 'http' && error.status !== null) {
+      return `HTTP ${error.status}`
+    }
+    return error.kind
+  }
+  const issue = error.issues[0]
+  if (issue) {
+    return `${issue.path || 'payload'}: ${issue.message}`
+  }
+  return undefined
+}
 
 function toEpoch(timestamp: string): number {
   const parsed = Date.parse(timestamp)
@@ -41,6 +62,7 @@ export function OverviewPage() {
   const [sourceState, setSourceState] = useState(getInitialOverviewSourceState)
   const overviewData = sourceState.snapshot
   const headlineMetrics = useMemo(() => overviewData?.headline_metrics ?? [], [overviewData])
+  const { state: dfmState, refetch: refetchDfm } = useDfmNowcast()
 
   useEffect(() => {
     let cancelled = false
@@ -166,7 +188,25 @@ export function OverviewPage() {
 
       {nowcast_forecast ? (
         <div className="overview-two-column">
-          <NowcastForecastBlock chart={nowcast_forecast} />
+          <div className="overview-nowcast-column">
+            {dfmState.status === 'degraded' ? (
+              <NowcastBanner
+                errorKind={dfmErrorKind(dfmState.error)}
+                errorDetail={dfmErrorDetail(dfmState.error)}
+                onRetry={refetchDfm}
+              />
+            ) : null}
+            <NowcastForecastBlock
+              chart={dfmState.status === 'bridge' ? dfmState.chart : nowcast_forecast}
+              statusSlot={
+                dfmState.status === 'loading' ? (
+                  <p className="overview-nowcast-refreshing" role="status" aria-live="polite">
+                    {t('overview.nowcast.refreshing')}
+                  </p>
+                ) : null
+              }
+            />
+          </div>
           <RiskPanel risks={top_risks} />
         </div>
       ) : null}

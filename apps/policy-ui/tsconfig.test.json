@@ -19,6 +19,7 @@
     "src/components/layout/**/*.tsx",
     "src/components/scenario-lab/**/*.ts",
     "src/components/scenario-lab/**/*.tsx",
+    "src/components/system/**/*.ts",
     "src/components/system/**/*.tsx",
     "src/data/adapters/**/*.ts",
     "src/data/mock/**/*.ts",

@@ -139,6 +139,14 @@
         "empty": "Saved scenarios will appear here after you save a draft in Scenario Lab."
       }
     },
+    "nowcast": {
+      "refreshing": "Refreshing nowcast…",
+      "banner": {
+        "title": "Live nowcast unavailable",
+        "subtitle": "Showing reference data",
+        "retry": "Retry"
+      }
+    },
     "caveats": {
       "title": "Model caveats",
       "description": "Known limitations affecting the metrics above. Read before citing.",

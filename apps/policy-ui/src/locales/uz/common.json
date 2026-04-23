@@ -139,6 +139,14 @@
         "empty": "Stsenariy simulyatorida qoralama saqlaganingizdan keyin stsenariylar shu yerda ko'rinadi."
       }
     },
+    "nowcast": {
+      "refreshing": "Tezkor baholash yangilanmoqda…",
+      "banner": {
+        "title": "Tezkor baholash mavjud emas",
+        "subtitle": "Ma'lumotnoma ko'rsatilmoqda",
+        "retry": "Qayta urinish"
+      }
+    },
     "caveats": {
       "title": "Model bo'yicha izohlar",
       "description": "Yuqoridagi ko'rsatkichlarga ta'sir qiluvchi ma'lum cheklovlar. Iqtibos qilishdan oldin o'qing.",

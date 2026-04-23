@@ -6,6 +6,7 @@ import type {
   UncertaintyBand,
 } from '../../contracts/data-contract.js'
 import { AttributionBadge } from './AttributionBadge.js'
+import { prettyPrintMethodologyLabel } from './chart-label-utils.js'
 import {
   Area,
   Bar,
@@ -104,16 +105,19 @@ function toSeriesMeta(spec: ChartSpec): SeriesMeta[] {
   }))
 }
 
-function toBandMeta(spec: ChartSpec): BandMeta[] {
-  return spec.uncertainty.map((band) => ({
-    band,
-    lowerKey: `band__${band.series_id}__lower`,
-    upperKey: `band__${band.series_id}__upper`,
-    name: band.is_illustrative
-      ? `(illustrative) ${band.confidence_level}% ${band.methodology_label}`
-      : `${band.confidence_level}% ${band.methodology_label}`,
-    patternId: `band__${spec.chart_id}__${band.series_id}__illustrative`,
-  }))
+export function toBandMeta(spec: ChartSpec): BandMeta[] {
+  return spec.uncertainty.map((band) => {
+    const prettyLabel = prettyPrintMethodologyLabel(band.methodology_label)
+    return {
+      band,
+      lowerKey: `band__${band.series_id}__${band.confidence_level}__lower`,
+      upperKey: `band__${band.series_id}__${band.confidence_level}__upper`,
+      name: band.is_illustrative
+        ? `(illustrative) ${band.confidence_level}% ${prettyLabel}`
+        : `${band.confidence_level}% ${prettyLabel}`,
+      patternId: `band__${spec.chart_id}__${band.series_id}__illustrative`,
+    }
+  })
 }
 
 function hasUsableSeriesData(spec: ChartSpec): boolean {
@@ -295,7 +299,7 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
 
   const uncertaintyBands = bandMeta.map((item) => (
     <Area
-      key={`${item.band.series_id}-band`}
+      key={`${item.band.series_id}-${item.band.confidence_level}-band`}
       dataKey={(datum: ChartDatum) => {
         const lower = datum[item.lowerKey]
         const upper = datum[item.upperKey]
