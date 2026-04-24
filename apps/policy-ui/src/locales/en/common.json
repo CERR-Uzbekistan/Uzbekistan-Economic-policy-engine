@@ -87,7 +87,15 @@
       "kicker": "Economic State",
       "modelListFallback": "MODEL SET",
       "draftedFrom": "State narrative · drafted from {{models}} baseline",
-      "updatedAt": "Updated {{date}}"
+      "updatedAt": "Updated {{date}}",
+      "provenance": {
+        "draftedFromLabel": "STATE NARRATIVE · drafted from",
+        "aiAssisted": "AI-assisted",
+        "humanAuthored": "Human-authored",
+        "reviewedAt": "reviewed {{date}}",
+        "reviewerPendingChip": "Reviewer pending",
+        "reviewerPendingAria": "Reviewer name pending — SME content pending"
+      }
     },
     "kpi": {
       "title": "Core indicators",
@@ -97,6 +105,8 @@
       "noPrior": "No prior value",
       "notAvailable": "n/a",
       "freshness": "Updated {{date}}",
+      "smePendingChip": "SME content pending",
+      "smePendingAria": "Contextual footnote — SME content pending",
       "direction": {
         "up": "higher",
         "down": "lower",

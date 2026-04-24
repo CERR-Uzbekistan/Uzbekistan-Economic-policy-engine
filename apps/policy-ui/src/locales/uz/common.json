@@ -87,7 +87,15 @@
       "kicker": "Iqtisodiy holat",
       "modelListFallback": "MODELLAR TO'PLAMI",
       "draftedFrom": "Holat narrativi · {{models}} bazasidan tuzilgan",
-      "updatedAt": "Yangilangan: {{date}}"
+      "updatedAt": "Yangilangan: {{date}}",
+      "provenance": {
+        "draftedFromLabel": "HOLAT NARRATIVI · bazasidan tuzilgan",
+        "aiAssisted": "AI yordamida",
+        "humanAuthored": "Mutaxassis tomonidan",
+        "reviewedAt": "taqriz {{date}}",
+        "reviewerPendingChip": "Taqrizchi kutilmoqda",
+        "reviewerPendingAria": "Taqrizchi ismi kutilmoqda — SME kontenti kutilmoqda"
+      }
     },
     "kpi": {
       "title": "Asosiy ko'rsatkichlar",
@@ -97,6 +105,8 @@
       "noPrior": "Oldingi qiymat yo'q",
       "notAvailable": "mavjud emas",
       "freshness": "Yangilangan: {{date}}",
+      "smePendingChip": "SME kontenti kutilmoqda",
+      "smePendingAria": "Kontekstli izoh — SME kontenti kutilmoqda",
       "direction": {
         "up": "yuqoriroq",
         "down": "pastroq",

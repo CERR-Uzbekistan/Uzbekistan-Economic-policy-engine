@@ -1,4 +1,12 @@
-import type { ChartSpec, HeadlineMetric, MacroSnapshot } from '../../contracts/data-contract'
+import type {
+  ChartSpec,
+  HeadlineMetric,
+  MacroSnapshot,
+  NarrativeSegment,
+  StateProvenance,
+} from '../../contracts/data-contract'
+
+const SME_CONTENT_PENDING = '[SME content pending]'
 
 const dfmAttribution = {
   model_id: 'dfm_nowcast',
@@ -205,14 +213,46 @@ const nowcastChart: ChartSpec = {
   model_attribution: [nowcastAttribution],
 }
 
+// Prompt §4.5 item 3: every KPI tile carries a context_note; Shot 1 populates it
+// with the editorial sentinel so the UI surfaces the "SME content pending" chip
+// until Shot 2 fills per-indicator interpretive prose.
+const headlineMetricsWithContext: HeadlineMetric[] = headlineMetrics.map((metric) => ({
+  ...metric,
+  context_note: SME_CONTENT_PENDING,
+}))
+
+// Prompt §4.5 item 1: structured segments let the Overview state-header wrap key
+// numbers in <em> without placing HTML inside translation values.
+const overviewNarrativeSegments: NarrativeSegment[] = [
+  { text: 'Growth remains solid at ' },
+  { text: '5.9%', emphasize: true },
+  {
+    text:
+      ', driven by services and construction; inflation is easing but remains above the Central Bank\u2019s ',
+  },
+  { text: '5% target', emphasize: true },
+  {
+    text:
+      '; the external position has narrowed modestly, though remittance dependence continues to anchor the principal downside risk.',
+  },
+]
+
+// Prompt §4.5 item 2: named-reviewer provenance line below the narrative.
+const overviewStateProvenance: StateProvenance = {
+  drafted_from: 'DFM + QPM baseline',
+  ai_assisted: true,
+  reviewed_at: '16 Apr',
+  reviewer_name: 'M. Usmanov',
+}
+
 export const overviewV1Data: MacroSnapshot = {
   snapshot_id: 'macro-snapshot-2026q1',
   snapshot_name: 'Current baseline snapshot',
   generated_at: '2026-04-17T09:05:00+05:00',
-  summary:
-    'Growth remains resilient, inflation is easing but still above medium-term comfort levels, and external vulnerability has narrowed modestly.',
+  summary: overviewNarrativeSegments,
+  provenance: overviewStateProvenance,
   model_ids: ['qpm_uzbekistan', 'dfm_nowcast', 'pe_model'],
-  headline_metrics: headlineMetrics,
+  headline_metrics: headlineMetricsWithContext,
   nowcast_forecast: nowcastChart,
   top_risks: [
     {

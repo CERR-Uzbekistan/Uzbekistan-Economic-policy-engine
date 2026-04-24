@@ -87,7 +87,15 @@
       "kicker": "Экономическое состояние",
       "modelListFallback": "НАБОР МОДЕЛЕЙ",
       "draftedFrom": "Нарратив состояния · составлен на базе {{models}}",
-      "updatedAt": "Обновлено {{date}}"
+      "updatedAt": "Обновлено {{date}}",
+      "provenance": {
+        "draftedFromLabel": "НАРРАТИВ СОСТОЯНИЯ · составлен на базе",
+        "aiAssisted": "При содействии ИИ",
+        "humanAuthored": "Подготовлено аналитиком",
+        "reviewedAt": "рецензия {{date}}",
+        "reviewerPendingChip": "Ожидается рецензент",
+        "reviewerPendingAria": "Имя рецензента ожидается — контент SME не заполнен"
+      }
     },
     "kpi": {
       "title": "Ключевые показатели",
@@ -97,6 +105,8 @@
       "noPrior": "Нет прошлого значения",
       "notAvailable": "н/д",
       "freshness": "Обновлено {{date}}",
+      "smePendingChip": "Контент SME не заполнен",
+      "smePendingAria": "Контекстная сноска — контент SME не заполнен",
       "direction": {
         "up": "выше",
         "down": "ниже",
