@@ -32,4 +32,4 @@ __pycache__/
 .tmp-dev-*.log
 
 # Project history exports (do not commit to repo)
-conversation-history-*.md
+/conversation-history-*.md
