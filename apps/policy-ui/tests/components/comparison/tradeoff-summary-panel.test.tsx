@@ -4,7 +4,10 @@ import i18next from 'i18next'
 import { initReactI18next, I18nextProvider } from 'react-i18next'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { TradeoffSummaryPanel } from '../../../src/components/comparison/TradeoffSummaryPanel.js'
-import type { ComparisonScenario } from '../../../src/contracts/data-contract.js'
+import type {
+  ComparisonScenarioMeta,
+  TradeoffSummary,
+} from '../../../src/contracts/data-contract.js'
 
 async function createTestI18n() {
   const instance = i18next.createInstance()
@@ -19,18 +22,9 @@ async function createTestI18n() {
         common: {
           comparison: {
             tradeoff: {
-              title: 'Tradeoff summary',
-              description: 'Template prose.',
-              empty: 'Select alternatives to compare.',
-              template: 'Compared to baseline, {{scenario_name}} {{delta_gdp}}{{delta_inf}}{{delta_rate}}.',
-              negligible: 'Compared to baseline, {{scenario_name}} shows negligible differences across headline metrics.',
-              shifts: 'shifts',
-              by: 'by',
-              metric: {
-                gdp_growth: 'GDP',
-                inflation: 'inflation',
-                policy_rate: 'policy rate',
-              },
+              title: 'Trade-off summary',
+              smePendingChip: 'SME content pending',
+              smePendingAria: 'Trade-off summary — SME content pending',
             },
           },
         },
@@ -40,45 +34,47 @@ async function createTestI18n() {
   return instance
 }
 
-function buildScenario(overrides: Partial<ComparisonScenario>): ComparisonScenario {
-  return {
-    scenario_id: 'scenario',
-    scenario_name: 'Scenario',
-    scenario_type: 'alternative',
-    summary: 'Summary',
-    initial_tag: 'balanced',
-    values: {
-      gdp_growth: 5,
-      inflation: 4,
-      policy_rate: 12,
-    },
-    risk_index: 0.3,
-    ...overrides,
-  }
-}
+const scenarios: ComparisonScenarioMeta[] = [
+  { id: 'baseline', name: 'Baseline', role: 'baseline', role_label: 'Baseline' },
+  {
+    id: 'fiscal-consolidation',
+    name: 'Fiscal consolidation',
+    role: 'alternative',
+    role_label: 'Alternative',
+  },
+]
 
 describe('TradeoffSummaryPanel', () => {
-  it('renders shifts token with a separator space before metric label', async () => {
+  it('wraps scenario names in <em> when rendering shell prose', async () => {
     const i18n = await createTestI18n()
-    const baseline = buildScenario({
-      scenario_id: 'baseline',
-      scenario_name: 'Baseline',
-      scenario_type: 'baseline',
-      values: { gdp_growth: 5, inflation: 4, policy_rate: 12 },
-    })
-    const alternative = buildScenario({
-      scenario_id: 'rate-cut-100bp',
-      scenario_name: 'Rate cut',
-      values: { gdp_growth: 5.8, inflation: 4, policy_rate: 12 },
-    })
+    const tradeoff: TradeoffSummary = {
+      mode: 'shell',
+      shell_id: 'fiscal-vs-growth-tradeoff',
+      rendered_text:
+        'Fiscal consolidation dominates on external stability at the cost of growth.',
+    }
 
     const markup = renderToStaticMarkup(
       <I18nextProvider i18n={i18n}>
-        <TradeoffSummaryPanel selectedScenarios={[baseline, alternative]} baselineId="baseline" />
+        <TradeoffSummaryPanel tradeoff={tradeoff} scenarios={scenarios} />
       </I18nextProvider>,
     )
 
-    assert.match(markup, /shifts GDP by \+0\.8pp/)
-    assert.equal(markup.includes('shiftsGDP by'), false)
+    assert.match(markup, /<em>Fiscal consolidation<\/em>/)
+    assert.doesNotMatch(markup, /SME content pending/)
+  })
+
+  it('renders the SME-pending warn chip when mode is empty', async () => {
+    const i18n = await createTestI18n()
+    const tradeoff: TradeoffSummary = { mode: 'empty' }
+
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <TradeoffSummaryPanel tradeoff={tradeoff} scenarios={scenarios} />
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /ui-chip--warn/)
+    assert.match(markup, /SME content pending/)
   })
 })

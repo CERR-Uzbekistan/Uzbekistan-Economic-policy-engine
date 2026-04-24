@@ -68,7 +68,7 @@ describe('overview adapter', () => {
     const snapshot = toMacroSnapshot({})
 
     assert.equal(snapshot.snapshot_id, 'overview-snapshot')
-    assert.ok(snapshot.summary.includes('No summary'))
+    assert.ok(typeof snapshot.summary === 'string' && snapshot.summary.includes('No summary'))
     assert.deepEqual(snapshot.headline_metrics, [])
     assert.equal(snapshot.nowcast_forecast.chart_id, 'nowcast_forecast')
     assert.equal(snapshot.output_action.target_href, '/scenario-lab')

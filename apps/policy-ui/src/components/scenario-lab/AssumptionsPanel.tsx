@@ -182,7 +182,7 @@ export function AssumptionsPanel({
             <button
               key={preset.preset_id}
               type="button"
-              className={`preset-chip ${presentation.className}`}
+              className={presentation.className}
               aria-pressed={presentation.ariaPressed}
               onClick={presentation.onClick}
               onKeyDown={presentation.onKeyDown}
