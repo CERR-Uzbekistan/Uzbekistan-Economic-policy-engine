@@ -1,0 +1,2831 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Policy Analysis Workspace — Spec Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  /* ═══════════════════════════════════════════════════════════════════
+     Tokens — copied verbatim from apps/policy-ui/src/styles/tokens.css
+     so this prototype visually matches the real React app.
+     ═══════════════════════════════════════════════════════════════════ */
+  :root {
+    --color-bg:             #f4f2ee;
+    --color-surface:        #ffffff;
+    --color-surface-muted:  #f2f4f7;
+    --color-border:         #d8dde6;
+    --color-border-strong:  #c5ceda;
+    --color-text:           #17253b;
+    --color-text-muted:     #4d5d74;
+    --color-brand:          #1f3658;
+    --color-brand-soft:     #e7edf6;
+
+    /* Semantic chart colors per spec §11.4 */
+    --color-baseline:       #1f3658;  /* slate/navy */
+    --color-alternative:    #2f7b8a;  /* muted teal */
+    --color-downside:       #9b3b2e;  /* muted red */
+    --color-upside:         #3e6b45;  /* muted green */
+    --color-uncertainty:    #c5ceda;  /* gray band */
+    --color-warn:           #8c5a00;
+    --color-warn-soft:      #f4e8d0;
+    --color-crit-soft:      #f5dfd6;
+
+    --font-sans: "Source Sans 3", "Noto Sans", "Helvetica Neue", sans-serif;
+    --font-mono: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 0.75rem;
+    --space-lg: 1rem;
+    --space-xl: 1.5rem;
+    --space-2xl: 2rem;
+    --space-3xl: 3rem;
+
+    --radius-sm: 0.375rem;
+    --radius-md: 0.625rem;
+    --radius-lg: 0.875rem;
+
+    --sidebar-width: clamp(14rem, 19vw, 16.5rem);
+    --content-max-width: 84rem;
+    --focus-ring: 0 0 0 2px rgba(31, 54, 88, 0.25);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body, #root { margin: 0; min-height: 100%; }
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    line-height: 1.45;
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ───── App shell ───────────────────────────────────────────────── */
+  .app-shell {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
+    min-height: 100vh;
+  }
+  .app-shell__sidebar {
+    background: var(--color-surface-muted);
+    border-inline-end: 1px solid var(--color-border);
+    display: flex; flex-direction: column; gap: var(--space-2xl);
+    padding: clamp(1rem, 2.2vw, 1.75rem);
+    position: sticky; top: 0; height: 100vh;
+  }
+  .app-shell__brand {
+    border-bottom: 1px solid var(--color-border);
+    display: grid; gap: var(--space-sm);
+    padding-bottom: var(--space-xl);
+  }
+  .app-shell__eyebrow {
+    color: var(--color-text-muted);
+    font-size: 0.72rem; letter-spacing: 0.04em;
+    margin: 0; text-transform: uppercase;
+  }
+  .app-shell__title {
+    color: var(--color-text);
+    font-size: 1rem; font-weight: 650; line-height: 1.35;
+    margin: 0;
+  }
+  .app-shell__nav-title {
+    color: var(--color-text-muted);
+    font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.04em;
+    margin: 0 0 var(--space-md);
+    text-transform: uppercase;
+  }
+  .app-shell__nav-list {
+    display: grid; gap: var(--space-xs);
+    list-style: none; margin: 0; padding: 0;
+  }
+  .app-shell__nav-link {
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    display: block;
+    font-size: 0.94rem; line-height: 1.3;
+    padding: var(--space-sm) var(--space-md);
+    text-decoration: none;
+    cursor: pointer;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+  }
+  .app-shell__nav-link:hover {
+    background: var(--color-brand-soft);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+  .app-shell__nav-link.active {
+    background: var(--color-brand-soft);
+    border-color: var(--color-border-strong);
+    color: var(--color-brand);
+    font-weight: 600;
+  }
+  .app-shell__sidebar-foot {
+    margin-top: auto;
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--color-border);
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    line-height: 1.55;
+  }
+
+  .app-shell__main {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-width: 0;
+  }
+  .app-shell__topbar {
+    background: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky; top: 0; z-index: 10;
+    backdrop-filter: blur(4px);
+  }
+  .app-shell__topbar-inner {
+    width: min(100%, var(--content-max-width));
+    margin-inline: auto;
+    min-height: 3.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    padding-inline: clamp(1rem, 2.8vw, 2.5rem);
+    gap: var(--space-lg);
+  }
+  .topbar-utilities {
+    display: flex; align-items: center; gap: var(--space-xl);
+    font-size: 0.82rem; color: var(--color-text-muted);
+  }
+  .topbar-utilities .freshness {
+    display: inline-flex; align-items: center; gap: var(--space-xs);
+    font-family: var(--font-mono); font-size: 0.72rem;
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .topbar-utilities .freshness .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--color-upside);
+    display: inline-block;
+  }
+  .topbar-utilities .icon-btn {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 0.3rem 0.55rem;
+    font-size: 0.82rem;
+    color: var(--color-text);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .topbar-utilities .icon-btn:hover { background: var(--color-brand-soft); }
+
+  .language-switcher {
+    align-items: center;
+    display: flex; gap: var(--space-sm);
+  }
+  .language-switcher__label {
+    color: var(--color-text-muted); font-size: 0.84rem;
+  }
+  .language-switcher select {
+    appearance: none;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    font: inherit;
+    min-height: 2rem; min-width: 4.5rem;
+    padding: 0 var(--space-lg);
+  }
+  .app-shell a:focus-visible,
+  .app-shell button:focus-visible,
+  .app-shell select:focus-visible {
+    box-shadow: var(--focus-ring); outline: none;
+  }
+  .app-shell__content { min-width: 0; }
+
+  /* ───── Page container / header ─────────────────────────────────── */
+  .page-container {
+    width: min(100%, var(--content-max-width));
+    margin-inline: auto;
+    padding-block: clamp(1rem, 2.6vw, 2rem);
+    padding-inline: clamp(1rem, 2.8vw, 2.5rem);
+    display: grid; gap: var(--space-2xl);
+  }
+  .page-header {
+    display: grid; gap: var(--space-sm);
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .page-header__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem; letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+  }
+  .page-header h1 {
+    font-size: clamp(1.5rem, 2.6vw, 1.9rem);
+    font-weight: 650; line-height: 1.2;
+    margin: 0; letter-spacing: -0.01em;
+  }
+  .page-header p.description {
+    color: var(--color-text-muted);
+    margin: 0; max-width: 68ch;
+    font-size: 0.95rem;
+  }
+  .page-header__meta {
+    display: flex; flex-wrap: wrap; gap: var(--space-xl);
+    margin-top: var(--space-sm);
+    font-family: var(--font-mono); font-size: 0.72rem;
+    color: var(--color-text-muted); letter-spacing: 0.03em;
+  }
+  .page-header__meta strong { color: var(--color-text); font-weight: 500; }
+
+  /* ───── Page section heads ───────────────────────────────────────── */
+  .page-section-head {
+    display: grid; gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
+  }
+  .page-section-head h2 {
+    font-size: 1.08rem; font-weight: 650; margin: 0;
+  }
+  .page-section-head p {
+    color: var(--color-text-muted);
+    font-size: 0.89rem; line-height: 1.4; margin: 0;
+  }
+
+  /* ───── UI primitives per spec §11.3 ────────────────────────────── */
+
+  /* Chip / badge */
+  .ui-chip {
+    align-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: 99px;
+    color: var(--color-text);
+    display: inline-flex;
+    font-size: 0.73rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    gap: 0.25rem;
+    line-height: 1;
+    padding: 0.24rem 0.52rem;
+    white-space: nowrap;
+  }
+  .ui-chip--neutral { background: var(--color-surface-muted); }
+  .ui-chip--accent {
+    background: var(--color-brand-soft);
+    border-color: var(--color-border-strong);
+    color: var(--color-brand);
+  }
+  .ui-chip--warn {
+    background: var(--color-warn-soft);
+    border-color: #e7d5a7;
+    color: var(--color-warn);
+  }
+  .ui-chip--crit {
+    background: var(--color-crit-soft);
+    border-color: #e7beb1;
+    color: var(--color-downside);
+  }
+
+  /* Attribution badge (per spec §10 rule 4, §11.3) */
+  .attribution-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.2rem 0.45rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    background: var(--color-surface);
+    white-space: nowrap;
+  }
+  .attribution-badge.active { color: var(--color-brand); border-color: var(--color-brand); }
+
+  /* Card patterns */
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+  }
+  .card--flat {
+    background: transparent;
+    border: 0; padding: 0;
+  }
+  .card__head {
+    display: flex; justify-content: space-between; align-items: start;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-lg);
+  }
+  .card__head h3 {
+    margin: 0; font-size: 1rem; font-weight: 650;
+  }
+  .card__head p {
+    margin: 0.2rem 0 0; color: var(--color-text-muted); font-size: 0.88rem;
+  }
+  .card__caption {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: var(--space-md);
+    margin-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    font-family: var(--font-mono);
+    font-size: 0.7rem; letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+  }
+
+  /* Buttons */
+  .btn-primary {
+    appearance: none; border: 0;
+    background: var(--color-brand); color: white;
+    font-family: inherit; font-size: 0.92rem; font-weight: 600;
+    padding: 0.6rem 1.1rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .btn-primary:hover { background: #16273f; }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .btn-secondary {
+    appearance: none;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-family: inherit; font-size: 0.88rem; font-weight: 600;
+    padding: 0.5rem 0.9rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .btn-secondary:hover { background: var(--color-brand-soft); border-color: var(--color-border-strong); }
+
+  .btn-ghost {
+    appearance: none;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--color-brand);
+    font: inherit; font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.35rem 0.55rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .btn-ghost:hover { background: var(--color-brand-soft); }
+
+  /* Status badge with severity */
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    font-family: var(--font-mono); font-size: 0.68rem;
+    font-weight: 600; letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.45rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid;
+  }
+  .status-badge--ok { border-color: var(--color-upside); color: var(--color-upside); background: #eaf1e8; }
+  .status-badge--warn { border-color: var(--color-warn); color: var(--color-warn); background: var(--color-warn-soft); }
+  .status-badge--crit { border-color: var(--color-downside); color: var(--color-downside); background: var(--color-crit-soft); }
+
+  /* Segmented control */
+  .segmented-control {
+    background: var(--color-surface-muted);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    flex-wrap: nowrap;
+    gap: var(--space-xs);
+    padding: var(--space-xs);
+  }
+  .segmented-control button {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    font: inherit; font-size: 0.82rem; font-weight: 600;
+    min-height: 1.95rem;
+    padding: 0 var(--space-md);
+    white-space: nowrap;
+  }
+  .segmented-control button.active {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  /* Empty state */
+  .empty-state {
+    background: var(--color-surface-muted);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    font-size: 0.88rem;
+    padding: var(--space-md);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     OVERVIEW PAGE (spec §9.1)
+     ═══════════════════════════════════════════════════════════════════ */
+
+  /* A. Economic state header */
+  .state-header {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-brand);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl) var(--space-2xl);
+  }
+  .state-header__body {
+    font-size: 1.15rem; line-height: 1.5;
+    color: var(--color-text);
+    max-width: 52rem;
+    margin: 0;
+  }
+  .state-header__body em {
+    font-style: italic; color: var(--color-brand); font-weight: 600;
+  }
+  .state-header__meta {
+    display: flex; flex-wrap: wrap; gap: var(--space-lg);
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    font-family: var(--font-mono); font-size: 0.72rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .state-header__meta span::before {
+    content: "· "; color: var(--color-border-strong);
+    margin-right: 0.2rem;
+  }
+  .state-header__meta span:first-child::before { content: ""; margin: 0; }
+
+  /* B. KPI strip */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .kpi {
+    padding: var(--space-lg) var(--space-xl);
+    border-right: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .kpi:nth-child(4n) { border-right: 0; }
+  .kpi:nth-child(n+5) { border-bottom: 0; }
+  .kpi__head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: var(--space-sm);
+  }
+  .kpi__name {
+    font-size: 0.78rem; font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .kpi__freshness {
+    font-family: var(--font-mono); font-size: 0.66rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.04em;
+  }
+  .kpi__value {
+    font-family: var(--font-mono);
+    font-size: 1.65rem; font-weight: 500;
+    line-height: 1.1;
+    color: var(--color-text);
+    letter-spacing: -0.01em;
+  }
+  .kpi__value .unit {
+    font-size: 0.85rem; color: var(--color-text-muted);
+    margin-left: 0.15rem;
+  }
+  .kpi__delta {
+    margin-top: var(--space-xs);
+    font-family: var(--font-mono); font-size: 0.76rem;
+    color: var(--color-text-muted);
+  }
+  .kpi__delta .arrow { margin-right: 0.25rem; }
+  /* Neutral delta semantics — per v2 audit and plan TA-4 acceptance criterion.
+     Direction is shown; value judgment is NOT encoded. */
+  .kpi__context {
+    margin-top: var(--space-xs);
+    font-size: 0.76rem;
+    color: var(--color-text-muted);
+  }
+
+  /* C. Nowcast block + D. Risks (two-column) */
+  .overview-two-col {
+    display: grid;
+    grid-template-columns: 1.45fr 1fr;
+    gap: var(--space-xl);
+  }
+  @media (max-width: 1100px) {
+    .overview-two-col { grid-template-columns: 1fr; }
+    .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .chart-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+    display: flex; flex-direction: column;
+  }
+  .chart-wrap {
+    position: relative;
+    height: 280px;
+    margin: var(--space-sm) 0;
+  }
+  .chart-legend {
+    display: flex; gap: var(--space-lg);
+    font-family: var(--font-mono); font-size: 0.7rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.04em;
+  }
+  .chart-legend span {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+  }
+  .chart-legend .sw {
+    width: 14px; height: 2px; display: inline-block;
+  }
+  .chart-legend .sw--band {
+    height: 6px; border-radius: 1px;
+    background: var(--color-uncertainty);
+  }
+  .chart-takeaway {
+    margin-top: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-surface-muted);
+    border-radius: var(--radius-sm);
+    font-size: 0.86rem;
+    color: var(--color-text);
+    line-height: 1.5;
+  }
+  .chart-takeaway strong { color: var(--color-brand); }
+
+  /* Risk rail */
+  .risk-list {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .risk-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .risk-item:last-child { border-bottom: 0; }
+  .risk-item__body h4 {
+    margin: 0 0 var(--space-xs);
+    font-size: 0.98rem; font-weight: 600;
+  }
+  .risk-item__body p {
+    margin: 0 0 var(--space-sm);
+    font-size: 0.88rem; color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+  .risk-item__body .channel {
+    font-family: var(--font-mono); font-size: 0.7rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .risk-item__action {
+    align-self: center;
+  }
+
+  /* E. Quick actions */
+  .quick-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-md);
+  }
+  .qa-tile {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    color: var(--color-text);
+    display: flex; flex-direction: column;
+    gap: var(--space-xs);
+    transition: border-color 0.12s, background 0.12s;
+  }
+  .qa-tile:hover {
+    background: var(--color-brand-soft);
+    border-color: var(--color-border-strong);
+  }
+  .qa-tile .qa-kind {
+    font-family: var(--font-mono); font-size: 0.68rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .qa-tile h5 {
+    margin: 0; font-size: 0.96rem; font-weight: 650;
+  }
+  .qa-tile p {
+    margin: 0; font-size: 0.82rem; color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+  @media (max-width: 1100px) {
+    .quick-actions { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* F. Recent updates feed */
+  .feed {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+  }
+  .feed-col h4 {
+    margin: 0 0 var(--space-sm);
+    font-size: 0.82rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    padding-bottom: var(--space-xs);
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+  .feed-item {
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.86rem;
+  }
+  .feed-item:last-child { border-bottom: 0; }
+  .feed-item__date {
+    font-family: var(--font-mono); font-size: 0.68rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.04em;
+    display: block;
+    margin-bottom: 0.15rem;
+  }
+  .feed-item__title {
+    color: var(--color-text);
+    line-height: 1.45;
+  }
+  .feed-item__tags {
+    display: inline-flex; gap: 0.3rem;
+    margin-top: 0.25rem;
+  }
+  @media (max-width: 1100px) {
+    .feed { grid-template-columns: 1fr; }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     SCENARIO LAB (spec §9.2)
+     Three-column layout: Assumptions · Results · Interpretation
+     ═══════════════════════════════════════════════════════════════════ */
+  .lab-grid {
+    display: grid;
+    grid-template-columns: 340px 1fr 340px;
+    gap: var(--space-lg);
+    align-items: start;
+  }
+  @media (max-width: 1280px) {
+    .lab-grid { grid-template-columns: 300px 1fr 300px; }
+  }
+  @media (max-width: 1100px) {
+    .lab-grid { grid-template-columns: 1fr; }
+  }
+
+  .lab-panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+  }
+  .lab-panel h3 {
+    margin: 0 0 var(--space-xs);
+    font-size: 1rem; font-weight: 650;
+  }
+  .lab-panel > p.sub {
+    margin: 0 0 var(--space-lg);
+    font-size: 0.82rem; color: var(--color-text-muted);
+  }
+
+  /* Assumption presets */
+  .presets {
+    display: flex; flex-wrap: wrap; gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
+  }
+  .preset-chip {
+    appearance: none; cursor: pointer;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 0.3rem 0.55rem;
+    font: inherit; font-size: 0.8rem; font-weight: 500;
+    color: var(--color-text-muted);
+  }
+  .preset-chip:hover { border-color: var(--color-border-strong); color: var(--color-text); }
+  .preset-chip.active {
+    background: var(--color-brand);
+    color: white;
+    border-color: var(--color-brand);
+  }
+
+  /* Session controls (name + buttons) */
+  .lab-session {
+    display: grid; gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+    padding: var(--space-md);
+    background: var(--color-surface-muted);
+    border-radius: var(--radius-sm);
+  }
+  .lab-session label {
+    display: grid; gap: 0.2rem;
+    font-size: 0.78rem; color: var(--color-text-muted);
+  }
+  .lab-session input[type="text"] {
+    padding: 0.35rem 0.55rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font: inherit; font-size: 0.9rem;
+    color: var(--color-text);
+    background: var(--color-surface);
+  }
+  .lab-session .actions {
+    display: flex; gap: var(--space-sm); margin-top: var(--space-xs);
+  }
+
+  /* Assumption group */
+  .assumption-group {
+    margin-bottom: var(--space-lg);
+  }
+  .assumption-group h4 {
+    margin: 0 0 var(--space-sm);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .assumption-field {
+    display: grid; gap: 0.2rem;
+    margin-bottom: var(--space-md);
+  }
+  .assumption-field__label {
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .assumption-field__label span.name {
+    font-size: 0.87rem; font-weight: 500;
+  }
+  .assumption-field__label span.value {
+    font-family: var(--font-mono); font-size: 0.82rem; font-weight: 600;
+    color: var(--color-brand);
+  }
+  .assumption-field__help {
+    font-size: 0.76rem; color: var(--color-text-muted);
+    line-height: 1.4;
+  }
+  .assumption-field__tech {
+    font-family: var(--font-mono); font-size: 0.7rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+  .assumption-field input[type="range"] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 1.2rem; background: transparent;
+    cursor: pointer;
+    margin: 0.2rem 0;
+  }
+  .assumption-field input[type="range"]::-webkit-slider-runnable-track {
+    height: 3px; border-radius: 2px;
+    background: var(--color-border);
+  }
+  .assumption-field input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px; height: 16px; margin-top: -7px;
+    background: var(--color-brand); border: 0;
+    border-radius: 50%;
+  }
+  .assumption-field input[type="range"]::-moz-range-thumb {
+    width: 14px; height: 14px;
+    background: var(--color-brand); border: 0;
+    border-radius: 50%;
+  }
+  .lab-technical-toggle {
+    display: flex; align-items: center; gap: var(--space-xs);
+    font-size: 0.82rem; color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+    padding: var(--space-sm);
+    background: var(--color-surface-muted);
+    border-radius: var(--radius-sm);
+  }
+
+  /* Results panel */
+  .result-tabs {
+    display: flex; gap: 0;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--space-lg);
+    overflow-x: auto;
+  }
+  .result-tab {
+    appearance: none; background: transparent; border: 0;
+    padding: 0.6rem 0.9rem;
+    font: inherit; font-size: 0.86rem; font-weight: 500;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    white-space: nowrap;
+  }
+  .result-tab[aria-selected="true"] {
+    color: var(--color-brand);
+    border-bottom-color: var(--color-brand);
+  }
+
+  .headline-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-lg);
+    overflow: hidden;
+  }
+  .hmetric {
+    padding: var(--space-md);
+    border-right: 1px solid var(--color-border);
+  }
+  .hmetric:last-child { border-right: 0; }
+  .hmetric__label {
+    font-size: 0.72rem; color: var(--color-text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: var(--space-xs);
+  }
+  .hmetric__value {
+    font-family: var(--font-mono); font-size: 1.3rem; font-weight: 500;
+    color: var(--color-text);
+  }
+  .hmetric__delta {
+    margin-top: 0.15rem;
+    font-family: var(--font-mono); font-size: 0.74rem;
+    color: var(--color-text-muted);
+  }
+
+  /* Interpretation rail */
+  .interpretation-section {
+    margin-bottom: var(--space-lg);
+  }
+  .interpretation-section h4 {
+    margin: 0 0 var(--space-xs);
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    padding-bottom: 0.2rem;
+    border-bottom: 1px dotted var(--color-border);
+  }
+  .interpretation-section ul {
+    margin: 0; padding-left: 1.1rem;
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+  .interpretation-section ul li {
+    margin-bottom: 0.3rem;
+    color: var(--color-text);
+  }
+  .ai-attribution {
+    margin-top: var(--space-lg);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-warn-soft);
+    border: 1px solid #e7d5a7;
+    border-left: 3px solid var(--color-warn);
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    color: var(--color-warn);
+    line-height: 1.45;
+  }
+  .ai-attribution strong { display: block; margin-bottom: 0.15rem; }
+
+  /* Stale banner (per React app existing pattern) */
+  .stale-banner {
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-warn-soft);
+    border: 1px solid #e7d5a7;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    color: var(--color-warn);
+    margin-bottom: var(--space-md);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     COMPARISON PAGE (spec §9.3)
+     ═══════════════════════════════════════════════════════════════════ */
+  .cmp-selector {
+    display: flex; align-items: center; flex-wrap: wrap;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  .cmp-selector .label {
+    font-size: 0.78rem; color: var(--color-text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-right: var(--space-sm);
+  }
+  .scenario-chip {
+    display: inline-flex; align-items: center; gap: var(--space-xs);
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--color-border);
+    border-radius: 99px;
+    background: var(--color-surface);
+    font-size: 0.84rem;
+  }
+  .scenario-chip .dot {
+    width: 10px; height: 10px; border-radius: 50%; display: inline-block;
+  }
+  .scenario-chip .close {
+    font-family: var(--font-mono); color: var(--color-text-muted);
+    cursor: pointer; margin-left: 0.15rem;
+  }
+
+  .cmp-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+  @media (max-width: 1100px) { .cmp-cards { grid-template-columns: 1fr; } }
+
+  .cmp-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    border-top: 3px solid var(--color-baseline);
+  }
+  .cmp-card[data-role="alternative"] { border-top-color: var(--color-alternative); }
+  .cmp-card[data-role="downside"]    { border-top-color: var(--color-downside); }
+  .cmp-card h3 {
+    margin: 0 0 0.1rem; font-size: 1rem; font-weight: 650;
+  }
+  .cmp-card .tag {
+    font-family: var(--font-mono); font-size: 0.68rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.04em; text-transform: uppercase;
+    margin-bottom: var(--space-md);
+  }
+  .cmp-card .metric-row {
+    display: grid; grid-template-columns: 1fr auto;
+    padding: var(--space-xs) 0;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.88rem;
+  }
+  .cmp-card .metric-row:last-child { border-bottom: 0; }
+  .cmp-card .metric-row .mn { color: var(--color-text-muted); }
+  .cmp-card .metric-row .mv {
+    font-family: var(--font-mono); font-weight: 500;
+  }
+
+  .delta-table {
+    width: 100%; border-collapse: collapse;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    font-size: 0.88rem;
+  }
+  .delta-table thead th {
+    text-align: left;
+    font-size: 0.74rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    padding: var(--space-md);
+    background: var(--color-surface-muted);
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+  .delta-table tbody td {
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+    font-family: var(--font-mono);
+  }
+  .delta-table tbody tr:last-child td { border-bottom: 0; }
+  .delta-table tbody td:first-child {
+    font-family: var(--font-sans);
+    color: var(--color-text);
+  }
+  .delta-table tbody td.num { text-align: right; }
+  .delta-table tbody td.lowest::after,
+  .delta-table tbody td.highest::after {
+    content: "★";
+    margin-left: 0.3rem;
+    color: var(--color-warn);
+    font-size: 0.8rem;
+  }
+  .delta-table tbody td.lowest,
+  .delta-table tbody td.highest {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+  .delta-table tbody tr:hover td { background: rgba(31, 54, 88, 0.03); }
+
+  .tradeoff {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-brand);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+  }
+  .tradeoff h4 {
+    margin: 0 0 var(--space-md);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+  }
+  .tradeoff p {
+    margin: 0; font-size: 1.02rem;
+    line-height: 1.6; color: var(--color-text);
+    max-width: 52rem;
+  }
+  .tradeoff em { color: var(--color-brand); font-style: italic; font-weight: 600; }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     MODEL EXPLORER (spec §9.4)
+     ═══════════════════════════════════════════════════════════════════ */
+  .model-catalog {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+  @media (max-width: 1100px) { .model-catalog { grid-template-columns: 1fr; } }
+
+  .model-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    color: var(--color-text);
+    display: grid; gap: var(--space-xs);
+    position: relative;
+  }
+  .model-card:hover {
+    border-color: var(--color-border-strong);
+    background: var(--color-brand-soft);
+  }
+  .model-card.active {
+    border-color: var(--color-brand);
+    background: var(--color-brand-soft);
+  }
+  .model-card__head {
+    display: flex; justify-content: space-between; align-items: start;
+    margin-bottom: var(--space-xs);
+  }
+  .model-card__title {
+    font-size: 1rem; font-weight: 650; margin: 0;
+  }
+  .model-card__meta {
+    font-family: var(--font-mono); font-size: 0.68rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .model-card__desc {
+    font-size: 0.84rem; color: var(--color-text-muted);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .model-card__stats {
+    display: flex; gap: var(--space-lg);
+    margin-top: var(--space-sm);
+    padding-top: var(--space-xs);
+    border-top: 1px dotted var(--color-border);
+  }
+  .model-card__stat {
+    font-size: 0.74rem;
+    color: var(--color-text-muted);
+  }
+  .model-card__stat b {
+    display: block;
+    font-family: var(--font-mono); font-size: 0.95rem;
+    color: var(--color-text); font-weight: 500;
+  }
+
+  /* Detail pane */
+  .model-detail {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  .model-detail__head {
+    padding: var(--space-xl);
+    border-bottom: 1px solid var(--color-border);
+    display: flex; justify-content: space-between; align-items: end;
+    gap: var(--space-lg);
+  }
+  .model-detail__head h3 {
+    margin: 0; font-size: 1.3rem; font-weight: 650;
+  }
+  .model-detail__head h3 .sub {
+    display: block;
+    font-size: 0.72rem; font-weight: 500;
+    color: var(--color-text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 0.25rem;
+  }
+  .model-detail__tabs {
+    display: flex;
+    border-bottom: 1px solid var(--color-border);
+    padding: 0 var(--space-xl);
+    background: var(--color-surface-muted);
+  }
+  .model-detail__body {
+    padding: var(--space-xl);
+    display: grid; grid-template-columns: 1.4fr 1fr;
+    gap: var(--space-2xl);
+  }
+  @media (max-width: 1100px) {
+    .model-detail__body { grid-template-columns: 1fr; }
+  }
+  .model-detail__body h4 {
+    margin: 0 0 var(--space-sm);
+    font-size: 0.88rem;
+    font-weight: 650;
+  }
+  .equation-block {
+    background: var(--color-surface-muted);
+    border-left: 2px solid var(--color-brand);
+    border-radius: var(--radius-sm);
+    padding: var(--space-md) var(--space-lg);
+    margin: var(--space-sm) 0;
+    font-family: var(--font-mono);
+    font-size: 0.92rem;
+    line-height: 1.8;
+  }
+  .equation-block .eq-label {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.7rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    margin-bottom: 0.4rem;
+  }
+  .equation-block em {
+    font-style: italic; color: var(--color-brand);
+    font-weight: 500;
+  }
+  .param-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.86rem;
+  }
+  .param-table th {
+    text-align: left;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    border-bottom: 1.5px solid var(--color-border-strong);
+  }
+  .param-table td {
+    padding: 0.45rem 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: top;
+  }
+  .param-table .sym {
+    font-family: var(--font-mono); font-weight: 500;
+    color: var(--color-brand);
+    font-style: italic;
+  }
+  .param-table .val {
+    font-family: var(--font-mono);
+    color: var(--color-text);
+  }
+  .param-table .val.issue { color: var(--color-downside); }
+
+  .caveat-list {
+    display: grid; gap: var(--space-sm);
+    list-style: none; padding: 0; margin: 0;
+  }
+  .caveat-item {
+    padding: var(--space-sm) var(--space-md);
+    border-left: 3px solid var(--color-border-strong);
+    background: var(--color-surface-muted);
+    border-radius: var(--radius-sm);
+    font-size: 0.86rem;
+    line-height: 1.5;
+  }
+  .caveat-item.severity-critical { border-left-color: var(--color-downside); }
+  .caveat-item.severity-warning  { border-left-color: var(--color-warn); }
+  .caveat-item strong {
+    display: block;
+    color: var(--color-text); font-weight: 650;
+    margin-bottom: 0.15rem;
+  }
+  .source-list {
+    display: grid; gap: var(--space-xs);
+  }
+  .source-item {
+    display: grid;
+    grid-template-columns: 180px 1fr auto;
+    gap: var(--space-md);
+    padding: var(--space-xs) 0;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.86rem; align-items: baseline;
+  }
+  .source-item .inst { font-weight: 600; color: var(--color-text); }
+  .source-item .desc { color: var(--color-text-muted); }
+  .source-item .vintage {
+    font-family: var(--font-mono); font-size: 0.72rem;
+    color: var(--color-text-muted);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     KNOWLEDGE HUB (spec §9.5)
+     ═══════════════════════════════════════════════════════════════════ */
+  .hub-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--space-2xl);
+  }
+  @media (max-width: 1100px) { .hub-grid { grid-template-columns: 1fr; } }
+
+  .timeline {
+    position: relative;
+    padding-left: var(--space-lg);
+    border-left: 1px solid var(--color-border);
+  }
+  .tl-item {
+    position: relative;
+    padding: 0 0 var(--space-lg) var(--space-md);
+  }
+  .tl-item::before {
+    content: "";
+    position: absolute;
+    left: calc(-1 * var(--space-lg) - 5px);
+    top: 0.35rem;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--color-surface);
+    border: 2px solid var(--color-brand);
+  }
+  .tl-item.in-progress::before { background: var(--color-warn); border-color: var(--color-warn); }
+  .tl-item.planned::before { border-style: dashed; }
+  .tl-item .tl-date {
+    font-family: var(--font-mono); font-size: 0.7rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.04em;
+  }
+  .tl-item h4 {
+    margin: 0.15rem 0 0.3rem;
+    font-size: 0.98rem; font-weight: 650;
+  }
+  .tl-item p {
+    margin: 0; font-size: 0.85rem;
+    color: var(--color-text-muted); line-height: 1.5;
+  }
+  .tl-item .meta {
+    display: flex; flex-wrap: wrap; gap: 0.3rem;
+    margin-top: var(--space-xs);
+  }
+
+  .brief-list { display: grid; gap: var(--space-lg); }
+  .brief {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+  }
+  .brief__author {
+    font-family: var(--font-mono); font-size: 0.7rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .brief h4 {
+    margin: 0.25rem 0 var(--space-xs);
+    font-size: 1rem; font-weight: 650;
+  }
+  .brief p {
+    margin: 0 0 var(--space-sm);
+    font-size: 0.86rem;
+    color: var(--color-text-muted); line-height: 1.55;
+  }
+  .brief .meta {
+    display: flex; gap: 0.3rem; flex-wrap: wrap;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     Page visibility controller
+     ═══════════════════════════════════════════════════════════════════ */
+  .page { display: none; }
+  .page.active {
+    display: block;
+    animation: fadeIn 0.25s ease both;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Skip link */
+  .skip-link {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    left: var(--space-xl);
+    padding: var(--space-sm) var(--space-lg);
+    position: fixed;
+    top: var(--space-sm);
+    transform: translateY(-200%);
+    transition: transform 0.15s ease;
+    z-index: 100;
+  }
+  .skip-link:focus-visible { transform: translateY(0); }
+
+  /* Mobile */
+  @media (max-width: 960px) {
+    .app-shell {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+    }
+    .app-shell__sidebar {
+      border-bottom: 1px solid var(--color-border);
+      border-inline-end: 0;
+      gap: var(--space-lg);
+      height: auto;
+      position: static;
+    }
+    .app-shell__nav-list {
+      display: flex; gap: var(--space-sm);
+      overflow-x: auto;
+      padding-bottom: var(--space-xs);
+    }
+    .app-shell__nav-link { white-space: nowrap; }
+    .app-shell__sidebar-foot { display: none; }
+  }
+
+</style>
+</head>
+<body>
+
+<div id="root">
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<div class="app-shell">
+
+  <!-- ═══ SIDEBAR (per spec §7.1 — five sections only) ═══ -->
+  <aside class="app-shell__sidebar" aria-label="Workspace navigation">
+    <div class="app-shell__brand">
+      <p class="app-shell__eyebrow">Uzbekistan Economic Policy Engine</p>
+      <p class="app-shell__title">Policy Analysis Workspace</p>
+    </div>
+
+    <nav aria-label="Primary">
+      <p class="app-shell__nav-title" data-i18n="nav.section">Workspace</p>
+      <ul class="app-shell__nav-list">
+        <li><button class="app-shell__nav-link active" data-route="overview"   data-i18n="nav.overview">Overview</button></li>
+        <li><button class="app-shell__nav-link"        data-route="lab"        data-i18n="nav.lab">Scenario Lab</button></li>
+        <li><button class="app-shell__nav-link"        data-route="comparison" data-i18n="nav.cmp">Comparison</button></li>
+        <li><button class="app-shell__nav-link"        data-route="explorer"   data-i18n="nav.exp">Model Explorer</button></li>
+        <li><button class="app-shell__nav-link"        data-route="hub"        data-i18n="nav.hub">Knowledge Hub</button></li>
+      </ul>
+    </nav>
+
+    <div class="app-shell__sidebar-foot">
+      Center for Economic Research<br>
+      and Reforms (CERR) · Tashkent<br>
+      <span style="opacity: 0.7;">v0.6-preview · 2026-04-18</span>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN (topbar + content) ═══ -->
+  <div class="app-shell__main">
+
+    <header class="app-shell__topbar" aria-label="Global utilities">
+      <div class="app-shell__topbar-inner">
+        <div class="topbar-utilities">
+          <span class="freshness"><span class="dot"></span>Data · 2 d ago</span>
+          <button class="icon-btn" title="Saved scenarios">★ Saved <span style="color:var(--color-brand)">3</span></button>
+          <button class="icon-btn" title="Export">↓ Export</button>
+          <button class="icon-btn" title="Help">? Help</button>
+        </div>
+        <label class="language-switcher">
+          <span class="language-switcher__label" data-i18n="lang.label">Language</span>
+          <select id="lang-select" aria-label="Select interface language">
+            <option value="en">EN</option>
+            <option value="ru">RU</option>
+            <option value="uz">UZ</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main id="main-content" tabindex="-1" class="app-shell__content">
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     OVERVIEW PAGE
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="page-overview" class="page active">
+  <div class="page-container">
+
+    <div class="page-header">
+      <p class="page-header__eyebrow" data-i18n="ov.eyebrow">Macroeconomic situation · April 2026</p>
+      <h1 data-i18n="ov.title">Overview</h1>
+      <p class="description" data-i18n="ov.desc">Decision-first macro snapshot designed to show what changed, why it matters, and where to test next.</p>
+      <div class="page-header__meta">
+        <span>Vintage · <strong>16 Apr 2026</strong></span>
+        <span>Models · <strong>6 live</strong></span>
+        <span>Last refresh · <strong>14 Apr 2026</strong></span>
+      </div>
+    </div>
+
+    <!-- A. Economic state header -->
+    <div class="state-header">
+      <p class="state-header__body">
+        Growth remains solid at <em>5.9%</em>, driven by services and construction; inflation is easing but remains above the Central Bank's <em>5% target</em>; the external position has narrowed modestly, though remittance dependence continues to anchor the principal downside risk.
+      </p>
+      <div class="state-header__meta">
+        <span>State narrative · drafted from DFM + QPM baseline</span>
+        <span>AI-assisted · reviewed 16 Apr · M. Usmanov</span>
+      </div>
+    </div>
+
+    <!-- B. Core KPI strip (8 indicators, neutral delta semantics) -->
+    <div class="kpi-strip" role="group" aria-label="Key macroeconomic indicators">
+      <div class="kpi">
+        <div class="kpi__head"><span class="kpi__name">GDP growth</span><span class="kpi__freshness">Q1 · NOWCAST</span></div>
+        <div class="kpi__value">5.9<span class="unit">%</span></div>
+        <div class="kpi__delta"><span class="arrow">↑</span>+0.3 pp vs prior estimate</div>
+        <div class="kpi__context">70% band · 5.2 – 6.4%</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__head"><span class="kpi__name">Headline inflation</span><span class="kpi__freshness">MAR 2026</span></div>
+        <div class="kpi__value">8.1<span class="unit">%</span></div>
+        <div class="kpi__delta"><span class="arrow">↓</span>−0.4 pp m/m</div>
+        <div class="kpi__context">Core 8.6% · target 5%</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__head"><span class="kpi__name">Policy rate</span><span class="kpi__freshness">CBU · APR</span></div>
+        <div class="kpi__value">13.50<span class="unit">%</span></div>
+        <div class="kpi__delta"><span class="arrow">→</span>unchanged · 4 mo</div>
+        <div class="kpi__context">Neutral est. 9.5% (QPM)</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__head"><span class="kpi__name">UZS / USD</span><span class="kpi__freshness">SPOT</span></div>
+        <div class="kpi__value">12 740</div>
+        <div class="kpi__delta"><span class="arrow">↑</span>+2.1% YTD</div>
+        <div class="kpi__context">REER broadly stable</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__head"><span class="kpi__name">Current account</span><span class="kpi__freshness">2025 · FINAL</span></div>
+        <div class="kpi__value">−3.4<span class="unit">%</span></div>
+        <div class="kpi__delta"><span class="arrow">↑</span>+0.7 pp narrower</div>
+        <div class="kpi__context">% of GDP</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__head"><span class="kpi__name">Fiscal balance</span><span class="kpi__freshness">2025</span></div>
+        <div class="kpi__value">−3.0<span class="unit">%</span></div>
+        <div class="kpi__delta"><span class="arrow">↑</span>+0.5 pp vs plan</div>
+        <div class="kpi__context">% of GDP · consolidated</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__head"><span class="kpi__name">Int'l reserves</span><span class="kpi__freshness">APR 2026</span></div>
+        <div class="kpi__value">41.2<span class="unit">B$</span></div>
+        <div class="kpi__delta"><span class="arrow">↑</span>+1.8 B$ YTD</div>
+        <div class="kpi__context">≈ 9 months of imports</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__head"><span class="kpi__name">Public debt</span><span class="kpi__freshness">2025</span></div>
+        <div class="kpi__value">35.7<span class="unit">%</span></div>
+        <div class="kpi__delta"><span class="arrow">→</span>broadly stable</div>
+        <div class="kpi__context">% of GDP · FX share 77%</div>
+      </div>
+    </div>
+
+    <!-- C + D. Nowcast chart + Risk rail -->
+    <div class="overview-two-col">
+      <div class="chart-card">
+        <div class="card__head">
+          <div>
+            <h3 data-i18n="ov.chart.title">GDP nowcast & one-year forecast</h3>
+            <p>2021 – 2027 · Quarterly · % y/y · 70% confidence band</p>
+          </div>
+          <span class="attribution-badge active" title="Dynamic Factor Model · Quarterly Projection Model">DFM · QPM</span>
+        </div>
+        <div class="chart-wrap"><canvas id="nowcast-chart"></canvas></div>
+        <div class="chart-takeaway">
+          <strong>Takeaway.</strong> Growth has stabilized around 5.8–5.9% with modest downside risk from remittance channel; uncertainty widens past 2026Q4.
+        </div>
+        <div class="card__caption">
+          <div class="chart-legend">
+            <span><span class="sw" style="background: var(--color-baseline)"></span>Realized</span>
+            <span><span class="sw" style="background: var(--color-alternative)"></span>Nowcast / forecast</span>
+            <span><span class="sw--band" style="display:inline-block; width: 14px"></span>70% band</span>
+          </div>
+          <span>34 indicators · rev. 14 Apr</span>
+        </div>
+      </div>
+
+      <div class="risk-list">
+        <div class="risk-item">
+          <div class="risk-item__body">
+            <h4>Russia slowdown via remittances</h4>
+            <p>A 15% remittance decline would subtract ~0.8 pp from GDP growth and widen the current account deficit by ~1.4 pp.</p>
+            <span class="channel">Hits · household consumption · CA balance</span>
+          </div>
+          <div class="risk-item__action">
+            <button class="btn-secondary" onclick="go('lab', 'russia_slowdown')">Test →</button>
+          </div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-item__body">
+            <h4>Inflation persistence above target</h4>
+            <p>Services inflation is sticky at ~10.5%; a second-round wage response could delay convergence to the 5% target by 4–6 quarters.</p>
+            <span class="channel">Hits · real wages · policy credibility</span>
+          </div>
+          <div class="risk-item__action">
+            <button class="btn-secondary" onclick="go('lab', 'inflation_persist')">Test →</button>
+          </div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-item__body">
+            <h4>Energy subsidy reform impact</h4>
+            <p>Phased tariff adjustment could add 1.8–2.4 pp to headline inflation in the shock quarter absent compensating transfers.</p>
+            <span class="channel">Hits · headline CPI · household welfare</span>
+          </div>
+          <div class="risk-item__action">
+            <button class="btn-secondary" onclick="go('lab', 'energy_reform')">Test →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- E. Quick actions -->
+    <div>
+      <div class="page-section-head">
+        <h2 data-i18n="ov.qa.title">Quick actions</h2>
+        <p>Pre-configured entry points into Scenario Lab and exports.</p>
+      </div>
+      <div class="quick-actions">
+        <button class="qa-tile" onclick="go('lab', 'rate_cut')">
+          <span class="qa-kind">Analysis</span>
+          <h5>Run a 100 bp rate cut</h5>
+          <p>Monetary easing shock through QPM with full impulse-response output.</p>
+        </button>
+        <button class="qa-tile" onclick="go('lab', 'wto')">
+          <span class="qa-kind">Analysis</span>
+          <h5>Test WTO tariff cut</h5>
+          <p>HS 28–40 liberalization combining Partial Equilibrium and CGE.</p>
+        </button>
+        <button class="qa-tile" onclick="go('comparison')">
+          <span class="qa-kind">Analysis</span>
+          <h5>Compare fiscal scenarios</h5>
+          <p>Baseline vs consolidation vs expansion, quarterly 2026–28.</p>
+        </button>
+        <button class="qa-tile" onclick="alert('Export flow would open here.')">
+          <span class="qa-kind">Output</span>
+          <h5>Export macro snapshot brief</h5>
+          <p>PDF briefing for internal distribution.</p>
+        </button>
+      </div>
+    </div>
+
+    <!-- F. Recent updates feed -->
+    <div>
+      <div class="page-section-head">
+        <h2 data-i18n="ov.feed.title">Recent updates</h2>
+        <p>What has changed in the last two weeks.</p>
+      </div>
+      <div class="feed">
+        <div class="feed-col">
+          <h4>Reforms</h4>
+          <div class="feed-item">
+            <span class="feed-item__date">14 APR · PRESIDENTIAL DECREE</span>
+            <div class="feed-item__title">PP-642 · Customs modernization Phase II</div>
+            <div class="feed-item__tags"><span class="ui-chip ui-chip--accent">Trade</span></div>
+          </div>
+          <div class="feed-item">
+            <span class="feed-item__date">02 APR · CBU RESOLUTION</span>
+            <div class="feed-item__title">Reserve requirement on FX deposits raised to 18%</div>
+            <div class="feed-item__tags"><span class="ui-chip ui-chip--accent">Monetary</span></div>
+          </div>
+          <div class="feed-item">
+            <span class="feed-item__date">21 MAR · CABINET RES.</span>
+            <div class="feed-item__title">Gas tariff adjustment mechanism, Q2 2026</div>
+            <div class="feed-item__tags"><span class="ui-chip ui-chip--accent">Fiscal</span></div>
+          </div>
+        </div>
+        <div class="feed-col">
+          <h4>Data refreshes</h4>
+          <div class="feed-item">
+            <span class="feed-item__date">14 APR · STAT AGENCY</span>
+            <div class="feed-item__title">Industrial production · March 2026</div>
+            <div class="feed-item__tags"><span class="attribution-badge">DFM input</span></div>
+          </div>
+          <div class="feed-item">
+            <span class="feed-item__date">11 APR · CBU</span>
+            <div class="feed-item__title">Monetary aggregates · March 2026</div>
+            <div class="feed-item__tags"><span class="attribution-badge">FPP input</span></div>
+          </div>
+          <div class="feed-item">
+            <span class="feed-item__date">08 APR · WITS</span>
+            <div class="feed-item__title">Tariff schedule · 2026 edition</div>
+            <div class="feed-item__tags"><span class="attribution-badge">PE input</span></div>
+          </div>
+        </div>
+        <div class="feed-col">
+          <h4>Your saved scenarios</h4>
+          <div class="feed-item">
+            <span class="feed-item__date">15 APR · N. MAMATOV</span>
+            <div class="feed-item__title">WTO accession · baseline tariff path</div>
+            <div class="feed-item__tags">
+              <span class="attribution-badge">PE</span>
+              <span class="attribution-badge">CGE</span>
+            </div>
+          </div>
+          <div class="feed-item">
+            <span class="feed-item__date">09 APR · J. AKHMATOV</span>
+            <div class="feed-item__title">Fiscal consolidation · 2026–2028</div>
+            <div class="feed-item__tags">
+              <span class="attribution-badge">FPP</span>
+              <span class="attribution-badge">QPM</span>
+            </div>
+          </div>
+          <div class="feed-item">
+            <span class="feed-item__date">04 APR · A. KARIMOVA</span>
+            <div class="feed-item__title">Oil price drop · $55/bbl stress</div>
+            <div class="feed-item__tags">
+              <span class="attribution-badge">QPM</span>
+              <span class="attribution-badge">FPP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SCENARIO LAB
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="page-lab" class="page">
+  <div class="page-container">
+
+    <div class="page-header">
+      <p class="page-header__eyebrow" data-i18n="lab.eyebrow">Scenario construction</p>
+      <h1 data-i18n="lab.title">Scenario Lab</h1>
+      <p class="description" data-i18n="lab.desc">Define assumptions in policy language, run the linked models, and read a structured interpretation of the result.</p>
+      <div class="page-header__meta">
+        <span>Active models · <strong>QPM · FPP</strong></span>
+        <span>Run lifecycle · <strong>Ready</strong></span>
+        <span>Data vintage · <strong>2026 Q1</strong></span>
+      </div>
+    </div>
+
+    <div class="lab-grid">
+
+      <!-- LEFT — Assumptions -->
+      <section class="lab-panel" aria-labelledby="lab-assumptions-title">
+        <h3 id="lab-assumptions-title">Assumptions</h3>
+        <p class="sub">Controls are grouped by policy meaning. Technical variable names are hidden behind a toggle.</p>
+
+        <div class="presets" role="radiogroup" aria-label="Scenario presets">
+          <button class="preset-chip active" data-preset="baseline">Baseline</button>
+          <button class="preset-chip" data-preset="rate_cut">Rate cut 100 bp</button>
+          <button class="preset-chip" data-preset="russia_slowdown">Russia slowdown</button>
+          <button class="preset-chip" data-preset="wto">WTO accession</button>
+          <button class="preset-chip" data-preset="energy_reform">Energy reform</button>
+        </div>
+
+        <div class="lab-session">
+          <label>
+            <span>Scenario name</span>
+            <input type="text" id="scen-name" value="Baseline (Q1 2026)" />
+          </label>
+          <div class="actions">
+            <button class="btn-primary" onclick="runScenario()">Run scenario</button>
+            <button class="btn-secondary" onclick="saveScenario()">Save draft</button>
+          </div>
+        </div>
+
+        <label class="lab-technical-toggle">
+          <input type="checkbox" id="tech-toggle" />
+          <span>Show technical variable names</span>
+        </label>
+
+        <div class="assumption-group">
+          <h4>Monetary</h4>
+          <div class="assumption-field">
+            <div class="assumption-field__label">
+              <span class="name">Policy rate change</span>
+              <span class="value" id="v-rate">0 bp</span>
+            </div>
+            <input type="range" id="s-rate" min="-300" max="300" step="25" value="0">
+            <div class="assumption-field__help">Shock to CBU refinancing rate, in basis points.</div>
+            <div class="assumption-field__tech tech-name" style="display:none;">Δi</div>
+          </div>
+          <div class="assumption-field">
+            <div class="assumption-field__label">
+              <span class="name">Currency depreciation</span>
+              <span class="value" id="v-fx">0%</span>
+            </div>
+            <input type="range" id="s-fx" min="-15" max="25" step="1" value="0">
+            <div class="assumption-field__help">UZS vs USD, annualized, as a shock to baseline.</div>
+            <div class="assumption-field__tech tech-name" style="display:none;">Δs</div>
+          </div>
+        </div>
+
+        <div class="assumption-group">
+          <h4>External</h4>
+          <div class="assumption-field">
+            <div class="assumption-field__label">
+              <span class="name">Remittance flow</span>
+              <span class="value" id="v-rem">0%</span>
+            </div>
+            <input type="range" id="s-rem" min="-30" max="15" step="1" value="0">
+            <div class="assumption-field__help">Annual change in inbound remittances.</div>
+            <div class="assumption-field__tech tech-name" style="display:none;">rem</div>
+          </div>
+          <div class="assumption-field">
+            <div class="assumption-field__label">
+              <span class="name">Commodity price shock</span>
+              <span class="value" id="v-com">0%</span>
+            </div>
+            <input type="range" id="s-com" min="-40" max="40" step="1" value="0">
+            <div class="assumption-field__help">Energy &amp; metals composite, world prices.</div>
+            <div class="assumption-field__tech tech-name" style="display:none;">p*</div>
+          </div>
+        </div>
+
+        <div class="assumption-group">
+          <h4>Fiscal</h4>
+          <div class="assumption-field">
+            <div class="assumption-field__label">
+              <span class="name">Government spending</span>
+              <span class="value" id="v-gov">0 pp</span>
+            </div>
+            <input type="range" id="s-gov" min="-4" max="4" step="0.25" value="0">
+            <div class="assumption-field__help">Change as a share of GDP.</div>
+            <div class="assumption-field__tech tech-name" style="display:none;">ΔG/Y</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CENTER — Results -->
+      <section class="lab-panel" aria-labelledby="lab-results-title">
+        <h3 id="lab-results-title">Results</h3>
+        <p class="sub">Impacts of current assumptions relative to baseline · 12-quarter horizon.</p>
+
+        <div class="result-tabs" role="tablist">
+          <button class="result-tab" role="tab" aria-selected="true">Headline impact</button>
+          <button class="result-tab" role="tab" aria-selected="false">Macro path</button>
+          <button class="result-tab" role="tab" aria-selected="false">External balance</button>
+          <button class="result-tab" role="tab" aria-selected="false">Fiscal effects</button>
+        </div>
+
+        <div id="stale-banner" class="stale-banner" style="display:none;">
+          Results reflect the previous run. <strong>Run scenario</strong> to update with current assumptions.
+        </div>
+
+        <div class="headline-metrics">
+          <div class="hmetric">
+            <div class="hmetric__label">GDP growth · 4q avg</div>
+            <div class="hmetric__value" id="r-gdp">5.9%</div>
+            <div class="hmetric__delta" id="r-gdp-d">vs baseline · 0.00 pp</div>
+          </div>
+          <div class="hmetric">
+            <div class="hmetric__label">Inflation · terminal</div>
+            <div class="hmetric__value" id="r-infl">8.1%</div>
+            <div class="hmetric__delta" id="r-infl-d">vs baseline · 0.00 pp</div>
+          </div>
+          <div class="hmetric">
+            <div class="hmetric__label">Current account</div>
+            <div class="hmetric__value" id="r-ca">−3.4%</div>
+            <div class="hmetric__delta" id="r-ca-d">vs baseline · 0.00 pp</div>
+          </div>
+          <div class="hmetric">
+            <div class="hmetric__label">Policy rate · end</div>
+            <div class="hmetric__value" id="r-rate">13.5%</div>
+            <div class="hmetric__delta" id="r-rate-d">vs baseline · 0.00 pp</div>
+          </div>
+        </div>
+
+        <div class="card__head" style="margin-bottom: var(--space-sm);">
+          <div>
+            <p class="page-header__eyebrow" style="margin:0;">Impulse response</p>
+            <h4 style="margin: 0.1rem 0 0;">GDP gap, inflation &amp; policy rate · 12 quarters</h4>
+          </div>
+          <span class="attribution-badge active">QPM · FPP</span>
+        </div>
+        <div class="chart-wrap" style="height: 300px;"><canvas id="result-chart"></canvas></div>
+        <div class="card__caption">
+          <div class="chart-legend">
+            <span><span class="sw" style="background: var(--color-baseline)"></span>GDP gap</span>
+            <span><span class="sw" style="background: var(--color-downside); border-top: 1px dashed"></span>Inflation</span>
+            <span><span class="sw" style="background: var(--color-text)"></span>Policy rate</span>
+          </div>
+          <span>Deviation from baseline · quarterly · pp</span>
+        </div>
+      </section>
+
+      <!-- RIGHT — Interpretation -->
+      <section class="lab-panel" aria-labelledby="lab-interp-title">
+        <h3 id="lab-interp-title">Interpretation</h3>
+        <p class="sub">Structured translation of model outputs into decision language.</p>
+
+        <div class="interpretation-section">
+          <h4>What changed</h4>
+          <ul id="int-what">
+            <li>No assumption has moved materially from baseline.</li>
+            <li>Drag a slider or pick a preset to populate.</li>
+          </ul>
+        </div>
+
+        <div class="interpretation-section">
+          <h4>Why it changed</h4>
+          <ul id="int-why">
+            <li>—</li>
+          </ul>
+        </div>
+
+        <div class="interpretation-section">
+          <h4>Key risks</h4>
+          <ul id="int-risks">
+            <li>Model uses linearized impulse responses; non-linearities at large shocks not captured.</li>
+            <li>Expectations are adaptive; no explicit forward-looking block.</li>
+          </ul>
+        </div>
+
+        <div class="interpretation-section">
+          <h4>Policy implications</h4>
+          <ul id="int-policy">
+            <li>Awaiting scenario input.</li>
+          </ul>
+        </div>
+
+        <div class="interpretation-section">
+          <h4>Suggested next scenarios</h4>
+          <ul>
+            <li><a href="#" onclick="go('lab','russia_slowdown'); return false;">Pair with a remittance shock</a></li>
+            <li><a href="#" onclick="go('lab','energy_reform'); return false;">Add energy tariff adjustment</a></li>
+            <li><a href="#" onclick="go('comparison'); return false;">Compare with baseline and tight-money</a></li>
+          </ul>
+        </div>
+
+        <div class="ai-attribution">
+          <strong>AI-assisted · Unreviewed draft</strong>
+          This interpretation was drafted from structured simulation outputs using the template narrative engine. Human review is required before citing externally.
+        </div>
+      </section>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     COMPARISON
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="page-comparison" class="page">
+  <div class="page-container">
+
+    <div class="page-header">
+      <p class="page-header__eyebrow" data-i18n="cmp.eyebrow">Scenario trade-offs</p>
+      <h1 data-i18n="cmp.title">Comparison</h1>
+      <p class="description" data-i18n="cmp.desc">Hold saved scenarios side by side; examine deltas, trade-offs, and which results are robust across models.</p>
+      <div class="page-header__meta">
+        <span>Comparing · <strong>3 scenarios</strong></span>
+        <span>Horizon · <strong>2026 Q1 – 2028 Q4</strong></span>
+        <span>Mode · <strong>Deltas vs. Baseline</strong></span>
+      </div>
+    </div>
+
+    <div class="cmp-selector">
+      <span class="label">In view</span>
+      <span class="scenario-chip">
+        <span class="dot" style="background: var(--color-baseline)"></span>
+        Baseline <span class="close">×</span>
+      </span>
+      <span class="scenario-chip">
+        <span class="dot" style="background: var(--color-alternative)"></span>
+        Fiscal consolidation <span class="close">×</span>
+      </span>
+      <span class="scenario-chip">
+        <span class="dot" style="background: var(--color-downside)"></span>
+        Russia slowdown <span class="close">×</span>
+      </span>
+      <button class="btn-ghost" style="margin-left: auto;">+ Add saved scenario</button>
+    </div>
+
+    <div class="cmp-cards">
+      <div class="cmp-card" data-role="baseline">
+        <div class="tag">Baseline · CERR Macro · 14 Apr</div>
+        <h3>Baseline</h3>
+        <div>
+          <div class="metric-row"><span class="mn">GDP growth · 3y avg</span><span class="mv">+5.8%</span></div>
+          <div class="metric-row"><span class="mn">Inflation · terminal</span><span class="mv">5.4%</span></div>
+          <div class="metric-row"><span class="mn">Current account · %GDP</span><span class="mv">−3.3%</span></div>
+          <div class="metric-row"><span class="mn">Fiscal balance · %GDP</span><span class="mv">−2.7%</span></div>
+          <div class="metric-row"><span class="mn">Reserves · end</span><span class="mv">43.8 B$</span></div>
+        </div>
+      </div>
+      <div class="cmp-card" data-role="alternative">
+        <div class="tag">Alternative · J. Akhmatov · 09 Apr</div>
+        <h3>Fiscal consolidation</h3>
+        <div>
+          <div class="metric-row"><span class="mn">GDP growth · 3y avg</span><span class="mv">+5.3%</span></div>
+          <div class="metric-row"><span class="mn">Inflation · terminal</span><span class="mv">4.6%</span></div>
+          <div class="metric-row"><span class="mn">Current account · %GDP</span><span class="mv">−2.5%</span></div>
+          <div class="metric-row"><span class="mn">Fiscal balance · %GDP</span><span class="mv">−1.1%</span></div>
+          <div class="metric-row"><span class="mn">Reserves · end</span><span class="mv">46.2 B$</span></div>
+        </div>
+      </div>
+      <div class="cmp-card" data-role="downside">
+        <div class="tag">Stress · A. Karimova · 04 Apr</div>
+        <h3>Russia slowdown</h3>
+        <div>
+          <div class="metric-row"><span class="mn">GDP growth · 3y avg</span><span class="mv">+4.8%</span></div>
+          <div class="metric-row"><span class="mn">Inflation · terminal</span><span class="mv">5.7%</span></div>
+          <div class="metric-row"><span class="mn">Current account · %GDP</span><span class="mv">−4.9%</span></div>
+          <div class="metric-row"><span class="mn">Fiscal balance · %GDP</span><span class="mv">−3.6%</span></div>
+          <div class="metric-row"><span class="mn">Reserves · end</span><span class="mv">38.4 B$</span></div>
+        </div>
+      </div>
+    </div>
+
+    <table class="delta-table">
+      <thead>
+        <tr>
+          <th>Indicator</th>
+          <th class="num">Baseline</th>
+          <th class="num">Fiscal cons.</th>
+          <th class="num">Δ</th>
+          <th class="num">Russia slow.</th>
+          <th class="num">Δ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GDP growth · 3y avg</td>
+          <td class="num highest" title="Numerically highest">+5.8%</td>
+          <td class="num">+5.3%</td>
+          <td class="num">−0.5 pp</td>
+          <td class="num">+4.8%</td>
+          <td class="num">−1.0 pp</td>
+        </tr>
+        <tr>
+          <td>Inflation · terminal</td>
+          <td class="num">5.4%</td>
+          <td class="num lowest" title="Numerically lowest">4.6%</td>
+          <td class="num">−0.8 pp</td>
+          <td class="num">5.7%</td>
+          <td class="num">+0.3 pp</td>
+        </tr>
+        <tr>
+          <td>Current account · %GDP</td>
+          <td class="num">−3.3%</td>
+          <td class="num highest" title="Numerically narrowest deficit">−2.5%</td>
+          <td class="num">+0.8 pp</td>
+          <td class="num">−4.9%</td>
+          <td class="num">−1.6 pp</td>
+        </tr>
+        <tr>
+          <td>Fiscal balance · %GDP</td>
+          <td class="num">−2.7%</td>
+          <td class="num highest" title="Numerically narrowest deficit">−1.1%</td>
+          <td class="num">+1.6 pp</td>
+          <td class="num">−3.6%</td>
+          <td class="num">−0.9 pp</td>
+        </tr>
+        <tr>
+          <td>Reserves · end</td>
+          <td class="num">43.8 B$</td>
+          <td class="num highest" title="Numerically highest">46.2 B$</td>
+          <td class="num">+2.4 B$</td>
+          <td class="num">38.4 B$</td>
+          <td class="num">−5.4 B$</td>
+        </tr>
+        <tr>
+          <td>Unemployment · avg</td>
+          <td class="num lowest" title="Numerically lowest">6.4%</td>
+          <td class="num">7.1%</td>
+          <td class="num">+0.7 pp</td>
+          <td class="num">7.8%</td>
+          <td class="num">+1.4 pp</td>
+        </tr>
+        <tr>
+          <td>Real wages · cumulative</td>
+          <td class="num">+8.2%</td>
+          <td class="num highest" title="Numerically highest">+9.1%</td>
+          <td class="num">+0.9 pp</td>
+          <td class="num">+5.1%</td>
+          <td class="num">−3.1 pp</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size: 0.74rem; color: var(--color-text-muted); margin: 0;">
+      ★ indicates numerically lowest or highest value. Policy judgment is separate and not encoded.
+    </p>
+
+    <div class="tradeoff">
+      <h4>Trade-off summary</h4>
+      <p>
+        <em>Fiscal consolidation</em> dominates on external and price stability — lower inflation, narrower current account, stronger reserves — at the cost of ~0.5 pp of growth and 0.7 pp of unemployment.
+        The <em>Russia slowdown</em> stress is adverse across every dimension, with the current account and reserves deteriorating most sharply; the fiscal path provides only partial insulation.
+        If price stability is the binding objective, consolidation is preferred. If growth and employment dominate the objective, the baseline is preferred and consolidation is deferred. No scenario is robust to the Russia shock — that is a case for building reserve buffers now, not scenario selection.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     MODEL EXPLORER
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="page-explorer" class="page">
+  <div class="page-container">
+
+    <div class="page-header">
+      <p class="page-header__eyebrow" data-i18n="exp.eyebrow">Methodology · Parameters · Caveats</p>
+      <h1 data-i18n="exp.title">Model Explorer</h1>
+      <p class="description" data-i18n="exp.desc">Inspect the mechanics behind every output. Honest about what each model does — and does not — do.</p>
+      <div class="page-header__meta">
+        <span>Models · <strong>6 live</strong></span>
+        <span>Last calibration audit · <strong>Apr 2026</strong></span>
+        <span>Open methodology issues · <strong>8</strong></span>
+      </div>
+    </div>
+
+    <div class="model-catalog">
+
+      <button class="model-card active">
+        <div class="model-card__head">
+          <h3 class="model-card__title">QPM</h3>
+          <span class="status-badge status-badge--warn">2 Fixes</span>
+        </div>
+        <p class="model-card__meta">DSGE · Quarterly · New-Keynesian SOE</p>
+        <p class="model-card__desc">Monetary policy transmission, impulse responses, cost-push and demand shocks.</p>
+        <div class="model-card__stats">
+          <div class="model-card__stat"><b>14</b>Params</div>
+          <div class="model-card__stat"><b>4</b>Equations</div>
+          <div class="model-card__stat"><b>Q</b>Freq.</div>
+        </div>
+      </button>
+
+      <button class="model-card">
+        <div class="model-card__head">
+          <h3 class="model-card__title">DFM</h3>
+          <span class="status-badge status-badge--ok">Active</span>
+        </div>
+        <p class="model-card__meta">Dynamic Factor · Mixed-frequency</p>
+        <p class="model-card__desc">GDP nowcasting via Kalman filter; 34 indicators, 3-month forecast horizon.</p>
+        <div class="model-card__stats">
+          <div class="model-card__stat"><b>34</b>Indicators</div>
+          <div class="model-card__stat"><b>1</b>Factor</div>
+          <div class="model-card__stat"><b>M</b>Freq.</div>
+        </div>
+      </button>
+
+      <button class="model-card">
+        <div class="model-card__head">
+          <h3 class="model-card__title">PE</h3>
+          <span class="status-badge status-badge--crit">Fix</span>
+        </div>
+        <p class="model-card__meta">Partial Equilibrium · WITS-SMART</p>
+        <p class="model-card__desc">WTO accession analysis · HS 28–40; trade creation, diversion, welfare effects.</p>
+        <div class="model-card__stats">
+          <div class="model-card__stat"><b>1.27</b>ε (uniform)</div>
+          <div class="model-card__stat"><b>8</b>HS chapters</div>
+          <div class="model-card__stat"><b>Y</b>Freq.</div>
+        </div>
+      </button>
+
+      <button class="model-card">
+        <div class="model-card__head">
+          <h3 class="model-card__title">I-O</h3>
+          <span class="status-badge status-badge--ok">Active</span>
+        </div>
+        <p class="model-card__meta">Input-Output · Leontief</p>
+        <p class="model-card__desc">136-sector framework; multipliers, forward/backward linkages, 2022 SAM.</p>
+        <div class="model-card__stats">
+          <div class="model-card__stat"><b>136</b>Sectors</div>
+          <div class="model-card__stat"><b>Type I</b>Mult.</div>
+          <div class="model-card__stat"><b>Y</b>Freq.</div>
+        </div>
+      </button>
+
+      <button class="model-card">
+        <div class="model-card__head">
+          <h3 class="model-card__title">CGE</h3>
+          <span class="status-badge status-badge--warn">Gap</span>
+        </div>
+        <p class="model-card__meta">CGE · 1-2-3 structure</p>
+        <p class="model-card__desc">Computable General Equilibrium with CET/Armington; sectoral shocks, 2021 calibration.</p>
+        <div class="model-card__stats">
+          <div class="model-card__stat"><b>12</b>Sliders</div>
+          <div class="model-card__stat"><b>—</b>Labor</div>
+          <div class="model-card__stat"><b>Y</b>Freq.</div>
+        </div>
+      </button>
+
+      <button class="model-card">
+        <div class="model-card__head">
+          <h3 class="model-card__title">FPP</h3>
+          <span class="status-badge status-badge--warn">CA exog.</span>
+        </div>
+        <p class="model-card__meta">Financial Programming · IMF CAEM</p>
+        <p class="model-card__desc">Four-sector consistency framework; base 2024, projection 2025–2027.</p>
+        <div class="model-card__stats">
+          <div class="model-card__stat"><b>4</b>Sectors</div>
+          <div class="model-card__stat"><b>IMF</b>Framework</div>
+          <div class="model-card__stat"><b>Y</b>Freq.</div>
+        </div>
+      </button>
+
+    </div>
+
+    <div class="model-detail">
+      <div class="model-detail__head">
+        <h3>
+          <span class="sub">Quarterly Projection Model · Active</span>
+          QPM — New-Keynesian Small Open Economy
+        </h3>
+        <span class="status-badge status-badge--warn">2 Known Fixes</span>
+      </div>
+
+      <div class="model-detail__tabs segmented-control" role="tablist" style="background: var(--color-surface-muted); border-radius: 0; border-top: 0;">
+        <button class="active">Overview</button>
+        <button>Equations</button>
+        <button>Parameters</button>
+        <button>Data sources</button>
+        <button>Caveats</button>
+      </div>
+
+      <div class="model-detail__body">
+
+        <div>
+          <h4>Purpose</h4>
+          <p style="font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.55;">A gap-form New-Keynesian block capturing monetary transmission in a small, commodity-exporting, import-dependent economy. Used for impulse-response analysis of policy-rate, external-demand, and exchange-rate shocks.</p>
+
+          <h4 style="margin-top: var(--space-xl);">Core equations</h4>
+
+          <div class="equation-block">
+            <span class="eq-label">IS · Aggregate demand</span>
+            <em>y</em><sub>t</sub> = <em>b</em><sub>1</sub>·<em>y</em><sub>t−1</sub> − <em>b</em><sub>2</sub>·(<em>r</em><sub>t</sub> − <em>r̄</em>) + <em>b</em><sub>3</sub>·<em>y</em><sub>t</sub>* + ε<sub>t</sub><sup>y</sup>
+          </div>
+
+          <div class="equation-block">
+            <span class="eq-label">Phillips · Inflation</span>
+            π<sub>t</sub> = <em>a</em><sub>1</sub>·π<sub>t−1</sub> + <em>a</em><sub>2</sub>·<em>rmc</em><sub>t</sub> + <em>a</em><sub>3</sub>·Δ<em>s</em><sub>t</sub> + ε<sub>t</sub><sup>π</sup>
+          </div>
+
+          <div class="equation-block">
+            <span class="eq-label">Taylor · Policy reaction</span>
+            <em>i</em><sub>t</sub> = ρ·<em>i</em><sub>t−1</sub> + (1−ρ)·[<em>r̄</em> + π<sub>t+1</sub><sup>e</sup> + γ<sub>π</sub>·(π<sub>t+1</sub><sup>e</sup> − π̄) + γ<sub>y</sub>·<em>y</em><sub>t</sub>]
+          </div>
+
+          <div class="equation-block">
+            <span class="eq-label">UIP · Exchange rate</span>
+            <em>s</em><sub>t</sub> = <em>s</em><sub>t+1</sub><sup>e</sup> − (<em>i</em><sub>t</sub> − <em>i</em><sub>t</sub>*) / 4 + ε<sub>t</sub><sup>s</sup>
+          </div>
+
+          <h4 style="margin-top: var(--space-xl);">Key parameters</h4>
+          <table class="param-table">
+            <thead>
+              <tr><th>Symbol</th><th>Name</th><th>Value</th><th>Range</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="sym">b<sub>1</sub></td>
+                <td>Output persistence</td>
+                <td class="val">0.60</td>
+                <td class="val">0.40 – 0.80</td>
+              </tr>
+              <tr>
+                <td class="sym">b<sub>2</sub></td>
+                <td>Real-rate sensitivity</td>
+                <td class="val">0.20</td>
+                <td class="val">0.10 – 0.35</td>
+              </tr>
+              <tr>
+                <td class="sym">b<sub>3</sub></td>
+                <td>External demand channel</td>
+                <td class="val issue">0.00 (inactive)</td>
+                <td class="val">0.00 – 0.45</td>
+              </tr>
+              <tr>
+                <td class="sym">a<sub>1</sub></td>
+                <td>Inflation persistence</td>
+                <td class="val">0.60</td>
+                <td class="val">0.40 – 0.85</td>
+              </tr>
+              <tr>
+                <td class="sym">γ<sub>π</sub></td>
+                <td>Inflation response weight</td>
+                <td class="val">1.50</td>
+                <td class="val">1.20 – 2.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <h4>Caveats</h4>
+          <ul class="caveat-list">
+            <li class="caveat-item severity-critical">
+              <strong>01 · b<sub>3</sub> external-demand shock is inactive in UI</strong>
+              The equation term exists; no button routes to it. Russia/China slowdown cannot currently be simulated via QPM. Tracked as issue #23. Target v1.1.
+            </li>
+            <li class="caveat-item severity-warning">
+              <strong>02 · No direct import-price pass-through in Phillips curve</strong>
+              Pass-through currently only via the RER gap. For an import-dependent economy this underestimates the response to exchange-rate moves.
+            </li>
+            <li class="caveat-item severity-warning">
+              <strong>03 · Phillips parameters diverge from FPP</strong>
+              QPM uses (a<sub>1</sub>=0.60, a<sub>2</sub>=0.20). FPP uses (λ<sub>1</sub>=0.05, λ<sub>2</sub>=0.70). These reflect different horizons (quarterly vs annual); reconciliation is documented not reconciled.
+            </li>
+            <li class="caveat-item">
+              <strong>04 · No country-risk premium in UIP</strong>
+              Capital-flight and sovereign-risk scenarios cannot be tested via UIP as specified. Workaround: apply ε<sup>s</sup> shock directly.
+            </li>
+            <li class="caveat-item">
+              <strong>05 · Adaptive expectations</strong>
+              Forward-looking term π<sub>t+1</sub><sup>e</sup> proxied by model forecast; no explicit expectations-formation block.
+            </li>
+          </ul>
+
+          <h4 style="margin-top: var(--space-xl);">Data sources</h4>
+          <div class="source-list">
+            <div class="source-item">
+              <span class="inst">Central Bank of Uzbekistan</span>
+              <span class="desc">Policy rate, inflation, monetary aggregates</span>
+              <span class="vintage">Apr 2026</span>
+            </div>
+            <div class="source-item">
+              <span class="inst">Statistics Agency</span>
+              <span class="desc">GDP, sectoral output, CPI components</span>
+              <span class="vintage">Q1 2026</span>
+            </div>
+            <div class="source-item">
+              <span class="inst">IMF WEO</span>
+              <span class="desc">External demand proxy, foreign rates</span>
+              <span class="vintage">Apr 2026</span>
+            </div>
+            <div class="source-item">
+              <span class="inst">CERR calibration</span>
+              <span class="desc">Structural parameter priors, steady states</span>
+              <span class="vintage">Feb 2026</span>
+            </div>
+          </div>
+
+          <h4 style="margin-top: var(--space-xl);">Validation summary</h4>
+          <p style="font-size: 0.85rem; color: var(--color-text-muted); margin: 0 0 var(--space-sm);">Simulated inflation IRF vs. Uzbek SVAR (2015–2024): peak response within ±0.3 pp, timing consistent at 4–5 quarters.</p>
+          <p style="font-size: 0.85rem; color: var(--color-text-muted); margin: 0;">Calibrated from Berg et al. (2006) and regional analogues; no formal estimation.</p>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     KNOWLEDGE HUB (per spec §9.5 — support context, lighter)
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="page-hub" class="page">
+  <div class="page-container">
+
+    <div class="page-header">
+      <p class="page-header__eyebrow" data-i18n="hub.eyebrow">Reforms · Research · Literature</p>
+      <h1 data-i18n="hub.title">Knowledge Hub</h1>
+      <p class="description" data-i18n="hub.desc">Context for scenarios. Reforms underway, CERR research output, and the academic literature behind each model.</p>
+      <div class="page-header__meta">
+        <span>Reforms tracked · <strong>14</strong></span>
+        <span>Research briefs · <strong>9</strong></span>
+        <span>Literature items · <strong>22</strong></span>
+      </div>
+    </div>
+
+    <div class="hub-grid">
+
+      <div>
+        <div class="page-section-head">
+          <h2>Reform tracker</h2>
+          <p>Policy actions linked to affected models and economic domains.</p>
+        </div>
+
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-date">14 APR 2026</div>
+            <h4>PP-642 · Customs modernization Phase II</h4>
+            <p>Risk-based customs clearance; reduces average physical-inspection rate to ~7%. Expected impact: ~0.4 pp ad-valorem trade-cost reduction.</p>
+            <div class="meta">
+              <span class="ui-chip ui-chip--accent">Trade</span>
+              <span class="attribution-badge">PE</span>
+              <span class="attribution-badge">CGE</span>
+            </div>
+          </div>
+          <div class="tl-item in-progress">
+            <div class="tl-date">02 APR 2026</div>
+            <h4>CBU reserve requirement on FX deposits</h4>
+            <p>Raised from 14% to 18%; intended to lower dollarization incentives. Secondary effect on credit channel under analysis.</p>
+            <div class="meta">
+              <span class="ui-chip ui-chip--accent">Monetary</span>
+              <span class="attribution-badge">QPM</span>
+              <span class="attribution-badge">FPP</span>
+            </div>
+          </div>
+          <div class="tl-item in-progress">
+            <div class="tl-date">21 MAR 2026</div>
+            <h4>Gas tariff adjustment mechanism</h4>
+            <p>Quarterly indexation to an oil-linked benchmark with a 3-month lag; phased subsidy reduction across 2026–2028.</p>
+            <div class="meta">
+              <span class="ui-chip ui-chip--accent">Fiscal / structural</span>
+              <span class="attribution-badge">CGE</span>
+              <span class="attribution-badge">FPP</span>
+            </div>
+          </div>
+          <div class="tl-item planned">
+            <div class="tl-date">Q3 2026 · Planned</div>
+            <h4>WTO accession · final tariff schedule</h4>
+            <p>Bound rates on HS 28–40 chapters; transition period 2026–2030.</p>
+            <div class="meta">
+              <span class="ui-chip ui-chip--accent">Trade</span>
+              <span class="attribution-badge">PE</span>
+              <span class="attribution-badge">CGE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="page-section-head">
+          <h2>Research briefs</h2>
+          <p>CERR team analysis. AI-drafted briefs are flagged and reviewer-attributed.</p>
+        </div>
+
+        <div class="brief-list">
+          <div class="brief">
+            <div class="brief__author">N. Mamatov · 11 Apr 2026 · 9 min read</div>
+            <h4>Remittance-sensitive growth: how much insurance does the current account provide?</h4>
+            <p>A scenario-based analysis of remittance shocks under three buffer regimes. Finds that a 15% decline leaves reserve adequacy intact but compresses non-tradable consumption disproportionately.</p>
+            <div class="meta">
+              <span class="ui-chip ui-chip--accent">Monetary</span>
+              <span class="attribution-badge">FPP</span>
+              <span class="attribution-badge">QPM</span>
+            </div>
+          </div>
+          <div class="brief">
+            <div class="brief__author">J. Akhmatov · 28 Mar 2026 · 6 min read</div>
+            <h4>Gas tariff reform: inflation arithmetic and compensation design</h4>
+            <p>Direct and second-round inflation effects of the planned tariff indexation. Proposes a compensating transfer that neutralizes the welfare impact for the lowest two income deciles.</p>
+            <div class="meta">
+              <span class="ui-chip ui-chip--accent">Fiscal</span>
+              <span class="attribution-badge">CGE</span>
+              <span class="attribution-badge">QPM</span>
+            </div>
+          </div>
+          <div class="brief">
+            <div class="brief__author">AI-drafted · reviewed by CERR Trade Desk · 05 Mar 2026</div>
+            <h4>WTO accession: winners and losers under uniform vs. differentiated elasticities</h4>
+            <p>Compares PE output under uniform ε = 1.27 against WITS sector-specific elasticities. Differentiated elasticities yield materially different sectoral welfare conclusions.</p>
+            <div class="meta">
+              <span class="ui-chip ui-chip--warn">AI-drafted</span>
+              <span class="ui-chip ui-chip--accent">Trade</span>
+              <span class="attribution-badge">PE</span>
+              <span class="attribution-badge">CGE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+    </main>
+  </div>
+</div>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   Routing
+   ═══════════════════════════════════════════════════════════════════ */
+const pages = document.querySelectorAll('.page');
+const navBtns = document.querySelectorAll('.app-shell__nav-link');
+
+function go(route, preset) {
+  pages.forEach(p => p.classList.toggle('active', p.id === 'page-' + route));
+  navBtns.forEach(b => b.classList.toggle('active', b.dataset.route === route));
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  if (route === 'lab' && preset) applyPreset(preset);
+  if (route === 'lab') setTimeout(drawResultChart, 50);
+}
+navBtns.forEach(b => b.addEventListener('click', () => go(b.dataset.route)));
+
+/* ═══════════════════════════════════════════════════════════════════
+   i18n (shell chrome only — demonstrates the TA-1a pattern)
+   ═══════════════════════════════════════════════════════════════════ */
+const i18n = {
+  en: {
+    'nav.section':'Workspace','nav.overview':'Overview','nav.lab':'Scenario Lab','nav.cmp':'Comparison','nav.exp':'Model Explorer','nav.hub':'Knowledge Hub',
+    'lang.label':'Language',
+    'ov.eyebrow':'Macroeconomic situation · April 2026',
+    'ov.title':'Overview',
+    'ov.desc':'Decision-first macro snapshot designed to show what changed, why it matters, and where to test next.',
+    'ov.chart.title':'GDP nowcast & one-year forecast','ov.qa.title':'Quick actions','ov.feed.title':'Recent updates',
+    'lab.eyebrow':'Scenario construction','lab.title':'Scenario Lab',
+    'lab.desc':'Define assumptions in policy language, run the linked models, and read a structured interpretation of the result.',
+    'cmp.eyebrow':'Scenario trade-offs','cmp.title':'Comparison',
+    'cmp.desc':'Hold saved scenarios side by side; examine deltas, trade-offs, and which results are robust across models.',
+    'exp.eyebrow':'Methodology · Parameters · Caveats','exp.title':'Model Explorer',
+    'exp.desc':'Inspect the mechanics behind every output. Honest about what each model does — and does not — do.',
+    'hub.eyebrow':'Reforms · Research · Literature','hub.title':'Knowledge Hub',
+    'hub.desc':'Context for scenarios. Reforms underway, CERR research output, and the academic literature behind each model.'
+  },
+  ru: {
+    'nav.section':'Рабочая область','nav.overview':'Обзор','nav.lab':'Лаборатория сценариев','nav.cmp':'Сравнение','nav.exp':'Обзор моделей','nav.hub':'База знаний',
+    'lang.label':'Язык',
+    'ov.eyebrow':'Макроэкономическая ситуация · апрель 2026',
+    'ov.title':'Обзор',
+    'ov.desc':'Ориентированный на решения макроснимок: что изменилось, почему это важно, и где проверить дальше.',
+    'ov.chart.title':'Текущая оценка ВВП и годовой прогноз','ov.qa.title':'Быстрые действия','ov.feed.title':'Последние обновления',
+    'lab.eyebrow':'Конструирование сценариев','lab.title':'Лаборатория сценариев',
+    'lab.desc':'Задайте предпосылки на языке политики, запустите связанные модели и получите структурированную интерпретацию.',
+    'cmp.eyebrow':'Компромиссы сценариев','cmp.title':'Сравнение',
+    'cmp.desc':'Сопоставьте сохранённые сценарии; изучите разницы, компромиссы и устойчивость результатов.',
+    'exp.eyebrow':'Методология · Параметры · Оговорки','exp.title':'Обзор моделей',
+    'exp.desc':'Изучите механику каждого расчёта. Честно о том, что модель делает — и чего не делает.',
+    'hub.eyebrow':'Реформы · Исследования · Литература','hub.title':'База знаний',
+    'hub.desc':'Контекст для сценариев: реформы, аналитика CERR и академическая литература по каждой модели.'
+  },
+  uz: {
+    'nav.section':'Ish maydoni','nav.overview':'Umumiy ko‘rinish','nav.lab':'Ssenariy laboratoriyasi','nav.cmp':'Taqqoslash','nav.exp':'Model tadqiqi','nav.hub':'Bilim markazi',
+    'lang.label':'Til',
+    'ov.eyebrow':'Makroiqtisodiy vaziyat · Aprel 2026',
+    'ov.title':'Umumiy ko‘rinish',
+    'ov.desc':'Qaror-ga yo‘naltirilgan makroiqtisodiy manzara: nima o‘zgardi, nega ahamiyatli, keyin nimani sinash kerak.',
+    'ov.chart.title':'YaIM nowkast va bir yillik prognoz','ov.qa.title':'Tezkor amallar','ov.feed.title':'Oxirgi yangilanishlar',
+    'lab.eyebrow':'Ssenariy qurish','lab.title':'Ssenariy laboratoriyasi',
+    'lab.desc':'Taxminlarni siyosat tilida kiriting, bog‘langan modellarni ishga tushiring va tuzilgan izohni o‘qing.',
+    'cmp.eyebrow':'Ssenariy kelishuvlari','cmp.title':'Taqqoslash',
+    'cmp.desc':'Saqlangan ssenariylarni yonma-yon qo‘ying; farqlar, kelishuvlar va barqarorlikni tahlil qiling.',
+    'exp.eyebrow':'Metodologiya · Parametrlar · Ogohlantirishlar','exp.title':'Model tadqiqi',
+    'exp.desc':'Har bir natija orqasidagi mexanizmlarni tekshiring. Model nima qilishi va nima qilmasligi haqida ochiq.',
+    'hub.eyebrow':'Islohotlar · Tadqiqot · Adabiyot','hub.title':'Bilim markazi',
+    'hub.desc':'Ssenariylar uchun kontekst: islohotlar, CERR tadqiqotlari va har bir model bo‘yicha akademik adabiyotlar.'
+  }
+};
+document.getElementById('lang-select').addEventListener('change', (e) => {
+  const code = e.target.value;
+  const dict = i18n[code];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.dataset.i18n;
+    if (dict[k]) el.textContent = dict[k];
+  });
+  document.documentElement.lang = code;
+});
+
+/* ═══════════════════════════════════════════════════════════════════
+   Technical variable name toggle
+   ═══════════════════════════════════════════════════════════════════ */
+document.getElementById('tech-toggle').addEventListener('change', (e) => {
+  document.querySelectorAll('.tech-name').forEach(el => {
+    el.style.display = e.target.checked ? 'block' : 'none';
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════════════
+   Chart.js defaults
+   ═══════════════════════════════════════════════════════════════════ */
+Chart.defaults.font.family = 'Source Sans 3, sans-serif';
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#4d5d74';
+Chart.defaults.borderColor = '#d8dde6';
+
+/* Nowcast chart (Overview) */
+const quarters = ['21Q1','21Q3','22Q1','22Q3','23Q1','23Q3','24Q1','24Q3','25Q1','25Q3','26Q1','26Q3','27Q1','27Q3'];
+const realized = [3.5, 4.2, 5.2, 6.1, 5.7, 5.9, 6.3, 6.1, 5.7, 5.8, null, null, null, null];
+const forecast = [null, null, null, null, null, null, null, null, null, 5.8, 5.9, 5.7, 5.5, 5.4];
+const upper    = [null, null, null, null, null, null, null, null, null, 5.8, 6.4, 6.5, 6.3, 6.2];
+const lower    = [null, null, null, null, null, null, null, null, null, 5.8, 5.2, 4.9, 4.7, 4.6];
+
+new Chart(document.getElementById('nowcast-chart'), {
+  type: 'line',
+  data: {
+    labels: quarters,
+    datasets: [
+      { label:'Upper', data: upper, borderColor:'transparent', backgroundColor:'rgba(197, 206, 218, 0.45)',
+        pointRadius:0, fill:'+1', tension:0.35 },
+      { label:'Lower', data: lower, borderColor:'transparent', backgroundColor:'transparent',
+        pointRadius:0, fill:false, tension:0.35 },
+      { label:'Realized', data: realized, borderColor:'#17253b', borderWidth:2,
+        backgroundColor:'#17253b', pointRadius:2.5, tension:0.25 },
+      { label:'Forecast', data: forecast, borderColor:'#2f7b8a', borderWidth:2, borderDash:[5,3],
+        backgroundColor:'#2f7b8a', pointRadius:2.5, tension:0.3 }
+    ]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{display:false}, tooltip:{
+      backgroundColor:'#17253b', titleFont:{family:'IBM Plex Mono',size:10}, bodyFont:{family:'Source Sans 3',size:11},
+      padding:10, cornerRadius:4, displayColors:false
+    }},
+    scales: {
+      x: { grid:{display:false}, ticks:{font:{family:'IBM Plex Mono',size:10}} },
+      y: { grid:{color:'#e5e8ee', drawBorder:false}, ticks:{
+        font:{family:'IBM Plex Mono',size:10}, callback:v => v + '%'
+      }, suggestedMin: 2, suggestedMax: 7 }
+    }
+  }
+});
+
+/* ═══════════════════════════════════════════════════════════════════
+   Scenario Lab — sliders, simulation, narrative
+   ═══════════════════════════════════════════════════════════════════ */
+function simulate() {
+  const ir  = Number(document.getElementById('s-rate').value) / 100;
+  const fx  = Number(document.getElementById('s-fx').value) / 100;
+  const rem = Number(document.getElementById('s-rem').value) / 100;
+  const com = Number(document.getElementById('s-com').value) / 100;
+  const gov = Number(document.getElementById('s-gov').value);
+
+  const T = 12;
+  const gdp = [], inf = [], rate = [];
+  for (let t = 0; t < T; t++) {
+    const persist = Math.pow(0.75, t);
+    const peak = t >= 2 ? Math.exp(-0.2 * Math.abs(t - 4)) : t * 0.3;
+    gdp.push(-ir * 1.2 * peak + fx * 0.3 * peak + rem * 0.6 * peak + com * 0.25 * peak + gov * 0.35 * peak);
+    inf.push(-ir * 0.8 * peak + fx * 0.55 * peak + com * 0.4 * peak + gov * 0.15 * peak);
+    rate.push(ir * persist + (inf[t] > 0 ? inf[t] * 0.6 : 0) * persist);
+  }
+  return { gdp, inf, rate };
+}
+
+let resultChart = null;
+function drawResultChart() {
+  const data = simulate();
+  const labels = Array.from({length:12}, (_,i) => 'Q'+(i+1));
+  const ctx = document.getElementById('result-chart');
+  if (!ctx) return;
+
+  if (resultChart) {
+    resultChart.data.datasets[0].data = data.gdp;
+    resultChart.data.datasets[1].data = data.inf;
+    resultChart.data.datasets[2].data = data.rate;
+    resultChart.update('none');
+    return;
+  }
+
+  resultChart = new Chart(ctx, {
+    type:'line',
+    data: {
+      labels,
+      datasets: [
+        { label:'GDP gap', data:data.gdp, borderColor:'#1f3658', borderWidth:2,
+          backgroundColor:'rgba(31,54,88,0.08)', tension:0.3, pointRadius:2, fill:false },
+        { label:'Inflation', data:data.inf, borderColor:'#9b3b2e', borderWidth:2,
+          backgroundColor:'rgba(155,59,46,0.08)', tension:0.3, pointRadius:2, fill:false, borderDash:[5,3] },
+        { label:'Policy rate', data:data.rate, borderColor:'#17253b', borderWidth:1.5,
+          backgroundColor:'transparent', tension:0.25, pointRadius:2, fill:false, borderDash:[2,3] }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{ display: false },
+        tooltip:{
+          backgroundColor:'#17253b', titleFont:{family:'IBM Plex Mono',size:10},
+          bodyFont:{family:'Source Sans 3',size:11},
+          padding:10, cornerRadius:4, displayColors:true
+        }
+      },
+      scales: {
+        x: { grid:{display:false}, ticks:{font:{family:'IBM Plex Mono',size:10}} },
+        y: { grid:{color:'#e5e8ee', drawBorder:false}, ticks:{
+          font:{family:'IBM Plex Mono',size:10},
+          callback: v => (v>=0?'+':'') + v.toFixed(1) + ' pp'
+        }}
+      }
+    }
+  });
+}
+
+function updateNarrative() {
+  const ir  = Number(document.getElementById('s-rate').value);
+  const fx  = Number(document.getElementById('s-fx').value);
+  const rem = Number(document.getElementById('s-rem').value);
+  const com = Number(document.getElementById('s-com').value);
+  const gov = Number(document.getElementById('s-gov').value);
+
+  const ranked = [
+    { name:'rate',  mag:Math.abs(ir),    v:ir },
+    { name:'fx',    mag:Math.abs(fx)*20, v:fx },
+    { name:'rem',   mag:Math.abs(rem)*10,v:rem },
+    { name:'com',   mag:Math.abs(com)*5, v:com },
+    { name:'gov',   mag:Math.abs(gov)*50,v:gov }
+  ].sort((a,b) => b.mag - a.mag);
+
+  const dom = ranked[0];
+  let what = [], why = [], policy = [];
+
+  if (dom.mag < 5) {
+    what = ['No assumption has moved materially from baseline.', 'Drag a slider or pick a preset to populate.'];
+    why = ['—'];
+    policy = ['Awaiting scenario input.'];
+  } else {
+    switch (dom.name) {
+      case 'rate':
+        what = [
+          `Policy rate shock of ${ir>0?'+':''}${ir} bp is the dominant change.`,
+          `GDP gap peaks at ~${(-ir*1.2*0.9/100).toFixed(2)} pp after 4 quarters.`,
+          `Inflation responds with a 4–6 quarter lag.`
+        ];
+        why = [
+          `IS-curve transmission: real-rate gap ${ir<0?'stimulates':'restrains'} aggregate demand.`,
+          `UIP condition amplifies via exchange-rate response.`,
+          `Phillips curve carries the inflation response with inertia (a₁=0.60).`
+        ];
+        policy = [
+          `Monitor inflation-expectations spread and ${ir<0?'stimulus-vs-price-stability':'demand-compression'} trade-off.`,
+          `Be prepared to ${ir<0?'reverse':'pause'} if response exceeds model expectation.`
+        ];
+        break;
+      case 'fx':
+        what = [
+          `${Math.abs(fx)}% UZS ${fx>0?'depreciation':'appreciation'} dominates.`,
+          `Immediate inflation response through import prices.`,
+          `Mixed output effect — export boost vs. FX-indebted firm balance sheets.`
+        ];
+        why = [
+          `Direct pass-through to CPI via import prices.`,
+          `REER change affects net exports within 2–3 quarters.`,
+          `Note: the QPM currently under-captures direct pass-through (see caveat 02).`
+        ];
+        policy = [
+          `Consider reserve usage if FX-smoothing is the objective.`,
+          `Compensating transfers if inflation pass-through exceeds social tolerance.`
+        ];
+        break;
+      case 'rem':
+        what = [
+          `Remittance ${rem<0?'decline':'rise'} of ${Math.abs(rem)}% dominates.`,
+          `GDP effect scales at ~0.05–0.07 pp per 1% of remittances.`,
+          `CA impact is larger than the GDP impact.`
+        ];
+        why = [
+          `Household non-labor income shifts consumption.`,
+          `BoP inflow effect dominates the fiscal channel.`,
+          `Inflation effect is second-order via non-tradable demand.`
+        ];
+        policy = [
+          rem < 0 ? `Targeted transfers to remittance-dependent households.` : `Consider reserve accumulation over consumption stimulus.`,
+          `Monitor CA-to-reserves ratio.`
+        ];
+        break;
+      case 'com':
+        what = [
+          `Commodity shock of ${com>0?'+':''}${com}% dominates.`,
+          `Terms-of-trade channel with inflation and fiscal consequences.`
+        ];
+        why = [
+          `Direct effect on CPI via tradable goods.`,
+          `Fiscal revenue effect via mineral royalties.`,
+          `Indirect exchange-rate effect via CA adjustment.`
+        ];
+        policy = [
+          `Smooth via sovereign wealth vehicle if temporary.`,
+          `Revisit fiscal rule and neutral real rate if persistent.`
+        ];
+        break;
+      case 'gov':
+        what = [
+          `Fiscal ${gov>0?'expansion':'consolidation'} of ${Math.abs(gov)} pp of GDP dominates.`,
+          `Output multiplier ~0.4; peak effect ${(gov*0.35*0.9).toFixed(2)} pp.`
+        ];
+        why = [
+          `Demand-side multiplier via IS curve.`,
+          `Partial crowding-out through monetary reaction.`,
+          `Larger effect under accommodative monetary stance.`
+        ];
+        policy = gov > 0 ? [
+          `Verify financing is not bond-crowding.`, `Monitor inflation response.`
+        ] : [
+          `Verify social safety-net adequacy.`, `Monitor unemployment response.`
+        ];
+        break;
+    }
+  }
+
+  document.getElementById('int-what').innerHTML = what.map(x => `<li>${x}</li>`).join('');
+  document.getElementById('int-why').innerHTML  = why.map(x => `<li>${x}</li>`).join('');
+  document.getElementById('int-policy').innerHTML = policy.map(x => `<li>${x}</li>`).join('');
+
+  /* Headline metrics */
+  const sim = simulate();
+  const gdpAvg  = sim.gdp.reduce((a,b)=>a+b,0)/sim.gdp.length;
+  const infEnd  = sim.inf[sim.inf.length-1];
+  const rateEnd = sim.rate[sim.rate.length-1];
+  const caChange = rem * 0.08 + com * 0.02 - gov * 0.15;
+
+  document.getElementById('r-gdp').textContent  = (5.9+gdpAvg).toFixed(1) + '%';
+  document.getElementById('r-infl').textContent = Math.max(0,(8.1+infEnd)).toFixed(1) + '%';
+  document.getElementById('r-ca').textContent   = (-3.4+caChange).toFixed(1) + '%';
+  document.getElementById('r-rate').textContent = (13.5+rateEnd).toFixed(1) + '%';
+
+  fmtDelta('r-gdp-d',  gdpAvg);
+  fmtDelta('r-infl-d', infEnd);
+  fmtDelta('r-ca-d',   caChange);
+  fmtDelta('r-rate-d', rateEnd);
+}
+
+function fmtDelta(id, v) {
+  const el = document.getElementById(id);
+  const sign = v > 0.01 ? '+' : v < -0.01 ? '−' : '';
+  el.textContent = `vs baseline · ${sign}${Math.abs(v).toFixed(2)} pp`;
+}
+
+/* Slider bindings */
+const sliders = ['rate','fx','rem','com','gov'];
+sliders.forEach(k => {
+  const slider = document.getElementById('s-'+k);
+  const label  = document.getElementById('v-'+k);
+  slider.addEventListener('input', () => {
+    const val = Number(slider.value);
+    const sign = val > 0 ? '+' : '';
+    const unit = k === 'rate' ? ' bp' : k === 'gov' ? ' pp' : '%';
+    label.textContent = `${sign}${val}${unit}`;
+    document.querySelectorAll('.preset-chip').forEach(p => p.classList.remove('active'));
+    document.getElementById('stale-banner').style.display = 'block';
+    drawResultChart();
+    updateNarrative();
+  });
+});
+
+/* Presets */
+const presets = {
+  baseline:         { rate: 0,    fx: 0,  rem: 0,   com: 0,   gov: 0 },
+  rate_cut:         { rate: -100, fx: 3,  rem: 0,   com: 0,   gov: 0 },
+  russia_slowdown:  { rate: 0,    fx: 8,  rem: -15, com: -10, gov: 0 },
+  wto:              { rate: 0,    fx: 2,  rem: 0,   com: 0,   gov: -1 },
+  energy_reform:    { rate: 50,   fx: 0,  rem: 0,   com: 15,  gov: -0.5 },
+  inflation_persist:{ rate: 150,  fx: 5,  rem: 0,   com: 8,   gov: 0 }
+};
+function applyPreset(key) {
+  const p = presets[key];
+  if (!p) return;
+  Object.keys(p).forEach(k => {
+    const s = document.getElementById('s-'+k);
+    if (!s) return;
+    s.value = p[k];
+    s.dispatchEvent(new Event('input'));
+  });
+  document.querySelectorAll('.preset-chip').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.preset === key);
+  });
+  document.getElementById('stale-banner').style.display = 'none';
+  document.getElementById('scen-name').value = ({
+    baseline: 'Baseline (Q1 2026)',
+    rate_cut: 'Rate cut 100 bp',
+    russia_slowdown: 'Russia slowdown',
+    wto: 'WTO accession',
+    energy_reform: 'Energy reform',
+    inflation_persist: 'Inflation persistence stress'
+  })[key] || 'Scenario';
+}
+document.querySelectorAll('.preset-chip').forEach(btn => {
+  btn.addEventListener('click', () => applyPreset(btn.dataset.preset));
+});
+
+function runScenario() {
+  document.getElementById('stale-banner').style.display = 'none';
+  alert('Prototype: would execute linked models on current assumptions and capture provenance (run_id, data_version, model versions) into the scenario run.');
+}
+function saveScenario() {
+  alert('Prototype: would open scenario save dialog — name, tags, description — and persist to localStorage with full provenance (author, timestamp, data vintage, model versions) per TA-3 acceptance criteria.');
+}
+
+/* Init */
+drawResultChart();
+updateNarrative();
+window.go = go;
+</script>
+
+</body>
+</html>
