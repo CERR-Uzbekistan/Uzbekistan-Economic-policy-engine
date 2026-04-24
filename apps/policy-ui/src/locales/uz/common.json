@@ -66,8 +66,7 @@
     },
     "knowledgeHub": {
       "title": "Bilimlar markazi",
-      "description": "lex.uz'dagi davlat qarorlari va xalqaro tashkilotlar baholari",
-      "placeholder": "Knowledge Hub v1 karkasi"
+      "description": "Stsenariylar uchun kontekst. Amalga oshirilayotgan islohotlar, CERR tadqiqot yozuvlari va har bir model ortidagi ilmiy adabiyotlar."
     }
   },
   "overview": {
@@ -306,12 +305,39 @@
       "negligible": "Bazaviyga nisbatan, {{scenario_name}} asosiy ko'rsatkichlar bo'yicha deyarli farq ko'rsatmaydi."
     }
   },
+  "knowledgeHub": {
+    "header": {
+      "eyebrow": "Islohotlar · Tadqiqotlar · Adabiyot",
+      "meta": {
+        "reformsTracked": "Kuzatilayotgan islohotlar",
+        "researchBriefs": "Tadqiqot yozuvlari",
+        "literatureItems": "Adabiyot manbalari"
+      }
+    },
+    "reforms": {
+      "title": "Islohotlar monitoringi",
+      "helper": "Tegishli modellar va iqtisodiy sohalarga bog'langan siyosiy choralar.",
+      "empty": "Hozircha kuzatilayotgan islohotlar yo'q."
+    },
+    "briefs": {
+      "title": "Tadqiqot yozuvlari",
+      "helper": "CERR jamoasi tahlili. AI yordamida tayyorlangan yozuvlar belgilanadi va taqrizchiga biriktiriladi.",
+      "empty": "Hozircha tadqiqot yozuvlari mavjud emas.",
+      "aiDraftedChip": "AI tayyorlagan",
+      "byline": {
+        "aiDrafted": "AI tayyorlagan",
+        "reviewedBy": "taqrizchi {{reviewer}}",
+        "readTime": "{{minutes}} min o'qish"
+      }
+    }
+  },
   "states": {
     "loading": {
       "overview": "So'nggi sharh holati yuklanmoqda...",
       "comparison": "Solishtirish ish maydoni yuklanmoqda...",
       "modelExplorer": "Model metama'lumotlari yuklanmoqda...",
-      "scenarioLabRun": "Joriy taxminlar bilan stsenariy ishga tushirilmoqda..."
+      "scenarioLabRun": "Joriy taxminlar bilan stsenariy ishga tushirilmoqda...",
+      "knowledgeHub": "Bilimlar markazi yuklanmoqda..."
     },
     "error": {
       "overviewUnavailable": "Sharh ma'lumotlari hozircha mavjud emas.",

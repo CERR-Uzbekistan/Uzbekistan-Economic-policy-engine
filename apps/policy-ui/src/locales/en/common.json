@@ -66,8 +66,7 @@
     },
     "knowledgeHub": {
       "title": "Knowledge Hub",
-      "description": "Policy context and references scaffold (post-MVP expansion area).",
-      "placeholder": "Knowledge Hub v1 scaffold"
+      "description": "Context for scenarios. Reforms underway, CERR research output, and the academic literature behind each model."
     }
   },
   "overview": {
@@ -306,12 +305,39 @@
       "negligible": "Compared to baseline, {{scenario_name}} shows negligible differences across headline metrics."
     }
   },
+  "knowledgeHub": {
+    "header": {
+      "eyebrow": "Reforms · Research · Literature",
+      "meta": {
+        "reformsTracked": "Reforms tracked",
+        "researchBriefs": "Research briefs",
+        "literatureItems": "Literature items"
+      }
+    },
+    "reforms": {
+      "title": "Reform tracker",
+      "helper": "Policy actions linked to affected models and economic domains.",
+      "empty": "No reforms are currently tracked."
+    },
+    "briefs": {
+      "title": "Research briefs",
+      "helper": "CERR team analysis. AI-drafted briefs are flagged and reviewer-attributed.",
+      "empty": "No research briefs are currently available.",
+      "aiDraftedChip": "AI-drafted",
+      "byline": {
+        "aiDrafted": "AI-drafted",
+        "reviewedBy": "reviewed by {{reviewer}}",
+        "readTime": "{{minutes}} min read"
+      }
+    }
+  },
   "states": {
     "loading": {
       "overview": "Loading latest overview snapshot...",
       "comparison": "Loading comparison workspace...",
       "modelExplorer": "Loading model metadata...",
-      "scenarioLabRun": "Running scenario with current assumptions..."
+      "scenarioLabRun": "Running scenario with current assumptions...",
+      "knowledgeHub": "Loading Knowledge Hub..."
     },
     "error": {
       "overviewUnavailable": "Overview data is currently unavailable.",
