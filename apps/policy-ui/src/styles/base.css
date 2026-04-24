@@ -304,6 +304,12 @@ h2 {
   color: var(--color-brand);
 }
 
+.ui-chip--warn {
+  background: var(--color-warn-soft);
+  border-color: #e7d5a7;
+  color: var(--color-warn);
+}
+
 .attribution-badge {
   align-items: center;
   background: transparent;

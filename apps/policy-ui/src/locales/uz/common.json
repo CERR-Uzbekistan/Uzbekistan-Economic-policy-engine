@@ -66,8 +66,7 @@
     },
     "knowledgeHub": {
       "title": "Bilimlar markazi",
-      "description": "lex.uz'dagi davlat qarorlari va xalqaro tashkilotlar baholari",
-      "placeholder": "Knowledge Hub v1 karkasi"
+      "description": "Stsenariylar uchun kontekst. Amalga oshirilayotgan islohotlar, CERR tadqiqot yozuvlari va har bir model ortidagi ilmiy adabiyotlar."
     }
   },
   "overview": {
@@ -88,7 +87,15 @@
       "kicker": "Iqtisodiy holat",
       "modelListFallback": "MODELLAR TO'PLAMI",
       "draftedFrom": "Holat narrativi · {{models}} bazasidan tuzilgan",
-      "updatedAt": "Yangilangan: {{date}}"
+      "updatedAt": "Yangilangan: {{date}}",
+      "provenance": {
+        "draftedFromLabel": "HOLAT NARRATIVI · bazasidan tuzilgan",
+        "aiAssisted": "AI yordamida",
+        "humanAuthored": "Mutaxassis tomonidan",
+        "reviewedAt": "taqriz {{date}}",
+        "reviewerPendingChip": "Taqrizchi kutilmoqda",
+        "reviewerPendingAria": "Taqrizchi ismi kutilmoqda — SME kontenti kutilmoqda"
+      }
     },
     "kpi": {
       "title": "Asosiy ko'rsatkichlar",
@@ -98,6 +105,8 @@
       "noPrior": "Oldingi qiymat yo'q",
       "notAvailable": "mavjud emas",
       "freshness": "Yangilangan: {{date}}",
+      "smePendingChip": "SME kontenti kutilmoqda",
+      "smePendingAria": "Kontekstli izoh — SME kontenti kutilmoqda",
       "direction": {
         "up": "yuqoriroq",
         "down": "pastroq",
@@ -168,7 +177,8 @@
     "cancel": "Bekor qilish",
     "saveDraft": "Qoralamani saqlash",
     "runScenario": "Stsenariyni ishga tushirish",
-    "retryRun": "Qayta ishga tushirish"
+    "retryRun": "Qayta ishga tushirish",
+    "close": "Yopish"
   },
   "scenarioLab": {
     "header": {
@@ -192,6 +202,7 @@
       "description": "Tavsif",
       "descriptionPlaceholder": "Ixtiyoriy stsenariy tavsifi",
       "tags": "Teglar",
+      "detailsSummary": "Stsenariy tafsilotlari",
       "scenarioTypeOptions": {
         "baseline": "Bazaviy",
         "alternative": "Muqobil",
@@ -220,6 +231,19 @@
       "emptyCategory": "Bu toifada taxminlar mavjud emas.",
       "emptyAdvanced": "Hozircha kengaytirilgan taxminlar sozlanmagan."
     },
+    "results": {
+      "title": "Natijalar",
+      "description": "Joriy taxminlar uchun asosiy ta'sirlar va uzatish kanallarini ko'rib chiqing.",
+      "tabsAria": "Natija ko'rinishlari",
+      "tabs": {
+        "headlineImpact": "Asosiy ta'sir",
+        "macroPath": "Makro trayektoriya",
+        "externalBalance": "Tashqi muvozanat",
+        "fiscalEffects": "Fiskal ta'sirlar"
+      },
+      "impulseResponseEyebrow": "IMPULS RESPONSI",
+      "deltaVsBaseline": "{{delta}} bazaviyga nisbatan"
+    },
     "interpretation": {
       "title": "Talqin",
       "description": "Model natijalarini qaror qabul qilish tiliga o'tkazing.",
@@ -231,6 +255,12 @@
         "suggestedNextScenarios": "Keyingi tavsiya etilgan stsenariylar"
       },
       "aiAttribution": {
+        "title": "AI-assisted · Ko'rib chiqilmagan qoralama",
+        "body": "Bu talqin {{engine}} yordamida tuzilgan tuzilmalashgan simulyatsiya natijalaridan olingan. Tashqi iqtibosdan oldin inson tekshiruvi talab etiladi.",
+        "engineTemplate": "shablonli narrativ dvigateli",
+        "engineAssisted": "yordamchi narrativ dvigateli",
+        "engineReviewed": "tekshirilgan narrativ dvigateli",
+        "reviewedMeta": "{{reviewer_name}} tomonidan {{review_date}} kuni tekshirilgan.",
         "assisted": {
           "title": "AI-assisted · Ko'rib chiqilmagan qoralama",
           "body": "AI-assisted qoralama. Model chiqishi asosida yaratilgan, CERR tahlil xodimlari tomonidan hali ko'rib chiqilmagan. Iqtibos qilmang, eksport qilmang va tashqariga ulashmang."
@@ -245,12 +275,35 @@
       "title": "Saqlangan stsenariylar",
       "empty": "Hozircha saqlangan stsenariy yo'q.",
       "load": "Yuklash",
+      "loadLink": "Saqlangan stsenariyni yuklash",
       "delete": "O'chirish",
       "confirmDelete": "\"{{scenarioName}}\" saqlangan stsenariyini o'chirasizmi?"
     }
   },
   "comparison": {
+    "header": {
+      "eyebrow": "Stsenariy murosalari",
+      "meta": {
+        "comparing": "Taqqoslanmoqda",
+        "scenarioCount": "{{count}} stsenariy",
+        "horizon": "Gorizont",
+        "mode": "Rejim",
+        "deltasVsBaseline": "Bazaviyga nisbatan dellalar"
+      }
+    },
+    "chip": {
+      "remove": "{{name}} ni taqqoslashdan olib tashlash"
+    },
+    "table": {
+      "indicator": "Ko'rsatkich",
+      "baselineFallback": "Bazaviy",
+      "highestTitle": "Raqamli eng yuqori",
+      "lowestTitle": "Raqamli eng past",
+      "footnote": "★ raqamli eng past yoki eng yuqori qiymatni bildiradi. Siyosiy mulohaza alohida va kod ichida emas."
+    },
     "selector": {
+      "inView": "Ko'rinishda",
+      "addSaved": "+ Saqlangan stsenariy qo'shish",
       "title": "Stsenariy tanlagich",
       "description": "2-3 ta stsenariyni tanlang va deltalarni talqin qilish uchun bitta bazaviy stsenariyni belgilang.",
       "empty": "Solishtirish uchun stsenariylar mavjud emas.",
@@ -293,6 +346,8 @@
     },
     "tradeoff": {
       "title": "Trade-off xulosasi",
+      "smePendingChip": "SME kontenti kutilmoqda",
+      "smePendingAria": "Murosalar xulosasi — SME kontenti kutilmoqda",
       "description": "Har bir muqobil stsenariy uchun shablon asosidagi qiyosiy jumlalar.",
       "empty": "Xulosani yaratish uchun bazaviy va kamida bitta muqobil stsenariyni tanlang.",
       "shifts": "siljitadi",
@@ -306,12 +361,89 @@
       "negligible": "Bazaviyga nisbatan, {{scenario_name}} asosiy ko'rsatkichlar bo'yicha deyarli farq ko'rsatmaydi."
     }
   },
+  "knowledgeHub": {
+    "header": {
+      "eyebrow": "Islohotlar · Tadqiqotlar · Adabiyot",
+      "meta": {
+        "reformsTracked": "Kuzatilayotgan islohotlar",
+        "researchBriefs": "Tadqiqot yozuvlari",
+        "literatureItems": "Adabiyot manbalari"
+      }
+    },
+    "reforms": {
+      "title": "Islohotlar monitoringi",
+      "helper": "Tegishli modellar va iqtisodiy sohalarga bog'langan siyosiy choralar.",
+      "empty": "Hozircha kuzatilayotgan islohotlar yo'q."
+    },
+    "briefs": {
+      "title": "Tadqiqot yozuvlari",
+      "helper": "CERR jamoasi tahlili. AI yordamida tayyorlangan yozuvlar belgilanadi va taqrizchiga biriktiriladi.",
+      "empty": "Hozircha tadqiqot yozuvlari mavjud emas.",
+      "aiDraftedChip": "AI tayyorlagan",
+      "byline": {
+        "aiDrafted": "AI tayyorlagan",
+        "reviewedBy": "taqrizchi {{reviewer}}",
+        "readTime": "{{minutes}} min o'qish"
+      }
+    }
+  },
+  "modelExplorer": {
+    "header": {
+      "eyebrow": "Metodologiya · Parametrlar · Eslatmalar",
+      "meta": {
+        "modelsLabel": "Modellar",
+        "modelsLive": "{{count}} faol",
+        "lastAuditLabel": "Oxirgi kalibrlash auditi",
+        "openIssuesLabel": "Ochiq metodologik masalalar"
+      }
+    },
+    "tabs": {
+      "aria": "Model tafsilotlari yorliqlari",
+      "overview": "Umumiy",
+      "equations": "Tenglamalar",
+      "parameters": "Parametrlar",
+      "dataSources": "Manbalar",
+      "caveats": "Eslatmalar"
+    },
+    "purpose": {
+      "title": "Maqsad"
+    },
+    "equations": {
+      "title": "Asosiy tenglamalar",
+      "smePendingChip": "SME kontenti kutilmoqda",
+      "smePendingAria": "Tenglama rendering — SME kontenti kutilmoqda"
+    },
+    "parameters": {
+      "title": "Asosiy parametrlar",
+      "symbol": "Belgi",
+      "name": "Nomi",
+      "value": "Qiymat",
+      "range": "Diapazon",
+      "empty": "Bu model uchun parametrlar hujjatlashtirilmagan."
+    },
+    "caveats": {
+      "title": "Eslatmalar",
+      "empty": "Bu model uchun eslatmalar hujjatlashtirilmagan.",
+      "trackedPrefix": "Masala sifatida kuzatilmoqda",
+      "target": "Maqsad {{version}}."
+    },
+    "dataSources": {
+      "title": "Ma'lumot manbalari",
+      "empty": "Bu model uchun manbalar hujjatlashtirilmagan."
+    },
+    "validation": {
+      "title": "Validatsiya xulosasi",
+      "smePendingChip": "SME kontenti kutilmoqda",
+      "smePendingAria": "Validatsiya xulosasi — SME kontenti kutilmoqda"
+    }
+  },
   "states": {
     "loading": {
       "overview": "So'nggi sharh holati yuklanmoqda...",
       "comparison": "Solishtirish ish maydoni yuklanmoqda...",
       "modelExplorer": "Model metama'lumotlari yuklanmoqda...",
-      "scenarioLabRun": "Joriy taxminlar bilan stsenariy ishga tushirilmoqda..."
+      "scenarioLabRun": "Joriy taxminlar bilan stsenariy ishga tushirilmoqda...",
+      "knowledgeHub": "Bilimlar markazi yuklanmoqda..."
     },
     "error": {
       "overviewUnavailable": "Sharh ma'lumotlari hozircha mavjud emas.",

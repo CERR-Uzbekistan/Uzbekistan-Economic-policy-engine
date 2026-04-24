@@ -150,6 +150,7 @@ export function OverviewPage() {
     caveats,
     references,
     activity_feed,
+    provenance,
   } = overviewData
 
 
@@ -182,6 +183,7 @@ export function OverviewPage() {
         updatedAt={generated_at}
         modelIds={model_ids}
         outputAction={output_action}
+        provenance={provenance}
       />
 
       <KpiStrip metrics={headline_metrics} />

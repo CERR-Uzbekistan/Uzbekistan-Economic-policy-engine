@@ -37,6 +37,12 @@
   max-width: 82ch;
 }
 
+.overview-state-header__summary em {
+  color: var(--color-brand);
+  font-style: normal;
+  font-weight: 600;
+}
+
 .state-header__meta,
 .overview-state-header__meta {
   color: var(--color-text-muted);
@@ -52,6 +58,35 @@
 .state-header__meta > span + span::before {
   content: "·";
   margin-right: var(--space-sm);
+}
+
+.overview-state-header__provenance {
+  display: grid;
+  gap: 0.15rem;
+  margin-top: var(--space-lg);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.overview-state-header__provenance-line {
+  margin: 0;
+}
+
+.overview-kpi-card__context-note {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+}
+
+.overview-kpi-card__sme-chip {
+  margin-left: var(--space-sm);
+}
+
+.overview-kpi-trend__glyph {
+  font-weight: 600;
+  color: var(--color-text);
 }
 
 .overview-section-head {

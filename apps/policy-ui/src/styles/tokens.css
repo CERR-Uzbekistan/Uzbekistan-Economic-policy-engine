@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Serif:wght@600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,650;0,700;1,400&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Serif:wght@600&display=swap");
 
 :root {
   --color-bg: #f4f2ee;
@@ -10,10 +10,17 @@
   --color-text-muted: #4d5d74;
   --color-brand: #1f3658;
   --color-brand-soft: #e7edf6;
+  --color-baseline: #1f3658;
+  --color-alternative: #2f7b8a;
   --color-downside: #9b3b2e;
   --color-upside: #3e6b45;
   --color-success: #3e6b45;
   --color-success-soft: #e8f3ec;
+  --color-warn: #8c5a00;
+  --color-warn-soft: #f4e8d0;
+  --color-crit-soft: #f5dfd6;
+  /* Alpha-composited band color is load-bearing for DFM three-band nesting (PR #87).
+     Do not flatten to prototype's solid #c5ceda — see shot-1 audit §8 / prompt §3.1. */
   --color-uncertainty: rgba(77, 93, 116, 0.25);
 
   --font-sans: "Source Sans 3", "Noto Sans", "Helvetica Neue", sans-serif;

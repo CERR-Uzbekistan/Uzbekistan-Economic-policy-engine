@@ -4,6 +4,7 @@ import type {
   Direction,
   MacroSnapshot,
   ModelAttribution,
+  NarrativeSegment,
 } from '../../contracts/data-contract'
 
 type RawModelAttribution = {
@@ -100,7 +101,9 @@ export type RawOverviewPayload = {
   id?: string
   name?: string
   generatedAt?: string
-  summary?: string
+  // Shot-1 widening: live payloads MAY return structured narrative segments.
+  // The guard validates segment shape and the adapter preserves the union.
+  summary?: string | NarrativeSegment[]
   models?: string[]
   headline?: RawOverviewMetric[]
   nowcast?: {
@@ -242,6 +245,9 @@ export function toMacroSnapshot(raw: RawOverviewPayload): MacroSnapshot {
     snapshot_id: raw.id ?? 'overview-snapshot',
     snapshot_name: raw.name ?? 'Overview Snapshot',
     generated_at: generatedAt,
+    // Shot-1 widening: string passes through unchanged; NarrativeSegment[]
+    // (validated by the guard) is preserved so the state header can <em>-wrap
+    // emphasized segments without re-parsing prose at render time.
     summary: raw.summary ?? 'No summary is available for this snapshot.',
     model_ids: raw.models ?? [],
     headline_metrics: headlineMetrics,

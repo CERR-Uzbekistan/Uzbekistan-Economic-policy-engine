@@ -1,9 +1,14 @@
 import type {
+  ComparisonContent,
   ComparisonMetricDefinition,
+  ComparisonMetricRow,
   ComparisonScenario,
+  ComparisonScenarioMeta,
   ComparisonScenarioTag,
   ComparisonWorkspace,
+  ScenarioRole,
   ScenarioType,
+  TradeoffSummary,
 } from '../../contracts/data-contract'
 
 export type RawComparisonHeadlineMetric = {
@@ -267,5 +272,236 @@ export function toComparisonWorkspace(raw: RawComparisonPayload): ComparisonWork
     scenarios,
     default_baseline_id: baselineId,
     default_selected_ids: defaultSelectedIds,
+  }
+}
+
+// ───────────────────────────────────────────────────────────────
+// Shot-1 composition layer (prompt §4.3 + audit §3.4).
+//
+// composeComparisonContent derives the UI-facing ComparisonContent shape
+// from an existing ComparisonWorkspace (which the QPM bridge and mock
+// pipelines continue to feed). The QPM bridge and scenarioComparisonAdapter
+// are untouched by this layer — it is pure presentation composition.
+// ───────────────────────────────────────────────────────────────
+
+const SCENARIO_ROLE_BY_TYPE: Record<ScenarioType, ScenarioRole> = {
+  baseline: 'baseline',
+  alternative: 'alternative',
+  stress: 'downside',
+}
+
+const SCENARIO_ROLE_LABEL: Record<ScenarioRole, string> = {
+  baseline: 'Baseline',
+  alternative: 'Alternative',
+  downside: 'Stress',
+  upside: 'Upside',
+}
+
+const SHOT1_COMPARISON_METRICS: ComparisonMetricDefinition[] = [
+  { metric_id: 'gdp_growth', label: 'GDP growth · 3y avg', unit: '%' },
+  { metric_id: 'inflation', label: 'Inflation · terminal', unit: '%' },
+  { metric_id: 'current_account', label: 'Current account · %GDP', unit: '% GDP' },
+  { metric_id: 'fiscal_balance', label: 'Fiscal balance · %GDP', unit: '% GDP' },
+  { metric_id: 'reserves_end', label: 'Reserves · end', unit: 'USD bn' },
+  { metric_id: 'unemployment_avg', label: 'Unemployment · avg', unit: '%' },
+  { metric_id: 'real_wages_cumulative', label: 'Real wages · cumulative', unit: '%' },
+]
+
+function toShot1MetricDefinitions(workspace: ComparisonWorkspace): ComparisonMetricDefinition[] {
+  const liveDefinitionsById = new Map(
+    workspace.metric_definitions.map((metric) => [metric.metric_id, metric]),
+  )
+
+  return SHOT1_COMPARISON_METRICS.map((metric) => {
+    const liveDefinition = liveDefinitionsById.get(metric.metric_id)
+    return {
+      metric_id: metric.metric_id,
+      label: metric.label,
+      unit: liveDefinition?.unit || metric.unit,
+    }
+  })
+}
+
+function formatMetricValue(value: number, unit: string): string {
+  if (!Number.isFinite(value)) {
+    return '—'
+  }
+  const precision = unit === 'UZS/USD' ? 0 : 1
+  const magnitude = Math.abs(value).toFixed(precision)
+  const sign = value > 0 ? '+' : value < 0 ? '−' : ''
+  // Balance-style units carry their own sign ("% GDP"); other percent/currency
+  // units render "+X" / "−X" in front of the magnitude.
+  const unitSpace = unit === '%' || unit === '' ? '' : ' '
+  return `${sign}${magnitude}${unitSpace}${unit}`.trim()
+}
+
+function formatMetricDelta(value: number, unit: string): string {
+  if (!Number.isFinite(value)) {
+    return '—'
+  }
+  const precision = unit === 'UZS/USD' ? 0 : 1
+  const magnitude = Math.abs(value).toFixed(precision)
+  const sign = value > 0 ? '+' : value < 0 ? '−' : ''
+  // Deltas on percent-family units render as "pp"; currency and ratio units
+  // keep their own label.
+  const deltaUnit = unit === '%' || unit === '% GDP' ? 'pp' : unit
+  const deltaSpace = deltaUnit ? ' ' : ''
+  return `${sign}${magnitude}${deltaSpace}${deltaUnit}`.trim()
+}
+
+function pickExtremeScenarioIds(
+  selectedScenarios: ComparisonScenario[],
+  metric: ComparisonMetricDefinition,
+): { highest: string | undefined; lowest: string | undefined } {
+  let highestScenarioId: string | undefined
+  let lowestScenarioId: string | undefined
+  let highestValue = Number.NEGATIVE_INFINITY
+  let lowestValue = Number.POSITIVE_INFINITY
+
+  for (const scenario of selectedScenarios) {
+    const value = scenario.values[metric.metric_id]
+    if (!isFiniteNumber(value)) continue
+    if (value > highestValue) {
+      highestValue = value
+      highestScenarioId = scenario.scenario_id
+    }
+    if (value < lowestValue) {
+      lowestValue = value
+      lowestScenarioId = scenario.scenario_id
+    }
+  }
+
+  // When every selected scenario carries the same numeric value, the highest
+  // and lowest collapse to the same scenario — suppress the star in that case
+  // since no scenario is numerically extreme.
+  if (highestValue === lowestValue) {
+    return { highest: undefined, lowest: undefined }
+  }
+  return { highest: highestScenarioId, lowest: lowestScenarioId }
+}
+
+function toScenarioMeta(scenario: ComparisonScenario): ComparisonScenarioMeta {
+  const role = SCENARIO_ROLE_BY_TYPE[scenario.scenario_type]
+  return {
+    id: scenario.scenario_id,
+    name: scenario.scenario_name,
+    role,
+    role_label: SCENARIO_ROLE_LABEL[role],
+  }
+}
+
+function renderShellBProse(
+  fiscalScenario: ComparisonScenarioMeta,
+  stressScenario: ComparisonScenarioMeta,
+): string {
+  // Shell B prose template (prompt §4.3 "fiscal-vs-growth-tradeoff"). Uses the
+  // actual matched scenario names so em-emphasis in TradeoffSummaryPanel wraps
+  // the live names rather than the prototype's literal strings.
+  return (
+    `${fiscalScenario.name} dominates on external and price stability — lower inflation, ` +
+    `narrower current account, stronger reserves — at the cost of growth and employment. ` +
+    `The ${stressScenario.name} stress is adverse across every dimension, with the current ` +
+    `account and reserves deteriorating most sharply; the fiscal path provides only partial ` +
+    `insulation. If price stability is the binding objective, consolidation is preferred. If ` +
+    `growth and employment dominate the objective, the baseline is preferred and consolidation ` +
+    `is deferred. No scenario is robust to the ${stressScenario.name} shock — that is a case ` +
+    `for building reserve buffers now, not scenario selection.`
+  )
+}
+
+function chooseTradeoffSummary(metas: ComparisonScenarioMeta[]): TradeoffSummary {
+  const fiscalCandidate =
+    metas.find(
+      (meta) =>
+        meta.role === 'alternative' && /consolid|fiscal/i.test(meta.name),
+    ) ?? null
+  const stressCandidate = metas.find((meta) => meta.role === 'downside') ?? null
+
+  // Shell B fires on fiscal-consolidation alternative + stress scenario. Shell
+  // A / C remain Shot 2 — unmatched configurations render the sentinel chip.
+  if (fiscalCandidate && stressCandidate) {
+    return {
+      mode: 'shell',
+      shell_id: 'fiscal-vs-growth-tradeoff',
+      rendered_text: renderShellBProse(fiscalCandidate, stressCandidate),
+    }
+  }
+  return { mode: 'empty' }
+}
+
+/**
+ * Compose a {@link ComparisonContent} view from an existing
+ * {@link ComparisonWorkspace} plus the page-level selection state.
+ *
+ * Purpose: the Shot-1 Comparison UI reads `ComparisonContent`, while the QPM
+ * bridge and scenarioComparisonAdapter continue to feed `ComparisonWorkspace`.
+ * This composer is the single boundary between the two shapes — it must never
+ * mutate the workspace or bypass the adapter/source pipeline.
+ */
+export function composeComparisonContent(
+  workspace: ComparisonWorkspace,
+  selectedIds: string[],
+  baselineId: string,
+): ComparisonContent {
+  const scenariosById = new Map(
+    workspace.scenarios.map((scenario) => [scenario.scenario_id, scenario]),
+  )
+  const selectedScenarios = selectedIds
+    .map((id) => scenariosById.get(id))
+    .filter((scenario): scenario is ComparisonScenario => Boolean(scenario))
+
+  const resolvedBaselineId = scenariosById.has(baselineId)
+    ? baselineId
+    : workspace.default_baseline_id
+  const baselineScenario = scenariosById.get(resolvedBaselineId) ?? null
+
+  const scenarios = selectedScenarios.map(toScenarioMeta)
+
+  const metrics: ComparisonMetricRow[] = toShot1MetricDefinitions(workspace).map((metric) => {
+    const values: Record<string, string> = {}
+    const deltas: Record<string, string> = {}
+    const baselineRaw = baselineScenario ? baselineScenario.values[metric.metric_id] : undefined
+
+    for (const scenario of selectedScenarios) {
+      const raw = scenario.values[metric.metric_id]
+      values[scenario.scenario_id] = isFiniteNumber(raw) ? formatMetricValue(raw, metric.unit) : '—'
+
+      if (scenario.scenario_id === resolvedBaselineId) {
+        deltas[scenario.scenario_id] = '—'
+        continue
+      }
+      if (!isFiniteNumber(raw) || !isFiniteNumber(baselineRaw)) {
+        deltas[scenario.scenario_id] = '—'
+        continue
+      }
+      deltas[scenario.scenario_id] = formatMetricDelta(raw - baselineRaw, metric.unit)
+    }
+
+    const { highest, lowest } = pickExtremeScenarioIds(selectedScenarios, metric)
+    return {
+      id: metric.metric_id,
+      label: metric.label,
+      baseline_value: isFiniteNumber(baselineRaw) ? formatMetricValue(baselineRaw, metric.unit) : '—',
+      values,
+      deltas,
+      highest_scenario: highest,
+      lowest_scenario: lowest,
+    }
+  })
+
+  const horizonLabel = (() => {
+    const generatedAtYear = new Date(workspace.generated_at).getUTCFullYear()
+    if (!Number.isFinite(generatedAtYear)) {
+      return ''
+    }
+    return `${generatedAtYear} Q1 – ${generatedAtYear + 2} Q4`
+  })()
+
+  return {
+    scenarios,
+    baseline_scenario_id: resolvedBaselineId,
+    horizon_label: horizonLabel,
+    metrics,
+    tradeoff: chooseTradeoffSummary(scenarios),
   }
 }

@@ -5,6 +5,8 @@ type KpiStripProps = {
   metrics: HeadlineMetric[]
 }
 
+const SME_CONTENT_PENDING = '[SME content pending]'
+
 function formatMetricValue(metric: HeadlineMetric) {
   if (metric.unit === 'UZS/USD') {
     return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(metric.value)
@@ -12,10 +14,12 @@ function formatMetricValue(metric: HeadlineMetric) {
   return new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 }).format(metric.value)
 }
 
+// Prompt §4.5 item 5: delta renders as inline arrow-plus-text (prototype format
+// "↑ +0.3 pp vs prior estimate"), not as a chip-pill.
 const DIRECTION_GLYPH: Record<HeadlineMetric['direction'], string> = {
-  up: '▲',
-  down: '▼',
-  flat: '—',
+  up: '↑',
+  down: '↓',
+  flat: '→',
 }
 
 function formatDelta(metric: HeadlineMetric) {
@@ -49,10 +53,9 @@ export function KpiStrip({ metrics }: KpiStripProps) {
 
   return (
     <section className="kpi-strip" aria-labelledby="overview-kpi-title">
-      <div className="overview-section-head page-section-head">
-        <h2 id="overview-kpi-title">{t('overview.kpi.title')}</h2>
-        <p>{t('overview.kpi.description')}</p>
-      </div>
+      <h2 id="overview-kpi-title" className="sr-only">
+        {t('overview.kpi.title')}
+      </h2>
 
       <div className="overview-kpi-grid">
         {metrics.map((metric) => {
@@ -62,7 +65,12 @@ export function KpiStrip({ metrics }: KpiStripProps) {
             ? t('overview.kpi.deltaSrLabel', { direction: directionWord, delta })
             : t('overview.kpi.noPrior')
           const freshness = formatFreshness(metric.last_updated, locale)
-          const deltaText = delta ?? t('overview.kpi.notAvailable')
+          const deltaLabel = metric.delta_label
+          const composedDelta = delta
+            ? `${delta} ${metric.unit === 'UZS/USD' ? 'UZS' : metric.unit}`.trim()
+            : t('overview.kpi.notAvailable')
+          const contextNote = metric.context_note
+          const contextIsSentinel = contextNote === SME_CONTENT_PENDING
 
           return (
             <article key={metric.metric_id} className="kpi overview-kpi-card">
@@ -73,14 +81,24 @@ export function KpiStrip({ metrics }: KpiStripProps) {
               <p className="kpi__value overview-kpi-card__value">
                 {formatMetricValue(metric)} <span>{metric.unit}</span>
               </p>
-              <span className="kpi__delta overview-kpi-trend ui-chip ui-chip--neutral" aria-label={srLabel}>
-                <span className="arrow overview-kpi-trend__glyph" aria-hidden="true">
-                    {DIRECTION_GLYPH[metric.direction]}
-                </span>
-                <span>{deltaText}</span>
-              </span>
+              <p className="kpi__delta overview-kpi-trend" aria-label={srLabel}>
+                <span className="overview-kpi-trend__glyph" aria-hidden="true">
+                  {DIRECTION_GLYPH[metric.direction]}
+                </span>{' '}
+                {deltaLabel ? deltaLabel : composedDelta}
+              </p>
               <div className="kpi__context overview-kpi-card__meta">
                 <span>{metric.period}</span>
+                {contextIsSentinel ? (
+                  <span
+                    className="ui-chip ui-chip--warn overview-kpi-card__sme-chip"
+                    aria-label={t('overview.kpi.smePendingAria')}
+                  >
+                    {t('overview.kpi.smePendingChip')}
+                  </span>
+                ) : contextNote ? (
+                  <span className="overview-kpi-card__context-note">{contextNote}</span>
+                ) : null}
               </div>
             </article>
           )

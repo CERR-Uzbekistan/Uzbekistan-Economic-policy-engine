@@ -1,3 +1,4 @@
+import type { NarrativeSegment } from '../../contracts/data-contract'
 import type { RawOverviewPayload } from './overview'
 
 type ValidationSeverity = 'error' | 'warning'
@@ -20,6 +21,55 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function asString(value: unknown): string | undefined {
   return typeof value === 'string' ? value : undefined
+}
+
+function isNarrativeSegment(entry: unknown): entry is NarrativeSegment {
+  if (!isRecord(entry)) return false
+  if (typeof entry.text !== 'string') return false
+  if (entry.emphasize !== undefined && typeof entry.emphasize !== 'boolean') return false
+  return true
+}
+
+/**
+ * Validate `summary` against the `string | NarrativeSegment[]` union that
+ * {@link MacroSnapshot.summary} widened to in Shot-1.
+ *
+ * Rules (matches prompt BLOCKING-2):
+ * - `undefined` passes through (downstream adapter applies a default).
+ * - `string` passes through unchanged.
+ * - `NarrativeSegment[]` passes through only when EVERY segment has a
+ *   `{ text: string, emphasize?: boolean }` shape. A malformed array is
+ *   rejected with an error issue; the adapter then falls back to a safe
+ *   default.
+ * - Any other value (number, boolean, object, ...) is rejected with an
+ *   error issue.
+ *
+ * Never silently stringifies a valid NarrativeSegment[] or discards it.
+ */
+function asSummary(
+  value: unknown,
+  issues: OverviewValidationIssue[],
+): string | NarrativeSegment[] | undefined {
+  if (value === undefined) return undefined
+  if (typeof value === 'string') return value
+  if (Array.isArray(value)) {
+    if (value.length === 0) return value as NarrativeSegment[]
+    if (value.every(isNarrativeSegment)) {
+      return value as NarrativeSegment[]
+    }
+    issues.push({
+      path: 'summary',
+      message: 'Expected an array of { text: string, emphasize?: boolean } segments.',
+      severity: 'error',
+    })
+    return undefined
+  }
+  issues.push({
+    path: 'summary',
+    message: 'Expected a string or an array of NarrativeSegment objects.',
+    severity: 'error',
+  })
+  return undefined
 }
 
 function asNumber(value: unknown): number | undefined {
@@ -171,7 +221,7 @@ export function validateRawOverviewPayload(input: unknown): OverviewValidationRe
     id: asString(input.id),
     name: asString(input.name),
     generatedAt: asString(input.generatedAt),
-    summary: asString(input.summary),
+    summary: asSummary(input.summary, issues),
     models: asStringArray(input.models, issues, 'models'),
     headline,
     nowcast,
