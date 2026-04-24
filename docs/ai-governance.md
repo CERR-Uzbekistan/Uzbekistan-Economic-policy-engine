@@ -1,12 +1,12 @@
 # AI Governance
 
-**Status:** ADOPTED 2026-04-20 — current sign-off pending analytical-lead appointment
-**Owner:** Nozimjon Ortiqov (engineering) + analytical lead (TBD — to be named at sign-off)
-**Deadline:** This week, before TA-5 (Scenario Lab Interpretation panel) begins
+**Status:** ADOPTED 2026-04-24 — signed by project owner as product and interim analytical owner
+**Owner:** Nozimjon Ortiqov (project owner, product owner, interim analytical owner)
+**Deadline:** Adopted before Sprint 3 Week 2 TA-9 work begins
 
-This document defines how AI-assisted output flows through the Uzbekistan Economic Policy Engine. It governs the `NarrativeBlock.generation_mode` discriminator in the React app, currently typed as `'template' | 'assisted'` in `apps/policy-ui/src/contracts/data-contract.ts`, and proposes extending it to `'template' | 'assisted' | 'reviewed'` once governance is adopted.
+This document defines how AI-assisted output flows through the Uzbekistan Economic Policy Engine. It governs the `NarrativeBlock.generation_mode` discriminator in the React app, currently typed as `'template' | 'assisted' | 'reviewed'` in `apps/policy-ui/src/contracts/data-contract.ts`.
 
-The six questions below previously had `[TBD]` answers. This revision proposes a specific decision for each, with rationale and tradeoffs, so the analytical lead can sign off (or counter-propose) rather than start from a blank page.
+The six questions below previously had `[TBD]` answers. The project owner has adopted the decisions for Sprint 3. If a separate analytical lead is appointed later, that lead may revise this document through a normal decision change.
 
 ## The six questions
 
@@ -82,16 +82,16 @@ For `generation_mode === 'reviewed'` (post-review):
 
 ## Sign-off
 
-This doc is not final, and no UI work gated on it may begin, until both of the following are signed:
+This doc is final for Sprint 3 Week 2 work. Nozimjon Ortiqov is the sole project owner for this phase and signs as product owner and interim analytical owner until a separate analytical lead is appointed.
 
-- [ ] **Product lead sign-off** — Nozimjon Ortiqov — date: 2026-04-20
-- [ ] **Analytical lead sign-off** — Nozimjon Ortiqov — date: 2026-04-20
+- [x] **Product lead sign-off** — Nozimjon Ortiqov — date: 2026-04-24
+- [x] **Interim analytical owner sign-off** — Nozimjon Ortiqov — date: 2026-04-24
 
-Interim sign-off by [TODO: fill in reviewer name] pending analytical-lead appointment.
+Separate analytical-lead appointment remains optional project governance work, not a blocker for TA-9.
 
 ## Hard gate
 
-**No UI work on `NarrativeBlock.generation_mode === 'assisted'` — and no introduction of the proposed `'reviewed'` value — ships until both sign-off checkboxes above are checked and dated.** TA-5's Interpretation panel renders `'template'` only until this governance is adopted; the `'assisted'` branch must compile but must not render user-facing disclaimer copy or approval controls. TA-9 is blocked entirely on adoption. The contract change extending `NarrativeGenerationMode` to include `'reviewed'` is part of the gated work and does not land separately.
+**Gate status:** closed for Sprint 3 Week 2. TA-9 may implement bounded AI trust-surface treatment under this document. Full draft-queue workflow, reviewer collaboration, and export/citation pipeline remain out of scope unless separately approved.
 
 ---
 *Draft v2 revised 2026-04-20. v1 committed 2026-04-19 with empty decisions. To be finalized with analytical lead this week.*
