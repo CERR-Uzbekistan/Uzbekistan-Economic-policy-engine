@@ -9,6 +9,7 @@ import type {
 } from '../../contracts/data-contract'
 import type { SavedScenarioRecord } from '../../state/scenarioStore'
 import { buildPresetChipPresentation } from './preset-chip.js'
+import { SavedScenarioModal } from './SavedScenarioModal.js'
 
 type AssumptionsPanelProps = {
   assumptions: ScenarioLabAssumptionInput[]
@@ -38,11 +39,11 @@ type AssumptionsPanelProps = {
 }
 
 const CATEGORY_TITLES: Record<AssumptionCategory, string> = {
-  macro: 'Macro assumptions',
-  external: 'External assumptions',
-  fiscal: 'Fiscal assumptions',
-  trade: 'Trade assumptions',
-  advanced: 'Advanced assumptions',
+  macro: 'Monetary',
+  external: 'External',
+  fiscal: 'Fiscal',
+  trade: 'Trade',
+  advanced: 'Advanced',
 }
 
 const MAIN_CATEGORIES: AssumptionCategory[] = ['macro', 'external', 'fiscal', 'trade']
@@ -53,34 +54,9 @@ function formatAssumptionValue(value: number, step: number): string {
   return value.toFixed(Math.min(stepDecimals, 2))
 }
 
-function formatRelativeTime(isoTimestamp: string, locale: string): string {
-  const target = new Date(isoTimestamp).getTime()
-  if (!Number.isFinite(target)) {
-    return isoTimestamp
-  }
-
-  const seconds = Math.round((target - Date.now()) / 1000)
-  const absSeconds = Math.abs(seconds)
-  const formatter = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' })
-
-  if (absSeconds < 60) {
-    return formatter.format(seconds, 'second')
-  }
-  if (absSeconds < 60 * 60) {
-    return formatter.format(Math.round(seconds / 60), 'minute')
-  }
-  if (absSeconds < 60 * 60 * 24) {
-    return formatter.format(Math.round(seconds / (60 * 60)), 'hour')
-  }
-  if (absSeconds < 60 * 60 * 24 * 30) {
-    return formatter.format(Math.round(seconds / (60 * 60 * 24)), 'day')
-  }
-  if (absSeconds < 60 * 60 * 24 * 365) {
-    return formatter.format(Math.round(seconds / (60 * 60 * 24 * 30)), 'month')
-  }
-  return formatter.format(Math.round(seconds / (60 * 60 * 24 * 365)), 'year')
-}
-
+// Prompt §4.4: assumption field with slider as primary control + number input
+// as secondary. Help text + technical-variable toggle per prototype lines
+// 776–819.
 function AssumptionField({
   item,
   value,
@@ -94,22 +70,36 @@ function AssumptionField({
   onChange: (nextValue: number) => void
   technicalPrefix: string
 }) {
+  const displayValue = Number.isFinite(value) ? value : item.default_value
+
   return (
-    <label className="scenario-assumption-field assumption-field">
-      <span className="scenario-assumption-field__label assumption-field__label">
+    <div className="scenario-assumption-field assumption-field">
+      <div className="scenario-assumption-field__label assumption-field__label">
         <span className="name">{item.label}</span>
         <span className="value">
-          {formatAssumptionValue(Number.isFinite(value) ? value : item.default_value, item.step)} {item.unit}
+          {formatAssumptionValue(displayValue, item.step)} {item.unit}
         </span>
+      </div>
+      <input
+        type="range"
+        className="scenario-assumption-field__slider"
+        min={item.min}
+        max={item.max}
+        step={item.step}
+        value={displayValue}
+        onChange={(event) => onChange(Number(event.target.value))}
+        aria-label={item.label}
+      />
+      <span className="scenario-assumption-field__description assumption-field__help">
+        {item.description}
       </span>
-      <span className="scenario-assumption-field__description assumption-field__help">{item.description}</span>
       <div className="scenario-assumption-field__control">
         <input
           type="number"
           min={item.min}
           max={item.max}
           step={item.step}
-          value={Number.isFinite(value) ? value : item.default_value}
+          value={displayValue}
           onChange={(event) => onChange(Number(event.target.value))}
         />
         <span className="scenario-assumption-field__unit">{item.unit}</span>
@@ -119,7 +109,7 @@ function AssumptionField({
           {technicalPrefix.replace('{{variable}}', item.technical_variable)}
         </span>
       ) : null}
-    </label>
+    </div>
   )
 }
 
@@ -149,8 +139,9 @@ export function AssumptionsPanel({
   onDeleteScenario,
   saveStatus,
 }: AssumptionsPanelProps) {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const [showTechnical, setShowTechnical] = useState(false)
+  const [isSavedModalOpen, setIsSavedModalOpen] = useState(false)
   const technicalPrefix = t('scenarioLab.assumptions.technicalPrefix')
 
   const grouped = useMemo(() => {
@@ -170,40 +161,41 @@ export function AssumptionsPanel({
   }, [assumptions])
 
   return (
-    <section className="scenario-panel scenario-panel--assumptions" aria-labelledby="scenario-assumptions-title">
+    <section
+      className="scenario-panel scenario-panel--assumptions lab-panel"
+      aria-labelledby="scenario-assumptions-title"
+    >
       <div className="scenario-panel__head page-section-head">
         <h2 id="scenario-assumptions-title">{t('scenarioLab.assumptions.title')}</h2>
         <p>{t('scenarioLab.assumptions.description')}</p>
       </div>
 
-      <div className="scenario-session-controls">
-        <label>
-          <span>{t('scenarioLab.form.preset')}</span>
-          <div className="presets" role="radiogroup" aria-label={t('scenarioLab.form.preset')}>
-            {presets.map((preset) => {
-              const presentation = buildPresetChipPresentation(
-                selectedPresetId,
-                preset.preset_id,
-                onPresetChange,
-              )
+      {/* Preset chip rail */}
+      <div className="presets" role="radiogroup" aria-label={t('scenarioLab.form.preset')}>
+        {presets.map((preset) => {
+          const presentation = buildPresetChipPresentation(
+            selectedPresetId,
+            preset.preset_id,
+            onPresetChange,
+          )
+          return (
+            <button
+              key={preset.preset_id}
+              type="button"
+              className={`preset-chip ${presentation.className}`}
+              aria-pressed={presentation.ariaPressed}
+              onClick={presentation.onClick}
+              onKeyDown={presentation.onKeyDown}
+            >
+              {preset.title}
+            </button>
+          )
+        })}
+      </div>
 
-              return (
-                <button
-                  key={preset.preset_id}
-                  type="button"
-                  className={presentation.className}
-                  aria-pressed={presentation.ariaPressed}
-                  onClick={presentation.onClick}
-                  onKeyDown={presentation.onKeyDown}
-                >
-                  {preset.title}
-                </button>
-              )
-            })}
-          </div>
-        </label>
-
-        <label>
+      {/* Lab-session block: scenario name + collapsed details + actions. */}
+      <div className="lab-session scenario-session-controls">
+        <label className="lab-session__field">
           <span>{t('scenarioLab.form.scenarioName')}</span>
           <input
             type="text"
@@ -213,53 +205,68 @@ export function AssumptionsPanel({
           />
         </label>
 
-        <label>
-          <span>{t('scenarioLab.form.scenarioType')}</span>
-          <select
-            value={scenarioType}
-            onChange={(event) => onScenarioTypeChange(event.target.value as ScenarioType)}
-          >
-            {SCENARIO_TYPE_OPTIONS.map((option) => (
-              <option key={option} value={option}>
-                {t(`scenarioLab.form.scenarioTypeOptions.${option}`)}
-              </option>
-            ))}
-          </select>
-        </label>
+        {/* Prompt §4.4: collapsed by default; keyboard-operable native disclosure. */}
+        <details className="lab-session__details">
+          <summary>{t('scenarioLab.form.detailsSummary')}</summary>
+          <div className="lab-session__details-body">
+            <label>
+              <span>{t('scenarioLab.form.scenarioType')}</span>
+              <select
+                value={scenarioType}
+                onChange={(event) => onScenarioTypeChange(event.target.value as ScenarioType)}
+              >
+                {SCENARIO_TYPE_OPTIONS.map((option) => (
+                  <option key={option} value={option}>
+                    {t(`scenarioLab.form.scenarioTypeOptions.${option}`)}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-        <label>
-          <span>{t('scenarioLab.form.description')}</span>
-          <textarea
-            value={scenarioDescription}
-            onChange={(event) => onScenarioDescriptionChange(event.target.value)}
-            placeholder={t('scenarioLab.form.descriptionPlaceholder')}
-            rows={3}
-          />
-        </label>
+            <label>
+              <span>{t('scenarioLab.form.description')}</span>
+              <textarea
+                value={scenarioDescription}
+                onChange={(event) => onScenarioDescriptionChange(event.target.value)}
+                placeholder={t('scenarioLab.form.descriptionPlaceholder')}
+                rows={3}
+              />
+            </label>
 
-        <fieldset className="scenario-tag-fieldset">
-          <legend>{t('scenarioLab.form.tags')}</legend>
-          <div className="scenario-tag-chip-list">
-            {availableScenarioTags.map((tag) => {
-              const isSelected = scenarioTags.includes(tag)
-              return (
-                <button
-                  key={tag}
-                  type="button"
-                  className={`scenario-tag-chip ${isSelected ? 'scenario-tag-chip--selected' : ''}`}
-                  aria-pressed={isSelected}
-                  onClick={() => onScenarioTagToggle(tag)}
-                >
-                  {t(`scenarioLab.form.tagOptions.${tag}`)}
-                </button>
-              )
-            })}
+            <fieldset className="scenario-tag-fieldset">
+              <legend>{t('scenarioLab.form.tags')}</legend>
+              <div className="scenario-tag-chip-list">
+                {availableScenarioTags.map((tag) => {
+                  const isSelected = scenarioTags.includes(tag)
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      className={`scenario-tag-chip ${isSelected ? 'scenario-tag-chip--selected' : ''}`}
+                      aria-pressed={isSelected}
+                      onClick={() => onScenarioTagToggle(tag)}
+                    >
+                      {t(`scenarioLab.form.tagOptions.${tag}`)}
+                    </button>
+                  )
+                })}
+              </div>
+            </fieldset>
           </div>
-        </fieldset>
+        </details>
 
-        <div className="scenario-session-controls__actions">
+        <div className="lab-session__actions scenario-session-controls__actions">
           <button
             type="button"
+            className="btn-primary"
+            onClick={onRunScenario}
+            disabled={isRunPending}
+          >
+            {isRunPending ? `${t('buttons.run')}...` : t('buttons.runScenario')}
+          </button>
+          <button
+            type="button"
+            className="btn-secondary"
             onClick={onSaveScenario}
             disabled={!canSaveScenario}
             title={saveDisabledReason ?? undefined}
@@ -272,43 +279,21 @@ export function AssumptionsPanel({
               {saveDisabledReason}
             </span>
           ) : null}
-          <button type="button" onClick={onRunScenario} disabled={isRunPending}>
-            {isRunPending ? `${t('buttons.run')}...` : t('buttons.runScenario')}
-          </button>
-          {saveStatus ? (
-            <p role="status" aria-live="polite">
-              {saveStatus}
-            </p>
-          ) : null}
         </div>
 
-        <section className="scenario-saved-list" aria-labelledby="scenario-saved-list-title">
-          <h3 id="scenario-saved-list-title">{t('scenarioLab.saved.title')}</h3>
-          {savedScenarios.length === 0 ? (
-            <p className="empty-state">{t('scenarioLab.saved.empty')}</p>
-          ) : (
-            <ul>
-              {savedScenarios.map((savedScenario) => (
-                <li key={savedScenario.scenario_id}>
-                  <div>
-                    <strong>{savedScenario.scenario_name}</strong>
-                    <span>
-                      {formatRelativeTime(savedScenario.created_at, i18n.resolvedLanguage ?? 'en')}
-                    </span>
-                  </div>
-                  <div className="scenario-saved-list__actions">
-                    <button type="button" onClick={() => onLoadScenario(savedScenario.scenario_id)}>
-                      {t('scenarioLab.saved.load')}
-                    </button>
-                    <button type="button" onClick={() => onDeleteScenario(savedScenario.scenario_id)}>
-                      {t('scenarioLab.saved.delete')}
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
+        <button
+          type="button"
+          className="lab-session__load-link btn-ghost"
+          onClick={() => setIsSavedModalOpen(true)}
+        >
+          {t('scenarioLab.saved.loadLink')}
+        </button>
+
+        {saveStatus ? (
+          <p className="lab-session__status" role="status" aria-live="polite">
+            {saveStatus}
+          </p>
+        ) : null}
       </div>
 
       <label className="scenario-technical-toggle">
@@ -346,15 +331,13 @@ export function AssumptionsPanel({
         </section>
       ))}
 
-      <details className="scenario-assumption-advanced">
-        <summary>
-          {t('scenarioLab.assumptions.categories.advanced', {
-            defaultValue: CATEGORY_TITLES.advanced,
-          })}
-        </summary>
-        {grouped.advanced.length === 0 ? (
-          <p className="empty-state">{t('scenarioLab.assumptions.emptyAdvanced')}</p>
-        ) : (
+      {grouped.advanced.length > 0 ? (
+        <details className="scenario-assumption-advanced">
+          <summary>
+            {t('scenarioLab.assumptions.categories.advanced', {
+              defaultValue: CATEGORY_TITLES.advanced,
+            })}
+          </summary>
           <div className="scenario-assumption-list">
             {grouped.advanced.map((item) => (
               <AssumptionField
@@ -367,8 +350,16 @@ export function AssumptionsPanel({
               />
             ))}
           </div>
-        )}
-      </details>
+        </details>
+      ) : null}
+
+      <SavedScenarioModal
+        isOpen={isSavedModalOpen}
+        onClose={() => setIsSavedModalOpen(false)}
+        savedScenarios={savedScenarios}
+        onLoadScenario={onLoadScenario}
+        onDeleteScenario={onDeleteScenario}
+      />
     </section>
   )
 }

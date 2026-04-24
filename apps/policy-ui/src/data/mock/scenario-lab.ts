@@ -8,6 +8,7 @@ import type {
   ScenarioLabPreset,
   ScenarioLabResultsBundle,
   ScenarioLabWorkspace,
+  SuggestedNextScenario,
 } from '../../contracts/data-contract'
 
 const ATTRIBUTION: ModelAttribution = {
@@ -469,6 +470,101 @@ function buildInterpretationCore(values: ScenarioLabAssumptionState): Interpreta
   }
 }
 
+// Prompt §4.4: clickable suggested-next anchors with route + preset targets.
+const SCENARIO_LAB_SUGGESTED_NEXT: SuggestedNextScenario[] = [
+  {
+    label: 'Pair with a remittance shock',
+    target_route: '/scenario-lab',
+    target_preset: 'russia_slowdown',
+  },
+  {
+    label: 'Add energy tariff adjustment',
+    target_route: '/scenario-lab',
+    target_preset: 'energy_reform',
+  },
+  {
+    label: 'Compare with baseline and tight-money',
+    target_route: '/comparison',
+  },
+]
+
+// Prompt §4.4: 3-series impulse-response line chart over 12 quarters, mapping
+// deviation-from-baseline for GDP gap, Inflation, and Policy rate. Shock paths
+// are geometric decays keyed off the current assumption values — they express
+// direction and shape, not calibrated QPM dynamics (live wiring is Shot 2+).
+function roundPp(value: number): number {
+  return Math.round(value * 100) / 100
+}
+
+function buildImpulseResponseChart(values: ScenarioLabAssumptionState): ChartSpec {
+  const horizons = Array.from({ length: 12 }, (_, index) => `Q${index + 1}`)
+  const policyRateShockPp = (values.policy_rate_change ?? 0) * 0.01 * 100
+  const exchangeRateShock = values.exchange_rate_change ?? 0
+  const externalDemandShock = values.export_demand_change ?? 0
+  const governmentSpendingShock = values.government_spending_change ?? 0
+
+  const gdpInitialGap =
+    -0.015 * policyRateShockPp +
+    0.04 * externalDemandShock +
+    0.12 * governmentSpendingShock
+  const inflationInitial = 0.18 * exchangeRateShock + -0.02 * policyRateShockPp
+  const policyRateInitial = policyRateShockPp + 0.04 * inflationInitial
+
+  const gdpDecay = 0.8
+  const inflationDecay = 0.72
+  const policyDecay = 0.85
+
+  const gdpSeries = horizons.map((_, index) => roundPp(gdpInitialGap * Math.pow(gdpDecay, index)))
+  const inflationSeries = horizons.map((_, index) =>
+    roundPp(inflationInitial * Math.pow(inflationDecay, index)),
+  )
+  const policyRateSeries = horizons.map((_, index) =>
+    roundPp(policyRateInitial * Math.pow(policyDecay, index)),
+  )
+
+  return {
+    chart_id: 'scenario_lab_impulse_response',
+    title: 'GDP gap, inflation & policy rate · 12 quarters',
+    subtitle: 'Deviation from baseline · pp',
+    chart_type: 'line',
+    x: {
+      label: 'Horizon',
+      unit: '',
+      values: horizons,
+    },
+    y: {
+      label: 'Deviation from baseline',
+      unit: 'pp',
+      values: [...gdpSeries, ...inflationSeries, ...policyRateSeries],
+    },
+    series: [
+      {
+        series_id: 'gdp_gap',
+        label: 'GDP gap',
+        semantic_role: 'baseline',
+        values: gdpSeries,
+      },
+      {
+        series_id: 'inflation',
+        label: 'Inflation',
+        semantic_role: 'downside',
+        values: inflationSeries,
+      },
+      {
+        series_id: 'policy_rate',
+        label: 'Policy rate',
+        semantic_role: 'other',
+        values: policyRateSeries,
+      },
+    ],
+    view_mode: 'delta',
+    uncertainty: [],
+    takeaway:
+      'GDP gap, inflation, and the policy-rate path move with combined monetary, external, and fiscal channels.',
+    model_attribution: [ATTRIBUTION],
+  }
+}
+
 function resolveInterpretationGenerationMode(): NarrativeGenerationMode {
   // No preset currently seeds 'assisted' mode. TA-9 will introduce
   // assisted narratives from the AI advisor; for now all preset
@@ -485,10 +581,16 @@ export function buildScenarioLabResults(
   const headlineMetrics = buildHeadlineMetrics(values)
   const interpretation = buildInterpretation(values) as InterpretationWithGenerationMode
   void options
-  interpretation.generation_mode = resolveInterpretationGenerationMode()
+  const generationMode = resolveInterpretationGenerationMode()
+  interpretation.generation_mode = generationMode
+  // Shot-1 additive: typed metadata supersedes the informal cast read inside
+  // InterpretationPanel; the old top-level field is retained for back-compat.
+  interpretation.metadata = { generation_mode: generationMode }
+  interpretation.suggested_next = SCENARIO_LAB_SUGGESTED_NEXT
 
   return {
     headline_metrics: headlineMetrics,
+    impulse_response_chart: buildImpulseResponseChart(values),
     charts_by_tab: {
       headline_impact: {
         chart_id: 'headline_impact_delta',

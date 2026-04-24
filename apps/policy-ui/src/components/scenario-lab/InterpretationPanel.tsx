@@ -1,11 +1,18 @@
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import type { NarrativeGenerationMode, ScenarioLabInterpretation } from '../../contracts/data-contract'
+import type {
+  NarrativeGenerationMode,
+  ScenarioLabInterpretation,
+  SuggestedNextScenario,
+} from '../../contracts/data-contract'
 
 type InterpretationPanelProps = {
   interpretation: ScenarioLabInterpretation
 }
 
-type InterpretationWithMetadata = ScenarioLabInterpretation & {
+type InterpretationWithLegacyMetadata = ScenarioLabInterpretation & {
+  // Legacy top-level fields used by pre-Shot-1 code paths; preserved until a
+  // follow-up slice removes them.
   generation_mode?: NarrativeGenerationMode
   reviewer_name?: string
   reviewed_at?: string
@@ -15,12 +22,10 @@ function formatReviewedAt(value: string | undefined, locale: string): string {
   if (!value) {
     return ''
   }
-
   const parsed = Date.parse(value)
   if (!Number.isFinite(parsed)) {
     return value
   }
-
   return new Intl.DateTimeFormat(locale, {
     day: '2-digit',
     month: 'short',
@@ -41,26 +46,63 @@ function InterpretationSection({ title, items }: { title: string; items: string[
   )
 }
 
+function resolveGenerationMode(
+  interpretation: InterpretationWithLegacyMetadata,
+): NarrativeGenerationMode {
+  return interpretation.metadata?.generation_mode ?? interpretation.generation_mode ?? 'template'
+}
+
+function resolveReviewerInfo(
+  interpretation: InterpretationWithLegacyMetadata,
+): { reviewerName: string; reviewedAt: string } {
+  const metadata = interpretation.metadata
+  const reviewerName = metadata?.reviewer_name?.trim() ?? interpretation.reviewer_name?.trim() ?? ''
+  const reviewedAt = metadata?.reviewed_at ?? interpretation.reviewed_at ?? ''
+  return { reviewerName, reviewedAt }
+}
+
+// Prompt §4.4: clickable Link anchors — route + preset encoded as query param.
+function SuggestedNextLink({ scenario }: { scenario: SuggestedNextScenario }) {
+  const to = scenario.target_preset
+    ? `${scenario.target_route}?preset=${encodeURIComponent(scenario.target_preset)}`
+    : scenario.target_route
+  return (
+    <li>
+      <Link to={to} className="scenario-suggested-next__link">
+        {scenario.label}
+      </Link>
+    </li>
+  )
+}
+
 export function InterpretationPanel({ interpretation }: InterpretationPanelProps) {
   const { t, i18n } = useTranslation()
-  const interpretationWithMetadata = interpretation as InterpretationWithMetadata
-  const generationMode = interpretationWithMetadata.generation_mode ?? 'template'
-  const reviewerName = interpretationWithMetadata.reviewer_name?.trim() ?? ''
-  const reviewedAtFormatted = formatReviewedAt(
-    interpretationWithMetadata.reviewed_at,
-    i18n.resolvedLanguage ?? 'en',
-  )
+  const enriched = interpretation as InterpretationWithLegacyMetadata
+  const generationMode = resolveGenerationMode(enriched)
+  const { reviewerName, reviewedAt } = resolveReviewerInfo(enriched)
+  const reviewedAtFormatted = formatReviewedAt(reviewedAt, i18n.resolvedLanguage ?? 'en')
+
+  // Prompt §4.4: disclaimer is ALWAYS visible; generation_mode only switches
+  // the engine wording. No branching that hides the aside.
+  const disclaimerEngine =
+    generationMode === 'assisted'
+      ? t('scenarioLab.interpretation.aiAttribution.engineAssisted')
+      : generationMode === 'reviewed'
+        ? t('scenarioLab.interpretation.aiAttribution.engineReviewed')
+        : t('scenarioLab.interpretation.aiAttribution.engineTemplate')
 
   const shouldFallbackReviewedToAssisted = generationMode === 'reviewed' && reviewerName.length === 0
   if (shouldFallbackReviewedToAssisted) {
-    console.warn('ScenarioLab interpretation marked as reviewed without reviewer_name. Falling back to assisted.')
+    console.warn(
+      'ScenarioLab interpretation marked as reviewed without reviewer_name. Falling back to assisted copy.',
+    )
   }
 
-  const effectiveMode = shouldFallbackReviewedToAssisted ? 'assisted' : generationMode
+  const suggestedNext = interpretation.suggested_next ?? []
 
   return (
     <section
-      className="scenario-panel scenario-panel--interpretation"
+      className="scenario-panel scenario-panel--interpretation lab-panel"
       aria-labelledby="scenario-interpretation-title"
     >
       <div className="scenario-panel__head page-section-head">
@@ -84,33 +126,38 @@ export function InterpretationPanel({ interpretation }: InterpretationPanelProps
         title={t('scenarioLab.interpretation.sections.policyImplications')}
         items={interpretation.policy_implications}
       />
-      <InterpretationSection
-        title={t('scenarioLab.interpretation.sections.suggestedNextScenarios')}
-        items={interpretation.suggested_next_scenarios}
-      />
 
-      {effectiveMode === 'assisted' ? (
-        <aside className="ai-attribution" aria-live="polite">
-          <strong>{t('scenarioLab.interpretation.aiAttribution.assisted.title')}</strong>
-          <p>{t('scenarioLab.interpretation.aiAttribution.assisted.body')}</p>
-        </aside>
+      {suggestedNext.length > 0 ? (
+        <section className="scenario-suggested-next interpretation-section">
+          <h4>{t('scenarioLab.interpretation.sections.suggestedNextScenarios')}</h4>
+          <ul>
+            {suggestedNext.map((scenario) => (
+              <SuggestedNextLink
+                key={`${scenario.target_route}:${scenario.target_preset ?? scenario.label}`}
+                scenario={scenario}
+              />
+            ))}
+          </ul>
+        </section>
+      ) : interpretation.suggested_next_scenarios.length > 0 ? (
+        <InterpretationSection
+          title={t('scenarioLab.interpretation.sections.suggestedNextScenarios')}
+          items={interpretation.suggested_next_scenarios}
+        />
       ) : null}
 
-      {effectiveMode === 'reviewed' ? (
-        <aside className="ai-attribution ai-attribution--reviewed" aria-live="polite">
-          <strong>
-            {t('scenarioLab.interpretation.aiAttribution.reviewed.title', {
-              reviewed_at: reviewedAtFormatted || interpretationWithMetadata.reviewed_at || '',
-            })}
-          </strong>
-          <p>
-            {t('scenarioLab.interpretation.aiAttribution.reviewed.body', {
+      <aside className="ai-attribution" aria-live="polite">
+        <strong>{t('scenarioLab.interpretation.aiAttribution.title')}</strong>
+        <p>{t('scenarioLab.interpretation.aiAttribution.body', { engine: disclaimerEngine })}</p>
+        {generationMode === 'reviewed' && reviewerName.length > 0 ? (
+          <p className="ai-attribution__reviewer">
+            {t('scenarioLab.interpretation.aiAttribution.reviewedMeta', {
               reviewer_name: reviewerName,
-              review_date: reviewedAtFormatted || interpretationWithMetadata.reviewed_at || '',
+              review_date: reviewedAtFormatted || reviewedAt || '',
             })}
           </p>
-        </aside>
-      ) : null}
+        ) : null}
+      </aside>
     </section>
   )
 }
