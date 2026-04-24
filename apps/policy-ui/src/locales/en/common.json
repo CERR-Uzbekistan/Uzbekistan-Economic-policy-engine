@@ -33,7 +33,7 @@
     },
     "modelExplorer": {
       "title": "Model Explorer",
-      "description": "Basic model catalog and technical reference for assumptions, equations, caveats, and sources.",
+      "description": "Inspect the mechanics behind every output. Honest about what each model does — and does not — do.",
       "catalogTitle": "Model catalog",
       "catalogHint": "Select one model to inspect technical assumptions and caveats.",
       "emptyState": "No model metadata is available in this workspace.",
@@ -388,6 +388,56 @@
         "reviewedBy": "reviewed by {{reviewer}}",
         "readTime": "{{minutes}} min read"
       }
+    }
+  },
+  "modelExplorer": {
+    "header": {
+      "eyebrow": "Methodology · Parameters · Caveats",
+      "meta": {
+        "modelsLabel": "Models",
+        "modelsLive": "{{count}} live",
+        "lastAuditLabel": "Last calibration audit",
+        "openIssuesLabel": "Open methodology issues"
+      }
+    },
+    "tabs": {
+      "aria": "Model detail tabs",
+      "overview": "Overview",
+      "equations": "Equations",
+      "parameters": "Parameters",
+      "dataSources": "Data sources",
+      "caveats": "Caveats"
+    },
+    "purpose": {
+      "title": "Purpose"
+    },
+    "equations": {
+      "title": "Core equations",
+      "smePendingChip": "SME content pending",
+      "smePendingAria": "Equation rendering — SME content pending"
+    },
+    "parameters": {
+      "title": "Key parameters",
+      "symbol": "Symbol",
+      "name": "Name",
+      "value": "Value",
+      "range": "Range",
+      "empty": "No parameters are documented for this model."
+    },
+    "caveats": {
+      "title": "Caveats",
+      "empty": "No caveats are documented for this model.",
+      "trackedPrefix": "Tracked as issue",
+      "target": "Target {{version}}."
+    },
+    "dataSources": {
+      "title": "Data sources",
+      "empty": "No data sources are documented for this model."
+    },
+    "validation": {
+      "title": "Validation summary",
+      "smePendingChip": "SME content pending",
+      "smePendingAria": "Validation summary — SME content pending"
     }
   },
   "states": {

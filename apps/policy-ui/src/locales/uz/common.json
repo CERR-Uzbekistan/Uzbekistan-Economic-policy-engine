@@ -390,6 +390,56 @@
       }
     }
   },
+  "modelExplorer": {
+    "header": {
+      "eyebrow": "Metodologiya · Parametrlar · Eslatmalar",
+      "meta": {
+        "modelsLabel": "Modellar",
+        "modelsLive": "{{count}} faol",
+        "lastAuditLabel": "Oxirgi kalibrlash auditi",
+        "openIssuesLabel": "Ochiq metodologik masalalar"
+      }
+    },
+    "tabs": {
+      "aria": "Model tafsilotlari yorliqlari",
+      "overview": "Umumiy",
+      "equations": "Tenglamalar",
+      "parameters": "Parametrlar",
+      "dataSources": "Manbalar",
+      "caveats": "Eslatmalar"
+    },
+    "purpose": {
+      "title": "Maqsad"
+    },
+    "equations": {
+      "title": "Asosiy tenglamalar",
+      "smePendingChip": "SME kontenti kutilmoqda",
+      "smePendingAria": "Tenglama rendering — SME kontenti kutilmoqda"
+    },
+    "parameters": {
+      "title": "Asosiy parametrlar",
+      "symbol": "Belgi",
+      "name": "Nomi",
+      "value": "Qiymat",
+      "range": "Diapazon",
+      "empty": "Bu model uchun parametrlar hujjatlashtirilmagan."
+    },
+    "caveats": {
+      "title": "Eslatmalar",
+      "empty": "Bu model uchun eslatmalar hujjatlashtirilmagan.",
+      "trackedPrefix": "Masala sifatida kuzatilmoqda",
+      "target": "Maqsad {{version}}."
+    },
+    "dataSources": {
+      "title": "Ma'lumot manbalari",
+      "empty": "Bu model uchun manbalar hujjatlashtirilmagan."
+    },
+    "validation": {
+      "title": "Validatsiya xulosasi",
+      "smePendingChip": "SME kontenti kutilmoqda",
+      "smePendingAria": "Validatsiya xulosasi — SME kontenti kutilmoqda"
+    }
+  },
   "states": {
     "loading": {
       "overview": "So'nggi sharh holati yuklanmoqda...",
