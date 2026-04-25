@@ -3,7 +3,12 @@ import { readFileSync } from 'node:fs'
 import { describe, it } from 'node:test'
 import { fileURLToPath } from 'node:url'
 import { toIoAdapterOutput } from '../../../src/data/bridge/io-adapter.js'
-import { fetchIoBridgePayload, IoTransportError, IoValidationError } from '../../../src/data/bridge/io-client.js'
+import {
+  fetchIoBridgePayload,
+  IoTransportError,
+  IoValidationError,
+  resolveIoDefaultDataUrl,
+} from '../../../src/data/bridge/io-client.js'
 import { validateIoBridgePayload } from '../../../src/data/bridge/io-guard.js'
 import type { IoBridgePayload } from '../../../src/data/bridge/io-types.js'
 
@@ -63,6 +68,14 @@ describe('io bridge public artifact', () => {
 })
 
 describe('io bridge client', () => {
+  it('resolves the default public artifact URL against the Vite base path', () => {
+    assert.equal(resolveIoDefaultDataUrl(undefined), '/data/io.json')
+    assert.equal(
+      resolveIoDefaultDataUrl('/Uzbekistan-Economic-policy-engine/policy-ui/'),
+      '/Uzbekistan-Economic-policy-engine/policy-ui/data/io.json',
+    )
+  })
+
   it('fetches and validates IO bridge payload through the shared bridge fetch helper', async () => {
     const payload = loadPublicIoPayload()
     const fetched = await fetchIoBridgePayload(() =>
