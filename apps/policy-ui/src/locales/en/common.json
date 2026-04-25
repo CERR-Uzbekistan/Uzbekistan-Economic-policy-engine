@@ -194,6 +194,117 @@
         }
       }
     },
+    "modelTabs": {
+      "title": "Analysis tabs",
+      "description": "Run model-native scenarios in one workspace while preserving each model's output boundary.",
+      "tabsAria": "Scenario Lab model tabs",
+      "macroQpm": "Macro / QPM",
+      "ioSectorShock": "I-O Sector Shock",
+      "savedRuns": "Saved Runs",
+      "synthesisPreview": "Synthesis Preview",
+      "status": {
+        "active": "Active",
+        "next": "Next",
+        "shell": "Shell",
+        "planned": "Planned"
+      }
+    },
+    "modelTabShell": {
+      "eyebrow": "Model tab",
+      "io": {
+        "title": "I-O Sector Shock",
+        "description": "This tab will host final-demand sector transmission analysis using the MCP-aligned I-O analytics contract.",
+        "items": {
+          "inputs": "Inputs: demand bucket, amount in billion UZS, distribution mode, and optional sector selector.",
+          "outputs": "Outputs: output, value-added, employment effects, top affected sectors, and linkage classes.",
+          "boundary": "Boundary: sector transmission evidence only; not a macro forecast or general-equilibrium result."
+        }
+      },
+      "saved": {
+        "title": "Saved Runs",
+        "description": "{{count}} saved run(s) are available in this browser session.",
+        "items": {
+          "macro": "QPM macro runs keep their existing saved scenario shape.",
+          "io": "I-O runs will be saved as sector-shock outputs after the analytics MVP is implemented.",
+          "compare": "Comparison will read saved outputs and render each model type in its own block."
+        }
+      },
+      "synthesis": {
+        "title": "Synthesis Preview",
+        "description": "Cross-model reconciliation stays planned until single-model contracts are ready.",
+        "items": {
+          "chain": "Target chain: PE trade shock -> I-O sector propagation -> CGE reallocation -> FPP fiscal path.",
+          "layers": "QPM and DFM enter as macro consistency and nowcast layers.",
+          "reconciliation": "The synthesis surface will show disagreements, confidence flags, and unresolved assumptions."
+        }
+      }
+    },
+    "ioShock": {
+      "title": "I-O Sector Shock",
+      "description": "Run a final-demand shock through the validated I-O bridge and inspect sector output and value-added transmission.",
+      "loading": "Loading I-O analytics data...",
+      "unavailable": "I-O analytics data is unavailable. Existing Scenario Lab behavior is unchanged.",
+      "controlsAria": "I-O sector shock controls",
+      "demandBucket": "Demand shock type",
+      "amount": "Shock amount",
+      "currency": "Currency",
+      "exchangeRate": "FX assumption, UZS/USD",
+      "distribution": "Distribution",
+      "sector": "Sector",
+      "boundary": "Sector transmission only. Value-added is an I-O accounting contribution to GDP, not a macro forecast, QPM scenario effect, or general-equilibrium result.",
+      "topSectors": "Top affected sectors",
+      "caveats": "Source caveats",
+      "saveRun": "Save I-O run",
+      "savedTitle": "I-O {{bucket}} shock · {{amount}} {{currency}}",
+      "savedDescription": "Saved I-O sector shock run for sector transmission analysis.",
+      "convertedShock": "Converted demand shock: {{amount}} bln UZS",
+      "buckets": {
+        "consumption": "Consumption",
+        "government": "Government",
+        "investment": "Investment",
+        "export": "Export"
+      },
+      "distributions": {
+        "output": "By output shares",
+        "gva": "By GVA shares",
+        "equal": "Equal across sectors",
+        "sector": "Single sector"
+      },
+      "currencies": {
+        "bln_uzs": "Billion UZS",
+        "mln_usd": "Million USD"
+      },
+      "kpis": {
+        "output": "Output effect",
+        "valueAdded": "Value-added effect",
+        "gdpContribution": "GDP accounting contribution",
+        "employment": "Employment effect",
+        "multiplier": "Output multiplier"
+      },
+      "table": {
+        "sector": "Sector",
+        "output": "Output, bln UZS",
+        "valueAdded": "VA, bln UZS",
+        "employment": "Employment",
+        "linkage": "Linkage"
+      }
+    },
+    "savedRuns": {
+      "title": "Saved Runs",
+      "description": "{{count}} saved run(s) are available in this browser session.",
+      "empty": "Saved macro and I-O runs will appear here after you save them.",
+      "ioBoundary": "Sector transmission evidence only; this is not a macro forecast or general-equilibrium result.",
+      "macroFallback": "Saved QPM macro scenario.",
+      "type": {
+        "io": "I-O sector shock",
+        "macro": "Macro/QPM"
+      },
+      "fields": {
+        "type": "Type",
+        "data": "Data",
+        "saved": "Saved"
+      }
+    },
     "form": {
       "preset": "Preset",
       "scenarioName": "Scenario name",
@@ -301,6 +412,25 @@
       "lowestTitle": "Numerically lowest",
       "footnote": "★ indicates numerically lowest or highest value. Policy judgment is separate and not encoded."
     },
+    "ioEvidence": {
+      "title": "I-O sector evidence",
+      "status": "Validated",
+      "note": "This panel describes structural sector transmission evidence from the I-O bridge. It is not a macro forecast, scenario delta, or causal effect of the scenarios above.",
+      "sourceArtifact": "Source artifact",
+      "dataVintage": "Data vintage",
+      "exportedAt": "Exported",
+      "sectorCount": "Sectors",
+      "framework": "Framework",
+      "units": "Units",
+      "linkageCounts": "Linkage classes",
+      "caveats": "Bridge caveats",
+      "linkageClass": {
+        "key": "Key",
+        "backward": "Backward-only",
+        "forward": "Forward-only",
+        "weak": "Weak"
+      }
+    },
     "selector": {
       "inView": "In view",
       "addSaved": "+ Add saved scenario",
@@ -329,6 +459,19 @@
     "savedModal": {
       "title": "Add saved scenario",
       "addSelected": "Add selected"
+    },
+    "savedIo": {
+      "title": "Saved I-O sector shock runs",
+      "description": "These saved runs are shown as sector transmission analytics. They do not change the macro comparison rows above.",
+      "type": "I-O run",
+      "topSectors": "Top sectors",
+      "boundary": "Boundary: value-added is an I-O accounting contribution, not a causal macro scenario delta.",
+      "metrics": {
+        "output": "Output",
+        "valueAdded": "Value added",
+        "gdpAccounting": "GDP accounting",
+        "employment": "Employment"
+      }
     },
     "chart": {
       "title": "Comparative charts",

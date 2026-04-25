@@ -284,6 +284,24 @@ export type ComparisonContent = {
   tradeoff: TradeoffSummary
 }
 
+export type ComparisonSectorEvidenceLinkageClass = 'key' | 'backward' | 'forward' | 'weak'
+
+export type ComparisonSectorEvidenceLinkageCount = {
+  classification: ComparisonSectorEvidenceLinkageClass
+  value: number
+}
+
+export type ComparisonSectorEvidence = {
+  source_artifact: string
+  data_vintage: string
+  exported_at: string
+  sector_count: number
+  framework: string
+  units: string
+  linkage_counts: ComparisonSectorEvidenceLinkageCount[]
+  caveats: string[]
+}
+
 // `ModelExplorerTabId` is extended additively in Shot-1: the new 5-tab strip uses
 // 'overview' | 'equations' | 'parameters' | 'caveats' | 'data_sources'. The legacy
 // 'assumptions' value is retained for back-compat with the existing catalog code path.
@@ -520,6 +538,65 @@ export type ScenarioLabWorkspace = {
   generated_at: string
   assumptions: ScenarioLabAssumptionInput[]
   presets: ScenarioLabPreset[]
+}
+
+export type ScenarioLabIoDemandBucket = 'consumption' | 'government' | 'investment' | 'export'
+export type ScenarioLabIoDistributionMode = 'output' | 'gva' | 'equal' | 'sector'
+export type ScenarioLabIoShockCurrency = 'bln_uzs' | 'mln_usd'
+
+export type ScenarioLabIoSectorOption = {
+  code: string
+  name: string
+}
+
+export type ScenarioLabIoAnalyticsWorkspace = {
+  source_artifact: string
+  data_vintage: string
+  exported_at: string
+  framework: string
+  units: string
+  base_year: number
+  sector_count: number
+  sectors: ScenarioLabIoSectorOption[]
+  caveats: string[]
+}
+
+export type ScenarioLabIoShockRequest = {
+  demand_bucket: ScenarioLabIoDemandBucket
+  amount: number
+  currency: ScenarioLabIoShockCurrency
+  exchange_rate_uzs_per_usd?: number
+  distribution: ScenarioLabIoDistributionMode
+  sector_code?: string
+}
+
+export type ScenarioLabIoSectorEffect = {
+  sector_code: string
+  sector_name: string
+  output_effect_bln_uzs: number
+  value_added_effect_bln_uzs: number
+  output_multiplier: number
+  value_added_multiplier: number
+  backward_linkage: number
+  forward_linkage: number
+  linkage_classification: ComparisonSectorEvidenceLinkageClass
+  employment_effect_persons: number | null
+}
+
+export type ScenarioLabIoShockResult = {
+  request: ScenarioLabIoShockRequest
+  totals: {
+    input_shock: number
+    input_currency: ScenarioLabIoShockCurrency
+    demand_shock_bln_uzs: number
+    output_effect_bln_uzs: number
+    value_added_effect_bln_uzs: number
+    gdp_accounting_contribution_bln_uzs: number
+    employment_effect_persons: number | null
+    aggregate_output_multiplier: number | null
+  }
+  top_sectors: ScenarioLabIoSectorEffect[]
+  caveats: string[]
 }
 
 export type ScenarioResult = {

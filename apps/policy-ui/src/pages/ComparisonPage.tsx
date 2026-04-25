@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { AddSavedScenarioModal } from '../components/comparison/AddSavedScenarioModal'
 import { ComparisonSelector } from '../components/comparison/ComparisonSelector'
 import { DeltaTable } from '../components/comparison/DeltaTable'
+import { SavedIoSectorRunsPanel } from '../components/comparison/SavedIoSectorRunsPanel'
 import { ScenarioSummaryCards } from '../components/comparison/ScenarioSummaryCards'
+import { SectorEvidencePanel } from '../components/comparison/SectorEvidencePanel'
 import { TradeoffSummaryPanel } from '../components/comparison/TradeoffSummaryPanel'
 import { PageContainer } from '../components/layout/PageContainer'
 import { PageHeader } from '../components/layout/PageHeader'
@@ -19,7 +21,7 @@ import {
   COMPARISON_SLOT_LIMIT,
   mergeSavedScenariosIntoWorkspace,
 } from '../state/comparisonSavedScenarios'
-import { listScenarios, subscribeScenarioStore } from '../state/scenarioStore'
+import { isIoSectorShockRecord, listScenarios, subscribeScenarioStore } from '../state/scenarioStore'
 import './comparison.css'
 
 const EMPTY_SAVED_SCENARIOS: [] = []
@@ -79,6 +81,11 @@ export function ComparisonPage() {
     return composeComparisonContent(workspace, selectedIds, baselineId)
   }, [workspace, selectedIds, baselineId])
 
+  const selectedSavedIoRecords = useMemo(() => {
+    const addedIds = new Set(addedSavedScenarioIds)
+    return savedScenarios.filter((scenario) => addedIds.has(scenario.scenario_id) && isIoSectorShockRecord(scenario))
+  }, [addedSavedScenarioIds, savedScenarios])
+
   async function handleRetry() {
     setSourceState((prev) => beginRetry(prev))
     const nextState = await loadComparisonSourceState()
@@ -135,15 +142,20 @@ export function ComparisonPage() {
     if (scenarioIds.length === 0) {
       return
     }
+    const macroScenarioIds = savedScenarios
+      .filter((scenario) => scenarioIds.includes(scenario.scenario_id) && !isIoSectorShockRecord(scenario))
+      .map((scenario) => scenario.scenario_id)
     setAddedSavedScenarioIds((current) => Array.from(new Set([...current, ...scenarioIds])))
-    setSelectedIdsOverride(
-      addSavedScenarioIdsToSelection({
-        currentSelectedIds: selectedIds,
-        baselineId,
-        savedScenarioIds: scenarioIds,
-        slotLimit: COMPARISON_SLOT_LIMIT,
-      }),
-    )
+    if (macroScenarioIds.length > 0) {
+      setSelectedIdsOverride(
+        addSavedScenarioIdsToSelection({
+          currentSelectedIds: selectedIds,
+          baselineId,
+          savedScenarioIds: macroScenarioIds,
+          slotLimit: COMPARISON_SLOT_LIMIT,
+        }),
+      )
+    }
     setBaselineIdOverride(baselineId)
   }
 
@@ -206,7 +218,7 @@ export function ComparisonPage() {
       <AddSavedScenarioModal
         isOpen={isSavedScenarioModalOpen}
         savedScenarios={savedScenarios}
-        activeScenarioIds={selectedIds}
+        activeScenarioIds={Array.from(new Set([...selectedIds, ...addedSavedScenarioIds]))}
         maxSelectable={COMPARISON_SLOT_LIMIT - 1}
         onClose={() => setIsSavedScenarioModalOpen(false)}
         onAddSelected={handleAddSelectedSavedScenarios}
@@ -214,11 +226,16 @@ export function ComparisonPage() {
 
       <ScenarioSummaryCards scenarios={content.scenarios} metrics={content.metrics} />
 
-      <DeltaTable
-        scenarios={content.scenarios}
-        metrics={content.metrics}
-        baselineScenarioId={content.baseline_scenario_id}
-      />
+      <div className="cmp-evidence-layout">
+        <DeltaTable
+          scenarios={content.scenarios}
+          metrics={content.metrics}
+          baselineScenarioId={content.baseline_scenario_id}
+        />
+        <SectorEvidencePanel evidence={sourceState.ioSectorEvidence} />
+      </div>
+
+      <SavedIoSectorRunsPanel records={selectedSavedIoRecords} />
 
       <TradeoffSummaryPanel tradeoff={content.tradeoff} scenarios={content.scenarios} />
     </PageContainer>

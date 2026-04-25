@@ -194,6 +194,117 @@
         }
       }
     },
+    "modelTabs": {
+      "title": "Tahlil tablari",
+      "description": "Har bir modelning natija chegarasini saqlagan holda modelga xos stsenariylarni bitta ish maydonida ishlating.",
+      "tabsAria": "Stsenariy simulyatori model tablari",
+      "macroQpm": "Makro / QPM",
+      "ioSectorShock": "I-O sektor shoki",
+      "savedRuns": "Saqlangan ishlar",
+      "synthesisPreview": "Sintez preview",
+      "status": {
+        "active": "Faol",
+        "next": "Keyingi",
+        "shell": "Karkas",
+        "planned": "Rejada"
+      }
+    },
+    "modelTabShell": {
+      "eyebrow": "Model tabi",
+      "io": {
+        "title": "I-O sektor shoki",
+        "description": "Bu tab MCP bilan mos I-O analytics contract asosida yakuniy talabning sektorlar bo'ylab uzatilishini tahlil qiladi.",
+        "items": {
+          "inputs": "Kirishlar: talab turi, mlrd so'mdagi miqdor, taqsimlash rejimi va ixtiyoriy sektor tanlovi.",
+          "outputs": "Chiqishlar: ishlab chiqarish, qo'shilgan qiymat, bandlik ta'sirlari, eng ko'p ta'sirlangan sektorlar va linkage klasslari.",
+          "boundary": "Chegara: faqat sektor uzatish dalili; makroprognoz yoki umumiy muvozanat natijasi emas."
+        }
+      },
+      "saved": {
+        "title": "Saqlangan ishlar",
+        "description": "Ushbu brauzer sessiyasida {{count}} ta saqlangan ish mavjud.",
+        "items": {
+          "macro": "QPM makro ishlari hozirgi saqlangan stsenariy formatini saqlaydi.",
+          "io": "I-O ishlari analytics MVP tugagandan keyin sektor-shock natijalari sifatida saqlanadi.",
+          "compare": "Comparison saqlangan natijalarni o'qib, har bir model turini alohida blokda ko'rsatadi."
+        }
+      },
+      "synthesis": {
+        "title": "Sintez preview",
+        "description": "Model kontraktlari tayyor bo'lmaguncha kross-model muvofiqlashtirish reja holatida qoladi.",
+        "items": {
+          "chain": "Maqsadli zanjir: PE savdo shoki -> I-O sektor uzatishi -> CGE qayta taqsimlash -> FPP fiskal trayektoriya.",
+          "layers": "QPM va DFM makro moslik va nowcast qatlamlari sifatida ulanadi.",
+          "reconciliation": "Sintez farqlar, ishonch flaglari va yechilmagan taxminlarni ko'rsatadi."
+        }
+      }
+    },
+    "ioShock": {
+      "title": "I-O sektor shoki",
+      "description": "Yakuniy talab shokini validatsiyadan o'tgan I-O bridge orqali ishlating va sektor ishlab chiqarishi hamda qo'shilgan qiymat uzatilishini ko'ring.",
+      "loading": "I-O analytics ma'lumotlari yuklanmoqda...",
+      "unavailable": "I-O analytics ma'lumotlari mavjud emas. Scenario Lab'ning mavjud ishlashi o'zgarmaydi.",
+      "controlsAria": "I-O sektor shoki boshqaruvlari",
+      "demandBucket": "Talab shoki turi",
+      "amount": "Shok miqdori",
+      "currency": "Valyuta",
+      "exchangeRate": "FX taxmini, so'm/USD",
+      "distribution": "Taqsimlash",
+      "sector": "Sektor",
+      "boundary": "Faqat sektor uzatishi. Qo'shilgan qiymat I-O hisob-kitobidagi YaIM hissasi, lekin makroprognoz, QPM stsenariy effekti yoki umumiy muvozanat natijasi emas.",
+      "topSectors": "Eng ko'p ta'sirlangan sektorlar",
+      "caveats": "Manba cheklovlari",
+      "saveRun": "I-O ishini saqlash",
+      "savedTitle": "I-O {{bucket}} shoki · {{amount}} {{currency}}",
+      "savedDescription": "Sektor uzatish tahlili uchun saqlangan I-O sektor shoki.",
+      "convertedShock": "Konvertatsiya qilingan talab shoki: {{amount}} mlrd so'm",
+      "buckets": {
+        "consumption": "Iste'mol",
+        "government": "Davlat xarajatlari",
+        "investment": "Investitsiya",
+        "export": "Eksport"
+      },
+      "distributions": {
+        "output": "Ishlab chiqarish ulushi bo'yicha",
+        "gva": "QQ ulushi bo'yicha",
+        "equal": "Sektorlarga teng",
+        "sector": "Bitta sektor"
+      },
+      "currencies": {
+        "bln_uzs": "Mlrd so'm",
+        "mln_usd": "Mln USD"
+      },
+      "kpis": {
+        "output": "Ishlab chiqarish ta'siri",
+        "valueAdded": "Qo'shilgan qiymat ta'siri",
+        "gdpContribution": "YaIM hisob-kitob hissasi",
+        "employment": "Bandlik ta'siri",
+        "multiplier": "Ishlab chiqarish multiplikatori"
+      },
+      "table": {
+        "sector": "Sektor",
+        "output": "Ishlab chiqarish, mlrd so'm",
+        "valueAdded": "QQ, mlrd so'm",
+        "employment": "Bandlik",
+        "linkage": "Bog'lanish"
+      }
+    },
+    "savedRuns": {
+      "title": "Saqlangan ishlar",
+      "description": "Ushbu brauzer sessiyasida {{count}} ta saqlangan ish mavjud.",
+      "empty": "Saqlangan makro va I-O ishlari saqlagandan keyin shu yerda ko'rinadi.",
+      "ioBoundary": "Faqat sektor uzatish dalili; bu makroprognoz yoki umumiy muvozanat natijasi emas.",
+      "macroFallback": "Saqlangan QPM makro stsenariysi.",
+      "type": {
+        "io": "I-O sektor shoki",
+        "macro": "Makro/QPM"
+      },
+      "fields": {
+        "type": "Tur",
+        "data": "Ma'lumot",
+        "saved": "Saqlangan"
+      }
+    },
     "form": {
       "preset": "Andoza",
       "scenarioName": "Stsenariy nomi",
@@ -301,6 +412,25 @@
       "lowestTitle": "Raqamli eng past",
       "footnote": "★ raqamli eng past yoki eng yuqori qiymatni bildiradi. Siyosiy mulohaza alohida va kod ichida emas."
     },
+    "ioEvidence": {
+      "title": "I-O sektor dalillari",
+      "status": "Validatsiyadan o'tgan",
+      "note": "Bu panel I-O bridge orqali olingan strukturaviy sektor uzatish dalillarini tavsiflaydi. Bu makro prognoz, stsenariy deltasi yoki yuqoridagi stsenariylarning sababiy ta'siri emas.",
+      "sourceArtifact": "Manba artefakti",
+      "dataVintage": "Ma'lumot davri",
+      "exportedAt": "Eksport qilingan",
+      "sectorCount": "Sektorlar",
+      "framework": "Metod",
+      "units": "Birliklar",
+      "linkageCounts": "Bog'lanish sinflari",
+      "caveats": "Bridge cheklovlari",
+      "linkageClass": {
+        "key": "Asosiy",
+        "backward": "Faqat orqaga",
+        "forward": "Faqat oldinga",
+        "weak": "Zaif"
+      }
+    },
     "selector": {
       "inView": "Ko'rinishda",
       "addSaved": "+ Saqlangan stsenariy qo'shish",
@@ -329,6 +459,19 @@
     "savedModal": {
       "title": "Saqlangan stsenariy qo'shish",
       "addSelected": "Tanlanganni qo'shish"
+    },
+    "savedIo": {
+      "title": "Saqlangan I-O sektor shoklari",
+      "description": "Bu saqlangan ishlar sektor tahlili sifatida ko'rsatiladi. Ular yuqoridagi makro qiyoslash qatorlarini o'zgartirmaydi.",
+      "type": "I-O ishi",
+      "topSectors": "Top sektorlar",
+      "boundary": "Chegara: qo'shilgan qiymat I-O hisob-kitob hissasi, sababiy makro stsenariy deltasi emas.",
+      "metrics": {
+        "output": "Ishlab chiqarish",
+        "valueAdded": "Qo'shilgan qiymat",
+        "gdpAccounting": "YaIM hisobi",
+        "employment": "Bandlik"
+      }
     },
     "chart": {
       "title": "Qiyosiy grafiklar",

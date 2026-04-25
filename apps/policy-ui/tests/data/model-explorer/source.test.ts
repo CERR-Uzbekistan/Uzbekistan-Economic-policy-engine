@@ -61,7 +61,10 @@ describe('model explorer source live integration flow', () => {
     const ioEntry = readyState.workspace?.catalog_entries_by_model_id?.['io-model']
 
     assert.equal(readyState.status, 'ready')
-    assert.equal(ioEntry?.bridge_evidence?.source_artifact, 'io_model/io_data.json')
+    assert.equal(
+      ioEntry?.bridge_evidence?.source_artifact,
+      'io_model/io_data.json + mcp_server/data/io_data.json',
+    )
     assert.equal(ioEntry?.bridge_evidence?.sector_count, 136)
   })
 

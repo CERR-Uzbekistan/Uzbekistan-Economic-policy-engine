@@ -29,7 +29,10 @@
         "inventories": 4671621.77,
         "exports": 2906891.58,
         "total": 14959200.21
-      }
+      },
+      "employment_total": 343564,
+      "employment_formal": 46636,
+      "employment_informal": 296928
     },
     {
       "id": 1,
@@ -51,7 +54,10 @@
         "inventories": -2557151.29,
         "exports": 2699019.73,
         "total": 34703810.14
-      }
+      },
+      "employment_total": 582741,
+      "employment_formal": 79102,
+      "employment_informal": 503639
     },
     {
       "id": 2,
@@ -73,7 +79,10 @@
         "inventories": 4327094.84,
         "exports": 0,
         "total": 4327094.84
-      }
+      },
+      "employment_total": 249004,
+      "employment_formal": 33800,
+      "employment_informal": 215204
     },
     {
       "id": 3,
@@ -95,7 +104,10 @@
         "inventories": 3045.2,
         "exports": 2937617.66,
         "total": 6237429.61
-      }
+      },
+      "employment_total": 102956,
+      "employment_formal": 13975,
+      "employment_informal": 88981
     },
     {
       "id": 4,
@@ -117,7 +129,10 @@
         "inventories": 4930252.93,
         "exports": 2114867.99,
         "total": 91673480.9
-      }
+      },
+      "employment_total": 1554161,
+      "employment_formal": 210964,
+      "employment_informal": 1343197
     },
     {
       "id": 5,
@@ -139,7 +154,10 @@
         "inventories": 30563.88,
         "exports": 5660691.38,
         "total": 16267062.01
-      }
+      },
+      "employment_total": 489250,
+      "employment_formal": 66412,
+      "employment_informal": 422838
     },
     {
       "id": 6,
@@ -161,7 +179,10 @@
         "inventories": 158919.46,
         "exports": 119658.35,
         "total": 1465761.48
-      }
+      },
+      "employment_total": 54066,
+      "employment_formal": 7339,
+      "employment_informal": 46727
     },
     {
       "id": 7,
@@ -183,7 +204,10 @@
         "inventories": -135680.87,
         "exports": 1048.7,
         "total": 1930251.51
-      }
+      },
+      "employment_total": 62958,
+      "employment_formal": 8546,
+      "employment_informal": 54412
     },
     {
       "id": 8,
@@ -205,7 +229,10 @@
         "inventories": -1521809.32,
         "exports": 32953.77,
         "total": -759845.37
-      }
+      },
+      "employment_total": 6664,
+      "employment_formal": 6303,
+      "employment_informal": 361
     },
     {
       "id": 9,
@@ -227,7 +254,10 @@
         "inventories": 1887793.68,
         "exports": 0.54,
         "total": 1887794.21
-      }
+      },
+      "employment_total": 5072,
+      "employment_formal": 4797,
+      "employment_informal": 275
     },
     {
       "id": 10,
@@ -249,7 +279,10 @@
         "inventories": -3127793.49,
         "exports": 9740833.05,
         "total": 11276860.29
-      }
+      },
+      "employment_total": 22267,
+      "employment_formal": 21061,
+      "employment_informal": 1206
     },
     {
       "id": 11,
@@ -271,7 +304,10 @@
         "inventories": -264168.9,
         "exports": 64.36,
         "total": -264104.54
-      }
+      },
+      "employment_total": 2,
+      "employment_formal": 2,
+      "employment_informal": 0
     },
     {
       "id": 12,
@@ -293,7 +329,10 @@
         "inventories": 3660227.26,
         "exports": 235142.1,
         "total": 3895369.35
-      }
+      },
+      "employment_total": 7613,
+      "employment_formal": 7201,
+      "employment_informal": 412
     },
     {
       "id": 13,
@@ -315,7 +354,10 @@
         "inventories": -3198043.27,
         "exports": 195367.53,
         "total": -3002675.74
-      }
+      },
+      "employment_total": 12573,
+      "employment_formal": 11892,
+      "employment_informal": 681
     },
     {
       "id": 14,
@@ -337,7 +379,10 @@
         "inventories": 0,
         "exports": 43208.43,
         "total": 43208.43
-      }
+      },
+      "employment_total": 3308,
+      "employment_formal": 3129,
+      "employment_informal": 179
     },
     {
       "id": 15,
@@ -359,7 +404,10 @@
         "inventories": 1620459.76,
         "exports": 73336.41,
         "total": 23124835.77
-      }
+      },
+      "employment_total": 27546,
+      "employment_formal": 12360,
+      "employment_informal": 15186
     },
     {
       "id": 16,
@@ -381,7 +429,10 @@
         "inventories": -461514.12,
         "exports": 164789.8,
         "total": 189513.54
-      }
+      },
+      "employment_total": 1080,
+      "employment_formal": 484,
+      "employment_informal": 596
     },
     {
       "id": 17,
@@ -403,7 +454,10 @@
         "inventories": -1170173.14,
         "exports": 1680376.15,
         "total": 5490746.2
-      }
+      },
+      "employment_total": 17083,
+      "employment_formal": 7665,
+      "employment_informal": 9418
     },
     {
       "id": 18,
@@ -425,7 +479,10 @@
         "inventories": 1148274.71,
         "exports": 336291.66,
         "total": 11890720.91
-      }
+      },
+      "employment_total": 22884,
+      "employment_formal": 10267,
+      "employment_informal": 12617
     },
     {
       "id": 19,
@@ -447,7 +504,10 @@
         "inventories": -3102685.15,
         "exports": 22957.76,
         "total": 2451261.31
-      }
+      },
+      "employment_total": 15725,
+      "employment_formal": 7056,
+      "employment_informal": 8669
     },
     {
       "id": 20,
@@ -469,7 +529,10 @@
         "inventories": -2962583.06,
         "exports": 3399439.31,
         "total": 10384624.73
-      }
+      },
+      "employment_total": 41140,
+      "employment_formal": 18459,
+      "employment_informal": 22681
     },
     {
       "id": 21,
@@ -491,7 +554,10 @@
         "inventories": 4067.33,
         "exports": 170164.56,
         "total": 5430626.51
-      }
+      },
+      "employment_total": 20941,
+      "employment_formal": 9396,
+      "employment_informal": 11545
     },
     {
       "id": 22,
@@ -513,7 +579,10 @@
         "inventories": -2348839.78,
         "exports": 537954.09,
         "total": 3095757.44
-      }
+      },
+      "employment_total": 7427,
+      "employment_formal": 3332,
+      "employment_informal": 4095
     },
     {
       "id": 23,
@@ -535,7 +604,10 @@
         "inventories": 96323.03,
         "exports": 0,
         "total": 4183188.59
-      }
+      },
+      "employment_total": 15895,
+      "employment_formal": 7132,
+      "employment_informal": 8763
     },
     {
       "id": 24,
@@ -557,7 +629,10 @@
         "inventories": -559702.55,
         "exports": 395842.18,
         "total": 487476.58
-      }
+      },
+      "employment_total": 10024,
+      "employment_formal": 4498,
+      "employment_informal": 5526
     },
     {
       "id": 25,
@@ -579,7 +654,10 @@
         "inventories": 1274095.19,
         "exports": 449811.8,
         "total": 16663315.56
-      }
+      },
+      "employment_total": 33846,
+      "employment_formal": 15186,
+      "employment_informal": 18660
     },
     {
       "id": 26,
@@ -601,7 +679,10 @@
         "inventories": -1296756.26,
         "exports": 570679.23,
         "total": 2990869.85
-      }
+      },
+      "employment_total": 2133,
+      "employment_formal": 957,
+      "employment_informal": 1176
     },
     {
       "id": 27,
@@ -623,7 +704,10 @@
         "inventories": 10215501.32,
         "exports": 24447987.58,
         "total": 34740713.78
-      }
+      },
+      "employment_total": 220250,
+      "employment_formal": 98822,
+      "employment_informal": 121428
     },
     {
       "id": 28,
@@ -645,7 +729,10 @@
         "inventories": -1171987.63,
         "exports": 2259759.83,
         "total": 1430417.83
-      }
+      },
+      "employment_total": 19851,
+      "employment_formal": 8907,
+      "employment_informal": 10944
     },
     {
       "id": 29,
@@ -667,7 +754,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 0
-      }
+      },
+      "employment_total": 1436,
+      "employment_formal": 645,
+      "employment_informal": 791
     },
     {
       "id": 30,
@@ -689,7 +779,10 @@
         "inventories": -822694.29,
         "exports": 5504175.93,
         "total": 7606619.65
-      }
+      },
+      "employment_total": 74976,
+      "employment_formal": 33641,
+      "employment_informal": 41335
     },
     {
       "id": 31,
@@ -711,7 +804,10 @@
         "inventories": -1678659.54,
         "exports": 9709119.11,
         "total": 19721827.79
-      }
+      },
+      "employment_total": 164114,
+      "employment_formal": 73635,
+      "employment_informal": 90479
     },
     {
       "id": 32,
@@ -733,7 +829,10 @@
         "inventories": -1857914.13,
         "exports": 962192.96,
         "total": 2024488.37
-      }
+      },
+      "employment_total": 19762,
+      "employment_formal": 8867,
+      "employment_informal": 10895
     },
     {
       "id": 33,
@@ -755,7 +854,10 @@
         "inventories": 513939.58,
         "exports": 166250.74,
         "total": 1357779.57
-      }
+      },
+      "employment_total": 11084,
+      "employment_formal": 4973,
+      "employment_informal": 6111
     },
     {
       "id": 34,
@@ -777,7 +879,10 @@
         "inventories": -1258732.85,
         "exports": 1366620.98,
         "total": 3865946.74
-      }
+      },
+      "employment_total": 25207,
+      "employment_formal": 11310,
+      "employment_informal": 13897
     },
     {
       "id": 35,
@@ -799,7 +904,10 @@
         "inventories": 853954.4,
         "exports": 90378.37,
         "total": 1052412.67
-      }
+      },
+      "employment_total": 14237,
+      "employment_formal": 6388,
+      "employment_informal": 7849
     },
     {
       "id": 36,
@@ -821,7 +929,10 @@
         "inventories": 52621.16,
         "exports": 0,
         "total": 52621.16
-      }
+      },
+      "employment_total": 0,
+      "employment_formal": 0,
+      "employment_informal": 0
     },
     {
       "id": 37,
@@ -843,7 +954,10 @@
         "inventories": -422823.8,
         "exports": 1878152.06,
         "total": 8782911.05
-      }
+      },
+      "employment_total": 22682,
+      "employment_formal": 10177,
+      "employment_informal": 12505
     },
     {
       "id": 38,
@@ -865,7 +979,10 @@
         "inventories": -1717030.66,
         "exports": 4477557.9,
         "total": 2762955.7
-      }
+      },
+      "employment_total": 17131,
+      "employment_formal": 7686,
+      "employment_informal": 9445
     },
     {
       "id": 39,
@@ -887,7 +1004,10 @@
         "inventories": 4178949.61,
         "exports": 4150527,
         "total": 8979556.74
-      }
+      },
+      "employment_total": 42595,
+      "employment_formal": 19112,
+      "employment_informal": 23483
     },
     {
       "id": 40,
@@ -909,7 +1029,10 @@
         "inventories": 6873870.3,
         "exports": 4279779.49,
         "total": 11153649.8
-      }
+      },
+      "employment_total": 28813,
+      "employment_formal": 12928,
+      "employment_informal": 15885
     },
     {
       "id": 41,
@@ -931,7 +1054,10 @@
         "inventories": -679692.94,
         "exports": 70321.43,
         "total": -437090.1
-      }
+      },
+      "employment_total": 1143,
+      "employment_formal": 513,
+      "employment_informal": 630
     },
     {
       "id": 42,
@@ -953,7 +1079,10 @@
         "inventories": -417153.01,
         "exports": 105002.73,
         "total": 104218.33
-      }
+      },
+      "employment_total": 6083,
+      "employment_formal": 2729,
+      "employment_informal": 3354
     },
     {
       "id": 43,
@@ -975,7 +1104,10 @@
         "inventories": 4127783.89,
         "exports": 161645.26,
         "total": 9278913.79
-      }
+      },
+      "employment_total": 5441,
+      "employment_formal": 2441,
+      "employment_informal": 3000
     },
     {
       "id": 44,
@@ -997,7 +1129,10 @@
         "inventories": -1897911.36,
         "exports": 364838.62,
         "total": -1317602.43
-      }
+      },
+      "employment_total": 4195,
+      "employment_formal": 1882,
+      "employment_informal": 2313
     },
     {
       "id": 45,
@@ -1019,7 +1154,10 @@
         "inventories": 394510.48,
         "exports": 472035.81,
         "total": 866546.28
-      }
+      },
+      "employment_total": 2044,
+      "employment_formal": 917,
+      "employment_informal": 1127
     },
     {
       "id": 46,
@@ -1041,7 +1179,10 @@
         "inventories": -3908588.86,
         "exports": 481270.14,
         "total": 10983220.93
-      }
+      },
+      "employment_total": 21623,
+      "employment_formal": 9702,
+      "employment_informal": 11921
     },
     {
       "id": 47,
@@ -1063,7 +1204,10 @@
         "inventories": -1437012.15,
         "exports": 122645.4,
         "total": -88936.38
-      }
+      },
+      "employment_total": 3548,
+      "employment_formal": 1592,
+      "employment_informal": 1956
     },
     {
       "id": 48,
@@ -1085,7 +1229,10 @@
         "inventories": 1912922.57,
         "exports": 586121.71,
         "total": 2604168.6
-      }
+      },
+      "employment_total": 19577,
+      "employment_formal": 8784,
+      "employment_informal": 10793
     },
     {
       "id": 49,
@@ -1107,7 +1254,10 @@
         "inventories": -711116.89,
         "exports": 117114.76,
         "total": 896289.27
-      }
+      },
+      "employment_total": 10907,
+      "employment_formal": 4894,
+      "employment_informal": 6013
     },
     {
       "id": 50,
@@ -1129,7 +1279,10 @@
         "inventories": -825589.14,
         "exports": 251041.41,
         "total": -494958.92
-      }
+      },
+      "employment_total": 8394,
+      "employment_formal": 3766,
+      "employment_informal": 4628
     },
     {
       "id": 51,
@@ -1151,7 +1304,10 @@
         "inventories": -475362.33,
         "exports": 108506.93,
         "total": -188986.52
-      }
+      },
+      "employment_total": 3514,
+      "employment_formal": 1576,
+      "employment_informal": 1938
     },
     {
       "id": 52,
@@ -1173,7 +1329,10 @@
         "inventories": -42810.44,
         "exports": 360481.43,
         "total": 881589.41
-      }
+      },
+      "employment_total": 13995,
+      "employment_formal": 6279,
+      "employment_informal": 7716
     },
     {
       "id": 53,
@@ -1195,7 +1354,10 @@
         "inventories": -1450048.26,
         "exports": 7363.8,
         "total": -1442684.46
-      }
+      },
+      "employment_total": 1788,
+      "employment_formal": 802,
+      "employment_informal": 986
     },
     {
       "id": 54,
@@ -1217,7 +1379,10 @@
         "inventories": -1290879.57,
         "exports": 892256.98,
         "total": 90639.04
-      }
+      },
+      "employment_total": 10500,
+      "employment_formal": 4711,
+      "employment_informal": 5789
     },
     {
       "id": 55,
@@ -1239,7 +1404,10 @@
         "inventories": -805239.67,
         "exports": 147607.59,
         "total": -94176.67
-      }
+      },
+      "employment_total": 1900,
+      "employment_formal": 852,
+      "employment_informal": 1048
     },
     {
       "id": 56,
@@ -1261,7 +1429,10 @@
         "inventories": -4282050.04,
         "exports": 128587.91,
         "total": -3600778.4
-      }
+      },
+      "employment_total": 49674,
+      "employment_formal": 22288,
+      "employment_informal": 27386
     },
     {
       "id": 57,
@@ -1283,7 +1454,10 @@
         "inventories": -5834730.46,
         "exports": 190630.13,
         "total": -5520605.97
-      }
+      },
+      "employment_total": 52633,
+      "employment_formal": 23616,
+      "employment_informal": 29017
     },
     {
       "id": 58,
@@ -1305,7 +1479,10 @@
         "inventories": -636774.73,
         "exports": 120645.38,
         "total": -462820.84
-      }
+      },
+      "employment_total": 2503,
+      "employment_formal": 1123,
+      "employment_informal": 1380
     },
     {
       "id": 59,
@@ -1327,7 +1504,10 @@
         "inventories": -1388835.68,
         "exports": 51826.08,
         "total": -1337009.6
-      }
+      },
+      "employment_total": 14479,
+      "employment_formal": 6497,
+      "employment_informal": 7982
     },
     {
       "id": 60,
@@ -1349,7 +1529,10 @@
         "inventories": -2328626.58,
         "exports": 15111529.97,
         "total": 12782903.39
-      }
+      },
+      "employment_total": 27888,
+      "employment_formal": 12513,
+      "employment_informal": 15375
     },
     {
       "id": 61,
@@ -1371,7 +1554,10 @@
         "inventories": -847599.03,
         "exports": 31183.3,
         "total": -765733.92
-      }
+      },
+      "employment_total": 7900,
+      "employment_formal": 3545,
+      "employment_informal": 4355
     },
     {
       "id": 62,
@@ -1393,7 +1579,10 @@
         "inventories": -910954.23,
         "exports": 116469.14,
         "total": -794485.09
-      }
+      },
+      "employment_total": 5933,
+      "employment_formal": 2662,
+      "employment_informal": 3271
     },
     {
       "id": 63,
@@ -1415,7 +1604,10 @@
         "inventories": 21456920.68,
         "exports": 62090898.18,
         "total": 83547818.86
-      }
+      },
+      "employment_total": 187738,
+      "employment_formal": 84235,
+      "employment_informal": 103503
     },
     {
       "id": 64,
@@ -1437,7 +1629,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 0
-      }
+      },
+      "employment_total": 285,
+      "employment_formal": 128,
+      "employment_informal": 157
     },
     {
       "id": 65,
@@ -1459,7 +1654,10 @@
         "inventories": 5510719.9,
         "exports": 804897.5,
         "total": 9051663.2
-      }
+      },
+      "employment_total": 33379,
+      "employment_formal": 14976,
+      "employment_informal": 18403
     },
     {
       "id": 66,
@@ -1481,7 +1679,10 @@
         "inventories": 100974.81,
         "exports": 47704.22,
         "total": 148679.03
-      }
+      },
+      "employment_total": 31574,
+      "employment_formal": 14167,
+      "employment_informal": 17407
     },
     {
       "id": 67,
@@ -1503,7 +1704,10 @@
         "inventories": 396428.31,
         "exports": 584242.62,
         "total": 10002596.07
-      }
+      },
+      "employment_total": 16633,
+      "employment_formal": 7463,
+      "employment_informal": 9170
     },
     {
       "id": 68,
@@ -1525,7 +1729,10 @@
         "inventories": 126026.38,
         "exports": 287183.13,
         "total": 5591370.16
-      }
+      },
+      "employment_total": 10998,
+      "employment_formal": 4935,
+      "employment_informal": 6063
     },
     {
       "id": 69,
@@ -1547,7 +1754,10 @@
         "inventories": -348652.31,
         "exports": 30832.49,
         "total": -284579.01
-      }
+      },
+      "employment_total": 1216,
+      "employment_formal": 546,
+      "employment_informal": 670
     },
     {
       "id": 70,
@@ -1569,7 +1779,10 @@
         "inventories": 170628.29,
         "exports": 337514.74,
         "total": 512652.57
-      }
+      },
+      "employment_total": 15518,
+      "employment_formal": 6963,
+      "employment_informal": 8555
     },
     {
       "id": 71,
@@ -1591,7 +1804,10 @@
         "inventories": -714002.27,
         "exports": 8888.67,
         "total": -171243.94
-      }
+      },
+      "employment_total": 1947,
+      "employment_formal": 873,
+      "employment_informal": 1074
     },
     {
       "id": 72,
@@ -1613,7 +1829,10 @@
         "inventories": -1539858.16,
         "exports": 4276029.2,
         "total": 8949769.75
-      }
+      },
+      "employment_total": 15560,
+      "employment_formal": 6982,
+      "employment_informal": 8578
     },
     {
       "id": 73,
@@ -1635,7 +1854,10 @@
         "inventories": -440855.13,
         "exports": 10403.6,
         "total": -88497.19
-      }
+      },
+      "employment_total": 1360,
+      "employment_formal": 610,
+      "employment_informal": 750
     },
     {
       "id": 74,
@@ -1657,7 +1879,10 @@
         "inventories": -574017.22,
         "exports": 605012.57,
         "total": 30518356.16
-      }
+      },
+      "employment_total": 14403,
+      "employment_formal": 6462,
+      "employment_informal": 7941
     },
     {
       "id": 75,
@@ -1679,7 +1904,10 @@
         "inventories": 140906.03,
         "exports": 82349.83,
         "total": 3137569.93
-      }
+      },
+      "employment_total": 2182,
+      "employment_formal": 979,
+      "employment_informal": 1203
     },
     {
       "id": 76,
@@ -1701,7 +1929,10 @@
         "inventories": 140087.93,
         "exports": 47915.92,
         "total": 1483022.57
-      }
+      },
+      "employment_total": 1211,
+      "employment_formal": 543,
+      "employment_informal": 668
     },
     {
       "id": 77,
@@ -1723,7 +1954,10 @@
         "inventories": 35828.56,
         "exports": 159961.94,
         "total": 1988010.31
-      }
+      },
+      "employment_total": 2281,
+      "employment_formal": 1024,
+      "employment_informal": 1257
     },
     {
       "id": 78,
@@ -1745,7 +1979,10 @@
         "inventories": 1824.11,
         "exports": 1932.35,
         "total": 6076365.31
-      }
+      },
+      "employment_total": 142,
+      "employment_formal": 64,
+      "employment_informal": 78
     },
     {
       "id": 79,
@@ -1767,7 +2004,10 @@
         "inventories": 1908990.26,
         "exports": 4945347.59,
         "total": 52019346.79
-      }
+      },
+      "employment_total": 61132,
+      "employment_formal": 27429,
+      "employment_informal": 33703
     },
     {
       "id": 80,
@@ -1789,7 +2029,10 @@
         "inventories": 219160.6,
         "exports": 146962.9,
         "total": 5161312.08
-      }
+      },
+      "employment_total": 12387,
+      "employment_formal": 5558,
+      "employment_informal": 6829
     },
     {
       "id": 81,
@@ -1811,7 +2054,10 @@
         "inventories": -160579.56,
         "exports": 99860.71,
         "total": 5157037.16
-      }
+      },
+      "employment_total": 33518,
+      "employment_formal": 15039,
+      "employment_informal": 18479
     },
     {
       "id": 82,
@@ -1833,7 +2079,10 @@
         "inventories": -855400.73,
         "exports": 89019.77,
         "total": 1547662.36
-      }
+      },
+      "employment_total": 8455,
+      "employment_formal": 3793,
+      "employment_informal": 4662
     },
     {
       "id": 83,
@@ -1855,7 +2104,10 @@
         "inventories": 7524.61,
         "exports": 77873.64,
         "total": 352061.55
-      }
+      },
+      "employment_total": 615,
+      "employment_formal": 276,
+      "employment_informal": 339
     },
     {
       "id": 84,
@@ -1877,7 +2129,10 @@
         "inventories": 263970.1,
         "exports": 38658.74,
         "total": 1847065.5
-      }
+      },
+      "employment_total": 2148,
+      "employment_formal": 964,
+      "employment_informal": 1184
     },
     {
       "id": 85,
@@ -1899,7 +2154,10 @@
         "inventories": 0,
         "exports": 182932.59,
         "total": 182932.59
-      }
+      },
+      "employment_total": 21895,
+      "employment_formal": 9824,
+      "employment_informal": 12071
     },
     {
       "id": 86,
@@ -1921,7 +2179,10 @@
         "inventories": 0,
         "exports": 1370642.23,
         "total": 5985671.13
-      }
+      },
+      "employment_total": 47372,
+      "employment_formal": 46744,
+      "employment_informal": 628
     },
     {
       "id": 87,
@@ -1943,7 +2204,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 0
-      }
+      },
+      "employment_total": 461,
+      "employment_formal": 455,
+      "employment_informal": 6
     },
     {
       "id": 88,
@@ -1965,7 +2229,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 0
-      }
+      },
+      "employment_total": 68,
+      "employment_formal": 67,
+      "employment_informal": 1
     },
     {
       "id": 89,
@@ -1987,7 +2254,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 133658.5
-      }
+      },
+      "employment_total": 4172,
+      "employment_formal": 4117,
+      "employment_informal": 55
     },
     {
       "id": 90,
@@ -2009,7 +2279,10 @@
         "inventories": 38940.33,
         "exports": 0,
         "total": 1135088.7
-      }
+      },
+      "employment_total": 21427,
+      "employment_formal": 21143,
+      "employment_informal": 284
     },
     {
       "id": 91,
@@ -2031,7 +2304,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 846836.33
-      }
+      },
+      "employment_total": 29433,
+      "employment_formal": 24857,
+      "employment_informal": 4576
     },
     {
       "id": 92,
@@ -2053,7 +2329,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 250594.31
-      }
+      },
+      "employment_total": 9974,
+      "employment_formal": 8424,
+      "employment_informal": 1550
     },
     {
       "id": 93,
@@ -2075,7 +2354,10 @@
         "inventories": -835418.96,
         "exports": 754877.49,
         "total": 238524.65
-      }
+      },
+      "employment_total": 10069,
+      "employment_formal": 8504,
+      "employment_informal": 1565
     },
     {
       "id": 94,
@@ -2097,7 +2379,10 @@
         "inventories": 0,
         "exports": 283.6,
         "total": 283.6
-      }
+      },
+      "employment_total": 23,
+      "employment_formal": 19,
+      "employment_informal": 4
     },
     {
       "id": 95,
@@ -2119,7 +2404,10 @@
         "inventories": 0,
         "exports": 108004.02,
         "total": 162142131.87
-      }
+      },
+      "employment_total": 1314300,
+      "employment_formal": 285031,
+      "employment_informal": 1029269
     },
     {
       "id": 96,
@@ -2141,7 +2429,10 @@
         "inventories": 4835202.7,
         "exports": 5032840.71,
         "total": 53909284.6
-      }
+      },
+      "employment_total": 1525200,
+      "employment_formal": 347843,
+      "employment_informal": 1177357
     },
     {
       "id": 97,
@@ -2163,7 +2454,10 @@
         "inventories": 2385122.63,
         "exports": 29483780.89,
         "total": 83264932.03
-      }
+      },
+      "employment_total": 460701,
+      "employment_formal": 131160,
+      "employment_informal": 329541
     },
     {
       "id": 98,
@@ -2185,7 +2479,10 @@
         "inventories": 0,
         "exports": 598023.26,
         "total": 889120.96
-      }
+      },
+      "employment_total": 153090,
+      "employment_formal": 43584,
+      "employment_informal": 109506
     },
     {
       "id": 99,
@@ -2207,7 +2504,10 @@
         "inventories": 0,
         "exports": 59808.49,
         "total": 299964.02
-      }
+      },
+      "employment_total": 19309,
+      "employment_formal": 5497,
+      "employment_informal": 13812
     },
     {
       "id": 100,
@@ -2229,7 +2529,10 @@
         "inventories": 0,
         "exports": 1231184.8,
         "total": 3079232.36
-      }
+      },
+      "employment_total": 88917,
+      "employment_formal": 22457,
+      "employment_informal": 66460
     },
     {
       "id": 101,
@@ -2251,7 +2554,10 @@
         "inventories": 0,
         "exports": 4570621.84,
         "total": 100499343.9
-      }
+      },
+      "employment_total": 259883,
+      "employment_formal": 65636,
+      "employment_informal": 194247
     },
     {
       "id": 102,
@@ -2273,7 +2579,10 @@
         "inventories": 14212.94,
         "exports": 0,
         "total": 1372708.73
-      }
+      },
+      "employment_total": 5413,
+      "employment_formal": 4451,
+      "employment_informal": 962
     },
     {
       "id": 103,
@@ -2295,7 +2604,10 @@
         "inventories": 0,
         "exports": 2077.75,
         "total": 107432.87
-      }
+      },
+      "employment_total": 874,
+      "employment_formal": 719,
+      "employment_informal": 155
     },
     {
       "id": 104,
@@ -2317,7 +2629,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 733487.16
-      }
+      },
+      "employment_total": 5183,
+      "employment_formal": 4262,
+      "employment_informal": 921
     },
     {
       "id": 105,
@@ -2339,7 +2654,10 @@
         "inventories": 0,
         "exports": 1996724.99,
         "total": 10965018.43
-      }
+      },
+      "employment_total": 34775,
+      "employment_formal": 28596,
+      "employment_informal": 6179
     },
     {
       "id": 106,
@@ -2361,7 +2679,10 @@
         "inventories": 0,
         "exports": 1080156.15,
         "total": 3152404.91
-      }
+      },
+      "employment_total": 21293,
+      "employment_formal": 17509,
+      "employment_informal": 3784
     },
     {
       "id": 107,
@@ -2383,7 +2704,10 @@
         "inventories": 0,
         "exports": 313944.79,
         "total": 1063223.9
-      }
+      },
+      "employment_total": 9762,
+      "employment_formal": 8028,
+      "employment_informal": 1734
     },
     {
       "id": 108,
@@ -2405,7 +2729,10 @@
         "inventories": 0,
         "exports": 807833.25,
         "total": 15514431.72
-      }
+      },
+      "employment_total": 60599,
+      "employment_formal": 59665,
+      "employment_informal": 934
     },
     {
       "id": 109,
@@ -2427,7 +2754,10 @@
         "inventories": 0,
         "exports": 609779.93,
         "total": 2992257.94
-      }
+      },
+      "employment_total": 6748,
+      "employment_formal": 6644,
+      "employment_informal": 104
     },
     {
       "id": 110,
@@ -2449,7 +2779,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 0
-      }
+      },
+      "employment_total": 2253,
+      "employment_formal": 2218,
+      "employment_informal": 35
     },
     {
       "id": 111,
@@ -2471,7 +2804,10 @@
         "inventories": 0,
         "exports": 2519236.24,
         "total": 50057226.22
-      }
+      },
+      "employment_total": 62200,
+      "employment_formal": 39531,
+      "employment_informal": 22669
     },
     {
       "id": 112,
@@ -2493,7 +2829,10 @@
         "inventories": 0,
         "exports": 25775.32,
         "total": 316545.83
-      }
+      },
+      "employment_total": 13602,
+      "employment_formal": 13090,
+      "employment_informal": 512
     },
     {
       "id": 113,
@@ -2515,7 +2854,10 @@
         "inventories": 0,
         "exports": 561821.82,
         "total": 561821.82
-      }
+      },
+      "employment_total": 5010,
+      "employment_formal": 4821,
+      "employment_informal": 189
     },
     {
       "id": 114,
@@ -2537,7 +2879,10 @@
         "inventories": 0,
         "exports": 346301.41,
         "total": 1971861.07
-      }
+      },
+      "employment_total": 84504,
+      "employment_formal": 81324,
+      "employment_informal": 3180
     },
     {
       "id": 115,
@@ -2559,7 +2904,10 @@
         "inventories": 0,
         "exports": 51041.11,
         "total": 841060.68
-      }
+      },
+      "employment_total": 15471,
+      "employment_formal": 14888,
+      "employment_informal": 583
     },
     {
       "id": 116,
@@ -2581,7 +2929,10 @@
         "inventories": 0,
         "exports": 206376.12,
         "total": 305554.71
-      }
+      },
+      "employment_total": 5838,
+      "employment_formal": 5618,
+      "employment_informal": 220
     },
     {
       "id": 117,
@@ -2603,7 +2954,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 1181039.24
-      }
+      },
+      "employment_total": 6092,
+      "employment_formal": 5863,
+      "employment_informal": 229
     },
     {
       "id": 118,
@@ -2625,7 +2979,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 315940.53
-      }
+      },
+      "employment_total": 5183,
+      "employment_formal": 4988,
+      "employment_informal": 195
     },
     {
       "id": 119,
@@ -2647,7 +3004,10 @@
         "inventories": 0,
         "exports": 288314.17,
         "total": 732717.08
-      }
+      },
+      "employment_total": 5265,
+      "employment_formal": 4601,
+      "employment_informal": 664
     },
     {
       "id": 120,
@@ -2669,7 +3029,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 483296.65
-      }
+      },
+      "employment_total": 6038,
+      "employment_formal": 5277,
+      "employment_informal": 761
     },
     {
       "id": 121,
@@ -2691,7 +3054,10 @@
         "inventories": 0,
         "exports": 144884.29,
         "total": 1675046.05
-      }
+      },
+      "employment_total": 2319,
+      "employment_formal": 2026,
+      "employment_informal": 293
     },
     {
       "id": 122,
@@ -2713,7 +3079,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 346555.84
-      }
+      },
+      "employment_total": 122,
+      "employment_formal": 107,
+      "employment_informal": 15
     },
     {
       "id": 123,
@@ -2735,7 +3104,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 4730944.14
-      }
+      },
+      "employment_total": 77423,
+      "employment_formal": 67659,
+      "employment_informal": 9764
     },
     {
       "id": 124,
@@ -2757,7 +3129,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 494261.27
-      }
+      },
+      "employment_total": 16933,
+      "employment_formal": 14797,
+      "employment_informal": 2136
     },
     {
       "id": 125,
@@ -2779,7 +3154,10 @@
         "inventories": 0,
         "exports": 177830.84,
         "total": 67410275.38
-      }
+      },
+      "employment_total": 636800,
+      "employment_formal": 182121,
+      "employment_informal": 454679
     },
     {
       "id": 126,
@@ -2801,7 +3179,10 @@
         "inventories": 0,
         "exports": 144511.13,
         "total": 63666804.71
-      }
+      },
+      "employment_total": 1268700,
+      "employment_formal": 1155664,
+      "employment_informal": 113036
     },
     {
       "id": 127,
@@ -2823,7 +3204,10 @@
         "inventories": 0,
         "exports": 52170.1,
         "total": 33995197.35
-      }
+      },
+      "employment_total": 645702,
+      "employment_formal": 513103,
+      "employment_informal": 132599
     },
     {
       "id": 128,
@@ -2845,7 +3229,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 823515
-      }
+      },
+      "employment_total": 19257,
+      "employment_formal": 15303,
+      "employment_informal": 3954
     },
     {
       "id": 129,
@@ -2867,7 +3254,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 566226.7
-      }
+      },
+      "employment_total": 6341,
+      "employment_formal": 5039,
+      "employment_informal": 1302
     },
     {
       "id": 130,
@@ -2889,7 +3279,10 @@
         "inventories": 0,
         "exports": 823471.26,
         "total": 3998207.59
-      }
+      },
+      "employment_total": 12438,
+      "employment_formal": 7299,
+      "employment_informal": 5139
     },
     {
       "id": 131,
@@ -2911,7 +3304,10 @@
         "inventories": 0,
         "exports": 30829.88,
         "total": 617546.97
-      }
+      },
+      "employment_total": 14004,
+      "employment_formal": 8218,
+      "employment_informal": 5786
     },
     {
       "id": 132,
@@ -2933,7 +3329,10 @@
         "inventories": 0,
         "exports": 114416.2,
         "total": 3144283.95
-      }
+      },
+      "employment_total": 45258,
+      "employment_formal": 26558,
+      "employment_informal": 18700
     },
     {
       "id": 133,
@@ -2955,7 +3354,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 2157363
-      }
+      },
+      "employment_total": 1011999,
+      "employment_formal": 26569,
+      "employment_informal": 985430
     },
     {
       "id": 134,
@@ -2977,7 +3379,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 5611484.54
-      }
+      },
+      "employment_total": 324925,
+      "employment_formal": 8531,
+      "employment_informal": 316394
     },
     {
       "id": 135,
@@ -2999,7 +3404,10 @@
         "inventories": 0,
         "exports": 0,
         "total": 9525703.55
-      }
+      },
+      "employment_total": 197176,
+      "employment_formal": 5177,
+      "employment_informal": 191999
     }
   ],
   "matrices": {
@@ -41121,13 +41529,24 @@
       "affected_models": [
         "IO"
       ]
+    },
+    {
+      "caveat_id": "io-employment-mcp-source",
+      "severity": "info",
+      "message": "Employment arrays are merged from the MCP-converted I-O source. Employment effects are linear employment-intensity estimates, not labor-market forecasts.",
+      "affected_metrics": [
+        "employment_effect_persons"
+      ],
+      "affected_models": [
+        "IO"
+      ]
     }
   ],
   "metadata": {
     "exported_at": "2026-04-09T00:00:00Z",
     "source_script_sha": null,
     "solver_version": "0.1.0",
-    "source_artifact": "io_model/io_data.json",
+    "source_artifact": "io_model/io_data.json + mcp_server/data/io_data.json",
     "source_artifact_generated": "2026-04-09",
     "source_title": "Uzbekistan Input-Output Table 2022",
     "source": "Statistics Agency under the President of Uzbekistan",

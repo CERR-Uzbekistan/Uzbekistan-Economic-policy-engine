@@ -7,6 +7,7 @@ import type {
   Scenario,
   ScenarioLabInterpretation,
   ScenarioLabInterpretationMetadata,
+  ScenarioLabIoShockResult,
   ScenarioLabResultTab,
   SuggestedNextScenario,
   ScenarioType,
@@ -36,6 +37,14 @@ export type PersistedRunResults = {
   charts_by_tab: Record<ScenarioLabResultTab, ChartSpec>
 }
 
+export type PersistedIoSectorShockRun = ScenarioLabIoShockResult & {
+  model_type: 'io_sector_shock'
+  title: string
+  data_vintage: string
+  source_artifact: string
+  saved_at: string
+}
+
 export type SavedScenarioRecord = ScenarioWithDataVersion & {
   stored_at: string
   // Optional output snapshot fields (run artifact). Absent on records that predate the snapshot
@@ -45,6 +54,7 @@ export type SavedScenarioRecord = ScenarioWithDataVersion & {
   run_results?: PersistedRunResults
   run_interpretation?: PersistedScenarioInterpretation
   run_attribution?: ModelAttribution[]
+  io_sector_shock?: PersistedIoSectorShockRun
 }
 
 export type { ScenarioWithDataVersion }
@@ -180,6 +190,103 @@ function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === 'string')
 }
 
+function isFiniteNumber(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value)
+}
+
+function isNullableFiniteNumber(value: unknown): value is number | null {
+  return value === null || isFiniteNumber(value)
+}
+
+function isIoDemandBucket(value: unknown): boolean {
+  return value === 'consumption' || value === 'government' || value === 'investment' || value === 'export'
+}
+
+function isIoDistributionMode(value: unknown): boolean {
+  return value === 'output' || value === 'gva' || value === 'equal' || value === 'sector'
+}
+
+function isIoShockCurrency(value: unknown): boolean {
+  return value === 'bln_uzs' || value === 'mln_usd'
+}
+
+function isIoLinkageClass(value: unknown): boolean {
+  return value === 'key' || value === 'backward' || value === 'forward' || value === 'weak'
+}
+
+function isPersistedIoSectorShockRun(value: unknown): value is PersistedIoSectorShockRun {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<PersistedIoSectorShockRun>
+  const request = candidate.request
+  const totals = candidate.totals
+  if (
+    candidate.model_type !== 'io_sector_shock' ||
+    typeof candidate.title !== 'string' ||
+    typeof candidate.data_vintage !== 'string' ||
+    typeof candidate.source_artifact !== 'string' ||
+    typeof candidate.saved_at !== 'string' ||
+    typeof request !== 'object' ||
+    request === null ||
+    typeof totals !== 'object' ||
+    totals === null
+  ) {
+    return false
+  }
+
+  const requestCandidate = request as Partial<PersistedIoSectorShockRun['request']>
+  const totalsCandidate = totals as Partial<PersistedIoSectorShockRun['totals']>
+  if (
+    !isIoDemandBucket(requestCandidate.demand_bucket) ||
+    !isFiniteNumber(requestCandidate.amount) ||
+    !isIoShockCurrency(requestCandidate.currency) ||
+    !isIoDistributionMode(requestCandidate.distribution) ||
+    (requestCandidate.exchange_rate_uzs_per_usd !== undefined &&
+      !isFiniteNumber(requestCandidate.exchange_rate_uzs_per_usd)) ||
+    (requestCandidate.sector_code !== undefined && typeof requestCandidate.sector_code !== 'string')
+  ) {
+    return false
+  }
+
+  if (
+    !isFiniteNumber(totalsCandidate.input_shock) ||
+    !isIoShockCurrency(totalsCandidate.input_currency) ||
+    !isFiniteNumber(totalsCandidate.demand_shock_bln_uzs) ||
+    !isFiniteNumber(totalsCandidate.output_effect_bln_uzs) ||
+    !isFiniteNumber(totalsCandidate.value_added_effect_bln_uzs) ||
+    !isFiniteNumber(totalsCandidate.gdp_accounting_contribution_bln_uzs) ||
+    !isNullableFiniteNumber(totalsCandidate.employment_effect_persons) ||
+    !isNullableFiniteNumber(totalsCandidate.aggregate_output_multiplier)
+  ) {
+    return false
+  }
+
+  if (!Array.isArray(candidate.top_sectors)) {
+    return false
+  }
+  const topSectorsValid = candidate.top_sectors.every((sector) => {
+    if (typeof sector !== 'object' || sector === null) {
+      return false
+    }
+    const sectorCandidate = sector as Partial<PersistedIoSectorShockRun['top_sectors'][number]>
+    return (
+      typeof sectorCandidate.sector_code === 'string' &&
+      typeof sectorCandidate.sector_name === 'string' &&
+      isFiniteNumber(sectorCandidate.output_effect_bln_uzs) &&
+      isFiniteNumber(sectorCandidate.value_added_effect_bln_uzs) &&
+      isFiniteNumber(sectorCandidate.output_multiplier) &&
+      isFiniteNumber(sectorCandidate.value_added_multiplier) &&
+      isFiniteNumber(sectorCandidate.backward_linkage) &&
+      isFiniteNumber(sectorCandidate.forward_linkage) &&
+      isIoLinkageClass(sectorCandidate.linkage_classification) &&
+      isNullableFiniteNumber(sectorCandidate.employment_effect_persons)
+    )
+  })
+
+  return topSectorsValid && isStringArray(candidate.caveats)
+}
+
 function isScenarioLabInterpretationMetadata(
   value: unknown,
 ): value is ScenarioLabInterpretationMetadata {
@@ -308,7 +415,16 @@ function isSavedScenarioRecord(value: unknown): value is SavedScenarioRecord {
   ) {
     return false
   }
+  if (candidate.io_sector_shock !== undefined && !isPersistedIoSectorShockRun(candidate.io_sector_shock)) {
+    return false
+  }
   return true
+}
+
+export function isIoSectorShockRecord(
+  record: SavedScenarioRecord,
+): record is SavedScenarioRecord & { io_sector_shock: PersistedIoSectorShockRun } {
+  return record.io_sector_shock?.model_type === 'io_sector_shock'
 }
 
 function buildScenarioKey(scenarioId: string): string {
@@ -368,6 +484,7 @@ export type SaveScenarioInput = ScenarioWithDataVersion & {
   run_results?: PersistedRunResults
   run_interpretation?: PersistedScenarioInterpretation
   run_attribution?: ModelAttribution[]
+  io_sector_shock?: PersistedIoSectorShockRun
 }
 
 export function saveScenario(scenario: SaveScenarioInput): SavedScenarioRecord {
@@ -419,6 +536,12 @@ export function saveScenario(scenario: SaveScenarioInput): SavedScenarioRecord {
   }
   if (scenario.run_attribution !== undefined) {
     normalizedRecord.run_attribution = scenario.run_attribution
+  }
+  if (scenario.io_sector_shock !== undefined) {
+    if (!isPersistedIoSectorShockRun(scenario.io_sector_shock)) {
+      throw new Error('I-O sector shock run does not match the supported persisted shape.')
+    }
+    normalizedRecord.io_sector_shock = scenario.io_sector_shock
   }
 
   storage.setItem(buildScenarioKey(normalizedRecord.scenario_id), JSON.stringify(normalizedRecord))

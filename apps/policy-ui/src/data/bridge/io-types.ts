@@ -22,6 +22,9 @@ export type IoSector = {
   gva_thousand_uzs: number
   compensation_of_employees_thousand_uzs: number
   gross_operating_surplus_thousand_uzs: number
+  employment_total?: number
+  employment_formal?: number
+  employment_informal?: number
   output_multiplier: number
   value_added_multiplier: number
   final_demand: IoFinalDemand

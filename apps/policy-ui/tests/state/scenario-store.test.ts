@@ -4,6 +4,7 @@ import { scenarioLabWorkspaceMock } from '../../src/data/mock/scenario-lab.js'
 import {
   clearAllScenarios,
   deleteScenario,
+  isIoSectorShockRecord,
   listScenarios,
   loadScenario,
   saveScenario,
@@ -204,6 +205,57 @@ describe('scenarioStore', () => {
     assert.equal(loaded.run_interpretation.metadata.reviewed_at, '2026-03-15T09:00:00Z')
     assert.deepEqual(loaded.run_interpretation.what_changed, ['policy rate lifted 50bps'])
     assert.deepEqual(loaded.run_interpretation.why_it_changed, ['inflation persistence elevated'])
+  })
+
+  it('round-trips a persisted I-O sector shock run without macro run results', () => {
+    const saved = saveScenario({
+      ...buildScenarioInput('scenario-io-sector', 'I-O export shock'),
+      model_ids: ['io-sector-shock'],
+      io_sector_shock: {
+        model_type: 'io_sector_shock',
+        title: 'I-O export shock',
+        data_vintage: '2022',
+        source_artifact: 'io_model/io_data.json',
+        saved_at: '2026-04-22T10:15:00Z',
+        request: {
+          demand_bucket: 'export',
+          amount: 1000,
+          currency: 'bln_uzs',
+          distribution: 'output',
+        },
+        totals: {
+          input_shock: 1000,
+          input_currency: 'bln_uzs',
+          demand_shock_bln_uzs: 1000,
+          output_effect_bln_uzs: 1600,
+          value_added_effect_bln_uzs: 650,
+          gdp_accounting_contribution_bln_uzs: 650,
+          employment_effect_persons: 2400,
+          aggregate_output_multiplier: 1.6,
+        },
+        top_sectors: [
+          {
+            sector_code: 'A01',
+            sector_name: 'Agriculture',
+            output_effect_bln_uzs: 200,
+            value_added_effect_bln_uzs: 80,
+            output_multiplier: 1.4,
+            value_added_multiplier: 0.6,
+            backward_linkage: 1.1,
+            forward_linkage: 0.9,
+            linkage_classification: 'backward',
+            employment_effect_persons: 900,
+          },
+        ],
+        caveats: ['Sector transmission only.'],
+      },
+    })
+    const loaded = loadScenario(saved.scenario_id)
+
+    assert.ok(loaded)
+    assert.equal(isIoSectorShockRecord(loaded), true)
+    assert.equal(loaded.run_results, undefined)
+    assert.equal(loaded.io_sector_shock?.totals.gdp_accounting_contribution_bln_uzs, 650)
   })
 
   it('strips inert legacy top-level governance fields when saving current metadata shape', () => {

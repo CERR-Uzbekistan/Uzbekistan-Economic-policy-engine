@@ -1,4 +1,6 @@
-import type { ComparisonWorkspace } from '../../contracts/data-contract'
+import type { ComparisonSectorEvidence, ComparisonWorkspace } from '../../contracts/data-contract'
+import { toComparisonSectorEvidence } from '../adapters/comparison-io-sector-evidence.js'
+import { fetchIoBridgePayload } from '../bridge/io-client.js'
 import { toComparisonWorkspaceFromQpm } from '../bridge/qpm-adapter.js'
 import {
   fetchQpmBridgePayload,
@@ -19,6 +21,7 @@ export type ComparisonDataMode = 'mock' | 'live'
 export type ComparisonSourceState = IntegrationSourceCore<ComparisonDataMode, QpmValidationIssue> & {
   workspace: ComparisonWorkspace | null
   qpmPayload: QpmBridgePayload | null
+  ioSectorEvidence: ComparisonSectorEvidence | null
 }
 
 function resolveComparisonDataMode(): ComparisonDataMode {
@@ -37,11 +40,22 @@ function buildReadyState(
   workspace: ComparisonWorkspace,
   qpmPayload: QpmBridgePayload | null = null,
   warnings: QpmValidationIssue[] = [],
+  ioSectorEvidence: ComparisonSectorEvidence | null = null,
 ): ComparisonSourceState {
   return {
     ...createReadySourceCore<ComparisonDataMode, QpmValidationIssue>(mode, warnings),
     workspace,
     qpmPayload,
+    ioSectorEvidence,
+  }
+}
+
+async function loadOptionalIoSectorEvidence(): Promise<ComparisonSectorEvidence | null> {
+  try {
+    const payload = await fetchIoBridgePayload()
+    return toComparisonSectorEvidence(payload)
+  } catch {
+    return null
   }
 }
 
@@ -51,23 +65,25 @@ export function getInitialComparisonSourceState(): ComparisonSourceState {
     ...createLoadingSourceCore<ComparisonDataMode, QpmValidationIssue>(mode),
     workspace: null,
     qpmPayload: null,
+    ioSectorEvidence: null,
   }
 }
 
 export async function loadComparisonSourceState(): Promise<ComparisonSourceState> {
   const mode = resolveComparisonDataMode()
   if (mode === 'mock') {
-    return buildReadyState(mode, comparisonWorkspaceMock, null)
+    return buildReadyState(mode, comparisonWorkspaceMock, null, [], await loadOptionalIoSectorEvidence())
   }
 
   try {
     const qpmPayload = await fetchQpmBridgePayload()
     const workspace = toComparisonWorkspaceFromQpm(qpmPayload)
-    return buildReadyState('live', workspace, qpmPayload, [])
+    return buildReadyState('live', workspace, qpmPayload, [], await loadOptionalIoSectorEvidence())
   } catch (error) {
+    const ioSectorEvidence = await loadOptionalIoSectorEvidence()
     if (error instanceof QpmValidationError) {
       console.warn('[Comparison] QPM bridge failed guard validation; using mock fallback.', error.issues)
-      return buildReadyState('mock', comparisonWorkspaceMock, null, error.issues)
+      return buildReadyState('mock', comparisonWorkspaceMock, null, error.issues, ioSectorEvidence)
     }
 
     if (error instanceof QpmTransportError) {
@@ -76,10 +92,10 @@ export async function loadComparisonSourceState(): Promise<ComparisonSourceState
         status: error.status,
         message: error.message,
       })
-      return buildReadyState('mock', comparisonWorkspaceMock, null)
+      return buildReadyState('mock', comparisonWorkspaceMock, null, [], ioSectorEvidence)
     }
 
     console.warn('[Comparison] QPM bridge failed unexpectedly; using mock fallback.', error)
-    return buildReadyState('mock', comparisonWorkspaceMock, null)
+    return buildReadyState('mock', comparisonWorkspaceMock, null, [], ioSectorEvidence)
   }
 }

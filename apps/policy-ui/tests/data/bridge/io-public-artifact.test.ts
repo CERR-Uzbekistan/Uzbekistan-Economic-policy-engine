@@ -28,9 +28,13 @@ describe('io bridge public artifact', () => {
 
     assert.equal(validation.ok, true)
     assert.ok(validation.value)
-    assert.equal(validation.value.metadata.source_artifact, 'io_model/io_data.json')
+    assert.equal(
+      validation.value.metadata.source_artifact,
+      'io_model/io_data.json + mcp_server/data/io_data.json',
+    )
     assert.equal(validation.value.metadata.n_sectors, 136)
     assert.equal(validation.value.sectors.length, 136)
+    assert.equal(validation.value.sectors[0].employment_total, 343564)
     assert.equal(validation.value.matrices.technical_coefficients.length, 136)
     assert.equal(validation.value.matrices.leontief_inverse[0].length, 136)
   })

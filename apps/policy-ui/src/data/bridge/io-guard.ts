@@ -204,6 +204,17 @@ function parseFinalDemand(value: unknown, issues: IoValidationIssue[], path: str
   return { household, government, npish, gfcf, inventories, exports: exportsValue, total }
 }
 
+function optionalFiniteNumber(value: unknown, issues: IoValidationIssue[], path: string): number | undefined {
+  if (value === undefined || value === null) {
+    return undefined
+  }
+  if (!isFiniteNumber(value)) {
+    pushError(issues, path, 'Expected a finite number when present.')
+    return undefined
+  }
+  return value
+}
+
 function parseSectors(value: unknown, issues: IoValidationIssue[], expectedLength: number): IoSector[] | null {
   if (!Array.isArray(value)) {
     pushError(issues, 'sectors', 'Expected an array.')
@@ -246,6 +257,9 @@ function parseSectors(value: unknown, issues: IoValidationIssue[], expectedLengt
       issues,
       `${path}.value_added_multiplier`,
     )
+    const employmentTotal = optionalFiniteNumber(entry.employment_total, issues, `${path}.employment_total`)
+    const employmentFormal = optionalFiniteNumber(entry.employment_formal, issues, `${path}.employment_formal`)
+    const employmentInformal = optionalFiniteNumber(entry.employment_informal, issues, `${path}.employment_informal`)
     const finalDemand = parseFinalDemand(entry.final_demand, issues, `${path}.final_demand`)
     if (
       id === null ||
@@ -278,6 +292,9 @@ function parseSectors(value: unknown, issues: IoValidationIssue[], expectedLengt
       gva_thousand_uzs: gva,
       compensation_of_employees_thousand_uzs: coe,
       gross_operating_surplus_thousand_uzs: gos,
+      employment_total: employmentTotal,
+      employment_formal: employmentFormal,
+      employment_informal: employmentInformal,
       output_multiplier: outputMultiplier,
       value_added_multiplier: valueAddedMultiplier,
       final_demand: finalDemand,

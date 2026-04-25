@@ -24,7 +24,7 @@ describe('model explorer IO bridge enrichment', () => {
     const linkageCountSum = evidence.linkage_counts.reduce((sum, item) => sum + Number(item.value), 0)
 
     assert.equal(evidence.status_label, 'Validated')
-    assert.equal(evidence.source_artifact, 'io_model/io_data.json')
+    assert.equal(evidence.source_artifact, 'io_model/io_data.json + mcp_server/data/io_data.json')
     assert.equal(evidence.data_version, '2022')
     assert.equal(evidence.exported_at, '2026-04-09')
     assert.equal(evidence.solver_version, '0.1.0')
