@@ -439,6 +439,18 @@
       "title": "Validatsiya xulosasi",
       "smePendingChip": "SME kontenti kutilmoqda",
       "smePendingAria": "Validatsiya xulosasi — SME kontenti kutilmoqda"
+    },
+    "bridgeEvidence": {
+      "title": "Bridge dalillari",
+      "sourceArtifact": "Manba artefakti",
+      "dataVintage": "Ma'lumot davri",
+      "exportedAt": "Eksport qilingan",
+      "solverVersion": "Solver",
+      "sectorCount": "Sektorlar",
+      "framework": "Metod",
+      "units": "Birliklar",
+      "linkageCounts": "Bog'lanish sinflari",
+      "caveats": "Bridge cheklovlari"
     }
   },
   "states": {

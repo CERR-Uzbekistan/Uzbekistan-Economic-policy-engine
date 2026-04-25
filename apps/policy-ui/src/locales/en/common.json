@@ -439,6 +439,18 @@
       "title": "Validation summary",
       "smePendingChip": "SME content pending",
       "smePendingAria": "Validation summary — SME content pending"
+    },
+    "bridgeEvidence": {
+      "title": "Bridge evidence",
+      "sourceArtifact": "Source artifact",
+      "dataVintage": "Data vintage",
+      "exportedAt": "Exported",
+      "solverVersion": "Solver",
+      "sectorCount": "Sectors",
+      "framework": "Framework",
+      "units": "Units",
+      "linkageCounts": "Linkage classes",
+      "caveats": "Bridge caveats"
     }
   },
   "states": {

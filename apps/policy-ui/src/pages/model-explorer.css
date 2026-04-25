@@ -345,3 +345,107 @@
   display: grid;
   gap: var(--space-xs);
 }
+
+.bridge-evidence {
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.bridge-evidence__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.bridge-evidence__head h4 {
+  margin: 0;
+}
+
+.bridge-evidence__status {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-upside);
+}
+
+.bridge-evidence__facts {
+  display: grid;
+  gap: var(--space-xs);
+  margin: 0;
+}
+
+.bridge-evidence__facts div {
+  display: grid;
+  grid-template-columns: 8.5rem 1fr;
+  gap: var(--space-sm);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.bridge-evidence__facts dt {
+  color: var(--color-text-muted);
+}
+
+.bridge-evidence__facts dd {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.bridge-evidence h5 {
+  margin: var(--space-md) 0 var(--space-xs);
+  font-size: 0.76rem;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+.bridge-evidence__linkages {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-xs);
+}
+
+.bridge-evidence__linkages span {
+  display: grid;
+  gap: 0.1rem;
+  border-top: 1px dotted var(--color-border);
+  padding-top: var(--space-xs);
+  font-size: 0.74rem;
+  color: var(--color-text-muted);
+}
+
+.bridge-evidence__linkages b {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.bridge-evidence__caveats {
+  display: grid;
+  gap: var(--space-xs);
+  margin: 0;
+  padding-left: 1rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 640px) {
+  .bridge-evidence__facts div {
+    grid-template-columns: 1fr;
+    gap: 0.1rem;
+  }
+
+  .bridge-evidence__linkages {
+    grid-template-columns: 1fr;
+  }
+}

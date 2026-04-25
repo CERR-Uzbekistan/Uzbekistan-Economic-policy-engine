@@ -439,6 +439,18 @@
       "title": "Сводка валидации",
       "smePendingChip": "Контент SME не заполнен",
       "smePendingAria": "Сводка валидации — контент SME не заполнен"
+    },
+    "bridgeEvidence": {
+      "title": "Данные моста",
+      "sourceArtifact": "Исходный артефакт",
+      "dataVintage": "Версия данных",
+      "exportedAt": "Экспорт",
+      "solverVersion": "Солвер",
+      "sectorCount": "Секторы",
+      "framework": "Метод",
+      "units": "Единицы",
+      "linkageCounts": "Классы связей",
+      "caveats": "Ограничения моста"
     }
   },
   "states": {

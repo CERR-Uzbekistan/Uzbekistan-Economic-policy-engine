@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { ModelCatalogEntry } from '../../contracts/data-contract'
+import { BridgeEvidencePanel } from './BridgeEvidencePanel.js'
 import { CaveatList } from './CaveatList.js'
 import { DataSourceList } from './DataSourceList.js'
 import { EquationBlock } from './EquationBlock.js'
@@ -98,6 +99,7 @@ export function ModelDetail({ entry, activeTab, onTabChange }: ModelDetailProps)
               <ParameterTable parameters={entry.parameters} />
             </div>
             <div className="model-detail__column">
+              <BridgeEvidencePanel evidence={entry.bridge_evidence} />
               <h4>{t('modelExplorer.caveats.title')}</h4>
               <CaveatList caveats={entry.caveats} />
               <h4>{t('modelExplorer.dataSources.title')}</h4>

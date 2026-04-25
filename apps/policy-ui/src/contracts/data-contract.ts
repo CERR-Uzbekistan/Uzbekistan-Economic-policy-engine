@@ -404,6 +404,24 @@ export type ModelStat = {
   label: string
 }
 
+export type ModelBridgeEvidenceMetric = {
+  label: string
+  value: string
+}
+
+export type ModelBridgeEvidence = {
+  status_label: string
+  source_artifact: string
+  data_version: string
+  exported_at: string
+  solver_version: string
+  sector_count: number
+  framework: string
+  units: string
+  linkage_counts: ModelBridgeEvidenceMetric[]
+  caveats: string[]
+}
+
 export type ModelCatalogEntry = {
   id: string
   title: string
@@ -421,6 +439,7 @@ export type ModelCatalogEntry = {
   caveats: ModelCaveat[]
   data_sources: ModelDataSource[]
   validation_summary: string[]
+  bridge_evidence?: ModelBridgeEvidence
 }
 
 export type ModelExplorerMeta = {
