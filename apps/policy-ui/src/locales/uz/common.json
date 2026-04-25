@@ -4,8 +4,8 @@
     "workspaceNavigationAria": "Ish maydoni navigatsiyasi",
     "primaryNavigationAria": "Asosiy navigatsiya",
     "workspaceLabel": "Ish maydoni",
-    "brandEyebrow": "Uzbekistan Economic Policy Engine",
-    "brandTitle": "Policy Analysis Workspace"
+    "brandEyebrow": "O'zbekiston iqtisodiy siyosat platformasi",
+    "brandTitle": "Siyosat tahlili ish maydoni"
   },
   "languageSwitcher": {
     "label": "Til",
@@ -15,25 +15,25 @@
     "overview": "Umumiy ko'rinish",
     "scenarioLab": "Stsenariy simulyatori",
     "comparison": "Stsenariylarni solishtirish",
-    "modelExplorer": "Model eksploreri",
+    "modelExplorer": "Model katalogi",
     "knowledgeHub": "Bilimlar markazi"
   },
   "pages": {
     "overview": {
       "title": "Umumiy ko'rinish",
-      "description": "Asosiy ko'rsatkichlar · So'nggi ma'lumotlar"
+      "description": "Qaror qabul qilishga yo'naltirilgan makroiqtisodiy holat: nima o'zgardi, nega muhim va keyin qayerda sinash kerak."
     },
     "scenarioLab": {
       "title": "Stsenariy simulyatori",
-      "description": "Siyosat ta'sirini baholash uchun taxminlarni moslab, stsenariyni ishga tushiring."
+      "description": "Taxminlarni sozlab siyosat stsenariylarini tuzing, keyin ta'sirlar va talqinni bitta ish maydonida ko'rib chiqing."
     },
     "comparison": {
       "title": "Stsenariylarni solishtirish",
-      "description": "Simulyatsiyalarni saqlang va natijalarni yonma-yon solishtiring"
+      "description": "Bazaviy va muqobil stsenariylarni yonma-yon solishtirib, kompromisslar va qaror doirasini ko'ring."
     },
     "modelExplorer": {
-      "title": "Model eksploreri",
-      "description": "Parametrlar, tenglamalar, ma'lumot manbalari va hisoblash oqimlari",
+      "title": "Model katalogi",
+      "description": "Har bir natija ortidagi mexanikani ko'ring. Har bir model nima qiladi va nima qilmasligini ochiq ko'rsatadi.",
       "catalogTitle": "Model katalogi",
       "catalogHint": "Texnik taxminlar va cheklovlarni ko'rish uchun bitta modelni tanlang.",
       "emptyState": "Ushbu ish maydonida model metama'lumotlari mavjud emas.",
@@ -195,7 +195,7 @@
       }
     },
     "form": {
-      "preset": "Preset",
+      "preset": "Andoza",
       "scenarioName": "Stsenariy nomi",
       "scenarioNamePlaceholder": "Stsenariy nomi",
       "scenarioType": "Stsenariy turi",
@@ -255,19 +255,19 @@
         "suggestedNextScenarios": "Keyingi tavsiya etilgan stsenariylar"
       },
       "aiAttribution": {
-        "title": "AI-assisted · Ko'rib chiqilmagan qoralama",
-        "body": "Bu talqin {{engine}} yordamida tuzilgan tuzilmalashgan simulyatsiya natijalaridan olingan. Tashqi iqtibosdan oldin inson tekshiruvi talab etiladi.",
-        "engineTemplate": "shablonli narrativ dvigateli",
-        "engineAssisted": "yordamchi narrativ dvigateli",
-        "engineReviewed": "tekshirilgan narrativ dvigateli",
+        "title": "AI yordamida · ko'rib chiqilmagan qoralama",
+        "body": "Bu talqin {{engine}} yordamida tuzilmalashgan simulyatsiya natijalaridan tayyorlangan. Tashqarida iqtibos qilishdan oldin inson tekshiruvi talab etiladi.",
+        "engineTemplate": "shablonli talqin matni dvigateli",
+        "engineAssisted": "yordamchi talqin matni dvigateli",
+        "engineReviewed": "ko'rib chiqilgan talqin matni dvigateli",
         "reviewedMeta": "{{reviewer_name}} tomonidan {{review_date}} kuni tekshirilgan.",
         "assisted": {
-          "title": "AI-assisted · Ko'rib chiqilmagan qoralama",
-          "body": "AI-assisted qoralama. Model chiqishi asosida yaratilgan, CERR tahlil xodimlari tomonidan hali ko'rib chiqilmagan. Iqtibos qilmang, eksport qilmang va tashqariga ulashmang."
+          "title": "AI yordamida · ko'rib chiqilmagan qoralama",
+          "body": "AI yordamida tayyorlangan qoralama. Model natijalari asosida yaratilgan, CERR tahlil xodimlari tomonidan hali ko'rib chiqilmagan. Iqtibos qilmang, eksport qilmang va tashkilot tashqarisida ulashmang."
         },
         "reviewed": {
-          "title": "AI-assisted · Ko'rib chiqilgan {{reviewed_at}}",
-          "body": "AI-assisted matn, {{reviewer_name}} tomonidan {{review_date}} kuni ko'rib chiqilgan. Ichki foydalanish va iqtibos uchun tasdiqlangan."
+          "title": "AI yordamida · ko'rib chiqilgan {{reviewed_at}}",
+          "body": "AI yordamida tayyorlangan talqin matni {{reviewer_name}} tomonidan {{review_date}} kuni ko'rib chiqilgan. Ichki foydalanish va iqtibos uchun tasdiqlangan."
         }
       }
     },
@@ -282,13 +282,13 @@
   },
   "comparison": {
     "header": {
-      "eyebrow": "Stsenariy murosalari",
+      "eyebrow": "Stsenariy kompromisslari",
       "meta": {
         "comparing": "Taqqoslanmoqda",
         "scenarioCount": "{{count}} stsenariy",
         "horizon": "Gorizont",
         "mode": "Rejim",
-        "deltasVsBaseline": "Bazaviyga nisbatan dellalar"
+        "deltasVsBaseline": "Bazaviyga nisbatan deltalar"
       }
     },
     "chip": {
@@ -328,7 +328,7 @@
     },
     "chart": {
       "title": "Qiyosiy grafiklar",
-      "description": "Tanlangan yo'nalish bo'yicha stsenariylar kesimidagi kichik-multipllar.",
+      "description": "Tanlangan qiyoslash o'lchami bo'yicha stsenariylar kesimidagi kichik grafiklar.",
       "emptySelection": "Grafiklarni ko'rsatish uchun bazaviy va kamida bitta muqobil stsenariyni tanlang.",
       "tabSwitcherAria": "Solishtirish grafik tablari",
       "tabSwitcher": {
@@ -341,13 +341,13 @@
       "miniSubtitle": "{{tab_label}}",
       "miniTakeaway": "Tanlangan stsenariy va tab uchun trayektoriya ko'rinishi.",
       "slotAria": "{{tab_label}} tabidagi {{scenario_name}} grafigi",
-      "savedRunEmpty": "Grafik mavjud emas — to'liq run persistence dan oldin saqlangan",
+      "savedRunEmpty": "Grafik mavjud emas — natijalar to'liq saqlanishidan oldin yozilgan",
       "unavailable": "Ushbu stsenariy va tab uchun grafik mavjud emas."
     },
     "tradeoff": {
       "title": "Trade-off xulosasi",
       "smePendingChip": "SME kontenti kutilmoqda",
-      "smePendingAria": "Murosalar xulosasi — SME kontenti kutilmoqda",
+      "smePendingAria": "Kompromisslar xulosasi — SME kontenti kutilmoqda",
       "description": "Har bir muqobil stsenariy uchun shablon asosidagi qiyosiy jumlalar.",
       "empty": "Xulosani yaratish uchun bazaviy va kamida bitta muqobil stsenariyni tanlang.",
       "shifts": "siljitadi",
