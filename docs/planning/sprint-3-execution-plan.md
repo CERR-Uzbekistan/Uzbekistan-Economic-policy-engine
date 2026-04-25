@@ -386,14 +386,20 @@ Default off-ramp:
 
 ### TB-P1 Deployment Migration Implementation
 
-**Status:** product decision locked; implementation plan still needed.  
-**Decision needed:** exact timing and owner for moving the React rebuild into pilot deployment.
+**Status:** implementation path selected in `codex/sprint3-tb-p1-pilot-deployment`.
+**Decision:** publish the React rebuild as the Sprint 3 GitHub Pages sidecar pilot under `/policy-ui/`, while preserving the legacy root.
 
 Constraints:
 
 - DFM cron activation depends on this sequence.
 - Pilot users need a stable public surface.
 - Do not treat workflow-on-epic as full freshness automation.
+
+Implementation notes:
+
+- Pages deployment follows `epic/replatform-execution` and `main`, not the older `epic/frontend-replatform` branch.
+- Pilot users access the React rebuild at `/policy-ui/#/overview` on the repository GitHub Pages host.
+- Default-branch DFM scheduled activation remains pending until this deployment path is promoted to `main`.
 
 ### Slice Size Cap
 

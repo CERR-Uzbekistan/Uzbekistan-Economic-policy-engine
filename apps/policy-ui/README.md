@@ -1,6 +1,6 @@
 # Policy UI (Replatform Shell)
 
-This app is the new frontend shell for the Uzbekistan Economic Policy Engine replatform.
+This app is the new frontend shell for the Uzbekistan Economic Policy Engine replatform and the Sprint 3 pilot deployment surface.
 
 ## Current scope
 
@@ -31,6 +31,22 @@ This app is the new frontend shell for the Uzbekistan Economic Policy Engine rep
 npm install
 npm run dev
 ```
+
+## Sprint 3 Pilot Deployment
+
+The deployed pilot is published by GitHub Pages under the repository site
+at `/policy-ui/`, while the legacy static site remains at the root.
+
+Pilot entry route:
+
+```text
+https://<org>.github.io/Uzbekistan-Economic-policy-engine/policy-ui/#/overview
+```
+
+The production build uses `POLICY_UI_BASE=/Uzbekistan-Economic-policy-engine/policy-ui/`
+and hash routing so static Pages hosting does not require rewrite rules.
+DFM scheduled freshness remains manual-dispatch on the epic branch until
+the deployment path is promoted to `main`.
 
 ## Data Modes
 

@@ -16,7 +16,7 @@ Interactive macroeconomic policy simulation platform for analyzing Uzbekistan's 
 ## Repository Structure
 
 - `index.html` + model folders (`qpm_uzbekistan`, `dfm_nowcast`, `pe_model`, `io_model`, `cge_model`, `fpp_model`): legacy static application and model pages.
-- `apps/policy-ui`: React + TypeScript replatform frontend.
+- `apps/policy-ui`: React + TypeScript replatform frontend and Sprint 3 pilot deployment surface.
 - `mcp_server`: Python MCP server exposing model tools.
 - `shared`: shared JS registries, engines, i18n, and data assets used by the static app.
 
@@ -33,6 +33,23 @@ Interactive macroeconomic policy simulation platform for analyzing Uzbekistan's 
 1. `cd apps/policy-ui`
 2. `npm ci`
 3. `npm run dev` (or `npm run build` / `npm run test`)
+
+### Sprint 3 pilot deployment
+
+The React rebuild is the Sprint 3 pilot deployment surface. GitHub Pages
+keeps the legacy static site at the repository root and publishes the React
+app as a sidecar under `/policy-ui/`.
+
+Pilot entry route:
+
+```text
+https://<org>.github.io/Uzbekistan-Economic-policy-engine/policy-ui/#/overview
+```
+
+The exact host depends on the repository Pages domain. DFM scheduled
+freshness is not considered active until the deployment and data-regeneration
+workflows are promoted to `main`; until then, DFM regeneration remains a
+manual-dispatch workflow on the epic branch.
 
 ### MCP server (`mcp_server`)
 

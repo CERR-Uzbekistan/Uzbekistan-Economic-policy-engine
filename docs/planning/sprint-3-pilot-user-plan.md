@@ -2,7 +2,7 @@
 
 **Owner:** Nozimjon Ortiqov  
 **Named evaluator deadline:** 2026-05-08  
-**Scope:** Planning and feedback capture only. TB-P1 deployment migration is explicitly out of scope for this slice.  
+**Scope:** Planning and feedback capture only. TB-P1 deployment migration is implemented separately and supplies the hosted access path.
 **Roadmap priority constraint:** This plan records the pilot path and Sprint 4 intake process; it does not change roadmap priorities.
 
 ## Purpose
@@ -31,7 +31,7 @@ Each session should be observational, not a walkthrough.
 - Format: evaluator uses the pilot surface while the team observes.
 - Prompting: use short task prompts only when the evaluator stalls; do not explain the intended answer.
 - Capture: record observations in `docs/frontend-replatform/13_pilot_observations.md`.
-- Deployment: do not start or require TB-P1 deployment migration in this slice. If a hosted URL is unavailable, record that access constraint separately from evaluator feedback.
+- Deployment: use the Sprint 3 React pilot at `/policy-ui/#/overview` on the repository GitHub Pages site once the TB-P1 deployment branch is merged and deployed. If the hosted URL is unavailable, record that access constraint separately from evaluator feedback.
 
 ## Feedback Capture Process
 
@@ -79,7 +79,7 @@ An observation should not alter Sprint 4 sequencing when it is:
 
 - Purely cosmetic.
 - A request for a new roadmap item unrelated to the current pilot surface.
-- Dependent on TB-P1 deployment migration, which is outside this slice.
+- Dependent on changing TB-P1 deployment architecture rather than using the GitHub Pages `/policy-ui/` pilot path.
 - Dependent on changing roadmap priorities without a separate Sprint 4 planning decision.
 
 ## Sprint 4 Backlog Triage Fields
@@ -101,7 +101,7 @@ Use these fields when converting observations into backlog candidates:
 
 ## Out of Scope
 
-- TB-P1 deployment migration implementation.
+- Changing TB-P1 deployment architecture or replacing the legacy root.
 - Changing roadmap priorities directly in this document.
 - Guided stakeholder demos presented as user research.
 - New bridge work, app code changes, or UI polish.

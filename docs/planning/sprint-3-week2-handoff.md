@@ -74,7 +74,7 @@ RU/UZ strings were not edited. RU/UZ translation can begin after owner review/ap
 
 - RU/UZ translation content.
 - IO/PE/CGE/FPP bridge work.
-- TB-P1 deployment migration.
+- TB-P1 deployment migration during the Week 2 content/trust branch. TB-P1 is handled separately by `codex/sprint3-tb-p1-pilot-deployment`, which publishes the React rebuild as the `/policy-ui/` GitHub Pages pilot.
 - Default-branch DFM cron activation.
 - Comparison add-saved-scenario modal.
 - Scenario Lab legacy metadata retirement.

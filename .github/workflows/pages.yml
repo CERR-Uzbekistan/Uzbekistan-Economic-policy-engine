@@ -3,7 +3,7 @@ name: Deploy Pages
 on:
   push:
     branches:
-      - epic/frontend-replatform
+      - epic/replatform-execution
       - main
   workflow_dispatch:
 
@@ -66,6 +66,13 @@ jobs:
             ./ _site/
           mkdir -p _site/policy-ui
           cp -r apps/policy-ui/dist/. _site/policy-ui/
+
+      - name: Validate pilot artifact layout
+        run: |
+          test -s _site/index.html
+          test -s _site/policy-ui/index.html
+          test -s _site/policy-ui/404.html
+          test -d _site/policy-ui/assets
 
       - uses: actions/upload-pages-artifact@v3
         with:

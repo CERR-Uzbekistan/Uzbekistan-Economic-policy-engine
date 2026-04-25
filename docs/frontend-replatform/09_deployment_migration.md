@@ -1,24 +1,87 @@
 # 09 — Deployment Migration
 
-**Status:** DRAFT v2 — recommendations staged for CERR leadership review
+**Status:** Sprint 3 TB-P1 update — GitHub Pages sidecar pilot selected
 **Owner:** Nozimjon Ortiqov
-**Deadline:** End of Week 1 (before TA-3 ships)
+**Implementation slice:** Sprint 3 TB-P1 pilot deployment migration
 
-This document converts three deployment decisions from open questions into
-concrete recommendations. Each section leads with the recommended option,
-the reasoning, and what it would take to reverse course if leadership
-prefers something else.
+This document originally converted three deployment decisions from open
+questions into concrete recommendations. Sprint 3 TB-P1 replaces the
+preview-hosting recommendation with the implementable pilot path now used
+by the repository: the React rebuild is published as a GitHub Pages sidecar
+under `/policy-ui/`, while the legacy root remains frozen and available.
+
+The read-before-write audit for the TB-P1 migration is recorded in
+[sprint3-tb-p1-pilot-deployment-audit.md](../alignment/sprint3-tb-p1-pilot-deployment-audit.md).
 
 ---
 
-## 1. Preview URL
+## 1. Pilot URL
 
-**Recommendation:** Provision Vercel, scoped to the `apps/policy-ui` build,
-with password protection via environment variable. Keep the existing GitHub
-Pages pipeline (`.github/workflows/pages.yml`) running in parallel as the
-public-facing surface for the legacy site until Decision 3 fires.
+**Sprint 3 TB-P1 decision:** Use GitHub Pages as the pilot deployment path.
+Keep the legacy site at the repository Pages root and publish the React
+rebuild under `/policy-ui/`.
 
-**Target provisioning date:** 2026-04-24 (half a day of configuration).
+Pilot entry URL pattern:
+
+```text
+https://<org>.github.io/Uzbekistan-Economic-policy-engine/policy-ui/#/overview
+```
+
+The exact host depends on the repository Pages domain. Within the deployed
+artifact, React routes are hash routes (`#/overview`, `#/scenario-lab`,
+`#/comparison`, `#/model-explorer`, `#/knowledge-hub`) so static hosting
+does not require a server-side rewrite rule.
+
+### Why GitHub Pages sidecar for TB-P1
+
+| Option | Pros | Cons | Verdict |
+|---|---|---|---|
+| **GitHub Pages sidecar at `/policy-ui/`** | Already wired in `.github/workflows/pages.yml`; no new vendor or secrets; preserves root legacy URLs; enough for named Sprint 3 pilot access. | Not password protected; public once deployed to Pages. | **Chosen for TB-P1.** |
+| Vercel | Zero-config for Vite; can provide password-protected previews and per-PR URLs. | Requires Vercel org/vendor setup, access-control decisions, and repo integration outside this branch. | Deferred option, not required for TB-P1. |
+| Replace Pages root with React | Makes React the top-level site immediately. | Would replace the existing legacy public surface and break the "legacy frozen unless explicitly replaced" constraint. | Rejected for TB-P1. |
+
+### Workflow shape
+
+The Pages workflow:
+
+1. Runs on `epic/replatform-execution` and `main`, plus manual dispatch.
+2. Installs, lints, tests, and builds `apps/policy-ui`.
+3. Builds React with `POLICY_UI_BASE=/Uzbekistan-Economic-policy-engine/policy-ui/`.
+4. Copies the existing repository-root legacy surface into `_site`.
+5. Copies `apps/policy-ui/dist/` into `_site/policy-ui/`.
+6. Validates `_site/index.html`, `_site/policy-ui/index.html`,
+   `_site/policy-ui/404.html`, and `_site/policy-ui/assets` before upload.
+
+This makes the React rebuild the Sprint 3 pilot deployment without deleting
+or redirecting the legacy site.
+
+### DFM freshness and default-branch activation
+
+TB-P1 does not by itself mean scheduled DFM freshness is active for users.
+The honest sequence remains:
+
+1. On `epic/replatform-execution`, data regeneration is available by manual
+   `workflow_dispatch`.
+2. The React pilot deployment path lands on `main` through the normal
+   promotion path.
+3. Only after the workflow exists on the default branch should scheduled
+   DFM regeneration be described as active for the user-facing pilot data.
+
+Do not describe default-branch cron freshness as complete while the
+deployment path lives only on the epic branch.
+
+## 1a. Deferred Preview-Protection Option
+
+The earlier Vercel recommendation remains a reversible option if CERR needs
+password protection or per-PR preview URLs before public rollout. It is not
+the Sprint 3 TB-P1 implementation path.
+
+<!-- Historical recommendation retained for context. -->
+
+**Prior recommendation:** Provision Vercel, scoped to the `apps/policy-ui`
+build, with password protection via environment variable. Keep the existing
+GitHub Pages pipeline (`.github/workflows/pages.yml`) running in parallel as
+the public-facing surface for the legacy site until Decision 3 fires.
 
 ### Why Vercel over the alternatives
 
