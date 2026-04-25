@@ -188,20 +188,91 @@ describe('scenarioStore', () => {
         key_risks: ['wage-price spiral'],
         policy_implications: ['tighten for longer'],
         suggested_next_scenarios: ['fx pass-through stress'],
-        generation_mode: 'assisted',
-        reviewer_name: 'X. Reviewer',
-        reviewed_at: '2026-03-15T09:00:00Z',
+        metadata: {
+          generation_mode: 'assisted',
+          reviewer_name: 'X. Reviewer',
+          reviewed_at: '2026-03-15T09:00:00Z',
+        },
       },
     })
 
     const loaded = loadScenario('scenario-gov-1')
     assert.ok(loaded)
     assert.ok(loaded.run_interpretation)
-    assert.equal(loaded.run_interpretation.generation_mode, 'assisted')
-    assert.equal(loaded.run_interpretation.reviewer_name, 'X. Reviewer')
-    assert.equal(loaded.run_interpretation.reviewed_at, '2026-03-15T09:00:00Z')
+    assert.equal(loaded.run_interpretation.metadata.generation_mode, 'assisted')
+    assert.equal(loaded.run_interpretation.metadata.reviewer_name, 'X. Reviewer')
+    assert.equal(loaded.run_interpretation.metadata.reviewed_at, '2026-03-15T09:00:00Z')
     assert.deepEqual(loaded.run_interpretation.what_changed, ['policy rate lifted 50bps'])
     assert.deepEqual(loaded.run_interpretation.why_it_changed, ['inflation persistence elevated'])
+  })
+
+  it('strips inert legacy top-level governance fields when saving current metadata shape', () => {
+    const saved = saveScenario({
+      ...buildScenarioInput('scenario-gov-duplicates', 'Scenario Governance Duplicates'),
+      run_interpretation: {
+        what_changed: ['policy rate lifted 50bps'],
+        why_it_changed: ['inflation persistence elevated'],
+        key_risks: ['wage-price spiral'],
+        policy_implications: ['tighten for longer'],
+        suggested_next_scenarios: ['fx pass-through stress'],
+        metadata: {
+          generation_mode: 'reviewed',
+          reviewer_name: 'X. Reviewer',
+          reviewed_at: '2026-03-15T09:00:00Z',
+        },
+        generation_mode: 'assisted',
+        reviewer_name: 'Legacy Reviewer',
+        reviewed_at: '2026-01-01T00:00:00Z',
+      } as Parameters<typeof saveScenario>[0]['run_interpretation'] & Record<string, unknown>,
+    })
+    const rawSavedRecord = localStorage.getItem(`policy-ui:scenario.v2:${saved.scenario_id}`)
+    assert.ok(rawSavedRecord)
+    const parsed = JSON.parse(rawSavedRecord) as {
+      run_interpretation?: Record<string, unknown>
+    }
+
+    assert.ok(parsed.run_interpretation)
+    assert.equal(parsed.run_interpretation.metadata instanceof Object, true)
+    assert.equal('generation_mode' in parsed.run_interpretation, false)
+    assert.equal('reviewer_name' in parsed.run_interpretation, false)
+    assert.equal('reviewed_at' in parsed.run_interpretation, false)
+  })
+
+  it('loads current metadata records that still carry inert duplicate legacy fields', () => {
+    const recordWithDuplicateFields = {
+      ...buildScenarioInput('scenario-gov-current-plus-legacy', 'Current Metadata Plus Legacy'),
+      created_at: '2026-04-01T12:00:00Z',
+      updated_at: '2026-04-01T12:00:00Z',
+      created_by: 'test-session',
+      stored_at: '2026-04-01T12:00:00Z',
+      run_interpretation: {
+        what_changed: ['Current metadata what changed.'],
+        why_it_changed: ['Current metadata why.'],
+        key_risks: ['Current metadata risk.'],
+        policy_implications: ['Current metadata implication.'],
+        suggested_next_scenarios: ['Current metadata next.'],
+        metadata: {
+          generation_mode: 'reviewed',
+          reviewer_name: 'Current Reviewer',
+          reviewed_at: '2026-04-01T12:00:00Z',
+        },
+        generation_mode: 'assisted',
+        reviewer_name: 'Legacy Reviewer',
+        reviewed_at: '2026-01-01T00:00:00Z',
+      },
+    }
+    const rawPayload = JSON.stringify(recordWithDuplicateFields)
+    localStorage.setItem('policy-ui:scenario.v2:scenario-gov-current-plus-legacy', rawPayload)
+
+    const loaded = loadScenario('scenario-gov-current-plus-legacy')
+
+    assert.ok(loaded)
+    assert.equal(loaded.run_interpretation?.metadata.generation_mode, 'reviewed')
+    assert.equal(loaded.run_interpretation?.metadata.reviewer_name, 'Current Reviewer')
+    assert.equal(
+      localStorage.getItem('policy-ui:scenario.v2:scenario-gov-current-plus-legacy'),
+      rawPayload,
+    )
   })
 
   it('round-trips run_id, run_saved_at, run_results and run_attribution', () => {
@@ -289,6 +360,41 @@ describe('scenarioStore', () => {
     const listed = listScenarios()
     assert.deepEqual(listed, [])
     assert.equal(localStorage.getItem('policy-ui:scenario:legacy-entry'), legacyPayload)
+  })
+
+  it('rejects legacy top-level-only interpretation governance without rewriting storage', () => {
+    const legacyRecord = {
+      ...buildScenarioInput('legacy-run-interpretation', 'Legacy Run Interpretation'),
+      created_at: '2026-04-01T12:00:00Z',
+      updated_at: '2026-04-01T12:00:00Z',
+      created_by: 'test-session',
+      stored_at: '2026-04-01T12:00:00Z',
+      run_interpretation: {
+        what_changed: ['Legacy what changed.'],
+        why_it_changed: ['Legacy why.'],
+        key_risks: ['Legacy risk.'],
+        policy_implications: ['Legacy implication.'],
+        suggested_next_scenarios: ['Legacy next.'],
+        generation_mode: 'reviewed',
+        reviewer_name: 'Legacy Reviewer',
+        reviewed_at: '2026-04-01T12:00:00Z',
+      },
+    }
+    const legacyPayload = JSON.stringify(legacyRecord)
+    localStorage.setItem('policy-ui:scenario.v2:legacy-run-interpretation', legacyPayload)
+
+    const originalWarn = console.warn
+    console.warn = (() => {}) as typeof console.warn
+    const loaded = loadScenario('legacy-run-interpretation')
+    const listed = listScenarios()
+    console.warn = originalWarn
+
+    assert.equal(loaded, null)
+    assert.equal(
+      listed.some((entry) => entry.scenario_id === 'legacy-run-interpretation'),
+      false,
+    )
+    assert.equal(localStorage.getItem('policy-ui:scenario.v2:legacy-run-interpretation'), legacyPayload)
   })
 
   it('rejects persisted run_results missing a required tab', () => {

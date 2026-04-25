@@ -4,10 +4,11 @@ import type {
   ChartSpec,
   HeadlineMetric,
   ModelAttribution,
-  NarrativeGenerationMode,
   Scenario,
   ScenarioLabInterpretation,
+  ScenarioLabInterpretationMetadata,
   ScenarioLabResultTab,
+  SuggestedNextScenario,
   ScenarioType,
 } from '../contracts/data-contract'
 
@@ -24,14 +25,10 @@ type ScenarioWithDataVersion = Scenario & {
   data_version: string
 }
 
-// Interpretation as emitted by the Scenario Lab source pipeline (TB-P3 extension).
-// Mirrors the `InterpretationWithMetadata` intersection already consumed by
-// `InterpretationPanel`; governance fields are carried on this extension,
-// not on `NarrativeBlock`.
+// Interpretation as emitted by the Scenario Lab source pipeline. Governance fields
+// are supported only through typed metadata, not legacy top-level fields.
 export type PersistedScenarioInterpretation = ScenarioLabInterpretation & {
-  generation_mode?: NarrativeGenerationMode
-  reviewer_name?: string
-  reviewed_at?: string
+  metadata: ScenarioLabInterpretationMetadata
 }
 
 export type PersistedRunResults = {
@@ -183,6 +180,41 @@ function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === 'string')
 }
 
+function isScenarioLabInterpretationMetadata(
+  value: unknown,
+): value is ScenarioLabInterpretationMetadata {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<ScenarioLabInterpretationMetadata>
+  if (
+    candidate.generation_mode !== 'template' &&
+    candidate.generation_mode !== 'assisted' &&
+    candidate.generation_mode !== 'reviewed'
+  ) {
+    return false
+  }
+  if (candidate.reviewer_name !== undefined && typeof candidate.reviewer_name !== 'string') {
+    return false
+  }
+  if (candidate.reviewed_at !== undefined && typeof candidate.reviewed_at !== 'string') {
+    return false
+  }
+  return true
+}
+
+function isSuggestedNextScenario(value: unknown): value is SuggestedNextScenario {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<SuggestedNextScenario>
+  return (
+    typeof candidate.label === 'string' &&
+    (candidate.target_route === '/scenario-lab' || candidate.target_route === '/comparison') &&
+    (candidate.target_preset === undefined || typeof candidate.target_preset === 'string')
+  )
+}
+
 function isPersistedScenarioInterpretation(value: unknown): value is PersistedScenarioInterpretation {
   if (typeof value !== 'object' || value === null) {
     return false
@@ -197,21 +229,33 @@ function isPersistedScenarioInterpretation(value: unknown): value is PersistedSc
   ) {
     return false
   }
+  if (!isScenarioLabInterpretationMetadata(candidate.metadata)) {
+    return false
+  }
   if (
-    candidate.generation_mode !== undefined &&
-    candidate.generation_mode !== 'template' &&
-    candidate.generation_mode !== 'assisted' &&
-    candidate.generation_mode !== 'reviewed'
+    candidate.suggested_next !== undefined &&
+    !(Array.isArray(candidate.suggested_next) && candidate.suggested_next.every(isSuggestedNextScenario))
   ) {
     return false
   }
-  if (candidate.reviewer_name !== undefined && typeof candidate.reviewer_name !== 'string') {
-    return false
-  }
-  if (candidate.reviewed_at !== undefined && typeof candidate.reviewed_at !== 'string') {
-    return false
-  }
   return true
+}
+
+function normalizePersistedScenarioInterpretation(
+  interpretation: PersistedScenarioInterpretation,
+): PersistedScenarioInterpretation {
+  const normalized: PersistedScenarioInterpretation = {
+    what_changed: interpretation.what_changed,
+    why_it_changed: interpretation.why_it_changed,
+    key_risks: interpretation.key_risks,
+    policy_implications: interpretation.policy_implications,
+    suggested_next_scenarios: interpretation.suggested_next_scenarios,
+    metadata: interpretation.metadata,
+  }
+  if (interpretation.suggested_next !== undefined) {
+    normalized.suggested_next = interpretation.suggested_next
+  }
+  return normalized
 }
 
 function isSavedScenarioRecord(value: unknown): value is SavedScenarioRecord {
@@ -366,7 +410,12 @@ export function saveScenario(scenario: SaveScenarioInput): SavedScenarioRecord {
     normalizedRecord.run_results = scenario.run_results
   }
   if (scenario.run_interpretation !== undefined) {
-    normalizedRecord.run_interpretation = scenario.run_interpretation
+    if (!isPersistedScenarioInterpretation(scenario.run_interpretation)) {
+      throw new Error('Scenario run interpretation does not match the supported persisted shape.')
+    }
+    normalizedRecord.run_interpretation = normalizePersistedScenarioInterpretation(
+      scenario.run_interpretation,
+    )
   }
   if (scenario.run_attribution !== undefined) {
     normalizedRecord.run_attribution = scenario.run_attribution

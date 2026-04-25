@@ -2,7 +2,6 @@ import type {
   ChartSpec,
   HeadlineMetric,
   ModelAttribution,
-  NarrativeGenerationMode,
   ScenarioLabAssumptionState,
   ScenarioLabInterpretation,
   ScenarioLabPreset,
@@ -424,13 +423,7 @@ function buildInterpretation(values: ScenarioLabAssumptionState): ScenarioLabInt
   return interpretation
 }
 
-type InterpretationWithGenerationMode = ScenarioLabInterpretation & {
-  generation_mode?: NarrativeGenerationMode
-  reviewer_name?: string
-  reviewed_at?: string
-}
-
-function buildInterpretationCore(values: ScenarioLabAssumptionState): InterpretationWithGenerationMode {
+function buildInterpretationCore(values: ScenarioLabAssumptionState): ScenarioLabInterpretation {
   const core = getMetricCore(values)
   const majorDrivers = Object.entries(values)
     .filter(([, value]) => Math.abs(value) > 0.01)
@@ -466,7 +459,6 @@ function buildInterpretationCore(values: ScenarioLabAssumptionState): Interpreta
       'Inflation persistence with stronger policy-rate response.',
       'Exchange-rate shock with remittance downside stress.',
     ],
-    generation_mode: 'template',
   }
 }
 
@@ -565,7 +557,9 @@ function buildImpulseResponseChart(values: ScenarioLabAssumptionState): ChartSpe
   }
 }
 
-function resolveInterpretationGenerationMode(): NarrativeGenerationMode {
+function resolveInterpretationGenerationMode(): NonNullable<
+  ScenarioLabInterpretation['metadata']
+>['generation_mode'] {
   // No preset currently seeds 'assisted' mode. TA-9 will introduce
   // assisted narratives from the AI advisor; for now all preset
   // outputs are template-mode.
@@ -579,12 +573,9 @@ export function buildScenarioLabResults(
   const baselineCore = getMetricCore(getDefaultAssumptionState())
   const scenarioCore = getMetricCore(values)
   const headlineMetrics = buildHeadlineMetrics(values)
-  const interpretation = buildInterpretation(values) as InterpretationWithGenerationMode
+  const interpretation = buildInterpretation(values)
   void options
   const generationMode = resolveInterpretationGenerationMode()
-  interpretation.generation_mode = generationMode
-  // Shot-1 additive: typed metadata supersedes the informal cast read inside
-  // InterpretationPanel; the old top-level field is retained for back-compat.
   interpretation.metadata = { generation_mode: generationMode }
   interpretation.suggested_next = SCENARIO_LAB_SUGGESTED_NEXT
 

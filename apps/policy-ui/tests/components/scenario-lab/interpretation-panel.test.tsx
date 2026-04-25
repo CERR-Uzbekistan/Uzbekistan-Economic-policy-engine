@@ -81,6 +81,26 @@ describe('InterpretationPanel', () => {
     assert.doesNotMatch(markup, /AI-assisted/)
   })
 
+  it('ignores legacy top-level governance fields without typed metadata', async () => {
+    const i18n = await createTestI18n()
+    const legacyInterpretation = {
+      ...buildInterpretation({ metadata: undefined }),
+      generation_mode: 'reviewed',
+      reviewer_name: 'Legacy Reviewer',
+      reviewed_at: '2026-04-20T09:15:00+05:00',
+    } as ScenarioLabInterpretation
+    const markup = renderToStaticMarkup(
+      <MemoryRouter>
+        <I18nextProvider i18n={i18n}>
+          <InterpretationPanel interpretation={legacyInterpretation} />
+        </I18nextProvider>
+      </MemoryRouter>,
+    )
+
+    assert.doesNotMatch(markup, /class="ai-attribution/)
+    assert.doesNotMatch(markup, /Legacy Reviewer/)
+  })
+
   it('renders the adopted unreviewed warning in assisted mode', async () => {
     const i18n = await createTestI18n()
     const markup = renderToStaticMarkup(

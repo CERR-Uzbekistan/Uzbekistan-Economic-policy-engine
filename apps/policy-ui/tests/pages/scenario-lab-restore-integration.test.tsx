@@ -222,9 +222,6 @@ describe('Scenario Lab saved-run restore integration', () => {
         key_risks: ['Persisted interpretation risk text.'],
         policy_implications: ['Persisted interpretation implication text.'],
         suggested_next_scenarios: ['Persisted next scenario text.'],
-        generation_mode: 'reviewed',
-        reviewer_name: 'M. Usmanov',
-        reviewed_at: '2026-04-01T12:00:00Z',
         metadata: {
           generation_mode: 'reviewed',
           reviewer_name: 'M. Usmanov',
@@ -248,6 +245,13 @@ describe('Scenario Lab saved-run restore integration', () => {
     assert.ok(rawSavedRecord)
     assert.match(rawSavedRecord, /"run_results"/)
     assert.match(rawSavedRecord, /"metadata"/)
+    const parsedSavedRecord = JSON.parse(rawSavedRecord) as {
+      run_interpretation?: Record<string, unknown>
+    }
+    assert.ok(parsedSavedRecord.run_interpretation)
+    assert.equal('generation_mode' in parsedSavedRecord.run_interpretation, false)
+    assert.equal('reviewer_name' in parsedSavedRecord.run_interpretation, false)
+    assert.equal('reviewed_at' in parsedSavedRecord.run_interpretation, false)
 
     const loaded = loadScenario(saved.scenario_id)
     assert.ok(loaded)
@@ -256,7 +260,7 @@ describe('Scenario Lab saved-run restore integration', () => {
     assert.ok(loaded.run_results)
     assert.ok(loaded.run_interpretation)
     assert.equal(loaded.run_interpretation.metadata?.generation_mode, 'reviewed')
-    assert.equal(loaded.run_interpretation.reviewer_name, 'M. Usmanov')
+    assert.equal(loaded.run_interpretation.metadata?.reviewer_name, 'M. Usmanov')
 
     const restoredAssumptions = toAssumptionValues(loaded.assumptions)
     assert.equal(restoredAssumptions.export_demand_change, -8)

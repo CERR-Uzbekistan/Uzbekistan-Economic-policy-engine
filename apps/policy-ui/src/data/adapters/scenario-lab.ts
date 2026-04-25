@@ -2,6 +2,7 @@ import type {
   ChartSpec,
   ChartType,
   HeadlineMetric,
+  ScenarioLabInterpretation,
   ScenarioLabResultTab,
   ScenarioLabResultsBundle,
   ScenarioLabWorkspace,
@@ -235,6 +236,33 @@ function toHeadlineMetrics(
   })
 }
 
+function isGenerationMode(
+  value: string | undefined,
+): value is NonNullable<ScenarioLabInterpretation['metadata']>['generation_mode'] {
+  return value === 'template' || value === 'assisted' || value === 'reviewed'
+}
+
+function toInterpretationMetadata(
+  rawInterpretation: RawScenarioLabInterpretation | undefined,
+  fallback: NonNullable<ScenarioLabInterpretation['metadata']>,
+): NonNullable<ScenarioLabInterpretation['metadata']> {
+  return {
+    generation_mode: isGenerationMode(rawInterpretation?.generationMode)
+      ? rawInterpretation.generationMode
+      : fallback.generation_mode,
+    ...(typeof rawInterpretation?.reviewerName === 'string'
+      ? { reviewer_name: rawInterpretation.reviewerName }
+      : fallback.reviewer_name
+        ? { reviewer_name: fallback.reviewer_name }
+        : {}),
+    ...(typeof rawInterpretation?.reviewedAt === 'string'
+      ? { reviewed_at: rawInterpretation.reviewedAt }
+      : fallback.reviewed_at
+        ? { reviewed_at: fallback.reviewed_at }
+        : {}),
+  }
+}
+
 function toWorkspace(raw: RawScenarioLabRunPayload['workspace'] | undefined): ScenarioLabWorkspace {
   const fallback = scenarioLabWorkspaceMock
   return {
@@ -282,6 +310,9 @@ export function toScenarioLabData(raw: RawScenarioLabRunPayload): ScenarioLabAda
   const fallbackResults = buildScenarioLabResults(getDefaultAssumptionState())
   const generatedAt = toIsoOrFallback(raw.run?.generatedAt, new Date().toISOString())
   const rawInterpretation = raw.run?.interpretation
+  const fallbackInterpretationMetadata = fallbackResults.interpretation.metadata ?? {
+    generation_mode: 'template',
+  }
 
   return {
     workspace: toWorkspace(raw.workspace),
@@ -301,17 +332,7 @@ export function toScenarioLabData(raw: RawScenarioLabRunPayload): ScenarioLabAda
         suggested_next_scenarios:
           raw.run?.interpretation?.suggestedNextScenarios ??
           fallbackResults.interpretation.suggested_next_scenarios,
-        ...(rawInterpretation?.generationMode === 'template' ||
-        rawInterpretation?.generationMode === 'assisted' ||
-        rawInterpretation?.generationMode === 'reviewed'
-          ? { generation_mode: rawInterpretation.generationMode }
-          : {}),
-        ...(typeof rawInterpretation?.reviewerName === 'string'
-          ? { reviewer_name: rawInterpretation.reviewerName }
-          : {}),
-        ...(typeof rawInterpretation?.reviewedAt === 'string'
-          ? { reviewed_at: rawInterpretation.reviewedAt }
-          : {}),
+        metadata: toInterpretationMetadata(rawInterpretation, fallbackInterpretationMetadata),
       } as ScenarioLabResultsBundle['interpretation'],
     },
   }

@@ -481,7 +481,8 @@ export type ScenarioLabInterpretation = {
   suggested_next_scenarios: string[]
   // Shot-1 additive: clickable anchors with route + optional preset target.
   suggested_next?: SuggestedNextScenario[]
-  // Shot-1 additive: typed metadata supersedes the informal cast in InterpretationPanel.
+  // Shot-1 additive: typed governance metadata for Scenario Lab interpretation rendering
+  // and saved-run restore.
   metadata?: ScenarioLabInterpretationMetadata
 }
 

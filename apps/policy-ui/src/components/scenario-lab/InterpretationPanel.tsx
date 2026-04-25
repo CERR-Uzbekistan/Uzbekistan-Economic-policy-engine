@@ -10,14 +10,6 @@ type InterpretationPanelProps = {
   interpretation: ScenarioLabInterpretation
 }
 
-type InterpretationWithLegacyMetadata = ScenarioLabInterpretation & {
-  // Legacy top-level fields used by pre-Shot-1 code paths; preserved until a
-  // follow-up slice removes them.
-  generation_mode?: NarrativeGenerationMode
-  reviewer_name?: string
-  reviewed_at?: string
-}
-
 function formatReviewedAt(value: string | undefined, locale: string): string {
   if (!value) {
     return ''
@@ -47,17 +39,17 @@ function InterpretationSection({ title, items }: { title: string; items: string[
 }
 
 function resolveGenerationMode(
-  interpretation: InterpretationWithLegacyMetadata,
+  interpretation: ScenarioLabInterpretation,
 ): NarrativeGenerationMode {
-  return interpretation.metadata?.generation_mode ?? interpretation.generation_mode ?? 'template'
+  return interpretation.metadata?.generation_mode ?? 'template'
 }
 
 function resolveReviewerInfo(
-  interpretation: InterpretationWithLegacyMetadata,
+  interpretation: ScenarioLabInterpretation,
 ): { reviewerName: string; reviewedAt: string } {
   const metadata = interpretation.metadata
-  const reviewerName = metadata?.reviewer_name?.trim() ?? interpretation.reviewer_name?.trim() ?? ''
-  const reviewedAt = metadata?.reviewed_at ?? interpretation.reviewed_at ?? ''
+  const reviewerName = metadata?.reviewer_name?.trim() ?? ''
+  const reviewedAt = metadata?.reviewed_at ?? ''
   return { reviewerName, reviewedAt }
 }
 
@@ -77,9 +69,8 @@ function SuggestedNextLink({ scenario }: { scenario: SuggestedNextScenario }) {
 
 export function InterpretationPanel({ interpretation }: InterpretationPanelProps) {
   const { t, i18n } = useTranslation()
-  const enriched = interpretation as InterpretationWithLegacyMetadata
-  const generationMode = resolveGenerationMode(enriched)
-  const { reviewerName, reviewedAt } = resolveReviewerInfo(enriched)
+  const generationMode = resolveGenerationMode(interpretation)
+  const { reviewerName, reviewedAt } = resolveReviewerInfo(interpretation)
   const reviewedAtFormatted = formatReviewedAt(reviewedAt, i18n.resolvedLanguage ?? 'en')
   const reviewedDateLabel = reviewedAtFormatted || reviewedAt
   const hasCompleteReview = reviewerName.length > 0 && reviewedDateLabel.length > 0
