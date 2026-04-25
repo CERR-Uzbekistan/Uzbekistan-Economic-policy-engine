@@ -1,12 +1,13 @@
 import { createBrowserRouter, createHashRouter, Navigate } from 'react-router-dom'
 import { AppShell } from './shell/AppShell'
 import { ComparisonPage } from '../pages/ComparisonPage'
+import { DataRegistryPage } from '../pages/DataRegistryPage'
 import { KnowledgeHubPage } from '../pages/KnowledgeHubPage'
 import { ModelExplorerPage } from '../pages/ModelExplorerPage'
 import { OverviewPage } from '../pages/OverviewPage'
 import { ScenarioLabPage } from '../pages/ScenarioLabPage'
 
-const routes = [
+export const appRoutes = [
   {
     path: '/',
     element: <AppShell />,
@@ -16,6 +17,7 @@ const routes = [
       { path: 'scenario-lab', element: <ScenarioLabPage /> },
       { path: 'comparison', element: <ComparisonPage /> },
       { path: 'model-explorer', element: <ModelExplorerPage /> },
+      { path: 'data-registry', element: <DataRegistryPage /> },
       { path: 'knowledge-hub', element: <KnowledgeHubPage /> },
     ],
   },
@@ -24,5 +26,5 @@ const routes = [
 // HashRouter in production so SPA deep links survive static hosting (GitHub Pages).
 // BrowserRouter in dev keeps clean URLs for local development.
 export const appRouter = import.meta.env.PROD
-  ? createHashRouter(routes)
-  : createBrowserRouter(routes)
+  ? createHashRouter(appRoutes)
+  : createBrowserRouter(appRoutes)

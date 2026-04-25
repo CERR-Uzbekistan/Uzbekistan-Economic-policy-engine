@@ -16,6 +16,7 @@
     "scenarioLab": "Stsenariy simulyatori",
     "comparison": "Stsenariylarni solishtirish",
     "modelExplorer": "Model katalogi",
+    "dataRegistry": "Ma'lumotlar reyestri",
     "knowledgeHub": "Bilimlar markazi"
   },
   "pages": {
@@ -63,6 +64,10 @@
         },
         "implicationPrefix": "Ta'sir"
       }
+    },
+    "dataRegistry": {
+      "title": "Ma'lumotlar reyestri",
+      "description": "Frontend ommaviy ma'lumot qatlamining manbalari, vintajlari, artefaktlari, validatsiyasi va yangilanish holati."
     },
     "knowledgeHub": {
       "title": "Bilimlar markazi",
@@ -593,6 +598,78 @@
       }
     }
   },
+  "dataRegistry": {
+    "header": {
+      "eyebrow": "Manbalar · Vintajlar · Validatsiya",
+      "meta": {
+        "expectedArtifacts": "Kutilgan artefaktlar",
+        "plannedFamilies": "Rejadagi oilalar",
+        "generated": "Tekshirildi"
+      }
+    },
+    "summary": {
+      "aria": "Ma'lumotlar reyestri status xulosasi"
+    },
+    "status": {
+      "valid": "Valid",
+      "warning": "Ogohlantirish",
+      "failed": "Xato",
+      "missing": "Yo'q",
+      "unavailable": "Mavjud emas",
+      "planned": "Rejada"
+    },
+    "sections": {
+      "dataSources": {
+        "title": "Ma'lumot manbalari",
+        "description": "Manba domenlari, vintajlar, eksport vaqtlari va rejalashtirilgan model oilalari."
+      },
+      "modelInputs": {
+        "title": "Model kirishlari",
+        "description": "Qaysi model oilalarida frontend kirishlari borligi va qaysilari rejada qolayotgani."
+      },
+      "bridgeOutputs": {
+        "title": "Bridge chiqishlari",
+        "description": "Mavjud bridge client va guard'lar orqali yuklangan ommaviy JSON artefaktlar."
+      },
+      "vintages": {
+        "title": "Vintajlar",
+        "description": "Manba snapshotlari va eksport vaqtlari alohida ko'rsatiladi."
+      },
+      "validation": {
+        "title": "Validatsiya va yangilanish holati",
+        "description": "Bridge guard'lariga asoslangan frontend ishonch holati va ehtiyotkor yangilanish izohi."
+      },
+      "warnings": {
+        "title": "Eskirgan/yo'q ogohlantirishlari",
+        "description": "Ogohlantirishlar faqat artefakt mavjudligi, guard xatolari, izohlar va vaqt chegaralaridan olinadi."
+      }
+    },
+    "table": {
+      "domain": "Domen",
+      "status": "Status",
+      "vintage": "Manba vintaji",
+      "export": "Eksport vaqti",
+      "source": "Manba/artefakt",
+      "notes": "Izohlar"
+    },
+    "artifact": {
+      "dataVintage": "Ma'lumot vintaji",
+      "exportTimestamp": "Eksport vaqti",
+      "sourceVintage": "Manba vintaji",
+      "solver": "Solver",
+      "caveats": "Izohlar",
+      "consumers": "Iste'molchi sahifalar"
+    },
+    "vintages": {
+      "boundary": "Manba vintaji va eksport vaqti boshqa-boshqa. Hozirgi eksport eskiroq manba jadvalini ham o'z ichiga olishi mumkin."
+    },
+    "warnings": {
+      "empty": "Hozir eskirish, yo'qlik, mavjud emaslik yoki validatsiya bo'yicha ogohlantirish ko'rinmayapti."
+    },
+    "links": {
+      "modelExplorer": "Model katalogi metodologiyasi"
+    }
+  },
   "modelExplorer": {
     "header": {
       "eyebrow": "Metodologiya · Parametrlar · Eslatmalar",
@@ -660,6 +737,7 @@
       "overview": "So'nggi sharh holati yuklanmoqda...",
       "comparison": "Solishtirish ish maydoni yuklanmoqda...",
       "modelExplorer": "Model metama'lumotlari yuklanmoqda...",
+      "dataRegistry": "Ma'lumotlar reyestri yuklanmoqda...",
       "scenarioLabRun": "Joriy taxminlar bilan stsenariy ishga tushirilmoqda...",
       "knowledgeHub": "Bilimlar markazi yuklanmoqda..."
     },

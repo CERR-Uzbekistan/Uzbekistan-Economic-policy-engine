@@ -16,6 +16,7 @@
     "scenarioLab": "Scenario Lab",
     "comparison": "Comparison",
     "modelExplorer": "Model Explorer",
+    "dataRegistry": "Data Registry",
     "knowledgeHub": "Knowledge Hub"
   },
   "pages": {
@@ -63,6 +64,10 @@
         },
         "implicationPrefix": "Implication"
       }
+    },
+    "dataRegistry": {
+      "title": "Data Registry",
+      "description": "Source, vintage, artifact, validation, and update health for the public frontend data layer."
     },
     "knowledgeHub": {
       "title": "Knowledge Hub",
@@ -593,6 +598,78 @@
       }
     }
   },
+  "dataRegistry": {
+    "header": {
+      "eyebrow": "Sources · Vintages · Validation",
+      "meta": {
+        "expectedArtifacts": "Expected artifacts",
+        "plannedFamilies": "Planned families",
+        "generated": "Checked"
+      }
+    },
+    "summary": {
+      "aria": "Data registry status summary"
+    },
+    "status": {
+      "valid": "Valid",
+      "warning": "Warning",
+      "failed": "Failed",
+      "missing": "Missing",
+      "unavailable": "Unavailable",
+      "planned": "Planned"
+    },
+    "sections": {
+      "dataSources": {
+        "title": "Data sources",
+        "description": "Human-readable source domains, vintages, export timestamps, and planned model families."
+      },
+      "modelInputs": {
+        "title": "Model inputs",
+        "description": "Which model families have consumable frontend inputs, and which remain planned."
+      },
+      "bridgeOutputs": {
+        "title": "Bridge outputs",
+        "description": "Public JSON artifacts loaded through the existing bridge clients and guards."
+      },
+      "vintages": {
+        "title": "Vintages",
+        "description": "Source snapshots and export timestamps shown separately."
+      },
+      "validation": {
+        "title": "Validation/update status",
+        "description": "Frontend trust state from bridge guards plus conservative update-status language."
+      },
+      "warnings": {
+        "title": "Stale/missing warnings",
+        "description": "Warnings derived only from artifact presence, guard failures, caveats, and timestamp thresholds."
+      }
+    },
+    "table": {
+      "domain": "Domain",
+      "status": "Status",
+      "vintage": "Source vintage",
+      "export": "Export timestamp",
+      "source": "Source/artifact",
+      "notes": "Notes"
+    },
+    "artifact": {
+      "dataVintage": "Data vintage",
+      "exportTimestamp": "Export timestamp",
+      "sourceVintage": "Source vintage",
+      "solver": "Solver",
+      "caveats": "Caveats",
+      "consumers": "Consumer surfaces"
+    },
+    "vintages": {
+      "boundary": "Source vintage and export timestamp are different. A current export can still contain an older source table."
+    },
+    "warnings": {
+      "empty": "No stale, missing, unavailable, or validation warnings are currently visible."
+    },
+    "links": {
+      "modelExplorer": "Model Explorer methodology"
+    }
+  },
   "modelExplorer": {
     "header": {
       "eyebrow": "Methodology · Parameters · Caveats",
@@ -660,6 +737,7 @@
       "overview": "Loading latest overview snapshot...",
       "comparison": "Loading comparison workspace...",
       "modelExplorer": "Loading model metadata...",
+      "dataRegistry": "Loading data registry...",
       "scenarioLabRun": "Running scenario with current assumptions...",
       "knowledgeHub": "Loading Knowledge Hub..."
     },
