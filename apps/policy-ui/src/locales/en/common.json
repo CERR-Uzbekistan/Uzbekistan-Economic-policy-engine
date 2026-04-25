@@ -326,6 +326,10 @@
         "downside_stress": "Downside stress"
       }
     },
+    "savedModal": {
+      "title": "Add saved scenario",
+      "addSelected": "Add selected"
+    },
     "chart": {
       "title": "Comparative charts",
       "description": "Small multiples by scenario for the selected comparison dimension.",

@@ -326,6 +326,10 @@
         "downside_stress": "Pastga stress"
       }
     },
+    "savedModal": {
+      "title": "Saqlangan stsenariy qo'shish",
+      "addSelected": "Tanlanganni qo'shish"
+    },
     "chart": {
       "title": "Qiyosiy grafiklar",
       "description": "Tanlangan qiyoslash o'lchami bo'yicha stsenariylar kesimidagi kichik grafiklar.",

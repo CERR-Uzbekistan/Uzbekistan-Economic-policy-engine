@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import { useTranslation } from 'react-i18next'
+import { AddSavedScenarioModal } from '../components/comparison/AddSavedScenarioModal'
 import { ComparisonSelector } from '../components/comparison/ComparisonSelector'
 import { DeltaTable } from '../components/comparison/DeltaTable'
 import { ScenarioSummaryCards } from '../components/comparison/ScenarioSummaryCards'
@@ -13,15 +14,28 @@ import {
   loadComparisonSourceState,
 } from '../data/comparison/source'
 import { beginRetry } from '../data/source-state'
+import {
+  addSavedScenarioIdsToSelection,
+  COMPARISON_SLOT_LIMIT,
+  mergeSavedScenariosIntoWorkspace,
+} from '../state/comparisonSavedScenarios'
+import { listScenarios, subscribeScenarioStore } from '../state/scenarioStore'
 import './comparison.css'
 
-const COMPARISON_SLOT_LIMIT = 3
+const EMPTY_SAVED_SCENARIOS: [] = []
 
 export function ComparisonPage() {
   const { t } = useTranslation()
   const [sourceState, setSourceState] = useState(getInitialComparisonSourceState)
   const [selectedIdsOverride, setSelectedIdsOverride] = useState<string[] | null>(null)
   const [baselineIdOverride, setBaselineIdOverride] = useState<string | null>(null)
+  const [isSavedScenarioModalOpen, setIsSavedScenarioModalOpen] = useState(false)
+  const [addedSavedScenarioIds, setAddedSavedScenarioIds] = useState<string[]>([])
+  const savedScenarios = useSyncExternalStore(
+    subscribeScenarioStore,
+    listScenarios,
+    () => EMPTY_SAVED_SCENARIOS,
+  )
 
   useEffect(() => {
     let cancelled = false
@@ -35,7 +49,12 @@ export function ComparisonPage() {
     }
   }, [])
 
-  const workspace = sourceState.workspace
+  const baseWorkspace = sourceState.workspace
+
+  const workspace = useMemo(() => {
+    if (!baseWorkspace) return null
+    return mergeSavedScenariosIntoWorkspace(baseWorkspace, savedScenarios, addedSavedScenarioIds)
+  }, [baseWorkspace, savedScenarios, addedSavedScenarioIds])
 
   const selectedIds = useMemo(() => {
     if (!workspace) return []
@@ -109,10 +128,23 @@ export function ComparisonPage() {
   }
 
   function handleAddSavedScenario() {
-    // Shot 1 stub — the saved-scenario picker modal is Shot 2 scope. A real
-    // picker would source from scenarioStore and merge into the selection
-    // (subject to COMPARISON_SLOT_LIMIT).
-    console.info('[Comparison] Add-saved-scenario modal not yet wired (Shot 2).')
+    setIsSavedScenarioModalOpen(true)
+  }
+
+  function handleAddSelectedSavedScenarios(scenarioIds: string[]) {
+    if (scenarioIds.length === 0) {
+      return
+    }
+    setAddedSavedScenarioIds((current) => Array.from(new Set([...current, ...scenarioIds])))
+    setSelectedIdsOverride(
+      addSavedScenarioIdsToSelection({
+        currentSelectedIds: selectedIds,
+        baselineId,
+        savedScenarioIds: scenarioIds,
+        slotLimit: COMPARISON_SLOT_LIMIT,
+      }),
+    )
+    setBaselineIdOverride(baselineId)
   }
 
   function handleBaselineChange(nextBaselineId: string) {
@@ -169,6 +201,15 @@ export function ComparisonPage() {
         onRemove={handleRemove}
         onAddSavedScenario={handleAddSavedScenario}
         onBaselineChange={handleBaselineChange}
+      />
+
+      <AddSavedScenarioModal
+        isOpen={isSavedScenarioModalOpen}
+        savedScenarios={savedScenarios}
+        activeScenarioIds={selectedIds}
+        maxSelectable={COMPARISON_SLOT_LIMIT - 1}
+        onClose={() => setIsSavedScenarioModalOpen(false)}
+        onAddSelected={handleAddSelectedSavedScenarios}
       />
 
       <ScenarioSummaryCards scenarios={content.scenarios} metrics={content.metrics} />
