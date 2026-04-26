@@ -290,6 +290,8 @@ export function AssumptionsPanel({
           {t('scenarioLab.saved.loadLink')}
         </button>
 
+        <p className="lab-session__local-note">{t('scenarioLab.saved.localBrowserDisclosure')}</p>
+
         {saveStatus ? (
           <p className="lab-session__status" role="status" aria-live="polite">
             {saveStatus}

@@ -55,10 +55,15 @@ async function createTestI18n() {
               },
               fields: {
                 type: 'Type',
-                data: 'Data',
+                data: 'Source vintage',
                 source: 'Source vintage',
+                sourceVintage: 'Source vintage',
+                sourceArtifact: 'Source artifact',
                 saved: 'Saved',
               },
+            },
+            saved: {
+              localBrowserDisclosure: 'Saved runs are stored only in this browser.',
             },
           },
         },
@@ -163,10 +168,12 @@ describe('ScenarioLabSavedRunsPanel', () => {
     )
 
     assert.match(markup, /Macro\/QPM/)
+    assert.match(markup, /Saved runs are stored only in this browser/)
     assert.match(markup, /I-O sector shock/)
     assert.match(markup, /2026Q1/)
     assert.match(markup, /2026Q1-live/)
     assert.match(markup, /io_model\/io_data\.json/)
+    assert.match(markup, /Source artifact/)
     assert.match(markup, /Output effect/)
     assert.match(markup, /Open in Comparison/)
     assert.match(markup, /Load/)

@@ -47,6 +47,24 @@ export function DataRegistryContent(props: {
         ))}
       </section>
 
+      <section className="data-registry-legend" aria-labelledby="data-registry-legend-title">
+        <h2 id="data-registry-legend-title">{t('dataRegistry.legend.title')}</h2>
+        <dl>
+          <div>
+            <dt>{t('dataRegistry.legend.valid.label')}</dt>
+            <dd>{t('dataRegistry.legend.valid.description')}</dd>
+          </div>
+          <div>
+            <dt>{t('dataRegistry.legend.warning.label')}</dt>
+            <dd>{t('dataRegistry.legend.warning.description')}</dd>
+          </div>
+          <div>
+            <dt>{t('dataRegistry.legend.planned.label')}</dt>
+            <dd>{t('dataRegistry.legend.planned.description')}</dd>
+          </div>
+        </dl>
+      </section>
+
       <RegistrySection
         title={t('dataRegistry.sections.dataSources.title')}
         description={t('dataRegistry.sections.dataSources.description')}

@@ -35,6 +35,7 @@ export function SavedIoSectorRunsPanel({
         <section className="cmp-saved-io cmp-saved-io--empty" aria-labelledby="cmp-saved-io-title">
           <div className="cmp-saved-io__head">
             <h4 id="cmp-saved-io-title">{t('comparison.savedIo.title')}</h4>
+            <strong>{t('comparison.savedIo.separationNote')}</strong>
             <p>{t('comparison.savedIo.emptyWithAvailable', { count: availableCount })}</p>
           </div>
           {onAddSavedRun ? (
@@ -52,6 +53,7 @@ export function SavedIoSectorRunsPanel({
     <section className="cmp-saved-io" aria-labelledby="cmp-saved-io-title">
       <div className="cmp-saved-io__head">
         <h4 id="cmp-saved-io-title">{t('comparison.savedIo.title')}</h4>
+        <strong>{t('comparison.savedIo.separationNote')}</strong>
         <p>{t('comparison.savedIo.description', { count: ioRecords.length })}</p>
       </div>
 
@@ -70,20 +72,27 @@ export function SavedIoSectorRunsPanel({
 
               <dl className="cmp-saved-io__metrics">
                 <div>
+                  <span className="claim-label">{t('comparison.savedIo.claimLabels.output')}</span>
                   <dt>{t('comparison.savedIo.metrics.output')}</dt>
                   <dd>{formatNumber(run.totals.output_effect_bln_uzs)} bln UZS</dd>
                 </div>
                 <div>
+                  <span className="claim-label">{t('comparison.savedIo.claimLabels.output')}</span>
                   <dt>{t('comparison.savedIo.metrics.valueAdded')}</dt>
                   <dd>{formatNumber(run.totals.value_added_effect_bln_uzs)} bln UZS</dd>
                 </div>
                 <div>
+                  <span className="claim-label">{t('comparison.savedIo.claimLabels.gdpAccounting')}</span>
                   <dt>{t('comparison.savedIo.metrics.gdpAccounting')}</dt>
                   <dd>{formatNumber(run.totals.gdp_accounting_contribution_bln_uzs)} bln UZS</dd>
                 </div>
                 <div>
+                  <span className="claim-label">{t('comparison.savedIo.claimLabels.employment')}</span>
                   <dt>{t('comparison.savedIo.metrics.employment')}</dt>
-                  <dd>{formatOptionalNumber(run.totals.employment_effect_persons)}</dd>
+                  <dd>
+                    {formatOptionalNumber(run.totals.employment_effect_persons)}{' '}
+                    {t('comparison.savedIo.employmentUnit')}
+                  </dd>
                 </div>
               </dl>
 

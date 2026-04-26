@@ -53,6 +53,7 @@ async function createTestI18n() {
               preset: 'Preset',
               scenarioName: 'Scenario name',
               scenarioNamePlaceholder: 'Scenario name',
+              detailsSummary: 'Details',
               scenarioType: 'Scenario type',
               scenarioTypeOptions: {
                 baseline: 'Baseline',
@@ -74,6 +75,8 @@ async function createTestI18n() {
               title: 'Saved scenarios',
               empty: 'No saved scenarios yet.',
               load: 'Load',
+              loadLink: 'Load saved scenario',
+              localBrowserDisclosure: 'Saved runs are stored only in this browser.',
               delete: 'Delete',
             },
           },
@@ -144,6 +147,7 @@ describe('preset chips', () => {
       baselineMarkup,
       /<button type="button" class="preset-chip active" aria-pressed="true">Balanced baseline<\/button>/,
     )
+    assert.match(baselineMarkup, /Saved runs are stored only in this browser/)
 
     const slowdownMarkup = await renderPanelMarkup('remittance-downside')
     assert.match(

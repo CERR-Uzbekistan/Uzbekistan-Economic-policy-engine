@@ -10,6 +10,7 @@ import { SectorEvidencePanel } from '../components/comparison/SectorEvidencePane
 import { TradeoffSummaryPanel } from '../components/comparison/TradeoffSummaryPanel'
 import { PageContainer } from '../components/layout/PageContainer'
 import { PageHeader } from '../components/layout/PageHeader'
+import { AnalyticalContextStrip } from '../components/system/AnalyticalContextStrip'
 import type { ComparisonContent } from '../contracts/data-contract'
 import { composeComparisonContent } from '../data/adapters/comparison'
 import {
@@ -237,6 +238,14 @@ export function ComparisonPage() {
       </span>
     </>
   )
+  const comparisonContextRunName = t('comparison.context.runName', {
+    baseline:
+      content.scenarios.find((scenario) => scenario.id === content.baseline_scenario_id)?.name ??
+      t('comparison.table.baselineFallback'),
+    alternatives: Math.max(content.scenarios.length - 1, 0),
+  })
+  const comparisonDataVintage =
+    sourceState.qpmPayload?.attribution.data_version ?? sourceState.workspace?.generated_at ?? workspace.generated_at
 
   return (
     <PageContainer className="comparison-page">
@@ -244,6 +253,15 @@ export function ComparisonPage() {
         title={t('pages.comparison.title')}
         description={t('pages.comparison.description')}
         meta={pageHeaderMeta}
+      />
+
+      <AnalyticalContextStrip
+        label={t('comparison.context.label')}
+        lane={t('scenarioLab.context.lane.macroScenario')}
+        model={t('scenarioLab.context.model.qpm')}
+        runName={comparisonContextRunName}
+        dataVintage={`${t('scenarioLab.context.dataVintage')} ${comparisonDataVintage}`}
+        saveState={t('comparison.context.saveState')}
       />
 
       <ComparisonSelector

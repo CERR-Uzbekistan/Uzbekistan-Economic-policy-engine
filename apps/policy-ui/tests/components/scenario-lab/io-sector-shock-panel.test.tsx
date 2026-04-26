@@ -62,6 +62,20 @@ async function createTestI18n() {
               topSectors: 'Top affected sectors',
               caveats: 'Source caveats',
               convertedShock: 'Converted demand shock: {{amount}} bln UZS',
+              sourceLabelNote:
+                'Sector labels are shown as source labels from {{artifact}} and are not translated here.',
+              units: {
+                employmentEstimate: 'employment count estimate',
+              },
+              claimLabels: {
+                output: 'Accounting multiplier / structural sector linkage',
+                gdpContribution: 'I-O value-added accounting contribution, not macro forecast',
+                employment: 'Linear employment-intensity estimate, not labor-market forecast',
+              },
+              whatThisMeans: {
+                title: 'What this means',
+                body: 'This demand shock produces {{output}} bln UZS of gross output effect and {{valueAdded}} bln UZS of value-added accounting contribution. Employment is shown as {{employment}} estimated positions from fixed sector intensities.',
+              },
               buckets: {
                 consumption: 'Consumption',
                 government: 'Government',
@@ -96,6 +110,8 @@ async function createTestI18n() {
               },
               table: {
                 sector: 'Sector',
+                sectorCode: 'Code',
+                sourceLabel: 'Source label',
                 output: 'Output, bln UZS',
                 valueAdded: 'VA, bln UZS',
                 employment: 'Employment',
@@ -135,6 +151,14 @@ describe('IoSectorShockPanel', () => {
     assert.match(markup, /Demand bucket/)
     assert.match(markup, /GDP accounting contribution/)
     assert.match(markup, /Employment effect/)
+    assert.match(markup, /Accounting multiplier \/ structural sector linkage/)
+    assert.match(markup, /I-O value-added accounting contribution, not macro forecast/)
+    assert.match(markup, /Linear employment-intensity estimate, not labor-market forecast/)
+    assert.match(markup, /What this means/)
+    assert.match(markup, /Sector labels are shown as source labels/)
+    assert.match(markup, /Code:/)
+    assert.match(markup, /Source label:/)
+    assert.match(markup, /employment count estimate/)
     assert.doesNotMatch(markup, /n\/a/)
     assert.match(markup, /not a macro forecast/)
     assert.match(markup, /linear employment-intensity estimate/)

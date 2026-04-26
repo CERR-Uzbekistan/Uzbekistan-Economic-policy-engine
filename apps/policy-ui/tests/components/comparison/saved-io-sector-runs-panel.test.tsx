@@ -19,9 +19,10 @@ async function createTestI18n() {
         common: {
           comparison: {
             savedIo: {
-              title: 'Saved I-O sector shock runs',
+              title: 'Sector evidence from saved I-O runs',
+              separationNote: 'Not part of the macro scenario delta table.',
               description:
-                '{{count}} saved run(s) are shown as sector transmission analytics. They do not change the macro comparison rows above.',
+                '{{count}} saved run(s) are shown as sector transmission analytics in a separate evidence section.',
               emptyWithAvailable:
                 '{{count}} saved I-O run(s) are available. Add them to show sector transmission blocks below the macro table.',
               addAction: 'Add saved run',
@@ -29,6 +30,12 @@ async function createTestI18n() {
               topSectors: 'Top sectors',
               boundary:
                 'Boundary: value-added is an I-O accounting contribution, not a causal macro scenario delta.',
+              employmentUnit: 'employment count estimate',
+              claimLabels: {
+                output: 'Accounting multiplier / structural sector linkage',
+                gdpAccounting: 'I-O value-added accounting contribution, not macro forecast',
+                employment: 'Linear employment-intensity estimate, not labor-market forecast',
+              },
               metrics: {
                 output: 'Output',
                 valueAdded: 'Value added',
@@ -115,10 +122,15 @@ describe('SavedIoSectorRunsPanel', () => {
       </I18nextProvider>,
     )
 
-    assert.match(markup, /Saved I-O sector shock runs/)
+    assert.match(markup, /Sector evidence from saved I-O runs/)
+    assert.match(markup, /Not part of the macro scenario delta table/)
     assert.match(markup, /sector transmission analytics/)
-    assert.match(markup, /do not change the macro comparison rows/)
+    assert.match(markup, /separate evidence section/)
     assert.match(markup, /not a causal macro scenario delta/)
+    assert.match(markup, /Accounting multiplier \/ structural sector linkage/)
+    assert.match(markup, /I-O value-added accounting contribution, not macro forecast/)
+    assert.match(markup, /Linear employment-intensity estimate, not labor-market forecast/)
+    assert.match(markup, /employment count estimate/)
     assert.match(markup, /I-O export shock/)
     assert.match(markup, /Agriculture/)
   })
@@ -143,6 +155,7 @@ describe('SavedIoSectorRunsPanel', () => {
     )
 
     assert.match(markup, /2 saved I-O run/)
+    assert.match(markup, /Not part of the macro scenario delta table/)
     assert.match(markup, /Add saved run/)
   })
 })

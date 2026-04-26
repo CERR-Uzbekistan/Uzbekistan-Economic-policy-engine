@@ -516,8 +516,8 @@ function buildImpulseResponseChart(values: ScenarioLabAssumptionState): ChartSpe
 
   return {
     chart_id: 'scenario_lab_impulse_response',
-    title: 'GDP gap, inflation & policy rate · 12 quarters',
-    subtitle: 'Deviation from baseline · pp',
+    title: 'Scenario impulse response vs baseline · 12 quarters',
+    subtitle: 'Deviation from baseline in percentage points; mock Scenario Lab engine output, not a live forecast.',
     chart_type: 'line',
     x: {
       label: 'Horizon',
@@ -552,7 +552,7 @@ function buildImpulseResponseChart(values: ScenarioLabAssumptionState): ChartSpe
     view_mode: 'delta',
     uncertainty: [],
     takeaway:
-      'GDP gap, inflation, and the policy-rate path move with combined monetary, external, and fiscal channels.',
+      'Read each line as a scenario deviation from the baseline path across 12 quarters, not as a standalone forecast level.',
     model_attribution: [ATTRIBUTION],
   }
 }

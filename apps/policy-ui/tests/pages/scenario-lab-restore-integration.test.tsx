@@ -86,6 +86,7 @@ async function createTestI18n() {
               load: 'Load',
               delete: 'Delete',
               loadLink: 'Load saved scenario',
+              localBrowserDisclosure: 'Saved runs are stored only in this browser.',
             },
             results: {
               title: 'Results',

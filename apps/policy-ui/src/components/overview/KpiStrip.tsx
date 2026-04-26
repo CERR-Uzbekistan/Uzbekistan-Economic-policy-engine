@@ -43,6 +43,29 @@ function formatFreshness(value: string, locale: string): string {
   }).format(new Date(parsed))
 }
 
+type KpiProvenance = 'nowcast' | 'scenario' | 'reference' | 'draft'
+
+function getMetricProvenance(metric: HeadlineMetric): KpiProvenance | null {
+  if (metric.context_note === SME_CONTENT_PENDING) {
+    return 'draft'
+  }
+  const attributionText = metric.model_attribution
+    .flatMap((item) => [item.module, item.model_id, item.model_name])
+    .join(' ')
+    .toLowerCase()
+
+  if (attributionText.includes('nowcast') || attributionText.includes('dfm')) {
+    return 'nowcast'
+  }
+  if (attributionText.includes('qpm')) {
+    return 'scenario'
+  }
+  if (attributionText.includes('pe')) {
+    return 'reference'
+  }
+  return null
+}
+
 export function KpiStrip({ metrics }: KpiStripProps) {
   const { t, i18n } = useTranslation()
   const locale = i18n.resolvedLanguage ?? 'en'
@@ -71,12 +94,20 @@ export function KpiStrip({ metrics }: KpiStripProps) {
             : t('overview.kpi.notAvailable')
           const contextNote = metric.context_note
           const contextIsSentinel = contextNote === SME_CONTENT_PENDING
+          const provenance = getMetricProvenance(metric)
 
           return (
             <article key={metric.metric_id} className="kpi overview-kpi-card">
               <div className="kpi__head overview-kpi-card__top">
                 <p className="kpi__name overview-kpi-card__label">{metric.label}</p>
-                <span className="kpi__freshness">{t('overview.kpi.freshness', { date: freshness })}</span>
+                <span className="overview-kpi-card__top-meta">
+                  {provenance ? (
+                    <span className={`overview-kpi-card__provenance overview-kpi-card__provenance--${provenance}`}>
+                      {t(`overview.kpi.provenance.${provenance}`)}
+                    </span>
+                  ) : null}
+                  <span className="kpi__freshness">{t('overview.kpi.freshness', { date: freshness })}</span>
+                </span>
               </div>
               <p className="kpi__value overview-kpi-card__value">
                 {formatMetricValue(metric)} <span>{metric.unit}</span>

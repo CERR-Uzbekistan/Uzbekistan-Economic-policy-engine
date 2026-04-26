@@ -20,6 +20,20 @@ const TAB_LABEL_KEYS: Record<ScenarioLabResultTab, string> = {
   fiscal_effects: 'scenarioLab.results.tabs.fiscalEffects',
 }
 
+const TAB_EXPLANATION_KEYS: Record<ScenarioLabResultTab, string> = {
+  headline_impact: 'scenarioLab.results.explanations.headlineImpact',
+  macro_path: 'scenarioLab.results.explanations.macroPath',
+  external_balance: 'scenarioLab.results.explanations.externalBalance',
+  fiscal_effects: 'scenarioLab.results.explanations.fiscalEffects',
+}
+
+const CLAIM_LABEL_KEYS: Record<ScenarioLabResultTab, string> = {
+  headline_impact: 'scenarioLab.results.claimLabels.headlineImpact',
+  macro_path: 'scenarioLab.results.claimLabels.macroPath',
+  external_balance: 'scenarioLab.results.claimLabels.externalBalance',
+  fiscal_effects: 'scenarioLab.results.claimLabels.fiscalEffects',
+}
+
 const HEADLINE_METRIC_ORDER = ['gdp_growth', 'inflation', 'current_account', 'policy_rate'] as const
 
 function formatMetricValue(metric: HeadlineMetric) {
@@ -43,10 +57,15 @@ function formatSignedDelta(value: number | null, unit: string) {
 
 // Non-headline tabs retain the existing table-view — they're out of scope for
 // Shot-1 structural alignment (prompt §4.4 drops only the bar chart).
-function ScenarioTabChart({ chart }: { chart: ChartSpec }) {
+function ScenarioTabChart({ chart, activeTab }: { chart: ChartSpec; activeTab: ScenarioLabResultTab }) {
+  const { t } = useTranslation()
   const titleId = `scenario-chart-title-${chart.chart_id}`
   return (
     <div className="scenario-main-chart" aria-labelledby={titleId}>
+      <div className="scenario-output-context">
+        <span className="claim-label">{t(CLAIM_LABEL_KEYS[activeTab])}</span>
+        <p>{t(TAB_EXPLANATION_KEYS[activeTab])}</p>
+      </div>
       <div className="scenario-main-chart__head">
         <h3 id={titleId}>{chart.title}</h3>
         <p>{chart.subtitle}</p>
@@ -156,7 +175,7 @@ export function ResultsPanel({ activeTab, onTabChange, results }: ResultsPanelPr
         {showImpulseResponse && results.impulse_response_chart ? (
           <ImpulseResponseChart chart={results.impulse_response_chart} />
         ) : (
-          <ScenarioTabChart chart={activeChart} />
+          <ScenarioTabChart chart={activeChart} activeTab={activeTab} />
         )}
       </div>
     </section>

@@ -33,6 +33,7 @@ async function createTestI18n() {
             },
             savedModal: {
               title: 'Add saved scenario',
+              localBrowserDisclosure: 'Saved runs are stored only in this browser.',
               addSelected: 'Add selected',
             },
           },
@@ -86,6 +87,7 @@ describe('AddSavedScenarioModal', () => {
 
     assert.match(markup, /role="dialog"/)
     assert.match(markup, /Add saved scenario/)
+    assert.match(markup, /Saved runs are stored only in this browser/)
     assert.match(markup, /No saved runs yet/)
   })
 
@@ -105,6 +107,7 @@ describe('AddSavedScenarioModal', () => {
     )
 
     assert.match(markup, /Saved modal scenario/)
+    assert.match(markup, /Saved runs are stored only in this browser/)
     assert.match(markup, /type="checkbox"/)
     assert.match(markup, /Alternative/)
     assert.match(markup, /Add selected/)

@@ -128,6 +128,18 @@ describe('comparison saved-scenario helpers', () => {
     assert.equal(workspace, comparisonWorkspaceMock)
     assert.equal(content.scenarios.length, comparisonWorkspaceMock.default_selected_ids.length)
     assert.equal(content.baseline_scenario_id, comparisonWorkspaceMock.default_baseline_id)
+    assert.deepEqual(
+      content.metrics.map((row) => [row.id, row.baseline_value]),
+      [
+        ['gdp_growth', '+5.8%'],
+        ['inflation', '+5.4%'],
+        ['current_account', '−3.3 % GDP'],
+        ['fiscal_balance', '−2.7 % GDP'],
+        ['reserves_end', '+43.8 USD bn'],
+        ['unemployment_avg', '+6.4%'],
+        ['real_wages_cumulative', '+8.2%'],
+      ],
+    )
   })
 
   it('keeps I-O saved runs out of the macro comparison rows', () => {

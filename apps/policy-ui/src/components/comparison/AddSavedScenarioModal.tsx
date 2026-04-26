@@ -147,6 +147,7 @@ export function AddSavedScenarioModal({
               {t('buttons.close')}
             </button>
           </div>
+          <p className="comparison-modal__local-note">{t('comparison.savedModal.localBrowserDisclosure')}</p>
 
           {savedScenarios.length === 0 ? (
             <p className="empty-state">{t('comparison.selector.savedEmpty')}</p>

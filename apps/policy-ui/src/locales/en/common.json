@@ -22,11 +22,11 @@
   "pages": {
     "overview": {
       "title": "Overview",
-      "description": "Decision-first macro snapshot designed to show what changed, why it matters, and where to test next."
+      "description": "Macro snapshot for analytical use, designed to show what changed, why it matters, and where to test next."
     },
     "scenarioLab": {
       "title": "Scenario Lab",
-      "description": "Build policy scenarios by adjusting assumptions, then review impacts and interpretation in one operational workspace."
+      "description": "Build policy scenarios by adjusting assumptions, then review impacts and interpretation in one analysis workspace."
     },
     "comparison": {
       "title": "Comparison",
@@ -86,13 +86,13 @@
       "vintageLabel": "Vintage",
       "modelsLabel": "Models",
       "modelsLive": "{{count}} live",
-      "lastRefreshLabel": "Last refresh"
+      "lastRefreshLabel": "Artifact export"
     },
     "header": {
       "kicker": "Economic State",
       "modelListFallback": "MODEL SET",
       "draftedFrom": "State narrative · drafted from {{models}} baseline",
-      "updatedAt": "Updated {{date}}",
+      "updatedAt": "State narrative reviewed {{date}}",
       "provenance": {
         "draftedFromLabel": "STATE NARRATIVE · drafted from",
         "aiAssisted": "AI-assisted",
@@ -109,9 +109,16 @@
       "deltaSrLabel": "{{direction}} by {{delta}} versus prior period",
       "noPrior": "No prior value",
       "notAvailable": "n/a",
-      "freshness": "Updated {{date}}",
+      "freshness": "Metric timestamp {{date}}",
       "smePendingChip": "SME content pending",
       "smePendingAria": "Contextual footnote — SME content pending",
+      "provenance": {
+        "observed": "Observed",
+        "nowcast": "Nowcast",
+        "scenario": "Scenario",
+        "reference": "Reference",
+        "draft": "Draft"
+      },
       "direction": {
         "up": "higher",
         "down": "lower",
@@ -193,7 +200,7 @@
       "meta": {
         "activeModelsLabel": "Active models",
         "runLifecycleLabel": "Run lifecycle",
-        "dataVintageLabel": "Data vintage",
+        "dataVintageLabel": "Source vintage",
         "runLifecycleStatus": {
           "loading": "Running",
           "ready": "Ready",
@@ -201,10 +208,33 @@
         }
       }
     },
+    "context": {
+      "label": "Context:",
+      "dataVintage": "source vintage",
+      "lane": {
+        "macroScenario": "Macro scenario",
+        "sectorLinkage": "Sector linkage"
+      },
+      "model": {
+        "qpm": "QPM",
+        "io": "I-O",
+        "pe": "PE",
+        "cge": "CGE",
+        "fpp": "FPP",
+        "savedRuns": "Saved runs",
+        "synthesis": "Synthesis"
+      },
+      "saveState": {
+        "saved": "saved",
+        "unsaved": "unsaved"
+      }
+    },
     "modelTabs": {
       "title": "Analysis tabs",
       "description": "Run model-native scenarios in one workspace while preserving each model's output boundary.",
       "tabsAria": "Scenario Lab model tabs",
+      "plannedTitle": "Planned model lanes",
+      "plannedDescription": "Coming next. These lanes are visible for orientation only and do not run models in this preview.",
       "macroQpm": "Macro / QPM",
       "ioSectorShock": "I-O Sector Shock",
       "peTradeShock": "PE Trade Shock",
@@ -212,9 +242,19 @@
       "fppFiscalPath": "FPP Fiscal Path",
       "savedRuns": "Saved Runs",
       "synthesisPreview": "Synthesis Preview",
+      "subtitle": {
+        "macroQpm": "Macro scenario simulation",
+        "ioSectorShock": "Sector linkage analysis",
+        "peTradeShock": "Trade incidence, planned",
+        "cgeReformShock": "General equilibrium reform analysis, planned",
+        "fppFiscalPath": "Fiscal consistency, planned",
+        "savedRuns": "Saved analytical runs",
+        "synthesisPreview": "Cross-model synthesis, planned"
+      },
       "status": {
         "active": "Active",
         "next": "Next",
+        "bridgePilot": "Bridge pilot",
         "shell": "Shell",
         "planned": "Planned"
       }
@@ -298,6 +338,19 @@
       "savedTitle": "I-O {{bucket}} shock · {{amount}} {{currency}}",
       "savedDescription": "Saved I-O sector shock run for sector transmission analysis.",
       "convertedShock": "Converted demand shock: {{amount}} bln UZS",
+      "sourceLabelNote": "Sector labels are shown as source labels from {{artifact}} and are not translated here.",
+      "units": {
+        "employmentEstimate": "employment count estimate"
+      },
+      "claimLabels": {
+        "output": "Accounting multiplier / structural sector linkage",
+        "gdpContribution": "I-O value-added accounting contribution, not macro forecast",
+        "employment": "Linear employment-intensity estimate, not labor-market forecast"
+      },
+      "whatThisMeans": {
+        "title": "What this means",
+        "body": "This demand shock produces {{output}} bln UZS of gross output effect and {{valueAdded}} bln UZS of value-added accounting contribution. Employment is shown as {{employment}} estimated positions from fixed sector intensities."
+      },
       "buckets": {
         "consumption": "Consumption",
         "government": "Government",
@@ -321,7 +374,7 @@
         "fx": "FX assumption",
         "distribution": "Distribution mode",
         "selectedSector": "Selected sector",
-        "dataVintage": "Data vintage"
+        "dataVintage": "Source vintage"
       },
       "kpis": {
         "output": "Output effect",
@@ -332,6 +385,8 @@
       },
       "table": {
         "sector": "Sector",
+        "sectorCode": "Code",
+        "sourceLabel": "Source label",
         "output": "Output, bln UZS",
         "valueAdded": "VA, bln UZS",
         "employment": "Employment",
@@ -362,8 +417,10 @@
       },
       "fields": {
         "type": "Type",
-        "data": "Data",
+        "data": "Source vintage",
         "source": "Source vintage",
+        "sourceVintage": "Source vintage",
+        "sourceArtifact": "Source artifact",
         "saved": "Saved"
       }
     },
@@ -415,6 +472,19 @@
         "fiscalEffects": "Fiscal effects"
       },
       "impulseResponseEyebrow": "IMPULSE RESPONSE",
+      "impulseResponseCaption": "Mock Scenario Lab engine output: deviations from baseline over 12 quarters, in percentage points. It should not be cited as a live forecast.",
+      "explanations": {
+        "headlineImpact": "Shows how the selected scenario deviates from the baseline across 12 quarters; values are percentage-point deviations from the mock Scenario Lab engine.",
+        "macroPath": "Shows the scenario path next to the baseline path so the table can be read as a comparison, not a raw dump.",
+        "externalBalance": "Shows the external-balance scenario path under the current assumptions, with units kept in percent of GDP.",
+        "fiscalEffects": "Shows fiscal accounting under the selected scenario assumptions; it is not a new fiscal model run."
+      },
+      "claimLabels": {
+        "headlineImpact": "Scenario impulse response",
+        "macroPath": "Scenario path vs baseline",
+        "externalBalance": "External-balance scenario path",
+        "fiscalEffects": "Fiscal scenario accounting"
+      },
       "deltaVsBaseline": "{{delta}} vs baseline"
     },
     "interpretation": {
@@ -449,6 +519,7 @@
       "empty": "No saved scenarios yet.",
       "load": "Load",
       "loadLink": "Load saved scenario",
+      "localBrowserDisclosure": "Saved runs are stored only in this browser.",
       "delete": "Delete",
       "confirmDelete": "Delete saved scenario \"{{scenarioName}}\"?"
     }
@@ -463,6 +534,11 @@
         "mode": "Mode",
         "deltasVsBaseline": "Deltas vs. Baseline"
       }
+    },
+    "context": {
+      "label": "Context:",
+      "runName": "{{baseline}} + {{alternatives}} alternative(s)",
+      "saveState": "comparison view"
     },
     "chip": {
       "remove": "Remove {{name}} from comparison"
@@ -479,8 +555,8 @@
       "status": "Validated",
       "note": "This panel describes structural sector transmission evidence from the I-O bridge. It is not a macro forecast, scenario delta, or causal effect of the scenarios above.",
       "sourceArtifact": "Source artifact",
-      "dataVintage": "Data vintage",
-      "exportedAt": "Exported",
+      "dataVintage": "Source vintage",
+      "exportedAt": "Artifact export",
       "sectorCount": "Sectors",
       "framework": "Framework",
       "units": "Units",
@@ -520,16 +596,24 @@
     },
     "savedModal": {
       "title": "Add saved scenario",
+      "localBrowserDisclosure": "Saved runs are stored only in this browser.",
       "addSelected": "Add selected"
     },
     "savedIo": {
-      "title": "Saved I-O sector shock runs",
-      "description": "{{count}} saved run(s) are shown as sector transmission analytics. They do not change the macro comparison rows above.",
+      "title": "Sector evidence from saved I-O runs",
+      "separationNote": "Not part of the macro scenario delta table.",
+      "description": "{{count}} saved run(s) are shown as sector transmission analytics in a separate evidence section.",
       "emptyWithAvailable": "{{count}} saved I-O run(s) are available. Add them to show sector transmission blocks below the macro table.",
       "addAction": "Add saved run",
       "type": "I-O run",
       "topSectors": "Top sectors",
       "boundary": "Boundary: value-added is an I-O accounting contribution, not a causal macro scenario delta.",
+      "employmentUnit": "employment count estimate",
+      "claimLabels": {
+        "output": "Accounting multiplier / structural sector linkage",
+        "gdpAccounting": "I-O value-added accounting contribution, not macro forecast",
+        "employment": "Linear employment-intensity estimate, not labor-market forecast"
+      },
       "metrics": {
         "output": "Output",
         "valueAdded": "Value added",
@@ -573,6 +657,7 @@
     }
   },
   "knowledgeHub": {
+    "staticPilotBanner": "Curated static pilot content — not a live legal or research feed.",
     "header": {
       "eyebrow": "Reforms · Research · Literature",
       "meta": {
@@ -604,11 +689,26 @@
       "meta": {
         "expectedArtifacts": "Expected artifacts",
         "plannedFamilies": "Planned families",
-        "generated": "Checked"
+        "generated": "Registry generated"
       }
     },
     "summary": {
       "aria": "Data registry status summary"
+    },
+    "legend": {
+      "title": "Status legend",
+      "valid": {
+        "label": "Artifact valid",
+        "description": "Public artifact loaded and passed frontend guard checks. This is not economic or model validation."
+      },
+      "warning": {
+        "label": "Warning",
+        "description": "Artifact loaded, but caveats or timestamp warnings exist."
+      },
+      "planned": {
+        "label": "Planned",
+        "description": "Intentionally absent in Sprint 3."
+      }
     },
     "status": {
       "valid": "Valid",
@@ -648,13 +748,13 @@
       "domain": "Domain",
       "status": "Status",
       "vintage": "Source vintage",
-      "export": "Export timestamp",
+      "export": "Artifact export",
       "source": "Source/artifact",
       "notes": "Notes"
     },
     "artifact": {
-      "dataVintage": "Data vintage",
-      "exportTimestamp": "Export timestamp",
+      "dataVintage": "Source vintage",
+      "exportTimestamp": "Artifact export",
       "sourceVintage": "Source vintage",
       "solver": "Solver",
       "caveats": "Caveats",
@@ -676,6 +776,10 @@
       "meta": {
         "modelsLabel": "Models",
         "modelsLive": "{{count}} live",
+        "bridgeBackedLabel": "Bridge-backed",
+        "bridgeBackedModels": "QPM, DFM, I-O",
+        "plannedLimitedLabel": "Planned/limited",
+        "plannedLimitedModels": "PE, CGE, FPP",
         "lastAuditLabel": "Last calibration audit",
         "openIssuesLabel": "Open methodology issues"
       }
@@ -722,8 +826,8 @@
     "bridgeEvidence": {
       "title": "Bridge evidence",
       "sourceArtifact": "Source artifact",
-      "dataVintage": "Data vintage",
-      "exportedAt": "Exported",
+      "dataVintage": "Source vintage",
+      "exportedAt": "Artifact export",
       "solverVersion": "Solver",
       "sectorCount": "Sectors",
       "framework": "Framework",

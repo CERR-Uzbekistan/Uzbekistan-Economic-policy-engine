@@ -64,10 +64,12 @@ export function ModelExplorerPage() {
     <>
       <span className="page-header__eyebrow">{t('modelExplorer.header.eyebrow')}</span>
       <span>
-        {t('modelExplorer.header.meta.modelsLabel')} {t('overview.common.middleDot')}{' '}
-        <strong>
-          {t('modelExplorer.header.meta.modelsLive', { count: modelCatalogMeta.models_live })}
-        </strong>
+        {t('modelExplorer.header.meta.bridgeBackedLabel')} {t('overview.common.middleDot')}{' '}
+        <strong>{t('modelExplorer.header.meta.bridgeBackedModels')}</strong>
+      </span>
+      <span>
+        {t('modelExplorer.header.meta.plannedLimitedLabel')} {t('overview.common.middleDot')}{' '}
+        <strong>{t('modelExplorer.header.meta.plannedLimitedModels')}</strong>
       </span>
       <span>
         {t('modelExplorer.header.meta.lastAuditLabel')} {t('overview.common.middleDot')}{' '}

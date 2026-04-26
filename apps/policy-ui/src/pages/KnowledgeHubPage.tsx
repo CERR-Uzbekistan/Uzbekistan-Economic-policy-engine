@@ -67,6 +67,7 @@ export function KnowledgeHubPage() {
         description={t('pages.knowledgeHub.description')}
         meta={pageHeaderMeta}
       />
+      <p className="knowledge-hub-static-banner">{t('knowledgeHub.staticPilotBanner')}</p>
       <div className="hub-grid">
         <ReformTimeline reforms={reforms} />
         <ResearchBriefList briefs={briefs} />

@@ -22,6 +22,8 @@ async function createTestI18n() {
               title: 'Analysis tabs',
               description: 'Run model-native scenarios in one workspace.',
               tabsAria: 'Scenario Lab model tabs',
+              plannedTitle: 'Planned model lanes',
+              plannedDescription: 'Coming next. These lanes do not run models in this preview.',
               macroQpm: 'Macro / QPM',
               ioSectorShock: 'I-O Sector Shock',
               peTradeShock: 'PE Trade Shock',
@@ -29,9 +31,19 @@ async function createTestI18n() {
               fppFiscalPath: 'FPP Fiscal Path',
               savedRuns: 'Saved Runs',
               synthesisPreview: 'Synthesis Preview',
+              subtitle: {
+                macroQpm: 'Macro scenario simulation',
+                ioSectorShock: 'Sector linkage analysis',
+                peTradeShock: 'Trade incidence, planned',
+                cgeReformShock: 'General equilibrium reform analysis, planned',
+                fppFiscalPath: 'Fiscal consistency, planned',
+                savedRuns: 'Saved analytical runs',
+                synthesisPreview: 'Cross-model synthesis, planned',
+              },
               status: {
                 active: 'Active',
                 next: 'Next',
+                bridgePilot: 'Bridge pilot',
                 shell: 'Shell',
                 planned: 'Planned',
               },
@@ -103,7 +115,7 @@ async function createTestI18n() {
 }
 
 describe('ScenarioLabModelTabs', () => {
-  it('renders Macro/QPM as active and shows planned model tabs', async () => {
+  it('renders active model tabs and demotes planned lanes outside the tablist', async () => {
     const i18n = await createTestI18n()
     const markup = renderToStaticMarkup(
       <I18nextProvider i18n={i18n}>
@@ -114,11 +126,23 @@ describe('ScenarioLabModelTabs', () => {
     assert.match(markup, /role="tablist"/)
     assert.match(markup, /Macro \/ QPM/)
     assert.match(markup, /I-O Sector Shock/)
+    assert.match(markup, /Saved Runs/)
+    assert.match(markup, /Planned model lanes/)
     assert.match(markup, /PE Trade Shock/)
     assert.match(markup, /CGE Reform Shock/)
     assert.match(markup, /FPP Fiscal Path/)
+    assert.match(markup, /Macro scenario simulation/)
+    assert.match(markup, /Sector linkage analysis/)
+    assert.match(markup, /Bridge pilot/)
+    assert.doesNotMatch(markup, /scenario-model-tabs__status">Next/)
+    assert.match(markup, /Trade incidence, planned/)
+    assert.match(markup, /General equilibrium reform analysis, planned/)
+    assert.match(markup, /Fiscal consistency, planned/)
     assert.match(markup, /aria-selected="true"[^>]*><span>Macro \/ QPM<\/span>/)
     assert.match(markup, /Synthesis Preview/)
+    assert.equal(markup.match(/role="tab"/g)?.length, 3)
+    assert.doesNotMatch(markup, /id="scenario-model-tab-pe_trade_shock"/)
+    assert.doesNotMatch(markup, /id="scenario-model-tab-synthesis_preview"/)
   })
 
   it('renders the I-O shell with non-overclaiming boundary copy', async () => {

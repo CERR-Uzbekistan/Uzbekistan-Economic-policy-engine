@@ -123,6 +123,35 @@
   justify-content: space-between;
 }
 
+.overview-kpi-card__top-meta {
+  align-items: flex-end;
+  display: grid;
+  gap: 0.2rem;
+  justify-items: end;
+}
+
+.overview-kpi-card__provenance {
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.22rem 0.44rem;
+  text-transform: uppercase;
+}
+
+.overview-kpi-card__provenance--nowcast {
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+}
+
+.overview-kpi-card__provenance--scenario,
+.overview-kpi-card__provenance--reference,
+.overview-kpi-card__provenance--draft {
+  background: var(--color-surface-muted);
+}
+
 .kpi__name,
 .overview-kpi-card__label {
   color: var(--color-text-muted);

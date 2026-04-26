@@ -91,6 +91,22 @@ async function createTestI18n() {
           overview: { common: { middleDot: '·' } },
           dataRegistry: {
             summary: { aria: 'summary' },
+            legend: {
+              title: 'Status legend',
+              valid: {
+                label: 'Artifact valid',
+                description:
+                  'Public artifact loaded and passed frontend guard checks. This is not economic or model validation.',
+              },
+              warning: {
+                label: 'Warning',
+                description: 'Artifact loaded, but caveats or timestamp warnings exist.',
+              },
+              planned: {
+                label: 'Planned',
+                description: 'Intentionally absent in Sprint 3.',
+              },
+            },
             status: {
               valid: 'Valid',
               warning: 'Warning',
@@ -185,6 +201,10 @@ describe('Data Registry page', () => {
     )
 
     assert.match(markup, /Data Registry/)
+    assert.match(markup, /Status legend/)
+    assert.match(markup, /Artifact valid/)
+    assert.match(markup, /not economic or model validation/)
+    assert.match(markup, /Intentionally absent in Sprint 3/)
     assert.match(markup, /Data sources/)
     assert.match(markup, /Model inputs/)
     assert.match(markup, /Bridge outputs/)

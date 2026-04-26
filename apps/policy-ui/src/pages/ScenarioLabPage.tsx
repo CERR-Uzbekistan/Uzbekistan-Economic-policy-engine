@@ -13,6 +13,7 @@ import {
 import { ScenarioLabTabShell } from '../components/scenario-lab/ScenarioLabTabShell'
 import { PageContainer } from '../components/layout/PageContainer'
 import { PageHeader } from '../components/layout/PageHeader'
+import { AnalyticalContextStrip } from '../components/system/AnalyticalContextStrip'
 import type {
   Assumption,
   ModelAttribution,
@@ -608,6 +609,53 @@ export function ScenarioLabPage() {
   )
   const latestAttribution = pickLatestAttribution(currentAttribution)
   const dataVintage = latestAttribution?.data_version ?? scenarioLabBaseDataVersion
+  const contextModelKeyByTab: Record<ScenarioLabModelTab, string> = {
+    macro_qpm: 'qpm',
+    io_sector_shock: 'io',
+    pe_trade_shock: 'pe',
+    cge_reform_shock: 'cge',
+    fpp_fiscal_path: 'fpp',
+    saved_runs: 'savedRuns',
+    synthesis_preview: 'synthesis',
+  }
+  const contextRunNameKeyByTab: Record<ScenarioLabModelTab, string> = {
+    macro_qpm: 'scenarioLab.modelTabs.macroQpm',
+    io_sector_shock: 'scenarioLab.modelTabs.ioSectorShock',
+    pe_trade_shock: 'scenarioLab.modelTabs.peTradeShock',
+    cge_reform_shock: 'scenarioLab.modelTabs.cgeReformShock',
+    fpp_fiscal_path: 'scenarioLab.modelTabs.fppFiscalPath',
+    saved_runs: 'scenarioLab.modelTabs.savedRuns',
+    synthesis_preview: 'scenarioLab.modelTabs.synthesisPreview',
+  }
+  const activeContext =
+    activeModelTab === 'io_sector_shock'
+      ? {
+          lane: t('scenarioLab.context.lane.sectorLinkage'),
+          model: t('scenarioLab.context.model.io'),
+          runName: t('scenarioLab.ioShock.title'),
+          dataVintage: ioAnalyticsState.workspace?.data_vintage ?? dataVintage,
+          saveState: ioSaveStatus
+            ? t('scenarioLab.context.saveState.saved')
+            : t('scenarioLab.context.saveState.unsaved'),
+        }
+      : activeModelTab === 'macro_qpm'
+        ? {
+            lane: t('scenarioLab.context.lane.macroScenario'),
+            model: t('scenarioLab.context.model.qpm'),
+            runName: scenarioName,
+            dataVintage,
+            saveState:
+              currentScenarioId && !hasPendingEdits
+                ? t('scenarioLab.context.saveState.saved')
+                : t('scenarioLab.context.saveState.unsaved'),
+          }
+        : {
+            lane: t('scenarioLab.context.lane.macroScenario'),
+            model: t(`scenarioLab.context.model.${contextModelKeyByTab[activeModelTab]}`),
+            runName: t(contextRunNameKeyByTab[activeModelTab]),
+            dataVintage,
+            saveState: t('scenarioLab.context.saveState.unsaved'),
+          }
   const runLifecycleStatusKey =
     sourceState.status === 'loading'
       ? 'loading'
@@ -643,6 +691,15 @@ export function ScenarioLabPage() {
       />
 
       <ScenarioLabModelTabs activeTab={activeModelTab} onTabChange={setActiveModelTab} />
+
+      <AnalyticalContextStrip
+        label={t('scenarioLab.context.label')}
+        lane={activeContext.lane}
+        model={activeContext.model}
+        runName={activeContext.runName}
+        dataVintage={`${t('scenarioLab.context.dataVintage')} ${activeContext.dataVintage}`}
+        saveState={activeContext.saveState}
+      />
 
       {activeModelTab === 'macro_qpm' ? (
         <div

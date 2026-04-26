@@ -26,9 +26,16 @@ async function createTestI18n() {
               deltaSrLabel: '{{direction}} by {{delta}}',
               noPrior: 'No prior',
               notAvailable: 'n/a',
-              freshness: 'Updated {{date}}',
+              freshness: 'Metric timestamp {{date}}',
               smePendingChip: 'SME content pending',
               smePendingAria: 'SME pending',
+              provenance: {
+                observed: 'Observed',
+                nowcast: 'Nowcast',
+                scenario: 'Scenario',
+                reference: 'Reference',
+                draft: 'Draft',
+              },
               direction: { up: 'higher', down: 'lower', flat: 'unchanged' },
             },
           },
@@ -108,5 +115,64 @@ describe('KpiStrip', () => {
     // Shot-1: delta renders as <p class="kpi__delta overview-kpi-trend"> with ↑ glyph.
     assert.match(markup, /overview-kpi-trend__glyph[^>]*>↑/)
     assert.doesNotMatch(markup, /overview-kpi-trend[^"]*ui-chip/)
+  })
+
+  it('renders conservative provenance pills from supported attribution metadata', async () => {
+    const i18n = await createTestI18n()
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <KpiStrip
+          metrics={[
+            buildMetric({
+              metric_id: 'gdp',
+              model_attribution: [
+                {
+                  model_id: 'dfm-nowcast',
+                  model_name: 'DFM',
+                  module: 'nowcast',
+                  version: '1.0.0',
+                  run_id: 'dfm-1',
+                  data_version: '2026Q1',
+                  timestamp: '2026-04-16T17:30:00+05:00',
+                },
+              ],
+            }),
+            buildMetric({
+              metric_id: 'inflation',
+              model_attribution: [
+                {
+                  model_id: 'qpm_uzbekistan',
+                  model_name: 'QPM',
+                  module: 'monetary',
+                  version: '1.0.0',
+                  run_id: 'qpm-1',
+                  data_version: 'mock-v1',
+                  timestamp: '2026-04-16T17:30:00+05:00',
+                },
+              ],
+            }),
+            buildMetric({
+              metric_id: 'external',
+              model_attribution: [
+                {
+                  model_id: 'pe_trade_reference',
+                  model_name: 'PE Trade',
+                  module: 'external',
+                  version: '1.0.0',
+                  run_id: 'pe-1',
+                  data_version: 'mock-v1',
+                  timestamp: '2026-04-16T17:30:00+05:00',
+                },
+              ],
+            }),
+          ]}
+        />
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /Nowcast/)
+    assert.match(markup, /Scenario/)
+    assert.match(markup, /Reference/)
+    assert.match(markup, /overview-kpi-card__provenance--nowcast/)
   })
 })

@@ -5,6 +5,45 @@
   gap: var(--space-xl);
 }
 
+.analytical-context {
+  align-items: center;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.analytical-context strong {
+  color: var(--color-text);
+  font-size: 0.82rem;
+}
+
+.analytical-context span {
+  font-size: 0.82rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.claim-label {
+  align-items: center;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-text-muted);
+  display: inline-flex;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  padding: 0.18rem var(--space-sm);
+  text-transform: uppercase;
+  width: fit-content;
+}
+
 .cmp-selector {
   display: flex;
   align-items: center;
@@ -350,8 +389,9 @@
   gap: var(--space-md);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-left: 3px solid var(--color-brand);
+  border-top: 3px solid var(--color-border-strong);
   border-radius: var(--radius-md);
+  margin-top: var(--space-xl);
   padding: var(--space-xl);
 }
 
@@ -371,10 +411,14 @@
 
 .cmp-saved-io__head h4 {
   margin: 0;
+  color: var(--color-text);
+  font-size: 1rem;
+}
+
+.cmp-saved-io__head strong {
   color: var(--color-text-muted);
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 0.82rem;
+  font-weight: 650;
 }
 
 .cmp-saved-io__head p,
@@ -547,6 +591,12 @@
 .comparison-modal__head h3 {
   margin: 0;
   font-size: 1rem;
+}
+
+.comparison-modal__local-note {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  margin: 0;
 }
 
 .comparison-modal__list {

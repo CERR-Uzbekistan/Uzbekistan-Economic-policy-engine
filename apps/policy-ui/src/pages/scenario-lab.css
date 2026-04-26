@@ -52,7 +52,7 @@
   display: grid;
   font: inherit;
   gap: 0.2rem;
-  min-height: 4.1rem;
+  min-height: 5rem;
   padding: var(--space-sm) var(--space-md);
   text-align: start;
 }
@@ -66,6 +66,13 @@
 .scenario-model-tabs__tab small {
   color: var(--color-text-muted);
   font-size: 0.72rem;
+}
+
+.scenario-model-tabs__subtitle {
+  line-height: 1.25;
+}
+
+.scenario-model-tabs__status {
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -75,6 +82,79 @@
   background: var(--color-brand-soft);
   border-color: var(--color-border-strong);
   color: var(--color-brand);
+}
+
+.scenario-model-tabs__planned {
+  background: var(--color-surface-muted);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+}
+
+.scenario-model-tabs__planned h3,
+.scenario-model-tabs__planned p {
+  margin: 0;
+}
+
+.scenario-model-tabs__planned h3 {
+  color: var(--color-text);
+  font-size: 0.86rem;
+}
+
+.scenario-model-tabs__planned p {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.scenario-model-tabs__planned ul {
+  display: grid;
+  gap: var(--space-xs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.scenario-model-tabs__planned li {
+  align-items: center;
+  display: grid;
+  gap: var(--space-xs);
+  grid-template-columns: minmax(7rem, 0.8fr) minmax(0, 1.2fr) auto;
+}
+
+.scenario-model-tabs__planned span {
+  font-size: 0.8rem;
+  font-weight: 650;
+}
+
+.scenario-model-tabs__planned small {
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+}
+
+.analytical-context {
+  align-items: center;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.analytical-context strong {
+  color: var(--color-text);
+  font-size: 0.82rem;
+}
+
+.analytical-context span {
+  font-size: 0.82rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .scenario-tab-shell {
@@ -290,6 +370,10 @@
   padding: var(--space-sm) var(--space-md);
 }
 
+.io-shock__kpis .claim-label {
+  justify-self: start;
+}
+
 .io-shock__kpis dt {
   color: var(--color-text-muted);
   font-size: 0.78rem;
@@ -324,6 +408,28 @@
 
 .io-shock__table-wrap h3 {
   font-size: 0.95rem;
+  margin: 0;
+}
+
+.io-shock__meaning {
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  display: grid;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.io-shock__meaning h4 {
+  font-size: 0.82rem;
+  margin: 0;
+}
+
+.io-shock__meaning p,
+.io-shock__source-note {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.42;
   margin: 0;
 }
 
@@ -370,6 +476,13 @@
   font-size: 0.72rem;
   font-weight: 700;
   margin-bottom: 0.15rem;
+}
+
+.io-shock__table tbody th strong {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 .io-shock__caveats {
@@ -851,6 +964,34 @@
   gap: var(--space-md);
 }
 
+.scenario-output-context {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.scenario-output-context p {
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+  line-height: 1.42;
+  margin: 0;
+}
+
+.claim-label {
+  align-items: center;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-text-muted);
+  display: inline-flex;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  padding: 0.18rem var(--space-sm);
+  text-transform: uppercase;
+  width: fit-content;
+}
+
 .scenario-main-chart__head {
   display: grid;
   gap: var(--space-xs);
@@ -1086,6 +1227,11 @@
   .scenario-chart-bars li {
     grid-template-columns: 1fr;
   }
+
+  .scenario-model-tabs__planned li {
+    align-items: start;
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 620px) {
@@ -1124,6 +1270,13 @@
 
 .lab-session__load-link {
   justify-self: start;
+}
+
+.lab-session__local-note,
+.saved-runs-panel__local-note {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  margin: 0;
 }
 
 .lab-session__actions {

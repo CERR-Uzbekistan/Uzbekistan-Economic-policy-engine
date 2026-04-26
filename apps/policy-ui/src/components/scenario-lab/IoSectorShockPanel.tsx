@@ -254,22 +254,27 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
           <div className="io-shock__results">
             <dl className="io-shock__kpis">
               <div>
+                <span className="claim-label">{t('scenarioLab.ioShock.claimLabels.output')}</span>
                 <dt>{t('scenarioLab.ioShock.kpis.output')}</dt>
                 <dd>{formatNumber(result.totals.output_effect_bln_uzs)} bln UZS</dd>
               </div>
               <div>
+                <span className="claim-label">{t('scenarioLab.ioShock.claimLabels.output')}</span>
                 <dt>{t('scenarioLab.ioShock.kpis.valueAdded')}</dt>
                 <dd>{formatNumber(result.totals.value_added_effect_bln_uzs)} bln UZS</dd>
               </div>
               <div>
+                <span className="claim-label">{t('scenarioLab.ioShock.claimLabels.gdpContribution')}</span>
                 <dt>{t('scenarioLab.ioShock.kpis.gdpContribution')}</dt>
                 <dd>{formatNumber(result.totals.gdp_accounting_contribution_bln_uzs)} bln UZS</dd>
               </div>
               <div>
+                <span className="claim-label">{t('scenarioLab.ioShock.claimLabels.employment')}</span>
                 <dt>{t('scenarioLab.ioShock.kpis.employment')}</dt>
-                <dd>{formatOptionalNumber(result.totals.employment_effect_persons)}</dd>
+                <dd>{formatOptionalNumber(result.totals.employment_effect_persons)} {t('scenarioLab.ioShock.units.employmentEstimate')}</dd>
               </div>
               <div>
+                <span className="claim-label">{t('scenarioLab.ioShock.claimLabels.output')}</span>
                 <dt>{t('scenarioLab.ioShock.kpis.multiplier')}</dt>
                 <dd>{result.totals.aggregate_output_multiplier?.toFixed(2) ?? 'n/a'}</dd>
               </div>
@@ -301,6 +306,21 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
 
             <div className="io-shock__table-wrap">
               <h3>{t('scenarioLab.ioShock.topSectors')}</h3>
+              <div className="io-shock__meaning">
+                <h4>{t('scenarioLab.ioShock.whatThisMeans.title')}</h4>
+                <p>
+                  {t('scenarioLab.ioShock.whatThisMeans.body', {
+                    output: formatNumber(result.totals.output_effect_bln_uzs),
+                    valueAdded: formatNumber(result.totals.value_added_effect_bln_uzs),
+                    employment: formatOptionalNumber(result.totals.employment_effect_persons),
+                  })}
+                </p>
+              </div>
+              <p className="io-shock__source-note">
+                {t('scenarioLab.ioShock.sourceLabelNote', {
+                  artifact: state.workspace.source_artifact,
+                })}
+              </p>
               <table className="io-shock__table">
                 <thead>
                   <tr>
@@ -315,8 +335,8 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
                   {result.top_sectors.map((sector) => (
                     <tr key={sector.sector_code}>
                       <th scope="row">
-                        <span>{sector.sector_code}</span>
-                        {sector.sector_name}
+                        <span>{t('scenarioLab.ioShock.table.sectorCode')}: {sector.sector_code}</span>
+                        <strong>{t('scenarioLab.ioShock.table.sourceLabel')}: {sector.sector_name}</strong>
                       </th>
                       <td>{formatNumber(sector.output_effect_bln_uzs)}</td>
                       <td>{formatNumber(sector.value_added_effect_bln_uzs)}</td>

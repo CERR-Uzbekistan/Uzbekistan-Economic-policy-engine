@@ -97,6 +97,7 @@ export function ScenarioLabSavedRunsPanel({
         <div className="scenario-panel__head page-section-head">
           <h2>{t('scenarioLab.savedRuns.title')}</h2>
           <p>{t('scenarioLab.savedRuns.empty')}</p>
+          <p className="saved-runs-panel__local-note">{t('scenarioLab.saved.localBrowserDisclosure')}</p>
         </div>
       </section>
     )
@@ -114,6 +115,7 @@ export function ScenarioLabSavedRunsPanel({
       <div className="scenario-panel__head page-section-head">
         <h2>{t('scenarioLab.savedRuns.title')}</h2>
         <p>{t('scenarioLab.savedRuns.description', { count: savedScenarios.length })}</p>
+        <p className="saved-runs-panel__local-note">{t('scenarioLab.saved.localBrowserDisclosure')}</p>
       </div>
 
       <div className="saved-runs-panel__filters" role="tablist" aria-label={t('scenarioLab.savedRuns.filtersAria')}>
@@ -175,7 +177,7 @@ export function ScenarioLabSavedRunsPanel({
                     <dd>{run.data_vintage}</dd>
                   </div>
                   <div>
-                    <dt>{t('scenarioLab.savedRuns.fields.source')}</dt>
+                    <dt>{t('scenarioLab.savedRuns.fields.sourceArtifact')}</dt>
                     <dd>{run.source_artifact}</dd>
                   </div>
                   <div>
@@ -240,7 +242,7 @@ export function ScenarioLabSavedRunsPanel({
                 </div>
                 {getMacroSourceVintage(scenario) ? (
                   <div>
-                    <dt>{t('scenarioLab.savedRuns.fields.source')}</dt>
+                    <dt>{t('scenarioLab.savedRuns.fields.sourceVintage')}</dt>
                     <dd>{getMacroSourceVintage(scenario)}</dd>
                   </div>
                 ) : null}

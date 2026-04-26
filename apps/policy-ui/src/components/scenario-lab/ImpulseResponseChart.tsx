@@ -20,13 +20,19 @@ export function ImpulseResponseChart({ chart }: ImpulseResponseChartProps) {
           <p className="page-header__eyebrow scenario-impulse-card__eyebrow">
             {t('scenarioLab.results.impulseResponseEyebrow')}
           </p>
-          <h4 id="scenario-impulse-card__title">{chart.title}</h4>
+          <h4 id="scenario-impulse-card-title">{chart.title}</h4>
           <p>{chart.subtitle}</p>
         </div>
         <AttributionBadge modelId="QPM · FPP" active />
       </div>
+      <div className="scenario-output-context">
+        <span className="claim-label">{t('scenarioLab.results.claimLabels.headlineImpact')}</span>
+        <p>{t('scenarioLab.results.explanations.headlineImpact')}</p>
+      </div>
       <ChartRenderer spec={chart} ariaLabel={chart.title} />
-      <p className="scenario-impulse-card__caption">{chart.takeaway}</p>
+      <p className="scenario-impulse-card__caption">
+        {t('scenarioLab.results.impulseResponseCaption')}
+      </p>
     </div>
   )
 }

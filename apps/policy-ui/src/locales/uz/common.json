@@ -22,7 +22,7 @@
   "pages": {
     "overview": {
       "title": "Umumiy ko'rinish",
-      "description": "Qaror qabul qilishga yo'naltirilgan makroiqtisodiy holat: nima o'zgardi, nega muhim va keyin qayerda sinash kerak."
+      "description": "Analitik foydalanish uchun makroiqtisodiy holat: nima o'zgardi, nega muhim va keyin qayerda sinash kerak."
     },
     "scenarioLab": {
       "title": "Stsenariy simulyatori",
@@ -86,13 +86,13 @@
       "vintageLabel": "Vintaj",
       "modelsLabel": "Modellar",
       "modelsLive": "{{count}} ta faol",
-      "lastRefreshLabel": "So'nggi yangilanish"
+      "lastRefreshLabel": "Artefakt eksporti"
     },
     "header": {
       "kicker": "Iqtisodiy holat",
       "modelListFallback": "MODELLAR TO'PLAMI",
       "draftedFrom": "Holat narrativi · {{models}} bazasidan tuzilgan",
-      "updatedAt": "Yangilangan: {{date}}",
+      "updatedAt": "Holat narrativi tekshirildi: {{date}}",
       "provenance": {
         "draftedFromLabel": "HOLAT NARRATIVI · bazasidan tuzilgan",
         "aiAssisted": "AI yordamida",
@@ -109,9 +109,16 @@
       "deltaSrLabel": "{{direction}}: oldingi davrga nisbatan {{delta}}",
       "noPrior": "Oldingi qiymat yo'q",
       "notAvailable": "mavjud emas",
-      "freshness": "Yangilangan: {{date}}",
+      "freshness": "Ko'rsatkich vaqti: {{date}}",
       "smePendingChip": "SME kontenti kutilmoqda",
       "smePendingAria": "Kontekstli izoh — SME kontenti kutilmoqda",
+      "provenance": {
+        "observed": "Kuzatilgan",
+        "nowcast": "Nowcast",
+        "scenario": "Stsenariy",
+        "reference": "Ma'lumotnoma",
+        "draft": "Qoralama"
+      },
       "direction": {
         "up": "yuqoriroq",
         "down": "pastroq",
@@ -193,7 +200,7 @@
       "meta": {
         "activeModelsLabel": "Faol modellar",
         "runLifecycleLabel": "Ishga tushirish sikli",
-        "dataVintageLabel": "Ma'lumot vintaji",
+        "dataVintageLabel": "Manba vintaji",
         "runLifecycleStatus": {
           "loading": "Ishlamoqda",
           "ready": "Tayyor",
@@ -201,10 +208,33 @@
         }
       }
     },
+    "context": {
+      "label": "Kontekst:",
+      "dataVintage": "manba vintaji",
+      "lane": {
+        "macroScenario": "Makro stsenariy",
+        "sectorLinkage": "Sektor bog'lanishi"
+      },
+      "model": {
+        "qpm": "QPM",
+        "io": "I-O",
+        "pe": "PE",
+        "cge": "CGE",
+        "fpp": "FPP",
+        "savedRuns": "Saqlangan ishlar",
+        "synthesis": "Sintez"
+      },
+      "saveState": {
+        "saved": "saqlangan",
+        "unsaved": "saqlanmagan"
+      }
+    },
     "modelTabs": {
       "title": "Tahlil tablari",
       "description": "Har bir modelning natija chegarasini saqlagan holda modelga xos stsenariylarni bitta ish maydonida ishlating.",
       "tabsAria": "Stsenariy simulyatori model tablari",
+      "plannedTitle": "Rejadagi model yo'nalishlari",
+      "plannedDescription": "Keyingi bosqich. Bu yo'nalishlar faqat orientir uchun ko'rsatilgan va ushbu previewda model ishga tushirmaydi.",
       "macroQpm": "Makro / QPM",
       "ioSectorShock": "I-O sektor shoki",
       "peTradeShock": "PE savdo shoki",
@@ -212,9 +242,19 @@
       "fppFiscalPath": "FPP fiskal trayektoriya",
       "savedRuns": "Saqlangan ishlar",
       "synthesisPreview": "Sintez preview",
+      "subtitle": {
+        "macroQpm": "Makro stsenariy simulyatsiyasi",
+        "ioSectorShock": "Sektor bog'lanishi tahlili",
+        "peTradeShock": "Savdo ta'sirlanishi, rejada",
+        "cgeReformShock": "Umumiy muvozanat islohoti tahlili, rejada",
+        "fppFiscalPath": "Fiskal izchillik, rejada",
+        "savedRuns": "Saqlangan analitik ishlar",
+        "synthesisPreview": "Modellararo sintez, rejada"
+      },
       "status": {
         "active": "Faol",
         "next": "Keyingi",
+        "bridgePilot": "Bridge pilot",
         "shell": "Karkas",
         "planned": "Rejada"
       }
@@ -298,6 +338,19 @@
       "savedTitle": "I-O {{bucket}} shoki · {{amount}} {{currency}}",
       "savedDescription": "Sektor uzatish tahlili uchun saqlangan I-O sektor shoki.",
       "convertedShock": "Konvertatsiya qilingan talab shoki: {{amount}} mlrd so'm",
+      "sourceLabelNote": "Sektor nomlari {{artifact}} manbasidagi asl yorliqlar sifatida ko'rsatiladi va bu yerda tarjima qilinmaydi.",
+      "units": {
+        "employmentEstimate": "bandlik soni bahosi"
+      },
+      "claimLabels": {
+        "output": "Hisob-kitob multiplikatori / strukturaviy sektor bog'lanishi",
+        "gdpContribution": "I-O qo'shilgan qiymat hisob-kitob hissasi, makro prognoz emas",
+        "employment": "Bandlik intensivligi bo'yicha chiziqli baho, mehnat bozori prognozi emas"
+      },
+      "whatThisMeans": {
+        "title": "Bu nimani anglatadi",
+        "body": "Ushbu talab shoki {{output}} mlrd so'm yalpi ishlab chiqarish effekti va {{valueAdded}} mlrd so'm qo'shilgan qiymat hisob-kitob hissasini beradi. Bandlik {{employment}} baholangan ish o'rinlari sifatida, o'zgarmas sektor intensivliklari bo'yicha ko'rsatiladi."
+      },
       "buckets": {
         "consumption": "Iste'mol",
         "government": "Davlat xarajatlari",
@@ -321,7 +374,7 @@
         "fx": "FX taxmini",
         "distribution": "Taqsimlash rejimi",
         "selectedSector": "Tanlangan sektor",
-        "dataVintage": "Ma'lumot vintaji"
+        "dataVintage": "Manba vintaji"
       },
       "kpis": {
         "output": "Ishlab chiqarish ta'siri",
@@ -332,6 +385,8 @@
       },
       "table": {
         "sector": "Sektor",
+        "sectorCode": "Kod",
+        "sourceLabel": "Manba yorlig'i",
         "output": "Ishlab chiqarish, mlrd so'm",
         "valueAdded": "QQ, mlrd so'm",
         "employment": "Bandlik",
@@ -362,8 +417,10 @@
       },
       "fields": {
         "type": "Tur",
-        "data": "Ma'lumot",
+        "data": "Manba vintaji",
         "source": "Manba vintaji",
+        "sourceVintage": "Manba vintaji",
+        "sourceArtifact": "Manba artefakti",
         "saved": "Saqlangan"
       }
     },
@@ -415,6 +472,19 @@
         "fiscalEffects": "Fiskal ta'sirlar"
       },
       "impulseResponseEyebrow": "IMPULS RESPONSI",
+      "impulseResponseCaption": "Scenario Lab mock dvigateli natijasi: 12 chorak davomida bazaviydan og'ishlar, foiz punktlarida. Jonli prognoz sifatida keltirilmasin.",
+      "explanations": {
+        "headlineImpact": "Tanlangan stsenariy 12 chorak davomida bazaviydan qanday og'ishini ko'rsatadi; qiymatlar Scenario Lab mock dvigatelidan foiz punktlaridagi og'ishlardir.",
+        "macroPath": "Jadval xom chiqish emas, taqqoslash sifatida o'qilishi uchun stsenariy trayektoriyasini bazaviy trayektoriya yonida ko'rsatadi.",
+        "externalBalance": "Joriy taxminlar ostida tashqi balans stsenariy trayektoriyasini ko'rsatadi; birliklar YaIM foizida saqlanadi.",
+        "fiscalEffects": "Tanlangan stsenariy taxminlari ostidagi fiskal hisob-kitobni ko'rsatadi; bu yangi fiskal model ishga tushirilishi emas."
+      },
+      "claimLabels": {
+        "headlineImpact": "Stsenariy impuls responsi",
+        "macroPath": "Stsenariy trayektoriyasi bazaviyga nisbatan",
+        "externalBalance": "Tashqi balans stsenariy trayektoriyasi",
+        "fiscalEffects": "Fiskal stsenariy hisob-kitobi"
+      },
       "deltaVsBaseline": "{{delta}} bazaviyga nisbatan"
     },
     "interpretation": {
@@ -449,6 +519,7 @@
       "empty": "Hozircha saqlangan stsenariy yo'q.",
       "load": "Yuklash",
       "loadLink": "Saqlangan stsenariyni yuklash",
+      "localBrowserDisclosure": "Saqlangan ishlar faqat shu brauzerda saqlanadi.",
       "delete": "O'chirish",
       "confirmDelete": "\"{{scenarioName}}\" saqlangan stsenariyini o'chirasizmi?"
     }
@@ -463,6 +534,11 @@
         "mode": "Rejim",
         "deltasVsBaseline": "Bazaviyga nisbatan deltalar"
       }
+    },
+    "context": {
+      "label": "Kontekst:",
+      "runName": "{{baseline}} + {{alternatives}} muqobil",
+      "saveState": "taqqoslash ko'rinishi"
     },
     "chip": {
       "remove": "{{name}} ni taqqoslashdan olib tashlash"
@@ -479,8 +555,8 @@
       "status": "Validatsiyadan o'tgan",
       "note": "Bu panel I-O bridge orqali olingan strukturaviy sektor uzatish dalillarini tavsiflaydi. Bu makro prognoz, stsenariy deltasi yoki yuqoridagi stsenariylarning sababiy ta'siri emas.",
       "sourceArtifact": "Manba artefakti",
-      "dataVintage": "Ma'lumot davri",
-      "exportedAt": "Eksport qilingan",
+      "dataVintage": "Manba vintaji",
+      "exportedAt": "Artefakt eksporti",
       "sectorCount": "Sektorlar",
       "framework": "Metod",
       "units": "Birliklar",
@@ -520,16 +596,24 @@
     },
     "savedModal": {
       "title": "Saqlangan stsenariy qo'shish",
+      "localBrowserDisclosure": "Saqlangan ishlar faqat shu brauzerda saqlanadi.",
       "addSelected": "Tanlanganni qo'shish"
     },
     "savedIo": {
-      "title": "Saqlangan I-O sektor shoklari",
-      "description": "{{count}} ta saqlangan ish sektor tahlili sifatida ko'rsatiladi. Ular yuqoridagi makro qiyoslash qatorlarini o'zgartirmaydi.",
+      "title": "Saqlangan I-O ishlaridan sektor dalillari",
+      "separationNote": "Makro stsenariy delta jadvalining bir qismi emas.",
+      "description": "{{count}} ta saqlangan ish alohida dalil bo'limida sektor tahlili sifatida ko'rsatiladi.",
       "emptyWithAvailable": "{{count}} ta saqlangan I-O ishi mavjud. Ularni qo'shsangiz, makro jadval ostida sektor bloklari ko'rinadi.",
       "addAction": "Saqlangan ishni qo'shish",
       "type": "I-O ishi",
       "topSectors": "Top sektorlar",
       "boundary": "Chegara: qo'shilgan qiymat I-O hisob-kitob hissasi, sababiy makro stsenariy deltasi emas.",
+      "employmentUnit": "bandlik soni bahosi",
+      "claimLabels": {
+        "output": "Hisob-kitob multiplikatori / strukturaviy sektor bog'lanishi",
+        "gdpAccounting": "I-O qo'shilgan qiymat hisob-kitob hissasi, makro prognoz emas",
+        "employment": "Bandlik intensivligi bo'yicha chiziqli baho, mehnat bozori prognozi emas"
+      },
       "metrics": {
         "output": "Ishlab chiqarish",
         "valueAdded": "Qo'shilgan qiymat",
@@ -573,6 +657,7 @@
     }
   },
   "knowledgeHub": {
+    "staticPilotBanner": "Kuratsiya qilingan statik pilot kontent — jonli huquqiy yoki tadqiqot lentasi emas.",
     "header": {
       "eyebrow": "Islohotlar · Tadqiqotlar · Adabiyot",
       "meta": {
@@ -604,11 +689,26 @@
       "meta": {
         "expectedArtifacts": "Kutilgan artefaktlar",
         "plannedFamilies": "Rejadagi oilalar",
-        "generated": "Tekshirildi"
+        "generated": "Reyestr tuzildi"
       }
     },
     "summary": {
       "aria": "Ma'lumotlar reyestri status xulosasi"
+    },
+    "legend": {
+      "title": "Status izohi",
+      "valid": {
+        "label": "Artefakt valid",
+        "description": "Public artefakt yuklandi va frontend guard checksdan o'tdi. Bu iqtisodiy yoki model validatsiyasi emas."
+      },
+      "warning": {
+        "label": "Warning",
+        "description": "Artefakt yuklandi, lekin caveat yoki vaqt bo'yicha ogohlantirishlar bor."
+      },
+      "planned": {
+        "label": "Rejada",
+        "description": "Sprint 3da ataylab yo'q."
+      }
     },
     "status": {
       "valid": "Valid",
@@ -648,13 +748,13 @@
       "domain": "Domen",
       "status": "Status",
       "vintage": "Manba vintaji",
-      "export": "Eksport vaqti",
+      "export": "Artefakt eksporti",
       "source": "Manba/artefakt",
       "notes": "Izohlar"
     },
     "artifact": {
-      "dataVintage": "Ma'lumot vintaji",
-      "exportTimestamp": "Eksport vaqti",
+      "dataVintage": "Manba vintaji",
+      "exportTimestamp": "Artefakt eksporti",
       "sourceVintage": "Manba vintaji",
       "solver": "Solver",
       "caveats": "Izohlar",
@@ -676,6 +776,10 @@
       "meta": {
         "modelsLabel": "Modellar",
         "modelsLive": "{{count}} faol",
+        "bridgeBackedLabel": "Bridge-backed",
+        "bridgeBackedModels": "QPM, DFM, I-O",
+        "plannedLimitedLabel": "Rejada/cheklangan",
+        "plannedLimitedModels": "PE, CGE, FPP",
         "lastAuditLabel": "Oxirgi kalibrlash auditi",
         "openIssuesLabel": "Ochiq metodologik masalalar"
       }
@@ -722,8 +826,8 @@
     "bridgeEvidence": {
       "title": "Bridge dalillari",
       "sourceArtifact": "Manba artefakti",
-      "dataVintage": "Ma'lumot davri",
-      "exportedAt": "Eksport qilingan",
+      "dataVintage": "Manba vintaji",
+      "exportedAt": "Artefakt eksporti",
       "solverVersion": "Solver",
       "sectorCount": "Sektorlar",
       "framework": "Metod",
