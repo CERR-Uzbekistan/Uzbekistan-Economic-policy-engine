@@ -72,6 +72,7 @@ function runExporter(options: {
       cwd: repoRoot,
       env: {
         ...process.env,
+        OVERVIEW_EXPORTER_FORCE_COMPILED: '1',
         OVERVIEW_SOURCE_SNAPSHOT_PATH: options.sourcePath ?? buildVerifiedFixturePath(),
         OVERVIEW_OUTPUT_PATH: outputPath,
       },

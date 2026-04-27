@@ -1,7 +1,6 @@
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { registerHooks } from 'node:module'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))))
 const generatedBy = 'scripts/overview/export-overview.mjs'
@@ -9,21 +8,10 @@ const defaultSourcePath = join(repoRoot, 'scripts', 'overview', 'overview_source
 const defaultOutputPath = join(repoRoot, 'apps', 'policy-ui', 'public', 'data', 'overview.json')
 const PUBLIC_EXPORT_SOURCE_STATUS = 'owner_verified_for_public_artifact'
 
-registerHooks({
-  resolve(specifier, context, nextResolve) {
-    if (specifier.endsWith('.js') && context.parentURL?.includes('/apps/policy-ui/src/')) {
-      return nextResolve(specifier.replace(/\.js$/, '.ts'), context)
-    }
-    return nextResolve(specifier, context)
-  },
-})
-
-const {
-  OVERVIEW_ARTIFACT_SCHEMA_VERSION,
-  OVERVIEW_LOCKED_METRICS,
-  OVERVIEW_TOP_CARD_METRIC_IDS,
-} = await import('../../apps/policy-ui/src/data/overview/artifact-types.ts')
-const { validateOverviewArtifact } = await import('../../apps/policy-ui/src/data/overview/artifact-guard.ts')
+let OVERVIEW_ARTIFACT_SCHEMA_VERSION
+let OVERVIEW_LOCKED_METRICS
+let OVERVIEW_TOP_CARD_METRIC_IDS
+let validateOverviewArtifact
 
 const PANEL_TITLES = {
   growth: 'Growth',
@@ -35,6 +23,46 @@ const PANEL_TITLES = {
 
 function fail(message) {
   throw new Error(message)
+}
+
+async function importFile(path) {
+  return import(pathToFileURL(path).href)
+}
+
+async function loadOverviewModules() {
+  const sourceTypesPath = join(repoRoot, 'apps', 'policy-ui', 'src', 'data', 'overview', 'artifact-types.ts')
+  const sourceGuardPath = join(repoRoot, 'apps', 'policy-ui', 'src', 'data', 'overview', 'artifact-guard.ts')
+  const compiledTypesPath = join(repoRoot, 'apps', 'policy-ui', '.test-dist', 'src', 'data', 'overview', 'artifact-types.js')
+  const compiledGuardPath = join(repoRoot, 'apps', 'policy-ui', '.test-dist', 'src', 'data', 'overview', 'artifact-guard.js')
+
+  const forceCompiledModules = process.env.OVERVIEW_EXPORTER_FORCE_COMPILED === '1'
+  const moduleApi = forceCompiledModules ? {} : await import('node:module')
+  if (typeof moduleApi.registerHooks === 'function') {
+    moduleApi.registerHooks({
+      resolve(specifier, context, nextResolve) {
+        if (specifier.endsWith('.js') && context.parentURL?.includes('/apps/policy-ui/src/')) {
+          return nextResolve(specifier.replace(/\.js$/, '.ts'), context)
+        }
+        return nextResolve(specifier, context)
+      },
+    })
+
+    return {
+      types: await importFile(sourceTypesPath),
+      guard: await importFile(sourceGuardPath),
+    }
+  }
+
+  if (existsSync(compiledTypesPath) && existsSync(compiledGuardPath)) {
+    return {
+      types: await importFile(compiledTypesPath),
+      guard: await importFile(compiledGuardPath),
+    }
+  }
+
+  fail(
+    'Overview exporter requires Node registerHooks support or compiled policy-ui test modules. Run npm test from apps/policy-ui before exporting with Node 20.',
+  )
 }
 
 function parseArgs(argv) {
@@ -245,7 +273,13 @@ function buildArtifact(sourceMetrics, exportedAt) {
   }
 }
 
-function main() {
+async function main() {
+  const modules = await loadOverviewModules()
+  OVERVIEW_ARTIFACT_SCHEMA_VERSION = modules.types.OVERVIEW_ARTIFACT_SCHEMA_VERSION
+  OVERVIEW_LOCKED_METRICS = modules.types.OVERVIEW_LOCKED_METRICS
+  OVERVIEW_TOP_CARD_METRIC_IDS = modules.types.OVERVIEW_TOP_CARD_METRIC_IDS
+  validateOverviewArtifact = modules.guard.validateOverviewArtifact
+
   const args = parseArgs(process.argv.slice(2))
   const sourcePath = resolve(process.env.OVERVIEW_SOURCE_SNAPSHOT_PATH ?? defaultSourcePath)
   const outputPath = resolve(process.env.OVERVIEW_OUTPUT_PATH ?? defaultOutputPath)
@@ -266,7 +300,7 @@ function main() {
 }
 
 try {
-  main()
+  await main()
 } catch (error) {
   console.error(error instanceof Error ? error.message : String(error))
   process.exitCode = 1
