@@ -5,7 +5,7 @@ This app is the new frontend shell for the Uzbekistan Economic Policy Engine rep
 ## Current scope
 
 - React 19 + TypeScript + Vite foundation
-- App shell with unified navigation across Overview, Scenario Lab, Comparison, Model Explorer, Knowledge Hub
+- App shell with unified navigation across Overview, Scenario Lab, Comparison, Model Explorer, and the pending-only Knowledge Hub route
 - i18n (EN/RU/UZ) via react-i18next
 - ChartRenderer (Recharts) with semantic role colors and uncertainty-band rendering
 - Typed data contract (`src/contracts/data-contract.ts`) covering HeadlineMetric, ChartSpec, NarrativeBlock (with TB-P3 generation_mode), ModelAttribution, Caveat, ApiError
@@ -55,10 +55,10 @@ The source modules use page-specific `VITE_*_DATA_MODE` keys:
 - Overview, Scenario Lab, and Model Explorer default to `mock`; set their mode to `live` to call the configured API URL.
 - Comparison defaults to `live` because it consumes the committed QPM bridge JSON; set `VITE_COMPARISON_DATA_MODE=mock` to force mock mode. Transport or guard failures intentionally fall back to mock content.
 - QPM and DFM bridge clients read static JSON from `VITE_QPM_DATA_URL` and `VITE_DFM_DATA_URL`, defaulting to `/data/qpm.json` and `/data/dfm.json`.
-- Knowledge Hub is curated/static for Sprint 3 and has no live-mode env key.
+- Knowledge Hub is pending-only for the operational preview and has no live-mode env key.
 
 ## Notes
 
 - The old frontend is intentionally untouched.
-- QPM and DFM are live via bridge JSON. PE/IO/CGE/FPP follow the same pattern (R solver -> nightly JSON -> consumer contract -> frontend alignment); targets in `docs/frontend-replatform/12_model_bridge.md`.
-- Knowledge Hub remains curated/static in Sprint 3 unless pilot feedback creates a freshness requirement.
+- QPM and DFM are live via bridge JSON, and I-O is implemented within its accepted static/read-only scope. PE, CGE, and FPP remain deferred until their contracts/readiness gates clear.
+- Knowledge Hub remains pending-only in the operational preview. Active content, external citation/export, backend/API CRUD, live ingest, and content expansion are gated by the Knowledge Hub contract/readiness path.

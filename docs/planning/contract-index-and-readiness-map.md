@@ -2,18 +2,23 @@
 
 Date: 2026-04-27  
 Branch verified: `epic/replatform-execution`  
-Candidate SHA verified: `b3950dd`  
+Candidate SHA verified: `efb889f`
 Status: index/map only; source contracts remain authoritative
 
-No code implementation is currently allowed on any listed gated workstream. Permitted next actions are docs, gate clearing, owner decisions, source-owner outreach, and contract acceptance only.
+No code implementation is currently allowed on any listed gated workstream. Permitted next actions are updates to existing authoritative docs, gate clearing, owner decisions, source-owner outreach, and contract acceptance only.
+
+Operational preview gate: passing after commit `efb889f`.
+
+Operational-preview planning freeze: no new planning, contract, or readiness documents for gated workstreams in this operational-preview phase. Existing contracts are frozen. Implementation resumes only when the named owner signals the gate has cleared, and then work should proceed directly into code, not another planning document.
 
 ## One-Line Readiness Summary
 
-- HFI: gated - next: source-owner outreach - forbidden: create `/data/hfi_snapshot.json`
-- FPP: gated - next: clear Gate 1 workbook freeze - forbidden: frontend integration
-- PE: gated - next: freeze WITS/source vintage and owner acceptance - forbidden: PE artifact or `pe_data.js` regeneration
-- Knowledge Hub: gated - internal-preview route is pending-only with mock content hidden - next: accept source/citation schema and reviewer model - forbidden: backend/API CRUD or external citation
-- Backend artifact registry: gated - next: accept backend operations, fallback adapter, and architecture owner decisions - forbidden: FastAPI/Postgres implementation
+- HFI: gated - pending source owner/license confirmations - forbidden: create `/data/hfi_snapshot.json`
+- FPP: gated - pending final workbook freeze/signoff - forbidden: frontend integration
+- PE: gated - pending accepted implementation gate - forbidden: PE artifact or `pe_data.js` regeneration
+- CGE: gated - pending accepted implementation gate - forbidden: active-preview implementation
+- Knowledge Hub: gated - current implementation is pending-only; internal-preview route has mock content hidden - next: accept source/citation schema and reviewer model - forbidden: backend/API CRUD or external citation
+- Backend artifact registry: gated - pending operations/fallback acceptance - forbidden: FastAPI/Postgres implementation
 - Registry API/static fallback adapter: gated - next: owner acceptance of API/static precedence and source-state labels - forbidden: frontend API wiring
 - Data Registry: implemented - next: preserve static/read-only registry semantics and update source docs with contract changes - forbidden: backend authority, scheduler status, or source CRUD claims
 - I-O: implemented - next: contract acceptance for any stronger analytics/saved-run scope - forbidden: macro forecast, causal policy, or general-equilibrium claims
@@ -45,7 +50,7 @@ STOP conditions must be quoted or line-referenced from source contracts where po
 ### HFI
 
 - Status: `gated`
-- Last verified: 2026-04-27 on `epic/replatform-execution` at `b3950dd`
+- Last verified: 2026-04-27 on `epic/replatform-execution` at `efb889f`
 - Source-of-truth doc path: `docs/data-bridge/06_hfi_contract.md`
 - Supporting docs: `docs/planning/hfi-source-inventory.md`, `docs/planning/hfi-source-owner-outreach.md`, `docs/planning/hfi-static-pilot-artifact-gate.md`
 - Current implementation status: planning/source inventory only; no HFI artifact, frontend wiring, backend storage, scheduler, DFM refit, or Data Registry promotion is authorized.
@@ -53,12 +58,12 @@ STOP conditions must be quoted or line-referenced from source contracts where po
 - Blocks / blocked-by: blocks HFI artifact, HFI Overview/Data Registry display, HFI backend/API/storage, and any HFI-derived model claims; blocked by source-owner confirmations, inventory row acceptance, Data Registry vocabulary acceptance, backend ops/fallback acceptance if API/storage is proposed, and RU/UZ review.
 - Next allowed action: continue source-owner outreach and write accepted answers back to `docs/planning/hfi-source-inventory.md`.
 - Next forbidden action: create `/data/hfi_snapshot.json`, HFI frontend/backend code, mock HFI data, composite index, heat score, traffic-light aggregate, dashboard light, or DFM refit/backfill path.
-- Owner decision needed: HFI source-inventory owner/source owner: "For each first-pilot indicator, who is the accountable source owner, what license/access and display rights apply, and what vintage/stale/missing rule is accepted in writing?"
+- Owner decision needed: HFI source-inventory owner/source owner: "For each internal-preview indicator, who is the accountable source owner, what license/access and display rights apply, and what vintage/stale/missing rule is accepted in writing?"
 
 ### FPP
 
 - Status: `gated`
-- Last verified: 2026-04-27 on `epic/replatform-execution` at `b3950dd`
+- Last verified: 2026-04-27 on `epic/replatform-execution` at `efb889f`
 - Source-of-truth doc path: `docs/data-bridge/07_fpp_contract.md`
 - Supporting docs: `docs/planning/fpp-implementation-gate-clearing.md`, `docs/planning/backend-operations-contract.md`, `docs/planning/registry-api-fallback-adapter.md`
 - Current implementation status: planning/gate-clearing only; no FPP artifact, frontend implementation, backend implementation, Scenario Lab activation, or Data Registry promotion is authorized.
@@ -71,7 +76,7 @@ STOP conditions must be quoted or line-referenced from source contracts where po
 ### PE
 
 - Status: `gated`
-- Last verified: 2026-04-27 on `epic/replatform-execution` at `b3950dd`
+- Last verified: 2026-04-27 on `epic/replatform-execution` at `efb889f`
 - Source-of-truth doc path: `docs/data-bridge/08_pe_contract.md`
 - Current implementation status: planning contract only; no PE artifact, frontend implementation, backend implementation, live refresh, or `pe_data.js` regeneration is authorized.
 - Blocking STOP conditions: `docs/data-bridge/08_pe_contract.md:292-309` says any one missing means STOP and includes WITS vintage/owner/license, `pe_data.js` provenance/version pin, HS coverage reconciliation, authority table, output catalogue, Data Registry shape, simulator schema acceptance, backend operations + fallback acceptance, and Comparison-table boundary acceptance. `docs/data-bridge/08_pe_contract.md:346` says no PE frontend implementation, backend implementation, artifact generation, `pe_data.js` regeneration, HFI overlap, or push is authorized by the contract.
@@ -80,10 +85,22 @@ STOP conditions must be quoted or line-referenced from source contracts where po
 - Next forbidden action: generate `/data/pe_baseline.json`, regenerate `pe_data.js`, wire PE frontend/backend code, or include PE in the macro Comparison table.
 - Owner decision needed: PE model/data owner: "What frozen WITS/source vintage, `pe_data.js` source script/input set, HS coverage scope, and license/redistribution class are accepted?"
 
+### CGE
+
+- Status: `gated`
+- Last verified: 2026-04-27 on `epic/replatform-execution` at `efb889f`
+- Source-of-truth doc path: none accepted for operational-preview implementation; legacy folder `cge_model/` remains reference/simulator only.
+- Current implementation status: deferred; no active-preview CGE implementation, bridge artifact, backend integration, Scenario Lab activation, Data Registry promotion, or legacy-folder promotion is authorized.
+- Blocking STOP conditions: no accepted CGE contract/readiness gate exists for active-preview implementation, and operational-preview planning freeze blocks creating another planning/contract/readiness document in this phase.
+- Blocks / blocked-by: blocks CGE active-preview code, artifacts, backend/API wiring, and release claims; blocked by named owner gate clearance and accepted implementation authority.
+- Next allowed action: wait for the named owner to signal that the CGE gate has cleared.
+- Next forbidden action: implement CGE in `apps/policy-ui`, generate CGE bridge artifacts, promote `cge_model/` as active preview product, or create another CGE planning/readiness document.
+- Owner decision needed: CGE owner: "Has the CGE active-preview implementation gate cleared, and what exact implementation authority replaces the current deferred status?"
+
 ### Knowledge Hub
 
 - Status: `gated`
-- Last verified: 2026-04-27 on `epic/replatform-execution` at `b3950dd`
+- Last verified: 2026-04-27 on `epic/replatform-execution` at `efb889f`
 - Source-of-truth doc path: `docs/data-bridge/09_knowledge_hub_contract.md`
 - Current implementation status: Knowledge Hub remains route-visible but pending-only for the operational internal preview; seeded static reform/brief/literature content is hidden behind the shared pending surface. Governed source/citation workflow, backend/API source records, external citation, live ingest, and CRUD remain gated.
 - Blocking STOP conditions: `docs/data-bridge/09_knowledge_hub_contract.md:405-426` says stop before app code, backend work, API wiring, CRUD, live ingest, content expansion, external citation, or export if schema governance, AI governance binding, source/citation lineage, reform-status authority, model-ref whitelist, citation scope, correction/takedown, RU/UZ review, reviewer sign-off, static/legal-currentness caveats, and read-only API/static fallback acceptance remain unresolved. `docs/data-bridge/09_knowledge_hub_contract.md:121-125` blocks external citation/export of AI-drafted content without reviewed/accepted source state and actual reviewer sign-off.
@@ -95,7 +112,7 @@ STOP conditions must be quoted or line-referenced from source contracts where po
 ### Backend Artifact Registry
 
 - Status: `gated`
-- Last verified: 2026-04-27 on `epic/replatform-execution` at `b3950dd`
+- Last verified: 2026-04-27 on `epic/replatform-execution` at `efb889f`
 - Source-of-truth doc path: `docs/planning/backend-database-architecture-plan.md`
 - Supporting docs: `docs/planning/backend-operations-contract.md`, `docs/planning/registry-api-fallback-adapter.md`
 - Current implementation status: architecture plan only; no backend implementation, database migrations, FastAPI skeleton, or Postgres schema is authorized.
@@ -108,7 +125,7 @@ STOP conditions must be quoted or line-referenced from source contracts where po
 ### Registry API/Static Fallback Adapter
 
 - Status: `gated`
-- Last verified: 2026-04-27 on `epic/replatform-execution` at `b3950dd`
+- Last verified: 2026-04-27 on `epic/replatform-execution` at `efb889f`
 - Source-of-truth doc path: `docs/planning/registry-api-fallback-adapter.md`
 - Current implementation status: planning contract only; no frontend API wiring or behavior change is authorized.
 - Blocking STOP conditions: `docs/planning/registry-api-fallback-adapter.md:306-320` blocks frontend API wiring until the adapter contract and backend operations contract are accepted, API mode flag/switch and response schemas are documented, static/artifact compatibility tests are accepted, divergence labels and ownership fields are accepted, DFM freshness ownership switch is accepted, bridge guards remain active, API failure cannot break Data Registry, planned rows are not treated as failed, and wiring does not require saved runs, Knowledge Hub CRUD, HFI storage, PE, CGE, FPP, or synthesis. `docs/planning/registry-api-fallback-adapter.md:293-299` says no API calls, no new absent-API error state, and exact static behavior until API mode is enabled.
@@ -120,7 +137,7 @@ STOP conditions must be quoted or line-referenced from source contracts where po
 ### Data Registry
 
 - Status: `implemented`
-- Last verified: 2026-04-27 on `epic/replatform-execution` at `b3950dd`
+- Last verified: 2026-04-27 on `epic/replatform-execution` at `efb889f`
 - Source-of-truth doc path: `docs/planning/sprint-3-data-registry-mvp-plan.md`
 - Supporting docs: `docs/alignment/sprint4-data-registry-v2-audit.md`, `docs/planning/registry-api-fallback-adapter.md`
 - Current implementation status: frontend-only, read-only, artifact-based Data Registry is implemented for current static QPM, DFM, and I-O artifacts with planned HFI/PE/CGE/FPP/Synthesis states.
@@ -133,7 +150,7 @@ STOP conditions must be quoted or line-referenced from source contracts where po
 ### I-O
 
 - Status: `implemented`
-- Last verified: 2026-04-27 on `epic/replatform-execution` at `b3950dd`
+- Last verified: 2026-04-27 on `epic/replatform-execution` at `efb889f`
 - Source-of-truth doc path: `docs/data-bridge/03_io_contract.md`
 - Supporting docs: `docs/data-bridge/04_io_analytics_contract.md`, `docs/planning/sprint-3-io-page-integration-gate.md`, `docs/planning/sprint-3-io-second-consumer-gate.md`
 - Current implementation status: static `/data/io.json` bridge and current read-only/evidence consumers are implemented; stronger Scenario Lab analytics and macro handoff claims require separate acceptance.
@@ -146,7 +163,7 @@ STOP conditions must be quoted or line-referenced from source contracts where po
 ### QPM/DFM
 
 - Status: `implemented`
-- Last verified: 2026-04-27 on `epic/replatform-execution` at `b3950dd`
+- Last verified: 2026-04-27 on `epic/replatform-execution` at `efb889f`
 - Source-of-truth doc path: `docs/data-bridge/00_qpm_contract.md`; `docs/data-bridge/02_dfm_contract.md`
 - Supporting docs: `docs/planning/registry-api-fallback-adapter.md`
 - Current implementation status: QPM and DFM static bridge artifacts are implemented for their current frontend consumers; freshness and source-vintage semantics remain static-artifact/guard based unless an accepted owner switch changes them.
@@ -159,7 +176,7 @@ STOP conditions must be quoted or line-referenced from source contracts where po
 ### Main Merge Readiness
 
 - Status: `gated`
-- Last verified: 2026-04-27 on `epic/replatform-execution`; readiness review source candidate `541db7c`, local HEAD `b3950dd`
+- Last verified: 2026-04-27 on `epic/replatform-execution`; readiness review source candidate `541db7c`, local HEAD `efb889f`
 - Source-of-truth doc path: `docs/planning/sprint-4-main-merge-readiness-review.md`
 - Supporting docs: `docs/planning/sprint-4-main-merge-readiness.md`, `docs/planning/sprint-3-main-merge-plan.md`, `docs/frontend-replatform/14_sprint3_release_candidate_readiness.md`
 - Current implementation status: release-control readiness is not accepted for main merge; remaining work is evidence/owner acceptance, not new product scope.
@@ -172,12 +189,12 @@ STOP conditions must be quoted or line-referenced from source contracts where po
 ## Recommended Next Three Actions
 
 1. Clear FPP Gate 1 by recording the canonical `unified-v1` workbook freeze, owner, hash/date, and sheet/range map - do NOT begin FPP frontend integration.
-2. Assign and contact HFI source owners for the first-pilot shortlist, then write accepted answers into the source inventory - do NOT create an HFI artifact or `/data/hfi_snapshot.json`.
+2. Assign and contact HFI source owners for the internal-preview shortlist, then write accepted answers into the source inventory - do NOT create an HFI artifact or `/data/hfi_snapshot.json`.
 3. Accept backend operations and registry fallback contracts with named owners and explicit negative authority - do NOT implement FastAPI, database migrations, or frontend API wiring.
 
-## Contracts Not Yet Drafted
+## Deferred Contract Topics
 
-Missing contracts/plans:
+The following topics are not authorized for new planning, contract, or readiness documents during this operational-preview phase:
 
 - CGE contract
 - synthesis contract
@@ -185,7 +202,7 @@ Missing contracts/plans:
 - production auth/roles contract
 - export/citation workflow contract
 - I-O Scenario Lab analytics acceptance contract
-- pilot/evaluator observation capture contract
+- internal-preview/evaluator observation capture contract
 - RU/UZ terminology review acceptance plan
 
 Do not expand these into new scope from this index.

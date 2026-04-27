@@ -1,8 +1,20 @@
 # Uzbekistan Economic Policy Engine
 
-Interactive macroeconomic policy simulation platform for analyzing Uzbekistan's economy. Features 6 economic models with real-time visualization, multi-language support (EN/RU/UZ), and data export capabilities.
+Operational internal-preview frontend for Uzbekistan economic policy workflows. The active preview product is `apps/policy-ui`; legacy static model folders remain reference/simulator assets unless explicitly promoted by contract.
+
+## Operational Preview Status
+
+| Surface | Status |
+|---|---|
+| `apps/policy-ui` | Active internal-preview product |
+| `cge_model/`, `dfm_nowcast/`, `fpp_model/`, `io_model/`, `pe_model/`, `qpm_uzbekistan/` | Legacy reference / not actively maintained in the preview |
+| `shared/`, `mcp_server/` | Reference / out-of-scope for preview |
+
+Knowledge Hub is pending-only in the operational preview. FPP, PE, CGE, HFI, backend, and Knowledge Hub implementation remain gated by their contracts/readiness docs.
 
 ## Models
+
+Legacy model inventory:
 
 | Model | Description |
 |-------|-------------|
@@ -22,17 +34,17 @@ Interactive macroeconomic policy simulation platform for analyzing Uzbekistan's 
 
 ## Getting Started
 
-### Legacy static app
-
-1. Clone or download the repository.
-2. Open `index.html` in a web browser.
-3. Navigate between models using the sidebar or model cards.
-
-### Replatform frontend (`apps/policy-ui`)
+### Active internal preview (`apps/policy-ui`)
 
 1. `cd apps/policy-ui`
 2. `npm ci`
 3. `npm run dev` (or `npm run build` / `npm run test`)
+
+### Legacy static reference
+
+1. Clone or download the repository.
+2. Open `index.html` in a web browser.
+3. Treat root/model-folder pages as legacy reference/simulator assets, not the active internal-preview product.
 
 ### Sprint 3 internal-preview deployment
 
@@ -76,7 +88,8 @@ manual-dispatch workflow on the epic branch.
 
 ## Features
 
-- 6 interactive economic models with real-time parameter adjustment
+- Active internal-preview surface in `apps/policy-ui`
+- Legacy reference/simulator inventory for six economic model folders
 - Multi-language interface (English, Русский, Ўзбекча)
 - Macro snapshot dashboard with key economic indicators
 - GDP forecast chart with DFM nowcast integration

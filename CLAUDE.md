@@ -5,33 +5,50 @@
 ## Project Overview
 
 - **Project name:** Uzbekistan Economic Policy Engine
-- **Description:** Interactive macroeconomic policy simulation platform for Uzbekistan with 6 economic models, multi-language support, and data visualization
-- **Tech stack:** R (modeling/data), HTML5/CSS3/Vanilla JS (frontend), Chart.js 4.4.0, jsPDF 2.5.1, XLSX 0.18.5
-- **Deployment:** Static HTML/JS — no server required
+- **Active product:** `apps/policy-ui` is the active internal-preview product.
+- **Description:** Operational internal-preview frontend for Uzbekistan economic policy workflows, with static/bridge-backed model surfaces and gated future workstreams.
+- **Tech stack:** React 19/TypeScript/Vite for the active preview; legacy static HTML/CSS/JS and R model assets remain as reference/simulator assets.
+- **Deployment:** GitHub Pages sidecar for `apps/policy-ui` under `/policy-ui/`; legacy static root remains available as reference unless explicitly promoted by contract.
+
+## Surface Status
+
+| Surface | Status |
+|---|---|
+| `apps/policy-ui` | Active internal-preview product |
+| `cge_model/`, `dfm_nowcast/`, `fpp_model/`, `io_model/`, `pe_model/`, `qpm_uzbekistan/` | Legacy reference / not actively maintained in the preview |
+| `shared/`, `mcp_server/` | Reference / out-of-scope for preview |
+
+Legacy static model folders remain reference/simulator assets unless explicitly promoted by contract. Do not move, archive, or delete legacy folders as part of operational-preview housekeeping.
+
+Knowledge Hub is pending-only in the operational preview. It may remain route-visible behind the shared pending surface, but active Knowledge Hub content, external citation/export, backend/API CRUD, live ingest, and content expansion are gated.
+
+FPP, PE, CGE, HFI, backend, and Knowledge Hub implementation are gated by their named contracts/readiness docs. No new planning, contract, or readiness documents for gated workstreams in this operational-preview phase. Existing contracts are frozen. Implementation resumes only when the named owner signals the gate has cleared, and then work should proceed directly into code, not another planning document.
 
 ## Directory Structure
 
 ```
 project-root/
-├── index.html              # Main hub/landing page with model cards, macro snapshot, GDP chart
+├── apps/
+│   └── policy-ui/          # Active internal-preview React product
+├── index.html              # Legacy static hub/reference entry point
 ├── cge_model/
-│   └── index.html          # CGE 1-2-3 Model — sectoral shock simulator (2021 data)
+│   └── index.html          # Legacy CGE 1-2-3 simulator reference
 ├── dfm_nowcast/
-│   ├── index.html          # GDP Nowcasting — DFM Kalman filter, 3-month forecast
-│   └── dfm_data.js         # Auto-generated from R: 36 variables, factor loadings, matrices
+│   ├── index.html          # Legacy GDP nowcasting simulator reference
+│   └── dfm_data.js         # Auto-generated model data reference
 ├── fpp_model/
-│   └── index.html          # Financial Programming & Policies — IMF 4-sector framework
+│   └── index.html          # Legacy FPP simulator reference
 ├── io_model/
-│   ├── index.html          # Input-Output Model — 136 sectors, Leontief multipliers
-│   ├── io_data.js          # Sector data in JS format (354 KB)
-│   └── io_data.json        # Raw Leontief symmetric table (528 KB, 2022 data)
+│   ├── index.html          # Legacy I-O simulator reference
+│   ├── io_data.js          # Sector data reference
+│   └── io_data.json        # Raw Leontief symmetric table reference
 ├── pe_model/
-│   ├── index.html          # Partial Equilibrium — WTO trade analysis, full HS coverage
-│   └── pe_data.js          # WITS-computed trade effects, HS codes 28-40
+│   ├── index.html          # Legacy PE simulator reference
+│   └── pe_data.js          # WITS-computed trade effects reference
 ├── qpm_uzbekistan/
-│   └── index.html          # QPM DSGE — New-Keynesian small open economy simulator
+│   └── index.html          # Legacy QPM simulator reference
 ├── shared/
-│   └── report-engine.js    # Reusable CSV/PNG/PDF export utilities + floating toolbar
+│   └── report-engine.js    # Legacy/reference shared utilities
 ├── .gitignore
 ├── CLAUDE.md               # This file
 └── README.md               # Project documentation
@@ -41,20 +58,18 @@ project-root/
 
 1. **Never delete data files** (`*_data.js`, `*_data.json`) without explicit permission — they are auto-generated from R models.
 2. **Never go outside this project directory.**
-3. **Always ask before overwriting** existing model HTML files.
-4. **Preserve i18n structure** — all user-visible text must support EN/RU/UZ via the language switcher.
-5. **Keep models self-contained** — each model folder should work independently with its own `index.html`.
-6. **Maintain the shared design system** — CSS variables, card styles, Inter/JetBrains Mono fonts, green accent palette.
+3. **Do not overwrite** legacy model HTML files unless the user explicitly asks for legacy-static changes.
+4. **Preserve i18n structure** — active preview user-visible text must support EN/RU/UZ via the app i18n layer.
+5. **Keep gated work gated** — FPP, PE, CGE, HFI, backend, and Knowledge Hub implementation require the named owner to clear the relevant contract/readiness gate.
+6. **Do not create new planning, contract, or readiness docs for gated workstreams** during this operational-preview phase. Existing contracts are frozen.
+7. **Do not move or archive legacy folders** as part of preview housekeeping.
 
 ## Code Conventions
 
-- **No build tools** — all HTML/CSS/JS is hand-written, no bundlers or frameworks.
-- **CDN dependencies only** — Chart.js, jsPDF, XLSX loaded via CDN `<script>` tags.
-- **CSS custom properties** for theming (colors, radii, spacing defined as variables).
-- **Responsive layouts** using CSS Grid and Flexbox.
-- **Data files** are generated by R scripts — edit the R source, not the JS/JSON output directly.
-- **Language keys** follow pattern: `{ en: "English", ru: "Русский", uz: "Ўзбекча" }`.
-- Keep functions short and focused; add comments for non-obvious economic formulas.
+- Active preview code lives in `apps/policy-ui` and follows its React/TypeScript/Vite conventions.
+- Legacy static folders are reference/simulator assets, not the active preview product.
+- Data files are generated by upstream model/data workflows; edit source workflows/contracts only when explicitly in scope.
+- Keep functions short and focused; add comments only for non-obvious economic formulas or contract boundaries.
 
 ## Models Reference
 
@@ -66,6 +81,8 @@ project-root/
 | Input-Output | `io_model/index.html` | 136-sector supply chain multipliers |
 | CGE 1-2-3 | `cge_model/index.html` | General equilibrium shock simulation |
 | Financial Programming | `fpp_model/index.html` | IMF 4-sector consistency framework |
+
+The table above is a legacy reference inventory. It does not mean all six models are live, maintained, or promoted in the operational preview.
 
 ## Data Sources
 
@@ -86,7 +103,7 @@ project-root/
 
 ## Current Status
 
-- **Last updated:** 2026-04-13
-- **Current focus:** Scenario comparison engine, AI policy advisor, accessibility
-- **Version:** Beta v0.4
-- **Roadmap:** See ROADMAP.md for phased improvement plan
+- **Last updated:** 2026-04-27
+- **Current focus:** Operational internal preview in `apps/policy-ui`
+- **Preview gate:** passing after commit `efb889f`
+- **Gated/deferred:** FPP, PE, CGE, HFI, backend, and Knowledge Hub implementation remain gated by contracts/readiness docs.
