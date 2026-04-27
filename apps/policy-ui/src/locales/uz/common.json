@@ -82,7 +82,7 @@
     },
     "dataRegistry": {
       "title": "Ma'lumotlar reyestri",
-      "description": "Frontend ommaviy ma'lumot qatlamining manbalari, vintajlari, artefaktlari, validatsiyasi va yangilanish holati."
+      "description": "Ommaviy frontend ma'lumot qatlami uchun read-only manba, vintaj, artefakt, guard-check va yangilanish holati inventari. U ma'lumotni yangilamaydi."
     },
     "knowledgeHub": {
       "title": "Bilimlar markazi",
@@ -718,6 +718,15 @@
     "summary": {
       "aria": "Ma'lumotlar reyestri status xulosasi"
     },
+    "filters": {
+      "aria": "Ma'lumotlar reyestri status filtrlari",
+      "all": "Hammasi",
+      "active": "Faol artefaktlar",
+      "warnings": "Ogohlantirishlar",
+      "planned": "Rejada",
+      "missingUnavailable": "Yo'q / mavjud emas",
+      "empty": "Bu filtrga mos reyestr yozuvlari yo'q."
+    },
     "legend": {
       "title": "Status izohi",
       "valid": {
@@ -757,6 +766,10 @@
         "title": "Bridge chiqishlari",
         "description": "Mavjud bridge client va guard'lar orqali yuklangan ommaviy JSON artefaktlar."
       },
+      "plannedArtifacts": {
+        "title": "Rejadagi artefaktlar",
+        "description": "Kelajakdagi manba shartnomalarigacha ataylab mavjud bo'lmagan kategoriyalar. Bular amalga oshirilgan artefakt xatosi emas."
+      },
       "vintages": {
         "title": "Vintajlar",
         "description": "Manba snapshotlari va eksport vaqtlari alohida ko'rsatiladi."
@@ -771,21 +784,38 @@
       }
     },
     "table": {
+      "type": "Reyestr turi",
       "domain": "Domen",
       "status": "Status",
       "vintage": "Manba vintaji",
       "export": "Artefakt eksporti",
       "source": "Manba/artefakt",
+      "owner": "Ega / manba tizimi",
       "notes": "Izohlar"
+    },
+    "registryType": {
+      "source_series": "Manba qatori",
+      "model_input": "Model kirishi",
+      "bridge_output": "Bridge chiqishi",
+      "planned_artifact": "Rejadagi artefakt"
     },
     "artifact": {
       "dataVintage": "Manba vintaji",
       "exportTimestamp": "Artefakt eksporti",
       "sourceVintage": "Manba vintaji",
       "lastValidationCheck": "Oxirgi validatsiya tekshiruvi",
+      "owner": "Ega",
+      "sourceSystem": "Manba tizimi",
       "solver": "Solver",
       "caveats": "Izohlar",
       "consumers": "Iste'molchi sahifalar"
+    },
+    "detail": {
+      "summary": "Guard va yangilik scope'ini ko'rish",
+      "validationScope": "Tekshiruv scope'i",
+      "freshnessRule": "Yangilik qoidasi",
+      "caveats": "Izohlar",
+      "sourceVsExport": "Manba va eksport"
     },
     "vintages": {
       "boundary": "Manba vintaji va eksport vaqti boshqa-boshqa. Hozirgi eksport eskiroq manba jadvalini ham o'z ichiga olishi mumkin."

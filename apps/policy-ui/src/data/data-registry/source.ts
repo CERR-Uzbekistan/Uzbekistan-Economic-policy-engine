@@ -20,8 +20,10 @@ import {
 import type { QpmBridgePayload } from '../bridge/qpm-types.js'
 
 export type RegistryStatus = 'valid' | 'warning' | 'failed' | 'missing' | 'unavailable' | 'planned'
+export type RegistryRecordKind = 'source_series' | 'model_input' | 'bridge_output' | 'planned_artifact'
+export type RegistryFilter = 'all' | 'active' | 'warnings' | 'planned' | 'missingUnavailable'
 export type ImplementedModelId = 'qpm' | 'dfm' | 'io'
-export type PlannedModelId = 'pe' | 'cge' | 'fpp'
+export type PlannedModelId = 'hfi' | 'pe' | 'cge' | 'fpp'
 export type RegistryModelId = ImplementedModelId | PlannedModelId
 
 export type RegistryIssue = {
@@ -32,11 +34,14 @@ export type RegistryIssue = {
 
 export type RegistryArtifact = {
   id: ImplementedModelId
+  registryType: 'bridge_output'
   artifactPath: string
   modelArea: string
   modelExplorerHref: string
   status: RegistryStatus
   statusDetail: string
+  owner: string
+  sourceSystem: string
   dataVintage: string
   exportTimestamp: string
   sourceArtifact: string
@@ -44,6 +49,10 @@ export type RegistryArtifact = {
   solverVersion: string
   caveatCount: number
   highestCaveatSeverity: CaveatSeverity | 'none'
+  validationScope: string
+  freshnessRule: string
+  caveatsSummary: string
+  sourceExportExplanation: string
   facts: Array<{ label: string; value: string }>
   consumers: Array<{ label: string; href: string }>
   issues: RegistryIssue[]
@@ -51,13 +60,20 @@ export type RegistryArtifact = {
 
 export type RegistryRow = {
   id: RegistryModelId
+  registryType: RegistryRecordKind
   label: string
   domain: string
   status: RegistryStatus
   dataVintage: string
   exportTimestamp: string
   source: string
+  owner: string
+  sourceSystem: string
   notes: string
+  validationScope: string
+  freshnessRule: string
+  caveats: string
+  sourceExportExplanation: string
   modelExplorerHref?: string
 }
 
@@ -74,10 +90,20 @@ export type DataRegistry = {
   artifacts: RegistryArtifact[]
   dataSources: RegistryRow[]
   modelInputs: RegistryRow[]
+  bridgeOutputs: RegistryRow[]
+  plannedArtifacts: RegistryRow[]
   vintages: RegistryRow[]
   updateStatuses: RegistryRow[]
   warnings: RegistryWarning[]
 }
+
+export const REGISTRY_FILTERS: RegistryFilter[] = [
+  'all',
+  'active',
+  'warnings',
+  'planned',
+  'missingUnavailable',
+]
 
 type LoadedArtifact =
   | { status: 'loaded'; payload: QpmBridgePayload | DfmBridgePayload | IoBridgePayload }
@@ -92,6 +118,7 @@ const CONSUMER_LINKS = {
   scenarioLab: { label: 'Scenario Lab', href: '/scenario-lab' },
   comparison: { label: 'Comparison', href: '/comparison' },
   modelExplorer: { label: 'Model Explorer', href: '/model-explorer' },
+  dataRegistry: { label: 'Data Registry', href: '/data-registry' },
 } as const
 
 export function getInitialDataRegistry(): DataRegistry {
@@ -127,6 +154,8 @@ export function buildDataRegistry(options: {
   const plannedRows = buildPlannedRows()
   const dataSources = [...artifacts.map(toDataSourceRow), ...plannedRows]
   const modelInputs = [...artifacts.map(toModelInputRow), ...plannedRows.map(toPlannedModelInputRow)]
+  const bridgeOutputs = artifacts.map(toBridgeOutputRow)
+  const plannedArtifacts = plannedRows.map(toPlannedArtifactRow)
   const vintages = artifacts.map(toVintageRow)
   const updateStatuses = artifacts.map(toUpdateStatusRow)
   const warnings = buildWarnings(artifacts, plannedRows)
@@ -138,10 +167,45 @@ export function buildDataRegistry(options: {
     artifacts,
     dataSources,
     modelInputs,
+    bridgeOutputs,
+    plannedArtifacts,
     vintages,
     updateStatuses,
     warnings,
   }
+}
+
+export function getFilteredRegistry(registry: DataRegistry, filter: RegistryFilter): DataRegistry {
+  if (filter === 'all') return registry
+
+  const artifacts = registry.artifacts.filter((artifact) => matchesRegistryFilter(artifact.status, filter))
+  const dataSources = registry.dataSources.filter((row) => matchesRegistryFilter(row.status, filter))
+  const modelInputs = registry.modelInputs.filter((row) => matchesRegistryFilter(row.status, filter))
+  const bridgeOutputs = registry.bridgeOutputs.filter((row) => matchesRegistryFilter(row.status, filter))
+  const plannedArtifacts = registry.plannedArtifacts.filter((row) => matchesRegistryFilter(row.status, filter))
+  const vintages = registry.vintages.filter((row) => matchesRegistryFilter(row.status, filter))
+  const updateStatuses = registry.updateStatuses.filter((row) => matchesRegistryFilter(row.status, filter))
+  const warnings = registry.warnings.filter((warning) => matchesRegistryFilter(warning.status, filter))
+
+  return {
+    ...registry,
+    artifacts,
+    dataSources,
+    modelInputs,
+    bridgeOutputs,
+    plannedArtifacts,
+    vintages,
+    updateStatuses,
+    warnings,
+  }
+}
+
+export function matchesRegistryFilter(status: RegistryStatus, filter: RegistryFilter): boolean {
+  if (filter === 'all') return true
+  if (filter === 'active') return status === 'valid' || status === 'warning'
+  if (filter === 'warnings') return status === 'warning'
+  if (filter === 'planned') return status === 'planned'
+  return status === 'failed' || status === 'missing' || status === 'unavailable'
 }
 
 async function loadQpmArtifact(fetchImpl: FetchLike): Promise<LoadedArtifact> {
@@ -228,7 +292,9 @@ function buildQpmArtifact(result: LoadedArtifact): RegistryArtifact {
   return {
     ...base,
     status: highestSeverity === 'critical' || highestSeverity === 'warning' ? 'warning' : 'valid',
-    statusDetail: 'Artifact loaded and passed QPM frontend guard checks; this is not economic validation.',
+    statusDetail: 'Artifact guard-checked by QPM frontend shape guards; this is not economic or model validation.',
+    owner: 'CERR macro modeling team',
+    sourceSystem: payload.attribution.module,
     dataVintage: payload.attribution.data_version,
     exportTimestamp: payload.metadata.exported_at,
     sourceArtifact: payload.attribution.module,
@@ -236,6 +302,10 @@ function buildQpmArtifact(result: LoadedArtifact): RegistryArtifact {
     solverVersion: payload.metadata.solver_version,
     caveatCount: payload.caveats.length,
     highestCaveatSeverity: highestSeverity,
+    validationScope: 'Frontend guard checks QPM attribution, scenarios, parameters, caveats, and metadata shape.',
+    freshnessRule: 'Uses ModelAttribution.data_version and artifact export timestamp; no frontend refresh or scheduler status is claimed.',
+    caveatsSummary: summarizeCaveats(payload.caveats),
+    sourceExportExplanation: 'Source vintage identifies the model input snapshot; artifact export is the public JSON build consumed by the UI.',
     facts: [
       { label: 'Run id', value: payload.attribution.run_id },
       { label: 'Scenarios', value: String(payload.scenarios.length) },
@@ -246,6 +316,7 @@ function buildQpmArtifact(result: LoadedArtifact): RegistryArtifact {
       CONSUMER_LINKS.scenarioLab,
       CONSUMER_LINKS.comparison,
       CONSUMER_LINKS.modelExplorer,
+      CONSUMER_LINKS.dataRegistry,
     ],
     issues: caveatsToIssues(payload.caveats),
   }
@@ -263,7 +334,9 @@ function buildDfmArtifact(result: LoadedArtifact, now: Date): RegistryArtifact {
   return {
     ...base,
     status: issues.length > 0 ? 'warning' : 'valid',
-    statusDetail: 'Artifact loaded and passed DFM frontend guard checks; this is not economic validation.',
+    statusDetail: 'Artifact guard-checked by DFM frontend shape guards; this is not economic or model validation.',
+    owner: 'CERR nowcasting team',
+    sourceSystem: payload.attribution.module,
     dataVintage: payload.attribution.data_version,
     exportTimestamp: payload.metadata.exported_at,
     sourceArtifact: payload.metadata.source_artifact,
@@ -271,12 +344,16 @@ function buildDfmArtifact(result: LoadedArtifact, now: Date): RegistryArtifact {
     solverVersion: payload.metadata.solver_version,
     caveatCount: payload.caveats.length,
     highestCaveatSeverity: staleIssue?.severity === 'error' ? 'critical' : highestSeverity,
+    validationScope: 'Frontend guard checks DFM attribution, nowcast periods, factor state, indicators, caveats, and metadata shape.',
+    freshnessRule: 'DFM JSON export older than 48 hours is a warning; older than 7 days is escalated. Upstream refit timestamp is separate.',
+    caveatsSummary: summarizeCaveats(payload.caveats, staleIssue),
+    sourceExportExplanation: 'Source artifact timestamp is the upstream DFM data/refit vintage; artifact export is the generated public JSON.',
     facts: [
       { label: 'Current quarter', value: payload.nowcast.current_quarter.period },
       { label: 'Indicators', value: String(payload.indicators.length) },
       { label: 'Factor convergence', value: payload.factor.converged ? 'Converged' : 'Not converged' },
     ],
-    consumers: [CONSUMER_LINKS.overview, CONSUMER_LINKS.modelExplorer],
+    consumers: [CONSUMER_LINKS.overview, CONSUMER_LINKS.modelExplorer, CONSUMER_LINKS.dataRegistry],
     issues,
   }
 }
@@ -290,7 +367,9 @@ function buildIoArtifact(result: LoadedArtifact): RegistryArtifact {
   return {
     ...base,
     status: highestSeverity === 'critical' || highestSeverity === 'warning' ? 'warning' : 'valid',
-    statusDetail: 'Artifact loaded and passed I-O frontend guard checks; this is not economic validation.',
+    statusDetail: 'Artifact guard-checked by I-O frontend shape guards; this is not economic or model validation.',
+    owner: 'CERR structural analysis team',
+    sourceSystem: payload.metadata.source,
     dataVintage: payload.attribution.data_version,
     exportTimestamp: payload.metadata.exported_at,
     sourceArtifact: payload.metadata.source_artifact,
@@ -298,6 +377,10 @@ function buildIoArtifact(result: LoadedArtifact): RegistryArtifact {
     solverVersion: payload.metadata.solver_version,
     caveatCount: payload.caveats.length,
     highestCaveatSeverity: highestSeverity,
+    validationScope: 'Frontend guard checks I-O attribution, sector records, matrices, totals, caveats, and metadata shape.',
+    freshnessRule: 'I-O 2022 is treated as a structural base-year vintage, not automatically stale because the source table is vintage-specific.',
+    caveatsSummary: summarizeCaveats(payload.caveats),
+    sourceExportExplanation: 'Source vintage is the official base-year table; artifact export is the deterministic public JSON build used by the app.',
     facts: [
       { label: 'Sectors', value: String(payload.metadata.n_sectors) },
       { label: 'Framework', value: payload.metadata.framework },
@@ -308,7 +391,12 @@ function buildIoArtifact(result: LoadedArtifact): RegistryArtifact {
       },
       { label: 'Source title', value: payload.metadata.source_title },
     ],
-    consumers: [CONSUMER_LINKS.scenarioLab, CONSUMER_LINKS.comparison, CONSUMER_LINKS.modelExplorer],
+    consumers: [
+      CONSUMER_LINKS.scenarioLab,
+      CONSUMER_LINKS.comparison,
+      CONSUMER_LINKS.modelExplorer,
+      CONSUMER_LINKS.dataRegistry,
+    ],
     issues: caveatsToIssues(payload.caveats),
   }
 }
@@ -320,11 +408,14 @@ function createArtifactBase(
 ): RegistryArtifact {
   return {
     id,
+    registryType: 'bridge_output',
     artifactPath,
     modelArea,
     modelExplorerHref: '/model-explorer',
     status: 'unavailable',
     statusDetail: 'Artifact has not been loaded.',
+    owner: DASH,
+    sourceSystem: DASH,
     dataVintage: DASH,
     exportTimestamp: DASH,
     sourceArtifact: DASH,
@@ -332,6 +423,10 @@ function createArtifactBase(
     solverVersion: DASH,
     caveatCount: 0,
     highestCaveatSeverity: 'none',
+    validationScope: 'Frontend artifact load has not completed, so guard scope is unavailable.',
+    freshnessRule: 'Freshness cannot be assessed until the artifact is loaded.',
+    caveatsSummary: 'No caveats are visible until the artifact is loaded.',
+    sourceExportExplanation: 'Source vintage and artifact export are unavailable until the public JSON artifact loads.',
     facts: [],
     consumers: [CONSUMER_LINKS.modelExplorer],
     issues: [],
@@ -350,36 +445,75 @@ function artifactFromFailure(base: RegistryArtifact, result: Exclude<LoadedArtif
 function buildPlannedRows(): RegistryRow[] {
   return [
     {
+      id: 'hfi',
+      registryType: 'planned_artifact',
+      label: 'High-frequency indicators',
+      domain: 'HFI source series',
+      status: 'planned',
+      dataVintage: 'Planned',
+      exportTimestamp: 'Unavailable by design until a source inventory and static artifact contract are accepted',
+      source: 'No public HFI artifact or chart data is included in this slice',
+      owner: 'Owner to be assigned during HFI source-inventory work',
+      sourceSystem: 'Planned source inventory',
+      notes: 'Planned/unavailable category for later nowcasting support; no HFI values, charts, live refresh, or DFM refit are implemented.',
+      validationScope: 'No guard scope exists yet because no HFI artifact contract has been accepted.',
+      freshnessRule: 'Freshness rules will be defined in the future HFI contract; this registry does not refresh data.',
+      caveats: 'Unavailable by design, not a failed artifact.',
+      sourceExportExplanation: 'A future HFI source vintage will differ from a future frontend artifact export timestamp.',
+      modelExplorerHref: '/model-explorer',
+    },
+    {
       id: 'pe',
+      registryType: 'planned_artifact',
       label: 'PE Trade Shock',
       domain: 'PE trade flows',
       status: 'planned',
       dataVintage: 'Planned',
       exportTimestamp: 'No Sprint 4 foundation artifact by design',
       source: 'No public PE input contract yet',
+      owner: 'Owner to be assigned during PE contract work',
+      sourceSystem: 'Planned trade-flow source inventory',
       notes: 'Planned/disabled model family; absence is not a missing implemented artifact.',
+      validationScope: 'No PE guard scope exists because no trade-flow artifact contract is active.',
+      freshnessRule: 'Freshness unavailable until a PE source contract exists.',
+      caveats: 'Planned/disabled; no PE computation or data contract is active.',
+      sourceExportExplanation: 'No source vintage or artifact export exists for PE in this frontend foundation.',
       modelExplorerHref: '/model-explorer',
     },
     {
       id: 'cge',
+      registryType: 'planned_artifact',
       label: 'CGE Reform Shock',
       domain: 'CGE SAM / reform inputs',
       status: 'planned',
       dataVintage: 'Planned',
       exportTimestamp: 'No Sprint 4 foundation artifact by design',
       source: 'No calibrated SAM bridge contract yet',
+      owner: 'Owner to be assigned during CGE contract work',
+      sourceSystem: 'Planned SAM/source inventory',
       notes: 'Planned/disabled model family; no CGE computation or data contract is active.',
+      validationScope: 'No CGE guard scope exists because no SAM/model artifact contract is active.',
+      freshnessRule: 'Freshness unavailable until a CGE source contract exists.',
+      caveats: 'Planned/disabled; no CGE computation or calibrated SAM is active.',
+      sourceExportExplanation: 'No source vintage or artifact export exists for CGE in this frontend foundation.',
       modelExplorerHref: '/model-explorer',
     },
     {
       id: 'fpp',
+      registryType: 'planned_artifact',
       label: 'FPP Fiscal Path',
       domain: 'FPP fiscal series',
       status: 'planned',
       dataVintage: 'Planned',
       exportTimestamp: 'No Sprint 4 foundation artifact by design',
       source: 'No public fiscal path input contract yet',
+      owner: 'Owner to be assigned during FPP contract work',
+      sourceSystem: 'Planned fiscal source inventory',
       notes: 'Planned/disabled model family; fiscal bridge is not implemented in this foundation bundle.',
+      validationScope: 'No FPP guard scope exists because no fiscal-series artifact contract is active.',
+      freshnessRule: 'Freshness unavailable until an FPP fiscal source contract exists.',
+      caveats: 'Planned/disabled; no fiscal path computation or data contract is active.',
+      sourceExportExplanation: 'No source vintage or artifact export exists for FPP in this frontend foundation.',
       modelExplorerHref: '/model-explorer',
     },
   ]
@@ -388,6 +522,7 @@ function buildPlannedRows(): RegistryRow[] {
 function toDataSourceRow(artifact: RegistryArtifact): RegistryRow {
   return {
     id: artifact.id,
+    registryType: 'source_series',
     label: artifact.modelArea,
     domain:
       artifact.id === 'qpm'
@@ -399,10 +534,16 @@ function toDataSourceRow(artifact: RegistryArtifact): RegistryRow {
     dataVintage: artifact.sourceVintage,
     exportTimestamp: artifact.exportTimestamp,
     source: artifact.sourceArtifact,
+    owner: artifact.owner,
+    sourceSystem: artifact.sourceSystem,
     notes:
       artifact.id === 'io'
         ? 'Structural base-year source table; not automatically stale because the official table is vintage-specific.'
         : artifact.statusDetail,
+    validationScope: artifact.validationScope,
+    freshnessRule: artifact.freshnessRule,
+    caveats: artifact.caveatsSummary,
+    sourceExportExplanation: artifact.sourceExportExplanation,
     modelExplorerHref: artifact.modelExplorerHref,
   }
 }
@@ -410,6 +551,7 @@ function toDataSourceRow(artifact: RegistryArtifact): RegistryRow {
 function toModelInputRow(artifact: RegistryArtifact): RegistryRow {
   return {
     id: artifact.id,
+    registryType: 'model_input',
     label:
       artifact.id === 'qpm'
         ? 'QPM / Macro Scenario'
@@ -421,12 +563,18 @@ function toModelInputRow(artifact: RegistryArtifact): RegistryRow {
     dataVintage: artifact.dataVintage,
     exportTimestamp: artifact.exportTimestamp,
     source: artifact.artifactPath,
+    owner: artifact.owner,
+    sourceSystem: artifact.sourceSystem,
     notes:
       artifact.id === 'dfm'
         ? 'Source vintage, artifact export, and frontend validation check are separate; no live scheduler status is claimed.'
         : artifact.id === 'io'
           ? 'Consumed as sector transmission analytics; guard checks validate artifact shape, not model economics.'
           : 'Public bridge exists; guard checks validate artifact shape, not macro-model calibration.',
+    validationScope: artifact.validationScope,
+    freshnessRule: artifact.freshnessRule,
+    caveats: artifact.caveatsSummary,
+    sourceExportExplanation: artifact.sourceExportExplanation,
     modelExplorerHref: artifact.modelExplorerHref,
   }
 }
@@ -434,26 +582,62 @@ function toModelInputRow(artifact: RegistryArtifact): RegistryRow {
 function toPlannedModelInputRow(row: RegistryRow): RegistryRow {
   return {
     ...row,
+    registryType: 'model_input',
     dataVintage: 'Unavailable until contract exists',
     source: 'Planned/disabled',
+  }
+}
+
+function toBridgeOutputRow(artifact: RegistryArtifact): RegistryRow {
+  return {
+    id: artifact.id,
+    registryType: 'bridge_output',
+    label: artifact.artifactPath,
+    domain: artifact.modelArea,
+    status: artifact.status,
+    dataVintage: artifact.dataVintage,
+    exportTimestamp: artifact.exportTimestamp,
+    source: artifact.sourceArtifact,
+    owner: artifact.owner,
+    sourceSystem: artifact.sourceSystem,
+    notes: artifact.statusDetail,
+    validationScope: artifact.validationScope,
+    freshnessRule: artifact.freshnessRule,
+    caveats: artifact.caveatsSummary,
+    sourceExportExplanation: artifact.sourceExportExplanation,
+    modelExplorerHref: artifact.modelExplorerHref,
+  }
+}
+
+function toPlannedArtifactRow(row: RegistryRow): RegistryRow {
+  return {
+    ...row,
+    registryType: 'planned_artifact',
   }
 }
 
 function toVintageRow(artifact: RegistryArtifact): RegistryRow {
   return {
     id: artifact.id,
+    registryType: 'bridge_output',
     label: artifact.modelArea,
     domain: artifact.artifactPath,
     status: artifact.status,
     dataVintage: artifact.dataVintage,
     exportTimestamp: artifact.exportTimestamp,
     source: artifact.sourceVintage,
+    owner: artifact.owner,
+    sourceSystem: artifact.sourceSystem,
     notes:
       artifact.id === 'dfm'
         ? 'Shows JSON export timestamp and upstream source-artifact refit timestamp separately.'
         : artifact.id === 'io'
           ? 'Source vintage is the base-year table; export timestamp is the deterministic public JSON build.'
-          : 'Uses ModelAttribution.data_version and artifact export timestamp.',
+        : 'Uses ModelAttribution.data_version and artifact export timestamp.',
+    validationScope: artifact.validationScope,
+    freshnessRule: artifact.freshnessRule,
+    caveats: artifact.caveatsSummary,
+    sourceExportExplanation: artifact.sourceExportExplanation,
     modelExplorerHref: artifact.modelExplorerHref,
   }
 }
@@ -461,16 +645,23 @@ function toVintageRow(artifact: RegistryArtifact): RegistryRow {
 function toUpdateStatusRow(artifact: RegistryArtifact): RegistryRow {
   return {
     id: artifact.id,
+    registryType: 'bridge_output',
     label: artifact.artifactPath,
     domain: artifact.modelArea,
     status: artifact.status,
     dataVintage: artifact.dataVintage,
     exportTimestamp: artifact.exportTimestamp,
     source: artifact.sourceArtifact,
+    owner: artifact.owner,
+    sourceSystem: artifact.sourceSystem,
     notes:
       artifact.status === 'valid' || artifact.status === 'warning'
         ? 'Last validation check is this frontend registry generation; no live scheduler status is claimed.'
         : artifact.statusDetail,
+    validationScope: artifact.validationScope,
+    freshnessRule: artifact.freshnessRule,
+    caveats: artifact.caveatsSummary,
+    sourceExportExplanation: artifact.sourceExportExplanation,
     modelExplorerHref: artifact.modelExplorerHref,
   }
 }
@@ -522,6 +713,16 @@ function getHighestCaveatSeverity(caveats: Array<{ severity: CaveatSeverity }>):
   if (caveats.some((caveat) => caveat.severity === 'warning')) return 'warning'
   if (caveats.some((caveat) => caveat.severity === 'info')) return 'info'
   return 'none'
+}
+
+function summarizeCaveats(
+  caveats: Array<{ severity: CaveatSeverity }>,
+  staleIssue?: RegistryIssue | null,
+): string {
+  const highestSeverity = getHighestCaveatSeverity(caveats)
+  const staleText = staleIssue ? `; freshness warning: ${staleIssue.message}` : ''
+  if (caveats.length === 0) return `No artifact caveats carried in the public JSON${staleText}.`
+  return `${caveats.length} artifact caveat(s); highest severity ${highestSeverity}${staleText}.`
 }
 
 function caveatsToIssues(caveats: Array<{ severity: CaveatSeverity; caveat_id: string; message: string }>): RegistryIssue[] {

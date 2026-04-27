@@ -98,6 +98,15 @@ async function createTestI18n() {
           overview: { common: { middleDot: '·' } },
           dataRegistry: {
             summary: { aria: 'summary' },
+            filters: {
+              aria: 'filters',
+              all: 'All',
+              active: 'Active artifacts',
+              warnings: 'Warnings',
+              planned: 'Planned',
+              missingUnavailable: 'Missing / unavailable',
+              empty: 'No registry records match this filter.',
+            },
             legend: {
               title: 'Status legend',
               valid: {
@@ -130,26 +139,44 @@ async function createTestI18n() {
               dataSources: { title: 'Data sources', description: 'Sources.' },
               modelInputs: { title: 'Model inputs', description: 'Inputs.' },
               bridgeOutputs: { title: 'Bridge outputs', description: 'Artifacts.' },
+              plannedArtifacts: { title: 'Planned artifacts', description: 'Planned records.' },
               vintages: { title: 'Vintages', description: 'Vintages.' },
               validation: { title: 'Validation/update status', description: 'Validation.' },
               warnings: { title: 'Stale/missing warnings', description: 'Warnings.' },
             },
             table: {
+              type: 'Registry type',
               domain: 'Domain',
               status: 'Status',
               vintage: 'Source vintage',
               export: 'Export timestamp',
               source: 'Source/artifact',
+              owner: 'Owner / source system',
               notes: 'Notes',
+            },
+            registryType: {
+              source_series: 'Source series',
+              model_input: 'Model input',
+              bridge_output: 'Bridge output',
+              planned_artifact: 'Planned artifact',
             },
             artifact: {
               dataVintage: 'Data vintage',
               exportTimestamp: 'Export timestamp',
               sourceVintage: 'Source vintage',
               lastValidationCheck: 'Last validation check',
+              owner: 'Owner',
+              sourceSystem: 'Source system',
               solver: 'Solver',
               caveats: 'Caveats',
               consumers: 'Consumer surfaces',
+            },
+            detail: {
+              summary: 'Inspect guard and freshness scope',
+              validationScope: 'Validation scope',
+              freshnessRule: 'Freshness rule',
+              caveats: 'Caveats',
+              sourceVsExport: 'Source vs export',
             },
             vintages: { boundary: 'Source vintage and export timestamp are different.' },
             warnings: { empty: 'No warnings.' },
@@ -214,6 +241,8 @@ describe('Data Registry page', () => {
 
     assert.match(markup, /Data Registry/)
     assert.match(markup, /Status legend/)
+    assert.match(markup, /Active artifacts/)
+    assert.match(markup, /Missing \/ unavailable/)
     assert.match(markup, /Artifact guard-checked/)
     assert.match(markup, /not economic or model validation/)
     assert.match(markup, /Intentionally absent in this foundation bundle/)
@@ -221,15 +250,27 @@ describe('Data Registry page', () => {
     assert.match(markup, /Data sources/)
     assert.match(markup, /Model inputs/)
     assert.match(markup, /Bridge outputs/)
+    assert.match(markup, /Planned artifacts/)
     assert.match(markup, /Vintages/)
     assert.match(markup, /Validation\/update status/)
     assert.match(markup, /Stale\/missing warnings/)
     assert.match(markup, /\/data\/qpm\.json/)
     assert.match(markup, /\/data\/dfm\.json/)
     assert.match(markup, /\/data\/io\.json/)
+    assert.match(markup, /High-frequency indicators/)
     assert.match(markup, /PE Trade Shock/)
     assert.match(markup, /CGE Reform Shock/)
     assert.match(markup, /FPP Fiscal Path/)
     assert.match(markup, /Planned/)
+    assert.match(markup, /Source series/)
+    assert.match(markup, /Model input/)
+    assert.match(markup, /Bridge output/)
+    assert.match(markup, /Planned artifact/)
+    assert.match(markup, /Owner \/ source system/)
+    assert.match(markup, /Inspect guard and freshness scope/)
+    assert.match(markup, /Validation scope/)
+    assert.match(markup, /Freshness rule/)
+    assert.match(markup, /Source vs export/)
+    assert.match(markup, /Data Registry/)
   })
 })

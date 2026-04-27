@@ -3,7 +3,11 @@ import { readFileSync } from 'node:fs'
 import { describe, it } from 'node:test'
 import { fileURLToPath } from 'node:url'
 import type { IoBridgePayload } from '../../../src/data/bridge/io-types.js'
-import { buildDataRegistry, loadDataRegistry } from '../../../src/data/data-registry/source.js'
+import {
+  buildDataRegistry,
+  getFilteredRegistry,
+  loadDataRegistry,
+} from '../../../src/data/data-registry/source.js'
 import { buildValidDfmPayload } from '../bridge/dfm-fixture.js'
 import { buildValidQpmPayload } from '../bridge/qpm-fixture.js'
 
@@ -55,10 +59,38 @@ describe('data registry source', () => {
     assert.ok(registry.artifacts.some((artifact) => artifact.artifactPath === '/data/qpm.json'))
     assert.ok(registry.artifacts.some((artifact) => artifact.artifactPath === '/data/dfm.json'))
     assert.ok(registry.artifacts.some((artifact) => artifact.artifactPath === '/data/io.json'))
+    assert.ok(registry.plannedArtifacts.some((row) => row.label === 'High-frequency indicators'))
+    assert.ok(registry.dataSources.some((row) => row.label === 'High-frequency indicators' && row.status === 'planned'))
     assert.ok(registry.dataSources.some((row) => row.label === 'PE Trade Shock' && row.status === 'planned'))
     assert.ok(registry.dataSources.some((row) => row.label === 'CGE Reform Shock' && row.status === 'planned'))
     assert.ok(registry.dataSources.some((row) => row.label === 'FPP Fiscal Path' && row.status === 'planned'))
     assert.equal(registry.dataSources.some((row) => row.id === 'pe' && row.status === 'missing'), false)
+    assert.equal(registry.dataSources.some((row) => row.id === 'hfi' && row.status === 'missing'), false)
+    assert.ok(registry.bridgeOutputs.every((row) => row.registryType === 'bridge_output'))
+  })
+
+  it('filters active, warning, planned, and missing/unavailable registry records', async () => {
+    const registry = await loadDataRegistry(
+      bridgeFetch({
+        qpm: new Response('', { status: 404 }),
+        dfm: buildValidDfmPayload(),
+        io: loadPublicIoPayload(),
+      }),
+      NOW,
+    )
+
+    const active = getFilteredRegistry(registry, 'active')
+    const warnings = getFilteredRegistry(registry, 'warnings')
+    const planned = getFilteredRegistry(registry, 'planned')
+    const missingUnavailable = getFilteredRegistry(registry, 'missingUnavailable')
+
+    assert.ok(active.artifacts.every((artifact) => artifact.status === 'valid' || artifact.status === 'warning'))
+    assert.ok(warnings.artifacts.every((artifact) => artifact.status === 'warning'))
+    assert.ok(planned.plannedArtifacts.some((row) => row.id === 'hfi'))
+    assert.ok(planned.plannedArtifacts.some((row) => row.id === 'pe'))
+    assert.ok(planned.plannedArtifacts.some((row) => row.id === 'cge'))
+    assert.ok(planned.plannedArtifacts.some((row) => row.id === 'fpp'))
+    assert.ok(missingUnavailable.artifacts.some((artifact) => artifact.id === 'qpm' && artifact.status === 'missing'))
   })
 
   it('warns when DFM export is older than 48 hours and escalates after 7 days', async () => {
@@ -117,5 +149,23 @@ describe('data registry source', () => {
     assert.equal(qpmArtifact?.status, 'missing')
     assert.ok(ioRows.some((row) => row.notes.includes('base-year')))
     assert.equal(registry.warnings.some((warning) => warning.title.includes('I-O') && warning.detail.includes('stale')), false)
+  })
+
+  it('describes guard scope without implying economic or model validation', async () => {
+    const registry = await loadDataRegistry(
+      bridgeFetch({
+        qpm: buildValidQpmPayload(),
+        dfm: buildValidDfmPayload(),
+        io: loadPublicIoPayload(),
+      }),
+      NOW,
+    )
+
+    for (const artifact of registry.artifacts) {
+      assert.match(artifact.statusDetail, /Artifact guard-checked/)
+      assert.match(artifact.statusDetail, /not economic or model validation/)
+      assert.match(artifact.validationScope, /Frontend guard checks/)
+      assert.doesNotMatch(artifact.statusDetail, /^Valid\b/)
+    }
   })
 })

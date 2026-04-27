@@ -1,12 +1,14 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { PageContainer } from '../layout/PageContainer.js'
 import { PageHeader } from '../layout/PageHeader.js'
 import { TrustStateLabel } from '../system/TrustStateLabel.js'
+import { REGISTRY_FILTERS, getFilteredRegistry } from '../../data/data-registry/source.js'
 import type {
   DataRegistry,
   RegistryArtifact,
+  RegistryFilter,
   RegistryRow,
   RegistryStatus,
   RegistryWarning,
@@ -28,6 +30,8 @@ export function DataRegistryContent(props: {
 }) {
   const { t } = useTranslation()
   const { registry, isLoading = false, title, description, loadingLabel, pageHeaderMeta } = props
+  const [activeFilter, setActiveFilter] = useState<RegistryFilter>('all')
+  const visibleRegistry = getFilteredRegistry(registry, activeFilter)
 
   return (
     <PageContainer className="data-registry-page">
@@ -48,11 +52,25 @@ export function DataRegistryContent(props: {
         ))}
       </section>
 
+      <section className="data-registry-filters" aria-label={t('dataRegistry.filters.aria')}>
+        {REGISTRY_FILTERS.map((filter) => (
+          <button
+            type="button"
+            key={filter}
+            className="data-registry-filter"
+            aria-pressed={filter === activeFilter}
+            onClick={() => setActiveFilter(filter)}
+          >
+            {t(`dataRegistry.filters.${filter}`)}
+          </button>
+        ))}
+      </section>
+
       <section
         className="data-registry-status-matrix"
         aria-label={t('dataRegistry.sections.bridgeOutputs.title')}
       >
-        {registry.artifacts.map((artifact) => (
+        {visibleRegistry.artifacts.map((artifact) => (
           <article className="data-registry-status-card" key={`matrix-${artifact.id}`}>
             <div className="data-registry-status-card__head">
               <h2>{artifact.modelArea}</h2>
@@ -75,6 +93,9 @@ export function DataRegistryContent(props: {
             <p>{artifact.statusDetail}</p>
           </article>
         ))}
+        {visibleRegistry.artifacts.length === 0 ? (
+          <p className="empty-state">{t('dataRegistry.filters.empty')}</p>
+        ) : null}
       </section>
 
       <section className="data-registry-legend" aria-labelledby="data-registry-legend-title">
@@ -103,25 +124,33 @@ export function DataRegistryContent(props: {
         title={t('dataRegistry.sections.dataSources.title')}
         description={t('dataRegistry.sections.dataSources.description')}
       >
-        <RegistryTable rows={registry.dataSources} />
+        <RegistryTable rows={visibleRegistry.dataSources} />
       </RegistrySection>
 
       <RegistrySection
         title={t('dataRegistry.sections.modelInputs.title')}
         description={t('dataRegistry.sections.modelInputs.description')}
       >
-        <RegistryTable rows={registry.modelInputs} />
+        <RegistryTable rows={visibleRegistry.modelInputs} />
       </RegistrySection>
 
       <RegistrySection
         title={t('dataRegistry.sections.bridgeOutputs.title')}
         description={t('dataRegistry.sections.bridgeOutputs.description')}
       >
+        <RegistryTable rows={visibleRegistry.bridgeOutputs} />
         <div className="data-registry-artifacts">
-          {registry.artifacts.map((artifact) => (
-            <ArtifactCard key={artifact.id} artifact={artifact} generatedAt={registry.generatedAt} />
+          {visibleRegistry.artifacts.map((artifact) => (
+            <ArtifactCard key={artifact.id} artifact={artifact} generatedAt={visibleRegistry.generatedAt} />
           ))}
         </div>
+      </RegistrySection>
+
+      <RegistrySection
+        title={t('dataRegistry.sections.plannedArtifacts.title')}
+        description={t('dataRegistry.sections.plannedArtifacts.description')}
+      >
+        <PlannedArtifactCards rows={visibleRegistry.plannedArtifacts} />
       </RegistrySection>
 
       <RegistrySection
@@ -129,21 +158,21 @@ export function DataRegistryContent(props: {
         description={t('dataRegistry.sections.vintages.description')}
       >
         <p className="data-registry-note">{t('dataRegistry.vintages.boundary')}</p>
-        <RegistryTable rows={registry.vintages} />
+        <RegistryTable rows={visibleRegistry.vintages} />
       </RegistrySection>
 
       <RegistrySection
         title={t('dataRegistry.sections.validation.title')}
         description={t('dataRegistry.sections.validation.description')}
       >
-        <RegistryTable rows={registry.updateStatuses} />
+        <RegistryTable rows={visibleRegistry.updateStatuses} />
       </RegistrySection>
 
       <RegistrySection
         title={t('dataRegistry.sections.warnings.title')}
         description={t('dataRegistry.sections.warnings.description')}
       >
-        <WarningsList warnings={registry.warnings} />
+        <WarningsList warnings={visibleRegistry.warnings} />
       </RegistrySection>
     </PageContainer>
   )
@@ -168,22 +197,29 @@ function RegistrySection(props: {
 function RegistryTable({ rows }: { rows: RegistryRow[] }) {
   const { t } = useTranslation()
 
+  if (rows.length === 0) {
+    return <p className="empty-state">{t('dataRegistry.filters.empty')}</p>
+  }
+
   return (
     <div className="data-registry-table-wrap">
       <table className="data-registry-table">
         <thead>
           <tr>
+            <th>{t('dataRegistry.table.type')}</th>
             <th>{t('dataRegistry.table.domain')}</th>
             <th>{t('dataRegistry.table.status')}</th>
             <th>{t('dataRegistry.table.vintage')}</th>
             <th>{t('dataRegistry.table.export')}</th>
             <th>{t('dataRegistry.table.source')}</th>
+            <th>{t('dataRegistry.table.owner')}</th>
             <th>{t('dataRegistry.table.notes')}</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((row) => (
             <tr key={`${row.id}-${row.label}-${row.domain}`}>
+              <td>{t(`dataRegistry.registryType.${row.registryType}`)}</td>
               <th scope="row">
                 <span>{row.label}</span>
                 <small>{row.domain}</small>
@@ -193,9 +229,34 @@ function RegistryTable({ rows }: { rows: RegistryRow[] }) {
               </td>
               <td>{row.dataVintage}</td>
               <td>{row.exportTimestamp}</td>
-              <td>{row.source}</td>
+              <td>
+                <span>{row.source}</span>
+                <small>{row.sourceSystem}</small>
+              </td>
+              <td>{row.owner}</td>
               <td>
                 <span>{row.notes}</span>
+                <details className="data-registry-row-detail">
+                  <summary>{t('dataRegistry.detail.summary')}</summary>
+                  <dl>
+                    <div>
+                      <dt>{t('dataRegistry.detail.validationScope')}</dt>
+                      <dd>{row.validationScope}</dd>
+                    </div>
+                    <div>
+                      <dt>{t('dataRegistry.detail.freshnessRule')}</dt>
+                      <dd>{row.freshnessRule}</dd>
+                    </div>
+                    <div>
+                      <dt>{t('dataRegistry.detail.caveats')}</dt>
+                      <dd>{row.caveats}</dd>
+                    </div>
+                    <div>
+                      <dt>{t('dataRegistry.detail.sourceVsExport')}</dt>
+                      <dd>{row.sourceExportExplanation}</dd>
+                    </div>
+                  </dl>
+                </details>
                 {row.modelExplorerHref ? (
                   <Link className="data-registry-inline-link" to={row.modelExplorerHref}>
                     {t('dataRegistry.links.modelExplorer')}
@@ -243,6 +304,14 @@ function ArtifactCard({ artifact, generatedAt }: { artifact: RegistryArtifact; g
           <dd>{generatedAt}</dd>
         </div>
         <div>
+          <dt>{t('dataRegistry.artifact.owner')}</dt>
+          <dd>{artifact.owner}</dd>
+        </div>
+        <div>
+          <dt>{t('dataRegistry.artifact.sourceSystem')}</dt>
+          <dd>{artifact.sourceSystem}</dd>
+        </div>
+        <div>
           <dt>{t('dataRegistry.artifact.solver')}</dt>
           <dd>{artifact.solverVersion}</dd>
         </div>
@@ -271,6 +340,28 @@ function ArtifactCard({ artifact, generatedAt }: { artifact: RegistryArtifact; g
         </ul>
       ) : null}
 
+      <details className="data-registry-detail">
+        <summary>{t('dataRegistry.detail.summary')}</summary>
+        <dl>
+          <div>
+            <dt>{t('dataRegistry.detail.validationScope')}</dt>
+            <dd>{artifact.validationScope}</dd>
+          </div>
+          <div>
+            <dt>{t('dataRegistry.detail.freshnessRule')}</dt>
+            <dd>{artifact.freshnessRule}</dd>
+          </div>
+          <div>
+            <dt>{t('dataRegistry.detail.caveats')}</dt>
+            <dd>{artifact.caveatsSummary}</dd>
+          </div>
+          <div>
+            <dt>{t('dataRegistry.detail.sourceVsExport')}</dt>
+            <dd>{artifact.sourceExportExplanation}</dd>
+          </div>
+        </dl>
+      </details>
+
       <div className="data-registry-consumers" aria-label={t('dataRegistry.artifact.consumers')}>
         {artifact.consumers.map((consumer) => (
           <Link key={consumer.href} to={consumer.href}>
@@ -279,6 +370,70 @@ function ArtifactCard({ artifact, generatedAt }: { artifact: RegistryArtifact; g
         ))}
       </div>
     </article>
+  )
+}
+
+function PlannedArtifactCards({ rows }: { rows: RegistryRow[] }) {
+  const { t } = useTranslation()
+
+  if (rows.length === 0) {
+    return <p className="empty-state">{t('dataRegistry.filters.empty')}</p>
+  }
+
+  return (
+    <div className="data-registry-planned">
+      {rows.map((row) => (
+        <article className="data-registry-planned-card" key={`planned-${row.id}`}>
+          <div className="data-registry-artifact__head">
+            <div>
+              <p className="data-registry-artifact__path">{t(`dataRegistry.registryType.${row.registryType}`)}</p>
+              <h3>{row.label}</h3>
+            </div>
+            <span className={statusClass(row.status)}>{t(`dataRegistry.status.${row.status}`)}</span>
+          </div>
+          <dl className="data-registry-facts">
+            <div>
+              <dt>{t('dataRegistry.table.owner')}</dt>
+              <dd>{row.owner}</dd>
+            </div>
+            <div>
+              <dt>{t('dataRegistry.table.source')}</dt>
+              <dd>{row.source}</dd>
+            </div>
+            <div>
+              <dt>{t('dataRegistry.table.vintage')}</dt>
+              <dd>{row.dataVintage}</dd>
+            </div>
+            <div>
+              <dt>{t('dataRegistry.table.export')}</dt>
+              <dd>{row.exportTimestamp}</dd>
+            </div>
+          </dl>
+          <p className="data-registry-artifact__detail">{row.notes}</p>
+          <details className="data-registry-detail">
+            <summary>{t('dataRegistry.detail.summary')}</summary>
+            <dl>
+              <div>
+                <dt>{t('dataRegistry.detail.validationScope')}</dt>
+                <dd>{row.validationScope}</dd>
+              </div>
+              <div>
+                <dt>{t('dataRegistry.detail.freshnessRule')}</dt>
+                <dd>{row.freshnessRule}</dd>
+              </div>
+              <div>
+                <dt>{t('dataRegistry.detail.caveats')}</dt>
+                <dd>{row.caveats}</dd>
+              </div>
+              <div>
+                <dt>{t('dataRegistry.detail.sourceVsExport')}</dt>
+                <dd>{row.sourceExportExplanation}</dd>
+              </div>
+            </dl>
+          </details>
+        </article>
+      ))}
+    </div>
   )
 }
 

@@ -82,7 +82,7 @@
     },
     "dataRegistry": {
       "title": "Data Registry",
-      "description": "Source, vintage, artifact, validation, and update health for the public frontend data layer."
+      "description": "Read-only source, vintage, artifact, guard-check, and update-state inventory for the public frontend data layer. It does not refresh data."
     },
     "knowledgeHub": {
       "title": "Knowledge Hub",
@@ -718,6 +718,15 @@
     "summary": {
       "aria": "Data registry status summary"
     },
+    "filters": {
+      "aria": "Data registry status filters",
+      "all": "All",
+      "active": "Active artifacts",
+      "warnings": "Warnings",
+      "planned": "Planned",
+      "missingUnavailable": "Missing / unavailable",
+      "empty": "No registry records match this filter."
+    },
     "legend": {
       "title": "Status legend",
       "valid": {
@@ -757,6 +766,10 @@
         "title": "Bridge outputs",
         "description": "Public JSON artifacts loaded through the existing bridge clients and guards."
       },
+      "plannedArtifacts": {
+        "title": "Planned artifacts",
+        "description": "Unavailable-by-design categories for future source contracts. These are not failed implemented artifacts."
+      },
       "vintages": {
         "title": "Vintages",
         "description": "Source snapshots and export timestamps shown separately."
@@ -771,21 +784,38 @@
       }
     },
     "table": {
+      "type": "Registry type",
       "domain": "Domain",
       "status": "Status",
       "vintage": "Source vintage",
       "export": "Artifact export",
       "source": "Source/artifact",
+      "owner": "Owner / source system",
       "notes": "Notes"
+    },
+    "registryType": {
+      "source_series": "Source series",
+      "model_input": "Model input",
+      "bridge_output": "Bridge output",
+      "planned_artifact": "Planned artifact"
     },
     "artifact": {
       "dataVintage": "Source vintage",
       "exportTimestamp": "Artifact export",
       "sourceVintage": "Source vintage",
       "lastValidationCheck": "Last validation check",
+      "owner": "Owner",
+      "sourceSystem": "Source system",
       "solver": "Solver",
       "caveats": "Caveats",
       "consumers": "Consumer surfaces"
+    },
+    "detail": {
+      "summary": "Inspect guard and freshness scope",
+      "validationScope": "Validation scope",
+      "freshnessRule": "Freshness rule",
+      "caveats": "Caveats",
+      "sourceVsExport": "Source vs export"
     },
     "vintages": {
       "boundary": "Source vintage and export timestamp are different. A current export can still contain an older source table."

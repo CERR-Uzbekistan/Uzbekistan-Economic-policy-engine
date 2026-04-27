@@ -26,6 +26,31 @@
   line-height: 1;
 }
 
+.data-registry-filters {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.data-registry-filter {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 650;
+  padding: 0.42rem 0.64rem;
+}
+
+.data-registry-filter[aria-pressed='true'] {
+  background: var(--color-brand-soft);
+  border-color: var(--color-border-strong);
+  color: var(--color-brand);
+}
+
 .data-registry-status-matrix {
   display: grid;
   gap: var(--space-sm);
@@ -149,7 +174,7 @@
   background: var(--color-surface);
   border-collapse: collapse;
   font-size: 0.82rem;
-  min-width: 68rem;
+  min-width: 86rem;
   width: 100%;
 }
 
@@ -195,6 +220,17 @@
 
 .data-registry-table td {
   color: var(--color-text-muted);
+}
+
+.data-registry-table td span,
+.data-registry-table td small {
+  display: block;
+}
+
+.data-registry-table td small {
+  color: var(--color-text-muted);
+  font-size: 0.74rem;
+  margin-top: 0.12rem;
 }
 
 .data-registry-inline-link {
@@ -256,7 +292,8 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.data-registry-artifact {
+.data-registry-artifact,
+.data-registry-planned-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
@@ -264,6 +301,12 @@
   gap: var(--space-md);
   min-width: 0;
   padding: var(--space-lg);
+}
+
+.data-registry-planned {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .data-registry-artifact__head {
@@ -354,6 +397,55 @@
   font-size: 0.82rem;
 }
 
+.data-registry-detail,
+.data-registry-row-detail {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm);
+}
+
+.data-registry-row-detail {
+  margin-top: var(--space-sm);
+}
+
+.data-registry-detail summary,
+.data-registry-row-detail summary {
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 650;
+}
+
+.data-registry-detail dl,
+.data-registry-row-detail dl {
+  display: grid;
+  gap: var(--space-sm);
+  margin: var(--space-sm) 0 0;
+}
+
+.data-registry-detail dl div,
+.data-registry-row-detail dl div {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-xs);
+}
+
+.data-registry-detail dt,
+.data-registry-row-detail dt {
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.data-registry-detail dd,
+.data-registry-row-detail dd {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  margin: 0.12rem 0 0;
+}
+
 .data-registry-consumers {
   display: flex;
   flex-wrap: wrap;
@@ -412,6 +504,10 @@
   }
 
   .data-registry-artifacts {
+    grid-template-columns: 1fr;
+  }
+
+  .data-registry-planned {
     grid-template-columns: 1fr;
   }
 }
