@@ -103,6 +103,53 @@ Once connected, you can ask Claude:
 docker compose up --build
 ```
 
+## Registry API v1 Runbook
+
+Install backend dependencies from the repository root:
+
+```bash
+py -m pip install -e .\mcp_server
+```
+
+Run the read-only registry API locally:
+
+```bash
+py -m uvicorn mcp_server.api.app:app --host 127.0.0.1 --port 8000
+```
+
+Endpoint:
+
+```text
+http://127.0.0.1:8000/api/v1/registry/artifacts
+```
+
+Expected 200 response shape is unchanged:
+
+```json
+{
+  "api_version": "v1",
+  "source": "frontend_public_artifacts",
+  "artifacts": []
+}
+```
+
+The live response includes QPM, DFM, and I-O artifact records with checksum,
+source vintage, guard status, caveats, and warnings. If a public artifact is
+missing or invalid JSON, the API returns HTTP 503 with
+`registry_artifact_unavailable` in the `code` field.
+
+For local frontend-to-backend testing, start the Vite app with:
+
+```bash
+cd apps\policy-ui
+$env:VITE_REGISTRY_API_URL="http://127.0.0.1:8000/api/v1/registry/artifacts"
+npm run dev
+```
+
+CORS is restricted to localhost origins for local development. GitHub Pages does
+not require the backend: when `VITE_REGISTRY_API_URL` is unset or the API is
+unavailable/invalid, the frontend keeps using its static public artifact fallback.
+
 ## Testing
 
 ```bash

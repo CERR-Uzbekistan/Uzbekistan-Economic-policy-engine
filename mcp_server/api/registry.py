@@ -8,6 +8,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from .schemas import RegistryArtifactResponse, RegistryArtifactsResponse
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PUBLIC_DATA_DIR = REPO_ROOT / "apps" / "policy-ui" / "public" / "data"
@@ -19,6 +21,14 @@ class ArtifactSource:
     model_family: str
     artifact_path: str
     file_path: Path
+
+
+class RegistryArtifactLoadError(RuntimeError):
+    """Raised when a public artifact cannot be loaded into registry metadata."""
+
+    def __init__(self, artifact_id: str, message: str) -> None:
+        super().__init__(message)
+        self.artifact_id = artifact_id
 
 
 ARTIFACT_SOURCES: tuple[ArtifactSource, ...] = (
@@ -39,15 +49,32 @@ def checksum_file(path: Path) -> str:
 
 
 def load_registry_artifacts(
-    sources: tuple[ArtifactSource, ...] = ARTIFACT_SOURCES,
-) -> list[dict[str, Any]]:
+    sources: tuple[ArtifactSource, ...] | None = None,
+) -> list[RegistryArtifactResponse]:
     """Load metadata records from existing frontend public artifacts."""
 
+    if sources is None:
+        sources = ARTIFACT_SOURCES
     return [load_registry_artifact(source) for source in sources]
 
 
-def load_registry_artifact(source: ArtifactSource) -> dict[str, Any]:
-    payload = json.loads(source.file_path.read_text(encoding="utf-8"))
+def load_registry_artifact(source: ArtifactSource) -> RegistryArtifactResponse:
+    try:
+        raw_payload = source.file_path.read_text(encoding="utf-8")
+    except FileNotFoundError as error:
+        raise RegistryArtifactLoadError(
+            source.artifact_id,
+            f"Registry artifact {source.artifact_id} is missing at {source.artifact_path}.",
+        ) from error
+
+    try:
+        payload = json.loads(raw_payload)
+    except json.JSONDecodeError as error:
+        raise RegistryArtifactLoadError(
+            source.artifact_id,
+            f"Registry artifact {source.artifact_id} contains invalid JSON.",
+        ) from error
+
     attribution = payload.get("attribution") if isinstance(payload, dict) else {}
     metadata = payload.get("metadata") if isinstance(payload, dict) else {}
     caveats = payload.get("caveats") if isinstance(payload, dict) else []
@@ -66,29 +93,29 @@ def load_registry_artifact(source: ArtifactSource) -> dict[str, Any]:
         if caveat["severity"] in {"warning", "critical"}
     ]
 
-    return {
-        "id": source.artifact_id,
-        "model_family": source.model_family,
-        "artifact_path": source.artifact_path,
-        "source_artifact": _source_artifact(source, metadata, attribution),
-        "source_vintage": _source_vintage(source.artifact_id, attribution, metadata),
-        "data_vintage": _string_or_none(attribution.get("data_version")),
-        "exported_at": _string_or_none(metadata.get("exported_at")),
-        "generated_at": _generated_at(attribution, metadata),
-        "checksum": checksum_file(source.file_path),
-        "guard_status": "warning" if warnings else "valid",
-        "guard_checks": ["json_parse", "metadata_extract"],
-        "caveats": normalized_caveats,
-        "warnings": warnings,
-    }
+    return RegistryArtifactResponse(
+        id=source.artifact_id,
+        model_family=source.model_family,
+        artifact_path=source.artifact_path,
+        source_artifact=_source_artifact(source, metadata, attribution),
+        source_vintage=_source_vintage(source.artifact_id, attribution, metadata),
+        data_vintage=_string_or_none(attribution.get("data_version")),
+        exported_at=_string_or_none(metadata.get("exported_at")),
+        generated_at=_generated_at(attribution, metadata),
+        checksum=checksum_file(source.file_path),
+        guard_status="warning" if warnings else "valid",
+        guard_checks=["json_parse", "metadata_extract"],
+        caveats=normalized_caveats,
+        warnings=warnings,
+    )
 
 
-def build_registry_response() -> dict[str, Any]:
-    return {
-        "api_version": "v1",
-        "source": "frontend_public_artifacts",
-        "artifacts": load_registry_artifacts(),
-    }
+def build_registry_response() -> RegistryArtifactsResponse:
+    return RegistryArtifactsResponse(
+        api_version="v1",
+        source="frontend_public_artifacts",
+        artifacts=load_registry_artifacts(),
+    )
 
 
 def _normalize_caveat(caveat: dict[str, Any]) -> dict[str, str | None]:

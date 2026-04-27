@@ -134,6 +134,27 @@ describe('data registry source', () => {
     assert.equal(qpmArtifact?.dataVintage, '2026Q1')
   })
 
+  it('falls back to static frontend composition when the backend registry returns invalid metadata with HTTP 200', async () => {
+    const registry = await loadDataRegistry(
+      bridgeFetch({
+        api: {
+          api_version: 'v1',
+          source: 'frontend_public_artifacts',
+          artifacts: [{ id: 'qpm' }],
+        },
+        qpm: buildValidQpmPayload(),
+        dfm: buildValidDfmPayload(),
+        io: loadPublicIoPayload(),
+      }),
+      NOW,
+    )
+
+    const qpmArtifact = registry.artifacts.find((artifact) => artifact.id === 'qpm')
+    assert.equal(registry.metadataSource, 'static-fallback')
+    assert.equal(qpmArtifact?.checksum, undefined)
+    assert.equal(qpmArtifact?.dataVintage, '2026Q1')
+  })
+
   it('renders QPM, DFM, and I-O rows from current metadata and keeps planned rows honest', async () => {
     const registry = await loadDataRegistry(
       bridgeFetch({

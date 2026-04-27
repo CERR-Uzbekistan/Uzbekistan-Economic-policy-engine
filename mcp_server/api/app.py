@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from .registry import build_registry_response
+from .registry import RegistryArtifactLoadError, build_registry_response
+from .schemas import RegistryArtifactsResponse
 
 
 def create_app() -> FastAPI:
@@ -32,9 +33,19 @@ def create_app() -> FastAPI:
         allow_headers=["Accept", "Content-Type"],
     )
 
-    @app.get("/api/v1/registry/artifacts")
-    def get_registry_artifacts() -> dict[str, object]:
-        return build_registry_response()
+    @app.get("/api/v1/registry/artifacts", response_model=RegistryArtifactsResponse)
+    def get_registry_artifacts() -> RegistryArtifactsResponse:
+        try:
+            return build_registry_response()
+        except RegistryArtifactLoadError as error:
+            raise HTTPException(
+                status_code=503,
+                detail={
+                    "code": "registry_artifact_unavailable",
+                    "artifact_id": error.artifact_id,
+                    "message": str(error),
+                },
+            ) from error
 
     return app
 
