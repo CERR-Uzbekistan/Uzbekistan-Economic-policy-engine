@@ -158,7 +158,16 @@ export function OverviewPage() {
   const pageHeaderMeta = (
     <>
       <span className="page-header__eyebrow">{t('overview.meta.eyebrow')}</span>
-      <TrustStateLabel id={sourceState.mode === 'live' ? 'liveBridgeJson' : 'mockFixture'} tone={sourceState.mode === 'live' ? 'success' : 'neutral'} />
+      <TrustStateLabel
+        id={
+          sourceState.sourceKind === 'overview-artifact'
+            ? 'overviewArtifact'
+            : sourceState.sourceKind === 'static-fallback'
+              ? 'staticOverviewFallback'
+              : 'liveBridgeJson'
+        }
+        tone={sourceState.sourceKind === 'overview-artifact' ? 'success' : 'neutral'}
+      />
       <span>
         <strong>{t('overview.meta.vintageLabel')}</strong> {t('overview.common.middleDot')}{' '}
         {formatDate(generated_at, locale)}

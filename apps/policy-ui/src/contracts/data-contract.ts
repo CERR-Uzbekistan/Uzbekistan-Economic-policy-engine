@@ -61,6 +61,15 @@ export type HeadlineMetric = {
   // `delta_label` is the full inline phrase (e.g., "+0.3 pp vs prior estimate"); when absent
   // the KPI tile composes a fallback from delta_abs + unit.
   delta_label?: string
+  // Overview artifact foundation fields. These are optional so the current static
+  // Overview remains a valid fallback until /data/overview.json exists.
+  source_label?: string
+  source_period?: string
+  claim_type?: string
+  validation_status?: 'valid' | 'warning' | 'failed'
+  warnings?: string[]
+  caveats?: string[]
+  citation_label?: string
 }
 
 // Shot-1 additive types for Overview state narrative (prompt §4.5 item 1).

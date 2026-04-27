@@ -11,7 +11,9 @@
       "sourceVintage": "Винтаж источника",
       "artifactExport": "Экспорт артефакта",
       "registryGenerated": "Реестр сформирован",
-      "lastValidationCheck": "Последняя проверка валидации"
+      "lastValidationCheck": "Последняя проверка валидации",
+      "overviewArtifact": "Артефакт обзора",
+      "staticOverviewFallback": "Статический fallback"
     }
   },
   "shell": {

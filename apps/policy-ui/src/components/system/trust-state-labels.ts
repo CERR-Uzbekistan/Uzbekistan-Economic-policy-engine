@@ -10,6 +10,8 @@ export type TrustStateLabelId =
   | 'artifactExport'
   | 'registryGenerated'
   | 'lastValidationCheck'
+  | 'overviewArtifact'
+  | 'staticOverviewFallback'
 
 export type TrustStateTone = 'neutral' | 'info' | 'success' | 'warn'
 

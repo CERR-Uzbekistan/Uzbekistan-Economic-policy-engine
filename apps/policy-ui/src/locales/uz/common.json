@@ -11,7 +11,9 @@
       "sourceVintage": "Manba vintaji",
       "artifactExport": "Artefakt eksporti",
       "registryGenerated": "Reyestr tuzildi",
-      "lastValidationCheck": "Oxirgi validatsiya tekshiruvi"
+      "lastValidationCheck": "Oxirgi validatsiya tekshiruvi",
+      "overviewArtifact": "Umumiy ko'rinish artefakti",
+      "staticOverviewFallback": "Statik fallback"
     }
   },
   "shell": {

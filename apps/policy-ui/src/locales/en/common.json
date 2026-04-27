@@ -11,7 +11,9 @@
       "sourceVintage": "Source vintage",
       "artifactExport": "Artifact export",
       "registryGenerated": "Registry generated",
-      "lastValidationCheck": "Last validation check"
+      "lastValidationCheck": "Last validation check",
+      "overviewArtifact": "Overview artifact",
+      "staticOverviewFallback": "Static fallback"
     }
   },
   "shell": {

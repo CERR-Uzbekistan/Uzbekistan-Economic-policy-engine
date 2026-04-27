@@ -17,7 +17,7 @@ export type RegistryApiCaveat = {
 }
 
 export type RegistryApiArtifact = {
-  id: ImplementedModelId
+  id: Exclude<ImplementedModelId, 'overview'>
   model_family: string
   artifact_path: string
   source_artifact: string | null

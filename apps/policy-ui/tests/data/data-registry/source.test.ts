@@ -10,6 +10,7 @@ import {
 } from '../../../src/data/data-registry/source.js'
 import { buildValidDfmPayload } from '../bridge/dfm-fixture.js'
 import { buildValidQpmPayload } from '../bridge/qpm-fixture.js'
+import { buildValidOverviewArtifact } from '../overview/overview-artifact-fixture.js'
 
 const IO_PUBLIC_ARTIFACT_PATH = fileURLToPath(new URL('../../../../public/data/io.json', import.meta.url))
 const NOW = new Date('2026-04-25T12:00:00Z')
@@ -27,6 +28,7 @@ function jsonResponse(payload: unknown, status = 200): Response {
 
 function bridgeFetch(payloads: {
   api?: unknown | Response
+  overview?: unknown | Response
   qpm?: unknown | Response
   dfm?: unknown | Response
   io?: unknown | Response
@@ -36,6 +38,11 @@ function bridgeFetch(payloads: {
     let value = payloads.io
     if (url.includes('/api/v1/registry/artifacts')) {
       value = payloads.api
+    } else if (url.includes('overview.json')) {
+      if (payloads.overview === undefined) {
+        return Promise.resolve(new Response('', { status: 404 }))
+      }
+      value = payloads.overview
     } else if (url.includes('qpm.json')) {
       value = payloads.qpm
     } else if (url.includes('dfm.json')) {
@@ -165,7 +172,8 @@ describe('data registry source', () => {
       NOW,
     )
 
-    assert.equal(registry.artifacts.length, 3)
+    assert.equal(registry.artifacts.length, 4)
+    assert.ok(registry.artifacts.some((artifact) => artifact.artifactPath === '/data/overview.json'))
     assert.ok(registry.artifacts.some((artifact) => artifact.artifactPath === '/data/qpm.json'))
     assert.ok(registry.artifacts.some((artifact) => artifact.artifactPath === '/data/dfm.json'))
     assert.ok(registry.artifacts.some((artifact) => artifact.artifactPath === '/data/io.json'))
@@ -177,6 +185,40 @@ describe('data registry source', () => {
     assert.equal(registry.dataSources.some((row) => row.id === 'pe' && row.status === 'missing'), false)
     assert.equal(registry.dataSources.some((row) => row.id === 'hfi' && row.status === 'missing'), false)
     assert.ok(registry.bridgeOutputs.every((row) => row.registryType === 'bridge_output'))
+  })
+
+  it('shows overview artifact as planned/missing when no production overview.json is present', async () => {
+    const registry = await loadDataRegistry(
+      bridgeFetch({
+        qpm: buildValidQpmPayload(),
+        dfm: buildValidDfmPayload(),
+        io: loadPublicIoPayload(),
+      }),
+      NOW,
+    )
+
+    const overviewArtifact = registry.artifacts.find((artifact) => artifact.id === 'overview')
+    assert.equal(overviewArtifact?.status, 'missing')
+    assert.ok(overviewArtifact?.statusDetail.includes('planned'))
+    assert.ok(registry.bridgeOutputs.some((row) => row.id === 'overview' && row.status === 'missing'))
+    assert.ok(registry.warnings.some((warning) => warning.title.includes('Operational Overview')))
+  })
+
+  it('shows overview artifact as valid when it is present and guard-checked', async () => {
+    const registry = await loadDataRegistry(
+      bridgeFetch({
+        overview: buildValidOverviewArtifact(),
+        qpm: buildValidQpmPayload(),
+        dfm: buildValidDfmPayload(),
+        io: loadPublicIoPayload(),
+      }),
+      NOW,
+    )
+
+    const overviewArtifact = registry.artifacts.find((artifact) => artifact.id === 'overview')
+    assert.equal(overviewArtifact?.status, 'valid')
+    assert.equal(overviewArtifact?.artifactPath, '/data/overview.json')
+    assert.ok(overviewArtifact?.facts.some((fact) => fact.label === 'Locked metrics' && fact.value === '17'))
   })
 
   it('filters active, warning, planned, and missing/unavailable registry records', async () => {
@@ -264,6 +306,7 @@ describe('data registry source', () => {
   it('describes guard scope without implying economic or model validation', async () => {
     const registry = await loadDataRegistry(
       bridgeFetch({
+        overview: buildValidOverviewArtifact(),
         qpm: buildValidQpmPayload(),
         dfm: buildValidDfmPayload(),
         io: loadPublicIoPayload(),

@@ -18,12 +18,19 @@ import {
   fetchQpmBridgePayload,
 } from '../bridge/qpm-client.js'
 import type { QpmBridgePayload } from '../bridge/qpm-types.js'
+import {
+  fetchOverviewArtifact,
+  OverviewArtifactTransportError,
+  OverviewArtifactValidationError,
+} from '../overview/artifact-client.js'
+import type { OverviewArtifact } from '../overview/artifact-types.js'
+import { OVERVIEW_TOP_CARD_METRIC_IDS } from '../overview/artifact-types.js'
 import { fetchRegistryApiMetadata, type RegistryApiArtifact } from './api-client.js'
 
 export type RegistryStatus = 'valid' | 'warning' | 'failed' | 'missing' | 'unavailable' | 'planned'
 export type RegistryRecordKind = 'source_series' | 'model_input' | 'bridge_output' | 'planned_artifact'
 export type RegistryFilter = 'all' | 'active' | 'warnings' | 'planned' | 'missingUnavailable'
-export type ImplementedModelId = 'qpm' | 'dfm' | 'io'
+export type ImplementedModelId = 'overview' | 'qpm' | 'dfm' | 'io'
 export type PlannedModelId = 'hfi' | 'pe' | 'cge' | 'fpp'
 export type RegistryModelId = ImplementedModelId | PlannedModelId
 
@@ -110,12 +117,13 @@ export const REGISTRY_FILTERS: RegistryFilter[] = [
 ]
 
 type LoadedArtifact =
-  | { status: 'loaded'; payload: QpmBridgePayload | DfmBridgePayload | IoBridgePayload }
+  | { status: 'loaded'; payload: QpmBridgePayload | DfmBridgePayload | IoBridgePayload | OverviewArtifact }
   | { status: 'failed' | 'missing' | 'unavailable'; detail: string; issues: RegistryIssue[] }
 
 const DASH = 'Not carried in public artifact'
 const DFM_STALE_WARNING_HOURS = 48
 const DFM_STALE_CRITICAL_HOURS = 24 * 7
+const OVERVIEW_TOP_CARD_METRIC_ID_SET: ReadonlySet<string> = new Set(OVERVIEW_TOP_CARD_METRIC_IDS)
 
 const CONSUMER_LINKS = {
   overview: { label: 'Overview', href: '/overview' },
@@ -127,6 +135,7 @@ const CONSUMER_LINKS = {
 
 export function getInitialDataRegistry(): DataRegistry {
   return buildDataRegistry({
+    overview: { status: 'unavailable', detail: 'Loading /data/overview.json.', issues: [] },
     qpm: { status: 'unavailable', detail: 'Loading /data/qpm.json.', issues: [] },
     dfm: { status: 'unavailable', detail: 'Loading /data/dfm.json.', issues: [] },
     io: { status: 'unavailable', detail: 'Loading /data/io.json.', issues: [] },
@@ -136,14 +145,16 @@ export function getInitialDataRegistry(): DataRegistry {
 }
 
 export async function loadDataRegistry(fetchImpl: FetchLike = fetch, now = new Date()): Promise<DataRegistry> {
-  const [apiMetadata, qpm, dfm, io] = await Promise.all([
+  const [apiMetadata, overview, qpm, dfm, io] = await Promise.all([
     loadRegistryApiMetadata(fetchImpl),
+    loadOverviewArtifact(fetchImpl),
     loadQpmArtifact(fetchImpl),
     loadDfmArtifact(fetchImpl),
     loadIoArtifact(fetchImpl),
   ])
 
   return buildDataRegistry({
+    overview,
     qpm,
     dfm,
     io,
@@ -154,6 +165,7 @@ export async function loadDataRegistry(fetchImpl: FetchLike = fetch, now = new D
 }
 
 export function buildDataRegistry(options: {
+  overview?: LoadedArtifact
   qpm: LoadedArtifact
   dfm: LoadedArtifact
   io: LoadedArtifact
@@ -162,6 +174,11 @@ export function buildDataRegistry(options: {
   metadataSource?: DataRegistry['metadataSource']
 }): DataRegistry {
   const artifacts = applyApiMetadata([
+    buildOverviewArtifact(options.overview ?? {
+      status: 'missing',
+      detail: 'Overview artifact is planned, but /data/overview.json is absent. Overview uses static fallback.',
+      issues: [],
+    }),
     buildQpmArtifact(options.qpm),
     buildDfmArtifact(options.dfm, options.now),
     buildIoArtifact(options.io),
@@ -247,6 +264,53 @@ async function loadRegistryApiMetadata(fetchImpl: FetchLike): Promise<RegistryAp
   }
 }
 
+async function loadOverviewArtifact(fetchImpl: FetchLike): Promise<LoadedArtifact> {
+  try {
+    return { status: 'loaded', payload: await fetchOverviewArtifact(fetchImpl) }
+  } catch (error) {
+    if (error instanceof OverviewArtifactValidationError) {
+      return {
+        status: 'failed',
+        detail: 'Overview artifact loaded but failed locked metric guard checks; Overview will use static fallback.',
+        issues: error.issues.map((issue) => ({
+          path: issue.path,
+          message: issue.message,
+          severity: issue.severity,
+        })),
+      }
+    }
+
+    if (error instanceof OverviewArtifactTransportError) {
+      const isMissing = error.kind === 'http' && error.status === 404
+      return {
+        status: isMissing ? 'missing' : 'unavailable',
+        detail: isMissing
+          ? 'Overview artifact is planned, but /data/overview.json is absent. Overview uses static fallback.'
+          : 'Overview artifact could not be fetched; Overview uses static fallback.',
+        issues: [
+          {
+            path: 'artifact',
+            message: error.message,
+            severity: isMissing ? 'warning' : 'error',
+          },
+        ],
+      }
+    }
+
+    return {
+      status: 'unavailable',
+      detail: 'Overview artifact could not be loaded; Overview uses static fallback.',
+      issues: [
+        {
+          path: 'artifact',
+          message: error instanceof Error ? error.message : 'Unknown Overview artifact load failure.',
+          severity: 'error',
+        },
+      ],
+    }
+  }
+}
+
 function applyApiMetadata(
   artifacts: RegistryArtifact[],
   apiMetadata: RegistryApiArtifact[] | null,
@@ -255,6 +319,7 @@ function applyApiMetadata(
 
   const metadataById = new Map(apiMetadata.map((metadata) => [metadata.id, metadata]))
   return artifacts.map((artifact) => {
+    if (artifact.id === 'overview') return artifact
     const metadata = metadataById.get(artifact.id)
     if (!metadata) return artifact
 
@@ -359,6 +424,76 @@ function mapBridgeError(error: unknown, label: string): LoadedArtifact {
         severity: 'error',
       },
     ],
+  }
+}
+
+function summarizeMetricPeriods(payload: OverviewArtifact): string {
+  const periods = Array.from(new Set(payload.metrics.map((metric) => metric.source_period))).filter(Boolean)
+  if (periods.length === 0) return DASH
+  if (periods.length <= 3) return periods.join(', ')
+  return `${periods.slice(0, 3).join(', ')} + ${periods.length - 3} more`
+}
+
+function buildOverviewArtifact(result: LoadedArtifact): RegistryArtifact {
+  const base = createArtifactBase('overview', '/data/overview.json', 'Operational Overview')
+  if (result.status !== 'loaded') return artifactFromFailure(base, result)
+
+  const payload = result.payload as OverviewArtifact
+  const issueWarnings = payload.warnings.map((message, index) => ({
+    path: `warnings[${index}]`,
+    message,
+    severity: 'warning' as const,
+  }))
+  const caveatIssues = payload.caveats.map((message, index) => ({
+    path: `caveats[${index}]`,
+    message,
+    severity: 'warning' as const,
+  }))
+  const metricWarningIssues = payload.metrics.flatMap((metric) =>
+    metric.warnings.map((message, index) => ({
+      path: `${metric.id}.warnings[${index}]`,
+      message,
+      severity: 'warning' as const,
+    })),
+  )
+  const issues = [...issueWarnings, ...caveatIssues, ...metricWarningIssues]
+  const status = payload.validation_status === 'warning' || issues.length > 0 ? 'warning' : 'valid'
+  const sourceLabels = Array.from(new Set(payload.metrics.map((metric) => metric.source_label))).slice(0, 3)
+  const topCardCount = payload.metrics.filter((metric) =>
+    metric.top_card === true || OVERVIEW_TOP_CARD_METRIC_ID_SET.has(metric.id),
+  ).length
+
+  return {
+    ...base,
+    status,
+    statusDetail:
+      'Artifact guard-checked by Overview locked-metric guards; this is not economic or model validation.',
+    owner: 'CERR macro monitoring team',
+    sourceSystem: 'overview_artifact',
+    dataVintage: summarizeMetricPeriods(payload),
+    exportTimestamp: payload.exported_at,
+    sourceArtifact: '/data/overview.json',
+    sourceVintage: summarizeMetricPeriods(payload),
+    solverVersion: 'n/a',
+    caveatCount: payload.caveats.length + payload.metrics.reduce((count, metric) => count + metric.caveats.length, 0),
+    highestCaveatSeverity: issues.length > 0 ? 'warning' : 'none',
+    validationScope:
+      'Frontend guard checks schema version, all 17 locked metric ids, claim type, unit, frequency, source labels, source periods, top-card ordering, and validation status.',
+    freshnessRule:
+      'Metric-level stale rules are carried as warnings from the artifact; the frontend does not crawl sources or refresh the artifact.',
+    caveatsSummary:
+      issues.length > 0
+        ? `${issues.length} artifact warning(s) or caveat(s) are carried.`
+        : 'No artifact caveats or warnings carried in the public JSON.',
+    sourceExportExplanation:
+      'Source period identifies each published metric period; artifact export is the generated overview.json timestamp consumed by the UI.',
+    facts: [
+      { label: 'Locked metrics', value: String(payload.metrics.length) },
+      { label: 'Top-card candidates', value: String(Math.min(topCardCount, 8)) },
+      { label: 'Source labels', value: sourceLabels.join(', ') || DASH },
+    ],
+    consumers: [CONSUMER_LINKS.overview, CONSUMER_LINKS.dataRegistry],
+    issues,
   }
 }
 
@@ -507,7 +642,7 @@ function createArtifactBase(
     caveatsSummary: 'No caveats are visible until the artifact is loaded.',
     sourceExportExplanation: 'Source vintage and artifact export are unavailable until the public JSON artifact loads.',
     facts: [],
-    consumers: [CONSUMER_LINKS.modelExplorer],
+    consumers: id === 'overview' ? [CONSUMER_LINKS.overview, CONSUMER_LINKS.dataRegistry] : [CONSUMER_LINKS.modelExplorer],
     issues: [],
   }
 }
@@ -603,12 +738,7 @@ function toDataSourceRow(artifact: RegistryArtifact): RegistryRow {
     id: artifact.id,
     registryType: 'source_series',
     label: artifact.modelArea,
-    domain:
-      artifact.id === 'qpm'
-        ? 'Macro/QPM inputs'
-        : artifact.id === 'dfm'
-          ? 'DFM indicators'
-          : 'I-O table',
+    domain: getArtifactSourceDomain(artifact.id),
     status: artifact.status,
     dataVintage: artifact.sourceVintage,
     exportTimestamp: artifact.exportTimestamp,
@@ -616,7 +746,9 @@ function toDataSourceRow(artifact: RegistryArtifact): RegistryRow {
     owner: artifact.owner,
     sourceSystem: artifact.sourceSystem,
     notes:
-      artifact.id === 'io'
+      artifact.id === 'overview'
+        ? 'Planned operational source artifact for Overview headline metrics; static fallback remains active when missing or invalid.'
+        : artifact.id === 'io'
         ? 'Structural base-year source table; not automatically stale because the official table is vintage-specific.'
         : artifact.statusDetail,
     validationScope: artifact.validationScope,
@@ -631,12 +763,7 @@ function toModelInputRow(artifact: RegistryArtifact): RegistryRow {
   return {
     id: artifact.id,
     registryType: 'model_input',
-    label:
-      artifact.id === 'qpm'
-        ? 'QPM / Macro Scenario'
-        : artifact.id === 'dfm'
-          ? 'DFM Nowcast'
-          : 'I-O Sector Shock',
+    label: getArtifactInputLabel(artifact.id),
     domain: artifact.modelArea,
     status: artifact.status,
     dataVintage: artifact.dataVintage,
@@ -645,7 +772,9 @@ function toModelInputRow(artifact: RegistryArtifact): RegistryRow {
     owner: artifact.owner,
     sourceSystem: artifact.sourceSystem,
     notes:
-      artifact.id === 'dfm'
+      artifact.id === 'overview'
+        ? 'Overview consumes /data/overview.json when valid and falls back to the static snapshot when the artifact is missing or invalid.'
+        : artifact.id === 'dfm'
         ? 'Source vintage, artifact export, and frontend validation check are separate; no live scheduler status is claimed.'
         : artifact.id === 'io'
           ? 'Consumed as sector transmission analytics; guard checks validate artifact shape, not model economics.'
@@ -665,6 +794,20 @@ function toPlannedModelInputRow(row: RegistryRow): RegistryRow {
     dataVintage: 'Unavailable until contract exists',
     source: 'Planned/disabled',
   }
+}
+
+function getArtifactSourceDomain(id: ImplementedModelId): string {
+  if (id === 'overview') return 'Operational overview metrics'
+  if (id === 'qpm') return 'Macro/QPM inputs'
+  if (id === 'dfm') return 'DFM indicators'
+  return 'I-O table'
+}
+
+function getArtifactInputLabel(id: ImplementedModelId): string {
+  if (id === 'overview') return 'Overview operational figures'
+  if (id === 'qpm') return 'QPM / Macro Scenario'
+  if (id === 'dfm') return 'DFM Nowcast'
+  return 'I-O Sector Shock'
 }
 
 function toBridgeOutputRow(artifact: RegistryArtifact): RegistryRow {
@@ -708,7 +851,9 @@ function toVintageRow(artifact: RegistryArtifact): RegistryRow {
     owner: artifact.owner,
     sourceSystem: artifact.sourceSystem,
     notes:
-      artifact.id === 'dfm'
+      artifact.id === 'overview'
+        ? 'Each Overview metric carries a source period; the artifact export timestamp is separate from those source periods.'
+        : artifact.id === 'dfm'
         ? 'Shows JSON export timestamp and upstream source-artifact refit timestamp separately.'
         : artifact.id === 'io'
           ? 'Source vintage is the base-year table; export timestamp is the deterministic public JSON build.'
