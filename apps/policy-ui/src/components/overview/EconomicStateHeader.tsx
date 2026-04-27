@@ -1,13 +1,16 @@
 import { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import type {
+  HeadlineMetric,
   NarrativeSegment,
   OverviewOutputAction,
   StateProvenance,
 } from '../../contracts/data-contract.js'
 import type { LanguageCode } from '../../state/language-context.js'
 import { useLanguage } from '../../state/useLanguage.js'
+import { formatOverviewMetricValue } from './metric-format.js'
 
 type EconomicStateHeaderProps = {
   summary: string | NarrativeSegment[]
@@ -15,6 +18,8 @@ type EconomicStateHeaderProps = {
   modelIds: string[]
   outputAction: OverviewOutputAction
   provenance?: StateProvenance
+  artifactSummaryMetrics?: HeadlineMetric[]
+  isArtifactMode?: boolean
 }
 
 const LOCALE_BY_LANGUAGE: Record<LanguageCode, string> = {
@@ -62,12 +67,47 @@ function renderSummary(summary: string | NarrativeSegment[]) {
   )
 }
 
+const SUMMARY_LABEL_KEY_BY_ID: Record<string, string> = {
+  real_gdp_growth_quarter_yoy: 'gdp',
+  cpi_yoy: 'cpi',
+  exports_yoy: 'exports',
+  imports_yoy: 'imports',
+  policy_rate: 'policyRate',
+  gold_price_level: 'gold',
+}
+
+function renderArtifactSummary(metrics: HeadlineMetric[], locale: string, t: TFunction) {
+  const items = metrics
+    .map((metric) => {
+      const labelKey = SUMMARY_LABEL_KEY_BY_ID[metric.metric_id]
+      if (!labelKey) return null
+      const qualifier = metric.validation_status === 'warning'
+        ? ` ${t('overview.header.summary.provisional')}`
+        : ''
+      return t('overview.header.summary.item', {
+        label: t(`overview.header.summary.labels.${labelKey}`),
+        value: formatOverviewMetricValue(metric, locale),
+        unit: metric.unit,
+        qualifier,
+      })
+    })
+    .filter((item): item is string => item !== null)
+
+  if (items.length === 0) {
+    return t('overview.header.summary.unavailable')
+  }
+
+  return t('overview.header.summary.template', { items: items.join(', ') })
+}
+
 export function EconomicStateHeader({
   summary,
   updatedAt,
   modelIds,
   outputAction,
   provenance,
+  artifactSummaryMetrics = [],
+  isArtifactMode = false,
 }: EconomicStateHeaderProps) {
   const { t } = useTranslation()
   const { language } = useLanguage()
@@ -84,6 +124,9 @@ export function EconomicStateHeader({
   const provenanceAssistedLabel = provenance?.ai_assisted
     ? t('overview.header.provenance.aiAssisted')
     : t('overview.header.provenance.humanAuthored')
+  const summaryText = isArtifactMode
+    ? renderArtifactSummary(artifactSummaryMetrics, locale, t)
+    : renderSummary(summary)
 
   return (
     <section className="state-header overview-state-header" aria-labelledby="overview-state-header-title">
@@ -91,12 +134,17 @@ export function EconomicStateHeader({
         {t('overview.header.kicker')}
       </p>
       <div className="state-header__body overview-state-header__body">
-        <p className="overview-state-header__summary">{renderSummary(summary)}</p>
+        <p className="overview-state-header__summary">{summaryText}</p>
         <Link className="ui-secondary-action" to={outputAction.target_href}>
           {outputAction.title}
         </Link>
       </div>
-      {provenance ? (
+      {isArtifactMode ? (
+        <p className="state-header__meta overview-state-header__meta">
+          <span>{t('overview.header.artifactSummaryMeta')}</span>
+          <span>{t('overview.header.updatedAt', { date: formattedUpdatedAt })}</span>
+        </p>
+      ) : provenance ? (
         <div className="state-header__provenance overview-state-header__provenance">
           <p className="overview-state-header__provenance-line">
             {t('overview.header.provenance.draftedFromLabel')}{' '}
@@ -123,7 +171,7 @@ export function EconomicStateHeader({
         </div>
       ) : (
         <p className="state-header__meta overview-state-header__meta">
-          <span>{t('overview.header.draftedFrom', { models: modelList })}</span>
+          <span>{t('overview.header.staticFallbackNotice')}</span>
           <span>{t('overview.header.updatedAt', { date: formattedUpdatedAt })}</span>
         </p>
       )}

@@ -111,6 +111,22 @@
       "modelListFallback": "MODEL SET",
       "draftedFrom": "State narrative · drafted from {{models}} baseline",
       "updatedAt": "State narrative reviewed {{date}}",
+      "artifactSummaryMeta": "Artifact summary · deterministic",
+      "staticFallbackNotice": "Static fallback summary · current artifact unavailable",
+      "summary": {
+        "template": "{{items}}.",
+        "item": "{{label}} {{value}} {{unit}}{{qualifier}}",
+        "provisional": "provisional",
+        "unavailable": "Overview artifact loaded, but no valid summary metrics are available.",
+        "labels": {
+          "gdp": "GDP",
+          "cpi": "CPI",
+          "exports": "exports",
+          "imports": "imports",
+          "policyRate": "policy rate",
+          "gold": "gold"
+        }
+      },
       "provenance": {
         "draftedFromLabel": "STATE NARRATIVE · drafted from",
         "aiAssisted": "AI-assisted",
@@ -141,6 +157,22 @@
         "up": "higher",
         "down": "lower",
         "flat": "unchanged"
+      }
+    },
+    "indicators": {
+      "title": "Indicator panels",
+      "description": "All locked Overview metrics grouped by source block.",
+      "groups": {
+        "growth": "Growth",
+        "inflation": "Inflation",
+        "trade": "Trade",
+        "monetary_fx": "Monetary / FX",
+        "gold": "Gold"
+      },
+      "status": {
+        "valid": "Valid",
+        "warning": "Caution",
+        "failed": "Failed"
       }
     },
     "risks": {
@@ -195,6 +227,15 @@
         "warning": "Warning",
         "info": "Info"
       }
+    },
+    "dataNotes": {
+      "title": "Data notes",
+      "description": "Compact governance view; expand for all artifact warnings and caveats.",
+      "warningMetricCount": "{{count}} warning metric",
+      "warningMetricCountPlural": "{{count}} warning metrics",
+      "noteCount": "{{count}} source note",
+      "noteCountPlural": "{{count}} source notes",
+      "exportedAt": "Exported {{date}}"
     },
     "references": {
       "title": "Sources and references"
@@ -907,8 +948,8 @@
       "units": "Units",
       "linkageCounts": "Linkage classes",
       "caveats": "Bridge caveats"
-    }
-  },
+      }
+    },
   "states": {
     "loading": {
       "overview": "Loading latest overview snapshot...",

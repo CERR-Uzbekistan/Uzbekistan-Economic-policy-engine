@@ -1,36 +1,17 @@
 import { useTranslation } from 'react-i18next'
 import type { HeadlineMetric } from '../../contracts/data-contract'
+import {
+  DIRECTION_GLYPH,
+  formatOverviewDelta,
+  formatOverviewDeltaWithUnit,
+  formatOverviewMetricValue,
+} from './metric-format.js'
 
 type KpiStripProps = {
   metrics: HeadlineMetric[]
 }
 
 const SME_CONTENT_PENDING = '[SME content pending]'
-
-function formatMetricValue(metric: HeadlineMetric) {
-  if (metric.unit === 'UZS/USD') {
-    return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(metric.value)
-  }
-  return new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 }).format(metric.value)
-}
-
-// Prompt §4.5 item 5: delta renders as inline arrow-plus-text (prototype format
-// "↑ +0.3 pp vs prior estimate"), not as a chip-pill.
-const DIRECTION_GLYPH: Record<HeadlineMetric['direction'], string> = {
-  up: '↑',
-  down: '↓',
-  flat: '→',
-}
-
-function formatDelta(metric: HeadlineMetric) {
-  if (metric.delta_abs === null) {
-    return null
-  }
-  const sign = metric.delta_abs > 0 ? '+' : metric.delta_abs < 0 ? '−' : ''
-  const magnitude = Math.abs(metric.delta_abs)
-  const precision = metric.unit === 'UZS/USD' ? 0 : 1
-  return `${sign}${magnitude.toFixed(precision)}`
-}
 
 function formatFreshness(value: string, locale: string): string {
   const parsed = Date.parse(value)
@@ -82,16 +63,14 @@ export function KpiStrip({ metrics }: KpiStripProps) {
 
       <div className="overview-kpi-grid">
         {metrics.map((metric) => {
-          const delta = formatDelta(metric)
+          const delta = formatOverviewDelta(metric, locale)
           const directionWord = t(`overview.kpi.direction.${metric.direction}`)
           const srLabel = delta
             ? t('overview.kpi.deltaSrLabel', { direction: directionWord, delta })
             : t('overview.kpi.noPrior')
           const freshness = formatFreshness(metric.last_updated, locale)
           const deltaLabel = metric.delta_label
-          const composedDelta = delta
-            ? `${delta} ${metric.unit === 'UZS/USD' ? 'UZS' : metric.unit}`.trim()
-            : t('overview.kpi.notAvailable')
+          const composedDelta = formatOverviewDeltaWithUnit(metric, locale) ?? t('overview.kpi.notAvailable')
           const contextNote = metric.context_note
           const contextIsSentinel = contextNote === SME_CONTENT_PENDING
           const provenance = getMetricProvenance(metric)
@@ -110,7 +89,7 @@ export function KpiStrip({ metrics }: KpiStripProps) {
                 </span>
               </div>
               <p className="kpi__value overview-kpi-card__value">
-                {formatMetricValue(metric)} <span>{metric.unit}</span>
+                {formatOverviewMetricValue(metric, locale)} <span>{metric.unit}</span>
               </p>
               <p className="kpi__delta overview-kpi-trend" aria-label={srLabel}>
                 <span className="overview-kpi-trend__glyph" aria-hidden="true">
@@ -129,6 +108,11 @@ export function KpiStrip({ metrics }: KpiStripProps) {
                   </span>
                 ) : contextNote ? (
                   <span className="overview-kpi-card__context-note">{contextNote}</span>
+                ) : null}
+                {metric.validation_status === 'warning' ? (
+                  <span className="ui-chip ui-chip--warn overview-kpi-card__status">
+                    {t('overview.indicators.status.warning')}
+                  </span>
                 ) : null}
               </div>
             </article>

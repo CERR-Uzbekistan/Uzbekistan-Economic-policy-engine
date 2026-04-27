@@ -5,6 +5,7 @@ import type {
   HeadlineMetric,
   MacroSnapshot,
   ModelAttribution,
+  OverviewIndicatorGroup,
 } from '../../contracts/data-contract.js'
 import { overviewV1Data } from '../mock/overview.js'
 import type { OverviewArtifact, OverviewArtifactMetric } from './artifact-types.js'
@@ -27,6 +28,7 @@ function toConfidence(status: OverviewArtifactMetric['validation_status']): Conf
 
 function toDisplayUnit(metric: OverviewArtifactMetric): string {
   if (metric.id === 'usd_uzs_level') return 'UZS/USD'
+  if (metric.unit === 'USD per troy ounce') return 'USD/oz'
   if (metric.unit.startsWith('percent')) return '%'
   if (metric.unit === 'UZS per USD') return 'UZS/USD'
   return metric.unit
@@ -123,8 +125,91 @@ function unique(values: string[]): string[] {
   return Array.from(new Set(values.filter(Boolean)))
 }
 
+const PANEL_GROUP_ORDER = ['growth', 'inflation', 'trade', 'monetary_fx', 'gold'] as const
+
+const SUMMARY_METRIC_IDS: OverviewMetricId[] = [
+  'real_gdp_growth_quarter_yoy',
+  'cpi_yoy',
+  'exports_yoy',
+  'imports_yoy',
+  'policy_rate',
+  'gold_price_level',
+]
+
+const GROUP_TITLE_BY_ID: Record<string, string> = {
+  growth: 'Growth',
+  inflation: 'Inflation',
+  trade: 'Trade',
+  monetary_fx: 'Monetary / FX',
+  gold: 'Gold',
+}
+
+function toOverviewIndicatorGroups(artifact: OverviewArtifact): OverviewIndicatorGroup[] {
+  const metricsById = new Map(artifact.metrics.map((metric) => [metric.id, metric]))
+  const groupedIds = new Set<string>()
+  const groups: OverviewIndicatorGroup[] = []
+  const groupsById = new Map<string, OverviewIndicatorGroup>()
+
+  for (const artifactGroup of artifact.panel_groups) {
+    const metrics = artifactGroup.metric_ids
+      .map((id) => metricsById.get(id))
+      .filter((metric): metric is OverviewArtifactMetric => metric !== undefined)
+      .map((metric) => {
+        groupedIds.add(metric.id)
+        return toHeadlineMetric(metric, artifact)
+      })
+
+    const group: OverviewIndicatorGroup = {
+      group_id: artifactGroup.id,
+      title: artifactGroup.title || GROUP_TITLE_BY_ID[artifactGroup.id] || artifactGroup.id,
+      metrics,
+    }
+    groups.push(group)
+    groupsById.set(group.group_id, group)
+  }
+
+  for (const metric of artifact.metrics) {
+    if (groupedIds.has(metric.id)) continue
+    const fallbackGroupId = metric.block
+    let group = groupsById.get(fallbackGroupId)
+    if (!group) {
+      group = {
+        group_id: fallbackGroupId,
+        title: GROUP_TITLE_BY_ID[fallbackGroupId] || fallbackGroupId,
+        metrics: [],
+      }
+      groups.push(group)
+      groupsById.set(fallbackGroupId, group)
+    }
+    group.metrics.push(toHeadlineMetric(metric, artifact))
+    groupedIds.add(metric.id)
+  }
+
+  return groups
+    .filter((group) => group.metrics.length > 0)
+    .sort((left, right) => {
+      const leftOrder = PANEL_GROUP_ORDER.indexOf(left.group_id as (typeof PANEL_GROUP_ORDER)[number])
+      const rightOrder = PANEL_GROUP_ORDER.indexOf(right.group_id as (typeof PANEL_GROUP_ORDER)[number])
+      const normalizedLeft = leftOrder < 0 ? Number.MAX_SAFE_INTEGER : leftOrder
+      const normalizedRight = rightOrder < 0 ? Number.MAX_SAFE_INTEGER : rightOrder
+      return normalizedLeft - normalizedRight
+    })
+}
+
+function toArtifactSummaryMetrics(artifact: OverviewArtifact): HeadlineMetric[] {
+  const metricsById = new Map(artifact.metrics.map((metric) => [metric.id, metric]))
+  return SUMMARY_METRIC_IDS.map((id) => metricsById.get(id))
+    .filter(
+      (metric): metric is OverviewArtifactMetric =>
+        metric !== undefined && metric.validation_status !== 'failed',
+    )
+    .map((metric) => toHeadlineMetric(metric, artifact))
+}
+
 export function overviewArtifactToMacroSnapshot(artifact: OverviewArtifact): MacroSnapshot {
   const topCards = selectTopCardMetrics(artifact.metrics).map((metric) => toHeadlineMetric(metric, artifact))
+  const indicatorGroups = toOverviewIndicatorGroups(artifact)
+  const artifactSummaryMetrics = toArtifactSummaryMetrics(artifact)
   const artifactWarnings: Caveat[] = artifact.warnings.map((message, index) => ({
     caveat_id: `overview-artifact-warning-${index + 1}`,
     severity: 'warning',
@@ -154,6 +239,8 @@ export function overviewArtifactToMacroSnapshot(artifact: OverviewArtifact): Mac
     generated_at: artifact.exported_at,
     model_ids: unique(['overview_artifact', ...overviewV1Data.model_ids]),
     headline_metrics: topCards,
+    indicator_groups: indicatorGroups,
+    artifact_summary_metrics: artifactSummaryMetrics,
     caveats: [...artifactWarnings, ...artifactCaveats, ...metricCaveats],
     references,
   }

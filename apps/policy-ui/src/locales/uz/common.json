@@ -111,6 +111,22 @@
       "modelListFallback": "MODELLAR TO'PLAMI",
       "draftedFrom": "Holat narrativi · {{models}} bazasidan tuzilgan",
       "updatedAt": "Holat narrativi tekshirildi: {{date}}",
+      "artifactSummaryMeta": "Artefakt xulosasi · deterministik",
+      "staticFallbackNotice": "Statik fallback xulosa · joriy artefakt mavjud emas",
+      "summary": {
+        "template": "{{items}}.",
+        "item": "{{label}} {{value}} {{unit}}{{qualifier}}",
+        "provisional": "dastlabki",
+        "unavailable": "Umumiy ko'rinish artefakti yuklandi, lekin xulosa uchun valid ko'rsatkichlar mavjud emas.",
+        "labels": {
+          "gdp": "YaIM",
+          "cpi": "CPI",
+          "exports": "eksport",
+          "imports": "import",
+          "policyRate": "siyosat stavkasi",
+          "gold": "oltin"
+        }
+      },
       "provenance": {
         "draftedFromLabel": "HOLAT NARRATIVI · bazasidan tuzilgan",
         "aiAssisted": "AI yordamida",
@@ -141,6 +157,22 @@
         "up": "yuqoriroq",
         "down": "pastroq",
         "flat": "o'zgarmagan"
+      }
+    },
+    "indicators": {
+      "title": "Ko'rsatkich panellari",
+      "description": "Barcha qulflangan Overview metrikalari manba bloki bo'yicha guruhlangan.",
+      "groups": {
+        "growth": "O'sish",
+        "inflation": "Inflyatsiya",
+        "trade": "Savdo",
+        "monetary_fx": "Pul-kredit / FX",
+        "gold": "Oltin"
+      },
+      "status": {
+        "valid": "Valid",
+        "warning": "Ehtiyot",
+        "failed": "Xato"
       }
     },
     "risks": {
@@ -195,6 +227,15 @@
         "warning": "Ogohlantirish",
         "info": "Ma'lumot"
       }
+    },
+    "dataNotes": {
+      "title": "Ma'lumot izohlari",
+      "description": "Ixcham governance ko'rinishi; barcha artefakt ogohlantirishlari va caveatlari uchun oching.",
+      "warningMetricCount": "{{count}} ogohlantirishli metrika",
+      "warningMetricCountPlural": "{{count}} ogohlantirishli metrika",
+      "noteCount": "{{count}} manba izohi",
+      "noteCountPlural": "{{count}} manba izohi",
+      "exportedAt": "Eksport {{date}}"
     },
     "references": {
       "title": "Manbalar va havolalar"
@@ -907,8 +948,8 @@
       "units": "Birliklar",
       "linkageCounts": "Bog'lanish sinflari",
       "caveats": "Bridge cheklovlari"
-    }
-  },
+      }
+    },
   "states": {
     "loading": {
       "overview": "So'nggi sharh holati yuklanmoqda...",

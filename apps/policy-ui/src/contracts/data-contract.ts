@@ -72,6 +72,12 @@ export type HeadlineMetric = {
   citation_label?: string
 }
 
+export type OverviewIndicatorGroup = {
+  group_id: string
+  title: string
+  metrics: HeadlineMetric[]
+}
+
 // Shot-1 additive types for Overview state narrative (prompt §4.5 item 1).
 // MacroSnapshot.summary widens to `string | NarrativeSegment[]`; structured form lets
 // EconomicStateHeader wrap emphasized spans in <em> without HTML in translation values.
@@ -215,6 +221,9 @@ export type MacroSnapshot = {
   caveats: Caveat[]
   references: string[]
   activity_feed: OverviewActivityFeed
+  // Additive Overview artifact fields. Static fallback snapshots can omit these.
+  indicator_groups?: OverviewIndicatorGroup[]
+  artifact_summary_metrics?: HeadlineMetric[]
   // Shot-1 additive: named-reviewer provenance line under the state narrative.
   provenance?: StateProvenance
 }

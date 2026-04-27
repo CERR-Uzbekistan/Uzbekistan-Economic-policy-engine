@@ -111,6 +111,22 @@
       "modelListFallback": "НАБОР МОДЕЛЕЙ",
       "draftedFrom": "Нарратив состояния · составлен на базе {{models}}",
       "updatedAt": "Нарратив состояния проверен {{date}}",
+      "artifactSummaryMeta": "Сводка артефакта · детерминированно",
+      "staticFallbackNotice": "Статическая fallback-сводка · текущий артефакт недоступен",
+      "summary": {
+        "template": "{{items}}.",
+        "item": "{{label}} {{value}} {{unit}}{{qualifier}}",
+        "provisional": "предварительно",
+        "unavailable": "Артефакт обзора загружен, но валидные показатели для сводки недоступны.",
+        "labels": {
+          "gdp": "ВВП",
+          "cpi": "ИПЦ",
+          "exports": "экспорт",
+          "imports": "импорт",
+          "policyRate": "ключевая ставка",
+          "gold": "золото"
+        }
+      },
       "provenance": {
         "draftedFromLabel": "НАРРАТИВ СОСТОЯНИЯ · составлен на базе",
         "aiAssisted": "При содействии ИИ",
@@ -141,6 +157,22 @@
         "up": "выше",
         "down": "ниже",
         "flat": "без изменений"
+      }
+    },
+    "indicators": {
+      "title": "Панели показателей",
+      "description": "Все закреплённые метрики обзора, сгруппированные по блокам источника.",
+      "groups": {
+        "growth": "Рост",
+        "inflation": "Инфляция",
+        "trade": "Торговля",
+        "monetary_fx": "ДКП / FX",
+        "gold": "Золото"
+      },
+      "status": {
+        "valid": "Валидно",
+        "warning": "Осторожно",
+        "failed": "Ошибка"
       }
     },
     "risks": {
@@ -195,6 +227,15 @@
         "warning": "Предупреждение",
         "info": "Информация"
       }
+    },
+    "dataNotes": {
+      "title": "Примечания к данным",
+      "description": "Компактный governance-вид; раскройте для всех предупреждений и оговорок артефакта.",
+      "warningMetricCount": "{{count}} метрика с предупреждением",
+      "warningMetricCountPlural": "{{count}} метрик с предупреждением",
+      "noteCount": "{{count}} примечание источника",
+      "noteCountPlural": "{{count}} примечаний источника",
+      "exportedAt": "Экспорт {{date}}"
     },
     "references": {
       "title": "Источники и ссылки"
@@ -907,8 +948,8 @@
       "units": "Единицы",
       "linkageCounts": "Классы связей",
       "caveats": "Ограничения моста"
-    }
-  },
+      }
+    },
   "states": {
     "loading": {
       "overview": "Загрузка последнего снимка обзора...",

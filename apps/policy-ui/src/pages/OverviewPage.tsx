@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { CaveatPanel } from '../components/overview/CaveatPanel'
 import { EconomicStateHeader } from '../components/overview/EconomicStateHeader'
+import { IndicatorPanelGrid } from '../components/overview/IndicatorPanelGrid'
 import { KpiStrip } from '../components/overview/KpiStrip'
 import { NowcastForecastBlock } from '../components/overview/NowcastForecastBlock'
 import { OverviewFeeds } from '../components/overview/OverviewFeeds'
@@ -152,6 +153,8 @@ export function OverviewPage() {
     references,
     activity_feed,
     provenance,
+    indicator_groups,
+    artifact_summary_metrics,
   } = overviewData
 
 
@@ -195,9 +198,12 @@ export function OverviewPage() {
         modelIds={model_ids}
         outputAction={output_action}
         provenance={provenance}
+        artifactSummaryMetrics={artifact_summary_metrics}
+        isArtifactMode={sourceState.sourceKind === 'overview-artifact'}
       />
 
       <KpiStrip metrics={headline_metrics} />
+      <IndicatorPanelGrid groups={indicator_groups} />
 
       {nowcast_forecast ? (
         <div className="overview-two-column">
@@ -230,7 +236,7 @@ export function OverviewPage() {
         </div>
       ) : null}
 
-      <CaveatPanel caveats={caveats} />
+      <CaveatPanel caveats={caveats} exportedAt={generated_at} />
       <QuickActions actions={analysis_actions} />
       <OverviewFeeds activityFeed={activity_feed} />
       <ReferencesFooter references={references} />

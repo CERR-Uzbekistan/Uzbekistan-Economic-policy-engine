@@ -28,6 +28,15 @@ async function createTestI18n() {
                 info: 'Info',
               },
             },
+            dataNotes: {
+              title: 'Data notes',
+              description: 'Compact governance view.',
+              warningMetricCount: '{{count}} warning metric',
+              warningMetricCountPlural: '{{count}} warning metrics',
+              noteCount: '{{count}} source note',
+              noteCountPlural: '{{count}} source notes',
+              exportedAt: 'Exported {{date}}',
+            },
           },
         },
       },
@@ -111,5 +120,45 @@ describe('CaveatPanel', () => {
     )
 
     assert.match(markup, /Affects: gdp_growth, inflation/)
+  })
+
+  it('keeps every unique caveat and warning string reachable in compact Data Notes', async () => {
+    const caveats: Caveat[] = [
+      {
+        caveat_id: 'warning-1',
+        severity: 'warning',
+        message: 'Warning caveat',
+        affected_metrics: ['gold_price_forecast'],
+        affected_models: ['overview_artifact'],
+      },
+      {
+        caveat_id: 'warning-duplicate',
+        severity: 'warning',
+        message: 'Warning caveat',
+        affected_metrics: ['gold_price_forecast'],
+        affected_models: ['overview_artifact'],
+      },
+      {
+        caveat_id: 'info-1',
+        severity: 'info',
+        message: 'Source note caveat',
+        affected_metrics: [],
+        affected_models: ['overview_artifact'],
+      },
+    ]
+
+    const i18n = await createTestI18n()
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <CaveatPanel caveats={caveats} exportedAt="2026-04-26T08:00:00Z" />
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /<details/)
+    assert.match(markup, /Data notes/)
+    assert.match(markup, /1 warning metric/)
+    assert.match(markup, /2 source notes/)
+    assert.match(markup, /Warning caveat/)
+    assert.match(markup, /Source note caveat/)
   })
 })
