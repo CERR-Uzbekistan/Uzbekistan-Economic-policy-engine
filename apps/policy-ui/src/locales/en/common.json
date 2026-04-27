@@ -717,12 +717,17 @@
   "dataRegistry": {
     "header": {
       "eyebrow": "Sources · Vintages · Validation",
-      "meta": {
-        "expectedArtifacts": "Expected artifacts",
-        "plannedFamilies": "Planned families",
-        "generated": "Registry generated"
-      }
-    },
+        "meta": {
+          "expectedArtifacts": "Expected artifacts",
+          "plannedFamilies": "Planned families",
+          "generated": "Registry generated",
+          "metadataSource": "Metadata source"
+        }
+      },
+      "metadataSource": {
+        "api": "API metadata",
+        "static-fallback": "Static fallback"
+      },
     "summary": {
       "aria": "Data registry status summary"
     },
@@ -807,12 +812,13 @@
       "bridge_output": "Bridge output",
       "planned_artifact": "Planned artifact"
     },
-    "artifact": {
-      "dataVintage": "Source vintage",
-      "exportTimestamp": "Artifact export",
-      "sourceVintage": "Source vintage",
-      "lastValidationCheck": "Last validation check",
-      "owner": "Owner",
+      "artifact": {
+        "dataVintage": "Source vintage",
+        "exportTimestamp": "Artifact export",
+        "sourceVintage": "Source vintage",
+        "lastValidationCheck": "Last validation check",
+        "checksum": "Checksum",
+        "owner": "Owner",
       "sourceSystem": "Source system",
       "solver": "Solver",
       "caveats": "Caveats",

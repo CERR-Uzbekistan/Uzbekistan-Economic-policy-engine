@@ -42,6 +42,10 @@ export function DataRegistryPage() {
         {t('trustState.labels.registryGenerated')} {t('overview.common.middleDot')}{' '}
         <strong>{effectiveRegistry.generatedAt}</strong>
       </span>
+      <span>
+        {t('dataRegistry.header.meta.metadataSource')} {t('overview.common.middleDot')}{' '}
+        <strong>{t(`dataRegistry.metadataSource.${effectiveRegistry.metadataSource}`)}</strong>
+      </span>
     </>
   )
 

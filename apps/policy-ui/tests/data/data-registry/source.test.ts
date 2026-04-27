@@ -26,17 +26,21 @@ function jsonResponse(payload: unknown, status = 200): Response {
 }
 
 function bridgeFetch(payloads: {
+  api?: unknown | Response
   qpm?: unknown | Response
   dfm?: unknown | Response
   io?: unknown | Response
 }) {
   return (input: RequestInfo | URL) => {
     const url = String(input)
-    const value = url.includes('qpm.json')
-      ? payloads.qpm
-      : url.includes('dfm.json')
-        ? payloads.dfm
-        : payloads.io
+    let value = payloads.io
+    if (url.includes('/api/v1/registry/artifacts')) {
+      value = payloads.api
+    } else if (url.includes('qpm.json')) {
+      value = payloads.qpm
+    } else if (url.includes('dfm.json')) {
+      value = payloads.dfm
+    }
     if (value instanceof Response) {
       return Promise.resolve(value)
     }
@@ -45,6 +49,91 @@ function bridgeFetch(payloads: {
 }
 
 describe('data registry source', () => {
+  it('prefers API metadata when the backend registry is available', async () => {
+    const registry = await loadDataRegistry(
+      bridgeFetch({
+        api: {
+          api_version: 'v1',
+          source: 'frontend_public_artifacts',
+          artifacts: [
+            {
+              id: 'qpm',
+              model_family: 'QPM',
+              artifact_path: '/data/qpm.json',
+              source_artifact: 'qpm',
+              source_vintage: '2026Q1-api',
+              data_vintage: '2026Q1-api',
+              exported_at: '2026-04-22T07:55:14Z',
+              generated_at: '2026-04-22T07:55:13Z',
+              checksum: 'sha256:qpm-test',
+              guard_status: 'warning',
+              guard_checks: ['json_parse', 'metadata_extract'],
+              caveats: [],
+              warnings: [],
+            },
+            {
+              id: 'dfm',
+              model_family: 'DFM',
+              artifact_path: '/data/dfm.json',
+              source_artifact: 'dfm_nowcast/dfm_data.js',
+              source_vintage: '2026-04-08 10:09:12',
+              data_vintage: '2026Q1',
+              exported_at: '2026-04-22T11:58:03Z',
+              generated_at: '2026-04-22T11:58:03Z',
+              checksum: 'sha256:dfm-test',
+              guard_status: 'valid',
+              guard_checks: ['json_parse', 'metadata_extract'],
+              caveats: [],
+              warnings: [],
+            },
+            {
+              id: 'io',
+              model_family: 'I-O',
+              artifact_path: '/data/io.json',
+              source_artifact: 'io_model/io_data.json',
+              source_vintage: 'Base-year vintage 2022',
+              data_vintage: '2022',
+              exported_at: '2026-04-09T00:00:00Z',
+              generated_at: '2026-04-09',
+              checksum: 'sha256:io-test',
+              guard_status: 'valid',
+              guard_checks: ['json_parse', 'metadata_extract'],
+              caveats: [],
+              warnings: [],
+            },
+          ],
+        },
+        qpm: buildValidQpmPayload(),
+        dfm: buildValidDfmPayload(),
+        io: loadPublicIoPayload(),
+      }),
+      NOW,
+    )
+
+    const qpmArtifact = registry.artifacts.find((artifact) => artifact.id === 'qpm')
+    assert.equal(registry.metadataSource, 'api')
+    assert.equal(qpmArtifact?.checksum, 'sha256:qpm-test')
+    assert.equal(qpmArtifact?.dataVintage, '2026Q1-api')
+    assert.ok(registry.bridgeOutputs.some((row) => row.id === 'qpm' && row.dataVintage === '2026Q1-api'))
+  })
+
+  it('falls back to static frontend composition when the backend registry is unavailable', async () => {
+    const registry = await loadDataRegistry(
+      bridgeFetch({
+        api: new Response('', { status: 503 }),
+        qpm: buildValidQpmPayload(),
+        dfm: buildValidDfmPayload(),
+        io: loadPublicIoPayload(),
+      }),
+      NOW,
+    )
+
+    const qpmArtifact = registry.artifacts.find((artifact) => artifact.id === 'qpm')
+    assert.equal(registry.metadataSource, 'static-fallback')
+    assert.equal(qpmArtifact?.checksum, undefined)
+    assert.equal(qpmArtifact?.dataVintage, '2026Q1')
+  })
+
   it('renders QPM, DFM, and I-O rows from current metadata and keeps planned rows honest', async () => {
     const registry = await loadDataRegistry(
       bridgeFetch({

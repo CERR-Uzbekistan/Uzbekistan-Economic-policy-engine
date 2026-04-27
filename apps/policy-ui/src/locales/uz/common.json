@@ -717,12 +717,17 @@
   "dataRegistry": {
     "header": {
       "eyebrow": "Manbalar · Vintajlar · Validatsiya",
-      "meta": {
-        "expectedArtifacts": "Kutilgan artefaktlar",
-        "plannedFamilies": "Rejadagi oilalar",
-        "generated": "Reyestr tuzildi"
-      }
-    },
+        "meta": {
+          "expectedArtifacts": "Kutilgan artefaktlar",
+          "plannedFamilies": "Rejadagi oilalar",
+          "generated": "Reyestr tuzildi",
+          "metadataSource": "Metama'lumot manbasi"
+        }
+      },
+      "metadataSource": {
+        "api": "API metama'lumoti",
+        "static-fallback": "Statik fallback"
+      },
     "summary": {
       "aria": "Ma'lumotlar reyestri status xulosasi"
     },
@@ -807,12 +812,13 @@
       "bridge_output": "Bridge chiqishi",
       "planned_artifact": "Rejadagi artefakt"
     },
-    "artifact": {
-      "dataVintage": "Manba vintaji",
-      "exportTimestamp": "Artefakt eksporti",
-      "sourceVintage": "Manba vintaji",
-      "lastValidationCheck": "Oxirgi validatsiya tekshiruvi",
-      "owner": "Ega",
+      "artifact": {
+        "dataVintage": "Manba vintaji",
+        "exportTimestamp": "Artefakt eksporti",
+        "sourceVintage": "Manba vintaji",
+        "lastValidationCheck": "Oxirgi validatsiya tekshiruvi",
+        "checksum": "Checksum",
+        "owner": "Ega",
       "sourceSystem": "Manba tizimi",
       "solver": "Solver",
       "caveats": "Izohlar",

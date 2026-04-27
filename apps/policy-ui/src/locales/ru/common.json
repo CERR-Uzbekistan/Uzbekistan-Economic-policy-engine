@@ -717,12 +717,17 @@
   "dataRegistry": {
     "header": {
       "eyebrow": "Источники · Винтажи · Валидация",
-      "meta": {
-        "expectedArtifacts": "Ожидаемые артефакты",
-        "plannedFamilies": "Планируемые модели",
-        "generated": "Реестр сформирован"
-      }
-    },
+        "meta": {
+          "expectedArtifacts": "Ожидаемые артефакты",
+          "plannedFamilies": "Планируемые модели",
+          "generated": "Реестр сформирован",
+          "metadataSource": "Источник метаданных"
+        }
+      },
+      "metadataSource": {
+        "api": "API-метаданные",
+        "static-fallback": "Статический fallback"
+      },
     "summary": {
       "aria": "Сводка статусов реестра данных"
     },
@@ -807,12 +812,13 @@
       "bridge_output": "Выход bridge",
       "planned_artifact": "Планируемый артефакт"
     },
-    "artifact": {
-      "dataVintage": "Винтаж источника",
-      "exportTimestamp": "Экспорт артефакта",
-      "sourceVintage": "Винтаж источника",
-      "lastValidationCheck": "Последняя проверка валидации",
-      "owner": "Владелец",
+      "artifact": {
+        "dataVintage": "Винтаж источника",
+        "exportTimestamp": "Экспорт артефакта",
+        "sourceVintage": "Винтаж источника",
+        "lastValidationCheck": "Последняя проверка валидации",
+        "checksum": "Checksum",
+        "owner": "Владелец",
       "sourceSystem": "Система источника",
       "solver": "Солвер",
       "caveats": "Оговорки",

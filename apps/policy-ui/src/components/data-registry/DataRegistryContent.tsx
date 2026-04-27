@@ -303,6 +303,12 @@ function ArtifactCard({ artifact, generatedAt }: { artifact: RegistryArtifact; g
           <dt>{t('dataRegistry.artifact.lastValidationCheck')}</dt>
           <dd>{generatedAt}</dd>
         </div>
+        {artifact.checksum ? (
+          <div>
+            <dt>{t('dataRegistry.artifact.checksum')}</dt>
+            <dd>{artifact.checksum}</dd>
+          </div>
+        ) : null}
         <div>
           <dt>{t('dataRegistry.artifact.owner')}</dt>
           <dd>{artifact.owner}</dd>

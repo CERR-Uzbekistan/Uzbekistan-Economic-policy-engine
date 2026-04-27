@@ -18,6 +18,7 @@ import {
   fetchQpmBridgePayload,
 } from '../bridge/qpm-client.js'
 import type { QpmBridgePayload } from '../bridge/qpm-types.js'
+import { fetchRegistryApiMetadata, type RegistryApiArtifact } from './api-client.js'
 
 export type RegistryStatus = 'valid' | 'warning' | 'failed' | 'missing' | 'unavailable' | 'planned'
 export type RegistryRecordKind = 'source_series' | 'model_input' | 'bridge_output' | 'planned_artifact'
@@ -53,6 +54,8 @@ export type RegistryArtifact = {
   freshnessRule: string
   caveatsSummary: string
   sourceExportExplanation: string
+  checksum?: string
+  metadataGeneratedAt?: string
   facts: Array<{ label: string; value: string }>
   consumers: Array<{ label: string; href: string }>
   issues: RegistryIssue[]
@@ -86,6 +89,7 @@ export type RegistryWarning = {
 
 export type DataRegistry = {
   generatedAt: string
+  metadataSource: 'api' | 'static-fallback'
   summaryCounts: Record<RegistryStatus, number>
   artifacts: RegistryArtifact[]
   dataSources: RegistryRow[]
@@ -127,17 +131,26 @@ export function getInitialDataRegistry(): DataRegistry {
     dfm: { status: 'unavailable', detail: 'Loading /data/dfm.json.', issues: [] },
     io: { status: 'unavailable', detail: 'Loading /data/io.json.', issues: [] },
     now: new Date(),
+    metadataSource: 'static-fallback',
   })
 }
 
 export async function loadDataRegistry(fetchImpl: FetchLike = fetch, now = new Date()): Promise<DataRegistry> {
-  const [qpm, dfm, io] = await Promise.all([
+  const [apiMetadata, qpm, dfm, io] = await Promise.all([
+    loadRegistryApiMetadata(fetchImpl),
     loadQpmArtifact(fetchImpl),
     loadDfmArtifact(fetchImpl),
     loadIoArtifact(fetchImpl),
   ])
 
-  return buildDataRegistry({ qpm, dfm, io, now })
+  return buildDataRegistry({
+    qpm,
+    dfm,
+    io,
+    now,
+    apiMetadata,
+    metadataSource: apiMetadata ? 'api' : 'static-fallback',
+  })
 }
 
 export function buildDataRegistry(options: {
@@ -145,12 +158,28 @@ export function buildDataRegistry(options: {
   dfm: LoadedArtifact
   io: LoadedArtifact
   now: Date
+  apiMetadata?: RegistryApiArtifact[] | null
+  metadataSource?: DataRegistry['metadataSource']
 }): DataRegistry {
-  const artifacts = [
+  const artifacts = applyApiMetadata([
     buildQpmArtifact(options.qpm),
     buildDfmArtifact(options.dfm, options.now),
     buildIoArtifact(options.io),
-  ]
+  ], options.apiMetadata ?? null)
+
+  return assembleDataRegistry({
+    generatedAt: options.now.toISOString(),
+    metadataSource: options.metadataSource ?? 'static-fallback',
+    artifacts,
+  })
+}
+
+function assembleDataRegistry(options: {
+  generatedAt: string
+  metadataSource: DataRegistry['metadataSource']
+  artifacts: RegistryArtifact[]
+}): DataRegistry {
+  const artifacts = options.artifacts
   const plannedRows = buildPlannedRows()
   const dataSources = [...artifacts.map(toDataSourceRow), ...plannedRows]
   const modelInputs = [...artifacts.map(toModelInputRow), ...plannedRows.map(toPlannedModelInputRow)]
@@ -162,7 +191,8 @@ export function buildDataRegistry(options: {
   const summaryCounts = countStatuses([...artifacts, ...plannedRows])
 
   return {
-    generatedAt: options.now.toISOString(),
+    generatedAt: options.generatedAt,
+    metadataSource: options.metadataSource,
     summaryCounts,
     artifacts,
     dataSources,
@@ -206,6 +236,55 @@ export function matchesRegistryFilter(status: RegistryStatus, filter: RegistryFi
   if (filter === 'warnings') return status === 'warning'
   if (filter === 'planned') return status === 'planned'
   return status === 'failed' || status === 'missing' || status === 'unavailable'
+}
+
+async function loadRegistryApiMetadata(fetchImpl: FetchLike): Promise<RegistryApiArtifact[] | null> {
+  try {
+    const response = await fetchRegistryApiMetadata(fetchImpl)
+    return response.artifacts
+  } catch {
+    return null
+  }
+}
+
+function applyApiMetadata(
+  artifacts: RegistryArtifact[],
+  apiMetadata: RegistryApiArtifact[] | null,
+): RegistryArtifact[] {
+  if (!apiMetadata) return artifacts
+
+  const metadataById = new Map(apiMetadata.map((metadata) => [metadata.id, metadata]))
+  return artifacts.map((artifact) => {
+    const metadata = metadataById.get(artifact.id)
+    if (!metadata) return artifact
+
+    return {
+      ...artifact,
+      artifactPath: metadata.artifact_path,
+      sourceArtifact: metadata.source_artifact ?? artifact.sourceArtifact,
+      sourceVintage: metadata.source_vintage ?? artifact.sourceVintage,
+      dataVintage: metadata.data_vintage ?? artifact.dataVintage,
+      exportTimestamp: metadata.exported_at ?? artifact.exportTimestamp,
+      status: mergeRegistryStatus(artifact.status, metadata.guard_status),
+      checksum: metadata.checksum,
+      metadataGeneratedAt: metadata.generated_at ?? undefined,
+    }
+  })
+}
+
+function mergeRegistryStatus(
+  staticStatus: RegistryStatus,
+  apiStatus: Extract<RegistryStatus, 'valid' | 'warning' | 'failed'>,
+): RegistryStatus {
+  const severityOrder: Record<RegistryStatus, number> = {
+    valid: 0,
+    planned: 0,
+    warning: 1,
+    unavailable: 2,
+    missing: 2,
+    failed: 3,
+  }
+  return severityOrder[apiStatus] > severityOrder[staticStatus] ? apiStatus : staticStatus
 }
 
 async function loadQpmArtifact(fetchImpl: FetchLike): Promise<LoadedArtifact> {
