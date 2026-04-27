@@ -1,4 +1,19 @@
 {
+  "trustState": {
+    "labels": {
+      "mockFixture": "Mock fixture",
+      "liveBridgeJson": "Live bridge JSON",
+      "fallbackMock": "Fallback mock",
+      "staticCuratedContent": "Статический курируемый контент",
+      "localBrowserDraft": "Локальный черновик браузера",
+      "planned": "План",
+      "artifactGuardChecked": "Артефакт guard-checked",
+      "sourceVintage": "Винтаж источника",
+      "artifactExport": "Экспорт артефакта",
+      "registryGenerated": "Реестр сформирован",
+      "lastValidationCheck": "Последняя проверка валидации"
+    }
+  },
   "shell": {
     "skipToMainContent": "Перейти к основному содержанию",
     "workspaceNavigationAria": "Навигация рабочего пространства",
@@ -659,6 +674,13 @@
   },
   "knowledgeHub": {
     "staticPilotBanner": "Курируемый статический пилотный контент — не живая правовая или исследовательская лента.",
+    "metadata": {
+      "sourceStatic": "Источник: статический пилотный контент",
+      "reviewCurated": "Статус проверки: курируемая пилотная копия",
+      "reviewedBy": "Проверил(а): {{reviewer}}",
+      "author": "Автор: {{author}}",
+      "sourceDate": "Дата источника: {{date}}"
+    },
     "header": {
       "eyebrow": "Реформы · Исследования · Литература",
       "meta": {
@@ -699,7 +721,7 @@
     "legend": {
       "title": "Легенда статусов",
       "valid": {
-        "label": "Артефакт валиден",
+        "label": "Артефакт guard-checked",
         "description": "Публичный артефакт загружен и прошёл frontend guard checks. Это не экономическая или модельная валидация."
       },
       "warning": {
@@ -708,11 +730,14 @@
       },
       "planned": {
         "label": "План",
-        "description": "Намеренно отсутствует в Sprint 3."
+        "description": "Намеренно отсутствует в этом foundation bundle."
+      },
+      "lastValidationCheck": {
+        "description": "Время, когда frontend-реестр в последний раз загрузил артефакты и выполнил shape guards."
       }
     },
     "status": {
-      "valid": "Валидно",
+      "valid": "Артефакт guard-checked",
       "warning": "Предупреждение",
       "failed": "Ошибка",
       "missing": "Отсутствует",
@@ -757,6 +782,7 @@
       "dataVintage": "Винтаж источника",
       "exportTimestamp": "Экспорт артефакта",
       "sourceVintage": "Винтаж источника",
+      "lastValidationCheck": "Последняя проверка валидации",
       "solver": "Солвер",
       "caveats": "Оговорки",
       "consumers": "Потребители"

@@ -10,6 +10,7 @@ import { ReferencesFooter } from '../components/overview/ReferencesFooter'
 import { RiskPanel } from '../components/overview/RiskPanel'
 import { PageContainer } from '../components/layout/PageContainer'
 import { PageHeader } from '../components/layout/PageHeader'
+import { TrustStateLabel } from '../components/system/TrustStateLabel'
 import {
   getInitialOverviewSourceState,
   loadOverviewSourceState,
@@ -157,6 +158,7 @@ export function OverviewPage() {
   const pageHeaderMeta = (
     <>
       <span className="page-header__eyebrow">{t('overview.meta.eyebrow')}</span>
+      <TrustStateLabel id={sourceState.mode === 'live' ? 'liveBridgeJson' : 'mockFixture'} tone={sourceState.mode === 'live' ? 'success' : 'neutral'} />
       <span>
         <strong>{t('overview.meta.vintageLabel')}</strong> {t('overview.common.middleDot')}{' '}
         {formatDate(generated_at, locale)}
@@ -200,6 +202,12 @@ export function OverviewPage() {
             ) : null}
             <NowcastForecastBlock
               chart={dfmState.status === 'bridge' ? dfmState.chart : nowcast_forecast}
+              headerSlot={
+                <TrustStateLabel
+                  id={dfmState.status === 'bridge' ? 'liveBridgeJson' : 'fallbackMock'}
+                  tone={dfmState.status === 'bridge' ? 'success' : 'warn'}
+                />
+              }
               statusSlot={
                 dfmState.status === 'loading' ? (
                   <p className="overview-nowcast-refreshing" role="status" aria-live="polite">

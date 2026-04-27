@@ -88,13 +88,20 @@ async function createTestI18n() {
     resources: {
       en: {
         common: {
+          trustState: {
+            labels: {
+              artifactGuardChecked: 'Artifact guard-checked',
+              planned: 'Planned',
+              lastValidationCheck: 'Last validation check',
+            },
+          },
           overview: { common: { middleDot: '·' } },
           dataRegistry: {
             summary: { aria: 'summary' },
             legend: {
               title: 'Status legend',
               valid: {
-                label: 'Artifact valid',
+                label: 'Artifact guard-checked',
                 description:
                   'Public artifact loaded and passed frontend guard checks. This is not economic or model validation.',
               },
@@ -104,11 +111,15 @@ async function createTestI18n() {
               },
               planned: {
                 label: 'Planned',
-                description: 'Intentionally absent in Sprint 3.',
+                description: 'Intentionally absent in this foundation bundle.',
+              },
+              lastValidationCheck: {
+                description:
+                  'Timestamp when the frontend registry last loaded artifacts and ran shape guards.',
               },
             },
             status: {
-              valid: 'Valid',
+              valid: 'Artifact guard-checked',
               warning: 'Warning',
               failed: 'Failed',
               missing: 'Missing',
@@ -135,6 +146,7 @@ async function createTestI18n() {
               dataVintage: 'Data vintage',
               exportTimestamp: 'Export timestamp',
               sourceVintage: 'Source vintage',
+              lastValidationCheck: 'Last validation check',
               solver: 'Solver',
               caveats: 'Caveats',
               consumers: 'Consumer surfaces',
@@ -202,9 +214,10 @@ describe('Data Registry page', () => {
 
     assert.match(markup, /Data Registry/)
     assert.match(markup, /Status legend/)
-    assert.match(markup, /Artifact valid/)
+    assert.match(markup, /Artifact guard-checked/)
     assert.match(markup, /not economic or model validation/)
-    assert.match(markup, /Intentionally absent in Sprint 3/)
+    assert.match(markup, /Intentionally absent in this foundation bundle/)
+    assert.match(markup, /Last validation check/)
     assert.match(markup, /Data sources/)
     assert.match(markup, /Model inputs/)
     assert.match(markup, /Bridge outputs/)

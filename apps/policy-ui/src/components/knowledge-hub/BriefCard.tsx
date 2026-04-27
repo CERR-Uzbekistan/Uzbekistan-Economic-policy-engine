@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { ResearchBrief } from '../../contracts/data-contract.js'
+import { TrustStateLabel } from '../system/TrustStateLabel.js'
 
 type BriefCardProps = {
   brief: ResearchBrief
@@ -33,6 +34,7 @@ export function BriefCard({ brief }: BriefCardProps) {
       <h4>{brief.title}</h4>
       <p>{brief.summary}</p>
       <div className="meta">
+        <TrustStateLabel id="staticCuratedContent" tone="neutral" />
         {byline.ai_drafted ? (
           <span className="ui-chip ui-chip--warn">{t('knowledgeHub.briefs.aiDraftedChip')}</span>
         ) : null}
@@ -44,6 +46,15 @@ export function BriefCard({ brief }: BriefCardProps) {
             {ref}
           </span>
         ))}
+      </div>
+      <div className="brief__source-meta">
+        <span>{t('knowledgeHub.metadata.sourceStatic')}</span>
+        {byline.reviewed_by ? (
+          <span>{t('knowledgeHub.metadata.reviewedBy', { reviewer: byline.reviewed_by })}</span>
+        ) : (
+          <span>{t('knowledgeHub.metadata.author', { author: byline.author ?? 'CERR' })}</span>
+        )}
+        <span>{t('knowledgeHub.metadata.sourceDate', { date: byline.date_label })}</span>
       </div>
     </article>
   )

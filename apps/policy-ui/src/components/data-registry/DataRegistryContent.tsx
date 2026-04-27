@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { PageContainer } from '../layout/PageContainer.js'
 import { PageHeader } from '../layout/PageHeader.js'
+import { TrustStateLabel } from '../system/TrustStateLabel.js'
 import type {
   DataRegistry,
   RegistryArtifact,
@@ -66,6 +67,10 @@ export function DataRegistryContent(props: {
                 <dt>{t('dataRegistry.artifact.exportTimestamp')}</dt>
                 <dd>{artifact.exportTimestamp}</dd>
               </div>
+              <div>
+                <dt>{t('dataRegistry.artifact.lastValidationCheck')}</dt>
+                <dd>{registry.generatedAt}</dd>
+              </div>
             </dl>
             <p>{artifact.statusDetail}</p>
           </article>
@@ -76,7 +81,7 @@ export function DataRegistryContent(props: {
         <h2 id="data-registry-legend-title">{t('dataRegistry.legend.title')}</h2>
         <dl>
           <div>
-            <dt>{t('dataRegistry.legend.valid.label')}</dt>
+            <dt><TrustStateLabel id="artifactGuardChecked" tone="success" /></dt>
             <dd>{t('dataRegistry.legend.valid.description')}</dd>
           </div>
           <div>
@@ -84,8 +89,12 @@ export function DataRegistryContent(props: {
             <dd>{t('dataRegistry.legend.warning.description')}</dd>
           </div>
           <div>
-            <dt>{t('dataRegistry.legend.planned.label')}</dt>
+            <dt><TrustStateLabel id="planned" tone="warn" /></dt>
             <dd>{t('dataRegistry.legend.planned.description')}</dd>
+          </div>
+          <div>
+            <dt><TrustStateLabel id="lastValidationCheck" /></dt>
+            <dd>{t('dataRegistry.legend.lastValidationCheck.description')}</dd>
           </div>
         </dl>
       </section>
@@ -110,7 +119,7 @@ export function DataRegistryContent(props: {
       >
         <div className="data-registry-artifacts">
           {registry.artifacts.map((artifact) => (
-            <ArtifactCard key={artifact.id} artifact={artifact} />
+            <ArtifactCard key={artifact.id} artifact={artifact} generatedAt={registry.generatedAt} />
           ))}
         </div>
       </RegistrySection>
@@ -201,7 +210,7 @@ function RegistryTable({ rows }: { rows: RegistryRow[] }) {
   )
 }
 
-function ArtifactCard({ artifact }: { artifact: RegistryArtifact }) {
+function ArtifactCard({ artifact, generatedAt }: { artifact: RegistryArtifact; generatedAt: string }) {
   const { t } = useTranslation()
 
   return (
@@ -228,6 +237,10 @@ function ArtifactCard({ artifact }: { artifact: RegistryArtifact }) {
         <div>
           <dt>{t('dataRegistry.artifact.sourceVintage')}</dt>
           <dd>{artifact.sourceVintage}</dd>
+        </div>
+        <div>
+          <dt>{t('dataRegistry.artifact.lastValidationCheck')}</dt>
+          <dd>{generatedAt}</dd>
         </div>
         <div>
           <dt>{t('dataRegistry.artifact.solver')}</dt>

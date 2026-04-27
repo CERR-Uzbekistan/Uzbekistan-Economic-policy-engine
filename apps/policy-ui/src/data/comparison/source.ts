@@ -17,11 +17,13 @@ import {
 } from '../source-state.js'
 
 export type ComparisonDataMode = 'mock' | 'live'
+export type ComparisonQpmSourceLabel = 'mockFixture' | 'liveBridgeJson' | 'fallbackMock'
 
 export type ComparisonSourceState = IntegrationSourceCore<ComparisonDataMode, QpmValidationIssue> & {
   workspace: ComparisonWorkspace | null
   qpmPayload: QpmBridgePayload | null
   ioSectorEvidence: ComparisonSectorEvidence | null
+  qpmSourceLabel: ComparisonQpmSourceLabel
 }
 
 function resolveComparisonDataMode(): ComparisonDataMode {
@@ -41,12 +43,16 @@ function buildReadyState(
   qpmPayload: QpmBridgePayload | null = null,
   warnings: QpmValidationIssue[] = [],
   ioSectorEvidence: ComparisonSectorEvidence | null = null,
+  qpmSourceLabel: ComparisonSourceState['qpmSourceLabel'] = mode === 'live'
+    ? 'liveBridgeJson'
+    : 'mockFixture',
 ): ComparisonSourceState {
   return {
     ...createReadySourceCore<ComparisonDataMode, QpmValidationIssue>(mode, warnings),
     workspace,
     qpmPayload,
     ioSectorEvidence,
+    qpmSourceLabel,
   }
 }
 
@@ -66,6 +72,7 @@ export function getInitialComparisonSourceState(): ComparisonSourceState {
     workspace: null,
     qpmPayload: null,
     ioSectorEvidence: null,
+    qpmSourceLabel: mode === 'live' ? 'liveBridgeJson' : 'mockFixture',
   }
 }
 
@@ -83,7 +90,7 @@ export async function loadComparisonSourceState(): Promise<ComparisonSourceState
     const ioSectorEvidence = await loadOptionalIoSectorEvidence()
     if (error instanceof QpmValidationError) {
       console.warn('[Comparison] QPM bridge failed guard validation; using mock fallback.', error.issues)
-      return buildReadyState('mock', comparisonWorkspaceMock, null, error.issues, ioSectorEvidence)
+      return buildReadyState('mock', comparisonWorkspaceMock, null, error.issues, ioSectorEvidence, 'fallbackMock')
     }
 
     if (error instanceof QpmTransportError) {
@@ -92,10 +99,10 @@ export async function loadComparisonSourceState(): Promise<ComparisonSourceState
         status: error.status,
         message: error.message,
       })
-      return buildReadyState('mock', comparisonWorkspaceMock, null, [], ioSectorEvidence)
+      return buildReadyState('mock', comparisonWorkspaceMock, null, [], ioSectorEvidence, 'fallbackMock')
     }
 
     console.warn('[Comparison] QPM bridge failed unexpectedly; using mock fallback.', error)
-    return buildReadyState('mock', comparisonWorkspaceMock, null, [], ioSectorEvidence)
+    return buildReadyState('mock', comparisonWorkspaceMock, null, [], ioSectorEvidence, 'fallbackMock')
   }
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DataRegistryContent } from '../components/data-registry/DataRegistryContent.js'
+import { TrustStateLabel } from '../components/system/TrustStateLabel.js'
 import {
   getInitialDataRegistry,
   loadDataRegistry,
@@ -28,6 +29,7 @@ export function DataRegistryPage() {
   const pageHeaderMeta = (
     <>
       <span className="page-header__eyebrow">{t('dataRegistry.header.eyebrow')}</span>
+      <TrustStateLabel id="artifactGuardChecked" tone="success" />
       <span>
         {t('dataRegistry.header.meta.expectedArtifacts')} {t('overview.common.middleDot')}{' '}
         <strong>{effectiveRegistry.artifacts.length}</strong>
@@ -37,7 +39,7 @@ export function DataRegistryPage() {
         <strong>{effectiveRegistry.summaryCounts.planned}</strong>
       </span>
       <span>
-        {t('dataRegistry.header.meta.generated')} {t('overview.common.middleDot')}{' '}
+        {t('trustState.labels.registryGenerated')} {t('overview.common.middleDot')}{' '}
         <strong>{effectiveRegistry.generatedAt}</strong>
       </span>
     </>

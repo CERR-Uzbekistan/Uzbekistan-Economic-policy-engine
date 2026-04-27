@@ -11,6 +11,7 @@ import { TradeoffSummaryPanel } from '../components/comparison/TradeoffSummaryPa
 import { PageContainer } from '../components/layout/PageContainer'
 import { PageHeader } from '../components/layout/PageHeader'
 import { AnalyticalContextStrip } from '../components/system/AnalyticalContextStrip'
+import { TrustStateLabel } from '../components/system/TrustStateLabel'
 import type { ComparisonContent } from '../contracts/data-contract'
 import { composeComparisonContent } from '../data/adapters/comparison'
 import {
@@ -246,6 +247,11 @@ export function ComparisonPage() {
   })
   const comparisonDataVintage =
     sourceState.qpmPayload?.attribution.data_version ?? sourceState.workspace?.generated_at ?? workspace.generated_at
+  const comparisonSourceTone = sourceState.qpmSourceLabel === 'liveBridgeJson'
+    ? 'success'
+    : sourceState.qpmSourceLabel === 'fallbackMock'
+      ? 'warn'
+      : 'neutral'
 
   return (
     <PageContainer className="comparison-page">
@@ -262,6 +268,10 @@ export function ComparisonPage() {
         runName={comparisonContextRunName}
         dataVintage={`${t('scenarioLab.context.dataVintage')} ${comparisonDataVintage}`}
         saveState={t('comparison.context.saveState')}
+        stateLabels={[
+          <TrustStateLabel key={sourceState.qpmSourceLabel} id={sourceState.qpmSourceLabel} tone={comparisonSourceTone} />,
+          <TrustStateLabel key="localBrowserDraft" id="localBrowserDraft" tone="warn" />,
+        ]}
       />
 
       <ComparisonSelector

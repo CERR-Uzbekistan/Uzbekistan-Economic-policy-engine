@@ -45,7 +45,15 @@
   display: flex;
   justify-content: space-between;
   align-items: start;
+  gap: var(--space-sm);
   margin-bottom: var(--space-xs);
+}
+
+.model-card__labels {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
 }
 
 .model-card__title {

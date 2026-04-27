@@ -13,11 +13,14 @@ describe('AnalyticalContextStrip', () => {
         runName="Baseline"
         dataVintage="data vintage mock-v1"
         saveState="unsaved"
+        stateLabels={['Mock fixture', 'Local browser draft']}
       />,
     )
 
     assert.match(markup, /Context:/)
     assert.match(markup, /Macro scenario · QPM · Baseline · data vintage mock-v1 · unsaved/)
+    assert.match(markup, /Mock fixture/)
+    assert.match(markup, /Local browser draft/)
   })
 
   it('renders current analytical context for I-O sector linkage', () => {

@@ -4,6 +4,7 @@ import { ModelCatalogCard } from '../components/model-explorer/ModelCatalogCard'
 import { ModelDetail, type ModelExplorerTab } from '../components/model-explorer/ModelDetail'
 import { PageContainer } from '../components/layout/PageContainer'
 import { PageHeader } from '../components/layout/PageHeader'
+import { TrustStateLabel } from '../components/system/TrustStateLabel'
 import type { ModelCatalogEntry, ModelExplorerWorkspace } from '../contracts/data-contract'
 import {
   getInitialModelExplorerSourceState,
@@ -63,10 +64,12 @@ export function ModelExplorerPage() {
   const pageHeaderMeta = (
     <>
       <span className="page-header__eyebrow">{t('modelExplorer.header.eyebrow')}</span>
+      <TrustStateLabel id="liveBridgeJson" tone="success" />
       <span>
         {t('modelExplorer.header.meta.bridgeBackedLabel')} {t('overview.common.middleDot')}{' '}
         <strong>{t('modelExplorer.header.meta.bridgeBackedModels')}</strong>
       </span>
+      <TrustStateLabel id="planned" tone="warn" />
       <span>
         {t('modelExplorer.header.meta.plannedLimitedLabel')} {t('overview.common.middleDot')}{' '}
         <strong>{t('modelExplorer.header.meta.plannedLimitedModels')}</strong>

@@ -1,4 +1,5 @@
 import type { ModelCatalogEntry } from '../../contracts/data-contract'
+import { TrustStateLabel } from '../system/TrustStateLabel.js'
 
 type ModelCatalogCardProps = {
   entry: ModelCatalogEntry
@@ -7,6 +8,8 @@ type ModelCatalogCardProps = {
 }
 
 export function ModelCatalogCard({ entry, isActive, onSelect }: ModelCatalogCardProps) {
+  const isBridgeBacked = entry.id === 'qpm-uzbekistan' || entry.id === 'dfm-nowcast' || entry.id === 'io-model'
+
   return (
     <button
       type="button"
@@ -16,8 +19,14 @@ export function ModelCatalogCard({ entry, isActive, onSelect }: ModelCatalogCard
     >
       <div className="model-card__head">
         <h3 className="model-card__title">{entry.title}</h3>
-        <span className={`status-badge status-badge--${entry.status.severity}`}>
-          {entry.status.label}
+        <span className="model-card__labels">
+          <TrustStateLabel
+            id={isBridgeBacked ? 'liveBridgeJson' : 'planned'}
+            tone={isBridgeBacked ? 'success' : 'warn'}
+          />
+          <span className={`status-badge status-badge--${entry.status.severity}`}>
+            {entry.status.label}
+          </span>
         </span>
       </div>
       <p className="model-card__meta">{entry.methodology_signature}</p>

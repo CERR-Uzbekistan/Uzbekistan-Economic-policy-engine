@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PageContainer } from '../components/layout/PageContainer'
 import { PageHeader } from '../components/layout/PageHeader'
-import { ReformTimeline } from '../components/knowledge-hub/ReformTimeline'
-import { ResearchBriefList } from '../components/knowledge-hub/ResearchBriefList'
+import { KnowledgeHubContentView } from '../components/knowledge-hub/KnowledgeHubContentView'
+import { TrustStateLabel } from '../components/system/TrustStateLabel'
 import {
   getInitialKnowledgeHubSourceState,
   loadKnowledgeHubSourceState,
@@ -40,11 +40,12 @@ export function KnowledgeHubPage() {
     )
   }
 
-  const { reforms, briefs, meta } = sourceState.content
+  const { meta } = sourceState.content
 
   const pageHeaderMeta = (
     <>
       <span className="page-header__eyebrow">{t('knowledgeHub.header.eyebrow')}</span>
+      <TrustStateLabel id="staticCuratedContent" tone="warn" />
       <span>
         {t('knowledgeHub.header.meta.reformsTracked')} {t('overview.common.middleDot')}{' '}
         <strong>{meta.reforms_tracked}</strong>
@@ -67,11 +68,7 @@ export function KnowledgeHubPage() {
         description={t('pages.knowledgeHub.description')}
         meta={pageHeaderMeta}
       />
-      <p className="knowledge-hub-static-banner">{t('knowledgeHub.staticPilotBanner')}</p>
-      <div className="hub-grid">
-        <ReformTimeline reforms={reforms} />
-        <ResearchBriefList briefs={briefs} />
-      </div>
+      <KnowledgeHubContentView content={sourceState.content} />
     </PageContainer>
   )
 }

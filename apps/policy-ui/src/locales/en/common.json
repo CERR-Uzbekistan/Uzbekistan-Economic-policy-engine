@@ -1,4 +1,19 @@
 {
+  "trustState": {
+    "labels": {
+      "mockFixture": "Mock fixture",
+      "liveBridgeJson": "Live bridge JSON",
+      "fallbackMock": "Fallback mock",
+      "staticCuratedContent": "Static curated content",
+      "localBrowserDraft": "Local browser draft",
+      "planned": "Planned",
+      "artifactGuardChecked": "Artifact guard-checked",
+      "sourceVintage": "Source vintage",
+      "artifactExport": "Artifact export",
+      "registryGenerated": "Registry generated",
+      "lastValidationCheck": "Last validation check"
+    }
+  },
   "shell": {
     "skipToMainContent": "Skip to main content",
     "workspaceNavigationAria": "Workspace navigation",
@@ -659,6 +674,13 @@
   },
   "knowledgeHub": {
     "staticPilotBanner": "Curated static pilot content — not a live legal or research feed.",
+    "metadata": {
+      "sourceStatic": "Source: static pilot content",
+      "reviewCurated": "Review state: curated pilot copy",
+      "reviewedBy": "Reviewed by {{reviewer}}",
+      "author": "Author: {{author}}",
+      "sourceDate": "Source date: {{date}}"
+    },
     "header": {
       "eyebrow": "Reforms · Research · Literature",
       "meta": {
@@ -699,7 +721,7 @@
     "legend": {
       "title": "Status legend",
       "valid": {
-        "label": "Artifact valid",
+        "label": "Artifact guard-checked",
         "description": "Public artifact loaded and passed frontend guard checks. This is not economic or model validation."
       },
       "warning": {
@@ -708,11 +730,14 @@
       },
       "planned": {
         "label": "Planned",
-        "description": "Intentionally absent in Sprint 3."
+        "description": "Intentionally absent in this foundation bundle."
+      },
+      "lastValidationCheck": {
+        "description": "Timestamp when the frontend registry last loaded artifacts and ran shape guards."
       }
     },
     "status": {
-      "valid": "Valid",
+      "valid": "Artifact guard-checked",
       "warning": "Warning",
       "failed": "Failed",
       "missing": "Missing",
@@ -757,6 +782,7 @@
       "dataVintage": "Source vintage",
       "exportTimestamp": "Artifact export",
       "sourceVintage": "Source vintage",
+      "lastValidationCheck": "Last validation check",
       "solver": "Solver",
       "caveats": "Caveats",
       "consumers": "Consumer surfaces"

@@ -336,6 +336,44 @@ h2 {
   color: var(--color-brand);
 }
 
+.trust-state-label {
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 99px;
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  padding: 0.2rem 0.44rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.trust-state-label--neutral {
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+}
+
+.trust-state-label--info {
+  background: var(--color-brand-soft);
+  border-color: var(--color-border-strong);
+  color: var(--color-brand);
+}
+
+.trust-state-label--success {
+  background: var(--color-success-soft);
+  border-color: #bed6c7;
+  color: var(--color-success);
+}
+
+.trust-state-label--warn {
+  background: var(--color-warn-soft);
+  border-color: #e7d5a7;
+  color: var(--color-warn);
+}
+
 .segmented-control {
   background: var(--color-surface-muted);
   border: 1px solid var(--color-border);

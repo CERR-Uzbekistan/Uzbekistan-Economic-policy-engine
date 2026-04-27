@@ -1,4 +1,19 @@
 {
+  "trustState": {
+    "labels": {
+      "mockFixture": "Mock fixture",
+      "liveBridgeJson": "Live bridge JSON",
+      "fallbackMock": "Fallback mock",
+      "staticCuratedContent": "Statik kuratsiya kontenti",
+      "localBrowserDraft": "Mahalliy brauzer qoralamasi",
+      "planned": "Rejada",
+      "artifactGuardChecked": "Artefakt guard-checked",
+      "sourceVintage": "Manba vintaji",
+      "artifactExport": "Artefakt eksporti",
+      "registryGenerated": "Reyestr tuzildi",
+      "lastValidationCheck": "Oxirgi validatsiya tekshiruvi"
+    }
+  },
   "shell": {
     "skipToMainContent": "Asosiy kontentga o'tish",
     "workspaceNavigationAria": "Ish maydoni navigatsiyasi",
@@ -659,6 +674,13 @@
   },
   "knowledgeHub": {
     "staticPilotBanner": "Kuratsiya qilingan statik pilot kontent — jonli huquqiy yoki tadqiqot lentasi emas.",
+    "metadata": {
+      "sourceStatic": "Manba: statik pilot kontent",
+      "reviewCurated": "Ko'rib chiqish holati: kuratsiya qilingan pilot matn",
+      "reviewedBy": "{{reviewer}} ko'rib chiqqan",
+      "author": "Muallif: {{author}}",
+      "sourceDate": "Manba sanasi: {{date}}"
+    },
     "header": {
       "eyebrow": "Islohotlar · Tadqiqotlar · Adabiyot",
       "meta": {
@@ -699,7 +721,7 @@
     "legend": {
       "title": "Status izohi",
       "valid": {
-        "label": "Artefakt valid",
+        "label": "Artefakt guard-checked",
         "description": "Public artefakt yuklandi va frontend guard checksdan o'tdi. Bu iqtisodiy yoki model validatsiyasi emas."
       },
       "warning": {
@@ -708,11 +730,14 @@
       },
       "planned": {
         "label": "Rejada",
-        "description": "Sprint 3da ataylab yo'q."
+        "description": "Ushbu foundation bundle'da ataylab yo'q."
+      },
+      "lastValidationCheck": {
+        "description": "Frontend reyestr artefaktlarni oxirgi marta yuklab, shape guardlarni ishga tushirgan vaqt."
       }
     },
     "status": {
-      "valid": "Valid",
+      "valid": "Artefakt guard-checked",
       "warning": "Ogohlantirish",
       "failed": "Xato",
       "missing": "Yo'q",
@@ -757,6 +782,7 @@
       "dataVintage": "Manba vintaji",
       "exportTimestamp": "Artefakt eksporti",
       "sourceVintage": "Manba vintaji",
+      "lastValidationCheck": "Oxirgi validatsiya tekshiruvi",
       "solver": "Solver",
       "caveats": "Izohlar",
       "consumers": "Iste'molchi sahifalar"

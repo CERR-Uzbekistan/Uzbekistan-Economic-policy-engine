@@ -32,6 +32,13 @@
   overflow-wrap: anywhere;
 }
 
+.analytical-context__labels {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
 .claim-label {
   align-items: center;
   background: transparent;

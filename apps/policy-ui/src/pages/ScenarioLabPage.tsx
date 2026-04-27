@@ -14,6 +14,8 @@ import { ScenarioLabTabShell } from '../components/scenario-lab/ScenarioLabTabSh
 import { PageContainer } from '../components/layout/PageContainer'
 import { PageHeader } from '../components/layout/PageHeader'
 import { AnalyticalContextStrip } from '../components/system/AnalyticalContextStrip'
+import { TrustStateLabel } from '../components/system/TrustStateLabel'
+import type { TrustStateLabelId } from '../components/system/trust-state-labels'
 import type {
   Assumption,
   ModelAttribution,
@@ -637,6 +639,7 @@ export function ScenarioLabPage() {
           saveState: ioSaveStatus
             ? t('scenarioLab.context.saveState.saved')
             : t('scenarioLab.context.saveState.unsaved'),
+          stateLabels: ['liveBridgeJson', 'sourceVintage'] satisfies TrustStateLabelId[],
         }
       : activeModelTab === 'macro_qpm'
         ? {
@@ -648,13 +651,27 @@ export function ScenarioLabPage() {
               currentScenarioId && !hasPendingEdits
                 ? t('scenarioLab.context.saveState.saved')
                 : t('scenarioLab.context.saveState.unsaved'),
+            stateLabels: [
+              sourceState.mode === 'live' ? 'liveBridgeJson' : 'mockFixture',
+              currentScenarioId && !hasPendingEdits ? 'localBrowserDraft' : 'artifactExport',
+            ] satisfies TrustStateLabelId[],
           }
+        : activeModelTab === 'saved_runs'
+          ? {
+              lane: t('scenarioLab.context.lane.macroScenario'),
+              model: t('scenarioLab.context.model.savedRuns'),
+              runName: t(contextRunNameKeyByTab[activeModelTab]),
+              dataVintage,
+              saveState: t('scenarioLab.context.saveState.unsaved'),
+              stateLabels: ['localBrowserDraft'] satisfies TrustStateLabelId[],
+            }
         : {
             lane: t('scenarioLab.context.lane.macroScenario'),
             model: t(`scenarioLab.context.model.${contextModelKeyByTab[activeModelTab]}`),
             runName: t(contextRunNameKeyByTab[activeModelTab]),
             dataVintage,
             saveState: t('scenarioLab.context.saveState.unsaved'),
+            stateLabels: ['planned'] satisfies TrustStateLabelId[],
           }
   const runLifecycleStatusKey =
     sourceState.status === 'loading'
@@ -699,6 +716,9 @@ export function ScenarioLabPage() {
         runName={activeContext.runName}
         dataVintage={`${t('scenarioLab.context.dataVintage')} ${activeContext.dataVintage}`}
         saveState={activeContext.saveState}
+        stateLabels={activeContext.stateLabels.map((labelId) => (
+          <TrustStateLabel key={labelId} id={labelId} tone={labelId === 'planned' || labelId === 'localBrowserDraft' ? 'warn' : 'neutral'} />
+        ))}
       />
 
       {activeModelTab === 'macro_qpm' ? (

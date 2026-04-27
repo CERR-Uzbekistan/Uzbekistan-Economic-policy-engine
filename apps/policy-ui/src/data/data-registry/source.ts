@@ -176,7 +176,7 @@ function mapBridgeError(error: unknown, label: string): LoadedArtifact {
   ) {
     return {
       status: 'failed',
-      detail: `${label} artifact loaded but failed bridge guard validation.`,
+      detail: `${label} artifact loaded but failed frontend guard checks.`,
       issues: error.issues.map((issue) => ({
         path: issue.path,
         message: issue.message,
@@ -228,7 +228,7 @@ function buildQpmArtifact(result: LoadedArtifact): RegistryArtifact {
   return {
     ...base,
     status: highestSeverity === 'critical' || highestSeverity === 'warning' ? 'warning' : 'valid',
-    statusDetail: 'Artifact loaded and passed QPM bridge guard validation.',
+    statusDetail: 'Artifact loaded and passed QPM frontend guard checks; this is not economic validation.',
     dataVintage: payload.attribution.data_version,
     exportTimestamp: payload.metadata.exported_at,
     sourceArtifact: payload.attribution.module,
@@ -263,7 +263,7 @@ function buildDfmArtifact(result: LoadedArtifact, now: Date): RegistryArtifact {
   return {
     ...base,
     status: issues.length > 0 ? 'warning' : 'valid',
-    statusDetail: 'Artifact loaded and passed DFM bridge guard validation.',
+    statusDetail: 'Artifact loaded and passed DFM frontend guard checks; this is not economic validation.',
     dataVintage: payload.attribution.data_version,
     exportTimestamp: payload.metadata.exported_at,
     sourceArtifact: payload.metadata.source_artifact,
@@ -290,7 +290,7 @@ function buildIoArtifact(result: LoadedArtifact): RegistryArtifact {
   return {
     ...base,
     status: highestSeverity === 'critical' || highestSeverity === 'warning' ? 'warning' : 'valid',
-    statusDetail: 'Artifact loaded and passed I-O bridge guard validation.',
+    statusDetail: 'Artifact loaded and passed I-O frontend guard checks; this is not economic validation.',
     dataVintage: payload.attribution.data_version,
     exportTimestamp: payload.metadata.exported_at,
     sourceArtifact: payload.metadata.source_artifact,
@@ -355,7 +355,7 @@ function buildPlannedRows(): RegistryRow[] {
       domain: 'PE trade flows',
       status: 'planned',
       dataVintage: 'Planned',
-      exportTimestamp: 'No Sprint 3 artifact by design',
+      exportTimestamp: 'No Sprint 4 foundation artifact by design',
       source: 'No public PE input contract yet',
       notes: 'Planned/disabled model family; absence is not a missing implemented artifact.',
       modelExplorerHref: '/model-explorer',
@@ -366,7 +366,7 @@ function buildPlannedRows(): RegistryRow[] {
       domain: 'CGE SAM / reform inputs',
       status: 'planned',
       dataVintage: 'Planned',
-      exportTimestamp: 'No Sprint 3 artifact by design',
+      exportTimestamp: 'No Sprint 4 foundation artifact by design',
       source: 'No calibrated SAM bridge contract yet',
       notes: 'Planned/disabled model family; no CGE computation or data contract is active.',
       modelExplorerHref: '/model-explorer',
@@ -377,9 +377,9 @@ function buildPlannedRows(): RegistryRow[] {
       domain: 'FPP fiscal series',
       status: 'planned',
       dataVintage: 'Planned',
-      exportTimestamp: 'No Sprint 3 artifact by design',
+      exportTimestamp: 'No Sprint 4 foundation artifact by design',
       source: 'No public fiscal path input contract yet',
-      notes: 'Planned/disabled model family; fiscal bridge is not implemented in Sprint 3.',
+      notes: 'Planned/disabled model family; fiscal bridge is not implemented in this foundation bundle.',
       modelExplorerHref: '/model-explorer',
     },
   ]
@@ -423,10 +423,10 @@ function toModelInputRow(artifact: RegistryArtifact): RegistryRow {
     source: artifact.artifactPath,
     notes:
       artifact.id === 'dfm'
-        ? 'Freshness reflects both public JSON export and upstream EM refit timestamp where carried.'
+        ? 'Source vintage, artifact export, and frontend validation check are separate; no live scheduler status is claimed.'
         : artifact.id === 'io'
-          ? 'Consumed as sector transmission analytics; employment effects depend on enriched validated artifact fields.'
-          : 'Public bridge exists and current Scenario Lab macro workflow keeps existing execution paths.',
+          ? 'Consumed as sector transmission analytics; guard checks validate artifact shape, not model economics.'
+          : 'Public bridge exists; guard checks validate artifact shape, not macro-model calibration.',
     modelExplorerHref: artifact.modelExplorerHref,
   }
 }
@@ -469,7 +469,7 @@ function toUpdateStatusRow(artifact: RegistryArtifact): RegistryRow {
     source: artifact.sourceArtifact,
     notes:
       artifact.status === 'valid' || artifact.status === 'warning'
-        ? 'Manual/workflow status unavailable in frontend; no live scheduler status is claimed.'
+        ? 'Last validation check is this frontend registry generation; no live scheduler status is claimed.'
         : artifact.statusDetail,
     modelExplorerHref: artifact.modelExplorerHref,
   }
