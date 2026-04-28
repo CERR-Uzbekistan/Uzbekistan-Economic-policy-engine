@@ -1,10 +1,8 @@
 {
   "source_snapshot_version": "overview-source.v1",
-  "status": "owner_verified_for_public_artifact",
-  "snapshot_accepted_by": "project owner",
-  "snapshot_accepted_at": "2026-04-27T12:00:00Z",
+  "status": "automation_pending_owner_review",
   "snapshot_note": "Owner-accepted Overview V1 source snapshot. REER remains warning-status with CERR owner-supplied value and source URL pending; replace with automated HFI-backed source when accepted.",
-  "value_hash": "8ea81fe9fa5bdcb3390266dd23a267cbca6224ce5bc4572814ae0730c43deaa3",
+  "value_hash": "48823ab3310223048b84d2b2b8f0e589ddc29f1b54afad0cc51e868fdd40e72f",
   "metrics": [
     {
       "metric_id": "real_gdp_growth_annual_yoy",
@@ -44,7 +42,7 @@
     },
     {
       "metric_id": "gdp_nowcast_current_quarter",
-      "value": 6.0,
+      "value": 6,
       "previous_value": null,
       "source_label": "Owner-approved static Overview fallback",
       "source_period": "2026 Q2 nowcast",
@@ -178,8 +176,8 @@
     },
     {
       "metric_id": "policy_rate",
-      "value": 14.0,
-      "previous_value": 14.0,
+      "value": 14,
+      "previous_value": 14,
       "source_label": "Central Bank of Uzbekistan policy rate",
       "source_period": "Effective 18 March 2026",
       "source_url": "https://cbu.uz/en/monetary-policy/publications/press-releases/3612625/",
@@ -195,59 +193,75 @@
     },
     {
       "metric_id": "usd_uzs_level",
-      "value": 12020.48,
+      "value": 12072.96,
       "previous_value": 12179.87,
       "source_label": "Central Bank of Uzbekistan exchange rate",
-      "source_period": "2026-04-27",
-      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-04-27/",
-      "observed_at": "2026-04-27T00:00:00Z",
+      "source_period": "2026-04-28",
+      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-04-28/",
+      "observed_at": "2026-04-28T00:00:00Z",
       "claim_type": "observed",
       "unit": "UZS per USD",
       "frequency": "daily",
       "validation_status": "valid",
       "caveats": [
-        "Official/reference rate, not transaction-weighted market average."
+        "Official/reference rate, not transaction-weighted market average.",
+        "Latest observation: requested 2026-04-28; actual CBU date/rate 2026-04-28, 12072.96 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-03-28; actual CBU date/rate 2026-03-27 returned for requested 2026-03-28, 12179.87 UZS per USD."
       ],
-      "warnings": []
+      "warnings": [
+        "Prior-month requested date 2026-03-28 differed from actual CBU date 2026-03-27; nearest available CBU observation was used."
+      ]
     },
     {
       "metric_id": "usd_uzs_mom_change",
-      "value": -1.31,
+      "value": -0.88,
       "previous_value": null,
       "source_label": "CBU exchange rate, calculated",
-      "source_period": "2026-04-27 vs 2026-03-27",
-      "source_reference": "Calculated from CBU official USD rates: 12020.48 on 2026-04-27 and 12179.87 on 2026-03-27",
-      "extracted_at": "2026-04-27T00:00:00Z",
+      "source_period": "2026-04-28 vs 2026-03-27",
+      "source_reference": "Calculated from CBU official USD rates: 12072.96 on 2026-04-28 and 12179.87 on 2026-03-27. Requested dates: latest 2026-04-28, prior-month 2026-03-28.",
+      "extracted_at": "2026-04-28T17:40:34.291Z",
       "claim_type": "calculated_identity",
       "unit": "percent MoM",
       "frequency": "monthly from daily observations",
       "validation_status": "valid",
       "caveats": [
-        "Positive values indicate UZS depreciation against USD."
+        "Latest observation: requested 2026-04-28; actual CBU date/rate 2026-04-28, 12072.96 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-03-28; actual CBU date/rate 2026-03-27 returned for requested 2026-03-28, 12179.87 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-04-28; actual CBU date/rate 2025-04-28, 12957.14 UZS per USD.",
+        "Formula: ((latest - comparison) / comparison) * 100.",
+        "Rounded to 2 decimal places.",
+        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
       ],
-      "warnings": []
+      "warnings": [
+        "Prior-month requested date 2026-03-28 differed from actual CBU date 2026-03-27; nearest available CBU observation was used."
+      ]
     },
     {
       "metric_id": "usd_uzs_yoy_change",
-      "value": -7.01,
+      "value": -6.82,
       "previous_value": null,
       "source_label": "CBU exchange rate, calculated",
-      "source_period": "2026-04-27 vs 2025-04-25",
-      "source_reference": "Calculated from CBU official USD rates: 12020.48 on 2026-04-27 and 12927.17 on 2025-04-25",
-      "extracted_at": "2026-04-27T00:00:00Z",
+      "source_period": "2026-04-28 vs 2025-04-28",
+      "source_reference": "Calculated from CBU official USD rates: 12072.96 on 2026-04-28 and 12957.14 on 2025-04-28. Requested dates: latest 2026-04-28, prior-year 2025-04-28.",
+      "extracted_at": "2026-04-28T17:40:34.291Z",
       "claim_type": "calculated_identity",
       "unit": "percent YoY",
       "frequency": "monthly from daily observations",
       "validation_status": "valid",
       "caveats": [
-        "Positive values indicate UZS depreciation against USD."
+        "Latest observation: requested 2026-04-28; actual CBU date/rate 2026-04-28, 12072.96 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-03-28; actual CBU date/rate 2026-03-27 returned for requested 2026-03-28, 12179.87 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-04-28; actual CBU date/rate 2025-04-28, 12957.14 UZS per USD.",
+        "Formula: ((latest - comparison) / comparison) * 100.",
+        "Rounded to 2 decimal places.",
+        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
       ],
       "warnings": []
     },
     {
       "metric_id": "reer_level",
       "value": 110.2,
-      "previous_value": 110.0,
+      "previous_value": 110,
       "source_label": "CERR, REER",
       "source_period": "March 2026",
       "source_reference": "Owner-supplied CERR REER value; source URL to be provided and later automated through the HFI source path.",
