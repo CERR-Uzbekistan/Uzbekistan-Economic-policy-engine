@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { ChartSpec } from '../../contracts/data-contract.js'
 import { ChartRenderer } from '../system/ChartRenderer.js'
 
@@ -39,12 +40,31 @@ function getHeadline(chart: ChartSpec) {
   }
 }
 
+function getVintageLine(chart: ChartSpec): string | null {
+  const attribution = chart.model_attribution[0]
+  if (!attribution) {
+    return null
+  }
+  const parts = [attribution.model_name, attribution.data_version].filter(Boolean)
+  return parts.length > 0 ? parts.join(' · ') : null
+}
+
 export function NowcastForecastBlock({ chart, headerSlot, statusSlot }: NowcastForecastBlockProps) {
+  const { t } = useTranslation()
   const headline = getHeadline(chart)
+  const vintageLine = getVintageLine(chart)
 
   return (
-    <section className="overview-panel overview-panel--primary" aria-label="Nowcast and forecast">
-      {headerSlot ? <div className="overview-nowcast-header-slot">{headerSlot}</div> : null}
+    <section className="overview-panel overview-panel--primary" aria-labelledby="overview-nowcast-title">
+      <div className="overview-nowcast-head">
+        <div>
+          <p className="overview-section-kicker">{t('overview.nowcast.kicker')}</p>
+          <h2 id="overview-nowcast-title">{chart.title}</h2>
+          <p>{chart.subtitle}</p>
+          {vintageLine ? <span>{vintageLine}</span> : null}
+        </div>
+        {headerSlot ? <div className="overview-nowcast-header-slot">{headerSlot}</div> : null}
+      </div>
 
       {headline ? (
         <div className="overview-nowcast-summary overview-nowcast-summary--single">
@@ -61,10 +81,21 @@ export function NowcastForecastBlock({ chart, headerSlot, statusSlot }: NowcastF
         <div className="overview-nowcast-status">{statusSlot}</div>
       ) : null}
 
+      <div className="overview-nowcast-legend" aria-label={t('overview.nowcast.legendAria')}>
+        <span>{t('overview.nowcast.legend.actual')}</span>
+        <span>{t('overview.nowcast.legend.nowcast')}</span>
+        <span>{t('overview.nowcast.legend.forecast')}</span>
+        <span>{t('overview.nowcast.legend.band')}</span>
+      </div>
+
       <ChartRenderer
         spec={chart}
         ariaLabel={`${chart.title}. ${chart.takeaway}`}
       />
+
+      <p className="overview-panel-takeaway overview-nowcast-note">
+        {t('overview.nowcast.modelNotOfficial')}
+      </p>
 
       <div className="sr-only">
         <table className="overview-nowcast-series">

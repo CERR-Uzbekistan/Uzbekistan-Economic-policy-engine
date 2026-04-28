@@ -23,6 +23,7 @@ async function createTestI18n() {
             indicators: {
               title: 'Indicator panels',
               description: 'All metrics',
+              inflationPair: 'CPI and food inflation pair',
               groups: {
                 growth: 'Growth',
                 inflation: 'Inflation',
@@ -34,6 +35,12 @@ async function createTestI18n() {
                 warning: 'Caution',
                 failed: 'Failed',
               },
+            },
+            comparisonBasis: {
+              cpi_yoy: 'vs same month previous year',
+              food_cpi_yoy: 'vs same month previous year',
+              cpi_mom: 'vs previous month',
+              gold_price_forecast: 'external reference forecast vintage',
             },
           },
         },
@@ -88,5 +95,42 @@ describe('IndicatorPanelGrid', () => {
     assert.match(markup, /Gold price forecast/)
     assert.match(markup, /Caution/)
     assert.match(markup, /ui-chip--warn/)
+  })
+
+  it('renders accessible comparison-basis labels in grouped indicator rows', async () => {
+    const i18n = await createTestI18n()
+    const snapshot = overviewArtifactToMacroSnapshot(buildValidOverviewArtifact())
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <IndicatorPanelGrid groups={snapshot.indicator_groups} />
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /overview-indicator-row__basis/)
+    assert.match(markup, />external reference forecast vintage</)
+    assert.doesNotMatch(markup, /title="external reference forecast vintage"/)
+  })
+
+  it('visually pairs CPI YoY and Food CPI YoY while keeping both metric ids queryable', async () => {
+    const i18n = await createTestI18n()
+    const snapshot = overviewArtifactToMacroSnapshot(buildValidOverviewArtifact())
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <IndicatorPanelGrid groups={snapshot.indicator_groups} />
+      </I18nextProvider>,
+    )
+
+    const pairHeaderIndex = markup.indexOf('CPI and food inflation pair')
+    const cpiIndex = markup.indexOf('data-metric-id="cpi_yoy"')
+    const foodIndex = markup.indexOf('data-metric-id="food_cpi_yoy"')
+    const momIndex = markup.indexOf('data-metric-id="cpi_mom"')
+
+    assert.ok(pairHeaderIndex > 0)
+    assert.ok(cpiIndex > pairHeaderIndex)
+    assert.ok(foodIndex > cpiIndex)
+    assert.ok(momIndex > foodIndex)
+    assert.match(markup, /overview-indicator-row--paired[^"]*"[^>]*data-metric-id="cpi_yoy"/)
+    assert.match(markup, /overview-indicator-row--paired[^"]*"[^>]*data-metric-id="food_cpi_yoy"/)
+    assert.doesNotMatch(markup, /<(article|section)[^>]*overview-indicator-row--paired/)
   })
 })

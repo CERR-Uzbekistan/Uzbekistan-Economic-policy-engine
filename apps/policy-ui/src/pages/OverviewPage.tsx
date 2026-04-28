@@ -248,7 +248,7 @@ export function OverviewPage() {
 
       <CaveatPanel caveats={caveats} exportedAt={generated_at} />
       <OverviewFeeds activityFeed={activity_feed} />
-      <ReferencesFooter references={references} />
+      <ReferencesFooter references={references} exportedAt={generated_at} />
     </PageContainer>
   )
 }

@@ -6,6 +6,7 @@ import {
   formatOverviewDeltaWithUnit,
   formatOverviewMetricValue,
 } from './metric-format.js'
+import { getComparisonBasisKey } from './metric-comparison-basis.js'
 
 type KpiStripProps = {
   metrics: HeadlineMetric[]
@@ -81,9 +82,11 @@ export function KpiStrip({ metrics }: KpiStripProps) {
           const contextNote = metric.context_note
           const contextIsSentinel = contextNote === SME_CONTENT_PENDING
           const provenance = getMetricProvenance(metric)
+          const comparisonBasisKey = getComparisonBasisKey(metric.metric_id)
+          const comparisonBasis = comparisonBasisKey ? t(comparisonBasisKey) : null
 
           return (
-            <article key={metric.metric_id} className="kpi overview-kpi-card">
+            <article key={metric.metric_id} className="kpi overview-kpi-card" data-metric-id={metric.metric_id}>
               <div className="kpi__head overview-kpi-card__top">
                 <p className="kpi__name overview-kpi-card__label">{metric.label}</p>
                 <span className="overview-kpi-card__top-meta">
@@ -117,6 +120,11 @@ export function KpiStrip({ metrics }: KpiStripProps) {
               </div>
               <div className="kpi__context overview-kpi-card__meta">
                 <span>{metric.period}</span>
+                {comparisonBasis ? (
+                  <span className="overview-comparison-basis overview-kpi-card__basis">
+                    {comparisonBasis}
+                  </span>
+                ) : null}
                 {contextIsSentinel ? (
                   <span
                     className="ui-chip ui-chip--warn overview-kpi-card__sme-chip"

@@ -38,6 +38,9 @@ async function createTestI18n() {
               },
               direction: { up: 'higher', down: 'lower', flat: 'unchanged' },
             },
+            comparisonBasis: {
+              cpi_yoy: 'vs same month previous year',
+            },
             indicators: {
               status: {
                 warning: 'Caution',
@@ -111,6 +114,20 @@ describe('KpiStrip', () => {
       /overview-kpi-card__top-meta[\s\S]*overview-kpi-card__status[\s\S]*Caution[\s\S]*kpi__freshness/,
     )
     assert.doesNotMatch(markup, /overview-kpi-card__meta[\s\S]*overview-kpi-card__status/)
+  })
+
+  it('renders accessible comparison-basis text on headline KPI cards', async () => {
+    const i18n = await createTestI18n()
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <KpiStrip metrics={[buildMetric({ metric_id: 'cpi_yoy', label: 'CPI inflation' })]} />
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /data-metric-id="cpi_yoy"/)
+    assert.match(markup, /overview-kpi-card__basis/)
+    assert.match(markup, />vs same month previous year</)
+    assert.doesNotMatch(markup, /title="vs same month previous year"/)
   })
 
   it('does not render the removed "Core indicators" section heading', async () => {

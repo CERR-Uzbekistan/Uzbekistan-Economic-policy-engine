@@ -161,9 +161,29 @@
         "flat": "o'zgarmagan"
       }
     },
+    "comparisonBasis": {
+      "real_gdp_growth_annual_yoy": "oldingi yilga nisbatan",
+      "real_gdp_growth_quarter_yoy": "o'tgan yilning shu choragiga nisbatan",
+      "gdp_nowcast_current_quarter": "joriy chorak uchun model nowcast",
+      "cpi_yoy": "o'tgan yilning shu oyiga nisbatan",
+      "cpi_mom": "oldingi oyga nisbatan",
+      "food_cpi_yoy": "o'tgan yilning shu oyiga nisbatan",
+      "exports_yoy": "2026 yan-fev 2025 yan-fevga nisbatan",
+      "imports_yoy": "2026 yan-fev 2025 yan-fevga nisbatan",
+      "trade_balance": "tovar balansi, yan-fev jamlanma",
+      "policy_rate": "joriy siyosat sozlamasi",
+      "usd_uzs_level": "rasmiy ma'lumot kursi",
+      "usd_uzs_mom_change": "oldingi oy oxiri/ma'lumot sanasiga nisbatan",
+      "usd_uzs_yoy_change": "o'tgan yilning shu ma'lumot sanasiga nisbatan",
+      "reer_level": "indeks, 2019=100",
+      "gold_price_level": "bozor spot/ma'lumot darajasi",
+      "gold_price_change": "oldingi oylik orientirga nisbatan",
+      "gold_price_forecast": "tashqi ma'lumot prognozi vintaji"
+    },
     "indicators": {
       "title": "Ko'rsatkich panellari",
       "description": "Barcha qulflangan Overview metrikalari manba bloki bo'yicha guruhlangan.",
+      "inflationPair": "CPI va oziq-ovqat inflyatsiyasi juftligi",
       "groups": {
         "growth": "O'sish",
         "inflation": "Inflyatsiya",
@@ -214,6 +234,15 @@
     },
     "nowcast": {
       "refreshing": "Tezkor baholash yangilanmoqda…",
+      "kicker": "Nowcast",
+      "legendAria": "Nowcast grafigi izohi",
+      "modelNotOfficial": "Model nowcast · rasmiy prognoz emas",
+      "legend": {
+        "actual": "Faktik tarix",
+        "nowcast": "Joriy nowcast",
+        "forecast": "Prognoz trayektoriyasi",
+        "band": "Noaniqlik oralig'i"
+      },
       "banner": {
         "title": "Tezkor baholash mavjud emas",
         "subtitle": "Ma'lumotnoma ko'rsatilmoqda",
@@ -240,7 +269,8 @@
       "exportedAt": "Eksport {{date}}"
     },
     "references": {
-      "title": "Manbalar va havolalar"
+      "title": "Manbalar va havolalar",
+      "summary": "{{count}} manba · eksport {{date}}"
     }
   },
   "buttons": {

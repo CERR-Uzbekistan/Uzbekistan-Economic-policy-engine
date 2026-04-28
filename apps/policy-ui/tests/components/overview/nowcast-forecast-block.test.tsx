@@ -1,9 +1,12 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
+import i18next from 'i18next'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { createElement } from 'react'
+import { initReactI18next, I18nextProvider } from 'react-i18next'
 import { NowcastForecastBlock } from '../../../src/components/overview/NowcastForecastBlock.js'
 import type { ChartSpec } from '../../../src/contracts/data-contract.js'
+import type { i18n as I18nInstance } from 'i18next'
 
 const attribution = {
   model_id: 'DFM',
@@ -62,32 +65,84 @@ const twoSeriesMock: ChartSpec = {
   model_attribution: [attribution],
 }
 
+async function createTestI18n() {
+  const instance = i18next.createInstance()
+  await instance.use(initReactI18next).init({
+    lng: 'en',
+    fallbackLng: 'en',
+    defaultNS: 'common',
+    ns: ['common'],
+    interpolation: { escapeValue: false },
+    resources: {
+      en: {
+        common: {
+          overview: {
+            nowcast: {
+              kicker: 'Nowcast',
+              legendAria: 'Nowcast chart legend',
+              modelNotOfficial: 'Model nowcast · not an official forecast',
+              legend: {
+                actual: 'Actual history',
+                nowcast: 'Current nowcast',
+                forecast: 'Forecast path',
+                band: 'Uncertainty band',
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  return instance
+}
+
+function renderBlock(chart: ChartSpec, props: Record<string, unknown> = {}, i18n?: I18nInstance) {
+  const block = createElement(NowcastForecastBlock, { chart, ...props })
+  return renderToStaticMarkup(
+    i18n ? createElement(I18nextProvider, { i18n }, block) : block,
+  )
+}
+
 describe('NowcastForecastBlock (shape-agnostic)', () => {
-  it('renders a single-series ChartSpec with uncertainty bands', () => {
-    const html = renderToStaticMarkup(createElement(NowcastForecastBlock, { chart: singleSeriesWithBands }))
+  it('renders a single-series ChartSpec with uncertainty bands', async () => {
+    const i18n = await createTestI18n()
+    const html = renderBlock(singleSeriesWithBands, {}, i18n)
     assert.equal(html.includes('GDP growth (YoY, %)'), true)
     assert.equal(html.includes('7.0%'), true)
     assert.equal(html.includes('2026Q1'), true)
   })
 
-  it('renders a two-series ChartSpec without uncertainty bands', () => {
-    const html = renderToStaticMarkup(createElement(NowcastForecastBlock, { chart: twoSeriesMock }))
+  it('renders a two-series ChartSpec without uncertainty bands', async () => {
+    const i18n = await createTestI18n()
+    const html = renderBlock(twoSeriesMock, {}, i18n)
     assert.equal(html.includes('Latest estimate'), true)
     assert.equal(html.includes('Prior estimate'), true)
     assert.equal(html.includes('8.7%'), true)
   })
 
-  it('renders the optional statusSlot when provided', () => {
+  it('renders the optional statusSlot when provided', async () => {
+    const i18n = await createTestI18n()
     const status = createElement('p', { className: 'refreshing' }, 'Refreshing nowcast…')
-    const html = renderToStaticMarkup(
-      createElement(NowcastForecastBlock, { chart: singleSeriesWithBands, statusSlot: status }),
-    )
+    const html = renderBlock(singleSeriesWithBands, { statusSlot: status }, i18n)
     assert.equal(html.includes('Refreshing nowcast…'), true)
   })
 
-  it('sr-only table iterates series generically', () => {
-    const html = renderToStaticMarkup(createElement(NowcastForecastBlock, { chart: twoSeriesMock }))
+  it('sr-only table iterates series generically', async () => {
+    const i18n = await createTestI18n()
+    const html = renderBlock(twoSeriesMock, {}, i18n)
     // Both series should appear as column headers in the sr-only table.
     assert.equal(html.match(/<th scope="col">/g)?.length, 3)
+  })
+
+  it('includes explicit model-nowcast non-official wording and compact legend', async () => {
+    const i18n = await createTestI18n()
+    const html = renderBlock(singleSeriesWithBands, {}, i18n)
+
+    assert.match(html, /Model nowcast · not an official forecast/)
+    assert.match(html, /Actual history/)
+    assert.match(html, /Current nowcast/)
+    assert.match(html, /Forecast path/)
+    assert.match(html, /Uncertainty band/)
+    assert.match(html, /Dynamic Factor Model · v1/)
   })
 })

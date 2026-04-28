@@ -161,9 +161,29 @@
         "flat": "unchanged"
       }
     },
+    "comparisonBasis": {
+      "real_gdp_growth_annual_yoy": "vs previous year",
+      "real_gdp_growth_quarter_yoy": "vs same quarter previous year",
+      "gdp_nowcast_current_quarter": "model nowcast for current quarter",
+      "cpi_yoy": "vs same month previous year",
+      "cpi_mom": "vs previous month",
+      "food_cpi_yoy": "vs same month previous year",
+      "exports_yoy": "Jan-Feb 2026 vs Jan-Feb 2025",
+      "imports_yoy": "Jan-Feb 2026 vs Jan-Feb 2025",
+      "trade_balance": "goods balance, Jan-Feb cumulative",
+      "policy_rate": "current policy setting",
+      "usd_uzs_level": "official reference rate",
+      "usd_uzs_mom_change": "vs previous month-end/reference date",
+      "usd_uzs_yoy_change": "vs same reference date previous year",
+      "reer_level": "index, 2019=100",
+      "gold_price_level": "market spot/reference level",
+      "gold_price_change": "vs previous monthly reference",
+      "gold_price_forecast": "external reference forecast vintage"
+    },
     "indicators": {
       "title": "Indicator panels",
       "description": "All locked Overview metrics grouped by source block.",
+      "inflationPair": "CPI and food inflation pair",
       "groups": {
         "growth": "Growth",
         "inflation": "Inflation",
@@ -214,6 +234,15 @@
     },
     "nowcast": {
       "refreshing": "Refreshing nowcast…",
+      "kicker": "Nowcast",
+      "legendAria": "Nowcast chart legend",
+      "modelNotOfficial": "Model nowcast · not an official forecast",
+      "legend": {
+        "actual": "Actual history",
+        "nowcast": "Current nowcast",
+        "forecast": "Forecast path",
+        "band": "Uncertainty band"
+      },
       "banner": {
         "title": "Live nowcast unavailable",
         "subtitle": "Showing reference data",
@@ -240,7 +269,8 @@
       "exportedAt": "Exported {{date}}"
     },
     "references": {
-      "title": "Sources and references"
+      "title": "Sources and references",
+      "summary": "{{count}} sources · exported {{date}}"
     }
   },
   "buttons": {
