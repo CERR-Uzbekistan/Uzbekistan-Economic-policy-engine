@@ -40,7 +40,10 @@ export function IndicatorPanelGrid({ groups = [] }: IndicatorPanelGridProps) {
 
       <div className="overview-indicator-grid">
         {visibleGroups.map((group) => (
-          <section key={group.group_id} className="overview-indicator-panel">
+          <section
+            key={group.group_id}
+            className={`overview-indicator-panel overview-indicator-panel--${group.group_id}`}
+          >
             <h3>{t(`overview.indicators.groups.${group.group_id}`, { defaultValue: group.title })}</h3>
             <div className="overview-indicator-panel__rows">
               {group.metrics.map((metric) => {

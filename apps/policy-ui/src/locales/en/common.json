@@ -111,7 +111,9 @@
       "modelListFallback": "MODEL SET",
       "draftedFrom": "State narrative · drafted from {{models}} baseline",
       "updatedAt": "State narrative reviewed {{date}}",
-      "artifactSummaryMeta": "Artifact summary · deterministic",
+      "artifactStrap": "Overview artifact · {{date}} · {{count}} provisional metric",
+      "artifactStrapPlural": "Overview artifact · {{date}} · {{count}} provisional metrics",
+      "artifactSummaryMeta": "Artifact metadata · {{count}} summary slots",
       "staticFallbackNotice": "Static fallback summary · current artifact unavailable",
       "summary": {
         "template": "{{items}}.",

@@ -65,6 +65,7 @@ describe('IndicatorPanelGrid', () => {
     )
 
     assert.match(markup, /Gold/)
+    assert.match(markup, /overview-indicator-panel--gold/)
     assert.match(markup, /Gold price/)
     assert.match(markup, /Gold price change/)
     assert.match(markup, /Gold price forecast/)

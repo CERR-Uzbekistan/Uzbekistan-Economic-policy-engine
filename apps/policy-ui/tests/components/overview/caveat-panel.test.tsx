@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { describe, it } from 'node:test'
 import i18next from 'i18next'
 import { initReactI18next, I18nextProvider } from 'react-i18next'
@@ -160,5 +162,14 @@ describe('CaveatPanel', () => {
     assert.match(markup, /2 source notes/)
     assert.match(markup, /Warning caveat/)
     assert.match(markup, /Source note caveat/)
+  })
+
+  it('uses neutral audit-trail caveat styling without tinted alert rows or wide side stripes', () => {
+    const css = readFileSync(join(process.cwd(), 'src', 'pages', 'overview.css'), 'utf8')
+    const caveatRule = css.match(/\.overview-caveat\s*\{[^}]*\}/)?.[0] ?? ''
+
+    assert.doesNotMatch(caveatRule, /border-(left|right)\s*:\s*[2-9]/)
+    assert.doesNotMatch(css, /#fef2f2|#fffbeb|#eff6ff/)
+    assert.doesNotMatch(css, /\.overview-caveat--(?:critical|warning|info)\s*\{[^}]*background/)
   })
 })

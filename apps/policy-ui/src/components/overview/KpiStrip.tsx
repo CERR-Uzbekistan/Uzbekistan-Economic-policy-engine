@@ -26,6 +26,13 @@ function formatFreshness(value: string, locale: string): string {
 
 type KpiProvenance = 'nowcast' | 'scenario' | 'reference' | 'draft'
 
+const KPI_PROVENANCE_MONOGRAM: Record<KpiProvenance, string> = {
+  nowcast: 'N',
+  scenario: 'S',
+  reference: 'R',
+  draft: 'D',
+}
+
 function getMetricProvenance(metric: HeadlineMetric): KpiProvenance | null {
   if (metric.context_note === SME_CONTENT_PENDING) {
     return 'draft'
@@ -81,22 +88,33 @@ export function KpiStrip({ metrics }: KpiStripProps) {
                 <p className="kpi__name overview-kpi-card__label">{metric.label}</p>
                 <span className="overview-kpi-card__top-meta">
                   {provenance ? (
-                    <span className={`overview-kpi-card__provenance overview-kpi-card__provenance--${provenance}`}>
-                      {t(`overview.kpi.provenance.${provenance}`)}
+                    <span
+                      className={`overview-kpi-card__provenance overview-kpi-card__provenance--${provenance}`}
+                      aria-label={t(`overview.kpi.provenance.${provenance}`)}
+                      title={t(`overview.kpi.provenance.${provenance}`)}
+                    >
+                      {KPI_PROVENANCE_MONOGRAM[provenance]}
+                    </span>
+                  ) : null}
+                  {metric.validation_status === 'warning' ? (
+                    <span className="ui-chip ui-chip--warn overview-kpi-card__status">
+                      {t('overview.indicators.status.warning')}
                     </span>
                   ) : null}
                   <span className="kpi__freshness">{t('overview.kpi.freshness', { date: freshness })}</span>
                 </span>
               </div>
-              <p className="kpi__value overview-kpi-card__value">
-                {formatOverviewMetricValue(metric, locale)} <span>{metric.unit}</span>
-              </p>
-              <p className="kpi__delta overview-kpi-trend" aria-label={srLabel}>
-                <span className="overview-kpi-trend__glyph" aria-hidden="true">
-                  {DIRECTION_GLYPH[metric.direction]}
-                </span>{' '}
-                {deltaLabel ? deltaLabel : composedDelta}
-              </p>
+              <div className="overview-kpi-card__main">
+                <p className="kpi__value overview-kpi-card__value">
+                  {formatOverviewMetricValue(metric, locale)} <span>{metric.unit}</span>
+                </p>
+                <p className="kpi__delta overview-kpi-trend" aria-label={srLabel}>
+                  <span className="overview-kpi-trend__glyph" aria-hidden="true">
+                    {DIRECTION_GLYPH[metric.direction]}
+                  </span>{' '}
+                  {deltaLabel ? deltaLabel : composedDelta}
+                </p>
+              </div>
               <div className="kpi__context overview-kpi-card__meta">
                 <span>{metric.period}</span>
                 {contextIsSentinel ? (
@@ -107,12 +125,7 @@ export function KpiStrip({ metrics }: KpiStripProps) {
                     {t('overview.kpi.smePendingChip')}
                   </span>
                 ) : contextNote ? (
-                  <span className="overview-kpi-card__context-note">{contextNote}</span>
-                ) : null}
-                {metric.validation_status === 'warning' ? (
-                  <span className="ui-chip ui-chip--warn overview-kpi-card__status">
-                    {t('overview.indicators.status.warning')}
-                  </span>
+                  <span className="overview-kpi-card__context-note" title={contextNote}>{contextNote}</span>
                 ) : null}
               </div>
             </article>

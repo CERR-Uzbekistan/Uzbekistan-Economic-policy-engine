@@ -24,7 +24,9 @@ async function createTestI18n() {
               modelListFallback: 'MODEL SET',
               draftedFrom: 'State narrative · drafted from {{models}} baseline',
               updatedAt: 'Updated {{date}}',
-              artifactSummaryMeta: 'Artifact summary · deterministic',
+              artifactStrap: 'Overview artifact · {{date}} · {{count}} provisional metric',
+              artifactStrapPlural: 'Overview artifact · {{date}} · {{count}} provisional metrics',
+              artifactSummaryMeta: 'Artifact metadata · {{count}} summary slots',
               staticFallbackNotice: 'Static fallback summary · current artifact unavailable',
               summary: {
                 template: '{{items}}.',
@@ -84,7 +86,7 @@ describe('EconomicStateHeader', () => {
     assert.match(markup, /Prepare snapshot brief/)
   })
 
-  it('renders artifact-derived summary values without stale attribution labels', async () => {
+  it('renders neutral artifact strap from metadata/counts without stale attribution labels', async () => {
     const i18n = await createTestI18n()
     const markup = renderToStaticMarkup(
       <I18nextProvider i18n={i18n}>
@@ -101,6 +103,7 @@ describe('EconomicStateHeader', () => {
                 target_href: '/scenario-lab?preset=snapshot-brief',
               }}
               isArtifactMode
+              artifactProvisionalCount={5}
               artifactSummaryMetrics={[
                 {
                   metric_id: 'real_gdp_growth_quarter_yoy',
@@ -139,8 +142,8 @@ describe('EconomicStateHeader', () => {
       </I18nextProvider>,
     )
 
-    assert.match(markup, /GDP 5\.7 %/)
-    assert.match(markup, /CPI 8\.1 % provisional/)
+    assert.match(markup, /Overview artifact · Apr 2026 · 5 provisional metrics/)
+    assert.match(markup, /Artifact metadata · 2 summary slots/)
     assert.doesNotMatch(markup, /AI-assisted/)
     assert.doesNotMatch(markup, /DFM \+ QPM/)
     assert.doesNotMatch(markup, /reviewed by/i)

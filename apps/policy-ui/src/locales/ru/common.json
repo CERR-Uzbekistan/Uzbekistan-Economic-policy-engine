@@ -111,7 +111,9 @@
       "modelListFallback": "НАБОР МОДЕЛЕЙ",
       "draftedFrom": "Нарратив состояния · составлен на базе {{models}}",
       "updatedAt": "Нарратив состояния проверен {{date}}",
-      "artifactSummaryMeta": "Сводка артефакта · детерминированно",
+      "artifactStrap": "Артефакт обзора · {{date}} · {{count}} предварительная метрика",
+      "artifactStrapPlural": "Артефакт обзора · {{date}} · {{count}} предварительных метрик",
+      "artifactSummaryMeta": "Метаданные артефакта · {{count}} слотов сводки",
       "staticFallbackNotice": "Статическая fallback-сводка · текущий артефакт недоступен",
       "summary": {
         "template": "{{items}}.",

@@ -157,6 +157,12 @@ export function OverviewPage() {
     artifact_summary_metrics,
   } = overviewData
 
+  const artifactProvisionalCount = new Set(
+    indicator_groups
+      ?.flatMap((group) => group.metrics)
+      .filter((metric) => metric.validation_status === 'warning')
+      .map((metric) => metric.metric_id) ?? [],
+  ).size
 
   const pageHeaderMeta = (
     <>
@@ -199,45 +205,48 @@ export function OverviewPage() {
         outputAction={output_action}
         provenance={provenance}
         artifactSummaryMetrics={artifact_summary_metrics}
+        artifactProvisionalCount={artifactProvisionalCount}
         isArtifactMode={sourceState.sourceKind === 'overview-artifact'}
       />
 
       <KpiStrip metrics={headline_metrics} />
+
+      <div className="overview-two-column overview-two-column--operations">
+        <RiskPanel risks={top_risks} />
+        <QuickActions actions={analysis_actions} />
+      </div>
+
       <IndicatorPanelGrid groups={indicator_groups} />
 
       {nowcast_forecast ? (
-        <div className="overview-two-column">
-          <div className="overview-nowcast-column">
-            {dfmState.status === 'degraded' ? (
-              <NowcastBanner
-                errorKind={dfmErrorKind(dfmState.error)}
-                errorDetail={dfmErrorDetail(dfmState.error)}
-                onRetry={refetchDfm}
-              />
-            ) : null}
-            <NowcastForecastBlock
-              chart={dfmState.status === 'bridge' ? dfmState.chart : nowcast_forecast}
-              headerSlot={
-                <TrustStateLabel
-                  id={dfmState.status === 'bridge' ? 'liveBridgeJson' : 'fallbackMock'}
-                  tone={dfmState.status === 'bridge' ? 'success' : 'warn'}
-                />
-              }
-              statusSlot={
-                dfmState.status === 'loading' ? (
-                  <p className="overview-nowcast-refreshing" role="status" aria-live="polite">
-                    {t('overview.nowcast.refreshing')}
-                  </p>
-                ) : null
-              }
+        <div className="overview-nowcast-column">
+          {dfmState.status === 'degraded' ? (
+            <NowcastBanner
+              errorKind={dfmErrorKind(dfmState.error)}
+              errorDetail={dfmErrorDetail(dfmState.error)}
+              onRetry={refetchDfm}
             />
-          </div>
-          <RiskPanel risks={top_risks} />
+          ) : null}
+          <NowcastForecastBlock
+            chart={dfmState.status === 'bridge' ? dfmState.chart : nowcast_forecast}
+            headerSlot={
+              <TrustStateLabel
+                id={dfmState.status === 'bridge' ? 'liveBridgeJson' : 'fallbackMock'}
+                tone={dfmState.status === 'bridge' ? 'success' : 'warn'}
+              />
+            }
+            statusSlot={
+              dfmState.status === 'loading' ? (
+                <p className="overview-nowcast-refreshing" role="status" aria-live="polite">
+                  {t('overview.nowcast.refreshing')}
+                </p>
+              ) : null
+            }
+          />
         </div>
       ) : null}
 
       <CaveatPanel caveats={caveats} exportedAt={generated_at} />
-      <QuickActions actions={analysis_actions} />
       <OverviewFeeds activityFeed={activity_feed} />
       <ReferencesFooter references={references} />
     </PageContainer>

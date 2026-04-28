@@ -1,7 +1,6 @@
 import { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import type { TFunction } from 'i18next'
 import type {
   HeadlineMetric,
   NarrativeSegment,
@@ -10,7 +9,6 @@ import type {
 } from '../../contracts/data-contract.js'
 import type { LanguageCode } from '../../state/language-context.js'
 import { useLanguage } from '../../state/useLanguage.js'
-import { formatOverviewMetricValue } from './metric-format.js'
 
 type EconomicStateHeaderProps = {
   summary: string | NarrativeSegment[]
@@ -19,6 +17,7 @@ type EconomicStateHeaderProps = {
   outputAction: OverviewOutputAction
   provenance?: StateProvenance
   artifactSummaryMetrics?: HeadlineMetric[]
+  artifactProvisionalCount?: number
   isArtifactMode?: boolean
 }
 
@@ -67,37 +66,12 @@ function renderSummary(summary: string | NarrativeSegment[]) {
   )
 }
 
-const SUMMARY_LABEL_KEY_BY_ID: Record<string, string> = {
-  real_gdp_growth_quarter_yoy: 'gdp',
-  cpi_yoy: 'cpi',
-  exports_yoy: 'exports',
-  imports_yoy: 'imports',
-  policy_rate: 'policyRate',
-  gold_price_level: 'gold',
-}
-
-function renderArtifactSummary(metrics: HeadlineMetric[], locale: string, t: TFunction) {
-  const items = metrics
-    .map((metric) => {
-      const labelKey = SUMMARY_LABEL_KEY_BY_ID[metric.metric_id]
-      if (!labelKey) return null
-      const qualifier = metric.validation_status === 'warning'
-        ? ` ${t('overview.header.summary.provisional')}`
-        : ''
-      return t('overview.header.summary.item', {
-        label: t(`overview.header.summary.labels.${labelKey}`),
-        value: formatOverviewMetricValue(metric, locale),
-        unit: metric.unit,
-        qualifier,
-      })
-    })
-    .filter((item): item is string => item !== null)
-
-  if (items.length === 0) {
-    return t('overview.header.summary.unavailable')
-  }
-
-  return t('overview.header.summary.template', { items: items.join(', ') })
+function formatMonthYear(value: string, locale: string) {
+  const date = new Date(value)
+  return new Intl.DateTimeFormat(locale, {
+    month: 'short',
+    year: 'numeric',
+  }).format(date)
 }
 
 export function EconomicStateHeader({
@@ -107,6 +81,7 @@ export function EconomicStateHeader({
   outputAction,
   provenance,
   artifactSummaryMetrics = [],
+  artifactProvisionalCount,
   isArtifactMode = false,
 }: EconomicStateHeaderProps) {
   const { t } = useTranslation()
@@ -124,8 +99,13 @@ export function EconomicStateHeader({
   const provenanceAssistedLabel = provenance?.ai_assisted
     ? t('overview.header.provenance.aiAssisted')
     : t('overview.header.provenance.humanAuthored')
+  const provisionalCount = artifactProvisionalCount
+    ?? artifactSummaryMetrics.filter((metric) => metric.validation_status === 'warning').length
   const summaryText = isArtifactMode
-    ? renderArtifactSummary(artifactSummaryMetrics, locale, t)
+    ? t(provisionalCount === 1 ? 'overview.header.artifactStrap' : 'overview.header.artifactStrapPlural', {
+        date: formatMonthYear(updatedAt, locale),
+        count: provisionalCount,
+      })
     : renderSummary(summary)
 
   return (
@@ -141,7 +121,7 @@ export function EconomicStateHeader({
       </div>
       {isArtifactMode ? (
         <p className="state-header__meta overview-state-header__meta">
-          <span>{t('overview.header.artifactSummaryMeta')}</span>
+          <span>{t('overview.header.artifactSummaryMeta', { count: artifactSummaryMetrics.length })}</span>
           <span>{t('overview.header.updatedAt', { date: formattedUpdatedAt })}</span>
         </p>
       ) : provenance ? (

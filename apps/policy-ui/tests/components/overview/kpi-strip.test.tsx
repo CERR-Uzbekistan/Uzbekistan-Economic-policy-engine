@@ -38,6 +38,12 @@ async function createTestI18n() {
               },
               direction: { up: 'higher', down: 'lower', flat: 'unchanged' },
             },
+            indicators: {
+              status: {
+                warning: 'Caution',
+                failed: 'Failed',
+              },
+            },
           },
         },
       },
@@ -88,7 +94,23 @@ describe('KpiStrip', () => {
     )
 
     assert.match(markup, /70% band · 5\.2 – 6\.4%/)
+    assert.match(markup, /title="70% band · 5\.2 – 6\.4%"/)
     assert.doesNotMatch(markup, /ui-chip--warn/)
+  })
+
+  it('keeps warning status in the KPI top meta area', async () => {
+    const i18n = await createTestI18n()
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <KpiStrip metrics={[buildMetric({ validation_status: 'warning' })]} />
+      </I18nextProvider>,
+    )
+
+    assert.match(
+      markup,
+      /overview-kpi-card__top-meta[\s\S]*overview-kpi-card__status[\s\S]*Caution[\s\S]*kpi__freshness/,
+    )
+    assert.doesNotMatch(markup, /overview-kpi-card__meta[\s\S]*overview-kpi-card__status/)
   })
 
   it('does not render the removed "Core indicators" section heading', async () => {
@@ -117,7 +139,7 @@ describe('KpiStrip', () => {
     assert.doesNotMatch(markup, /overview-kpi-trend[^"]*ui-chip/)
   })
 
-  it('renders conservative provenance pills from supported attribution metadata', async () => {
+  it('renders compact provenance monograms from supported attribution metadata', async () => {
     const i18n = await createTestI18n()
     const markup = renderToStaticMarkup(
       <I18nextProvider i18n={i18n}>
@@ -170,9 +192,9 @@ describe('KpiStrip', () => {
       </I18nextProvider>,
     )
 
-    assert.match(markup, /Nowcast/)
-    assert.match(markup, /Scenario/)
-    assert.match(markup, /Reference/)
+    assert.match(markup, /aria-label="Nowcast"[^>]*>N</)
+    assert.match(markup, /aria-label="Scenario"[^>]*>S</)
+    assert.match(markup, /aria-label="Reference"[^>]*>R</)
     assert.match(markup, /overview-kpi-card__provenance--nowcast/)
   })
 })

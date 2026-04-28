@@ -111,7 +111,9 @@
       "modelListFallback": "MODELLAR TO'PLAMI",
       "draftedFrom": "Holat narrativi · {{models}} bazasidan tuzilgan",
       "updatedAt": "Holat narrativi tekshirildi: {{date}}",
-      "artifactSummaryMeta": "Artefakt xulosasi · deterministik",
+      "artifactStrap": "Overview artefakti · {{date}} · {{count}} dastlabki metrika",
+      "artifactStrapPlural": "Overview artefakti · {{date}} · {{count}} dastlabki metrika",
+      "artifactSummaryMeta": "Artefakt metama'lumoti · {{count}} xulosa sloti",
       "staticFallbackNotice": "Statik fallback xulosa · joriy artefakt mavjud emas",
       "summary": {
         "template": "{{items}}.",
