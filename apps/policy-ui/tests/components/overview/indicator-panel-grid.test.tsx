@@ -20,6 +20,27 @@ async function createTestI18n() {
         common: {
           overview: {
             common: { middleDot: '·' },
+            delta: {
+              vsPeriodBasis: 'vs {{period}} {{basis}}',
+            },
+            tradeBalance: {
+              deficit: 'deficit',
+              surplus: 'surplus',
+              balanced: 'balanced',
+              usdBnPattern: 'USD {{value}}bn {{position}}',
+            },
+            fx: {
+              stronger: 'UZS stronger',
+              weaker: 'UZS weaker',
+              unchanged: 'unchanged',
+            },
+            claimLabels: {
+              observed: 'Observed',
+              calculated: 'Calculated',
+              nowcast: 'Nowcast',
+              reference: 'Reference',
+              forecast: 'Forecast',
+            },
             indicators: {
               title: 'Indicator panels',
               description: 'All metrics',
@@ -37,10 +58,14 @@ async function createTestI18n() {
               },
             },
             comparisonBasis: {
-              cpi_yoy: 'vs same month previous year',
-              food_cpi_yoy: 'vs same month previous year',
-              cpi_mom: 'vs previous month',
-              gold_price_forecast: 'external reference forecast vintage',
+              cpi_yoy: 'print',
+              food_cpi_yoy: 'print',
+              cpi_mom: 'print',
+              usd_uzs_level: 'official reference rate',
+              usd_uzs_mom_change: 'monthly FX change',
+              usd_uzs_yoy_change: 'annual FX change',
+              trade_balance: 'trade balance',
+              gold_price_forecast: 'forecast vintage',
             },
           },
         },
@@ -97,7 +122,7 @@ describe('IndicatorPanelGrid', () => {
     assert.match(markup, /ui-chip--warn/)
   })
 
-  it('renders accessible comparison-basis labels in grouped indicator rows', async () => {
+  it('renders accessible comparison-basis labels in grouped indicator row deltas', async () => {
     const i18n = await createTestI18n()
     const snapshot = overviewArtifactToMacroSnapshot(buildValidOverviewArtifact())
     const markup = renderToStaticMarkup(
@@ -106,9 +131,10 @@ describe('IndicatorPanelGrid', () => {
       </I18nextProvider>,
     )
 
-    assert.match(markup, /overview-indicator-row__basis/)
-    assert.match(markup, />external reference forecast vintage</)
-    assert.doesNotMatch(markup, /title="external reference forecast vintage"/)
+    assert.match(markup, /overview-indicator-row__delta/)
+    assert.match(markup, /vs Feb 2026 print/)
+    assert.match(markup, /forecast vintage/)
+    assert.doesNotMatch(markup, /overview-indicator-row__basis/)
   })
 
   it('visually pairs CPI YoY and Food CPI YoY while keeping both metric ids queryable', async () => {
@@ -132,5 +158,80 @@ describe('IndicatorPanelGrid', () => {
     assert.match(markup, /overview-indicator-row--paired[^"]*"[^>]*data-metric-id="cpi_yoy"/)
     assert.match(markup, /overview-indicator-row--paired[^"]*"[^>]*data-metric-id="food_cpi_yoy"/)
     assert.doesNotMatch(markup, /<(article|section)[^>]*overview-indicator-row--paired/)
+  })
+
+  it('renders CPI MoM deltas as pp and labels claim type from claim_type', async () => {
+    const i18n = await createTestI18n()
+    const artifact = buildValidOverviewArtifact()
+    const cpiMom = artifact.metrics.find((metric) => metric.id === 'cpi_mom')
+    if (!cpiMom) throw new Error('fixture missing cpi_mom')
+    cpiMom.value = 0.7
+    cpiMom.previous_value = 0.5
+    const snapshot = overviewArtifactToMacroSnapshot(artifact)
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <IndicatorPanelGrid groups={snapshot.indicator_groups} />
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /data-metric-id="cpi_mom"[\s\S]*\+0\.2 pp vs Feb 2026 print/)
+    assert.match(markup, /data-metric-id="cpi_mom"[\s\S]*overview-indicator-row__claim-label[^>]*>Observed</)
+    assert.doesNotMatch(markup, /data-metric-id="cpi_mom"[\s\S]*\+0\.2 %/)
+  })
+
+  it('renders FX interpretation and trade-balance sign labels without raw ambiguous units', async () => {
+    const i18n = await createTestI18n()
+    const artifact = buildValidOverviewArtifact()
+    const fxLevel = artifact.metrics.find((metric) => metric.id === 'usd_uzs_level')
+    const fxMom = artifact.metrics.find((metric) => metric.id === 'usd_uzs_mom_change')
+    const tradeBalance = artifact.metrics.find((metric) => metric.id === 'trade_balance')
+    if (!fxLevel || !fxMom || !tradeBalance) throw new Error('fixture missing required metrics')
+    fxLevel.value = 12400
+    fxLevel.previous_value = 12500
+    fxMom.value = 0.9
+    fxMom.previous_value = 1.1
+    tradeBalance.value = -4.51
+    tradeBalance.previous_value = -4.25
+    const snapshot = overviewArtifactToMacroSnapshot(artifact)
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <IndicatorPanelGrid groups={snapshot.indicator_groups} />
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /data-metric-id="usd_uzs_level"[\s\S]*UZS stronger 0\.8%/)
+    assert.match(markup, /data-metric-id="usd_uzs_mom_change"[\s\S]*UZS stronger 0\.2 pp/)
+    assert.match(markup, /data-metric-id="usd_uzs_mom_change"[\s\S]*Calculated/)
+    assert.match(markup, /data-metric-id="trade_balance"[\s\S]*USD 4\.51bn deficit/)
+    assert.match(markup, /data-metric-id="trade_balance"[\s\S]*Calculated/)
+    assert.doesNotMatch(markup, /USD million or USD billion/)
+  })
+
+  it('renders balanced and surplus trade-balance states', async () => {
+    const i18n = await createTestI18n()
+    const surplusArtifact = buildValidOverviewArtifact()
+    const surplusMetric = surplusArtifact.metrics.find((metric) => metric.id === 'trade_balance')
+    if (!surplusMetric) throw new Error('fixture missing trade_balance')
+    surplusMetric.value = 4.51
+    const surplusSnapshot = overviewArtifactToMacroSnapshot(surplusArtifact)
+    const surplusMarkup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <IndicatorPanelGrid groups={surplusSnapshot.indicator_groups} />
+      </I18nextProvider>,
+    )
+
+    const balancedArtifact = buildValidOverviewArtifact()
+    const balancedMetric = balancedArtifact.metrics.find((metric) => metric.id === 'trade_balance')
+    if (!balancedMetric) throw new Error('fixture missing trade_balance')
+    balancedMetric.value = 0
+    const balancedSnapshot = overviewArtifactToMacroSnapshot(balancedArtifact)
+    const balancedMarkup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <IndicatorPanelGrid groups={balancedSnapshot.indicator_groups} />
+      </I18nextProvider>,
+    )
+
+    assert.match(surplusMarkup, /USD 4\.51bn surplus/)
+    assert.match(balancedMarkup, /balanced/)
   })
 })

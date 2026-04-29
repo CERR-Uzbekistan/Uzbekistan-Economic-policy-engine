@@ -96,6 +96,27 @@
     "common": {
       "middleDot": "·"
     },
+    "delta": {
+      "vsPeriodBasis": "{{period}} {{basis}}ga nisbatan"
+    },
+    "tradeBalance": {
+      "deficit": "defitsit",
+      "surplus": "profitsit",
+      "balanced": "balanslangan",
+      "usdBnPattern": "USD {{value}} mlrd {{position}}"
+    },
+    "fx": {
+      "stronger": "UZS kuchaydi",
+      "weaker": "UZS zaiflashdi",
+      "unchanged": "o'zgarmagan"
+    },
+    "claimLabels": {
+      "observed": "Kuzatilgan",
+      "calculated": "Hisoblangan",
+      "nowcast": "Nowcast",
+      "reference": "Ma'lumotnoma",
+      "forecast": "Prognoz"
+    },
     "topbar": {
       "freshness": "Ma'lumotlar · {{days}} kun oldin"
     },
@@ -162,23 +183,23 @@
       }
     },
     "comparisonBasis": {
-      "real_gdp_growth_annual_yoy": "oldingi yilga nisbatan",
-      "real_gdp_growth_quarter_yoy": "o'tgan yilning shu choragiga nisbatan",
-      "gdp_nowcast_current_quarter": "joriy chorak uchun model nowcast",
-      "cpi_yoy": "o'tgan yilning shu oyiga nisbatan",
-      "cpi_mom": "oldingi oyga nisbatan",
-      "food_cpi_yoy": "o'tgan yilning shu oyiga nisbatan",
-      "exports_yoy": "2026 yan-fev 2025 yan-fevga nisbatan",
-      "imports_yoy": "2026 yan-fev 2025 yan-fevga nisbatan",
-      "trade_balance": "tovar balansi, yan-fev jamlanma",
-      "policy_rate": "joriy siyosat sozlamasi",
+      "real_gdp_growth_annual_yoy": "reliz",
+      "real_gdp_growth_quarter_yoy": "reliz",
+      "gdp_nowcast_current_quarter": "model nowcast",
+      "cpi_yoy": "reliz",
+      "cpi_mom": "reliz",
+      "food_cpi_yoy": "reliz",
+      "exports_yoy": "savdo relizi",
+      "imports_yoy": "savdo relizi",
+      "trade_balance": "savdo balansi",
+      "policy_rate": "siyosat sozlamasi",
       "usd_uzs_level": "rasmiy ma'lumot kursi",
-      "usd_uzs_mom_change": "oldingi oy oxiri/ma'lumot sanasiga nisbatan",
-      "usd_uzs_yoy_change": "o'tgan yilning shu ma'lumot sanasiga nisbatan",
-      "reer_level": "indeks, 2019=100",
-      "gold_price_level": "bozor spot/ma'lumot darajasi",
-      "gold_price_change": "oldingi oylik orientirga nisbatan",
-      "gold_price_forecast": "tashqi ma'lumot prognozi vintaji"
+      "usd_uzs_mom_change": "oylik FX o'zgarishi",
+      "usd_uzs_yoy_change": "yillik FX o'zgarishi",
+      "reer_level": "REER indeksi",
+      "gold_price_level": "bozor orientiri",
+      "gold_price_change": "oltin narxi o'zgarishi",
+      "gold_price_forecast": "prognoz vintaji"
     },
     "indicators": {
       "title": "Ko'rsatkich panellari",

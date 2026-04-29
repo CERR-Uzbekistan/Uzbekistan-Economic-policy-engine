@@ -3,10 +3,10 @@ import type { HeadlineMetric } from '../../contracts/data-contract'
 import {
   DIRECTION_GLYPH,
   formatOverviewDelta,
+  formatOverviewDeltaComparison,
   formatOverviewDeltaWithUnit,
-  formatOverviewMetricValue,
+  formatOverviewMetricValueWithUnit,
 } from './metric-format.js'
-import { getComparisonBasisKey } from './metric-comparison-basis.js'
 
 type KpiStripProps = {
   metrics: HeadlineMetric[]
@@ -23,36 +23,6 @@ function formatFreshness(value: string, locale: string): string {
     day: '2-digit',
     month: 'short',
   }).format(new Date(parsed))
-}
-
-type KpiProvenance = 'nowcast' | 'scenario' | 'reference' | 'draft'
-
-const KPI_PROVENANCE_MONOGRAM: Record<KpiProvenance, string> = {
-  nowcast: 'N',
-  scenario: 'S',
-  reference: 'R',
-  draft: 'D',
-}
-
-function getMetricProvenance(metric: HeadlineMetric): KpiProvenance | null {
-  if (metric.context_note === SME_CONTENT_PENDING) {
-    return 'draft'
-  }
-  const attributionText = metric.model_attribution
-    .flatMap((item) => [item.module, item.model_id, item.model_name])
-    .join(' ')
-    .toLowerCase()
-
-  if (attributionText.includes('nowcast') || attributionText.includes('dfm')) {
-    return 'nowcast'
-  }
-  if (attributionText.includes('qpm')) {
-    return 'scenario'
-  }
-  if (attributionText.includes('pe')) {
-    return 'reference'
-  }
-  return null
 }
 
 export function KpiStrip({ metrics }: KpiStripProps) {
@@ -78,25 +48,27 @@ export function KpiStrip({ metrics }: KpiStripProps) {
             : t('overview.kpi.noPrior')
           const freshness = formatFreshness(metric.last_updated, locale)
           const deltaLabel = metric.delta_label
-          const composedDelta = formatOverviewDeltaWithUnit(metric, locale) ?? t('overview.kpi.notAvailable')
+          const composedDelta = formatOverviewDeltaWithUnit(metric, locale, t) ?? t('overview.kpi.notAvailable')
+          const deltaComparison = formatOverviewDeltaComparison(metric, t)
+          const composedDeltaWithComparison = deltaComparison
+            ? `${composedDelta} ${deltaComparison}`
+            : composedDelta
           const contextNote = metric.context_note
           const contextIsSentinel = contextNote === SME_CONTENT_PENDING
-          const provenance = getMetricProvenance(metric)
-          const comparisonBasisKey = getComparisonBasisKey(metric.metric_id)
-          const comparisonBasis = comparisonBasisKey ? t(comparisonBasisKey) : null
+          const claimLabel = metric.claim_label_key ? t(metric.claim_label_key) : null
 
           return (
             <article key={metric.metric_id} className="kpi overview-kpi-card" data-metric-id={metric.metric_id}>
               <div className="kpi__head overview-kpi-card__top">
                 <p className="kpi__name overview-kpi-card__label">{metric.label}</p>
                 <span className="overview-kpi-card__top-meta">
-                  {provenance ? (
+                  {claimLabel ? (
                     <span
-                      className={`overview-kpi-card__provenance overview-kpi-card__provenance--${provenance}`}
-                      aria-label={t(`overview.kpi.provenance.${provenance}`)}
-                      title={t(`overview.kpi.provenance.${provenance}`)}
+                      className="overview-kpi-card__claim-label"
+                      aria-label={claimLabel}
+                      title={claimLabel}
                     >
-                      {KPI_PROVENANCE_MONOGRAM[provenance]}
+                      {claimLabel}
                     </span>
                   ) : null}
                   {metric.validation_status === 'warning' ? (
@@ -108,23 +80,16 @@ export function KpiStrip({ metrics }: KpiStripProps) {
                 </span>
               </div>
               <div className="overview-kpi-card__main">
-                <p className="kpi__value overview-kpi-card__value">
-                  {formatOverviewMetricValue(metric, locale)} <span>{metric.unit}</span>
-                </p>
+                <p className="kpi__value overview-kpi-card__value">{formatOverviewMetricValueWithUnit(metric, locale, t)}</p>
                 <p className="kpi__delta overview-kpi-trend" aria-label={srLabel}>
                   <span className="overview-kpi-trend__glyph" aria-hidden="true">
                     {DIRECTION_GLYPH[metric.direction]}
                   </span>{' '}
-                  {deltaLabel ? deltaLabel : composedDelta}
+                  {deltaLabel ? deltaLabel : composedDeltaWithComparison}
                 </p>
               </div>
               <div className="kpi__context overview-kpi-card__meta">
                 <span>{metric.period}</span>
-                {comparisonBasis ? (
-                  <span className="overview-comparison-basis overview-kpi-card__basis">
-                    {comparisonBasis}
-                  </span>
-                ) : null}
                 {contextIsSentinel ? (
                   <span
                     className="ui-chip ui-chip--warn overview-kpi-card__sme-chip"

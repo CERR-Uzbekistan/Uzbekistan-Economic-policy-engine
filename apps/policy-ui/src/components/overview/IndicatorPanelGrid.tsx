@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next'
 import type { HeadlineMetric, OverviewIndicatorGroup } from '../../contracts/data-contract'
 import {
   DIRECTION_GLYPH,
+  formatOverviewDeltaComparison,
   formatOverviewDeltaWithUnit,
-  formatOverviewMetricValue,
+  formatOverviewMetricValueWithUnit,
 } from './metric-format.js'
-import { getComparisonBasisKey } from './metric-comparison-basis.js'
 
 type IndicatorPanelGridProps = {
   groups?: OverviewIndicatorGroup[]
@@ -65,9 +65,9 @@ export function IndicatorPanelGrid({ groups = [] }: IndicatorPanelGridProps) {
             <h3>{t(`overview.indicators.groups.${group.group_id}`, { defaultValue: group.title })}</h3>
             <div className="overview-indicator-panel__rows">
               {orderedGroupMetrics(group).map((metric, index) => {
-                const delta = formatOverviewDeltaWithUnit(metric, locale)
-                const comparisonBasisKey = getComparisonBasisKey(metric.metric_id)
-                const comparisonBasis = comparisonBasisKey ? t(comparisonBasisKey) : null
+                const delta = formatOverviewDeltaWithUnit(metric, locale, t)
+                const deltaComparison = formatOverviewDeltaComparison(metric, t)
+                const claimLabel = metric.claim_label_key ? t(metric.claim_label_key) : null
                 const showInflationPairHeader = group.group_id === 'inflation' && metric.metric_id === 'cpi_yoy'
                 return (
                   <Fragment key={metric.metric_id}>
@@ -90,21 +90,20 @@ export function IndicatorPanelGrid({ groups = [] }: IndicatorPanelGridProps) {
                         </span>
                       </div>
                       <div className="overview-indicator-row__measure">
-                        <p>
-                          {formatOverviewMetricValue(metric, locale)}
-                          <span>{metric.unit}</span>
-                        </p>
+                        <p>{formatOverviewMetricValueWithUnit(metric, locale, t)}</p>
                         <div className="overview-indicator-row__meta">
                           <span className="overview-indicator-row__delta" aria-hidden={delta ? undefined : true}>
-                            {delta ? `${DIRECTION_GLYPH[metric.direction]} ${delta}` : '\u00a0'}
+                            {delta
+                              ? `${DIRECTION_GLYPH[metric.direction]} ${delta}${
+                                  deltaComparison ? ` ${deltaComparison}` : ''
+                                }`
+                              : '\u00a0'}
                           </span>
+                          {claimLabel ? (
+                            <span className="overview-indicator-row__claim-label">{claimLabel}</span>
+                          ) : null}
                           <StatusChip metric={metric} />
                         </div>
-                        {comparisonBasis ? (
-                          <p className="overview-comparison-basis overview-indicator-row__basis">
-                            {comparisonBasis}
-                          </p>
-                        ) : null}
                       </div>
                     </div>
                   </Fragment>

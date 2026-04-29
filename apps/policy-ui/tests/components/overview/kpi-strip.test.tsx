@@ -19,6 +19,27 @@ async function createTestI18n() {
         common: {
           overview: {
             common: { middleDot: '·' },
+            delta: {
+              vsPeriodBasis: 'vs {{period}} {{basis}}',
+            },
+            tradeBalance: {
+              deficit: 'deficit',
+              surplus: 'surplus',
+              balanced: 'balanced',
+              usdBnPattern: 'USD {{value}}bn {{position}}',
+            },
+            fx: {
+              stronger: 'UZS stronger',
+              weaker: 'UZS weaker',
+              unchanged: 'unchanged',
+            },
+            claimLabels: {
+              observed: 'Observed',
+              calculated: 'Calculated',
+              nowcast: 'Nowcast',
+              reference: 'Reference',
+              forecast: 'Forecast',
+            },
             kpi: {
               title: 'Core indicators',
               description: 'desc',
@@ -39,7 +60,10 @@ async function createTestI18n() {
               direction: { up: 'higher', down: 'lower', flat: 'unchanged' },
             },
             comparisonBasis: {
-              cpi_yoy: 'vs same month previous year',
+              cpi_yoy: 'print',
+              real_gdp_growth_quarter_yoy: 'print',
+              gdp_nowcast_current_quarter: 'model nowcast',
+              policy_rate: 'policy setting',
             },
             indicators: {
               status: {
@@ -64,6 +88,9 @@ function buildMetric(overrides: Partial<HeadlineMetric> = {}): HeadlineMetric {
     period: '2026 Q1',
     baseline_value: 5.5,
     delta_abs: 0.3,
+    delta_value: 0.3,
+    delta_unit: 'pp',
+    delta_basis: 'percentage_point',
     delta_pct: 5.45,
     direction: 'up',
     confidence: 'medium',
@@ -120,14 +147,22 @@ describe('KpiStrip', () => {
     const i18n = await createTestI18n()
     const markup = renderToStaticMarkup(
       <I18nextProvider i18n={i18n}>
-        <KpiStrip metrics={[buildMetric({ metric_id: 'cpi_yoy', label: 'CPI inflation' })]} />
+        <KpiStrip
+          metrics={[
+            buildMetric({
+              metric_id: 'cpi_yoy',
+              label: 'CPI inflation',
+              comparison_basis_key: 'overview.comparisonBasis.cpi_yoy',
+              comparison_period: 'Feb 2026',
+            }),
+          ]}
+        />
       </I18nextProvider>,
     )
 
     assert.match(markup, /data-metric-id="cpi_yoy"/)
-    assert.match(markup, /overview-kpi-card__basis/)
-    assert.match(markup, />vs same month previous year</)
-    assert.doesNotMatch(markup, /title="vs same month previous year"/)
+    assert.match(markup, /↑<\/span> \+0\.3 pp vs Feb 2026 print/)
+    assert.doesNotMatch(markup, /title="vs Feb 2026 print"/)
   })
 
   it('does not render the removed "Core indicators" section heading', async () => {
@@ -156,14 +191,16 @@ describe('KpiStrip', () => {
     assert.doesNotMatch(markup, /overview-kpi-trend[^"]*ui-chip/)
   })
 
-  it('renders compact provenance monograms from supported attribution metadata', async () => {
+  it('renders compact claim labels from claim_type semantics instead of attribution text', async () => {
     const i18n = await createTestI18n()
     const markup = renderToStaticMarkup(
       <I18nextProvider i18n={i18n}>
         <KpiStrip
           metrics={[
             buildMetric({
-              metric_id: 'gdp',
+              metric_id: 'real_gdp_growth_quarter_yoy',
+              claim_type: 'observed',
+              claim_label_key: 'overview.claimLabels.observed',
               model_attribution: [
                 {
                   model_id: 'dfm-nowcast',
@@ -177,7 +214,9 @@ describe('KpiStrip', () => {
               ],
             }),
             buildMetric({
-              metric_id: 'inflation',
+              metric_id: 'gdp_nowcast_current_quarter',
+              claim_type: 'nowcast',
+              claim_label_key: 'overview.claimLabels.nowcast',
               model_attribution: [
                 {
                   model_id: 'qpm_uzbekistan',
@@ -191,7 +230,9 @@ describe('KpiStrip', () => {
               ],
             }),
             buildMetric({
-              metric_id: 'external',
+              metric_id: 'gold_price_forecast',
+              claim_type: 'reference_forecast',
+              claim_label_key: 'overview.claimLabels.forecast',
               model_attribution: [
                 {
                   model_id: 'pe_trade_reference',
@@ -209,9 +250,116 @@ describe('KpiStrip', () => {
       </I18nextProvider>,
     )
 
-    assert.match(markup, /aria-label="Nowcast"[^>]*>N</)
-    assert.match(markup, /aria-label="Scenario"[^>]*>S</)
-    assert.match(markup, /aria-label="Reference"[^>]*>R</)
-    assert.match(markup, /overview-kpi-card__provenance--nowcast/)
+    assert.match(markup, /data-metric-id="real_gdp_growth_quarter_yoy"[\s\S]*aria-label="Observed"[^>]*>Observed</)
+    assert.match(markup, /data-metric-id="gdp_nowcast_current_quarter"[\s\S]*aria-label="Nowcast"[^>]*>Nowcast</)
+    assert.match(markup, /data-metric-id="gold_price_forecast"[\s\S]*aria-label="Forecast"[^>]*>Forecast</)
+    assert.doesNotMatch(markup, /overview-kpi-card__provenance/)
+  })
+
+  it('renders rate-metric deltas as percentage points, not percent changes', async () => {
+    const i18n = await createTestI18n()
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <KpiStrip
+          metrics={[
+            buildMetric({
+              metric_id: 'cpi_yoy',
+              label: 'CPI inflation, YoY',
+              value: 7.1,
+              baseline_value: 7.3,
+              delta_abs: -0.2,
+              delta_value: -0.2,
+              delta_unit: 'pp',
+              delta_basis: 'percentage_point',
+              delta_pct: null,
+              direction: 'down',
+              comparison_basis_key: 'overview.comparisonBasis.cpi_yoy',
+              comparison_period: 'Feb 2026',
+            }),
+            buildMetric({
+              metric_id: 'real_gdp_growth_quarter_yoy',
+              label: 'GDP growth',
+              value: 8.7,
+              baseline_value: 6.8,
+              delta_abs: 1.9,
+              delta_value: 1.9,
+              delta_unit: 'pp',
+              delta_basis: 'percentage_point',
+              delta_pct: null,
+              comparison_basis_key: 'overview.comparisonBasis.real_gdp_growth_quarter_yoy',
+              comparison_period: '2025 Q1',
+            }),
+            buildMetric({
+              metric_id: 'policy_rate',
+              label: 'Policy rate',
+              value: 14,
+              baseline_value: 13.5,
+              delta_abs: 0.5,
+              delta_value: 0.5,
+              delta_unit: 'pp',
+              delta_basis: 'percentage_point',
+              delta_pct: null,
+              comparison_basis_key: 'overview.comparisonBasis.policy_rate',
+            }),
+          ]}
+        />
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /−0\.2 pp vs Feb 2026 print/)
+    assert.match(markup, /\+1\.9 pp vs 2025 Q1 print/)
+    assert.match(markup, /\+0\.5 pp policy setting/)
+    assert.doesNotMatch(markup, /−0\.2 %/)
+    assert.doesNotMatch(markup, /\+1\.9 %/)
+  })
+
+  it('renders USD/UZS deltas with stronger, weaker, and unchanged interpretation', async () => {
+    const i18n = await createTestI18n()
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <KpiStrip
+          metrics={[
+            buildMetric({
+              metric_id: 'usd_uzs_level',
+              label: 'USD/UZS',
+              unit: 'UZS/USD',
+              value: 12400,
+              baseline_value: 12500,
+              delta_abs: -100,
+              delta_value: -0.8,
+              delta_unit: '%',
+              delta_basis: 'percent_change',
+              direction: 'down',
+            }),
+            buildMetric({
+              metric_id: 'usd_uzs_mom_change',
+              label: 'USD/UZS MoM',
+              value: 0.9,
+              baseline_value: 0.7,
+              delta_abs: 0.2,
+              delta_value: 0.2,
+              delta_unit: 'pp',
+              delta_basis: 'percentage_point',
+              direction: 'up',
+            }),
+            buildMetric({
+              metric_id: 'usd_uzs_yoy_change',
+              label: 'USD/UZS YoY',
+              value: 0,
+              baseline_value: 0,
+              delta_abs: 0,
+              delta_value: 0,
+              delta_unit: 'pp',
+              delta_basis: 'percentage_point',
+              direction: 'flat',
+            }),
+          ]}
+        />
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /UZS stronger 0\.8%/)
+    assert.match(markup, /UZS weaker 0\.2 pp/)
+    assert.match(markup, /unchanged/)
   })
 })

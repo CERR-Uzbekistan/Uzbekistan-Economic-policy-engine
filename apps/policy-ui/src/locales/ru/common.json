@@ -96,6 +96,27 @@
     "common": {
       "middleDot": "·"
     },
+    "delta": {
+      "vsPeriodBasis": "к {{period}} {{basis}}"
+    },
+    "tradeBalance": {
+      "deficit": "дефицит",
+      "surplus": "профицит",
+      "balanced": "баланс",
+      "usdBnPattern": "USD {{value}} млрд, {{position}}"
+    },
+    "fx": {
+      "stronger": "UZS укрепился",
+      "weaker": "UZS ослаб",
+      "unchanged": "без изменений"
+    },
+    "claimLabels": {
+      "observed": "Наблюдаемое",
+      "calculated": "Расчётное",
+      "nowcast": "Nowcast",
+      "reference": "Справочное",
+      "forecast": "Прогноз"
+    },
     "topbar": {
       "freshness": "Данные · {{days}}д назад"
     },
@@ -162,23 +183,23 @@
       }
     },
     "comparisonBasis": {
-      "real_gdp_growth_annual_yoy": "к предыдущему году",
-      "real_gdp_growth_quarter_yoy": "к тому же кварталу прошлого года",
-      "gdp_nowcast_current_quarter": "модельный nowcast текущего квартала",
-      "cpi_yoy": "к тому же месяцу прошлого года",
-      "cpi_mom": "к предыдущему месяцу",
-      "food_cpi_yoy": "к тому же месяцу прошлого года",
-      "exports_yoy": "янв-фев 2026 к янв-фев 2025",
-      "imports_yoy": "янв-фев 2026 к янв-фев 2025",
-      "trade_balance": "товарный баланс, январь-февраль накопительно",
-      "policy_rate": "текущая настройка политики",
-      "usd_uzs_level": "официальный справочный курс",
-      "usd_uzs_mom_change": "к предыдущей месячной/справочной дате",
-      "usd_uzs_yoy_change": "к той же справочной дате прошлого года",
-      "reer_level": "индекс, 2019=100",
-      "gold_price_level": "рыночный спот/справочный уровень",
-      "gold_price_change": "к предыдущему месячному ориентиру",
-      "gold_price_forecast": "винтаж внешнего справочного прогноза"
+      "real_gdp_growth_annual_yoy": "релизу",
+      "real_gdp_growth_quarter_yoy": "релизу",
+      "gdp_nowcast_current_quarter": "модельному nowcast",
+      "cpi_yoy": "релизу",
+      "cpi_mom": "релизу",
+      "food_cpi_yoy": "релизу",
+      "exports_yoy": "торговому релизу",
+      "imports_yoy": "торговому релизу",
+      "trade_balance": "торговому балансу",
+      "policy_rate": "настройке политики",
+      "usd_uzs_level": "официальному справочному курсу",
+      "usd_uzs_mom_change": "месячному изменению FX",
+      "usd_uzs_yoy_change": "годовому изменению FX",
+      "reer_level": "индексу REER",
+      "gold_price_level": "рыночному ориентиру",
+      "gold_price_change": "изменению цены золота",
+      "gold_price_forecast": "винтажу прогноза"
     },
     "indicators": {
       "title": "Панели показателей",

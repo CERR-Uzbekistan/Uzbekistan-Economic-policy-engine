@@ -49,6 +49,11 @@ export type HeadlineMetric = {
   period: string
   baseline_value: number | null
   delta_abs: number | null
+  // Overview artifact semantics. `delta_abs` is retained for legacy consumers;
+  // Overview renderers should prefer these explicit fields when present.
+  delta_value?: number | null
+  delta_unit?: string | null
+  delta_basis?: 'percentage_point' | 'percent_change' | 'absolute' | 'none'
   delta_pct: number | null
   direction: Direction
   confidence: Confidence | null
@@ -66,6 +71,9 @@ export type HeadlineMetric = {
   source_label?: string
   source_period?: string
   claim_type?: string
+  claim_label_key?: string
+  comparison_basis_key?: string
+  comparison_period?: string | null
   validation_status?: 'valid' | 'warning' | 'failed'
   warnings?: string[]
   caveats?: string[]

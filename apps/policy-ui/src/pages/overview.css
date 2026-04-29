@@ -160,28 +160,17 @@
   justify-content: flex-end;
 }
 
-.overview-kpi-card__provenance {
+.overview-kpi-card__claim-label {
   border: 1px solid var(--color-border);
   border-radius: 0;
   color: var(--color-text-muted);
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   font-weight: 700;
   line-height: 1;
   min-width: 1.35rem;
   padding: 0.18rem 0.28rem;
   text-align: center;
   text-transform: uppercase;
-}
-
-.overview-kpi-card__provenance--nowcast {
-  border-color: var(--color-brand);
-  color: var(--color-brand);
-}
-
-.overview-kpi-card__provenance--scenario,
-.overview-kpi-card__provenance--reference,
-.overview-kpi-card__provenance--draft {
-  background: var(--color-surface-muted);
 }
 
 .kpi__name,
@@ -360,6 +349,7 @@
   display: grid;
   gap: 0.22rem;
   justify-items: end;
+  min-width: 0;
   text-align: end;
 }
 
@@ -385,16 +375,22 @@
   min-height: 1.38rem;
 }
 
-.overview-indicator-row__basis {
-  margin: 0;
-  max-width: 24ch;
-}
-
 .overview-indicator-row__delta {
   color: var(--color-text-muted);
   font-family: var(--font-mono);
   font-size: 0.74rem;
-  white-space: nowrap;
+  max-width: 28ch;
+  overflow-wrap: anywhere;
+}
+
+.overview-indicator-row__claim-label {
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.22rem 0.32rem;
+  text-transform: uppercase;
 }
 
 .overview-indicator-row__status {

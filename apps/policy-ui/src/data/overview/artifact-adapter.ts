@@ -7,6 +7,11 @@ import type {
   ModelAttribution,
   OverviewIndicatorGroup,
 } from '../../contracts/data-contract.js'
+import {
+  getClaimLabelKey,
+  getMetricSemantics,
+  type OverviewComparisonPeriodStrategy,
+} from '../../components/overview/metric-semantics.js'
 import { overviewV1Data } from '../mock/overview.js'
 import type { OverviewArtifact, OverviewArtifactMetric } from './artifact-types.js'
 import {
@@ -27,6 +32,8 @@ function toConfidence(status: OverviewArtifactMetric['validation_status']): Conf
 }
 
 function toDisplayUnit(metric: OverviewArtifactMetric): string {
+  const semantics = getMetricSemantics(metric.id)
+  if (semantics) return semantics.display_unit
   if (metric.id === 'usd_uzs_level') return 'UZS/USD'
   if (metric.unit === 'USD per troy ounce') return 'USD/oz'
   if (metric.unit.startsWith('percent')) return '%'
@@ -48,13 +55,93 @@ function toModelAttribution(metric: OverviewArtifactMetric, artifact: OverviewAr
   ]
 }
 
+const MONTH_INDEX_BY_NAME: Readonly<Record<string, number>> = {
+  jan: 0,
+  january: 0,
+  feb: 1,
+  february: 1,
+  mar: 2,
+  march: 2,
+  apr: 3,
+  april: 3,
+  may: 4,
+  jun: 5,
+  june: 5,
+  jul: 6,
+  july: 6,
+  aug: 7,
+  august: 7,
+  sep: 8,
+  sept: 8,
+  september: 8,
+  oct: 9,
+  october: 9,
+  nov: 10,
+  november: 10,
+  dec: 11,
+  december: 11,
+}
+
+const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] as const
+
+function deriveComparisonPeriod(
+  sourcePeriod: string,
+  strategy: OverviewComparisonPeriodStrategy,
+  previousValue: number | null,
+): string | null {
+  if (previousValue === null) return null
+
+  if (strategy === 'previous_month') {
+    const match = /^([A-Za-z]+)\s+(\d{4})$/.exec(sourcePeriod.trim())
+    if (!match) return null
+    const monthIndex = MONTH_INDEX_BY_NAME[match[1].toLowerCase()]
+    if (monthIndex === undefined) return null
+    const year = Number(match[2])
+    const previousMonth = monthIndex === 0 ? 11 : monthIndex - 1
+    const previousYear = monthIndex === 0 ? year - 1 : year
+    return `${MONTH_LABELS[previousMonth]} ${previousYear}`
+  }
+
+  if (strategy === 'previous_year') {
+    const match = /^(\d{4})$/.exec(sourcePeriod.trim())
+    return match ? String(Number(match[1]) - 1) : null
+  }
+
+  if (strategy === 'same_quarter_previous_year') {
+    const normalized = sourcePeriod.trim()
+    const yearFirst = /^(\d{4})\s+Q([1-4])$/i.exec(normalized)
+    if (yearFirst) return `${Number(yearFirst[1]) - 1} Q${yearFirst[2]}`
+    const quarterFirst = /^Q([1-4])\s+(\d{4})$/i.exec(normalized)
+    if (quarterFirst) return `Q${quarterFirst[1]} ${Number(quarterFirst[2]) - 1}`
+  }
+
+  return null
+}
+
 function toHeadlineMetric(metric: OverviewArtifactMetric, artifact: OverviewArtifact): HeadlineMetric {
   const deltaAbs = metric.previous_value === null ? null : metric.value - metric.previous_value
-  const deltaPct =
-    deltaAbs === null || metric.previous_value === null || metric.previous_value === 0
+  const semantics = getMetricSemantics(metric.id)
+  const deltaBasis = semantics?.delta_display_mode ?? 'absolute'
+  const deltaValue =
+    deltaAbs === null
       ? null
-      : (deltaAbs / metric.previous_value) * 100
+      : deltaBasis === 'percent_change'
+        ? metric.previous_value === null || metric.previous_value === 0
+          ? null
+          : (deltaAbs / metric.previous_value) * 100
+        : deltaBasis === 'none'
+          ? null
+          : deltaAbs
+  // `delta_pct` is retained only for true percent-change semantics. Rate metrics
+  // use percentage-point `delta_value`, so downstream UI cannot mistake pp deltas
+  // for relative percentage changes.
+  const deltaPct = deltaBasis === 'percent_change' ? deltaValue : null
   const definition = OVERVIEW_LOCKED_METRIC_BY_ID.get(metric.id)
+  const comparisonPeriod = deriveComparisonPeriod(
+    metric.source_period,
+    semantics?.comparison_period_strategy ?? 'none',
+    metric.previous_value,
+  )
 
   return {
     metric_id: metric.id,
@@ -64,6 +151,9 @@ function toHeadlineMetric(metric: OverviewArtifactMetric, artifact: OverviewArti
     period: metric.source_period,
     baseline_value: metric.previous_value,
     delta_abs: deltaAbs,
+    delta_value: deltaValue,
+    delta_unit: semantics?.delta_unit ?? toDisplayUnit(metric),
+    delta_basis: deltaBasis,
     delta_pct: deltaPct,
     direction: toDirection(deltaAbs),
     confidence: toConfidence(metric.validation_status),
@@ -74,6 +164,9 @@ function toHeadlineMetric(metric: OverviewArtifactMetric, artifact: OverviewArti
     source_label: metric.source_label,
     source_period: metric.source_period,
     claim_type: metric.claim_type,
+    claim_label_key: semantics?.claim_label_key ?? getClaimLabelKey(metric.claim_type) ?? undefined,
+    comparison_basis_key: semantics?.comparison_basis_key,
+    comparison_period: comparisonPeriod,
     validation_status: metric.validation_status,
     warnings: metric.warnings,
     caveats: metric.caveats,
