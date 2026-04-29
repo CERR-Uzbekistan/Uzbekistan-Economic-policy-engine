@@ -1,6 +1,6 @@
 {
   "schema_version": "overview.v1",
-  "exported_at": "2026-04-29T10:34:43Z",
+  "exported_at": "2026-04-29T11:18:20Z",
   "generated_by": "scripts/overview/export-overview.mjs",
   "validation_status": "warning",
   "metrics": [
@@ -13,15 +13,16 @@
       "frequency": "annual",
       "value": 7.7,
       "previous_value": 6.7,
-      "source_label": "Statistics Agency national accounts",
+      "source_label": "Statistics Agency SIAT annual GDP data, calculated YoY",
       "source_period": "2025",
       "validation_status": "valid",
       "caveats": [
-        "Preliminary annual national accounts release; owner verification is still required before public export.",
-        "previous_value 6.7 is the 2024 annual real GDP growth rate shown in the same Statistics Agency annual GDP release."
+        "SIAT 582 reports annual GDP growth rates as prior-year=100 index values; Overview stores index minus 100.",
+        "previous_value 6.7 is 2024 SIAT 582 index 106.7 minus 100.",
+        "SIAT 582 metadata note: for 2024 preliminary data."
       ],
       "warnings": [],
-      "exported_at": "2026-04-29T10:34:43Z",
+      "exported_at": "2026-04-29T11:18:20Z",
       "top_card": false
     },
     {
@@ -41,7 +42,7 @@
         "previous_value 6.8 is the January-March 2025 real GDP growth rate shown in the same Statistics Agency Q1 GDP release."
       ],
       "warnings": [],
-      "exported_at": "2026-04-29T10:34:43Z",
+      "exported_at": "2026-04-29T11:18:20Z",
       "top_card": true,
       "top_card_order": 1
     },
@@ -64,7 +65,7 @@
       "warnings": [
         "Static fallback nowcast is owner-approved for Overview V1 but is not an accepted DFM Q2 artifact."
       ],
-      "exported_at": "2026-04-29T10:34:43Z",
+      "exported_at": "2026-04-29T11:18:20Z",
       "top_card": true,
       "top_card_order": 2
     },
@@ -85,7 +86,7 @@
         "previous_value 7.3 is the February 2026 annual CPI rate shown in the same Statistics Agency March 2026 CPI release."
       ],
       "warnings": [],
-      "exported_at": "2026-04-29T10:34:43Z",
+      "exported_at": "2026-04-29T11:18:20Z",
       "top_card": true,
       "top_card_order": 3
     },
@@ -106,7 +107,7 @@
         "previous_value 0.6 is February 2026 SIAT 4585 aggregate index 100.6 minus 100."
       ],
       "warnings": [],
-      "exported_at": "2026-04-29T10:34:43Z",
+      "exported_at": "2026-04-29T11:18:20Z",
       "top_card": false
     },
     {
@@ -126,7 +127,7 @@
         "previous_value 5.9 is the February 2026 annual food CPI rate shown in the same Statistics Agency March 2026 CPI release."
       ],
       "warnings": [],
-      "exported_at": "2026-04-29T10:34:43Z",
+      "exported_at": "2026-04-29T11:18:20Z",
       "top_card": true,
       "top_card_order": 4
     },
@@ -149,7 +150,7 @@
       "warnings": [
         "Owner approved calculated YoY from official observed SIAT levels; current lock still classifies this metric as observed pending later cleanup."
       ],
-      "exported_at": "2026-04-29T10:34:43Z",
+      "exported_at": "2026-04-29T11:18:20Z",
       "top_card": true,
       "top_card_order": 5
     },
@@ -172,7 +173,7 @@
       "warnings": [
         "Owner approved calculated YoY from official observed SIAT levels; current lock still classifies this metric as observed pending later cleanup."
       ],
-      "exported_at": "2026-04-29T10:34:43Z",
+      "exported_at": "2026-04-29T11:18:20Z",
       "top_card": true,
       "top_card_order": 6
     },
@@ -195,7 +196,7 @@
       "warnings": [
         "Owner approved calculated trade balance from official observed SIAT export and import levels; current lock unit remains broad pending later cleanup."
       ],
-      "exported_at": "2026-04-29T10:34:43Z",
+      "exported_at": "2026-04-29T11:18:20Z",
       "top_card": false
     },
     {
@@ -214,7 +215,7 @@
         "Event-based setting; do not infer policy stance without inflation context."
       ],
       "warnings": [],
-      "exported_at": "2026-04-29T10:34:43Z",
+      "exported_at": "2026-04-29T11:18:20Z",
       "top_card": true,
       "top_card_order": 7
     },
@@ -238,7 +239,7 @@
       "warnings": [
         "Prior-month requested date 2026-03-28 differed from actual CBU date 2026-03-27; nearest available CBU observation was used."
       ],
-      "exported_at": "2026-04-29T10:34:43Z",
+      "exported_at": "2026-04-29T11:18:20Z",
       "top_card": true,
       "top_card_order": 8
     },
@@ -265,7 +266,7 @@
       "warnings": [
         "Prior-month requested date 2026-03-28 differed from actual CBU date 2026-03-27; nearest available CBU observation was used."
       ],
-      "exported_at": "2026-04-29T10:34:43Z",
+      "exported_at": "2026-04-29T11:18:20Z",
       "top_card": false
     },
     {
@@ -289,7 +290,7 @@
         "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
       ],
       "warnings": [],
-      "exported_at": "2026-04-29T10:34:43Z",
+      "exported_at": "2026-04-29T11:18:20Z",
       "top_card": false
     },
     {
@@ -311,7 +312,7 @@
       "warnings": [
         "Source URL is pending; replace this owner-supplied CERR value with accepted HFI-backed source when available."
       ],
-      "exported_at": "2026-04-29T10:34:43Z",
+      "exported_at": "2026-04-29T11:18:20Z",
       "top_card": false
     },
     {
@@ -330,7 +331,7 @@
         "External monthly average market price; not a CERR forecast."
       ],
       "warnings": [],
-      "exported_at": "2026-04-29T10:34:43Z",
+      "exported_at": "2026-04-29T11:18:20Z",
       "top_card": false
     },
     {
@@ -349,7 +350,7 @@
         "Comparison basis is MoM."
       ],
       "warnings": [],
-      "exported_at": "2026-04-29T10:34:43Z",
+      "exported_at": "2026-04-29T11:18:20Z",
       "top_card": false
     },
     {
@@ -369,7 +370,7 @@
         "Forecast vintage predates the March 2026 spot reading; do not read the level gap as a CERR call."
       ],
       "warnings": [],
-      "exported_at": "2026-04-29T10:34:43Z",
+      "exported_at": "2026-04-29T11:18:20Z",
       "top_card": false
     }
   ],
