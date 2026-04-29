@@ -1,7 +1,8 @@
 import { readFileSync, writeFileSync } from 'node:fs'
-import { dirname, join, resolve } from 'node:path'
+import { basename, dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { buildCbuFxMetricUpdates } from './sources/cbu-fx.mjs'
+import { buildSiatTradeMetricUpdates, isManualRequiredError } from './sources/siat-trade.mjs'
 import { applyMetricUpdatesToSnapshot, formatDiffReport } from './sources/update-snapshot.mjs'
 
 const repoRoot = resolve(fileURLToPath(import.meta.url), '..', '..', '..')
@@ -49,7 +50,9 @@ function parseArgs(argv) {
     }
   }
 
-  if (options.family !== 'cbu-fx') fail(`Unsupported Overview source family for Phase 1: ${options.family}`)
+  if (!['cbu-fx', 'siat-trade'].includes(options.family)) {
+    fail(`Unsupported Overview source family: ${options.family}`)
+  }
   if (options.dryRun && options.writeSnapshot) fail('Use either --dry-run or --write-snapshot, not both.')
   if (!options.dryRun && !options.writeSnapshot) options.dryRun = true
   return options
@@ -63,7 +66,11 @@ function fixtureFetchJson(fixtureDir) {
   return async (_url, requestedDate) => readJson(join(fixtureDir, `${requestedDate}.json`))
 }
 
-function buildDiffReport(args, snapshotPath, result) {
+function siatFixtureFetchJson(fixtureDir) {
+  return async (url) => readJson(join(fixtureDir, basename(new URL(url).pathname)))
+}
+
+function buildDiffReport(args, snapshotPath, result, manualRequired = null) {
   return {
     generated_at: new Date().toISOString(),
     family: args.family,
@@ -71,6 +78,7 @@ function buildDiffReport(args, snapshotPath, result) {
     changed: result.changed,
     status: result.snapshot.status,
     value_hash: result.value_hash,
+    manual_required: manualRequired,
     diff: result.diff,
   }
 }
@@ -79,23 +87,54 @@ async function main() {
   const args = parseArgs(process.argv.slice(2))
   const snapshotPath = resolve(args.snapshot)
   const snapshot = readJson(snapshotPath)
-  const updates = await buildCbuFxMetricUpdates({
-    latestDate: args.latestDate,
-    priorMonthDate: args.priorMonthDate,
-    priorYearDate: args.priorYearDate,
-    fetchJson: args.fixtureDir ? fixtureFetchJson(resolve(args.fixtureDir)) : undefined,
-  })
-  const result = applyMetricUpdatesToSnapshot(snapshot, updates)
+  let result
+  let manualRequired = null
 
-  console.log(formatDiffReport(result.diff))
+  try {
+    const updates = args.family === 'cbu-fx'
+      ? await buildCbuFxMetricUpdates({
+        latestDate: args.latestDate,
+        priorMonthDate: args.priorMonthDate,
+        priorYearDate: args.priorYearDate,
+        fetchJson: args.fixtureDir ? fixtureFetchJson(resolve(args.fixtureDir)) : undefined,
+      })
+      : await buildSiatTradeMetricUpdates({
+        snapshot,
+        fetchJson: args.fixtureDir ? siatFixtureFetchJson(resolve(args.fixtureDir)) : undefined,
+      })
+    result = applyMetricUpdatesToSnapshot(snapshot, updates)
+  } catch (error) {
+    if (!isManualRequiredError(error)) throw error
+    manualRequired = {
+      reason: error.reason ?? error.message,
+      details: error.details ?? {},
+    }
+    result = {
+      snapshot,
+      diff: [],
+      changed: false,
+      value_hash: snapshot.value_hash,
+    }
+  }
+
+  if (manualRequired) {
+    console.log(`manual_required: ${manualRequired.reason}`)
+    console.log(JSON.stringify(manualRequired.details))
+  } else {
+    console.log(formatDiffReport(result.diff))
+  }
   console.log(`status: ${result.snapshot.status}`)
   console.log(`value_hash: ${result.value_hash}`)
 
   if (args.writeSnapshot) {
     const diffReportPath = resolve(args.diffReport ?? join(dirname(snapshotPath), 'overview_source_snapshot.diff_report.json'))
-    writeFileSync(snapshotPath, `${JSON.stringify(result.snapshot, null, 2)}\n`, 'utf8')
-    writeFileSync(diffReportPath, `${JSON.stringify(buildDiffReport(args, snapshotPath, result), null, 2)}\n`, 'utf8')
-    console.log(`Wrote source snapshot: ${snapshotPath}`)
+    if (result.changed) {
+      writeFileSync(snapshotPath, `${JSON.stringify(result.snapshot, null, 2)}\n`, 'utf8')
+      console.log(`Wrote source snapshot: ${snapshotPath}`)
+    } else {
+      console.log(`No source snapshot changes written: ${snapshotPath}`)
+    }
+    writeFileSync(diffReportPath, `${JSON.stringify(buildDiffReport(args, snapshotPath, result, manualRequired), null, 2)}\n`, 'utf8')
     console.log(`Wrote diff report: ${diffReportPath}`)
   } else {
     console.log('Dry run only; source snapshot and public overview.json were not written.')

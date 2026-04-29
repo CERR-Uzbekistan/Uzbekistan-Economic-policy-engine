@@ -62,3 +62,42 @@ provenance. If a snapshot says `owner_verified_for_public_artifact` but its stor
 Source fetching is manual-script only. The React app and build do not import or run
 CBU/stat.uz/SIAT source fetch code, and public artifact generation remains behind the
 existing owner-verified exporter gate.
+
+## Phase 2 SIAT Trade Automation
+
+Phase 2 automation is intentionally limited to these SIAT trade metrics:
+
+- `exports_yoy`
+- `imports_yoy`
+- `trade_balance`
+
+It uses official SIAT / Statistics Agency machine-readable SDMX JSON endpoints already
+present in the source snapshot as seeds. The script validates that each payload is the
+expected foreign-trade family, flow (`exports` or `imports`), USD million unit, monthly
+cumulative-window series, and comparable current/prior-year window before applying any
+value. If metadata or window validation fails, the script reports `manual_required`,
+leaves metric values unchanged, and writes that reason to the diff report on write runs.
+
+Dry run with fixtures:
+
+```bash
+node scripts/overview/fetch-overview-sources.mjs --dry-run --family siat-trade --snapshot scripts/overview/overview_source_snapshot.json --fixture-dir scripts/overview/test-fixtures/siat-trade
+```
+
+Write the source snapshot after reviewer inspection of the diff:
+
+```bash
+node scripts/overview/fetch-overview-sources.mjs --write-snapshot --family siat-trade --snapshot scripts/overview/overview_source_snapshot.json --fixture-dir scripts/overview/test-fixtures/siat-trade
+```
+
+Calculated values:
+
+- `exports_yoy = round2((exports_current - exports_prior_year) / exports_prior_year * 100)`
+- `imports_yoy = round2((imports_current - imports_prior_year) / imports_prior_year * 100)`
+- `trade_balance = round2((exports_current - imports_current) / 1000)` when SIAT levels are USD million and the displayed balance is USD billion.
+
+The automated SIAT update preserves the existing warning posture for trade metrics until
+the lock cleanup is handled separately. Any changed trade value or provenance moves the
+snapshot to `automation_pending_owner_review`, clears prior acceptance fields, recomputes
+`value_hash`, and updates `overview_source_snapshot.diff_report.json`. It must never
+write `apps/policy-ui/public/data/overview.json`.

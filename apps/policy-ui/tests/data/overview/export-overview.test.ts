@@ -117,6 +117,7 @@ describe('overview exporter', () => {
 
     assert.notEqual(result.status, 0)
     assert.match(result.stderr, /automation_pending_owner_review/)
+    assert.equal(existsSync(result.outputPath), false)
   })
 
   it('refuses owner-verified snapshots when value_hash no longer matches values or provenance', () => {

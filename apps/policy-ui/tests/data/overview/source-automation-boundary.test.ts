@@ -28,6 +28,7 @@ describe('Overview source automation boundary', () => {
       /scripts\/overview\/sources/,
       /scripts\\overview\\sources/,
       /cbu-fx\.mjs/,
+      /siat-trade\.mjs/,
       /snapshot-hash\.mjs/,
       /update-snapshot\.mjs/,
     ]
@@ -49,4 +50,3 @@ describe('Overview source automation boundary', () => {
     assert.equal(/cbu\.uz|stat\.uz|siat|fetch-overview-sources/i.test(buildScript), false)
   })
 })
-

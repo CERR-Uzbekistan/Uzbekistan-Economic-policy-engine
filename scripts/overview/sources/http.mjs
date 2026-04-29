@@ -1,5 +1,6 @@
 const DEFAULT_USER_AGENT = 'Uzbekistan-Economic-Policy-Engine/overview-source-automation (+manual-review)'
 const CBU_USD_PATH_PATTERN = /^\/en\/arkhiv-kursov-valyut\/json\/USD\/\d{4}-\d{2}-\d{2}\/$/
+const SIAT_SDMX_DATA_PATH_PATTERN = /^\/media\/uploads\/sdmx\/sdmx_data_\d+\.json$/
 const hostQueues = new Map()
 
 function sleep(ms) {
@@ -28,7 +29,9 @@ async function withHostLimit(url, task) {
 
 export function assertAllowedOverviewSourceUrl(url) {
   const parsed = new URL(url)
-  if (parsed.host !== 'cbu.uz' || !CBU_USD_PATH_PATTERN.test(parsed.pathname)) {
+  const allowedCbuUrl = parsed.host === 'cbu.uz' && CBU_USD_PATH_PATTERN.test(parsed.pathname)
+  const allowedSiatUrl = parsed.host === 'api.siat.stat.uz' && SIAT_SDMX_DATA_PATH_PATTERN.test(parsed.pathname)
+  if (!allowedCbuUrl && !allowedSiatUrl) {
     throw new Error(`Refusing to request unsupported Overview source URL: ${url}`)
   }
 }
@@ -72,4 +75,3 @@ export async function fetchJsonWithRetry(url, options = {}) {
     throw new Error(`Failed to fetch ${url}: ${lastError instanceof Error ? lastError.message : String(lastError)}`)
   })
 }
-

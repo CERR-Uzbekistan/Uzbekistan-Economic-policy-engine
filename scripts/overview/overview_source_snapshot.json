@@ -1,10 +1,8 @@
 {
   "source_snapshot_version": "overview-source.v1",
-  "status": "owner_verified_for_public_artifact",
-  "snapshot_accepted_by": "project owner",
-  "snapshot_accepted_at": "2026-04-28T17:43:21Z",
+  "status": "automation_pending_owner_review",
   "snapshot_note": "Owner-accepted Overview V1 source snapshot. REER remains warning-status with CERR owner-supplied value and source URL pending; replace with automated HFI-backed source when accepted.",
-  "value_hash": "48823ab3310223048b84d2b2b8f0e589ddc29f1b54afad0cc51e868fdd40e72f",
+  "value_hash": "1bbcd82005a61539a187612df5e2294157361e305a2ed9a8da4a3469f95d5a71",
   "metrics": [
     {
       "metric_id": "real_gdp_growth_annual_yoy",
@@ -130,11 +128,13 @@
       "validation_status": "warning",
       "caveats": [
         "Trade values can be revised; show latest-vintage status.",
-        "YoY rate calculated from official SIAT cumulative monthly export levels: USD 3,546.808 million for January-February 2026 versus USD 4,643.0 million for January-February 2025."
+        "YoY rate calculated from official SIAT cumulative monthly export levels: USD 3,546.808 million for January-February 2026 versus USD 4,643 million for January-February 2025."
       ],
       "warnings": [
         "Owner approved calculated YoY from official observed SIAT levels; current lock still classifies this metric as observed pending later cleanup."
-      ]
+      ],
+      "source_reference": "Calculated from SIAT sdmx_data_2407 cumulative monthly export levels for January-February 2026: USD 3,546.808 million versus USD 4,643 million for January-February 2025.",
+      "extracted_at": "2026-04-29T05:00:31.416Z"
     },
     {
       "metric_id": "imports_yoy",
@@ -154,22 +154,24 @@
       ],
       "warnings": [
         "Owner approved calculated YoY from official observed SIAT levels; current lock still classifies this metric as observed pending later cleanup."
-      ]
+      ],
+      "source_reference": "Calculated from SIAT sdmx_data_2414 cumulative monthly import levels for January-February 2026: USD 8,058.287 million versus USD 6,202.6 million for January-February 2025.",
+      "extracted_at": "2026-04-29T05:00:31.416Z"
     },
     {
       "metric_id": "trade_balance",
-      "value": -4.511,
+      "value": -4.51,
       "previous_value": null,
       "source_label": "Statistics Agency SIAT trade data, calculated",
       "source_period": "January-February 2026",
-      "source_reference": "Calculated from SIAT export and import monthly datasets: exports USD 3,546.808 million, imports USD 8,058.287 million.",
-      "extracted_at": "2026-04-27T00:00:00Z",
+      "source_reference": "Calculated from SIAT cumulative monthly goods trade levels for January-February 2026: exports USD 3,546.808 million from sdmx_data_2407, imports USD 8,058.287 million from sdmx_data_2414. Source URLs: https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json; https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2414.json.",
+      "extracted_at": "2026-04-29T05:00:31.416Z",
       "claim_type": "observed",
       "unit": "USD million or USD billion",
       "frequency": "monthly or quarterly",
       "validation_status": "warning",
       "caveats": [
-        "Displayed value is in USD billion and is calculated from SIAT cumulative monthly goods/trade levels.",
+        "Displayed value is in USD billion (negative = goods trade deficit); calculated from SIAT cumulative monthly goods trade levels.",
         "Label goods trade balance if services are excluded."
       ],
       "warnings": [

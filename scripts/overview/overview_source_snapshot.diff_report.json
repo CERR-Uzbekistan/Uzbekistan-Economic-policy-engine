@@ -1,139 +1,76 @@
 {
-  "generated_at": "2026-04-28T17:40:34.542Z",
-  "family": "cbu-fx",
+  "generated_at": "2026-04-29T05:00:31.433Z",
+  "family": "siat-trade",
   "snapshot": "C:\\Users\\n.ortiqov\\Desktop\\Uzbekistan-Economic-policy-engine\\scripts\\overview\\overview_source_snapshot.json",
   "changed": true,
   "status": "automation_pending_owner_review",
-  "value_hash": "48823ab3310223048b84d2b2b8f0e589ddc29f1b54afad0cc51e868fdd40e72f",
+  "value_hash": "1bbcd82005a61539a187612df5e2294157361e305a2ed9a8da4a3469f95d5a71",
+  "manual_required": null,
   "diff": [
     {
-      "metric_id": "usd_uzs_level",
-      "field": "value",
-      "old_value": 12020.48,
-      "new_value": 12072.96
+      "metric_id": "exports_yoy",
+      "field": "source_reference",
+      "old_value": null,
+      "new_value": "Calculated from SIAT sdmx_data_2407 cumulative monthly export levels for January-February 2026: USD 3,546.808 million versus USD 4,643 million for January-February 2025."
     },
     {
-      "metric_id": "usd_uzs_level",
-      "field": "source_period",
-      "old_value": "2026-04-27",
-      "new_value": "2026-04-28"
+      "metric_id": "exports_yoy",
+      "field": "extracted_at",
+      "old_value": null,
+      "new_value": "2026-04-29T05:00:31.416Z"
     },
     {
-      "metric_id": "usd_uzs_level",
-      "field": "source_url",
-      "old_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-04-27/",
-      "new_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-04-28/"
-    },
-    {
-      "metric_id": "usd_uzs_level",
-      "field": "observed_at",
-      "old_value": "2026-04-27T00:00:00Z",
-      "new_value": "2026-04-28T00:00:00Z"
-    },
-    {
-      "metric_id": "usd_uzs_level",
+      "metric_id": "exports_yoy",
       "field": "caveats",
       "old_value": [
-        "Official/reference rate, not transaction-weighted market average."
+        "Trade values can be revised; show latest-vintage status.",
+        "YoY rate calculated from official SIAT cumulative monthly export levels: USD 3,546.808 million for January-February 2026 versus USD 4,643.0 million for January-February 2025."
       ],
       "new_value": [
-        "Official/reference rate, not transaction-weighted market average.",
-        "Latest observation: requested 2026-04-28; actual CBU date/rate 2026-04-28, 12072.96 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-03-28; actual CBU date/rate 2026-03-27 returned for requested 2026-03-28, 12179.87 UZS per USD."
+        "Trade values can be revised; show latest-vintage status.",
+        "YoY rate calculated from official SIAT cumulative monthly export levels: USD 3,546.808 million for January-February 2026 versus USD 4,643 million for January-February 2025."
       ]
     },
     {
-      "metric_id": "usd_uzs_level",
-      "field": "warnings",
-      "old_value": [],
-      "new_value": [
-        "Prior-month requested date 2026-03-28 differed from actual CBU date 2026-03-27; nearest available CBU observation was used."
-      ]
-    },
-    {
-      "metric_id": "usd_uzs_mom_change",
-      "field": "value",
-      "old_value": -1.31,
-      "new_value": -0.88
-    },
-    {
-      "metric_id": "usd_uzs_mom_change",
-      "field": "source_period",
-      "old_value": "2026-04-27 vs 2026-03-27",
-      "new_value": "2026-04-28 vs 2026-03-27"
-    },
-    {
-      "metric_id": "usd_uzs_mom_change",
+      "metric_id": "imports_yoy",
       "field": "source_reference",
-      "old_value": "Calculated from CBU official USD rates: 12020.48 on 2026-04-27 and 12179.87 on 2026-03-27",
-      "new_value": "Calculated from CBU official USD rates: 12072.96 on 2026-04-28 and 12179.87 on 2026-03-27. Requested dates: latest 2026-04-28, prior-month 2026-03-28."
+      "old_value": null,
+      "new_value": "Calculated from SIAT sdmx_data_2414 cumulative monthly import levels for January-February 2026: USD 8,058.287 million versus USD 6,202.6 million for January-February 2025."
     },
     {
-      "metric_id": "usd_uzs_mom_change",
+      "metric_id": "imports_yoy",
+      "field": "extracted_at",
+      "old_value": null,
+      "new_value": "2026-04-29T05:00:31.416Z"
+    },
+    {
+      "metric_id": "trade_balance",
+      "field": "value",
+      "old_value": -4.511,
+      "new_value": -4.51
+    },
+    {
+      "metric_id": "trade_balance",
+      "field": "source_reference",
+      "old_value": "Calculated from SIAT export and import monthly datasets: exports USD 3,546.808 million, imports USD 8,058.287 million.",
+      "new_value": "Calculated from SIAT cumulative monthly goods trade levels for January-February 2026: exports USD 3,546.808 million from sdmx_data_2407, imports USD 8,058.287 million from sdmx_data_2414. Source URLs: https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json; https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2414.json."
+    },
+    {
+      "metric_id": "trade_balance",
       "field": "extracted_at",
       "old_value": "2026-04-27T00:00:00Z",
-      "new_value": "2026-04-28T17:40:34.291Z"
+      "new_value": "2026-04-29T05:00:31.416Z"
     },
     {
-      "metric_id": "usd_uzs_mom_change",
+      "metric_id": "trade_balance",
       "field": "caveats",
       "old_value": [
-        "Positive values indicate UZS depreciation against USD."
+        "Displayed value is in USD billion and is calculated from SIAT cumulative monthly goods/trade levels.",
+        "Label goods trade balance if services are excluded."
       ],
       "new_value": [
-        "Latest observation: requested 2026-04-28; actual CBU date/rate 2026-04-28, 12072.96 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-03-28; actual CBU date/rate 2026-03-27 returned for requested 2026-03-28, 12179.87 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-04-28; actual CBU date/rate 2025-04-28, 12957.14 UZS per USD.",
-        "Formula: ((latest - comparison) / comparison) * 100.",
-        "Rounded to 2 decimal places.",
-        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
-      ]
-    },
-    {
-      "metric_id": "usd_uzs_mom_change",
-      "field": "warnings",
-      "old_value": [],
-      "new_value": [
-        "Prior-month requested date 2026-03-28 differed from actual CBU date 2026-03-27; nearest available CBU observation was used."
-      ]
-    },
-    {
-      "metric_id": "usd_uzs_yoy_change",
-      "field": "value",
-      "old_value": -7.01,
-      "new_value": -6.82
-    },
-    {
-      "metric_id": "usd_uzs_yoy_change",
-      "field": "source_period",
-      "old_value": "2026-04-27 vs 2025-04-25",
-      "new_value": "2026-04-28 vs 2025-04-28"
-    },
-    {
-      "metric_id": "usd_uzs_yoy_change",
-      "field": "source_reference",
-      "old_value": "Calculated from CBU official USD rates: 12020.48 on 2026-04-27 and 12927.17 on 2025-04-25",
-      "new_value": "Calculated from CBU official USD rates: 12072.96 on 2026-04-28 and 12957.14 on 2025-04-28. Requested dates: latest 2026-04-28, prior-year 2025-04-28."
-    },
-    {
-      "metric_id": "usd_uzs_yoy_change",
-      "field": "extracted_at",
-      "old_value": "2026-04-27T00:00:00Z",
-      "new_value": "2026-04-28T17:40:34.291Z"
-    },
-    {
-      "metric_id": "usd_uzs_yoy_change",
-      "field": "caveats",
-      "old_value": [
-        "Positive values indicate UZS depreciation against USD."
-      ],
-      "new_value": [
-        "Latest observation: requested 2026-04-28; actual CBU date/rate 2026-04-28, 12072.96 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-03-28; actual CBU date/rate 2026-03-27 returned for requested 2026-03-28, 12179.87 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-04-28; actual CBU date/rate 2025-04-28, 12957.14 UZS per USD.",
-        "Formula: ((latest - comparison) / comparison) * 100.",
-        "Rounded to 2 decimal places.",
-        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
+        "Displayed value is in USD billion (negative = goods trade deficit); calculated from SIAT cumulative monthly goods trade levels.",
+        "Label goods trade balance if services are excluded."
       ]
     }
   ]
