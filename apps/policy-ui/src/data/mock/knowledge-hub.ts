@@ -1,3 +1,5 @@
+// Hidden pilot content. Not deployable. Gated by docs/data-bridge/09_knowledge_hub_contract.md
+// and CLAUDE.md preview gates. No data edits.
 import type { KnowledgeHubContent } from '../../contracts/data-contract.js'
 
 // Content seeded verbatim from docs/alignment/spec_prototype.html:2332–2412.
