@@ -1,4 +1,4 @@
-import type { JSX } from 'react'
+import { useEffect, useRef, useState, type JSX } from 'react'
 import type {
   ChartSemanticRole,
   ChartSeries,
@@ -15,7 +15,6 @@ import {
   ComposedChart,
   Legend,
   Line,
-  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
@@ -66,11 +65,11 @@ function colorForSemanticRole(role: ChartSemanticRole): string {
 // gets the same visual encoding without widening the ChartSeries contract.
 const NOWCAST_LINE_STYLES: Record<
   string,
-  { strokeDasharray?: string; showDots: boolean; connectNulls: boolean }
+  { strokeDasharray?: string; showDots: boolean; connectNulls: boolean; strokeWidth: number; dotRadius: number }
 > = {
-  gdp_history_yoy: { showDots: false, connectNulls: false },
-  gdp_nowcast_yoy: { strokeDasharray: '6 4', showDots: true, connectNulls: true },
-  gdp_forecast_yoy: { strokeDasharray: '2 4', showDots: false, connectNulls: true },
+  gdp_history_yoy: { showDots: false, connectNulls: false, strokeWidth: 2, dotRadius: 0 },
+  gdp_nowcast_yoy: { strokeDasharray: '6 4', showDots: true, connectNulls: true, strokeWidth: 3, dotRadius: 4.5 },
+  gdp_forecast_yoy: { strokeDasharray: '2 4', showDots: false, connectNulls: true, strokeWidth: 2, dotRadius: 0 },
 }
 
 function lineStyleForSeriesId(seriesId: string) {
@@ -78,6 +77,8 @@ function lineStyleForSeriesId(seriesId: string) {
     strokeDasharray: undefined,
     showDots: false,
     connectNulls: false,
+    strokeWidth: 2,
+    dotRadius: 0,
   }
 }
 
@@ -192,9 +193,34 @@ function buildScreenReaderSummary(spec: ChartSpec): string {
 }
 
 export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererProps): JSX.Element {
+  const bodyRef = useRef<HTMLDivElement>(null)
+  const [measuredWidth, setMeasuredWidth] = useState(() =>
+    typeof document === 'undefined' ? 640 : 0,
+  )
   const primaryModel = spec.model_attribution[0]?.model_id ?? 'N/A'
   const chartAriaLabel = ariaLabel ?? spec.title
   const freshness = getFreshness(spec)
+
+  useEffect(() => {
+    const element = bodyRef.current
+    if (!element) {
+      return undefined
+    }
+
+    const updateWidth = () => {
+      setMeasuredWidth(Math.max(1, Math.floor(element.getBoundingClientRect().width)))
+    }
+    updateWidth()
+
+    if (typeof ResizeObserver !== 'undefined') {
+      const observer = new ResizeObserver(updateWidth)
+      observer.observe(element)
+      return () => observer.disconnect()
+    }
+
+    globalThis.addEventListener?.('resize', updateWidth)
+    return () => globalThis.removeEventListener?.('resize', updateWidth)
+  }, [])
 
   if (!hasUsableSeriesData(spec)) {
     return (
@@ -218,6 +244,8 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
   const yDomain = toYAxisDomain(spec)
   const screenReaderSummary = buildScreenReaderSummary(spec)
   const hasIllustrativeBand = bandMeta.some((item) => item.band.is_illustrative)
+  const suppressInternalLegend = spec.series.some((series) => series.series_id === 'gdp_nowcast_yoy')
+  const chartWidth = Math.max(measuredWidth, 1)
 
   const commonChartChildren = (
     <>
@@ -264,13 +292,15 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
           fontSize: '0.82rem',
         }}
       />
-      <Legend
-        align="left"
-        className="chart-renderer__legend"
-        iconSize={8}
-        verticalAlign="bottom"
-        wrapperStyle={{ paddingTop: 10 }}
-      />
+      {suppressInternalLegend ? null : (
+        <Legend
+          align="left"
+          className="chart-renderer__legend"
+          iconSize={8}
+          verticalAlign="bottom"
+          wrapperStyle={{ paddingTop: 10 }}
+        />
+      )}
     </>
   )
 
@@ -328,7 +358,7 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
   })
 
   const lineChartBody = (
-    <ComposedChart data={data} margin={{ top: 8, right: 8, bottom: 6, left: 6 }}>
+    <ComposedChart data={data} height={height} margin={{ top: 8, right: 8, bottom: 6, left: 6 }} width={chartWidth}>
       {uncertaintyPatterns}
       {commonChartChildren}
       {uncertaintyBands}
@@ -339,12 +369,16 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
             key={item.series.series_id}
             connectNulls={style.connectNulls}
             dataKey={item.key}
-            dot={style.showDots ? { r: 3, stroke: item.color, fill: item.color } : false}
+            dot={
+              style.showDots
+                ? { r: style.dotRadius, stroke: 'var(--color-surface)', strokeWidth: 1.5, fill: item.color }
+                : false
+            }
             isAnimationActive={false}
             name={item.series.label}
             stroke={item.color}
             strokeDasharray={style.strokeDasharray}
-            strokeWidth={2}
+            strokeWidth={style.strokeWidth}
             type="monotone"
           />
         )
@@ -372,14 +406,14 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
 
   const barChartBody =
     bandMeta.length > 0 ? (
-      <ComposedChart data={data} margin={{ top: 8, right: 8, bottom: 6, left: 6 }}>
+      <ComposedChart data={data} height={height} margin={{ top: 8, right: 8, bottom: 6, left: 6 }} width={chartWidth}>
         {uncertaintyPatterns}
         {commonChartChildren}
         {uncertaintyBands}
         {barSeries}
       </ComposedChart>
     ) : (
-      <BarChart data={data} margin={{ top: 8, right: 8, bottom: 6, left: 6 }}>
+      <BarChart data={data} height={height} margin={{ top: 8, right: 8, bottom: 6, left: 6 }} width={chartWidth}>
         {commonChartChildren}
         {barSeries}
       </BarChart>
@@ -404,11 +438,9 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
         <AttributionBadge modelId={primaryModel} active />
       </header>
 
-      <div className="chart-renderer__body" role="img" aria-label={chartAriaLabel}>
+      <div className="chart-renderer__body" role="img" aria-label={chartAriaLabel} ref={bodyRef}>
         <p className="sr-only">{screenReaderSummary}</p>
-        <ResponsiveContainer width="100%" height={height}>
-          {chartBody}
-        </ResponsiveContainer>
+        {measuredWidth > 0 ? chartBody : null}
       </div>
       <p className="chart-renderer__axis-note">
         {spec.x.label}

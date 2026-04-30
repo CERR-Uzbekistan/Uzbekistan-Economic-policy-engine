@@ -271,6 +271,11 @@
       "kicker": "Nowcast",
       "legendAria": "Nowcast chart legend",
       "modelNotOfficial": "Model nowcast · not an official forecast",
+      "markers": {
+        "aria": "Nowcast chart markers",
+        "lastActual": "Last actual",
+        "current": "Current nowcast"
+      },
       "legend": {
         "actual": "Actual history",
         "nowcast": "Current nowcast",

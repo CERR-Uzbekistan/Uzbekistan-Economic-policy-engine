@@ -81,6 +81,11 @@ async function createTestI18n() {
               kicker: 'Nowcast',
               legendAria: 'Nowcast chart legend',
               modelNotOfficial: 'Model nowcast · not an official forecast',
+              markers: {
+                aria: 'Nowcast chart markers',
+                lastActual: 'Last actual',
+                current: 'Current nowcast',
+              },
               legend: {
                 actual: 'Actual history',
                 nowcast: 'Current nowcast',
@@ -101,6 +106,106 @@ function renderBlock(chart: ChartSpec, props: Record<string, unknown> = {}, i18n
   return renderToStaticMarkup(
     i18n ? createElement(I18nextProvider, { i18n }, block) : block,
   )
+}
+
+function buildLongSegmentedChart(withForecast = true): ChartSpec {
+  const periods = [
+    '2017Q1', '2017Q2', '2017Q3', '2017Q4',
+    '2018Q1', '2018Q2', '2018Q3', '2018Q4',
+    '2019Q1', '2019Q2', '2019Q3', '2019Q4',
+    '2020Q1', '2020Q2', '2020Q3', '2020Q4',
+    '2021Q1', '2021Q2', '2021Q3', '2021Q4',
+    '2022Q1', '2022Q2', '2022Q3', '2022Q4',
+    '2023Q1', '2023Q2', '2023Q3', '2023Q4',
+    '2024Q1', '2024Q2', '2024Q3', '2024Q4',
+    '2025Q1', '2025Q2', '2025Q3', '2025Q4',
+    '2026Q1',
+    ...(withForecast ? ['2026Q2', '2026Q3'] : []),
+  ]
+  const currentIndex = periods.indexOf('2026Q1')
+  const forecastStart = currentIndex + 1
+  const historyValues = periods.map((_, index) => (index < currentIndex ? 4 + index * 0.1 : Number.NaN))
+  const lastActual = historyValues[currentIndex - 1]
+  const nowcastValues = periods.map((_, index) => {
+    if (index === currentIndex - 1) {
+      return lastActual
+    }
+    if (index === currentIndex) {
+      return 7.0
+    }
+    return Number.NaN
+  })
+  const forecastValues = periods.map((_, index) => {
+    if (index === currentIndex) {
+      return 7.0
+    }
+    if (withForecast && index >= forecastStart) {
+      return 6.8 - (index - forecastStart) * 0.2
+    }
+    return Number.NaN
+  })
+  const lower = periods.map((_, index) => {
+    if (index === currentIndex - 1) {
+      return lastActual
+    }
+    if (index >= currentIndex) {
+      return 6.3 - Math.max(0, index - currentIndex) * 0.2
+    }
+    return Number.NaN
+  })
+  const upper = periods.map((_, index) => {
+    if (index === currentIndex - 1) {
+      return lastActual
+    }
+    if (index >= currentIndex) {
+      return 7.7 + Math.max(0, index - currentIndex) * 0.2
+    }
+    return Number.NaN
+  })
+
+  return {
+    chart_id: 'nowcast_forecast',
+    title: 'Nowcast and forecast',
+    subtitle: 'Real GDP growth',
+    chart_type: 'line',
+    x: { label: 'Quarter', unit: '', values: periods },
+    y: { label: 'GDP growth', unit: '%', values: periods.map((_, index) => historyValues[index] ?? Number.NaN) },
+    series: [
+      {
+        series_id: 'gdp_history_yoy',
+        label: 'GDP growth — history (YoY, %)',
+        semantic_role: 'baseline',
+        values: historyValues,
+      },
+      {
+        series_id: 'gdp_nowcast_yoy',
+        label: 'GDP growth — current nowcast (YoY, %)',
+        semantic_role: 'alternative',
+        values: nowcastValues,
+      },
+      ...(withForecast
+        ? [{
+            series_id: 'gdp_forecast_yoy',
+            label: 'GDP growth — forecast path (YoY, %)',
+            semantic_role: 'other' as const,
+            values: forecastValues,
+          }]
+        : []),
+    ],
+    view_mode: 'level',
+    uncertainty: [
+      {
+        series_id: 'gdp_nowcast_yoy',
+        lower,
+        upper,
+        confidence_level: 70,
+        methodology_label: 'fan',
+        is_illustrative: false,
+      },
+    ],
+    takeaway: 'Current-quarter nowcast: 7.0% YoY (2026Q1).',
+    model_attribution: [attribution],
+  }
 }
 
 describe('NowcastForecastBlock (shape-agnostic)', () => {
@@ -264,5 +369,40 @@ describe('NowcastForecastBlock (shape-agnostic)', () => {
     assert.match(html, /Actual history/)
     assert.match(html, /Current nowcast/)
     assert.match(html, /Uncertainty band/)
+  })
+
+  it('projects the default Overview nowcast chart to a recent display window', async () => {
+    const i18n = await createTestI18n()
+    const chart = buildLongSegmentedChart()
+    const html = renderBlock(chart, {}, i18n)
+
+    assert.match(html, /data-nowcast-display-window="recent"/)
+    assert.match(html, /data-nowcast-display-start="2023Q1"/)
+    assert.match(html, /data-nowcast-display-end="2026Q3"/)
+    assert.match(html, /data-nowcast-display-points="15"/)
+    assert.match(html, /<th scope="row">2017Q1<\/th>/)
+  })
+
+  it('keeps the current segment and fan after recent-window projection', async () => {
+    const i18n = await createTestI18n()
+    const html = renderBlock(buildLongSegmentedChart(), {}, i18n)
+
+    assert.match(html, /data-nowcast-has-current-segment="true"/)
+    assert.match(html, /data-nowcast-has-fan="true"/)
+    assert.match(html, /data-nowcast-fan-inset="true"/)
+  })
+
+  it('renders current nowcast and last actual markers while the sr-only table keeps full history', async () => {
+    const i18n = await createTestI18n()
+    const chart = buildLongSegmentedChart()
+    const html = renderBlock(chart, {}, i18n)
+
+    assert.match(html, /data-nowcast-display-window="recent"/)
+    assert.match(html, /data-nowcast-marker="last-actual"/)
+    assert.match(html, /data-nowcast-marker="current"/)
+    assert.match(html, /Current nowcast/)
+    assert.match(html, /2026Q1/)
+    assert.match(html, /aria-label="Nowcast and forecast\. Current-quarter nowcast: 7\.0% YoY \(2026Q1\)\. Current nowcast: 2026Q1, 7\.0%\./)
+    assert.match(html, /<th scope="row">2017Q1<\/th>/)
   })
 })

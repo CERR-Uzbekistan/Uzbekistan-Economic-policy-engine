@@ -36,6 +36,8 @@
 
 .chart-renderer__body {
   min-height: 0;
+  min-width: 0;
+  overflow: hidden;
   width: 100%;
 }
 

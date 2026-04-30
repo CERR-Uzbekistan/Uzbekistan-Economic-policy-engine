@@ -271,6 +271,11 @@
       "kicker": "Nowcast",
       "legendAria": "Легенда графика nowcast",
       "modelNotOfficial": "Модельный nowcast · не официальный прогноз",
+      "markers": {
+        "aria": "Маркеры графика nowcast",
+        "lastActual": "Последний факт",
+        "current": "Текущий nowcast"
+      },
       "legend": {
         "actual": "Фактическая история",
         "nowcast": "Текущий nowcast",

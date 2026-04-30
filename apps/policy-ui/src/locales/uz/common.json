@@ -271,6 +271,11 @@
       "kicker": "Nowcast",
       "legendAria": "Nowcast grafigi izohi",
       "modelNotOfficial": "Model nowcast · rasmiy prognoz emas",
+      "markers": {
+        "aria": "Nowcast grafigi markerlari",
+        "lastActual": "So'nggi fakt",
+        "current": "Joriy nowcast"
+      },
       "legend": {
         "actual": "Faktik tarix",
         "nowcast": "Joriy nowcast",
