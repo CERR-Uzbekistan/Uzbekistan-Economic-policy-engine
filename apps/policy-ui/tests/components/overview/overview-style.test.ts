@@ -22,6 +22,20 @@ describe('Overview CSS contracts', () => {
     )
   })
 
+  it('does not size or clip Recharts internals (.recharts-wrapper, .recharts-surface)', () => {
+    // Regression: sizing/clipping rules on Recharts internals caused the
+    // nowcast chart to disappear. Constrain only the outer chart container
+    // (.chart-renderer) and ResponsiveContainer; never the SVG internals.
+    assert.doesNotMatch(
+      css,
+      /\.overview-nowcast-column[^{]*\.recharts-wrapper[^{]*\{[^}]*(?:max-width|width|height|min-width|max-height|min-height|overflow|clip|clip-path)[^}]*\}/s,
+    )
+    assert.doesNotMatch(
+      css,
+      /\.overview-nowcast-column[^{]*\.recharts-surface[^{]*\{[^}]*(?:max-width|width|height|min-width|max-height|min-height|overflow|clip|clip-path)[^}]*\}/s,
+    )
+  })
+
   it('keeps first-screen overview rows wrap-safe at narrow widths', () => {
     const requiredRules = [
       /\.overview-page \.page-header__meta\s*\{[^}]*overflow-wrap:\s*anywhere/s,

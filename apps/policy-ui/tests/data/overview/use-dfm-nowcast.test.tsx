@@ -62,7 +62,8 @@ describe('useDfmNowcast', () => {
     const payload = await fetchDfmBridgePayload(makeFetchOk())
     const adapter = toDfmAdapterOutput(payload)
     const chart = composeDfmNowcastChart(adapter)
-    assert.equal(chart.series.length, 1)
+    // Segmented composition emits at minimum the history + nowcast pair.
+    assert.ok(chart.series.length >= 2)
     assert.equal(chart.uncertainty.length, 3)
   })
 

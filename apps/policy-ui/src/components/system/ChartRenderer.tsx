@@ -60,6 +60,27 @@ function colorForSemanticRole(role: ChartSemanticRole): string {
   return 'var(--color-text-muted)'
 }
 
+// DFM Overview nowcast splits one logical "GDP growth" line into three
+// segmented series so history/current/forecast render visually distinct.
+// Style decisions live here so any chart that opts into these series_ids
+// gets the same visual encoding without widening the ChartSeries contract.
+const NOWCAST_LINE_STYLES: Record<
+  string,
+  { strokeDasharray?: string; showDots: boolean; connectNulls: boolean }
+> = {
+  gdp_history_yoy: { showDots: false, connectNulls: false },
+  gdp_nowcast_yoy: { strokeDasharray: '6 4', showDots: true, connectNulls: true },
+  gdp_forecast_yoy: { strokeDasharray: '2 4', showDots: false, connectNulls: true },
+}
+
+function lineStyleForSeriesId(seriesId: string) {
+  return NOWCAST_LINE_STYLES[seriesId] ?? {
+    strokeDasharray: undefined,
+    showDots: false,
+    connectNulls: false,
+  }
+}
+
 function formatCompactNumber(value: number): string {
   if (Math.abs(value) >= 1000) {
     return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value)
@@ -273,46 +294,61 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
     </defs>
   ) : null
 
-  const uncertaintyBands = bandMeta.map((item) => (
-    <Area
-      key={`${item.band.series_id}-${item.band.confidence_level}-band`}
-      dataKey={(datum: ChartDatum) => {
-        const lower = datum[item.lowerKey]
-        const upper = datum[item.upperKey]
-        if (!isFiniteNumber(lower) || !isFiniteNumber(upper) || upper < lower) {
-          return null
-        }
-        return [lower, upper]
-      }}
-      fill={item.band.is_illustrative ? `url(#${item.patternId})` : 'var(--color-uncertainty)'}
-      fillOpacity={item.band.is_illustrative ? 1 : 0.3}
-      isAnimationActive={false}
-      legendType="rect"
-      name={item.name}
-      stroke="var(--color-border-strong)"
-      strokeDasharray={item.band.is_illustrative ? '5 3' : undefined}
-      strokeWidth={1}
-      type="monotone"
-    />
-  ))
+  // Render bands widest-to-narrowest so narrower bands paint over wider
+  // ones. Each successive (narrower) band uses a stronger fill opacity
+  // to produce nested-ring fan geometry without flattening the
+  // --color-uncertainty token.
+  const orderedBandMeta = [...bandMeta].sort(
+    (a, b) => b.band.confidence_level - a.band.confidence_level,
+  )
+  const uncertaintyBands = orderedBandMeta.map((item, index) => {
+    const baseOpacity = Math.min(0.18 + index * 0.14, 0.5)
+    return (
+      <Area
+        key={`${item.band.series_id}-${item.band.confidence_level}-band`}
+        dataKey={(datum: ChartDatum) => {
+          const lower = datum[item.lowerKey]
+          const upper = datum[item.upperKey]
+          if (!isFiniteNumber(lower) || !isFiniteNumber(upper) || upper < lower) {
+            return null
+          }
+          return [lower, upper]
+        }}
+        fill={item.band.is_illustrative ? `url(#${item.patternId})` : 'var(--color-uncertainty)'}
+        fillOpacity={item.band.is_illustrative ? 1 : baseOpacity}
+        isAnimationActive={false}
+        legendType="rect"
+        name={item.name}
+        stroke="var(--color-border-strong)"
+        strokeDasharray={item.band.is_illustrative ? '5 3' : undefined}
+        strokeWidth={1}
+        type="monotone"
+      />
+    )
+  })
 
   const lineChartBody = (
     <ComposedChart data={data} margin={{ top: 8, right: 8, bottom: 6, left: 6 }}>
       {uncertaintyPatterns}
       {commonChartChildren}
       {uncertaintyBands}
-      {seriesMeta.map((item) => (
-        <Line
-          key={item.series.series_id}
-          dataKey={item.key}
-          dot={false}
-          isAnimationActive={false}
-          name={item.series.label}
-          stroke={item.color}
-          strokeWidth={2}
-          type="monotone"
-        />
-      ))}
+      {seriesMeta.map((item) => {
+        const style = lineStyleForSeriesId(item.series.series_id)
+        return (
+          <Line
+            key={item.series.series_id}
+            connectNulls={style.connectNulls}
+            dataKey={item.key}
+            dot={style.showDots ? { r: 3, stroke: item.color, fill: item.color } : false}
+            isAnimationActive={false}
+            name={item.series.label}
+            stroke={item.color}
+            strokeDasharray={style.strokeDasharray}
+            strokeWidth={2}
+            type="monotone"
+          />
+        )
+      })}
     </ComposedChart>
   )
 

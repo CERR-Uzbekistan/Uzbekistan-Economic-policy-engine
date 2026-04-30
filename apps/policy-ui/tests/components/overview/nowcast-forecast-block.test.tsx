@@ -145,4 +145,124 @@ describe('NowcastForecastBlock (shape-agnostic)', () => {
     assert.match(html, /Uncertainty band/)
     assert.match(html, /Dynamic Factor Model · v1/)
   })
+
+  it('headline selects the current nowcast point when a segmented nowcast series is present', async () => {
+    const i18n = await createTestI18n()
+    const segmented: ChartSpec = {
+      chart_id: 'nowcast_forecast',
+      title: 'Nowcast and forecast',
+      subtitle: 'Real GDP growth',
+      chart_type: 'line',
+      x: { label: 'Quarter', unit: '', values: ['2025Q3', '2025Q4', '2026Q1'] },
+      y: { label: 'GDP growth', unit: '%', values: [9.1, 8.7, 7.0] },
+      series: [
+        {
+          series_id: 'gdp_history_yoy',
+          label: 'GDP growth — history (YoY, %)',
+          semantic_role: 'baseline',
+          values: [9.1, 8.7, Number.NaN],
+        },
+        {
+          series_id: 'gdp_nowcast_yoy',
+          label: 'GDP growth — current nowcast (YoY, %)',
+          semantic_role: 'alternative',
+          values: [Number.NaN, 8.7, 7.0],
+        },
+      ],
+      view_mode: 'level',
+      uncertainty: [],
+      takeaway: 'mock',
+      model_attribution: [attribution],
+    }
+
+    const html = renderBlock(segmented, {}, i18n)
+    // Headline must be the current nowcast (7.0% at 2026Q1), not the
+    // latest historical actual (8.7% at 2025Q4) and not the anchor.
+    assert.match(html, /overview-panel-value">7\.0%/)
+    assert.match(html, /2026Q1/)
+    // The headline value cell itself must not display 8.7% (history).
+    assert.equal(html.includes('overview-panel-value">8.7%'), false)
+  })
+
+  it('headline picks the current nowcast even when a forecast endpoint is later in the timeline', async () => {
+    const i18n = await createTestI18n()
+    const segmentedWithForecast: ChartSpec = {
+      chart_id: 'nowcast_forecast',
+      title: 'Nowcast and forecast',
+      subtitle: 'Real GDP growth',
+      chart_type: 'line',
+      x: {
+        label: 'Quarter',
+        unit: '',
+        values: ['2025Q3', '2025Q4', '2026Q1', '2026Q2'],
+      },
+      y: { label: 'GDP growth', unit: '%', values: [9.1, 8.7, 7.0, 6.5] },
+      series: [
+        {
+          series_id: 'gdp_history_yoy',
+          label: 'history',
+          semantic_role: 'baseline',
+          values: [9.1, 8.7, Number.NaN, Number.NaN],
+        },
+        {
+          series_id: 'gdp_nowcast_yoy',
+          label: 'nowcast',
+          semantic_role: 'alternative',
+          values: [Number.NaN, 8.7, 7.0, Number.NaN],
+        },
+        {
+          series_id: 'gdp_forecast_yoy',
+          label: 'forecast',
+          semantic_role: 'other',
+          values: [Number.NaN, Number.NaN, 7.0, 6.5],
+        },
+      ],
+      view_mode: 'level',
+      uncertainty: [],
+      takeaway: 'mock',
+      model_attribution: [attribution],
+    }
+
+    const html = renderBlock(segmentedWithForecast, {}, i18n)
+    // The headline value cell should show 7.0%, not the forecast endpoint 6.5%.
+    assert.match(html, /overview-panel-value">7\.0%/)
+    assert.equal(html.includes('overview-panel-value">6.5%'), false)
+  })
+
+  it('omits the forecast legend item when segmented shape ships without a forecast series', async () => {
+    const i18n = await createTestI18n()
+    const segmentedNoForecast: ChartSpec = {
+      chart_id: 'nowcast_forecast',
+      title: 'Nowcast and forecast',
+      subtitle: 'Real GDP growth',
+      chart_type: 'line',
+      x: { label: 'Quarter', unit: '', values: ['2025Q4', '2026Q1'] },
+      y: { label: 'GDP growth', unit: '%', values: [8.7, 7.0] },
+      series: [
+        {
+          series_id: 'gdp_history_yoy',
+          label: 'history',
+          semantic_role: 'baseline',
+          values: [8.7, Number.NaN],
+        },
+        {
+          series_id: 'gdp_nowcast_yoy',
+          label: 'nowcast',
+          semantic_role: 'alternative',
+          values: [8.7, 7.0],
+        },
+      ],
+      view_mode: 'level',
+      uncertainty: [],
+      takeaway: 'mock',
+      model_attribution: [attribution],
+    }
+
+    const html = renderBlock(segmentedNoForecast, {}, i18n)
+    // The legend must not visually imply a forecast path exists.
+    assert.equal(html.includes('Forecast path'), false)
+    assert.match(html, /Actual history/)
+    assert.match(html, /Current nowcast/)
+    assert.match(html, /Uncertainty band/)
+  })
 })

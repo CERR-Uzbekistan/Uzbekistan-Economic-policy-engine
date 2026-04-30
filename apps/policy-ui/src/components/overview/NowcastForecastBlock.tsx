@@ -14,11 +14,16 @@ function isFinite(value: unknown): value is number {
 }
 
 function getHeadline(chart: ChartSpec) {
-  const primarySeries = chart.series[0]
-  if (!primarySeries) {
+  // Prefer the dedicated current-nowcast series so the headline does not
+  // accidentally pick up the latest historical actual or the forecast
+  // endpoint. Fall back to the first series for legacy chart shapes that
+  // do not segment history/nowcast/forecast.
+  const nowcastSeries =
+    chart.series.find((series) => series.series_id === 'gdp_nowcast_yoy') ?? chart.series[0]
+  if (!nowcastSeries) {
     return null
   }
-  const values = primarySeries.values
+  const values = nowcastSeries.values
   let latestValue: number | null = null
   let latestIndex = -1
   for (let index = values.length - 1; index >= 0; index -= 1) {
@@ -35,9 +40,20 @@ function getHeadline(chart: ChartSpec) {
   return {
     value: latestValue,
     unit: chart.y.unit,
-    seriesLabel: primarySeries.label,
+    seriesLabel: nowcastSeries.label,
     periodLabel,
   }
+}
+
+function hasSegmentedNowcastShape(chart: ChartSpec): boolean {
+  return chart.series.some(
+    (series) =>
+      series.series_id === 'gdp_history_yoy' || series.series_id === 'gdp_nowcast_yoy',
+  )
+}
+
+function hasForecastSeries(chart: ChartSpec): boolean {
+  return chart.series.some((series) => series.series_id === 'gdp_forecast_yoy')
 }
 
 function getVintageLine(chart: ChartSpec): string | null {
@@ -82,10 +98,20 @@ export function NowcastForecastBlock({ chart, headerSlot, statusSlot }: NowcastF
       ) : null}
 
       <div className="overview-nowcast-legend" aria-label={t('overview.nowcast.legendAria')}>
-        <span>{t('overview.nowcast.legend.actual')}</span>
-        <span>{t('overview.nowcast.legend.nowcast')}</span>
-        <span>{t('overview.nowcast.legend.forecast')}</span>
-        <span>{t('overview.nowcast.legend.band')}</span>
+        <span className="overview-nowcast-legend__token overview-nowcast-legend__token--actual">
+          {t('overview.nowcast.legend.actual')}
+        </span>
+        <span className="overview-nowcast-legend__token overview-nowcast-legend__token--nowcast">
+          {t('overview.nowcast.legend.nowcast')}
+        </span>
+        {!hasSegmentedNowcastShape(chart) || hasForecastSeries(chart) ? (
+          <span className="overview-nowcast-legend__token overview-nowcast-legend__token--forecast">
+            {t('overview.nowcast.legend.forecast')}
+          </span>
+        ) : null}
+        <span className="overview-nowcast-legend__token overview-nowcast-legend__token--band">
+          {t('overview.nowcast.legend.band')}
+        </span>
       </div>
 
       <ChartRenderer
