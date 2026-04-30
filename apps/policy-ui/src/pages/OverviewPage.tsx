@@ -16,6 +16,7 @@ import {
   getInitialOverviewSourceState,
   loadOverviewSourceState,
 } from '../data/overview/source'
+import { buildOverviewMacroPulseTokens } from '../data/overview/macro-pulse'
 import { useDfmNowcast } from '../data/overview/useDfmNowcast'
 import { NowcastBanner, type NowcastBannerErrorKind } from '../components/overview/NowcastBanner'
 import { DfmTransportError, DfmValidationError } from '../data/bridge/dfm-client'
@@ -109,8 +110,6 @@ export function OverviewPage() {
     }
   }, [latestAttributionTimestamp, overviewData, sourceState.status])
 
-  const uniqueModelsInMetrics = overviewData?.model_ids.length ?? 0
-
   if (sourceState.status === 'loading') {
     return (
       <PageContainer className="overview-page">
@@ -163,10 +162,14 @@ export function OverviewPage() {
       .filter((metric) => metric.validation_status === 'warning')
       .map((metric) => metric.metric_id) ?? [],
   ).size
+  const macroPulseTokens = buildOverviewMacroPulseTokens(
+    [...(artifact_summary_metrics ?? []), ...headline_metrics],
+    locale,
+    t,
+  )
 
   const pageHeaderMeta = (
     <>
-      <span className="page-header__eyebrow">{t('overview.meta.eyebrow')}</span>
       <TrustStateLabel
         id={
           sourceState.sourceKind === 'overview-artifact'
@@ -181,16 +184,6 @@ export function OverviewPage() {
         <strong>{t('overview.meta.vintageLabel')}</strong> {t('overview.common.middleDot')}{' '}
         {formatDate(generated_at, locale)}
       </span>
-      <span>
-        <strong>{t('overview.meta.modelsLabel')}</strong> {t('overview.common.middleDot')}{' '}
-        {t('overview.meta.modelsLive', { count: uniqueModelsInMetrics })}
-      </span>
-      {latestAttributionTimestamp ? (
-        <span>
-          <strong>{t('overview.meta.lastRefreshLabel')}</strong> {t('overview.common.middleDot')}{' '}
-          {formatDate(latestAttributionTimestamp, locale)}
-        </span>
-      ) : null}
     </>
   )
 
@@ -207,6 +200,7 @@ export function OverviewPage() {
         artifactSummaryMetrics={artifact_summary_metrics}
         artifactProvisionalCount={artifactProvisionalCount}
         isArtifactMode={sourceState.sourceKind === 'overview-artifact'}
+        macroPulseTokens={macroPulseTokens}
       />
 
       <KpiStrip metrics={headline_metrics} />
@@ -215,8 +209,6 @@ export function OverviewPage() {
         <RiskPanel risks={top_risks} />
         <QuickActions actions={analysis_actions} />
       </div>
-
-      <IndicatorPanelGrid groups={indicator_groups} />
 
       {nowcast_forecast ? (
         <div className="overview-nowcast-column">
@@ -245,6 +237,8 @@ export function OverviewPage() {
           />
         </div>
       ) : null}
+
+      <IndicatorPanelGrid groups={indicator_groups} />
 
       <CaveatPanel caveats={caveats} exportedAt={generated_at} />
       <OverviewFeeds activityFeed={activity_feed} />

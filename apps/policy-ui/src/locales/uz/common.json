@@ -94,7 +94,8 @@
   },
   "overview": {
     "common": {
-      "middleDot": "·"
+      "middleDot": "·",
+      "slash": "/"
     },
     "delta": {
       "vsPeriodBasis": "{{period}} {{basis}}ga nisbatan"
@@ -116,6 +117,14 @@
       "nowcast": "Nowcast",
       "reference": "Ma'lumotnoma",
       "forecast": "Prognoz"
+    },
+    "macroPulse": {
+      "gdp": "YaIM",
+      "cpi": "CPI",
+      "tradeBalance": "Savdo balansi",
+      "usdUzs": "USD/UZS",
+      "yoy": "y/y",
+      "mom": "m/m"
     },
     "topbar": {
       "freshness": "Ma'lumotlar · {{days}} kun oldin"
@@ -287,6 +296,7 @@
       "warningMetricCountPlural": "{{count}} ogohlantirishli metrika",
       "noteCount": "{{count}} manba izohi",
       "noteCountPlural": "{{count}} manba izohi",
+      "severityCounts": "{{critical}} kritik · {{warning}} ogohl. · {{info}} info",
       "exportedAt": "Eksport {{date}}"
     },
     "references": {

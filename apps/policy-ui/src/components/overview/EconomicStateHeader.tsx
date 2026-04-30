@@ -7,6 +7,7 @@ import type {
   OverviewOutputAction,
   StateProvenance,
 } from '../../contracts/data-contract.js'
+import type { OverviewMacroPulseToken } from '../../data/overview/macro-pulse.js'
 import type { LanguageCode } from '../../state/language-context.js'
 import { useLanguage } from '../../state/useLanguage.js'
 
@@ -19,6 +20,7 @@ type EconomicStateHeaderProps = {
   artifactSummaryMetrics?: HeadlineMetric[]
   artifactProvisionalCount?: number
   isArtifactMode?: boolean
+  macroPulseTokens?: OverviewMacroPulseToken[]
 }
 
 const LOCALE_BY_LANGUAGE: Record<LanguageCode, string> = {
@@ -83,6 +85,7 @@ export function EconomicStateHeader({
   artifactSummaryMetrics = [],
   artifactProvisionalCount,
   isArtifactMode = false,
+  macroPulseTokens = [],
 }: EconomicStateHeaderProps) {
   const { t } = useTranslation()
   const { language } = useLanguage()
@@ -101,12 +104,27 @@ export function EconomicStateHeader({
     : t('overview.header.provenance.humanAuthored')
   const provisionalCount = artifactProvisionalCount
     ?? artifactSummaryMetrics.filter((metric) => metric.validation_status === 'warning').length
-  const summaryText = isArtifactMode
-    ? t(provisionalCount === 1 ? 'overview.header.artifactStrap' : 'overview.header.artifactStrapPlural', {
-        date: formatMonthYear(updatedAt, locale),
-        count: provisionalCount,
-      })
-    : renderSummary(summary)
+  const artifactStrap = t(provisionalCount === 1 ? 'overview.header.artifactStrap' : 'overview.header.artifactStrapPlural', {
+    date: formatMonthYear(updatedAt, locale),
+    count: provisionalCount,
+  })
+  const summaryText = isArtifactMode && macroPulseTokens.length > 0
+    ? (
+      <span className="overview-state-header__pulse">
+        {macroPulseTokens.map((token, index) => (
+          <Fragment key={token.id}>
+            {index > 0 ? <span className="overview-state-header__pulse-separator"> {t('overview.common.middleDot')} </span> : null}
+            <span className="overview-state-header__pulse-token">
+              <span className="overview-state-header__pulse-label">{token.label}</span>{' '}
+              <span className="overview-state-header__pulse-value">{token.value}</span>
+            </span>
+          </Fragment>
+        ))}
+      </span>
+    )
+    : isArtifactMode
+      ? artifactStrap
+      : renderSummary(summary)
 
   return (
     <section className="state-header overview-state-header" aria-labelledby="overview-state-header-title">
@@ -120,10 +138,41 @@ export function EconomicStateHeader({
         </Link>
       </div>
       {isArtifactMode ? (
-        <p className="state-header__meta overview-state-header__meta">
-          <span>{t('overview.header.artifactSummaryMeta', { count: artifactSummaryMetrics.length })}</span>
-          <span>{t('overview.header.updatedAt', { date: formattedUpdatedAt })}</span>
-        </p>
+        <div className="state-header__provenance overview-state-header__provenance">
+          <p className="overview-state-header__provenance-line">
+            <span>{t('overview.header.artifactSummaryMeta', { count: artifactSummaryMetrics.length })}</span>
+          </p>
+          {provenance ? (
+            <>
+              <p className="overview-state-header__provenance-line">
+                {t('overview.header.provenance.draftedFromLabel')}{' '}
+                {t('overview.common.middleDot')} {draftedFrom}
+              </p>
+              <p className="overview-state-header__provenance-line">
+                {provenanceAssistedLabel}
+                {reviewDate ? (
+                  <>
+                    {' '}
+                    {t('overview.common.middleDot')}{' '}
+                    {t('overview.header.provenance.reviewedAt', { date: reviewDate })}
+                  </>
+                ) : null}{' '}
+                {t('overview.common.middleDot')}{' '}
+                {hasReviewerName ? (
+                  reviewerName
+                ) : (
+                  <span className="ui-chip ui-chip--warn" aria-label={t('overview.header.provenance.reviewerPendingAria')}>
+                    {t('overview.header.provenance.reviewerPendingChip')}
+                  </span>
+                )}
+              </p>
+            </>
+          ) : (
+            <p className="overview-state-header__provenance-line">
+              {t('overview.header.updatedAt', { date: formattedUpdatedAt })}
+            </p>
+          )}
+        </div>
       ) : provenance ? (
         <div className="state-header__provenance overview-state-header__provenance">
           <p className="overview-state-header__provenance-line">

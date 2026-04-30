@@ -138,8 +138,9 @@ describe('KpiStrip', () => {
 
     assert.match(
       markup,
-      /overview-kpi-card__top-meta[\s\S]*overview-kpi-card__status[\s\S]*Caution[\s\S]*kpi__freshness/,
+      /overview-kpi-card__top-meta[\s\S]*overview-kpi-card__status[\s\S]*Caution/,
     )
+    assert.doesNotMatch(markup, /kpi__freshness/)
     assert.doesNotMatch(markup, /overview-kpi-card__meta[\s\S]*overview-kpi-card__status/)
   })
 
@@ -189,6 +190,24 @@ describe('KpiStrip', () => {
     // Shot-1: delta renders as <p class="kpi__delta overview-kpi-trend"> with ↑ glyph.
     assert.match(markup, /overview-kpi-trend__glyph[^>]*>↑/)
     assert.doesNotMatch(markup, /overview-kpi-trend[^"]*ui-chip/)
+  })
+
+  it('renders localized no-prior text for null deltas', async () => {
+    const i18n = await createTestI18n()
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <KpiStrip metrics={[buildMetric({
+          baseline_value: null,
+          delta_abs: null,
+          delta_value: null,
+          delta_pct: null,
+          direction: 'flat',
+        })]} />
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /aria-label="No prior"[^>]*>No prior/)
+    assert.doesNotMatch(markup, /→ n\/a/)
   })
 
   it('renders compact claim labels from claim_type semantics instead of attribution text', async () => {

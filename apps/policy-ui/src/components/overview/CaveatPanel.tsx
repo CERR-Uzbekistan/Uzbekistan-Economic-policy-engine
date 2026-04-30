@@ -52,6 +52,13 @@ export function CaveatPanel({ caveats, exportedAt }: CaveatPanelProps) {
       .flatMap((caveat) => caveat.affected_metrics),
   ).size
   const noteCount = sorted.length
+  const severityCounts = sorted.reduce(
+    (counts, caveat) => ({
+      ...counts,
+      [caveat.severity]: counts[caveat.severity] + 1,
+    }),
+    { critical: 0, warning: 0, info: 0 },
+  )
 
   return (
     <section className="overview-caveats overview-data-notes" aria-labelledby="overview-caveats-title">
@@ -67,6 +74,13 @@ export function CaveatPanel({ caveats, exportedAt }: CaveatPanelProps) {
             })}
           </span>
           <span>{t(pluralKey('overview.dataNotes.noteCount', noteCount), { count: noteCount })}</span>
+          <span>
+            {t('overview.dataNotes.severityCounts', {
+              critical: severityCounts.critical,
+              warning: severityCounts.warning,
+              info: severityCounts.info,
+            })}
+          </span>
           <span>{t('overview.dataNotes.exportedAt', { date: formatDate(exportedAt, locale) })}</span>
         </summary>
         <ul className="overview-caveats__list">

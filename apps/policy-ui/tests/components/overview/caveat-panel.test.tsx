@@ -37,6 +37,7 @@ async function createTestI18n() {
               warningMetricCountPlural: '{{count}} warning metrics',
               noteCount: '{{count}} source note',
               noteCountPlural: '{{count}} source notes',
+              severityCounts: '{{critical}} critical · {{warning}} warning · {{info}} info',
               exportedAt: 'Exported {{date}}',
             },
           },
@@ -160,8 +161,44 @@ describe('CaveatPanel', () => {
     assert.match(markup, /Data notes/)
     assert.match(markup, /1 warning metric/)
     assert.match(markup, /2 source notes/)
+    assert.match(markup, /0 critical · 1 warning · 1 info/)
     assert.match(markup, /Warning caveat/)
     assert.match(markup, /Source note caveat/)
+  })
+
+  it('renders critical, warning, and info counts in the summary', async () => {
+    const caveats: Caveat[] = [
+      {
+        caveat_id: 'critical-1',
+        severity: 'critical',
+        message: 'Critical caveat',
+        affected_metrics: ['gdp_growth'],
+        affected_models: [],
+      },
+      {
+        caveat_id: 'warning-1',
+        severity: 'warning',
+        message: 'Warning caveat',
+        affected_metrics: ['inflation'],
+        affected_models: [],
+      },
+      {
+        caveat_id: 'info-1',
+        severity: 'info',
+        message: 'Info caveat',
+        affected_metrics: [],
+        affected_models: [],
+      },
+    ]
+
+    const i18n = await createTestI18n()
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <CaveatPanel caveats={caveats} />
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /1 critical · 1 warning · 1 info/)
   })
 
   it('uses neutral audit-trail caveat styling without tinted alert rows or wide side stripes', () => {

@@ -94,7 +94,8 @@
   },
   "overview": {
     "common": {
-      "middleDot": "·"
+      "middleDot": "·",
+      "slash": "/"
     },
     "delta": {
       "vsPeriodBasis": "vs {{period}} {{basis}}"
@@ -116,6 +117,14 @@
       "nowcast": "Nowcast",
       "reference": "Reference",
       "forecast": "Forecast"
+    },
+    "macroPulse": {
+      "gdp": "GDP",
+      "cpi": "CPI",
+      "tradeBalance": "Trade balance",
+      "usdUzs": "USD/UZS",
+      "yoy": "YoY",
+      "mom": "MoM"
     },
     "topbar": {
       "freshness": "Data · {{days}}d ago"
@@ -287,6 +296,7 @@
       "warningMetricCountPlural": "{{count}} warning metrics",
       "noteCount": "{{count}} source note",
       "noteCountPlural": "{{count}} source notes",
+      "severityCounts": "{{critical}} critical · {{warning}} warning · {{info}} info",
       "exportedAt": "Exported {{date}}"
     },
     "references": {

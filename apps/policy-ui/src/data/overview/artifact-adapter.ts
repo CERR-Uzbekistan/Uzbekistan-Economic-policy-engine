@@ -223,6 +223,9 @@ const PANEL_GROUP_ORDER = ['growth', 'inflation', 'trade', 'monetary_fx', 'gold'
 const SUMMARY_METRIC_IDS: OverviewMetricId[] = [
   'real_gdp_growth_quarter_yoy',
   'cpi_yoy',
+  'cpi_mom',
+  'trade_balance',
+  'usd_uzs_level',
   'exports_yoy',
   'imports_yoy',
   'policy_rate',

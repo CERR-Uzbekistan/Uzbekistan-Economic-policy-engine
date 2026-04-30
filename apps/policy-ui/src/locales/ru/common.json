@@ -94,7 +94,8 @@
   },
   "overview": {
     "common": {
-      "middleDot": "·"
+      "middleDot": "·",
+      "slash": "/"
     },
     "delta": {
       "vsPeriodBasis": "к {{period}} {{basis}}"
@@ -116,6 +117,14 @@
       "nowcast": "Nowcast",
       "reference": "Справочное",
       "forecast": "Прогноз"
+    },
+    "macroPulse": {
+      "gdp": "ВВП",
+      "cpi": "ИПЦ",
+      "tradeBalance": "Торговый баланс",
+      "usdUzs": "USD/UZS",
+      "yoy": "г/г",
+      "mom": "м/м"
     },
     "topbar": {
       "freshness": "Данные · {{days}}д назад"
@@ -287,6 +296,7 @@
       "warningMetricCountPlural": "{{count}} метрик с предупреждением",
       "noteCount": "{{count}} примечание источника",
       "noteCountPlural": "{{count}} примечаний источника",
+      "severityCounts": "{{critical}} крит. · {{warning}} предупр. · {{info}} инфо",
       "exportedAt": "Экспорт {{date}}"
     },
     "references": {

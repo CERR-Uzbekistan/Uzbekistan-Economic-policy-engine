@@ -14,17 +14,6 @@ type KpiStripProps = {
 
 const SME_CONTENT_PENDING = '[SME content pending]'
 
-function formatFreshness(value: string, locale: string): string {
-  const parsed = Date.parse(value)
-  if (!Number.isFinite(parsed)) {
-    return value
-  }
-  return new Intl.DateTimeFormat(locale, {
-    day: '2-digit',
-    month: 'short',
-  }).format(new Date(parsed))
-}
-
 export function KpiStrip({ metrics }: KpiStripProps) {
   const { t, i18n } = useTranslation()
   const locale = i18n.resolvedLanguage ?? 'en'
@@ -46,11 +35,11 @@ export function KpiStrip({ metrics }: KpiStripProps) {
           const srLabel = delta
             ? t('overview.kpi.deltaSrLabel', { direction: directionWord, delta })
             : t('overview.kpi.noPrior')
-          const freshness = formatFreshness(metric.last_updated, locale)
           const deltaLabel = metric.delta_label
-          const composedDelta = formatOverviewDeltaWithUnit(metric, locale, t) ?? t('overview.kpi.notAvailable')
+          const formattedDelta = formatOverviewDeltaWithUnit(metric, locale, t)
+          const composedDelta = formattedDelta ?? t('overview.kpi.noPrior')
           const deltaComparison = formatOverviewDeltaComparison(metric, t)
-          const composedDeltaWithComparison = deltaComparison
+          const composedDeltaWithComparison = formattedDelta && deltaComparison
             ? `${composedDelta} ${deltaComparison}`
             : composedDelta
           const contextNote = metric.context_note
@@ -76,15 +65,18 @@ export function KpiStrip({ metrics }: KpiStripProps) {
                       {t('overview.indicators.status.warning')}
                     </span>
                   ) : null}
-                  <span className="kpi__freshness">{t('overview.kpi.freshness', { date: freshness })}</span>
                 </span>
               </div>
               <div className="overview-kpi-card__main">
                 <p className="kpi__value overview-kpi-card__value">{formatOverviewMetricValueWithUnit(metric, locale, t)}</p>
                 <p className="kpi__delta overview-kpi-trend" aria-label={srLabel}>
-                  <span className="overview-kpi-trend__glyph" aria-hidden="true">
-                    {DIRECTION_GLYPH[metric.direction]}
-                  </span>{' '}
+                  {formattedDelta || deltaLabel ? (
+                    <>
+                      <span className="overview-kpi-trend__glyph" aria-hidden="true">
+                        {DIRECTION_GLYPH[metric.direction]}
+                      </span>{' '}
+                    </>
+                  ) : null}
                   {deltaLabel ? deltaLabel : composedDeltaWithComparison}
                 </p>
               </div>
