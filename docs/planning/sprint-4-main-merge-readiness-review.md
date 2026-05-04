@@ -6,6 +6,8 @@ Commit reviewed locally: `541db7c`
 Target branch: `main`  
 Review type: docs/workflow readiness review; no app features implemented
 
+Update: 2026-05-04 release-control addendum recorded for candidate `8bba079`.
+
 ## Verdict
 
 **Merge readiness verdict: conditional.**
@@ -13,6 +15,8 @@ Review type: docs/workflow readiness review; no app features implemented
 `epic/replatform-execution` appears directionally ready for a controlled main-merge path, but it should not be merged today as an automatic or casual integration. The remaining work is release-control evidence, not new product scope: complete the slice review ledger, record final hosted `/policy-ui/` smoke on the selected merge candidate, confirm final CI, and keep unrelated local artifacts out of the repository.
 
 Main merge can proceed after those conditions are recorded and accepted by the owner. Pilot readiness remains separate and is still blocked by named evaluator and human RU/UZ terminology gates.
+
+**2026-05-04 update verdict: SPLIT.** The slice ledger now has named owner/reviewer evidence, and the current `origin/main` divergence is documented as QPM nightly data-refresh drift. Do not make an immediate GO call for main until final CI and hosted `/policy-ui/` smoke are recorded on the selected SHA and the QPM nightly-data divergence is either reconciled or explicitly accepted by the owner. Keep pilot readiness and gated model/backend workstreams separate from the controlled main-merge decision.
 
 ## Review Inputs
 
@@ -39,15 +43,25 @@ Main merge can proceed after those conditions are recorded and accepted by the o
 | Release claims | Release-control docs correctly avoid production-ready and pilot-ready claims. README wording was tightened from pilot deployment to internal-preview deployment to match the current status. |
 | Overclaim risk | Remaining risk is mostly terminology drift: owner-facing docs may still use "pilot" historically, but the active readiness docs explicitly say not pilot-ready and not public/production validated. |
 
+## 2026-05-04 Addendum
+
+Local branch state after `git fetch origin`: `epic/replatform-execution` at `8bba079`, tracking `origin/epic/replatform-execution`.
+
+Main divergence is now release-controlled: `origin/main...HEAD` is `12` behind and `112` ahead. The behind side consists of QPM nightly regeneration commits dated 2026-04-22 through 2026-05-03; the latest inspected main-only commit, `a419402 data(qpm): nightly regeneration 2026-05-03`, changes only `apps/policy-ui/public/data/qpm.json`. This is a required final-candidate reconciliation item, but it does not change the release-claim boundary or authorize new model work.
+
+Current local dirty state remains excluded from the merge evidence: tracked modification `shared/literature-data.js`; untracked `Git-GitHub-Guide-CERR-Team-v2.html`, `Git-GitHub-Guide-CERR-Team-v3-animated.html`, `_pptx_extract/`, `apps/policy-ui/skills-lock.json`, `docs/planning/knowledge-hub-mock-cleanup-slice.md`, and `huashu-design-showcase/`.
+
+Owner/release-claim evidence now points to the completed slice ledger in `docs/planning/sprint-3-main-merge-plan.md` and the claim boundary in `docs/frontend-replatform/14_sprint3_release_candidate_readiness.md`. The active release language remains internal-preview only; pilot-ready, production-ready, public launch, and full replacement claims remain disallowed.
+
 ## Blockers
 
 These block main merge until completed or explicitly waived by the owner:
 
-1. Fill the slice review ledger in `docs/planning/sprint-3-main-merge-plan.md` with reviewer/owner, status, and evidence for deployment/base-path, bridge foundation, I-O analytics, saved-run workflow, trust/content/i18n, and Data Registry.
+1. Record final CI on the selected merge candidate, including Pages build/deploy behavior and `validate.yml`.
 2. Record hosted `/policy-ui/` smoke results for the final merge candidate, including routes, JSON artifacts, language switching, console errors, refresh/back behavior, Data Registry, Model Explorer I-O evidence, Scenario Lab I-O save, and Comparison saved I-O add.
-3. Confirm final CI on the selected merge candidate, including Pages build/deploy behavior and `validate.yml`.
+3. Reconcile the current QPM nightly-data divergence from `origin/main` into the final candidate, or record owner acceptance to merge without it.
 4. Resolve, defer by owner decision, or explicitly exclude any P0/P1 hosted-smoke, pilot, or release-control findings.
-5. Confirm the untracked local artifacts listed above are not staged, committed, or included in the merge.
+5. Confirm the unrelated local dirty artifacts listed above are not staged, committed, or included in the merge.
 
 ## Non-Blocking Warnings
 

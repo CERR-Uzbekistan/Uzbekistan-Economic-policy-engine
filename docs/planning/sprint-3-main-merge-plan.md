@@ -3,7 +3,7 @@
 Date: 2026-04-26  
 Branch under review: `epic/replatform-execution`  
 Target branch: `main`  
-Status: merge-control plan
+Status: merge-control plan; current decision recorded 2026-05-04
 
 This plan controls how Sprint 3 replatform work should be reviewed before it reaches `main`. It does not authorize new app features and does not replace the hosted smoke or pilot review gates.
 
@@ -17,12 +17,24 @@ The branch should be reviewed through explicit slices even if the final technica
 
 | Slice | Purpose | Reviewer / owner | Status | Evidence link |
 |---|---|---|---|---|
-| Deployment/base-path | Confirm the app works under the hosted `/policy-ui/` path and data artifacts resolve. | `[TBD]` | `[pending]` | `docs/planning/sprint-3-hosted-smoke-checklist.md` |
-| Bridge foundation | Confirm app bridge contracts remain explicit and do not silently mock unsupported model behavior. | `[TBD]` | `[pending]` | `[fill in]` |
-| I-O analytics | Confirm I-O evidence and analytics are visible, caveated, and scoped to current artifact limits. | `[TBD]` | `[pending]` | `[fill in]` |
-| Saved-run workflow | Confirm Scenario Lab save and Comparison add flows work without corrupting macro comparison behavior. | `[TBD]` | `[pending]` | `[fill in]` |
-| Trust/content/i18n | Confirm caveats, provenance, warnings, and EN/RU/UZ smoke behavior are honest and usable. | `[TBD]` | `[pending]` | `[fill in]` |
-| Data Registry | Confirm implemented/planned assets and warning states are visible and accurate for pilot scope. | `[TBD]` | `[pending]` | `[fill in]` |
+| Deployment/base-path | Confirm the app works under the hosted `/policy-ui/` path and data artifacts resolve. | Nozimjon Ortiqov, project/product owner; release reviewer to verify hosted Pages before merge | Accepted for controlled merge path; final hosted smoke still required on selected SHA | `docs/alignment/sprint3-tb-p1-pilot-deployment-audit.md`; `docs/planning/sprint-3-hosted-smoke-checklist.md`; `docs/planning/sprint-4-main-merge-readiness-review.md` |
+| Bridge foundation | Confirm app bridge contracts remain explicit and do not silently mock unsupported model behavior. | Nozimjon Ortiqov, project/product owner; engineering review via bridge audit evidence | Accepted for current QPM/DFM/I-O static bridge scope; API/backend ownership switch remains gated | `docs/data-bridge/00_qpm_contract.md`; `docs/data-bridge/02_dfm_contract.md`; `docs/data-bridge/03_io_contract.md`; `docs/alignment/sprint3-io-bridge-helper-audit.md`; `docs/planning/contract-index-and-readiness-map.md` |
+| I-O analytics | Confirm I-O evidence and analytics are visible, caveated, and scoped to current artifact limits. | Nozimjon Ortiqov, project/product owner; analytics review via I-O evidence audits | Accepted for internal-preview evidence and saved-run analytics; macro forecast, causal, and general-equilibrium claims remain out of scope | `docs/alignment/sprint3-model-explorer-io-enrichment-audit.md`; `docs/alignment/sprint3-scenario-lab-io-sector-shock-audit.md`; `docs/data-bridge/04_io_analytics_contract.md`; `docs/planning/sprint-3-stabilization-closeout.md` |
+| Saved-run workflow | Confirm Scenario Lab save and Comparison add flows work without corrupting macro comparison behavior. | Nozimjon Ortiqov, project/product owner; workflow review via saved-run audit and closeout evidence | Accepted for local/internal-preview workflow; server-side persistence and evaluator ownership remain gated | `docs/alignment/sprint3-scenario-lab-workflow-polish-audit.md`; `docs/alignment/sprint3-io-saved-runs-comparison-audit.md`; `docs/planning/sprint-3-stabilization-closeout.md` |
+| Trust/content/i18n | Confirm caveats, provenance, warnings, and EN/RU/UZ smoke behavior are honest and usable. | Nozimjon Ortiqov, project/product owner and interim analytical owner; human terminology review remains separate | Accepted for internal-preview claims; not accepted for pilot-ready or public/production claims | `docs/ai-governance.md`; `docs/alignment/sprint3-week2-ta9-ai-surface-audit.md`; `docs/alignment/sprint3-final-prepilot-trust-usability-audit.md`; `docs/frontend-replatform/14_sprint3_release_candidate_readiness.md` |
+| Data Registry | Confirm implemented/planned assets and warning states are visible and accurate for pilot scope. | Nozimjon Ortiqov, project/product owner; registry review via MVP and v2 audit evidence | Accepted for static/read-only internal-preview registry; backend authority, scheduler status, and source CRUD remain gated | `docs/alignment/sprint3-data-registry-mvp-audit.md`; `docs/alignment/sprint4-data-registry-v2-audit.md`; `docs/planning/contract-index-and-readiness-map.md`; `docs/planning/sprint-3-stabilization-closeout.md` |
+
+## Current Release-Control Record - 2026-05-04
+
+Current candidate reviewed locally: `8bba079` on `epic/replatform-execution` after `git fetch origin`.
+
+`origin/main` divergence is documented, not merged in this cleanup pass: `git rev-list --left-right --count origin/main...HEAD` returned `12 112`. The 12 commits present on `origin/main` and absent from this branch are QPM nightly regeneration commits from 2026-04-22 through 2026-05-03; the latest inspected commit, `a419402 data(qpm): nightly regeneration 2026-05-03`, changes only `apps/policy-ui/public/data/qpm.json`. Treat this as data-refresh divergence to reconcile before the final merge candidate is cut, not as authorization to start new model/backend scope.
+
+Local dirty files are excluded from this release decision. At this review point, `git status -sb` showed one tracked unrelated modification, `shared/literature-data.js`, and untracked local artifacts: `Git-GitHub-Guide-CERR-Team-v2.html`, `Git-GitHub-Guide-CERR-Team-v3-animated.html`, `_pptx_extract/`, `apps/policy-ui/skills-lock.json`, `docs/planning/knowledge-hub-mock-cleanup-slice.md`, and `huashu-design-showcase/`. None are part of the controlled main-merge evidence and none should be staged for the merge PR unless separately reviewed and explicitly accepted.
+
+Release-claim evidence remains bounded by `docs/frontend-replatform/14_sprint3_release_candidate_readiness.md`: internal preview release candidate only; not pilot-ready, not production-ready, not public-launch validated, and not a replacement for every legacy workflow. Named evaluator sessions and human RU/UZ terminology review are separated from main-merge readiness unless the owner changes that gate in writing.
+
+Final decision for this record: **SPLIT**. Proceed with the controlled main-merge path only after current-SHA CI, hosted `/policy-ui/` smoke, and QPM nightly-data divergence reconciliation/owner acceptance are recorded. Keep pilot readiness, gated workstreams, and unrelated dirty files out of the merge decision.
 
 ## Acceptance Criteria by Slice
 

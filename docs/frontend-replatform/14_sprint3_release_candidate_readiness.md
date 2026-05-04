@@ -2,7 +2,7 @@
 
 Date: 2026-04-26  
 Branch: `epic/replatform-execution`  
-Status: Internal preview release candidate  
+Status: Internal preview release candidate; 2026-05-04 controlled merge decision is SPLIT
 Source closeout: `docs/planning/sprint-3-stabilization-closeout.md`
 
 ## Current Status
@@ -12,6 +12,8 @@ Sprint 3 is release-candidate ready for internal preview and workflow/trust revi
 The app-level stabilization gate is clean according to the Sprint 3 closeout: lint passed, tests passed, production build passed, local browser QA passed across the supported routes, and the I-O pilot workflows were verified. The final prototype/data-viz alignment pass is complete for the release-candidate surface, including Scenario Lab chart clarity, I-O result readability, Comparison macro/I-O separation, Data Registry status scanning, and Model Explorer bridge evidence consistency. Knowledge Hub remains route-visible for the operational internal preview, but seeded reform/brief/literature mock content is hidden behind a pending state until the source/citation workflow and reviewer model are accepted. The remaining release-control work is hosted verification, deferred named evaluator readiness, human RU/UZ terminology review, and slice-based review before any merge to `main`.
 
 This branch is not pilot-ready because named evaluator sessions are deferred. Broader pilot readiness still requires named evaluators and a human review of RU/UZ terminology and sector/model wording.
+
+2026-05-04 release-control update: the slice review ledger in `docs/planning/sprint-3-main-merge-plan.md` now records owner/reviewer evidence for deployment/base-path, bridge foundation, I-O analytics, saved-run workflow, trust/content/i18n, and Data Registry. Current `origin/main` divergence is documented as QPM nightly data-refresh drift: `origin/main...HEAD` was `12` behind and `112` ahead after fetch, with the main-only side consisting of QPM nightly regeneration commits through 2026-05-03. This must be reconciled or accepted by the owner before the final main-merge candidate is cut.
 
 ## In Scope
 
@@ -81,8 +83,12 @@ This branch is not pilot-ready because named evaluator sessions are deferred. Br
 | EN/RU/UZ key completeness | Pending verification | Locale keys must remain complete across EN/RU/UZ. Functional RU/UZ translations do not replace human terminology review. |
 | Browser smoke console errors | Pending verification | `/overview`, `/scenario-lab`, `/comparison`, `/model-explorer`, `/data-registry`, `/knowledge-hub`, and EN/RU/UZ toggles must pass with 0 console errors. |
 | Hosted deployment | Conditional | GitHub Pages workflow must pass on Ubuntu and the hosted `/policy-ui/` path must be smoke checked. |
+| Origin/main divergence | Documented; final reconciliation required | Main-only commits are QPM nightly regeneration updates through 2026-05-03. Reconcile the data artifact or record owner acceptance before final main merge. |
+| Unrelated local dirty files | Excluded | `shared/literature-data.js` and untracked guide/showcase/extract/skills-lock/Knowledge-Hub-planning files are outside this release-control decision and must not be staged into the merge PR without separate acceptance. |
 | Named evaluator pilot | Deferred | Named evaluator sessions are skipped for now; this branch is not pilot-ready. |
 | Public launch | Not claimed | This package supports internal preview workflow/trust review, not public launch. |
+
+2026-05-04 local verification rerun: `npm run lint` passed, `npm test` passed with 312 tests, and `npm run build` passed with the accepted large-chunk warning. This is local evidence only; it does not replace final CI or hosted smoke on the selected merge candidate.
 
 ## Accepted Warnings
 
@@ -117,14 +123,13 @@ Named evaluator sessions are skipped for now. These gates apply when pilot work 
 
 ## Remaining Gates Before Merging to Main
 
-1. Complete the slice-based review ledger in `docs/planning/sprint-3-main-merge-plan.md`.
-2. Review deployment/base-path behavior separately from app feature slices.
-3. Review bridge foundation, I-O analytics, saved-run workflow, trust/content/i18n, and Data Registry as separate acceptance units.
-4. Confirm CI passes on the final merge candidate.
-5. Confirm hosted smoke remains clean after the final branch state is selected.
-6. Resolve or explicitly accept all P0/P1 pilot findings before merge.
-7. Record owner approval for any remaining P2/P3 deferrals.
-8. Avoid merging `epic/replatform-execution` as an unreviewed mega-PR.
+1. Confirm CI passes on the final merge candidate.
+2. Confirm hosted smoke remains clean after the final branch state is selected.
+3. Reconcile or owner-accept the QPM nightly-data divergence from `origin/main`.
+4. Resolve or explicitly accept all P0/P1 pilot findings before merge.
+5. Record owner approval for any remaining P2/P3 deferrals.
+6. Keep unrelated dirty files out of the merge PR unless separately reviewed and accepted.
+7. Avoid merging `epic/replatform-execution` as an unreviewed mega-PR.
 
 ## Go / No-Go Recommendation
 
@@ -132,4 +137,6 @@ GO for internal preview release candidate workflow/trust review.
 
 NO-GO for controlled pilot review while named evaluator sessions remain deferred. Pilot review may resume only after hosted smoke verification passes, named evaluators are confirmed, and human RU/UZ terminology review is complete.
 
-NO-GO for casual merge to `main` until the slice-based review ledger is complete, final CI is clean, hosted smoke is clean, and any P0/P1 pilot findings are resolved or explicitly blocked from the merge.
+SPLIT for main-merge release control as of 2026-05-04. The slice review ledger and release-claim evidence are now documented, but the final main-merge candidate still needs current-SHA CI, hosted smoke, and QPM nightly-data divergence reconciliation or owner acceptance. This is not a HOLD on internal-preview review, and it is not permission to start gated workstreams.
+
+NO-GO for casual merge to `main` until final CI is clean, hosted smoke is clean, QPM nightly-data divergence is reconciled or owner-accepted, unrelated dirty files are excluded, and any P0/P1 pilot findings are resolved or explicitly blocked from the merge.
