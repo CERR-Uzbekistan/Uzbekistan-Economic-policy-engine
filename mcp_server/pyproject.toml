@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "MCP server exposing Uzbekistan's 6 macroeconomic policy models as AI-queryable tools"
 requires-python = ">=3.11"
 dependencies = [
-    "fastapi>=0.115.0",
     "mcp[cli]>=1.8.0",
     "numpy>=1.26.0",
     "scipy>=1.12.0",
@@ -26,7 +25,7 @@ requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
-include = ["api*", "models*", "helpers*", "tools*"]
+include = ["models*", "helpers*", "tools*"]
 
 [tool.ruff]
 line-length = 100

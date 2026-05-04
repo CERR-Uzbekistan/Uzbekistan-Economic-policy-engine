@@ -32,7 +32,7 @@ async def run_full_pipeline():
 
     # Step 1: Fetch from all sources
     print(f"{'='*50}")
-    print("  FETCHING POLICY REFORMS")
+    print(f"  FETCHING POLICY REFORMS")
     print(f"{'='*50}")
 
     for source in sources:
@@ -66,9 +66,9 @@ async def run_full_pipeline():
                     print(f"    WARNING: {cat_result['error']}")
 
     if not all_reforms:
-        print("\n  No reforms to update.")
+        print(f"\n  No reforms to update.")
         print(f"\n{'='*50}")
-        print("  REFORM UPDATE COMPLETE — 0 new reforms")
+        print(f"  REFORM UPDATE COMPLETE — 0 new reforms")
         print(f"{'='*50}")
         for line in report:
             print(f"    {line}")
@@ -76,7 +76,7 @@ async def run_full_pipeline():
 
     # Step 3: Update tracker data file
     print(f"\n{'='*50}")
-    print("  UPDATING TRACKER FILE")
+    print(f"  UPDATING TRACKER FILE")
     print(f"{'='*50}")
     print(f"  Merging {len(all_reforms)} reforms into policy-tracker-data.js...")
 
@@ -97,7 +97,7 @@ async def run_full_pipeline():
 
     # Summary
     print(f"\n{'='*50}")
-    print("  REFORM UPDATE COMPLETE")
+    print(f"  REFORM UPDATE COMPLETE")
     print(f"{'='*50}")
     print(f"  Total new reforms added: {total_added}")
     for line in report:

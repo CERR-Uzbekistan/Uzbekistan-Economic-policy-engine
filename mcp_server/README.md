@@ -14,19 +14,7 @@ An MCP (Model Context Protocol) server that exposes 6 macroeconomic models for U
 | **FPP** (IMF) | `fpp_project` | 4-sector financial programming framework (2025-2027) |
 | Cross-model | `list_models`, `scenario_compare` | Discovery and multi-scenario comparison |
 
-### Knowledge Hub & curation tools
-
-| Group | Tools | Description |
-|-------|-------|-------------|
-| **Academic literature pipeline** | `fetch_academic_papers` | Fetch candidate papers from Semantic Scholar and OpenAlex using model-specific or custom keywords |
-| | `curate_academic_papers` | AI-score candidates 0–10 for model relevance and attach trilingual (EN/RU/UZ) relevance notes |
-| | `update_literature_data` | Merge curated papers into `shared/literature-data.js`; dedup by DOI and title, preserve existing papers, refresh `lastUpdated` |
-| **Policy reform tracker** | `fetch_policy_reforms` | Pull recent government documents from lex.uz, CBU announcements, and WTO working-party sources |
-| | `categorize_policy_reform` | AI-classify a document by category, sector, region, and document type; generate trilingual summaries and link to relevant economic models |
-| | `update_tracker_data` | Merge categorized reforms into `shared/policy-tracker-data.js`; dedup by title, append new entries, refresh `lastUpdated` |
-| **Research article storage** | `save_research_article` | Save a research article or policy brief to `shared/research-data.js` with a generated unique ID; used by the AI Advisor "Publish as Brief" button and for manual article creation |
-
-**Total: 19 tools**
+**Total: 12 tools**
 
 ## Quick Start
 
@@ -102,53 +90,6 @@ Once connected, you can ask Claude:
 ```bash
 docker compose up --build
 ```
-
-## Registry API v1 Runbook
-
-Install backend dependencies from the repository root:
-
-```bash
-py -m pip install -e .\mcp_server
-```
-
-Run the read-only registry API locally:
-
-```bash
-py -m uvicorn mcp_server.api.app:app --host 127.0.0.1 --port 8000
-```
-
-Endpoint:
-
-```text
-http://127.0.0.1:8000/api/v1/registry/artifacts
-```
-
-Expected 200 response shape is unchanged:
-
-```json
-{
-  "api_version": "v1",
-  "source": "frontend_public_artifacts",
-  "artifacts": []
-}
-```
-
-The live response includes QPM, DFM, and I-O artifact records with checksum,
-source vintage, guard status, caveats, and warnings. If a public artifact is
-missing or invalid JSON, the API returns HTTP 503 with
-`registry_artifact_unavailable` in the `code` field.
-
-For local frontend-to-backend testing, start the Vite app with:
-
-```bash
-cd apps\policy-ui
-$env:VITE_REGISTRY_API_URL="http://127.0.0.1:8000/api/v1/registry/artifacts"
-npm run dev
-```
-
-CORS is restricted to localhost origins for local development. GitHub Pages does
-not require the backend: when `VITE_REGISTRY_API_URL` is unset or the API is
-unavailable/invalid, the frontend keeps using its static public artifact fallback.
 
 ## Testing
 
