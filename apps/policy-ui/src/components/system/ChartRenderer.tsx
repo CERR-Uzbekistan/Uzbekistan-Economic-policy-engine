@@ -1,11 +1,18 @@
-import type { JSX } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type JSX } from 'react'
+import { useTranslation } from 'react-i18next'
 import type {
   ChartSemanticRole,
   ChartSeries,
   ChartSpec,
-  UncertaintyBand,
 } from '../../contracts/data-contract.js'
+import {
+  formatAxisUnitLabel,
+  formatQuarterLabel,
+  formatUnavailable,
+  formatValueWithUnit,
+} from '../../lib/format/locale-format.js'
 import { AttributionBadge } from './AttributionBadge.js'
+import { toBandMeta, type BandMeta } from './chart-meta-utils.js'
 import {
   Area,
   Bar,
@@ -15,7 +22,6 @@ import {
   ComposedChart,
   Legend,
   Line,
-  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
@@ -35,14 +41,6 @@ type SeriesMeta = {
   color: string
 }
 
-type BandMeta = {
-  band: UncertaintyBand
-  lowerKey: string
-  upperKey: string
-  name: string
-  patternId: string
-}
-
 const X_KEY = '__x'
 const Y_AXIS_TICK_STYLE = {
   fill: 'var(--color-text-muted)',
@@ -51,6 +49,7 @@ const Y_AXIS_TICK_STYLE = {
   letterSpacing: '0.04em',
 }
 const GRID_STROKE_OPACITY = 0.6
+const useChartMeasureEffect = typeof document === 'undefined' ? useEffect : useLayoutEffect
 
 function colorForSemanticRole(role: ChartSemanticRole): string {
   if (role === 'baseline') {
@@ -68,28 +67,27 @@ function colorForSemanticRole(role: ChartSemanticRole): string {
   return 'var(--color-text-muted)'
 }
 
-function formatCompactNumber(value: number): string {
-  if (Math.abs(value) >= 1000) {
-    return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value)
-  }
-  if (Math.abs(value) >= 100) {
-    return value.toFixed(0)
-  }
-  if (Math.abs(value) >= 10) {
-    return value.toFixed(1)
-  }
-  return value.toFixed(2).replace(/\.00$/, '')
+// DFM Overview nowcast splits one logical "GDP growth" line into three
+// segmented series so history/current/forecast render visually distinct.
+// Style decisions live here so any chart that opts into these series_ids
+// gets the same visual encoding without widening the ChartSeries contract.
+const NOWCAST_LINE_STYLES: Record<
+  string,
+  { strokeDasharray?: string; showDots: boolean; connectNulls: boolean; strokeWidth: number; dotRadius: number }
+> = {
+  gdp_history_yoy: { showDots: false, connectNulls: false, strokeWidth: 2, dotRadius: 0 },
+  gdp_nowcast_yoy: { strokeDasharray: '6 4', showDots: true, connectNulls: true, strokeWidth: 3, dotRadius: 4.5 },
+  gdp_forecast_yoy: { strokeDasharray: '2 4', showDots: false, connectNulls: true, strokeWidth: 2, dotRadius: 0 },
 }
 
-function formatWithUnit(value: number, unit: string): string {
-  const numeric = formatCompactNumber(value)
-  if (!unit) {
-    return numeric
+function lineStyleForSeriesId(seriesId: string) {
+  return NOWCAST_LINE_STYLES[seriesId] ?? {
+    strokeDasharray: undefined,
+    showDots: false,
+    connectNulls: false,
+    strokeWidth: 2,
+    dotRadius: 0,
   }
-  if (unit === '%' || unit === 'pp') {
-    return `${numeric}${unit}`
-  }
-  return `${numeric} ${unit}`
 }
 
 function isFiniteNumber(value: unknown): value is number {
@@ -101,18 +99,6 @@ function toSeriesMeta(spec: ChartSpec): SeriesMeta[] {
     series,
     key: `series__${series.series_id}`,
     color: colorForSemanticRole(series.semantic_role),
-  }))
-}
-
-function toBandMeta(spec: ChartSpec): BandMeta[] {
-  return spec.uncertainty.map((band) => ({
-    band,
-    lowerKey: `band__${band.series_id}__lower`,
-    upperKey: `band__${band.series_id}__upper`,
-    name: band.is_illustrative
-      ? `(illustrative) ${band.confidence_level}% ${band.methodology_label}`
-      : `${band.confidence_level}% ${band.methodology_label}`,
-    patternId: `band__${spec.chart_id}__${band.series_id}__illustrative`,
   }))
 }
 
@@ -178,7 +164,7 @@ function getFreshness(spec: ChartSpec): string | null {
   return normalized ? normalized : null
 }
 
-function buildScreenReaderSummary(spec: ChartSpec): string {
+function buildScreenReaderSummary(spec: ChartSpec, fallbackLabel: string): string {
   const takeaway = spec.takeaway.trim()
   if (takeaway) {
     return takeaway
@@ -187,13 +173,40 @@ function buildScreenReaderSummary(spec: ChartSpec): string {
   if (subtitle) {
     return subtitle
   }
-  return `${spec.title} chart`
+  return `${spec.title} ${fallbackLabel}`
 }
 
 export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererProps): JSX.Element {
-  const primaryModel = spec.model_attribution[0]?.model_id ?? 'N/A'
+  const { i18n, t } = useTranslation()
+  const locale = i18n.resolvedLanguage ?? i18n.language
+  const bodyRef = useRef<HTMLDivElement>(null)
+  const [measuredWidth, setMeasuredWidth] = useState(() =>
+    typeof document === 'undefined' ? 640 : 0,
+  )
+  const primaryModel = spec.model_attribution[0]?.model_id ?? formatUnavailable(locale)
   const chartAriaLabel = ariaLabel ?? spec.title
   const freshness = getFreshness(spec)
+
+  useChartMeasureEffect(() => {
+    const element = bodyRef.current
+    if (!element) {
+      return undefined
+    }
+
+    const updateWidth = () => {
+      setMeasuredWidth(Math.max(1, Math.floor(element.getBoundingClientRect().width)))
+    }
+    updateWidth()
+
+    if (typeof ResizeObserver !== 'undefined') {
+      const observer = new ResizeObserver(updateWidth)
+      observer.observe(element)
+      return () => observer.disconnect()
+    }
+
+    globalThis.addEventListener?.('resize', updateWidth)
+    return () => globalThis.removeEventListener?.('resize', updateWidth)
+  }, [])
 
   if (!hasUsableSeriesData(spec)) {
     return (
@@ -205,7 +218,9 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
           </div>
           <AttributionBadge modelId={primaryModel} active />
         </header>
-        <p className="empty-state chart-renderer__empty">No data available for this chart.</p>
+        <p className="empty-state chart-renderer__empty">
+          {t('chartRenderer.empty', { defaultValue: 'No data available for this chart.' })}
+        </p>
       </article>
     )
   }
@@ -215,8 +230,13 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
   const data = buildChartData(spec, seriesMeta, bandMeta)
   const yUnit = spec.y.unit
   const yDomain = toYAxisDomain(spec)
-  const screenReaderSummary = buildScreenReaderSummary(spec)
+  const screenReaderSummary = buildScreenReaderSummary(
+    spec,
+    t('chartRenderer.srFallback', { defaultValue: 'chart' }),
+  )
   const hasIllustrativeBand = bandMeta.some((item) => item.band.is_illustrative)
+  const suppressInternalLegend = spec.series.some((series) => series.series_id === 'gdp_nowcast_yoy')
+  const chartWidth = Math.max(measuredWidth, 1)
 
   const commonChartChildren = (
     <>
@@ -229,6 +249,7 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
         dataKey={X_KEY}
         axisLine={false}
         tick={Y_AXIS_TICK_STYLE}
+        tickFormatter={(value) => formatQuarterLabel(value, locale)}
         tickLine={{ stroke: 'var(--color-border-strong)', strokeWidth: 0.75 }}
       />
       <YAxis
@@ -239,17 +260,18 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
           if (!isFiniteNumber(value)) {
             return ''
           }
-          return formatWithUnit(value, yUnit)
+          return formatValueWithUnit(value, yUnit, locale, { maximumFractionDigits: 2 })
         }}
         tickLine={{ stroke: 'var(--color-border-strong)', strokeWidth: 0.75 }}
       />
       <Tooltip
         formatter={(value) => {
           if (!isFiniteNumber(value)) {
-            return 'n/a'
+            return formatUnavailable(locale)
           }
-          return formatWithUnit(value, yUnit)
+          return formatValueWithUnit(value, yUnit, locale, { maximumFractionDigits: 2 })
         }}
+        labelFormatter={(label) => formatQuarterLabel(label, locale)}
         itemStyle={{
           color: 'var(--color-text)',
           fontFamily: 'var(--font-mono)',
@@ -263,13 +285,15 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
           fontSize: '0.82rem',
         }}
       />
-      <Legend
-        align="left"
-        className="chart-renderer__legend"
-        iconSize={8}
-        verticalAlign="bottom"
-        wrapperStyle={{ paddingTop: 10 }}
-      />
+      {suppressInternalLegend ? null : (
+        <Legend
+          align="left"
+          className="chart-renderer__legend"
+          iconSize={8}
+          verticalAlign="bottom"
+          wrapperStyle={{ paddingTop: 10 }}
+        />
+      )}
     </>
   )
 
@@ -293,46 +317,65 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
     </defs>
   ) : null
 
-  const uncertaintyBands = bandMeta.map((item) => (
-    <Area
-      key={`${item.band.series_id}-band`}
-      dataKey={(datum: ChartDatum) => {
-        const lower = datum[item.lowerKey]
-        const upper = datum[item.upperKey]
-        if (!isFiniteNumber(lower) || !isFiniteNumber(upper) || upper < lower) {
-          return null
-        }
-        return [lower, upper]
-      }}
-      fill={item.band.is_illustrative ? `url(#${item.patternId})` : 'var(--color-uncertainty)'}
-      fillOpacity={item.band.is_illustrative ? 1 : 0.3}
-      isAnimationActive={false}
-      legendType="rect"
-      name={item.name}
-      stroke="var(--color-border-strong)"
-      strokeDasharray={item.band.is_illustrative ? '5 3' : undefined}
-      strokeWidth={1}
-      type="monotone"
-    />
-  ))
+  // Render bands widest-to-narrowest so narrower bands paint over wider
+  // ones. Each successive (narrower) band uses a stronger fill opacity
+  // to produce nested-ring fan geometry without flattening the
+  // --color-uncertainty token.
+  const orderedBandMeta = [...bandMeta].sort(
+    (a, b) => b.band.confidence_level - a.band.confidence_level,
+  )
+  const uncertaintyBands = orderedBandMeta.map((item, index) => {
+    const baseOpacity = Math.min(0.18 + index * 0.14, 0.5)
+    return (
+      <Area
+        key={`${item.band.series_id}-${item.band.confidence_level}-band`}
+        dataKey={(datum: ChartDatum) => {
+          const lower = datum[item.lowerKey]
+          const upper = datum[item.upperKey]
+          if (!isFiniteNumber(lower) || !isFiniteNumber(upper) || upper < lower) {
+            return null
+          }
+          return [lower, upper]
+        }}
+        fill={item.band.is_illustrative ? `url(#${item.patternId})` : 'var(--color-uncertainty)'}
+        fillOpacity={item.band.is_illustrative ? 1 : baseOpacity}
+        isAnimationActive={false}
+        legendType="rect"
+        name={item.name}
+        stroke="var(--color-border-strong)"
+        strokeDasharray={item.band.is_illustrative ? '5 3' : undefined}
+        strokeWidth={1}
+        type="monotone"
+      />
+    )
+  })
 
   const lineChartBody = (
-    <ComposedChart data={data} margin={{ top: 8, right: 8, bottom: 6, left: 6 }}>
+    <ComposedChart data={data} height={height} margin={{ top: 8, right: 8, bottom: 6, left: 6 }} width={chartWidth}>
       {uncertaintyPatterns}
       {commonChartChildren}
       {uncertaintyBands}
-      {seriesMeta.map((item) => (
-        <Line
-          key={item.series.series_id}
-          dataKey={item.key}
-          dot={false}
-          isAnimationActive={false}
-          name={item.series.label}
-          stroke={item.color}
-          strokeWidth={2}
-          type="monotone"
-        />
-      ))}
+      {seriesMeta.map((item) => {
+        const style = lineStyleForSeriesId(item.series.series_id)
+        return (
+          <Line
+            key={item.series.series_id}
+            connectNulls={style.connectNulls}
+            dataKey={item.key}
+            dot={
+              style.showDots
+                ? { r: style.dotRadius, stroke: 'var(--color-surface)', strokeWidth: 1.5, fill: item.color }
+                : false
+            }
+            isAnimationActive={false}
+            name={item.series.label}
+            stroke={item.color}
+            strokeDasharray={style.strokeDasharray}
+            strokeWidth={style.strokeWidth}
+            type="monotone"
+          />
+        )
+      })}
     </ComposedChart>
   )
 
@@ -356,14 +399,14 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
 
   const barChartBody =
     bandMeta.length > 0 ? (
-      <ComposedChart data={data} margin={{ top: 8, right: 8, bottom: 6, left: 6 }}>
+      <ComposedChart data={data} height={height} margin={{ top: 8, right: 8, bottom: 6, left: 6 }} width={chartWidth}>
         {uncertaintyPatterns}
         {commonChartChildren}
         {uncertaintyBands}
         {barSeries}
       </ComposedChart>
     ) : (
-      <BarChart data={data} margin={{ top: 8, right: 8, bottom: 6, left: 6 }}>
+      <BarChart data={data} height={height} margin={{ top: 8, right: 8, bottom: 6, left: 6 }} width={chartWidth}>
         {commonChartChildren}
         {barSeries}
       </BarChart>
@@ -388,19 +431,24 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
         <AttributionBadge modelId={primaryModel} active />
       </header>
 
-      <div className="chart-renderer__body" role="img" aria-label={chartAriaLabel}>
+      <div className="chart-renderer__body" role="img" aria-label={chartAriaLabel} ref={bodyRef}>
         <p className="sr-only">{screenReaderSummary}</p>
-        <ResponsiveContainer width="100%" height={height}>
-          {chartBody}
-        </ResponsiveContainer>
+        {measuredWidth > 0 ? chartBody : null}
       </div>
+      <p className="chart-renderer__axis-note">
+        {spec.x.label}
+        {spec.x.unit ? ` (${formatAxisUnitLabel(spec.x.unit, locale)})` : ''} · {spec.y.label}
+        {spec.y.unit ? ` (${formatAxisUnitLabel(spec.y.unit, locale)})` : ''}
+      </p>
       {hasIllustrativeBand ? (
-        <p className="chart-renderer__illustrative-note">Illustrative uncertainty band (hatched).</p>
+        <p className="chart-renderer__illustrative-note">
+          {t('chartRenderer.illustrativeBand', { defaultValue: 'Illustrative uncertainty band (hatched).' })}
+        </p>
       ) : null}
 
       {spec.takeaway.trim() ? (
         <p className="chart-renderer__takeaway">
-          <strong>Takeaway.</strong> {spec.takeaway}
+          <strong>{t('chartRenderer.takeawayLabel', { defaultValue: 'Takeaway.' })}</strong> {spec.takeaway}
         </p>
       ) : null}
 

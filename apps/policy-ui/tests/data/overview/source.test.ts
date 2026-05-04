@@ -2,17 +2,98 @@ import assert from 'node:assert/strict'
 import { afterEach, describe, it } from 'node:test'
 import { loadOverviewSourceState } from '../../../src/data/overview/source.js'
 import { overviewLiveRawMock } from '../../../src/data/raw/overview-live.js'
+import { overviewV1Data } from '../../../src/data/mock/overview.js'
+import { buildValidOverviewArtifact } from './overview-artifact-fixture.js'
 
 const originalFetch = globalThis.fetch
 const originalMode = process.env.VITE_OVERVIEW_DATA_MODE
+const originalArtifactUrl = process.env.VITE_OVERVIEW_ARTIFACT_URL
+const originalConsoleError = console.error
 
 afterEach(() => {
   globalThis.fetch = originalFetch
+  console.error = originalConsoleError
   if (originalMode === undefined) {
     delete process.env.VITE_OVERVIEW_DATA_MODE
   } else {
     process.env.VITE_OVERVIEW_DATA_MODE = originalMode
   }
+  if (originalArtifactUrl === undefined) {
+    delete process.env.VITE_OVERVIEW_ARTIFACT_URL
+  } else {
+    process.env.VITE_OVERVIEW_ARTIFACT_URL = originalArtifactUrl
+  }
+})
+
+function jsonResponse(payload: unknown, status = 200): Response {
+  return new Response(JSON.stringify(payload), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  })
+}
+
+describe('overview source artifact flow', () => {
+  it('loads a valid overview artifact and exposes artifact source state', async () => {
+    delete process.env.VITE_OVERVIEW_DATA_MODE
+    globalThis.fetch = (() => Promise.resolve(jsonResponse(buildValidOverviewArtifact()))) as typeof fetch
+
+    const state = await loadOverviewSourceState()
+
+    assert.equal(state.status, 'ready')
+    assert.equal(state.mode, 'artifact')
+    assert.equal(state.sourceKind, 'overview-artifact')
+    assert.equal(state.fallbackReason, null)
+    assert.equal(state.snapshot?.snapshot_id, 'overview-artifact')
+    assert.equal(state.snapshot?.headline_metrics[0].metric_id, 'real_gdp_growth_quarter_yoy')
+  })
+
+  it('falls back cleanly when the overview artifact is missing', async () => {
+    delete process.env.VITE_OVERVIEW_DATA_MODE
+    globalThis.fetch = (() => Promise.resolve(new Response('', { status: 404 }))) as typeof fetch
+
+    const state = await loadOverviewSourceState()
+
+    assert.equal(state.status, 'ready')
+    assert.equal(state.sourceKind, 'static-fallback')
+    assert.equal(state.fallbackReason, 'missing')
+    assert.equal(state.snapshot?.snapshot_id, overviewV1Data.snapshot_id)
+  })
+
+  it('treats Vite HTML fallback for missing overview.json as clean missing fallback', async () => {
+    delete process.env.VITE_OVERVIEW_DATA_MODE
+    const consoleErrors: unknown[][] = []
+    console.error = (...args: unknown[]) => {
+      consoleErrors.push(args)
+    }
+    globalThis.fetch = (() =>
+      Promise.resolve(
+        new Response('<!doctype html><html lang="en"></html>', {
+          status: 200,
+          headers: { 'Content-Type': 'text/html' },
+        }),
+      )) as typeof fetch
+
+    const state = await loadOverviewSourceState()
+
+    assert.equal(state.status, 'ready')
+    assert.equal(state.sourceKind, 'static-fallback')
+    assert.equal(state.fallbackReason, 'missing')
+    assert.equal(state.snapshot?.snapshot_id, overviewV1Data.snapshot_id)
+    assert.equal(consoleErrors.length, 0)
+  })
+
+  it('falls back cleanly when the overview artifact is invalid', async () => {
+    delete process.env.VITE_OVERVIEW_DATA_MODE
+    globalThis.fetch = (() => Promise.resolve(jsonResponse({ schema_version: 'overview.v1' }))) as typeof fetch
+
+    const state = await loadOverviewSourceState()
+
+    assert.equal(state.status, 'ready')
+    assert.equal(state.sourceKind, 'static-fallback')
+    assert.equal(state.fallbackReason, 'invalid')
+    assert.equal(state.snapshot?.snapshot_id, overviewV1Data.snapshot_id)
+    assert.ok(state.warnings.length > 0)
+  })
 })
 
 describe('overview source live integration flow', () => {

@@ -4,6 +4,7 @@ import { scenarioLabWorkspaceMock } from '../../src/data/mock/scenario-lab.js'
 import {
   clearAllScenarios,
   deleteScenario,
+  isIoSectorShockRecord,
   listScenarios,
   loadScenario,
   saveScenario,
@@ -120,10 +121,10 @@ describe('scenarioStore', () => {
     const keys = localStorageHandle?.storage
       .snapshot()
       .map(([key]) => key)
-      .filter((key) => key.startsWith('policy-ui:scenario:'))
+      .filter((key) => key.startsWith('policy-ui:scenario.v2:'))
     assert.equal(keys?.length, 2)
-    assert.equal(keys?.includes('policy-ui:scenario:scenario-c1'), true)
-    assert.equal(keys?.includes('policy-ui:scenario:scenario-c2'), true)
+    assert.equal(keys?.includes('policy-ui:scenario.v2:scenario-c1'), true)
+    assert.equal(keys?.includes('policy-ui:scenario.v2:scenario-c2'), true)
 
     const listed = listScenarios()
     assert.equal(listed.length, 2)
@@ -162,12 +163,12 @@ describe('scenarioStore', () => {
     const scenarioKeys = localStorageHandle?.storage
       .snapshot()
       .map(([key]) => key)
-      .filter((key) => key.startsWith('policy-ui:scenario:'))
+      .filter((key) => key.startsWith('policy-ui:scenario.v2:'))
     assert.equal(scenarioKeys?.length, 0)
   })
 
   it('returns null and warns when a saved record does not match schema', () => {
-    localStorage.setItem('policy-ui:scenario:bad-schema', JSON.stringify({ scenario_id: 'bad-schema' }))
+    localStorage.setItem('policy-ui:scenario.v2:bad-schema', JSON.stringify({ scenario_id: 'bad-schema' }))
     const originalWarn = console.warn
     const warnings: string[] = []
     console.warn = ((message: unknown) => warnings.push(String(message))) as typeof console.warn
@@ -177,5 +178,458 @@ describe('scenarioStore', () => {
     console.warn = originalWarn
     assert.equal(loaded, null)
     assert.equal(warnings.length > 0, true)
+  })
+
+  it('round-trips governance metadata on run_interpretation bit-for-bit', () => {
+    saveScenario({
+      ...buildScenarioInput('scenario-gov-1', 'Scenario Governance'),
+      run_interpretation: {
+        what_changed: ['policy rate lifted 50bps'],
+        why_it_changed: ['inflation persistence elevated'],
+        key_risks: ['wage-price spiral'],
+        policy_implications: ['tighten for longer'],
+        suggested_next_scenarios: ['fx pass-through stress'],
+        metadata: {
+          generation_mode: 'assisted',
+          reviewer_name: 'X. Reviewer',
+          reviewed_at: '2026-03-15T09:00:00Z',
+        },
+      },
+    })
+
+    const loaded = loadScenario('scenario-gov-1')
+    assert.ok(loaded)
+    assert.ok(loaded.run_interpretation)
+    assert.equal(loaded.run_interpretation.metadata.generation_mode, 'assisted')
+    assert.equal(loaded.run_interpretation.metadata.reviewer_name, 'X. Reviewer')
+    assert.equal(loaded.run_interpretation.metadata.reviewed_at, '2026-03-15T09:00:00Z')
+    assert.deepEqual(loaded.run_interpretation.what_changed, ['policy rate lifted 50bps'])
+    assert.deepEqual(loaded.run_interpretation.why_it_changed, ['inflation persistence elevated'])
+  })
+
+  it('round-trips a persisted I-O sector shock run without macro run results', () => {
+    const saved = saveScenario({
+      ...buildScenarioInput('scenario-io-sector', 'I-O export shock'),
+      model_ids: ['io-sector-shock'],
+      io_sector_shock: {
+        model_type: 'io_sector_shock',
+        title: 'I-O export shock',
+        data_vintage: '2022',
+        source_artifact: 'io_model/io_data.json',
+        saved_at: '2026-04-22T10:15:00Z',
+        request: {
+          demand_bucket: 'export',
+          amount: 1000,
+          currency: 'bln_uzs',
+          distribution: 'output',
+        },
+        totals: {
+          input_shock: 1000,
+          input_currency: 'bln_uzs',
+          demand_shock_bln_uzs: 1000,
+          output_effect_bln_uzs: 1600,
+          value_added_effect_bln_uzs: 650,
+          gdp_accounting_contribution_bln_uzs: 650,
+          employment_effect_persons: 2400,
+          aggregate_output_multiplier: 1.6,
+        },
+        top_sectors: [
+          {
+            sector_code: 'A01',
+            sector_name: 'Agriculture',
+            output_effect_bln_uzs: 200,
+            value_added_effect_bln_uzs: 80,
+            output_multiplier: 1.4,
+            value_added_multiplier: 0.6,
+            backward_linkage: 1.1,
+            forward_linkage: 0.9,
+            linkage_classification: 'backward',
+            employment_effect_persons: 900,
+          },
+        ],
+        caveats: ['Sector transmission only.'],
+      },
+    })
+    const loaded = loadScenario(saved.scenario_id)
+
+    assert.ok(loaded)
+    assert.equal(isIoSectorShockRecord(loaded), true)
+    assert.equal(loaded.run_results, undefined)
+    assert.equal(loaded.io_sector_shock?.totals.gdp_accounting_contribution_bln_uzs, 650)
+  })
+
+  it('strips inert legacy top-level governance fields when saving current metadata shape', () => {
+    const saved = saveScenario({
+      ...buildScenarioInput('scenario-gov-duplicates', 'Scenario Governance Duplicates'),
+      run_interpretation: {
+        what_changed: ['policy rate lifted 50bps'],
+        why_it_changed: ['inflation persistence elevated'],
+        key_risks: ['wage-price spiral'],
+        policy_implications: ['tighten for longer'],
+        suggested_next_scenarios: ['fx pass-through stress'],
+        metadata: {
+          generation_mode: 'reviewed',
+          reviewer_name: 'X. Reviewer',
+          reviewed_at: '2026-03-15T09:00:00Z',
+        },
+        generation_mode: 'assisted',
+        reviewer_name: 'Legacy Reviewer',
+        reviewed_at: '2026-01-01T00:00:00Z',
+      } as Parameters<typeof saveScenario>[0]['run_interpretation'] & Record<string, unknown>,
+    })
+    const rawSavedRecord = localStorage.getItem(`policy-ui:scenario.v2:${saved.scenario_id}`)
+    assert.ok(rawSavedRecord)
+    const parsed = JSON.parse(rawSavedRecord) as {
+      run_interpretation?: Record<string, unknown>
+    }
+
+    assert.ok(parsed.run_interpretation)
+    assert.equal(parsed.run_interpretation.metadata instanceof Object, true)
+    assert.equal('generation_mode' in parsed.run_interpretation, false)
+    assert.equal('reviewer_name' in parsed.run_interpretation, false)
+    assert.equal('reviewed_at' in parsed.run_interpretation, false)
+  })
+
+  it('loads current metadata records that still carry inert duplicate legacy fields', () => {
+    const recordWithDuplicateFields = {
+      ...buildScenarioInput('scenario-gov-current-plus-legacy', 'Current Metadata Plus Legacy'),
+      created_at: '2026-04-01T12:00:00Z',
+      updated_at: '2026-04-01T12:00:00Z',
+      created_by: 'test-session',
+      stored_at: '2026-04-01T12:00:00Z',
+      run_interpretation: {
+        what_changed: ['Current metadata what changed.'],
+        why_it_changed: ['Current metadata why.'],
+        key_risks: ['Current metadata risk.'],
+        policy_implications: ['Current metadata implication.'],
+        suggested_next_scenarios: ['Current metadata next.'],
+        metadata: {
+          generation_mode: 'reviewed',
+          reviewer_name: 'Current Reviewer',
+          reviewed_at: '2026-04-01T12:00:00Z',
+        },
+        generation_mode: 'assisted',
+        reviewer_name: 'Legacy Reviewer',
+        reviewed_at: '2026-01-01T00:00:00Z',
+      },
+    }
+    const rawPayload = JSON.stringify(recordWithDuplicateFields)
+    localStorage.setItem('policy-ui:scenario.v2:scenario-gov-current-plus-legacy', rawPayload)
+
+    const loaded = loadScenario('scenario-gov-current-plus-legacy')
+
+    assert.ok(loaded)
+    assert.equal(loaded.run_interpretation?.metadata.generation_mode, 'reviewed')
+    assert.equal(loaded.run_interpretation?.metadata.reviewer_name, 'Current Reviewer')
+    assert.equal(
+      localStorage.getItem('policy-ui:scenario.v2:scenario-gov-current-plus-legacy'),
+      rawPayload,
+    )
+  })
+
+  it('round-trips run_id, run_saved_at, run_results and run_attribution', () => {
+    const runAttribution = {
+      model_id: 'qpm-mock',
+      model_name: 'QPM Mock',
+      module: 'qpm',
+      version: '1.0.0',
+      run_id: 'run-abc',
+      data_version: '2025Q4',
+      timestamp: '2026-04-01T12:00:00Z',
+    }
+    const headlineMetric = {
+      metric_id: 'gdp_growth',
+      label: 'GDP growth',
+      value: 42,
+      unit: '%',
+      period: '2026',
+      baseline_value: 4,
+      delta_abs: 38,
+      delta_pct: null,
+      direction: 'up' as const,
+      confidence: 'medium' as const,
+      last_updated: '2026-04-01T12:00:00Z',
+      model_attribution: [runAttribution],
+    }
+    const chartSpec = {
+      chart_id: 'headline-impact-chart',
+      title: 'Headline impact',
+      subtitle: 'Sentinel',
+      chart_type: 'line' as const,
+      x: { label: 'Year', unit: '', values: ['2026'] },
+      y: { label: '%', unit: '%', values: [] },
+      series: [{ series_id: 's1', label: 'Alt', semantic_role: 'alternative' as const, values: [42] }],
+      view_mode: 'level' as const,
+      uncertainty: [],
+      takeaway: 'Sentinel',
+      model_attribution: [runAttribution],
+    }
+
+    saveScenario({
+      ...buildScenarioInput('scenario-output-1', 'Scenario Outputs'),
+      run_id: 'run-abc',
+      run_saved_at: '2026-04-01T12:00:00Z',
+      run_results: {
+        headline_metrics: [headlineMetric],
+        charts_by_tab: {
+          headline_impact: chartSpec,
+          macro_path: chartSpec,
+          external_balance: chartSpec,
+          fiscal_effects: chartSpec,
+        },
+      },
+      run_attribution: [runAttribution],
+    })
+
+    const loaded = loadScenario('scenario-output-1')
+    assert.ok(loaded)
+    assert.equal(loaded.run_id, 'run-abc')
+    assert.equal(loaded.run_saved_at, '2026-04-01T12:00:00Z')
+    assert.ok(loaded.run_results)
+    assert.deepEqual(loaded.run_results.headline_metrics, [headlineMetric])
+    assert.deepEqual(loaded.run_results.charts_by_tab.headline_impact, chartSpec)
+    assert.ok(loaded.run_attribution)
+    assert.deepEqual(loaded.run_attribution, [runAttribution])
+  })
+
+  it('ignores legacy v1 entries and leaves them byte-identical in storage', () => {
+    const legacyPayload = JSON.stringify({
+      scenario_id: 'legacy-entry',
+      scenario_name: 'Legacy',
+      scenario_type: 'alternative',
+      tags: [],
+      description: '',
+      created_at: '2025-01-01T00:00:00Z',
+      updated_at: '2025-01-01T00:00:00Z',
+      created_by: 'legacy-session',
+      assumptions: [],
+      model_ids: ['legacy-model'],
+      data_version: '2024Q4',
+      stored_at: '2025-01-01T00:00:00Z',
+    })
+    localStorage.setItem('policy-ui:scenario:legacy-entry', legacyPayload)
+
+    const listed = listScenarios()
+    assert.deepEqual(listed, [])
+    assert.equal(localStorage.getItem('policy-ui:scenario:legacy-entry'), legacyPayload)
+  })
+
+  it('rejects legacy top-level-only interpretation governance without rewriting storage', () => {
+    const legacyRecord = {
+      ...buildScenarioInput('legacy-run-interpretation', 'Legacy Run Interpretation'),
+      created_at: '2026-04-01T12:00:00Z',
+      updated_at: '2026-04-01T12:00:00Z',
+      created_by: 'test-session',
+      stored_at: '2026-04-01T12:00:00Z',
+      run_interpretation: {
+        what_changed: ['Legacy what changed.'],
+        why_it_changed: ['Legacy why.'],
+        key_risks: ['Legacy risk.'],
+        policy_implications: ['Legacy implication.'],
+        suggested_next_scenarios: ['Legacy next.'],
+        generation_mode: 'reviewed',
+        reviewer_name: 'Legacy Reviewer',
+        reviewed_at: '2026-04-01T12:00:00Z',
+      },
+    }
+    const legacyPayload = JSON.stringify(legacyRecord)
+    localStorage.setItem('policy-ui:scenario.v2:legacy-run-interpretation', legacyPayload)
+
+    const originalWarn = console.warn
+    console.warn = (() => {}) as typeof console.warn
+    const loaded = loadScenario('legacy-run-interpretation')
+    const listed = listScenarios()
+    console.warn = originalWarn
+
+    assert.equal(loaded, null)
+    assert.equal(
+      listed.some((entry) => entry.scenario_id === 'legacy-run-interpretation'),
+      false,
+    )
+    assert.equal(localStorage.getItem('policy-ui:scenario.v2:legacy-run-interpretation'), legacyPayload)
+  })
+
+  it('rejects persisted run_results missing a required tab', () => {
+    const runAttribution = {
+      model_id: 'qpm-mock',
+      model_name: 'QPM Mock',
+      module: 'qpm',
+      version: '1.0.0',
+      run_id: 'run-tab',
+      data_version: '2025Q4',
+      timestamp: '2026-04-01T12:00:00Z',
+    }
+    const headlineMetric = {
+      metric_id: 'gdp_growth',
+      label: 'GDP growth',
+      value: 42,
+      unit: '%',
+      period: '2026',
+      baseline_value: 4,
+      delta_abs: 38,
+      delta_pct: null,
+      direction: 'up' as const,
+      confidence: 'medium' as const,
+      last_updated: '2026-04-01T12:00:00Z',
+      model_attribution: [runAttribution],
+    }
+    const chartSpec = {
+      chart_id: 'headline-impact-chart',
+      title: 'Headline impact',
+      subtitle: 'Sentinel',
+      chart_type: 'line' as const,
+      x: { label: 'Year', unit: '', values: ['2026'] },
+      y: { label: '%', unit: '%', values: [] },
+      series: [{ series_id: 's1', label: 'Alt', semantic_role: 'alternative' as const, values: [42] }],
+      view_mode: 'level' as const,
+      uncertainty: [],
+      takeaway: 'Sentinel',
+      model_attribution: [runAttribution],
+    }
+
+    const brokenRecord = {
+      scenario_id: 'scenario-missing-tab',
+      scenario_name: 'Missing Tab',
+      scenario_type: 'alternative',
+      tags: [],
+      description: '',
+      created_at: '2026-04-01T12:00:00Z',
+      updated_at: '2026-04-01T12:00:00Z',
+      created_by: 'test-session',
+      assumptions,
+      model_ids: ['scenario-lab-mock-engine'],
+      data_version: '2025Q4',
+      stored_at: '2026-04-01T12:00:00Z',
+      run_id: 'run-tab',
+      run_saved_at: '2026-04-01T12:00:00Z',
+      run_results: {
+        headline_metrics: [headlineMetric],
+        charts_by_tab: {
+          headline_impact: chartSpec,
+          macro_path: chartSpec,
+          external_balance: chartSpec,
+          // fiscal_effects deliberately missing — renderer would crash on navigation.
+        },
+      },
+      run_attribution: [runAttribution],
+    }
+    localStorage.setItem(
+      `policy-ui:scenario.v2:${brokenRecord.scenario_id}`,
+      JSON.stringify(brokenRecord),
+    )
+
+    const originalWarn = console.warn
+    console.warn = (() => {}) as typeof console.warn
+    const listed = listScenarios()
+    console.warn = originalWarn
+
+    assert.equal(
+      listed.find((entry) => entry.scenario_id === brokenRecord.scenario_id),
+      undefined,
+      'expected broken record (missing required tab) to be filtered out',
+    )
+  })
+
+  it('rejects persisted run_results with a chart missing required axis', () => {
+    const runAttribution = {
+      model_id: 'qpm-mock',
+      model_name: 'QPM Mock',
+      module: 'qpm',
+      version: '1.0.0',
+      run_id: 'run-axis',
+      data_version: '2025Q4',
+      timestamp: '2026-04-01T12:00:00Z',
+    }
+    const headlineMetric = {
+      metric_id: 'gdp_growth',
+      label: 'GDP growth',
+      value: 42,
+      unit: '%',
+      period: '2026',
+      baseline_value: 4,
+      delta_abs: 38,
+      delta_pct: null,
+      direction: 'up' as const,
+      confidence: 'medium' as const,
+      last_updated: '2026-04-01T12:00:00Z',
+      model_attribution: [runAttribution],
+    }
+    const validChart = {
+      chart_id: 'headline-impact-chart',
+      title: 'Headline impact',
+      subtitle: 'Sentinel',
+      chart_type: 'line' as const,
+      x: { label: 'Year', unit: '', values: ['2026'] },
+      y: { label: '%', unit: '%', values: [] },
+      series: [{ series_id: 's1', label: 'Alt', semantic_role: 'alternative' as const, values: [42] }],
+      view_mode: 'level' as const,
+      uncertainty: [],
+      takeaway: 'Sentinel',
+      model_attribution: [runAttribution],
+    }
+    // Chart with x axis dropped — renderer would dereference chart.x and crash.
+    const malformedChart = {
+      ...validChart,
+      x: null as unknown,
+    }
+
+    const brokenRecord = {
+      scenario_id: 'scenario-missing-axis',
+      scenario_name: 'Missing Axis',
+      scenario_type: 'alternative',
+      tags: [],
+      description: '',
+      created_at: '2026-04-01T12:00:00Z',
+      updated_at: '2026-04-01T12:00:00Z',
+      created_by: 'test-session',
+      assumptions,
+      model_ids: ['scenario-lab-mock-engine'],
+      data_version: '2025Q4',
+      stored_at: '2026-04-01T12:00:00Z',
+      run_id: 'run-axis',
+      run_saved_at: '2026-04-01T12:00:00Z',
+      run_results: {
+        headline_metrics: [headlineMetric],
+        charts_by_tab: {
+          headline_impact: malformedChart,
+          macro_path: validChart,
+          external_balance: validChart,
+          fiscal_effects: validChart,
+        },
+      },
+      run_attribution: [runAttribution],
+    }
+    localStorage.setItem(
+      `policy-ui:scenario.v2:${brokenRecord.scenario_id}`,
+      JSON.stringify(brokenRecord),
+    )
+
+    const originalWarn = console.warn
+    console.warn = (() => {}) as typeof console.warn
+    const listed = listScenarios()
+    console.warn = originalWarn
+
+    assert.equal(
+      listed.find((entry) => entry.scenario_id === brokenRecord.scenario_id),
+      undefined,
+      'expected broken record (chart missing required axis) to be filtered out',
+    )
+  })
+
+  it('tolerates records saved without optional output fields', () => {
+    const saved = saveScenario(buildScenarioInput('scenario-no-outputs', 'No Outputs'))
+    assert.equal(saved.run_id, undefined)
+    assert.equal(saved.run_saved_at, undefined)
+    assert.equal(saved.run_results, undefined)
+    assert.equal(saved.run_interpretation, undefined)
+    assert.equal(saved.run_attribution, undefined)
+
+    const loaded = loadScenario('scenario-no-outputs')
+    assert.ok(loaded)
+    assert.equal(loaded.run_id, undefined)
+    assert.equal(loaded.run_saved_at, undefined)
+    assert.equal(loaded.run_results, undefined)
+    assert.equal(loaded.run_interpretation, undefined)
+    assert.equal(loaded.run_attribution, undefined)
   })
 })

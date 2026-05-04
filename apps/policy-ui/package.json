@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "test": "tsc -p tsconfig.test.json && node --experimental-specifier-resolution=node --test \"./.test-dist/tests/**/*.test.js\"",
+    "test": "tsc -p tsconfig.test.json && node --experimental-specifier-resolution=node scripts/run-compiled-tests.mjs",
+    "smoke:active-preview": "node scripts/active-preview-smoke.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

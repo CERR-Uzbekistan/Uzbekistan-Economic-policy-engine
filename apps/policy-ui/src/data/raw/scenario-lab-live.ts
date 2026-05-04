@@ -33,7 +33,7 @@ export const scenarioLabLiveRawMock: RawScenarioLabRunPayload = {
     ],
     presets: [
       {
-        presetId: 'balanced-baseline',
+        presetId: 'baseline',
         title: 'Balanced baseline',
         summary: 'No additional shocks; use as anchor for alternatives.',
         assumptionOverrides: {},

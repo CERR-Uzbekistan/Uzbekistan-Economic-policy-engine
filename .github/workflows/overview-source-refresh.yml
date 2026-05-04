@@ -1,0 +1,140 @@
+name: Overview Source Refresh
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh-source-snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      BASE_BRANCH: epic/replatform-execution
+      AUTOMATION_BRANCH: automation/overview-source-refresh
+      SNAPSHOT_PATH: scripts/overview/overview_source_snapshot.json
+      DIFF_REPORT_PATH: scripts/overview/overview_source_snapshot.diff_report.json
+      PUBLIC_OVERVIEW_PATH: apps/policy-ui/public/data/overview.json
+    steps:
+      - name: Check out base branch
+        uses: actions/checkout@v4
+        with:
+          ref: epic/replatform-execution
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Initialize run metadata
+        run: |
+          mkdir -p "$RUNNER_TEMP/overview-source-refresh"
+          printf '[]\n' > "$RUNNER_TEMP/overview-source-refresh/family-results.json"
+          cp "$DIFF_REPORT_PATH" "$RUNNER_TEMP/overview-source-refresh/original-diff-report.json"
+
+      - name: Guard PR target branches
+        run: |
+          if [ "$AUTOMATION_BRANCH" = "main" ] || [ "$AUTOMATION_BRANCH" = "$BASE_BRANCH" ]; then
+            echo "::error::Automation branch must not be main or $BASE_BRANCH."
+            exit 1
+          fi
+
+      - name: Refresh cbu-fx source family
+        run: node scripts/overview/overview-source-refresh-workflow.mjs run-family --family cbu-fx --results "$RUNNER_TEMP/overview-source-refresh/family-results.json"
+
+      - name: Refresh siat-trade source family
+        run: node scripts/overview/overview-source-refresh-workflow.mjs run-family --family siat-trade --results "$RUNNER_TEMP/overview-source-refresh/family-results.json"
+
+      - name: Refresh siat-cpi source family
+        run: node scripts/overview/overview-source-refresh-workflow.mjs run-family --family siat-cpi --results "$RUNNER_TEMP/overview-source-refresh/family-results.json"
+
+      - name: Refresh siat-gdp-annual source family
+        run: node scripts/overview/overview-source-refresh-workflow.mjs run-family --family siat-gdp-annual --results "$RUNNER_TEMP/overview-source-refresh/family-results.json"
+
+      - name: Generate PR body and workflow summary
+        run: |
+          node scripts/overview/overview-source-refresh-workflow.mjs finalize \
+            --results "$RUNNER_TEMP/overview-source-refresh/family-results.json" \
+            --original-diff-report "$RUNNER_TEMP/overview-source-refresh/original-diff-report.json" \
+            --body "$RUNNER_TEMP/overview-source-refresh/pr-body.md" \
+            --summary "$RUNNER_TEMP/overview-source-refresh/summary.md"
+
+      - name: Run Overview source tests
+        run: node --test scripts/overview/tests/*.test.mjs
+
+      - name: Hard STOP checks before PR creation
+        run: |
+          if git diff --quiet -- "$PUBLIC_OVERVIEW_PATH"; then
+            echo "Public overview export unchanged."
+          else
+            echo "::error::$PUBLIC_OVERVIEW_PATH changed; this workflow must never publish public overview.json."
+            exit 1
+          fi
+
+          disallowed="$(git status --porcelain --untracked-files=all | awk '{print $2}' | grep -Ev "^(${SNAPSHOT_PATH}|${DIFF_REPORT_PATH})$" || true)"
+          if [ -n "$disallowed" ]; then
+            echo "::error::Files outside the Overview source-refresh allowlist changed:"
+            echo "$disallowed"
+            exit 1
+          fi
+
+          snapshot_changed=false
+          if ! git diff --quiet -- "$SNAPSHOT_PATH"; then
+            snapshot_changed=true
+          fi
+
+          status="$(node -e "console.log(require('./$SNAPSHOT_PATH').status || '')")"
+          value_hash="$(node -e "console.log(require('./$SNAPSHOT_PATH').value_hash || '')")"
+          source_changed="$(node -e "console.log(require('./$DIFF_REPORT_PATH').changed ? 'true' : 'false')")"
+
+          if [ "$source_changed" = "true" ] && [ "$snapshot_changed" != "true" ]; then
+            echo "::error::Diff report says source metrics changed but the source snapshot did not change."
+            exit 1
+          fi
+          if [ "$source_changed" = "true" ] && [ "$status" = "owner_verified_for_public_artifact" ]; then
+            echo "::error::Snapshot cannot remain owner_verified_for_public_artifact after automation source changes."
+            exit 1
+          fi
+          if [ "$source_changed" = "true" ] && [ "$status" != "automation_pending_owner_review" ]; then
+            echo "::error::Source snapshot changed but status is not automation_pending_owner_review."
+            exit 1
+          fi
+          if [ "$source_changed" = "true" ] && [ -z "$value_hash" ]; then
+            echo "::error::value_hash is missing after source snapshot write."
+            exit 1
+          fi
+
+      - name: Create or update source-refresh PR
+        id: cpr
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1
+        with:
+          branch: automation/overview-source-refresh
+          base: epic/replatform-execution
+          commit-message: "chore(overview): refresh source snapshot"
+          committer: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
+          author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
+          title: "chore(overview): refresh source snapshot"
+          body-path: ${{ runner.temp }}/overview-source-refresh/pr-body.md
+          add-paths: |
+            scripts/overview/overview_source_snapshot.json
+            scripts/overview/overview_source_snapshot.diff_report.json
+
+      - name: Write workflow summary
+        if: always()
+        run: |
+          operation="${{ steps.cpr.outputs.pull-request-operation }}"
+          url="${{ steps.cpr.outputs.pull-request-url }}"
+          if [ -z "$operation" ]; then
+            operation="no-op"
+          fi
+          node scripts/overview/overview-source-refresh-workflow.mjs append-pr-result \
+            --results "$RUNNER_TEMP/overview-source-refresh/family-results.json" \
+            --summary "$RUNNER_TEMP/overview-source-refresh/summary.md" \
+            --operation "$operation" \
+            --url "$url"
+          cat "$RUNNER_TEMP/overview-source-refresh/summary.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail after PR creation if any family errored
+        run: node scripts/overview/overview-source-refresh-workflow.mjs fail-if-family-errors --results "$RUNNER_TEMP/overview-source-refresh/family-results.json"

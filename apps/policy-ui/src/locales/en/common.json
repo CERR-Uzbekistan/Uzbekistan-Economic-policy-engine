@@ -1,8 +1,37 @@
 {
+  "trustState": {
+    "labels": {
+      "mockFixture": "Mock fixture",
+      "liveBridgeJson": "Live bridge JSON",
+      "fallbackMock": "Fallback mock",
+      "staticCuratedContent": "Static curated content",
+      "localBrowserDraft": "Local browser draft",
+      "planned": "Planned",
+      "artifactGuardChecked": "Artifact guard-checked",
+      "sourceVintage": "Source vintage",
+      "artifactExport": "Artifact export",
+      "registryGenerated": "Registry generated",
+      "lastValidationCheck": "Last validation check",
+      "overviewArtifact": "Overview artifact",
+      "staticOverviewFallback": "Static fallback"
+    }
+  },
+  "format": {
+    "notAvailable": "n/a",
+    "unavailable": "Unavailable",
+    "units": {
+      "percent": "%",
+      "percentagePoint": "pp",
+      "blnUzs": "bln UZS",
+      "mlnUsd": "mln USD",
+      "uzsUsd": "UZS/USD"
+    }
+  },
   "shell": {
     "skipToMainContent": "Skip to main content",
     "workspaceNavigationAria": "Workspace navigation",
     "primaryNavigationAria": "Primary",
+    "globalUtilitiesAria": "Global utilities",
     "workspaceLabel": "Workspace",
     "brandEyebrow": "Uzbekistan Economic Policy Engine",
     "brandTitle": "Policy Analysis Workspace"
@@ -11,21 +40,29 @@
     "label": "Language",
     "ariaLabel": "Select interface language"
   },
+  "chartRenderer": {
+    "empty": "No data available for this chart.",
+    "srFallback": "chart",
+    "illustrativeBand": "Illustrative uncertainty band (hatched).",
+    "takeawayLabel": "Takeaway."
+  },
   "nav": {
     "overview": "Overview",
     "scenarioLab": "Scenario Lab",
     "comparison": "Comparison",
     "modelExplorer": "Model Explorer",
-    "knowledgeHub": "Knowledge Hub"
+    "dataRegistry": "Data Registry",
+    "knowledgeHub": "Knowledge Hub",
+    "pending": "Pending"
   },
   "pages": {
     "overview": {
       "title": "Overview",
-      "description": "Decision-first macro snapshot designed to show what changed, why it matters, and where to test next."
+      "description": "Macro snapshot for analytical use, designed to show what changed, why it matters, and where to test next."
     },
     "scenarioLab": {
       "title": "Scenario Lab",
-      "description": "Build policy scenarios by adjusting assumptions, then review impacts and interpretation in one operational workspace."
+      "description": "Build policy scenarios by adjusting assumptions, then review impacts and interpretation in one analysis workspace."
     },
     "comparison": {
       "title": "Comparison",
@@ -33,7 +70,7 @@
     },
     "modelExplorer": {
       "title": "Model Explorer",
-      "description": "Basic model catalog and technical reference for assumptions, equations, caveats, and sources.",
+      "description": "Inspect the mechanics behind every output. Honest about what each model does — and does not — do.",
       "catalogTitle": "Model catalog",
       "catalogHint": "Select one model to inspect technical assumptions and caveats.",
       "emptyState": "No model metadata is available in this workspace.",
@@ -64,15 +101,48 @@
         "implicationPrefix": "Implication"
       }
     },
+    "dataRegistry": {
+      "title": "Data Registry",
+      "description": "Read-only source, vintage, artifact, guard-check, and update-state inventory for the public frontend data layer. It does not refresh data."
+    },
     "knowledgeHub": {
       "title": "Knowledge Hub",
-      "description": "Policy context and references scaffold (post-MVP expansion area).",
-      "placeholder": "Knowledge Hub v1 scaffold"
+      "description": "Internal-preview route retained for future source-linked policy context. Content remains pending until the citation workflow is accepted."
     }
   },
   "overview": {
     "common": {
-      "middleDot": "·"
+      "middleDot": "·",
+      "slash": "/"
+    },
+    "delta": {
+      "vsPeriodBasis": "vs {{period}} {{basis}}"
+    },
+    "tradeBalance": {
+      "deficit": "deficit",
+      "surplus": "surplus",
+      "balanced": "balanced",
+      "usdBnPattern": "USD {{value}}bn {{position}}"
+    },
+    "fx": {
+      "stronger": "UZS stronger",
+      "weaker": "UZS weaker",
+      "unchanged": "unchanged"
+    },
+    "claimLabels": {
+      "observed": "Observed",
+      "calculated": "Calculated",
+      "nowcast": "Nowcast",
+      "reference": "Reference",
+      "forecast": "Forecast"
+    },
+    "macroPulse": {
+      "gdp": "GDP",
+      "cpi": "CPI",
+      "tradeBalance": "Trade balance",
+      "usdUzs": "USD/UZS",
+      "yoy": "YoY",
+      "mom": "MoM"
     },
     "topbar": {
       "freshness": "Data · {{days}}d ago"
@@ -82,13 +152,39 @@
       "vintageLabel": "Vintage",
       "modelsLabel": "Models",
       "modelsLive": "{{count}} live",
-      "lastRefreshLabel": "Last refresh"
+      "lastRefreshLabel": "Artifact export"
     },
     "header": {
       "kicker": "Economic State",
       "modelListFallback": "MODEL SET",
       "draftedFrom": "State narrative · drafted from {{models}} baseline",
-      "updatedAt": "Updated {{date}}"
+      "updatedAt": "State narrative reviewed {{date}}",
+      "artifactStrap": "Overview artifact · {{date}} · {{count}} provisional metric",
+      "artifactStrapPlural": "Overview artifact · {{date}} · {{count}} provisional metrics",
+      "artifactSummaryMeta": "Artifact metadata · {{count}} summary slots",
+      "staticFallbackNotice": "Static fallback summary · current artifact unavailable",
+      "summary": {
+        "template": "{{items}}.",
+        "item": "{{label}} {{value}} {{unit}}{{qualifier}}",
+        "provisional": "provisional",
+        "unavailable": "Overview artifact loaded, but no valid summary metrics are available.",
+        "labels": {
+          "gdp": "GDP",
+          "cpi": "CPI",
+          "exports": "exports",
+          "imports": "imports",
+          "policyRate": "policy rate",
+          "gold": "gold"
+        }
+      },
+      "provenance": {
+        "draftedFromLabel": "STATE NARRATIVE · drafted from",
+        "aiAssisted": "AI-assisted",
+        "humanAuthored": "Human-authored",
+        "reviewedAt": "reviewed {{date}}",
+        "reviewerPendingChip": "Reviewer pending",
+        "reviewerPendingAria": "Reviewer name pending — SME content pending"
+      }
     },
     "kpi": {
       "title": "Core indicators",
@@ -97,11 +193,60 @@
       "deltaSrLabel": "{{direction}} by {{delta}} versus prior period",
       "noPrior": "No prior value",
       "notAvailable": "n/a",
-      "freshness": "Updated {{date}}",
+      "freshness": "Metric timestamp {{date}}",
+      "smePendingChip": "SME content pending",
+      "smePendingAria": "Contextual footnote — SME content pending",
+      "provenance": {
+        "observed": "Observed",
+        "nowcast": "Nowcast",
+        "scenario": "Scenario",
+        "reference": "Reference",
+        "draft": "Draft"
+      },
       "direction": {
         "up": "higher",
         "down": "lower",
         "flat": "unchanged"
+      }
+    },
+    "comparisonBasis": {
+      "real_gdp_growth_annual_yoy": "print",
+      "real_gdp_growth_quarter_yoy": "print",
+      "gdp_nowcast_current_quarter": "model nowcast",
+      "cpi_yoy": "print",
+      "cpi_mom": "print",
+      "food_cpi_yoy": "print",
+      "exports_yoy": "trade print",
+      "imports_yoy": "trade print",
+      "trade_balance": "trade balance",
+      "policy_rate": "policy setting",
+      "usd_uzs_level": "official reference rate",
+      "usd_uzs_mom_change": "monthly FX change",
+      "usd_uzs_yoy_change": "annual FX change",
+      "reer_level": "REER index",
+      "gold_price_level": "market reference level",
+      "gold_price_change": "gold price change",
+      "gold_price_forecast": "forecast vintage"
+    },
+    "indicators": {
+      "title": "Indicator panels",
+      "description": "All locked Overview metrics grouped by source block.",
+      "inflationPair": "CPI and food inflation pair",
+      "tradeFlowPair": "Exports / Imports",
+      "usdUzsPair": "USD/UZS",
+      "primarySource": "Primary source: {{source}}",
+      "forecastExternal": "Forecast (external)",
+      "groups": {
+        "growth": "Growth",
+        "inflation": "Inflation",
+        "trade": "Trade",
+        "monetary_fx": "Monetary / FX",
+        "gold": "Gold"
+      },
+      "status": {
+        "valid": "Valid",
+        "warning": "Caution",
+        "failed": "Failed"
       }
     },
     "risks": {
@@ -121,7 +266,13 @@
       "sectionAria": "Overview feed panels",
       "reforms": {
         "title": "Reforms",
-        "empty": "Content coming from Knowledge Hub."
+        "empty": "No recent policy actions on file.",
+        "actionType": {
+          "rate_decision": "Rate decision",
+          "regulation": "Regulation",
+          "announcement": "Announcement",
+          "other": "Other"
+        }
       },
       "dataRefreshes": {
         "title": "Data refreshes",
@@ -130,9 +281,58 @@
       },
       "savedScenarios": {
         "title": "Your saved scenarios",
-        "empty": "Saved scenarios will appear here after you save a draft in Scenario Lab.",
-        "youShort": "YOU"
+        "empty": "Saved scenarios will appear here after you save a draft in Scenario Lab."
       }
+    },
+    "nowcast": {
+      "refreshing": "Refreshing nowcast…",
+      "kicker": "Nowcast",
+      "legendAria": "Nowcast chart legend",
+      "modelNotOfficial": "Model nowcast · not an official forecast",
+      "markers": {
+        "aria": "Nowcast chart markers",
+        "lastActual": "Last actual",
+        "current": "Current nowcast"
+      },
+      "series": {
+        "period": "Period"
+      },
+      "fanInsetAria": "{{period}} nowcast fan: {{lower}} to {{upper}}, current {{current}}.",
+      "legend": {
+        "actual": "Actual history",
+        "nowcast": "Current nowcast",
+        "forecast": "Forecast path",
+        "band": "Uncertainty band"
+      },
+      "banner": {
+        "title": "Live nowcast unavailable",
+        "subtitle": "Showing reference data",
+        "retry": "Retry"
+      }
+    },
+    "caveats": {
+      "title": "Model caveats",
+      "description": "Known limitations affecting the metrics above. Read before citing.",
+      "affectedMetrics": "Affects: {{metrics}}",
+      "severity": {
+        "critical": "Critical",
+        "warning": "Warning",
+        "info": "Info"
+      }
+    },
+    "dataNotes": {
+      "title": "Data notes",
+      "description": "Compact governance view; expand for all artifact warnings and caveats.",
+      "warningMetricCount": "{{count}} warning metric",
+      "warningMetricCountPlural": "{{count}} warning metrics",
+      "noteCount": "{{count}} source note",
+      "noteCountPlural": "{{count}} source notes",
+      "severityCounts": "{{critical}} critical · {{warning}} warning · {{info}} info",
+      "exportedAt": "Exported {{date}}"
+    },
+    "references": {
+      "title": "Sources and references",
+      "summary": "{{count}} sources · exported {{date}}"
     }
   },
   "buttons": {
@@ -142,7 +342,10 @@
     "cancel": "Cancel",
     "saveDraft": "Save draft",
     "runScenario": "Run scenario",
-    "retryRun": "Retry run"
+    "retryRun": "Retry run",
+    "close": "Close",
+    "load": "Load",
+    "delete": "Delete"
   },
   "scenarioLab": {
     "header": {
@@ -150,12 +353,229 @@
       "meta": {
         "activeModelsLabel": "Active models",
         "runLifecycleLabel": "Run lifecycle",
-        "dataVintageLabel": "Data vintage",
+        "dataVintageLabel": "Source vintage",
         "runLifecycleStatus": {
           "loading": "Running",
           "ready": "Ready",
           "error": "Retry needed"
         }
+      }
+    },
+    "context": {
+      "label": "Context:",
+      "dataVintage": "source vintage",
+      "lane": {
+        "macroScenario": "Macro scenario",
+        "sectorLinkage": "Sector linkage"
+      },
+      "model": {
+        "qpm": "QPM",
+        "io": "I-O",
+        "pe": "PE",
+        "cge": "CGE",
+        "fpp": "FPP",
+        "savedRuns": "Saved runs",
+        "synthesis": "Synthesis"
+      },
+      "saveState": {
+        "saved": "saved",
+        "unsaved": "unsaved"
+      }
+    },
+    "modelTabs": {
+      "title": "Analysis tabs",
+      "description": "Run model-native scenarios in one workspace while preserving each model's output boundary.",
+      "tabsAria": "Scenario Lab model tabs",
+      "plannedTitle": "Planned model lanes",
+      "plannedDescription": "Coming next. These lanes are visible for orientation only and do not run models in this preview.",
+      "macroQpm": "Macro / QPM",
+      "ioSectorShock": "I-O Sector Shock",
+      "peTradeShock": "PE Trade Shock",
+      "cgeReformShock": "CGE Reform Shock",
+      "fppFiscalPath": "FPP Fiscal Path",
+      "savedRuns": "Saved Runs",
+      "synthesisPreview": "Synthesis Preview",
+      "subtitle": {
+        "macroQpm": "Macro scenario simulation",
+        "ioSectorShock": "Sector linkage analysis",
+        "peTradeShock": "Trade incidence, planned",
+        "cgeReformShock": "General equilibrium reform analysis, planned",
+        "fppFiscalPath": "Fiscal consistency, planned",
+        "savedRuns": "Saved analytical runs",
+        "synthesisPreview": "Cross-model synthesis, planned"
+      },
+      "status": {
+        "active": "Active",
+        "next": "Next",
+        "bridgePilot": "Bridge proof point",
+        "shell": "Shell",
+        "planned": "Planned"
+      }
+    },
+    "modelTabShell": {
+      "eyebrow": "Model tab",
+      "plannedStatus": "Planned / disabled",
+      "io": {
+        "title": "I-O Sector Shock",
+        "description": "This tab will host final-demand sector transmission analysis using the MCP-aligned I-O analytics contract.",
+        "items": {
+          "inputs": "Inputs: demand bucket, amount in billion UZS, distribution mode, and optional sector selector.",
+          "outputs": "Outputs: output, value-added, employment effects, top affected sectors, and linkage classes.",
+          "boundary": "Boundary: sector transmission evidence only; not a macro forecast or general-equilibrium result."
+        }
+      },
+      "pe": {
+        "title": "PE Trade Shock",
+        "description": "Planned partial-equilibrium trade analysis. No tariff or trade computation is active in this sprint.",
+        "items": {
+          "inputs": "Expected inputs: tariff or import-price shock, HS/product group, partner, elasticity set, and scenario label.",
+          "outputs": "Expected outputs: direct import/export quantity effects, price effects, affected product groups, and elasticity sensitivity.",
+          "boundary": "Integration boundary: direct trade-channel evidence only until it is handed to I-O, CGE, or synthesis contracts."
+        }
+      },
+      "cge": {
+        "title": "CGE Reform Shock",
+        "description": "Planned economy-wide reform analysis. The tab is a readiness placeholder and does not run a CGE model.",
+        "items": {
+          "inputs": "Expected inputs: productivity, tax, tariff, energy, labor, capital, and closure assumptions.",
+          "outputs": "Expected outputs: welfare, real GDP, sector reallocation, prices, and distributional indicators where supported.",
+          "boundary": "Integration boundary: general-equilibrium results require a scoped CGE contract and calibrated SAM before activation."
+        }
+      },
+      "fpp": {
+        "title": "FPP Fiscal Path",
+        "description": "Planned fiscal-programming path analysis. The tab is disabled for computation until the fiscal contract is ready.",
+        "items": {
+          "inputs": "Expected inputs: revenue, expenditure, financing, debt stock, interest-rate, and growth assumptions.",
+          "outputs": "Expected outputs: deficit, debt path, financing gap, fiscal buffers, and risk flags.",
+          "boundary": "Integration boundary: fiscal sustainability evidence only; it will not backfill QPM, I-O, PE, or CGE outputs without reconciliation."
+        }
+      },
+      "saved": {
+        "title": "Saved Runs",
+        "description": "{{count}} saved run(s) are available in this browser session.",
+        "items": {
+          "macro": "QPM macro runs keep their existing saved scenario shape.",
+          "io": "I-O runs will be saved as sector-shock outputs after the analytics MVP is implemented.",
+          "compare": "Comparison will read saved outputs and render each model type in its own block."
+        }
+      },
+      "synthesis": {
+        "title": "Synthesis Preview",
+        "description": "Cross-model reconciliation stays planned until single-model contracts are ready.",
+        "items": {
+          "chain": "Target chain: PE trade shock -> I-O sector propagation -> CGE reallocation -> FPP fiscal path.",
+          "layers": "QPM and DFM enter as macro consistency and nowcast layers.",
+          "reconciliation": "The synthesis surface will show disagreements, confidence flags, and unresolved assumptions."
+        }
+      }
+    },
+    "ioShock": {
+      "title": "I-O Sector Shock",
+      "description": "Run a final-demand shock through the validated I-O bridge and inspect sector output and value-added transmission.",
+      "loading": "Loading I-O analytics data...",
+      "unavailable": "I-O analytics data is unavailable. Existing Scenario Lab behavior is unchanged.",
+      "controlsAria": "I-O sector shock controls",
+      "demandBucket": "Demand shock type",
+      "amount": "Shock amount",
+      "currency": "Currency",
+      "exchangeRate": "FX assumption, UZS/USD",
+      "distribution": "Distribution",
+      "sector": "Sector",
+      "sectorHint": "Single-sector shocks route the final-demand vector to one of {{sectorCount}}.",
+      "boundary": "Sector transmission only. Value-added is an I-O accounting contribution to GDP, not a macro forecast, QPM scenario effect, or general-equilibrium result.",
+      "employmentBoundary": "Employment is a linear employment-intensity estimate, not a labor-market forecast.",
+      "topSectors": "Top affected sectors",
+      "caveats": "Source caveats",
+      "saveRun": "Save I-O run",
+      "savedTitle": "I-O {{bucket}} shock · {{amount}} {{currency}}",
+      "savedDescription": "Saved I-O sector shock run for sector transmission analysis.",
+      "convertedShock": "Converted demand shock: {{amount}}",
+      "sourceLabelNote": "Sector labels are shown as source labels from {{artifact}} and are not translated here.",
+      "units": {
+        "employmentEstimate": "employment count estimate"
+      },
+      "claimLabels": {
+        "output": "Accounting multiplier / structural sector linkage",
+        "gdpContribution": "I-O value-added accounting contribution, not macro forecast",
+        "employment": "Linear employment-intensity estimate, not labor-market forecast"
+      },
+      "whatThisMeans": {
+        "title": "What this means",
+        "body": "This demand shock produces {{output}} of gross output effect and {{valueAdded}} of value-added accounting contribution. Employment is shown as {{employment}} estimated positions from fixed sector intensities."
+      },
+      "buckets": {
+        "consumption": "Consumption",
+        "government": "Government",
+        "investment": "Investment",
+        "export": "Export"
+      },
+      "distributions": {
+        "output": "By output shares",
+        "gva": "By GVA shares",
+        "equal": "Equal across sectors",
+        "sector": "Single sector"
+      },
+      "currencies": {
+        "bln_uzs": "Billion UZS",
+        "mln_usd": "Million USD"
+      },
+      "summary": {
+        "title": "Run summary",
+        "bucket": "Demand bucket",
+        "amount": "Amount",
+        "fx": "FX assumption",
+        "distribution": "Distribution mode",
+        "selectedSector": "Selected sector",
+        "dataVintage": "Source vintage"
+      },
+      "kpis": {
+        "output": "Output effect",
+        "valueAdded": "Value-added effect",
+        "gdpContribution": "GDP accounting contribution",
+        "employment": "Employment effect",
+        "multiplier": "Output multiplier"
+      },
+      "table": {
+        "rank": "Rank",
+        "sector": "Sector",
+        "sectorCode": "Code",
+        "sourceLabel": "Source label",
+        "output": "Output, bln UZS",
+        "valueAdded": "VA, bln UZS",
+        "employment": "Employment",
+        "linkage": "Linkage"
+      }
+    },
+    "savedRuns": {
+      "title": "Saved Runs",
+      "description": "{{count}} saved run(s) are available in this browser session.",
+      "empty": "Saved macro and I-O runs will appear here after you save them.",
+      "filtersAria": "Saved run filters",
+      "openInComparison": "Open in Comparison",
+      "ioBoundary": "Sector transmission evidence only; this is not a macro forecast or general-equilibrium result.",
+      "macroFallback": "Saved QPM macro scenario.",
+      "filters": {
+        "all": "All",
+        "macro_qpm": "Macro/QPM",
+        "io": "I-O"
+      },
+      "filteredEmpty": {
+        "all": "No saved runs match this filter.",
+        "macro_qpm": "No saved Macro/QPM runs yet.",
+        "io": "No saved I-O runs yet."
+      },
+      "type": {
+        "io": "I-O sector shock",
+        "macro": "Macro/QPM"
+      },
+      "fields": {
+        "type": "Type",
+        "data": "Source vintage",
+        "source": "Source vintage",
+        "sourceVintage": "Source vintage",
+        "sourceArtifact": "Source artifact",
+        "saved": "Saved"
       }
     },
     "form": {
@@ -166,6 +586,7 @@
       "description": "Description",
       "descriptionPlaceholder": "Optional scenario description",
       "tags": "Tags",
+      "detailsSummary": "Scenario details",
       "scenarioTypeOptions": {
         "baseline": "Baseline",
         "alternative": "Alternative",
@@ -185,14 +606,40 @@
       "showTechnical": "Show technical variable names",
       "technicalPrefix": "Technical: {{variable}}",
       "categories": {
-        "macro": "Macro assumptions",
-        "external": "External assumptions",
-        "fiscal": "Fiscal assumptions",
-        "trade": "Trade assumptions",
-        "advanced": "Advanced assumptions"
+        "macro": "Monetary",
+        "external": "External",
+        "fiscal": "Fiscal",
+        "trade": "Trade",
+        "advanced": "Advanced"
       },
       "emptyCategory": "No assumptions available in this category.",
       "emptyAdvanced": "No advanced assumptions are currently configured."
+    },
+    "results": {
+      "title": "Results",
+      "description": "Review headline effects and transmission paths for the current assumptions.",
+      "tabsAria": "Result views",
+      "tabs": {
+        "headlineImpact": "Headline impact",
+        "macroPath": "Macro path",
+        "externalBalance": "External balance",
+        "fiscalEffects": "Fiscal effects"
+      },
+      "impulseResponseEyebrow": "IMPULSE RESPONSE",
+      "impulseResponseCaption": "Mock Scenario Lab engine output: deviations from baseline over 12 quarters, in percentage points. It should not be cited as a live forecast.",
+      "explanations": {
+        "headlineImpact": "Shows how the selected scenario deviates from the baseline across 12 quarters; values are percentage-point deviations from the mock Scenario Lab engine.",
+        "macroPath": "Shows the scenario path next to the baseline path so the table can be read as a comparison, not a raw dump.",
+        "externalBalance": "Shows the external-balance scenario path under the current assumptions, with units kept in percent of GDP.",
+        "fiscalEffects": "Shows fiscal accounting under the selected scenario assumptions; it is not a new fiscal model run."
+      },
+      "claimLabels": {
+        "headlineImpact": "Scenario impulse response",
+        "macroPath": "Scenario path vs baseline",
+        "externalBalance": "External-balance scenario path",
+        "fiscalEffects": "Fiscal scenario accounting"
+      },
+      "deltaVsBaseline": "{{delta}} vs baseline"
     },
     "interpretation": {
       "title": "Interpretation",
@@ -205,6 +652,12 @@
         "suggestedNextScenarios": "Suggested next scenarios"
       },
       "aiAttribution": {
+        "title": "AI-assisted · Unreviewed draft",
+        "body": "This interpretation was drafted from structured simulation outputs using the {{engine}}. Human review is required before citing externally.",
+        "engineTemplate": "template narrative engine",
+        "engineAssisted": "assisted narrative engine",
+        "engineReviewed": "reviewed narrative engine",
+        "reviewedMeta": "Reviewed by {{reviewer_name}} on {{review_date}}.",
         "assisted": {
           "title": "AI-assisted · Unreviewed draft",
           "body": "AI-assisted draft. Generated by model output, not yet reviewed by CERR analytical staff. Do not cite, export, or share externally."
@@ -219,16 +672,394 @@
       "title": "Saved scenarios",
       "empty": "No saved scenarios yet.",
       "load": "Load",
+      "loadLink": "Load saved scenario",
+      "localBrowserDisclosure": "Saved runs are stored only in this browser.",
       "delete": "Delete",
       "confirmDelete": "Delete saved scenario \"{{scenarioName}}\"?"
     }
   },
+  "comparison": {
+    "header": {
+      "eyebrow": "Scenario trade-offs",
+      "meta": {
+        "comparing": "Comparing",
+        "scenarioCount": "{{count}} scenarios",
+        "horizon": "Horizon",
+        "mode": "Mode",
+        "deltasVsBaseline": "Deltas vs. Baseline"
+      }
+    },
+    "context": {
+      "label": "Context:",
+      "runName": "{{baseline}} + {{alternatives}} alternative(s)",
+      "saveState": "comparison view"
+    },
+    "chip": {
+      "remove": "Remove {{name}} from comparison"
+    },
+    "table": {
+      "indicator": "Indicator",
+      "baselineFallback": "Baseline",
+      "highestTitle": "Numerically highest",
+      "lowestTitle": "Numerically lowest",
+      "footnote": "★ indicates numerically lowest or highest value. Policy judgment is separate and not encoded."
+    },
+    "ioEvidence": {
+      "title": "I-O sector evidence",
+      "status": "Validated",
+      "note": "This panel describes structural sector transmission evidence from the I-O bridge. It is not a macro forecast, scenario delta, or causal effect of the scenarios above.",
+      "sourceArtifact": "Source artifact",
+      "dataVintage": "Source vintage",
+      "exportedAt": "Artifact export",
+      "sectorCount": "Sectors",
+      "framework": "Framework",
+      "units": "Units",
+      "linkageCounts": "Linkage classes",
+      "caveats": "Bridge caveats",
+      "linkageClass": {
+        "key": "Key",
+        "backward": "Backward-only",
+        "forward": "Forward-only",
+        "weak": "Weak"
+      }
+    },
+    "selector": {
+      "inView": "In view",
+      "addSaved": "+ Add saved scenario",
+      "title": "Scenario selector",
+      "description": "Select 2-3 scenarios and define one baseline for delta interpretation.",
+      "empty": "No scenarios are available to compare.",
+      "selectedCount": "Selected: {{count}} / {{max}}",
+      "baselineLabel": "Baseline",
+      "baselineBadge": "Baseline",
+      "tagLabel": "Scenario tag",
+      "qpmSection": "QPM reference scenarios",
+      "savedSection": "Saved runs",
+      "savedEmpty": "No saved runs yet. Run and save a scenario in Scenario Lab to compare it here.",
+      "scenarioType": {
+        "baseline": "Baseline",
+        "alternative": "Alternative",
+        "stress": "Stress"
+      },
+      "tag": {
+        "preferred": "Preferred",
+        "balanced": "Balanced",
+        "aggressive": "Aggressive",
+        "downside_stress": "Downside stress"
+      }
+    },
+    "savedModal": {
+      "title": "Add saved scenario",
+      "localBrowserDisclosure": "Saved runs are stored only in this browser.",
+      "addSelected": "Add selected"
+    },
+    "savedIo": {
+      "title": "Sector evidence from saved I-O runs",
+      "separationNote": "Not part of the macro scenario delta table.",
+      "description": "{{count}} saved run(s) are shown as sector transmission analytics in a separate evidence section.",
+      "description_one": "{{count}} saved run is shown as sector transmission analytics in a separate evidence section.",
+      "description_few": "{{count}} saved runs are shown as sector transmission analytics in a separate evidence section.",
+      "description_many": "{{count}} saved runs are shown as sector transmission analytics in a separate evidence section.",
+      "description_other": "{{count}} saved runs are shown as sector transmission analytics in a separate evidence section.",
+      "emptyWithAvailable": "{{count}} saved I-O run(s) are available. Add them to show sector transmission blocks below the macro table.",
+      "emptyWithAvailable_one": "{{count}} saved I-O run is available. Add it to show sector transmission blocks below the macro table.",
+      "emptyWithAvailable_few": "{{count}} saved I-O runs are available. Add them to show sector transmission blocks below the macro table.",
+      "emptyWithAvailable_many": "{{count}} saved I-O runs are available. Add them to show sector transmission blocks below the macro table.",
+      "emptyWithAvailable_other": "{{count}} saved I-O runs are available. Add them to show sector transmission blocks below the macro table.",
+      "addAction": "Add saved run",
+      "type": "I-O run",
+      "topSectors": "Top sectors",
+      "boundary": "Boundary: value-added is an I-O accounting contribution, not a causal macro scenario delta.",
+      "employmentUnit": "employment count estimate",
+      "claimLabels": {
+        "output": "Accounting multiplier / structural sector linkage",
+        "gdpAccounting": "I-O value-added accounting contribution, not macro forecast",
+        "employment": "Linear employment-intensity estimate, not labor-market forecast"
+      },
+      "metrics": {
+        "output": "Output",
+        "valueAdded": "Value added",
+        "gdpAccounting": "GDP accounting",
+        "employment": "Employment"
+      }
+    },
+    "chart": {
+      "title": "Comparative charts",
+      "description": "Small multiples by scenario for the selected comparison dimension.",
+      "emptySelection": "Select at least one baseline and one alternative scenario to populate charts.",
+      "tabSwitcherAria": "Comparison chart tabs",
+      "tabSwitcher": {
+        "headline_impact": "Headline impact",
+        "macro_path": "Macro path",
+        "external_balance": "External balance",
+        "fiscal_effects": "Fiscal effects"
+      },
+      "miniTitle": "{{scenario_name}}",
+      "miniSubtitle": "{{tab_label}}",
+      "miniTakeaway": "Path view for the selected scenario and tab.",
+      "slotAria": "{{scenario_name}} chart in {{tab_label}} tab",
+      "savedRunEmpty": "Chart unavailable — saved before full run persistence",
+      "unavailable": "Chart unavailable for this scenario and tab."
+    },
+    "tradeoff": {
+      "title": "Trade-off summary",
+      "smePendingChip": "SME content pending",
+      "smePendingAria": "Trade-off summary — SME content pending",
+      "description": "Template-based comparison sentences for each alternative scenario.",
+      "empty": "Select a baseline and at least one alternative scenario to generate a trade-off summary.",
+      "shifts": "shifts",
+      "by": "by",
+      "metric": {
+        "gdp_growth": "GDP",
+        "inflation": "inflation",
+        "policy_rate": "policy rate"
+      },
+      "template": "Compared to baseline, {{scenario_name}} {{delta_gdp}}{{delta_inf}}{{delta_rate}}.",
+      "negligible": "Compared to baseline, {{scenario_name}} shows negligible differences across headline metrics."
+    }
+  },
+  "knowledgeHub": {
+    "pending": {
+      "status": "Pending",
+      "title": "Knowledge Hub pending",
+      "message": "Knowledge Hub is not active in this internal preview.",
+      "reason": "Source/citation workflow is pending; no live legal or research feed is connected.",
+      "nextStep": "Next: accept the source/citation workflow, reviewer-of-record process, and static/currentness caveats before activation."
+    },
+    "staticPilotBanner": "Curated static pilot content — not a live legal or research feed.",
+    "metadata": {
+      "sourceStatic": "Source: static pilot content",
+      "reviewCurated": "Review state: curated pilot copy",
+      "reviewedBy": "Reviewed by {{reviewer}}",
+      "author": "Author: {{author}}",
+      "sourceDate": "Source date: {{date}}"
+    },
+    "header": {
+      "eyebrow": "Reforms · Research · Literature",
+      "meta": {
+        "reformsTracked": "Reforms tracked",
+        "researchBriefs": "Research briefs",
+        "literatureItems": "Literature items"
+      }
+    },
+    "reforms": {
+      "title": "Reform tracker",
+      "helper": "Policy actions linked to affected models and economic domains.",
+      "empty": "No reforms are currently tracked."
+    },
+    "briefs": {
+      "title": "Research briefs",
+      "helper": "CERR team analysis. AI-drafted briefs are flagged and reviewer-attributed.",
+      "empty": "No research briefs are currently available.",
+      "aiDraftedChip": "AI-drafted",
+      "byline": {
+        "aiDrafted": "AI-drafted",
+        "reviewedBy": "reviewed by {{reviewer}}",
+        "readTime": "{{minutes}} min read"
+      }
+    }
+  },
+  "dataRegistry": {
+    "header": {
+      "eyebrow": "Sources · Vintages · Validation",
+        "meta": {
+          "expectedArtifacts": "Expected artifacts",
+          "plannedFamilies": "Planned families",
+          "generated": "Registry generated",
+          "metadataSource": "Metadata source"
+        }
+      },
+      "metadataSource": {
+        "api": "API metadata",
+        "static-fallback": "Static fallback"
+      },
+    "summary": {
+      "aria": "Data registry status summary"
+    },
+    "filters": {
+      "aria": "Data registry status filters",
+      "all": "All",
+      "active": "Active artifacts",
+      "warnings": "Warnings",
+      "planned": "Planned",
+      "missingUnavailable": "Missing / unavailable",
+      "empty": "No registry records match this filter."
+    },
+    "legend": {
+      "title": "Status legend",
+      "valid": {
+        "label": "Artifact guard-checked",
+        "description": "Public artifact loaded and passed frontend guard checks. This is not economic or model validation."
+      },
+      "warning": {
+        "label": "Warning",
+        "description": "Artifact loaded, but caveats or timestamp warnings exist."
+      },
+      "planned": {
+        "label": "Planned",
+        "description": "Intentionally absent in this foundation bundle."
+      },
+      "lastValidationCheck": {
+        "description": "Timestamp when the frontend registry last loaded artifacts and ran shape guards."
+      }
+    },
+    "status": {
+      "valid": "Artifact guard-checked",
+      "warning": "Warning",
+      "failed": "Failed",
+      "missing": "Missing",
+      "unavailable": "Unavailable",
+      "planned": "Planned"
+    },
+    "sections": {
+      "dataSources": {
+        "title": "Data sources",
+        "description": "Human-readable source domains, vintages, export timestamps, and planned model families."
+      },
+      "modelInputs": {
+        "title": "Model inputs",
+        "description": "Which model families have consumable frontend inputs, and which remain planned."
+      },
+      "bridgeOutputs": {
+        "title": "Bridge outputs",
+        "description": "Public JSON artifacts loaded through the existing bridge clients and guards."
+      },
+      "plannedArtifacts": {
+        "title": "Planned artifacts",
+        "description": "Unavailable-by-design categories for future source contracts. These are not failed implemented artifacts."
+      },
+      "vintages": {
+        "title": "Vintages",
+        "description": "Source snapshots and export timestamps shown separately."
+      },
+      "validation": {
+        "title": "Validation/update status",
+        "description": "Frontend trust state from bridge guards plus conservative update-status language."
+      },
+      "warnings": {
+        "title": "Stale/missing warnings",
+        "description": "Warnings derived only from artifact presence, guard failures, caveats, and timestamp thresholds."
+      }
+    },
+    "table": {
+      "type": "Registry type",
+      "domain": "Domain",
+      "status": "Status",
+      "vintage": "Source vintage",
+      "export": "Artifact export",
+      "source": "Source/artifact",
+      "owner": "Owner / source system",
+      "notes": "Notes"
+    },
+    "registryType": {
+      "source_series": "Source series",
+      "model_input": "Model input",
+      "bridge_output": "Bridge output",
+      "planned_artifact": "Planned artifact"
+    },
+      "artifact": {
+        "dataVintage": "Source vintage",
+        "exportTimestamp": "Artifact export",
+        "sourceVintage": "Source vintage",
+        "lastValidationCheck": "Last validation check",
+        "checksum": "Checksum",
+        "owner": "Owner",
+      "sourceSystem": "Source system",
+      "solver": "Solver",
+      "caveats": "Caveats",
+      "consumers": "Consumer surfaces"
+    },
+    "detail": {
+      "summary": "Inspect guard and freshness scope",
+      "validationScope": "Validation scope",
+      "freshnessRule": "Freshness rule",
+      "caveats": "Caveats",
+      "sourceVsExport": "Source vs export"
+    },
+    "vintages": {
+      "boundary": "Source vintage and export timestamp are different. A current export can still contain an older source table."
+    },
+    "warnings": {
+      "empty": "No stale, missing, unavailable, or validation warnings are currently visible."
+    },
+    "links": {
+      "modelExplorer": "Model Explorer methodology"
+    }
+  },
+  "modelExplorer": {
+    "header": {
+      "eyebrow": "Methodology · Parameters · Caveats",
+      "meta": {
+        "modelsLabel": "Models",
+        "modelsLive": "{{count}} live",
+        "bridgeBackedLabel": "Bridge-backed",
+        "bridgeBackedModels": "QPM, DFM, I-O",
+        "plannedLimitedLabel": "Planned/limited",
+        "plannedLimitedModels": "PE, CGE, FPP",
+        "lastAuditLabel": "Last calibration audit",
+        "openIssuesLabel": "Open methodology issues"
+      }
+    },
+    "tabs": {
+      "aria": "Model detail tabs",
+      "overview": "Overview",
+      "equations": "Equations",
+      "parameters": "Parameters",
+      "dataSources": "Data sources",
+      "caveats": "Caveats"
+    },
+    "purpose": {
+      "title": "Purpose"
+    },
+    "equations": {
+      "title": "Core equations",
+      "smePendingChip": "SME content pending",
+      "smePendingAria": "Equation rendering — SME content pending"
+    },
+    "parameters": {
+      "title": "Key parameters",
+      "symbol": "Symbol",
+      "name": "Name",
+      "value": "Value",
+      "range": "Range",
+      "empty": "No parameters are documented for this model."
+    },
+    "caveats": {
+      "title": "Caveats",
+      "empty": "No caveats are documented for this model.",
+      "trackedPrefix": "Tracked as issue",
+      "target": "Target {{version}}."
+    },
+    "dataSources": {
+      "title": "Data sources",
+      "empty": "No data sources are documented for this model."
+    },
+    "validation": {
+      "title": "Validation summary",
+      "smePendingChip": "SME content pending",
+      "smePendingAria": "Validation summary — SME content pending"
+    },
+    "bridgeEvidence": {
+      "title": "Bridge evidence",
+      "sourceArtifact": "Source artifact",
+      "dataVintage": "Source vintage",
+      "exportedAt": "Artifact export",
+      "solverVersion": "Solver",
+      "sectorCount": "Sectors",
+      "framework": "Framework",
+      "units": "Units",
+      "linkageCounts": "Linkage classes",
+      "caveats": "Bridge caveats"
+      }
+    },
   "states": {
     "loading": {
       "overview": "Loading latest overview snapshot...",
       "comparison": "Loading comparison workspace...",
       "modelExplorer": "Loading model metadata...",
-      "scenarioLabRun": "Running scenario with current assumptions..."
+      "dataRegistry": "Loading data registry...",
+      "scenarioLabRun": "Running scenario with current assumptions...",
+      "knowledgeHub": "Loading Knowledge Hub..."
     },
     "error": {
       "overviewUnavailable": "Overview data is currently unavailable.",
@@ -238,7 +1069,8 @@
       "scenarioSaveFailed": "Could not save scenario to local storage.",
       "savedScenarioLoadFailed": "Saved scenario could not be loaded.",
       "savedScenarioDeleteFailed": "Saved scenario could not be deleted.",
-      "scenarioModelIdsUnavailable": "Scenario model attribution is unavailable. Run scenario before saving."
+      "scenarioModelIdsUnavailable": "Run scenario to save results",
+      "scenarioSaveStaleEdits": "Run scenario to save with current edits"
     },
     "stale": {
       "scenarioResults": "Results reflect the previous run. Run scenario to update with current assumptions."
@@ -250,6 +1082,7 @@
     "success": {
       "savedToLocalSessionAt": "Saved to local session at {{timestamp}}.",
       "savedScenarioLoaded": "Loaded \"{{scenarioName}}\" into Scenario Lab.",
+      "savedScenarioLoadedWithResults": "Loaded \"{{scenarioName}}\" with persisted run results.",
       "savedScenarioDeleted": "Deleted \"{{scenarioName}}\" from saved scenarios."
     }
   }

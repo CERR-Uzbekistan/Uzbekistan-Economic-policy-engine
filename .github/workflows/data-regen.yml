@@ -1,4 +1,4 @@
-name: Data Regeneration — QPM nightly
+name: Data Regeneration - QPM and DFM nightly
 
 on:
   schedule:
@@ -12,7 +12,7 @@ on:
         required: false
 
 jobs:
-  export-qpm:
+  export-model-data:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
@@ -38,15 +38,18 @@ jobs:
       - name: Run QPM export
         run: Rscript scripts/export_qpm.R
 
-      - name: Check whether qpm.json changed
+      - name: Run DFM export
+        run: Rscript scripts/export_dfm.R
+
+      - name: Check whether data JSON changed
         id: diff
         run: |
-          if git diff --quiet apps/policy-ui/public/data/qpm.json; then
+          if git diff --quiet apps/policy-ui/public/data/qpm.json apps/policy-ui/public/data/dfm.json; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "[data-regen] qpm.json unchanged; nothing to commit."
+            echo "[data-regen] qpm.json and dfm.json unchanged; nothing to commit."
           else
             echo "changed=true"  >> "$GITHUB_OUTPUT"
-            echo "[data-regen] qpm.json changed; will commit."
+            echo "[data-regen] qpm.json and/or dfm.json changed; will commit."
           fi
 
       - name: Commit updated JSON
@@ -54,6 +57,6 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add apps/policy-ui/public/data/qpm.json
-          git commit -m "data(qpm): nightly regeneration $(date -u +%Y-%m-%d)"
+          git add apps/policy-ui/public/data/qpm.json apps/policy-ui/public/data/dfm.json
+          git commit -m "data(models): nightly regeneration $(date -u +%Y-%m-%d)"
           git push

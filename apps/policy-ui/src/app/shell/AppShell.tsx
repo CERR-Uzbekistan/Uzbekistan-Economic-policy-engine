@@ -31,7 +31,10 @@ export function AppShell() {
                     isActive ? 'app-shell__nav-link active' : 'app-shell__nav-link'
                   }
                 >
-                  {t(item.labelKey)}
+                  <span>{t(item.labelKey)}</span>
+                  {item.badgeKey ? (
+                    <span className="app-shell__nav-badge">{t(item.badgeKey)}</span>
+                  ) : null}
                 </NavLink>
               </li>
             ))}
@@ -40,7 +43,7 @@ export function AppShell() {
       </aside>
 
       <div className="app-shell__main">
-        <header className="app-shell__topbar" aria-label="Global utilities">
+        <header className="app-shell__topbar" aria-label={t('shell.globalUtilitiesAria')}>
           <div className="app-shell__topbar-inner">
             <div className="topbar-utilities">
               {freshness ? (

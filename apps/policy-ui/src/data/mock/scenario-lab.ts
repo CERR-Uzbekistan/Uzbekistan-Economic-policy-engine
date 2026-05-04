@@ -2,12 +2,12 @@ import type {
   ChartSpec,
   HeadlineMetric,
   ModelAttribution,
-  NarrativeGenerationMode,
   ScenarioLabAssumptionState,
   ScenarioLabInterpretation,
   ScenarioLabPreset,
   ScenarioLabResultsBundle,
   ScenarioLabWorkspace,
+  SuggestedNextScenario,
 } from '../../contracts/data-contract'
 
 const ATTRIBUTION: ModelAttribution = {
@@ -26,50 +26,42 @@ const PERIODS = ['2026 Q1', '2026 Q2', '2026 Q3', '2026 Q4']
 
 const PRESETS: ScenarioLabPreset[] = [
   {
-    preset_id: 'balanced-baseline',
-    title: 'Balanced baseline',
-    summary: 'No additional shocks; use as anchor for alternative scenarios.',
+    preset_id: 'baseline',
+    title: 'Baseline',
+    summary: 'All shocks zero; economy follows the baseline calibration path from Q1 2026 initial conditions toward steady state.',
     assumption_overrides: {},
   },
   {
-    preset_id: 'external-slowdown',
-    title: 'External slowdown',
-    summary: 'Lower remittances and export demand with mild exchange-rate pressure.',
+    preset_id: 'rate-cut-100bp',
+    title: 'Policy rate cut (−100 bp)',
+    summary: 'CBU cuts the policy rate by 100 bp below the Taylor-rule path; expect higher output gap and temporarily faster disinflation response.',
     assumption_overrides: {
-      remittance_change: -12,
-      export_demand_change: -8,
-      exchange_rate_change: 4,
+      policy_rate_change: -1.0,
     },
   },
   {
-    preset_id: 'fiscal-consolidation',
-    title: 'Fiscal consolidation',
-    summary: 'Lower discretionary spending with improved revenue effort.',
+    preset_id: 'rate-hike-100bp',
+    title: 'Policy rate hike (+100 bp)',
+    summary: 'CBU hikes the policy rate by 100 bp above the Taylor-rule path; expect lower output gap and stronger UZS via the UIP channel.',
     assumption_overrides: {
-      gov_spending_change: -2,
-      tax_revenue_change: 1.2,
+      policy_rate_change: 1.0,
     },
   },
   {
     preset_id: 'exchange-rate-shock',
-    title: 'Exchange-rate shock',
-    summary: 'Sharper depreciation stress to test inflation and external-balance sensitivity.',
+    title: 'UZS depreciation (+10%)',
+    summary: 'One-off 10% UZS depreciation against USD; expect inflation spike via direct pass-through (a4) and RER gap, plus policy-rate response.',
     assumption_overrides: {
       exchange_rate_change: 10,
       pass_through_adjustment: 0.2,
     },
   },
-  // TA-5 mock: 'assisted' mode seeded here for visual verification
-  // of the TB-P3 attribution block. Real AI output will replace
-  // this in TA-9.
   {
-    preset_id: 'inflation-persistence',
-    title: 'Inflation persistence',
-    summary: 'Commodity and pass-through pressure despite policy tightening.',
+    preset_id: 'remittance-downside',
+    title: 'Remittance downside (proxy)',
+    summary: 'Proxy for Russia-slowdown remittance decline using a −0.5 pp aggregate demand shock; implemented via gap_shock while the b3 external-demand channel remains inactive (ROADMAP Phase 1B, QPM item 1).',
     assumption_overrides: {
-      commodity_price_change: 10,
-      pass_through_adjustment: 0.3,
-      policy_rate_change: 1,
+      export_demand_change: -8,
     },
   },
 ]
@@ -431,13 +423,7 @@ function buildInterpretation(values: ScenarioLabAssumptionState): ScenarioLabInt
   return interpretation
 }
 
-type InterpretationWithGenerationMode = ScenarioLabInterpretation & {
-  generation_mode?: NarrativeGenerationMode
-  reviewer_name?: string
-  reviewed_at?: string
-}
-
-function buildInterpretationCore(values: ScenarioLabAssumptionState): InterpretationWithGenerationMode {
+function buildInterpretationCore(values: ScenarioLabAssumptionState): ScenarioLabInterpretation {
   const core = getMetricCore(values)
   const majorDrivers = Object.entries(values)
     .filter(([, value]) => Math.abs(value) > 0.01)
@@ -473,12 +459,111 @@ function buildInterpretationCore(values: ScenarioLabAssumptionState): Interpreta
       'Inflation persistence with stronger policy-rate response.',
       'Exchange-rate shock with remittance downside stress.',
     ],
-    generation_mode: 'template',
   }
 }
 
-function resolveInterpretationGenerationMode(presetId: string | undefined): NarrativeGenerationMode {
-  return presetId === 'inflation-persistence' ? 'assisted' : 'template'
+// Prompt §4.4: clickable suggested-next anchors with route + preset targets.
+const SCENARIO_LAB_SUGGESTED_NEXT: SuggestedNextScenario[] = [
+  {
+    label: 'Pair with a remittance shock',
+    target_route: '/scenario-lab',
+    target_preset: 'russia_slowdown',
+  },
+  {
+    label: 'Add energy tariff adjustment',
+    target_route: '/scenario-lab',
+    target_preset: 'energy_reform',
+  },
+  {
+    label: 'Compare with baseline and tight-money',
+    target_route: '/comparison',
+  },
+]
+
+// Prompt §4.4: 3-series impulse-response line chart over 12 quarters, mapping
+// deviation-from-baseline for GDP gap, Inflation, and Policy rate. Shock paths
+// are geometric decays keyed off the current assumption values — they express
+// direction and shape, not calibrated QPM dynamics (live wiring is Shot 2+).
+function roundPp(value: number): number {
+  return Math.round(value * 100) / 100
+}
+
+function buildImpulseResponseChart(values: ScenarioLabAssumptionState): ChartSpec {
+  const horizons = Array.from({ length: 12 }, (_, index) => `Q${index + 1}`)
+  const policyRateShockPp = (values.policy_rate_change ?? 0) * 0.01 * 100
+  const exchangeRateShock = values.exchange_rate_change ?? 0
+  const externalDemandShock = values.export_demand_change ?? 0
+  const governmentSpendingShock = values.government_spending_change ?? 0
+
+  const gdpInitialGap =
+    -0.015 * policyRateShockPp +
+    0.04 * externalDemandShock +
+    0.12 * governmentSpendingShock
+  const inflationInitial = 0.18 * exchangeRateShock + -0.02 * policyRateShockPp
+  const policyRateInitial = policyRateShockPp + 0.04 * inflationInitial
+
+  const gdpDecay = 0.8
+  const inflationDecay = 0.72
+  const policyDecay = 0.85
+
+  const gdpSeries = horizons.map((_, index) => roundPp(gdpInitialGap * Math.pow(gdpDecay, index)))
+  const inflationSeries = horizons.map((_, index) =>
+    roundPp(inflationInitial * Math.pow(inflationDecay, index)),
+  )
+  const policyRateSeries = horizons.map((_, index) =>
+    roundPp(policyRateInitial * Math.pow(policyDecay, index)),
+  )
+
+  return {
+    chart_id: 'scenario_lab_impulse_response',
+    title: 'Scenario impulse response vs baseline · 12 quarters',
+    subtitle: 'Deviation from baseline in percentage points; mock Scenario Lab engine output, not a live forecast.',
+    chart_type: 'line',
+    x: {
+      label: 'Horizon',
+      unit: '',
+      values: horizons,
+    },
+    y: {
+      label: 'Deviation from baseline',
+      unit: 'pp',
+      values: [...gdpSeries, ...inflationSeries, ...policyRateSeries],
+    },
+    series: [
+      {
+        series_id: 'gdp_gap',
+        label: 'GDP gap',
+        semantic_role: 'baseline',
+        values: gdpSeries,
+      },
+      {
+        series_id: 'inflation',
+        label: 'Inflation',
+        semantic_role: 'downside',
+        values: inflationSeries,
+      },
+      {
+        series_id: 'policy_rate',
+        label: 'Policy rate',
+        semantic_role: 'other',
+        values: policyRateSeries,
+      },
+    ],
+    view_mode: 'delta',
+    uncertainty: [],
+    takeaway:
+      'Read each line as a scenario deviation from the baseline path across 12 quarters, not as a standalone forecast level.',
+    model_attribution: [ATTRIBUTION],
+  }
+}
+
+function resolveInterpretationGenerationMode(): NonNullable<
+  ScenarioLabInterpretation['metadata']
+>['generation_mode'] {
+  // No preset currently seeds 'assisted' mode. TA-9 will introduce
+  // assisted narratives from the AI advisor; for now all preset
+  // outputs are template-mode.
+  return 'template'
 }
 
 export function buildScenarioLabResults(
@@ -488,11 +573,15 @@ export function buildScenarioLabResults(
   const baselineCore = getMetricCore(getDefaultAssumptionState())
   const scenarioCore = getMetricCore(values)
   const headlineMetrics = buildHeadlineMetrics(values)
-  const interpretation = buildInterpretation(values) as InterpretationWithGenerationMode
-  interpretation.generation_mode = resolveInterpretationGenerationMode(options?.selectedPresetId)
+  const interpretation = buildInterpretation(values)
+  void options
+  const generationMode = resolveInterpretationGenerationMode()
+  interpretation.metadata = { generation_mode: generationMode }
+  interpretation.suggested_next = SCENARIO_LAB_SUGGESTED_NEXT
 
   return {
     headline_metrics: headlineMetrics,
+    impulse_response_chart: buildImpulseResponseChart(values),
     charts_by_tab: {
       headline_impact: {
         chart_id: 'headline_impact_delta',

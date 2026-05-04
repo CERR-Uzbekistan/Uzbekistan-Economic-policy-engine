@@ -1,6 +1,21 @@
-import type { Assumption, Scenario, ScenarioType } from '../contracts/data-contract'
+import type {
+  Assumption,
+  ChartAxis,
+  ChartSpec,
+  HeadlineMetric,
+  ModelAttribution,
+  Scenario,
+  ScenarioLabInterpretation,
+  ScenarioLabInterpretationMetadata,
+  ScenarioLabIoShockResult,
+  ScenarioLabResultTab,
+  SuggestedNextScenario,
+  ScenarioType,
+} from '../contracts/data-contract'
 
-const SCENARIO_KEY_PREFIX = 'policy-ui:scenario:'
+// v2 key prefix. v1 entries under `policy-ui:scenario:` are intentionally left untouched —
+// no silent migration; they sit inert until manually cleared. The store only reads/writes v2.
+const SCENARIO_KEY_PREFIX = 'policy-ui:scenario.v2:'
 const SESSION_ID_KEY = 'policy-ui:session-id'
 const STORE_EVENT = 'policy-ui:scenario-store-updated'
 let cachedSnapshot: SavedScenarioRecord[] = []
@@ -11,9 +26,38 @@ type ScenarioWithDataVersion = Scenario & {
   data_version: string
 }
 
+// Interpretation as emitted by the Scenario Lab source pipeline. Governance fields
+// are supported only through typed metadata, not legacy top-level fields.
+export type PersistedScenarioInterpretation = ScenarioLabInterpretation & {
+  metadata: ScenarioLabInterpretationMetadata
+}
+
+export type PersistedRunResults = {
+  headline_metrics: HeadlineMetric[]
+  charts_by_tab: Record<ScenarioLabResultTab, ChartSpec>
+}
+
+export type PersistedIoSectorShockRun = ScenarioLabIoShockResult & {
+  model_type: 'io_sector_shock'
+  title: string
+  data_vintage: string
+  source_artifact: string
+  saved_at: string
+}
+
 export type SavedScenarioRecord = ScenarioWithDataVersion & {
   stored_at: string
+  // Optional output snapshot fields (run artifact). Absent on records that predate the snapshot
+  // feature or were saved without a successful run having produced results.
+  run_id?: string
+  run_saved_at?: string
+  run_results?: PersistedRunResults
+  run_interpretation?: PersistedScenarioInterpretation
+  run_attribution?: ModelAttribution[]
+  io_sector_shock?: PersistedIoSectorShockRun
 }
+
+export type { ScenarioWithDataVersion }
 
 type StorageLike = Pick<Storage, 'getItem' | 'setItem' | 'removeItem' | 'key' | 'length'>
 
@@ -47,12 +91,286 @@ function isAssumption(value: unknown): value is Assumption {
   )
 }
 
+function isModelAttribution(value: unknown): value is ModelAttribution {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<ModelAttribution>
+  return (
+    typeof candidate.model_id === 'string' &&
+    typeof candidate.model_name === 'string' &&
+    typeof candidate.module === 'string' &&
+    typeof candidate.version === 'string' &&
+    typeof candidate.run_id === 'string' &&
+    typeof candidate.data_version === 'string' &&
+    typeof candidate.timestamp === 'string'
+  )
+}
+
+function isHeadlineMetric(value: unknown): value is HeadlineMetric {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<HeadlineMetric>
+  return (
+    typeof candidate.metric_id === 'string' &&
+    typeof candidate.label === 'string' &&
+    typeof candidate.value === 'number' &&
+    typeof candidate.unit === 'string' &&
+    typeof candidate.period === 'string' &&
+    typeof candidate.last_updated === 'string' &&
+    Array.isArray(candidate.model_attribution) &&
+    candidate.model_attribution.every(isModelAttribution)
+  )
+}
+
+function isChartAxis(value: unknown): value is ChartAxis {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<ChartAxis>
+  return (
+    typeof candidate.label === 'string' &&
+    typeof candidate.unit === 'string' &&
+    Array.isArray(candidate.values)
+  )
+}
+
+function isChartSpec(value: unknown): value is ChartSpec {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<ChartSpec>
+  return (
+    typeof candidate.chart_id === 'string' &&
+    typeof candidate.title === 'string' &&
+    typeof candidate.subtitle === 'string' &&
+    typeof candidate.chart_type === 'string' &&
+    isChartAxis(candidate.x) &&
+    isChartAxis(candidate.y) &&
+    Array.isArray(candidate.series) &&
+    Array.isArray(candidate.uncertainty) &&
+    typeof candidate.takeaway === 'string' &&
+    Array.isArray(candidate.model_attribution) &&
+    candidate.model_attribution.every(isModelAttribution)
+  )
+}
+
+// ScenarioLabResultTab is a closed set of four tab ids. The ResultsPanel dereferences
+// charts_by_tab[activeTab] unguarded, so a persisted snapshot missing any of these
+// tabs would crash the page on navigation. Require the full set at validation time.
+const REQUIRED_CHART_TABS: readonly ScenarioLabResultTab[] = [
+  'headline_impact',
+  'macro_path',
+  'external_balance',
+  'fiscal_effects',
+]
+
+function isPersistedRunResults(value: unknown): value is PersistedRunResults {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<PersistedRunResults>
+  if (!Array.isArray(candidate.headline_metrics) || !candidate.headline_metrics.every(isHeadlineMetric)) {
+    return false
+  }
+  if (typeof candidate.charts_by_tab !== 'object' || candidate.charts_by_tab === null) {
+    return false
+  }
+  const chartsByTab = candidate.charts_by_tab as Record<string, unknown>
+  for (const tab of REQUIRED_CHART_TABS) {
+    if (!isChartSpec(chartsByTab[tab])) {
+      return false
+    }
+  }
+  return true
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item) => typeof item === 'string')
+}
+
+function isFiniteNumber(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value)
+}
+
+function isNullableFiniteNumber(value: unknown): value is number | null {
+  return value === null || isFiniteNumber(value)
+}
+
+function isIoDemandBucket(value: unknown): boolean {
+  return value === 'consumption' || value === 'government' || value === 'investment' || value === 'export'
+}
+
+function isIoDistributionMode(value: unknown): boolean {
+  return value === 'output' || value === 'gva' || value === 'equal' || value === 'sector'
+}
+
+function isIoShockCurrency(value: unknown): boolean {
+  return value === 'bln_uzs' || value === 'mln_usd'
+}
+
+function isIoLinkageClass(value: unknown): boolean {
+  return value === 'key' || value === 'backward' || value === 'forward' || value === 'weak'
+}
+
+function isPersistedIoSectorShockRun(value: unknown): value is PersistedIoSectorShockRun {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<PersistedIoSectorShockRun>
+  const request = candidate.request
+  const totals = candidate.totals
+  if (
+    candidate.model_type !== 'io_sector_shock' ||
+    typeof candidate.title !== 'string' ||
+    typeof candidate.data_vintage !== 'string' ||
+    typeof candidate.source_artifact !== 'string' ||
+    typeof candidate.saved_at !== 'string' ||
+    typeof request !== 'object' ||
+    request === null ||
+    typeof totals !== 'object' ||
+    totals === null
+  ) {
+    return false
+  }
+
+  const requestCandidate = request as Partial<PersistedIoSectorShockRun['request']>
+  const totalsCandidate = totals as Partial<PersistedIoSectorShockRun['totals']>
+  if (
+    !isIoDemandBucket(requestCandidate.demand_bucket) ||
+    !isFiniteNumber(requestCandidate.amount) ||
+    !isIoShockCurrency(requestCandidate.currency) ||
+    !isIoDistributionMode(requestCandidate.distribution) ||
+    (requestCandidate.exchange_rate_uzs_per_usd !== undefined &&
+      !isFiniteNumber(requestCandidate.exchange_rate_uzs_per_usd)) ||
+    (requestCandidate.sector_code !== undefined && typeof requestCandidate.sector_code !== 'string')
+  ) {
+    return false
+  }
+
+  if (
+    !isFiniteNumber(totalsCandidate.input_shock) ||
+    !isIoShockCurrency(totalsCandidate.input_currency) ||
+    !isFiniteNumber(totalsCandidate.demand_shock_bln_uzs) ||
+    !isFiniteNumber(totalsCandidate.output_effect_bln_uzs) ||
+    !isFiniteNumber(totalsCandidate.value_added_effect_bln_uzs) ||
+    !isFiniteNumber(totalsCandidate.gdp_accounting_contribution_bln_uzs) ||
+    !isNullableFiniteNumber(totalsCandidate.employment_effect_persons) ||
+    !isNullableFiniteNumber(totalsCandidate.aggregate_output_multiplier)
+  ) {
+    return false
+  }
+
+  if (!Array.isArray(candidate.top_sectors)) {
+    return false
+  }
+  const topSectorsValid = candidate.top_sectors.every((sector) => {
+    if (typeof sector !== 'object' || sector === null) {
+      return false
+    }
+    const sectorCandidate = sector as Partial<PersistedIoSectorShockRun['top_sectors'][number]>
+    return (
+      typeof sectorCandidate.sector_code === 'string' &&
+      typeof sectorCandidate.sector_name === 'string' &&
+      isFiniteNumber(sectorCandidate.output_effect_bln_uzs) &&
+      isFiniteNumber(sectorCandidate.value_added_effect_bln_uzs) &&
+      isFiniteNumber(sectorCandidate.output_multiplier) &&
+      isFiniteNumber(sectorCandidate.value_added_multiplier) &&
+      isFiniteNumber(sectorCandidate.backward_linkage) &&
+      isFiniteNumber(sectorCandidate.forward_linkage) &&
+      isIoLinkageClass(sectorCandidate.linkage_classification) &&
+      isNullableFiniteNumber(sectorCandidate.employment_effect_persons)
+    )
+  })
+
+  return topSectorsValid && isStringArray(candidate.caveats)
+}
+
+function isScenarioLabInterpretationMetadata(
+  value: unknown,
+): value is ScenarioLabInterpretationMetadata {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<ScenarioLabInterpretationMetadata>
+  if (
+    candidate.generation_mode !== 'template' &&
+    candidate.generation_mode !== 'assisted' &&
+    candidate.generation_mode !== 'reviewed'
+  ) {
+    return false
+  }
+  if (candidate.reviewer_name !== undefined && typeof candidate.reviewer_name !== 'string') {
+    return false
+  }
+  if (candidate.reviewed_at !== undefined && typeof candidate.reviewed_at !== 'string') {
+    return false
+  }
+  return true
+}
+
+function isSuggestedNextScenario(value: unknown): value is SuggestedNextScenario {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<SuggestedNextScenario>
+  return (
+    typeof candidate.label === 'string' &&
+    (candidate.target_route === '/scenario-lab' || candidate.target_route === '/comparison') &&
+    (candidate.target_preset === undefined || typeof candidate.target_preset === 'string')
+  )
+}
+
+function isPersistedScenarioInterpretation(value: unknown): value is PersistedScenarioInterpretation {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<PersistedScenarioInterpretation>
+  if (
+    !isStringArray(candidate.what_changed) ||
+    !isStringArray(candidate.why_it_changed) ||
+    !isStringArray(candidate.key_risks) ||
+    !isStringArray(candidate.policy_implications) ||
+    !isStringArray(candidate.suggested_next_scenarios)
+  ) {
+    return false
+  }
+  if (!isScenarioLabInterpretationMetadata(candidate.metadata)) {
+    return false
+  }
+  if (
+    candidate.suggested_next !== undefined &&
+    !(Array.isArray(candidate.suggested_next) && candidate.suggested_next.every(isSuggestedNextScenario))
+  ) {
+    return false
+  }
+  return true
+}
+
+function normalizePersistedScenarioInterpretation(
+  interpretation: PersistedScenarioInterpretation,
+): PersistedScenarioInterpretation {
+  const normalized: PersistedScenarioInterpretation = {
+    what_changed: interpretation.what_changed,
+    why_it_changed: interpretation.why_it_changed,
+    key_risks: interpretation.key_risks,
+    policy_implications: interpretation.policy_implications,
+    suggested_next_scenarios: interpretation.suggested_next_scenarios,
+    metadata: interpretation.metadata,
+  }
+  if (interpretation.suggested_next !== undefined) {
+    normalized.suggested_next = interpretation.suggested_next
+  }
+  return normalized
+}
+
 function isSavedScenarioRecord(value: unknown): value is SavedScenarioRecord {
   if (typeof value !== 'object' || value === null) {
     return false
   }
   const candidate = value as Partial<SavedScenarioRecord>
-  return (
+  const baseValid =
     typeof candidate.scenario_id === 'string' &&
     typeof candidate.scenario_name === 'string' &&
     isScenarioType(candidate.scenario_type) &&
@@ -70,7 +388,43 @@ function isSavedScenarioRecord(value: unknown): value is SavedScenarioRecord {
     typeof candidate.data_version === 'string' &&
     candidate.data_version.length > 0 &&
     typeof candidate.stored_at === 'string'
-  )
+
+  if (!baseValid) {
+    return false
+  }
+
+  // Optional output-snapshot fields: validate when present, tolerate when absent.
+  if (candidate.run_id !== undefined && typeof candidate.run_id !== 'string') {
+    return false
+  }
+  if (candidate.run_saved_at !== undefined && typeof candidate.run_saved_at !== 'string') {
+    return false
+  }
+  if (candidate.run_results !== undefined && !isPersistedRunResults(candidate.run_results)) {
+    return false
+  }
+  if (
+    candidate.run_interpretation !== undefined &&
+    !isPersistedScenarioInterpretation(candidate.run_interpretation)
+  ) {
+    return false
+  }
+  if (
+    candidate.run_attribution !== undefined &&
+    !(Array.isArray(candidate.run_attribution) && candidate.run_attribution.every(isModelAttribution))
+  ) {
+    return false
+  }
+  if (candidate.io_sector_shock !== undefined && !isPersistedIoSectorShockRun(candidate.io_sector_shock)) {
+    return false
+  }
+  return true
+}
+
+export function isIoSectorShockRecord(
+  record: SavedScenarioRecord,
+): record is SavedScenarioRecord & { io_sector_shock: PersistedIoSectorShockRun } {
+  return record.io_sector_shock?.model_type === 'io_sector_shock'
 }
 
 function buildScenarioKey(scenarioId: string): string {
@@ -124,7 +478,16 @@ function safeParseRecord(rawValue: string, scenarioId: string): SavedScenarioRec
   }
 }
 
-export function saveScenario(scenario: ScenarioWithDataVersion): SavedScenarioRecord {
+export type SaveScenarioInput = ScenarioWithDataVersion & {
+  run_id?: string
+  run_saved_at?: string
+  run_results?: PersistedRunResults
+  run_interpretation?: PersistedScenarioInterpretation
+  run_attribution?: ModelAttribution[]
+  io_sector_shock?: PersistedIoSectorShockRun
+}
+
+export function saveScenario(scenario: SaveScenarioInput): SavedScenarioRecord {
   const storage = getStorage()
   if (!storage) {
     throw new Error('Local storage is unavailable in this environment.')
@@ -152,6 +515,33 @@ export function saveScenario(scenario: ScenarioWithDataVersion): SavedScenarioRe
     model_ids: scenario.model_ids,
     data_version: scenario.data_version,
     stored_at: nowIso,
+  }
+
+  if (scenario.run_id !== undefined) {
+    normalizedRecord.run_id = scenario.run_id
+  }
+  if (scenario.run_saved_at !== undefined) {
+    normalizedRecord.run_saved_at = scenario.run_saved_at
+  }
+  if (scenario.run_results !== undefined) {
+    normalizedRecord.run_results = scenario.run_results
+  }
+  if (scenario.run_interpretation !== undefined) {
+    if (!isPersistedScenarioInterpretation(scenario.run_interpretation)) {
+      throw new Error('Scenario run interpretation does not match the supported persisted shape.')
+    }
+    normalizedRecord.run_interpretation = normalizePersistedScenarioInterpretation(
+      scenario.run_interpretation,
+    )
+  }
+  if (scenario.run_attribution !== undefined) {
+    normalizedRecord.run_attribution = scenario.run_attribution
+  }
+  if (scenario.io_sector_shock !== undefined) {
+    if (!isPersistedIoSectorShockRun(scenario.io_sector_shock)) {
+      throw new Error('I-O sector shock run does not match the supported persisted shape.')
+    }
+    normalizedRecord.io_sector_shock = scenario.io_sector_shock
   }
 
   storage.setItem(buildScenarioKey(normalizedRecord.scenario_id), JSON.stringify(normalizedRecord))

@@ -1,43 +1,18 @@
 import { useTranslation } from 'react-i18next'
 import type { HeadlineMetric } from '../../contracts/data-contract'
+import {
+  DIRECTION_GLYPH,
+  formatOverviewDelta,
+  formatOverviewDeltaComparison,
+  formatOverviewDeltaWithUnit,
+  formatOverviewMetricValueWithUnit,
+} from './metric-format.js'
 
 type KpiStripProps = {
   metrics: HeadlineMetric[]
 }
 
-function formatMetricValue(metric: HeadlineMetric) {
-  if (metric.unit === 'UZS/USD') {
-    return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(metric.value)
-  }
-  return new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 }).format(metric.value)
-}
-
-const DIRECTION_GLYPH: Record<HeadlineMetric['direction'], string> = {
-  up: '▲',
-  down: '▼',
-  flat: '—',
-}
-
-function formatDelta(metric: HeadlineMetric) {
-  if (metric.delta_abs === null) {
-    return null
-  }
-  const sign = metric.delta_abs > 0 ? '+' : metric.delta_abs < 0 ? '−' : ''
-  const magnitude = Math.abs(metric.delta_abs)
-  const precision = metric.unit === 'UZS/USD' ? 0 : 1
-  return `${sign}${magnitude.toFixed(precision)}`
-}
-
-function formatFreshness(value: string, locale: string): string {
-  const parsed = Date.parse(value)
-  if (!Number.isFinite(parsed)) {
-    return value
-  }
-  return new Intl.DateTimeFormat(locale, {
-    day: '2-digit',
-    month: 'short',
-  }).format(new Date(parsed))
-}
+const SME_CONTENT_PENDING = '[SME content pending]'
 
 export function KpiStrip({ metrics }: KpiStripProps) {
   const { t, i18n } = useTranslation()
@@ -49,38 +24,74 @@ export function KpiStrip({ metrics }: KpiStripProps) {
 
   return (
     <section className="kpi-strip" aria-labelledby="overview-kpi-title">
-      <div className="overview-section-head page-section-head">
-        <h2 id="overview-kpi-title">{t('overview.kpi.title')}</h2>
-        <p>{t('overview.kpi.description')}</p>
-      </div>
+      <h2 id="overview-kpi-title" className="sr-only">
+        {t('overview.kpi.title')}
+      </h2>
 
       <div className="overview-kpi-grid">
         {metrics.map((metric) => {
-          const delta = formatDelta(metric)
+          const delta = formatOverviewDelta(metric, locale)
           const directionWord = t(`overview.kpi.direction.${metric.direction}`)
           const srLabel = delta
             ? t('overview.kpi.deltaSrLabel', { direction: directionWord, delta })
             : t('overview.kpi.noPrior')
-          const freshness = formatFreshness(metric.last_updated, locale)
-          const deltaText = delta ?? t('overview.kpi.notAvailable')
+          const deltaLabel = metric.delta_label
+          const formattedDelta = formatOverviewDeltaWithUnit(metric, locale, t)
+          const composedDelta = formattedDelta ?? t('overview.kpi.noPrior')
+          const deltaComparison = formatOverviewDeltaComparison(metric, t)
+          const composedDeltaWithComparison = formattedDelta && deltaComparison
+            ? `${composedDelta} ${deltaComparison}`
+            : composedDelta
+          const contextNote = metric.context_note
+          const contextIsSentinel = contextNote === SME_CONTENT_PENDING
+          const claimLabel = metric.claim_label_key ? t(metric.claim_label_key) : null
 
           return (
-            <article key={metric.metric_id} className="kpi overview-kpi-card">
+            <article key={metric.metric_id} className="kpi overview-kpi-card" data-metric-id={metric.metric_id}>
               <div className="kpi__head overview-kpi-card__top">
                 <p className="kpi__name overview-kpi-card__label">{metric.label}</p>
-                <span className="kpi__freshness">{t('overview.kpi.freshness', { date: freshness })}</span>
-              </div>
-              <p className="kpi__value overview-kpi-card__value">
-                {formatMetricValue(metric)} <span>{metric.unit}</span>
-              </p>
-              <span className="kpi__delta overview-kpi-trend ui-chip ui-chip--neutral" aria-label={srLabel}>
-                <span className="arrow overview-kpi-trend__glyph" aria-hidden="true">
-                    {DIRECTION_GLYPH[metric.direction]}
+                <span className="overview-kpi-card__top-meta">
+                  {claimLabel ? (
+                    <span
+                      className="overview-kpi-card__claim-label"
+                      aria-label={claimLabel}
+                      title={claimLabel}
+                    >
+                      {claimLabel}
+                    </span>
+                  ) : null}
+                  {metric.validation_status === 'warning' ? (
+                    <span className="ui-chip ui-chip--warn overview-kpi-card__status">
+                      {t('overview.indicators.status.warning')}
+                    </span>
+                  ) : null}
                 </span>
-                <span>{deltaText}</span>
-              </span>
+              </div>
+              <div className="overview-kpi-card__main">
+                <p className="kpi__value overview-kpi-card__value">{formatOverviewMetricValueWithUnit(metric, locale, t)}</p>
+                <p className="kpi__delta overview-kpi-trend" aria-label={srLabel}>
+                  {formattedDelta || deltaLabel ? (
+                    <>
+                      <span className="overview-kpi-trend__glyph" aria-hidden="true">
+                        {DIRECTION_GLYPH[metric.direction]}
+                      </span>{' '}
+                    </>
+                  ) : null}
+                  {deltaLabel ? deltaLabel : composedDeltaWithComparison}
+                </p>
+              </div>
               <div className="kpi__context overview-kpi-card__meta">
-                <span>{metric.period}</span>
+                <span className="overview-kpi-card__period">{metric.period}</span>
+                {contextIsSentinel ? (
+                  <span
+                    className="ui-chip ui-chip--warn overview-kpi-card__sme-chip"
+                    aria-label={t('overview.kpi.smePendingAria')}
+                  >
+                    {t('overview.kpi.smePendingChip')}
+                  </span>
+                ) : contextNote ? (
+                  <span className="overview-kpi-card__context-note" title={contextNote}>{contextNote}</span>
+                ) : null}
               </div>
             </article>
           )

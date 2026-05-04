@@ -1,6 +1,6 @@
 import type { ScenarioLabAssumptionState, ScenarioLabWorkspace } from '../contracts/data-contract'
 
-export const DEFAULT_PRESET_ID = 'balanced-baseline'
+export const DEFAULT_PRESET_ID = 'baseline'
 
 export function getDefaultValuesFromWorkspace(
   workspace: ScenarioLabWorkspace,

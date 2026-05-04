@@ -1,49 +1,61 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ComparisonChartPanel } from '../components/comparison/ComparisonChartPanel'
-import { HeadlineComparisonTable } from '../components/comparison/HeadlineComparisonTable'
-import { ScenarioSelectorPanel } from '../components/comparison/ScenarioSelectorPanel'
+import { useLocation } from 'react-router-dom'
+import { AddSavedScenarioModal } from '../components/comparison/AddSavedScenarioModal'
+import { ComparisonSelector } from '../components/comparison/ComparisonSelector'
+import { DeltaTable } from '../components/comparison/DeltaTable'
+import { SavedIoSectorRunsPanel } from '../components/comparison/SavedIoSectorRunsPanel'
+import { ScenarioSummaryCards } from '../components/comparison/ScenarioSummaryCards'
+import { SectorEvidencePanel } from '../components/comparison/SectorEvidencePanel'
 import { TradeoffSummaryPanel } from '../components/comparison/TradeoffSummaryPanel'
 import { PageContainer } from '../components/layout/PageContainer'
 import { PageHeader } from '../components/layout/PageHeader'
-import type {
-  ComparisonScenario,
-  ComparisonScenarioTag,
-  ComparisonViewMode,
-} from '../contracts/data-contract'
+import { AnalyticalContextStrip } from '../components/system/AnalyticalContextStrip'
+import { TrustStateLabel } from '../components/system/TrustStateLabel'
+import type { ComparisonContent } from '../contracts/data-contract'
+import { composeComparisonContent } from '../data/adapters/comparison'
 import {
   getInitialComparisonSourceState,
   loadComparisonSourceState,
 } from '../data/comparison/source'
 import { beginRetry } from '../data/source-state'
-import { toComparisonScenario } from '../state/scenarioComparisonAdapter'
-import { listScenarios, subscribeScenarioStore } from '../state/scenarioStore'
+import {
+  addSavedScenarioIdsToSelection,
+  COMPARISON_SLOT_LIMIT,
+  mergeSavedScenariosIntoWorkspace,
+} from '../state/comparisonSavedScenarios'
+import { isIoSectorShockRecord, listScenarios, subscribeScenarioStore } from '../state/scenarioStore'
 import './comparison.css'
 
-function buildScenarioMap(scenarios: ComparisonScenario[]) {
-  return scenarios.reduce<Record<string, ComparisonScenario>>((acc, scenario) => {
-    acc[scenario.scenario_id] = scenario
-    return acc
-  }, {})
-}
+const EMPTY_SAVED_SCENARIOS: [] = []
 
-function buildInitialTags(scenarios: ComparisonScenario[]): Record<string, ComparisonScenarioTag> {
-  return scenarios.reduce<Record<string, ComparisonScenarioTag>>((acc, scenario) => {
-    acc[scenario.scenario_id] = scenario.initial_tag
-    return acc
-  }, {})
+function readLinkedSavedScenarioIds(state: unknown): string[] {
+  if (typeof state !== 'object' || state === null) {
+    return []
+  }
+  const candidate = (state as { addSavedScenarioIds?: unknown }).addSavedScenarioIds
+  if (!Array.isArray(candidate)) {
+    return []
+  }
+  return candidate.filter((id): id is string => typeof id === 'string' && id.length > 0)
 }
 
 export function ComparisonPage() {
   const { t } = useTranslation()
+  const location = useLocation()
   const [sourceState, setSourceState] = useState(getInitialComparisonSourceState)
   const [selectedIdsOverride, setSelectedIdsOverride] = useState<string[] | null>(null)
   const [baselineIdOverride, setBaselineIdOverride] = useState<string | null>(null)
-  const [viewMode, setViewMode] = useState<ComparisonViewMode>('level')
-  const [tagsByScenarioIdOverride, setTagsByScenarioIdOverride] = useState<
-    Record<string, ComparisonScenarioTag> | null
-  >(null)
-  const savedScenarios = useSyncExternalStore(subscribeScenarioStore, listScenarios, () => [])
+  const [isSavedScenarioModalOpen, setIsSavedScenarioModalOpen] = useState(false)
+  const [linkedSavedScenarioIds] = useState<string[]>(() =>
+    readLinkedSavedScenarioIds(location.state),
+  )
+  const [addedSavedScenarioIds, setAddedSavedScenarioIds] = useState<string[]>(linkedSavedScenarioIds)
+  const savedScenarios = useSyncExternalStore(
+    subscribeScenarioStore,
+    listScenarios,
+    () => EMPTY_SAVED_SCENARIOS,
+  )
 
   useEffect(() => {
     let cancelled = false
@@ -52,101 +64,67 @@ export function ComparisonPage() {
         setSourceState(state)
       }
     })
-
     return () => {
       cancelled = true
     }
   }, [])
 
-  const workspace = sourceState.workspace
-  const scenarios = useMemo(() => {
-    const workspaceScenarios = workspace?.scenarios ?? []
-    if (savedScenarios.length === 0) {
-      return workspaceScenarios
-    }
-    const merged = new Map<string, ComparisonScenario>()
-    for (const scenario of workspaceScenarios) {
-      merged.set(scenario.scenario_id, scenario)
-    }
-    for (const savedScenario of savedScenarios) {
-      const mapped = toComparisonScenario(savedScenario)
-      merged.set(mapped.scenario_id, mapped)
-    }
-    return Array.from(merged.values())
-  }, [workspace, savedScenarios])
-  const metricDefinitions = useMemo(() => workspace?.metric_definitions ?? [], [workspace])
+  const baseWorkspace = sourceState.workspace
 
-  const defaultSelectedIds = useMemo(() => {
-    if (!workspace) {
-      return []
-    }
-
-    const scenarioIds = new Set(scenarios.map((scenario) => scenario.scenario_id))
-    const normalized = workspace.default_selected_ids.filter((id) => scenarioIds.has(id)).slice(0, 4)
-    return normalized.length >= 2
-      ? normalized
-      : scenarios.map((scenario) => scenario.scenario_id).slice(0, 4)
-  }, [workspace, scenarios])
+  const workspace = useMemo(() => {
+    if (!baseWorkspace) return null
+    return mergeSavedScenariosIntoWorkspace(baseWorkspace, savedScenarios, addedSavedScenarioIds)
+  }, [baseWorkspace, savedScenarios, addedSavedScenarioIds])
 
   const selectedIds = useMemo(() => {
-    if (!workspace) {
-      return []
-    }
-
-    if (!selectedIdsOverride) {
-      return defaultSelectedIds
-    }
-
-    const scenarioIds = new Set(scenarios.map((scenario) => scenario.scenario_id))
-    const normalized = selectedIdsOverride.filter((id) => scenarioIds.has(id)).slice(0, 4)
-    return normalized.length >= 2 ? normalized : defaultSelectedIds
-  }, [workspace, scenarios, selectedIdsOverride, defaultSelectedIds])
-
-  const defaultBaselineId = useMemo(() => {
-    if (!workspace) {
-      return ''
-    }
-
-    const scenarioIds = new Set(scenarios.map((scenario) => scenario.scenario_id))
-    return scenarioIds.has(workspace.default_baseline_id)
-      ? workspace.default_baseline_id
-      : scenarios[0]?.scenario_id ?? ''
-  }, [workspace, scenarios])
+    if (!workspace) return []
+    const scenarioIds = new Set(workspace.scenarios.map((scenario) => scenario.scenario_id))
+    const candidate = selectedIdsOverride ?? workspace.default_selected_ids
+    const linkedMacroScenarioIds =
+      selectedIdsOverride === null
+        ? savedScenarios
+            .filter(
+              (scenario) =>
+                linkedSavedScenarioIds.includes(scenario.scenario_id) &&
+                !isIoSectorShockRecord(scenario),
+            )
+            .map((scenario) => scenario.scenario_id)
+        : []
+    const candidateWithLinkedMacro =
+      linkedMacroScenarioIds.length > 0
+        ? addSavedScenarioIdsToSelection({
+            currentSelectedIds: candidate,
+            baselineId: baselineIdOverride ?? workspace.default_baseline_id,
+            savedScenarioIds: linkedMacroScenarioIds,
+            slotLimit: COMPARISON_SLOT_LIMIT,
+          })
+        : candidate
+    const normalized = candidateWithLinkedMacro.filter((id) => scenarioIds.has(id)).slice(0, COMPARISON_SLOT_LIMIT)
+    return normalized.length >= 2
+      ? normalized
+      : workspace.scenarios.map((scenario) => scenario.scenario_id).slice(0, COMPARISON_SLOT_LIMIT)
+  }, [baselineIdOverride, linkedSavedScenarioIds, savedScenarios, selectedIdsOverride, workspace])
 
   const baselineId = useMemo(() => {
-    if (!workspace) {
-      return ''
-    }
-
-    const candidate = baselineIdOverride ?? defaultBaselineId
+    if (!workspace) return ''
+    const candidate = baselineIdOverride ?? workspace.default_baseline_id
     return selectedIds.includes(candidate) ? candidate : selectedIds[0] ?? ''
-  }, [workspace, baselineIdOverride, defaultBaselineId, selectedIds])
+  }, [workspace, baselineIdOverride, selectedIds])
 
-  const tagsByScenarioId = useMemo(() => {
-    if (!workspace) {
-      return {}
+  const content: ComparisonContent | null = useMemo(() => {
+    if (!workspace || selectedIds.length === 0 || !baselineId) {
+      return null
     }
+    return composeComparisonContent(workspace, selectedIds, baselineId)
+  }, [workspace, selectedIds, baselineId])
 
-    const defaults = buildInitialTags(scenarios)
-    if (!tagsByScenarioIdOverride) {
-      return defaults
-    }
-
-    return Object.entries(tagsByScenarioIdOverride).reduce<Record<string, ComparisonScenarioTag>>(
-      (acc, [scenarioId, tag]) => {
-        if (scenarioId in acc) {
-          acc[scenarioId] = tag
-        }
-        return acc
-      },
-      defaults,
-    )
-  }, [workspace, scenarios, tagsByScenarioIdOverride])
-
-  const scenarioMap = useMemo(() => buildScenarioMap(scenarios), [scenarios])
-  const selectedScenarios = useMemo(
-    () => selectedIds.map((id) => scenarioMap[id]).filter(Boolean),
-    [selectedIds, scenarioMap],
+  const selectedSavedIoRecords = useMemo(() => {
+    const addedIds = new Set(addedSavedScenarioIds)
+    return savedScenarios.filter((scenario) => addedIds.has(scenario.scenario_id) && isIoSectorShockRecord(scenario))
+  }, [addedSavedScenarioIds, savedScenarios])
+  const savedIoRunCount = useMemo(
+    () => savedScenarios.filter(isIoSectorShockRecord).length,
+    [savedScenarios],
   )
 
   async function handleRetry() {
@@ -158,7 +136,10 @@ export function ComparisonPage() {
   if (sourceState.status === 'loading') {
     return (
       <PageContainer className="comparison-page">
-        <PageHeader title={t('pages.comparison.title')} description={t('pages.comparison.description')} />
+        <PageHeader
+          title={t('pages.comparison.title')}
+          description={t('pages.comparison.description')}
+        />
         <p className="empty-state" role="status" aria-live="polite">
           {t('states.loading.comparison')}
         </p>
@@ -166,10 +147,13 @@ export function ComparisonPage() {
     )
   }
 
-  if (sourceState.status === 'error' || !workspace) {
+  if (sourceState.status === 'error' || !workspace || !content) {
     return (
       <PageContainer className="comparison-page">
-        <PageHeader title={t('pages.comparison.title')} description={t('pages.comparison.description')} />
+        <PageHeader
+          title={t('pages.comparison.title')}
+          description={t('pages.comparison.description')}
+        />
         <p className="empty-state" role="alert">
           {sourceState.error ?? t('states.error.comparisonUnavailable')}
         </p>
@@ -184,86 +168,147 @@ export function ComparisonPage() {
     )
   }
 
-  function handleToggleScenario(scenarioId: string) {
-    const currentlySelected = selectedIds.includes(scenarioId)
+  function handleRemove(scenarioId: string) {
+    // Preserve baseline; require at least 2 scenarios to remain.
+    if (scenarioId === baselineId) return
+    if (selectedIds.length <= 2) return
+    setSelectedIdsOverride(selectedIds.filter((id) => id !== scenarioId))
+  }
 
-    if (currentlySelected) {
-      if (scenarioId === baselineId || selectedIds.length <= 2) {
-        return
-      }
-      setSelectedIdsOverride((prev) => {
-        const current = prev ?? selectedIds
-        return current.filter((id) => id !== scenarioId)
-      })
+  function handleAddSavedScenario() {
+    setIsSavedScenarioModalOpen(true)
+  }
+
+  function handleAddSelectedSavedScenarios(scenarioIds: string[]) {
+    if (scenarioIds.length === 0) {
       return
     }
-
-    if (selectedIds.length >= 4) {
-      return
+    const macroScenarioIds = savedScenarios
+      .filter((scenario) => scenarioIds.includes(scenario.scenario_id) && !isIoSectorShockRecord(scenario))
+      .map((scenario) => scenario.scenario_id)
+    setAddedSavedScenarioIds((current) => Array.from(new Set([...current, ...scenarioIds])))
+    if (macroScenarioIds.length > 0) {
+      setSelectedIdsOverride(
+        addSavedScenarioIdsToSelection({
+          currentSelectedIds: selectedIds,
+          baselineId,
+          savedScenarioIds: macroScenarioIds,
+          slotLimit: COMPARISON_SLOT_LIMIT,
+        }),
+      )
     }
-
-    setSelectedIdsOverride((prev) => {
-      const current = prev ?? selectedIds
-      return [...current, scenarioId]
-    })
+    setBaselineIdOverride(baselineId)
   }
 
   function handleBaselineChange(nextBaselineId: string) {
+    // Amend-cycle 1 fix: baseline switcher reintroduced. If the new baseline is
+    // not already in the selection, swap it in (replacing the last non-baseline
+    // slot when at capacity) so the delta table continues to render 3 scenarios.
+    if (!workspace) return
     if (!selectedIds.includes(nextBaselineId)) {
-      setSelectedIdsOverride((prev) => {
-        const current = prev ?? selectedIds
-        if (current.length < 4) {
-          return [...current, nextBaselineId]
-        }
-        const removable = current.find((id) => id !== baselineId)
-        return removable ? [...current.filter((id) => id !== removable), nextBaselineId] : current
-      })
+      const currentIds = selectedIds
+      if (currentIds.length < COMPARISON_SLOT_LIMIT) {
+        setSelectedIdsOverride([...currentIds, nextBaselineId])
+      } else {
+        const removableId = currentIds.find((id) => id !== baselineId) ?? currentIds[0]
+        setSelectedIdsOverride([
+          ...currentIds.filter((id) => id !== removableId),
+          nextBaselineId,
+        ])
+      }
     }
     setBaselineIdOverride(nextBaselineId)
   }
 
-  function handleTagChange(scenarioId: string, tag: ComparisonScenarioTag) {
-    setTagsByScenarioIdOverride((prev) => {
-      const current = prev ?? tagsByScenarioId
-      return { ...current, [scenarioId]: tag }
-    })
-  }
+  const pageHeaderMeta = (
+    <>
+      <span className="page-header__eyebrow">{t('comparison.header.eyebrow')}</span>
+      <span>
+        {t('comparison.header.meta.comparing')} {t('overview.common.middleDot')}{' '}
+        <strong>
+          {t('comparison.header.meta.scenarioCount', { count: content.scenarios.length })}
+        </strong>
+      </span>
+      <span>
+        {t('comparison.header.meta.horizon')} {t('overview.common.middleDot')}{' '}
+        <strong>{content.horizon_label}</strong>
+      </span>
+      <span>
+        {t('comparison.header.meta.mode')} {t('overview.common.middleDot')}{' '}
+        <strong>{t('comparison.header.meta.deltasVsBaseline')}</strong>
+      </span>
+    </>
+  )
+  const comparisonContextRunName = t('comparison.context.runName', {
+    baseline:
+      content.scenarios.find((scenario) => scenario.id === content.baseline_scenario_id)?.name ??
+      t('comparison.table.baselineFallback'),
+    alternatives: Math.max(content.scenarios.length - 1, 0),
+  })
+  const comparisonDataVintage =
+    sourceState.qpmPayload?.attribution.data_version ?? sourceState.workspace?.generated_at ?? workspace.generated_at
+  const comparisonSourceTone = sourceState.qpmSourceLabel === 'liveBridgeJson'
+    ? 'success'
+    : sourceState.qpmSourceLabel === 'fallbackMock'
+      ? 'warn'
+      : 'neutral'
 
   return (
     <PageContainer className="comparison-page">
-      <PageHeader title={t('pages.comparison.title')} description={t('pages.comparison.description')} />
+      <PageHeader
+        title={t('pages.comparison.title')}
+        description={t('pages.comparison.description')}
+        meta={pageHeaderMeta}
+      />
 
-      <ScenarioSelectorPanel
-        scenarios={scenarios}
-        selectedIds={selectedIds}
-        baselineId={baselineId}
-        tagsByScenarioId={tagsByScenarioId}
-        onToggleScenario={handleToggleScenario}
+      <AnalyticalContextStrip
+        label={t('comparison.context.label')}
+        lane={t('scenarioLab.context.lane.macroScenario')}
+        model={t('scenarioLab.context.model.qpm')}
+        runName={comparisonContextRunName}
+        dataVintage={`${t('scenarioLab.context.dataVintage')} ${comparisonDataVintage}`}
+        saveState={t('comparison.context.saveState')}
+        stateLabels={[
+          <TrustStateLabel key={sourceState.qpmSourceLabel} id={sourceState.qpmSourceLabel} tone={comparisonSourceTone} />,
+          <TrustStateLabel key="localBrowserDraft" id="localBrowserDraft" tone="warn" />,
+        ]}
+      />
+
+      <ComparisonSelector
+        scenarios={content.scenarios}
+        baselineId={content.baseline_scenario_id}
+        onRemove={handleRemove}
+        onAddSavedScenario={handleAddSavedScenario}
         onBaselineChange={handleBaselineChange}
-        onTagChange={handleTagChange}
       />
 
-      <HeadlineComparisonTable
-        metrics={metricDefinitions}
-        selectedScenarios={selectedScenarios}
-        baselineId={baselineId}
-        tagsByScenarioId={tagsByScenarioId}
+      <AddSavedScenarioModal
+        isOpen={isSavedScenarioModalOpen}
+        savedScenarios={savedScenarios}
+        activeScenarioIds={Array.from(new Set([...selectedIds, ...addedSavedScenarioIds]))}
+        maxSelectable={COMPARISON_SLOT_LIMIT - 1}
+        onClose={() => setIsSavedScenarioModalOpen(false)}
+        onAddSelected={handleAddSelectedSavedScenarios}
       />
 
-      <div className="comparison-bottom-grid">
-        <ComparisonChartPanel
-          selectedScenarios={selectedScenarios}
-          metricDefinitions={metricDefinitions}
-          baselineId={baselineId}
-          viewMode={viewMode}
-          onViewModeChange={setViewMode}
+      <ScenarioSummaryCards scenarios={content.scenarios} metrics={content.metrics} />
+
+      <div className="cmp-evidence-layout">
+        <DeltaTable
+          scenarios={content.scenarios}
+          metrics={content.metrics}
+          baselineScenarioId={content.baseline_scenario_id}
         />
-        <TradeoffSummaryPanel
-          selectedScenarios={selectedScenarios}
-          baselineId={baselineId}
-          tagsByScenarioId={tagsByScenarioId}
-        />
+        <SectorEvidencePanel evidence={sourceState.ioSectorEvidence} />
       </div>
+
+      <SavedIoSectorRunsPanel
+        records={selectedSavedIoRecords}
+        availableCount={savedIoRunCount}
+        onAddSavedRun={handleAddSavedScenario}
+      />
+
+      <TradeoffSummaryPanel tradeoff={content.tradeoff} scenarios={content.scenarios} />
     </PageContainer>
   )
 }

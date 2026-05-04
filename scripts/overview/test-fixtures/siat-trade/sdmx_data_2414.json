@@ -1,0 +1,31 @@
+{
+  "metadata": {
+    "source": "Statistics Agency SIAT machine-readable SDMX data",
+    "dataset_name": "Foreign trade in goods, cumulative monthly import levels",
+    "family": "foreign trade goods",
+    "flow": "imports",
+    "unit": "USD million",
+    "window_semantics": "cumulative_monthly",
+    "frequency": "monthly"
+  },
+  "observations": [
+    {
+      "period": "2025-01/2025-02",
+      "period_label": "January-February 2025",
+      "year": 2025,
+      "start_month": 1,
+      "end_month": 2,
+      "value": 6202.6,
+      "observed_at": "2025-03-30T00:00:00Z"
+    },
+    {
+      "period": "2026-01/2026-02",
+      "period_label": "January-February 2026",
+      "year": 2026,
+      "start_month": 1,
+      "end_month": 2,
+      "value": 8058.287,
+      "observed_at": "2026-03-30T00:00:00Z"
+    }
+  ]
+}

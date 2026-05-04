@@ -2,14 +2,26 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'reac
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 import { AssumptionsPanel } from '../components/scenario-lab/AssumptionsPanel'
+import { IoSectorShockPanel } from '../components/scenario-lab/IoSectorShockPanel'
 import { InterpretationPanel } from '../components/scenario-lab/InterpretationPanel'
 import { ResultsPanel } from '../components/scenario-lab/ResultsPanel'
+import { ScenarioLabSavedRunsPanel } from '../components/scenario-lab/ScenarioLabSavedRunsPanel'
+import {
+  ScenarioLabModelTabs,
+  type ScenarioLabModelTab,
+} from '../components/scenario-lab/ScenarioLabModelTabs'
+import { ScenarioLabTabShell } from '../components/scenario-lab/ScenarioLabTabShell'
 import { PageContainer } from '../components/layout/PageContainer'
 import { PageHeader } from '../components/layout/PageHeader'
+import { AnalyticalContextStrip } from '../components/system/AnalyticalContextStrip'
+import { TrustStateLabel } from '../components/system/TrustStateLabel'
+import type { TrustStateLabelId } from '../components/system/trust-state-labels'
 import type {
   Assumption,
   ModelAttribution,
   ScenarioLabAssumptionState,
+  ScenarioLabIoAnalyticsWorkspace,
+  ScenarioLabIoShockResult,
   ScenarioLabResultTab,
   ScenarioLabResultsBundle,
   ScenarioLabWorkspace,
@@ -25,6 +37,10 @@ import {
   getInitialScenarioLabSourceState,
   loadScenarioLabSourceState,
 } from '../data/scenario-lab/source'
+import {
+  getInitialScenarioLabIoAnalyticsState,
+  loadScenarioLabIoAnalyticsState,
+} from '../data/scenario-lab/io-analytics-source'
 import { beginRetry } from '../data/source-state'
 import {
   deleteScenario,
@@ -32,6 +48,9 @@ import {
   loadScenario,
   saveScenario,
   subscribeScenarioStore,
+  type PersistedIoSectorShockRun,
+  type PersistedRunResults,
+  type PersistedScenarioInterpretation,
 } from '../state/scenarioStore'
 import {
   findPreset,
@@ -125,6 +144,7 @@ export function ScenarioLabPage() {
   const { t, i18n } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
   const [sourceState, setSourceState] = useState(getInitialScenarioLabSourceState)
+  const [ioAnalyticsState, setIoAnalyticsState] = useState(getInitialScenarioLabIoAnalyticsState)
   const initialPresetId = resolveDefaultPresetId(scenarioLabWorkspaceMock)
   const initialPreset = findPreset(scenarioLabWorkspaceMock, initialPresetId)
   const [selectedPresetId, setSelectedPresetId] = useState(initialPresetId)
@@ -137,7 +157,9 @@ export function ScenarioLabPage() {
     getPresetValuesFromWorkspace(scenarioLabWorkspaceMock, initialPresetId),
   )
   const [activeTab, setActiveTab] = useState<ScenarioLabResultTab>('headline_impact')
+  const [activeModelTab, setActiveModelTab] = useState<ScenarioLabModelTab>('macro_qpm')
   const [saveStatus, setSaveStatus] = useState<string | null>(null)
+  const [ioSaveStatus, setIoSaveStatus] = useState<string | null>(null)
   const [lastRunAssumptions, setLastRunAssumptions] = useState<ScenarioLabAssumptionState>(assumptionValues)
   const latestRunParamsRef = useRef<ScenarioRunParams>({
     assumptions: assumptionValues,
@@ -190,6 +212,18 @@ export function ScenarioLabPage() {
       latestSuccessfulAttributionRef.current = extractAttribution(sourceState.results)
     }
   }, [sourceState.status, sourceState.results])
+
+  useEffect(() => {
+    let cancelled = false
+    loadScenarioLabIoAnalyticsState().then((state) => {
+      if (!cancelled) {
+        setIoAnalyticsState(state)
+      }
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   useEffect(() => {
     if (hasHydratedPresetFromUrlRef.current) {
@@ -317,14 +351,36 @@ export function ScenarioLabPage() {
     const modelIds = modelIdsFromRun.length > 0 ? modelIdsFromRun : modelIdsFromPreset
     const dataVersion = latestAttribution?.data_version ?? scenarioLabBaseDataVersion
 
+    // Defensive: the save button is disabled when no attribution is available, so this branch
+    // should be unreachable under normal flow. Kept to preserve the existing save-failure UX.
     if (modelIds.length === 0) {
-      setSaveStatus(t('states.error.scenarioModelIdsUnavailable'))
       return
     }
 
+    const scenarioId = currentScenarioId ?? globalThis.crypto.randomUUID()
+    // run_id: prefer the attribution-provided run_id (deduped by `extractAttribution`) when
+    // present; fall back to a composed `${scenario_id}:${stored_at}` so saved records remain
+    // self-identifying even in the pre-bridge mock flow where attribution run_ids are
+    // session-scoped rather than globally unique.
+    const runId = latestAttribution?.run_id ?? `${scenarioId}:${new Date().toISOString()}`
+    const runSavedAt = latestAttribution?.timestamp ?? new Date().toISOString()
+    const runResults: PersistedRunResults | undefined = sourceState.results
+      ? {
+          headline_metrics: sourceState.results.headline_metrics,
+          charts_by_tab: sourceState.results.charts_by_tab,
+        }
+      : undefined
+    const runInterpretation: PersistedScenarioInterpretation | undefined = sourceState.results
+      ? (sourceState.results.interpretation as PersistedScenarioInterpretation)
+      : undefined
+    const runAttribution =
+      latestSuccessfulAttributionRef.current.length > 0
+        ? latestSuccessfulAttributionRef.current
+        : undefined
+
     try {
       const record = saveScenario({
-        scenario_id: currentScenarioId ?? globalThis.crypto.randomUUID(),
+        scenario_id: scenarioId,
         scenario_name: scenarioName,
         scenario_type: scenarioType,
         description: scenarioDescription,
@@ -335,6 +391,11 @@ export function ScenarioLabPage() {
         created_at: '',
         updated_at: '',
         created_by: '',
+        run_id: runId,
+        run_saved_at: runSavedAt,
+        run_results: runResults,
+        run_interpretation: runInterpretation,
+        run_attribution: runAttribution,
       })
       const timestamp = new Intl.DateTimeFormat(i18n.resolvedLanguage ?? 'en', {
         hour: '2-digit',
@@ -346,6 +407,80 @@ export function ScenarioLabPage() {
       setSaveStatus(t('states.success.savedToLocalSessionAt', { timestamp }))
     } catch {
       setSaveStatus(t('states.error.scenarioSaveFailed'))
+    }
+  }
+
+  function handleSaveIoSectorShock(
+    result: ScenarioLabIoShockResult,
+    ioWorkspace: ScenarioLabIoAnalyticsWorkspace,
+  ) {
+    const nowIso = new Date().toISOString()
+    const scenarioId = globalThis.crypto.randomUUID()
+    const title = t('scenarioLab.ioShock.savedTitle', {
+      bucket: t(`scenarioLab.ioShock.buckets.${result.request.demand_bucket}`),
+      amount: result.totals.input_shock,
+      currency: t(`scenarioLab.ioShock.currencies.${result.totals.input_currency}`),
+    })
+    const ioRun: PersistedIoSectorShockRun = {
+      ...result,
+      model_type: 'io_sector_shock',
+      title,
+      data_vintage: ioWorkspace.data_vintage,
+      source_artifact: ioWorkspace.source_artifact,
+      saved_at: nowIso,
+    }
+
+    try {
+      const record = saveScenario({
+        scenario_id: scenarioId,
+        scenario_name: title,
+        scenario_type: 'alternative',
+        description: t('scenarioLab.ioShock.savedDescription'),
+        tags: ['io', 'sector'],
+        assumptions: [
+          {
+            key: 'io_demand_bucket',
+            label: t('scenarioLab.ioShock.demandBucket'),
+            value: result.request.demand_bucket,
+            unit: 'category',
+            category: 'trade',
+            technical_variable: null,
+          },
+          {
+            key: 'io_shock_amount',
+            label: t('scenarioLab.ioShock.amount'),
+            value: result.request.amount,
+            unit: result.request.currency,
+            category: 'trade',
+            technical_variable: null,
+          },
+          {
+            key: 'io_distribution',
+            label: t('scenarioLab.ioShock.distribution'),
+            value: result.request.distribution,
+            unit: 'mode',
+            category: 'trade',
+            technical_variable: null,
+          },
+        ],
+        model_ids: ['io-sector-shock'],
+        data_version: ioWorkspace.data_vintage,
+        created_at: '',
+        updated_at: '',
+        created_by: '',
+        run_id: `io-sector-shock:${scenarioId}:${nowIso}`,
+        run_saved_at: nowIso,
+        io_sector_shock: ioRun,
+      })
+      const timestamp = new Intl.DateTimeFormat(i18n.resolvedLanguage ?? 'en', {
+        hour: '2-digit',
+        minute: '2-digit',
+        day: '2-digit',
+        month: 'short',
+      }).format(new Date(record.stored_at))
+      setIoSaveStatus(t('states.success.savedToLocalSessionAt', { timestamp }))
+    } catch {
+      setIoSaveStatus(t('states.error.scenarioSaveFailed'))
     }
   }
 
@@ -361,7 +496,48 @@ export function ScenarioLabPage() {
     setScenarioDescription(record.description)
     setScenarioTags(record.tags)
     setCurrentScenarioId(record.scenario_id)
-    setAssumptionValues(toAssumptionValues(workspace, record.assumptions))
+    const restoredAssumptions = toAssumptionValues(workspace, record.assumptions)
+    setAssumptionValues(restoredAssumptions)
+    // Sync last-run baseline so hasPendingEdits stays false on load (user didn't edit anything).
+    setLastRunAssumptions(restoredAssumptions)
+
+    if (record.run_results) {
+      const persistedInterpretation =
+        record.run_interpretation ?? sourceState.results?.interpretation ?? fallbackResults.interpretation
+      const restoredBundle: ScenarioLabResultsBundle = {
+        headline_metrics: record.run_results.headline_metrics,
+        charts_by_tab: record.run_results.charts_by_tab,
+        interpretation: persistedInterpretation,
+      }
+      latestSuccessfulAttributionRef.current = record.run_attribution ?? extractAttribution(restoredBundle)
+      // Cancel any in-flight run so it cannot overwrite the restored snapshot.
+      activeRunIdRef.current += 1
+      setSourceState((prev) => ({
+        ...prev,
+        status: 'ready',
+        error: null,
+        workspace: prev.workspace ?? scenarioLabWorkspaceMock,
+        results: restoredBundle,
+      }))
+      setSaveStatus(
+        t('states.success.savedScenarioLoadedWithResults', { scenarioName: record.scenario_name }),
+      )
+      return
+    }
+
+    // No persisted run snapshot — put the page in a true "no run yet" state so Save
+    // disables until the user reruns. Without this, the previous scenario's results
+    // and attribution would remain live and could be persisted alongside the newly
+    // loaded assumptions (silent corruption; ANCHOR-3).
+    activeRunIdRef.current += 1
+    latestSuccessfulAttributionRef.current = []
+    setSourceState((prev) => ({
+      ...prev,
+      status: 'ready',
+      error: null,
+      workspace: prev.workspace ?? scenarioLabWorkspaceMock,
+      results: null,
+    }))
     setSaveStatus(t('states.success.savedScenarioLoaded', { scenarioName: record.scenario_name }))
   }
 
@@ -396,6 +572,12 @@ export function ScenarioLabPage() {
     void runScenario(latestRunParamsRef.current)
   }
 
+  async function handleRetryIoAnalytics() {
+    setIoAnalyticsState(getInitialScenarioLabIoAnalyticsState())
+    const nextState = await loadScenarioLabIoAnalyticsState()
+    setIoAnalyticsState(nextState)
+  }
+
   const hasReadyRun = sourceState.status === 'ready' || sourceState.results !== null
   const hasPendingEdits =
     hasReadyRun &&
@@ -403,6 +585,22 @@ export function ScenarioLabPage() {
     !assumptionsEqual(assumptionValues, lastRunAssumptions)
 
   const currentAttribution = extractAttribution(currentResults)
+  // Save is gated on a successful run producing attribution. Derived from rendered state
+  // (not latestSuccessfulAttributionRef) so React can reconcile the disabled attribute
+  // without ref-during-render warnings.
+  const successfulRunAttribution = sourceState.results ? extractAttribution(sourceState.results) : []
+  // Save is gated on (a) a successful run producing attribution AND (b) no pending edits since
+  // that run. Gate (b) prevents the silent-drift failure where a user runs, edits an assumption,
+  // and clicks Save — which would otherwise persist the prior run's results alongside the newly
+  // edited assumptions, producing a record that falsely claims those assumptions produced those
+  // results.
+  const canSaveScenario = successfulRunAttribution.length > 0 && !hasPendingEdits
+  const saveDisabledReason =
+    successfulRunAttribution.length === 0
+      ? t('states.error.scenarioModelIdsUnavailable')
+      : hasPendingEdits
+        ? t('states.error.scenarioSaveStaleEdits')
+        : null
   const modelIdsForHeader =
     currentAttribution.length > 0
       ? currentAttribution.map((entry) => entry.model_id)
@@ -413,6 +611,68 @@ export function ScenarioLabPage() {
   )
   const latestAttribution = pickLatestAttribution(currentAttribution)
   const dataVintage = latestAttribution?.data_version ?? scenarioLabBaseDataVersion
+  const contextModelKeyByTab: Record<ScenarioLabModelTab, string> = {
+    macro_qpm: 'qpm',
+    io_sector_shock: 'io',
+    pe_trade_shock: 'pe',
+    cge_reform_shock: 'cge',
+    fpp_fiscal_path: 'fpp',
+    saved_runs: 'savedRuns',
+    synthesis_preview: 'synthesis',
+  }
+  const contextRunNameKeyByTab: Record<ScenarioLabModelTab, string> = {
+    macro_qpm: 'scenarioLab.modelTabs.macroQpm',
+    io_sector_shock: 'scenarioLab.modelTabs.ioSectorShock',
+    pe_trade_shock: 'scenarioLab.modelTabs.peTradeShock',
+    cge_reform_shock: 'scenarioLab.modelTabs.cgeReformShock',
+    fpp_fiscal_path: 'scenarioLab.modelTabs.fppFiscalPath',
+    saved_runs: 'scenarioLab.modelTabs.savedRuns',
+    synthesis_preview: 'scenarioLab.modelTabs.synthesisPreview',
+  }
+  const activeContext =
+    activeModelTab === 'io_sector_shock'
+      ? {
+          lane: t('scenarioLab.context.lane.sectorLinkage'),
+          model: t('scenarioLab.context.model.io'),
+          runName: t('scenarioLab.ioShock.title'),
+          dataVintage: ioAnalyticsState.workspace?.data_vintage ?? dataVintage,
+          saveState: ioSaveStatus
+            ? t('scenarioLab.context.saveState.saved')
+            : t('scenarioLab.context.saveState.unsaved'),
+          stateLabels: ['liveBridgeJson', 'sourceVintage'] satisfies TrustStateLabelId[],
+        }
+      : activeModelTab === 'macro_qpm'
+        ? {
+            lane: t('scenarioLab.context.lane.macroScenario'),
+            model: t('scenarioLab.context.model.qpm'),
+            runName: scenarioName,
+            dataVintage,
+            saveState:
+              currentScenarioId && !hasPendingEdits
+                ? t('scenarioLab.context.saveState.saved')
+                : t('scenarioLab.context.saveState.unsaved'),
+            stateLabels: [
+              sourceState.mode === 'live' ? 'liveBridgeJson' : 'mockFixture',
+              currentScenarioId && !hasPendingEdits ? 'localBrowserDraft' : 'artifactExport',
+            ] satisfies TrustStateLabelId[],
+          }
+        : activeModelTab === 'saved_runs'
+          ? {
+              lane: t('scenarioLab.context.lane.macroScenario'),
+              model: t('scenarioLab.context.model.savedRuns'),
+              runName: t(contextRunNameKeyByTab[activeModelTab]),
+              dataVintage,
+              saveState: t('scenarioLab.context.saveState.unsaved'),
+              stateLabels: ['localBrowserDraft'] satisfies TrustStateLabelId[],
+            }
+        : {
+            lane: t('scenarioLab.context.lane.macroScenario'),
+            model: t(`scenarioLab.context.model.${contextModelKeyByTab[activeModelTab]}`),
+            runName: t(contextRunNameKeyByTab[activeModelTab]),
+            dataVintage,
+            saveState: t('scenarioLab.context.saveState.unsaved'),
+            stateLabels: ['planned'] satisfies TrustStateLabelId[],
+          }
   const runLifecycleStatusKey =
     sourceState.status === 'loading'
       ? 'loading'
@@ -447,75 +707,118 @@ export function ScenarioLabPage() {
         meta={pageHeaderMeta}
       />
 
-      <div className="scenario-lab-grid lab-grid">
-        <AssumptionsPanel
-          assumptions={workspace.assumptions}
-          values={assumptionValues}
-          presets={workspace.presets}
-          selectedPresetId={selectedPresetId}
-          scenarioName={scenarioName}
-          scenarioType={scenarioType}
-          scenarioDescription={scenarioDescription}
-          scenarioTags={scenarioTags}
-          availableScenarioTags={SCENARIO_TAG_OPTIONS}
-          onPresetChange={handlePresetChange}
-          onScenarioNameChange={handleScenarioNameChange}
-          onScenarioTypeChange={handleScenarioTypeChange}
-          onScenarioDescriptionChange={handleScenarioDescriptionChange}
-          onScenarioTagToggle={handleScenarioTagToggle}
-          onAssumptionChange={handleAssumptionChange}
-          onRunScenario={handleRunScenario}
-          isRunPending={sourceState.status === 'loading'}
-          onSaveScenario={handleSaveScenario}
-          savedScenarios={savedScenarios}
-          onLoadScenario={handleLoadSavedScenario}
-          onDeleteScenario={handleDeleteSavedScenario}
-          saveStatus={saveStatus}
-        />
+      <ScenarioLabModelTabs activeTab={activeModelTab} onTabChange={setActiveModelTab} />
 
-        <div className="scenario-panel-stack scenario-panel-stack--results">
-          {sourceState.status === 'loading' ? (
-            <p className="scenario-run-state scenario-run-state--loading" role="status" aria-live="polite">
-              {t('states.loading.scenarioLabRun')}
-            </p>
-          ) : null}
+      <AnalyticalContextStrip
+        label={t('scenarioLab.context.label')}
+        lane={activeContext.lane}
+        model={activeContext.model}
+        runName={activeContext.runName}
+        dataVintage={`${t('scenarioLab.context.dataVintage')} ${activeContext.dataVintage}`}
+        saveState={activeContext.saveState}
+        stateLabels={activeContext.stateLabels.map((labelId) => (
+          <TrustStateLabel key={labelId} id={labelId} tone={labelId === 'planned' || labelId === 'localBrowserDraft' ? 'warn' : 'neutral'} />
+        ))}
+      />
 
-          {sourceState.status === 'error' ? (
-            <div className="scenario-run-state scenario-run-state--error" role="alert">
-              <p>{sourceState.error ?? t('states.error.scenarioRunFailed')}</p>
-              <button type="button" className="ui-secondary-action" onClick={handleRetryScenarioRun}>
-                {t('buttons.retryRun')}
-              </button>
-            </div>
-          ) : null}
+      {activeModelTab === 'macro_qpm' ? (
+        <div
+          className="scenario-lab-grid lab-grid"
+          id="scenario-model-tabpanel-macro_qpm"
+          role="tabpanel"
+          aria-labelledby="scenario-model-tab-macro_qpm"
+        >
+          <AssumptionsPanel
+            assumptions={workspace.assumptions}
+            values={assumptionValues}
+            presets={workspace.presets}
+            selectedPresetId={selectedPresetId}
+            scenarioName={scenarioName}
+            scenarioType={scenarioType}
+            scenarioDescription={scenarioDescription}
+            scenarioTags={scenarioTags}
+            availableScenarioTags={SCENARIO_TAG_OPTIONS}
+            onPresetChange={handlePresetChange}
+            onScenarioNameChange={handleScenarioNameChange}
+            onScenarioTypeChange={handleScenarioTypeChange}
+            onScenarioDescriptionChange={handleScenarioDescriptionChange}
+            onScenarioTagToggle={handleScenarioTagToggle}
+            onAssumptionChange={handleAssumptionChange}
+            onRunScenario={handleRunScenario}
+            isRunPending={sourceState.status === 'loading'}
+            onSaveScenario={handleSaveScenario}
+            canSaveScenario={canSaveScenario}
+            saveDisabledReason={saveDisabledReason}
+            savedScenarios={savedScenarios}
+            onLoadScenario={handleLoadSavedScenario}
+            onDeleteScenario={handleDeleteSavedScenario}
+            saveStatus={saveStatus}
+          />
 
-          {hasPendingEdits ? (
-            <p
-              className="scenario-run-state scenario-run-state--stale stale-banner"
-              role="status"
-              aria-live="polite"
-            >
-              {t('states.stale.scenarioResults')}
-            </p>
-          ) : null}
+          <div className="scenario-panel-stack scenario-panel-stack--results">
+            {sourceState.status === 'loading' ? (
+              <p className="scenario-run-state scenario-run-state--loading" role="status" aria-live="polite">
+                {t('states.loading.scenarioLabRun')}
+              </p>
+            ) : null}
+
+            {sourceState.status === 'error' ? (
+              <div className="scenario-run-state scenario-run-state--error" role="alert">
+                <p>{sourceState.error ?? t('states.error.scenarioRunFailed')}</p>
+                <button type="button" className="ui-secondary-action" onClick={handleRetryScenarioRun}>
+                  {t('buttons.retryRun')}
+                </button>
+              </div>
+            ) : null}
+
+            {hasPendingEdits ? (
+              <p
+                className="scenario-run-state scenario-run-state--stale stale-banner"
+                role="status"
+                aria-live="polite"
+              >
+                {t('states.stale.scenarioResults')}
+              </p>
+            ) : null}
+
+            {hasReadyRun ? (
+              <ResultsPanel activeTab={activeTab} onTabChange={setActiveTab} results={currentResults} />
+            ) : (
+              <section className="scenario-panel scenario-panel--results">
+                <p className="empty-state">{t('states.empty.scenarioRunToView')}</p>
+              </section>
+            )}
+          </div>
 
           {hasReadyRun ? (
-            <ResultsPanel activeTab={activeTab} onTabChange={setActiveTab} results={currentResults} />
+            <InterpretationPanel interpretation={currentResults.interpretation} />
           ) : (
-            <section className="scenario-panel scenario-panel--results">
-              <p className="empty-state">{t('states.empty.scenarioRunToView')}</p>
+            <section className="scenario-panel scenario-panel--interpretation">
+              <p className="empty-state">{t('states.empty.scenarioInterpretationAfterRun')}</p>
             </section>
           )}
         </div>
-
-        {hasReadyRun ? (
-          <InterpretationPanel interpretation={currentResults.interpretation} />
-        ) : (
-          <section className="scenario-panel scenario-panel--interpretation">
-            <p className="empty-state">{t('states.empty.scenarioInterpretationAfterRun')}</p>
-          </section>
-        )}
-      </div>
+      ) : activeModelTab === 'io_sector_shock' ? (
+        <IoSectorShockPanel
+          state={ioAnalyticsState}
+          onRetry={() => {
+            void handleRetryIoAnalytics()
+          }}
+          onSaveRun={handleSaveIoSectorShock}
+          saveStatus={ioSaveStatus}
+        />
+      ) : activeModelTab === 'saved_runs' ? (
+        <ScenarioLabSavedRunsPanel
+          savedScenarios={savedScenarios}
+          onLoadScenario={(scenarioId) => {
+            handleLoadSavedScenario(scenarioId)
+            setActiveModelTab('macro_qpm')
+          }}
+          onDeleteScenario={handleDeleteSavedScenario}
+        />
+      ) : (
+        <ScenarioLabTabShell tab={activeModelTab} savedRunCount={savedScenarios.length} />
+      )}
     </PageContainer>
   )
 }

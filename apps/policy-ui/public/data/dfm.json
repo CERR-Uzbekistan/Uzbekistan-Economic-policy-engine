@@ -1,0 +1,683 @@
+{
+  "attribution": {
+    "model_id": "DFM",
+    "model_name": "Dynamic Factor Model - GDP Nowcast (Uzbekistan)",
+    "module": "dfm_nowcast",
+    "version": "0.1.0",
+    "run_id": "dfm-nightly-2026-04-22",
+    "data_version": "2026Q1",
+    "timestamp": "2026-04-22T11:58:03Z"
+  },
+  "nowcast": {
+    "last_observed_date": "2025-12-01",
+    "current_quarter": {
+      "period": "2026Q1",
+      "quarter_start_date": "2026-01-01",
+      "gdp_growth_yoy_pct": 7.0078,
+      "gdp_growth_qoq_pct": 1.4398,
+      "gdp_level_idx": 287053.958,
+      "horizon_quarters": 1,
+      "uncertainty": {
+        "methodology_label": "Out-of-sample RMSE fan chart, sigma = 0.45 pp * sqrt(h), h=1",
+        "is_illustrative": false,
+        "bands": [
+          {
+            "confidence_level": 0.5,
+            "lower_pct": 6.7045,
+            "upper_pct": 7.3111
+          },
+          {
+            "confidence_level": 0.7,
+            "lower_pct": 6.5416,
+            "upper_pct": 7.474
+          },
+          {
+            "confidence_level": 0.9,
+            "lower_pct": 6.2676,
+            "upper_pct": 7.748
+          }
+        ]
+      }
+    },
+    "forecast_horizon": [],
+    "history": [
+      {
+        "period": "2017Q1",
+        "quarter_start_date": "2017-01-01",
+        "gdp_growth_yoy_pct": null,
+        "gdp_growth_qoq_pct": null,
+        "gdp_level_idx": 166640.771
+      },
+      {
+        "period": "2017Q2",
+        "quarter_start_date": "2017-04-01",
+        "gdp_growth_yoy_pct": null,
+        "gdp_growth_qoq_pct": 2.9694,
+        "gdp_level_idx": 171663.284
+      },
+      {
+        "period": "2017Q3",
+        "quarter_start_date": "2017-07-01",
+        "gdp_growth_yoy_pct": null,
+        "gdp_growth_qoq_pct": 2.2398,
+        "gdp_level_idx": 175551.476
+      },
+      {
+        "period": "2017Q4",
+        "quarter_start_date": "2017-10-01",
+        "gdp_growth_yoy_pct": null,
+        "gdp_growth_qoq_pct": 1.7173,
+        "gdp_level_idx": 178592.572
+      },
+      {
+        "period": "2018Q1",
+        "quarter_start_date": "2018-01-01",
+        "gdp_growth_yoy_pct": 10.2467,
+        "gdp_growth_qoq_pct": 2.8283,
+        "gdp_level_idx": 183715.989
+      },
+      {
+        "period": "2018Q2",
+        "quarter_start_date": "2018-04-01",
+        "gdp_growth_yoy_pct": 5.7654,
+        "gdp_growth_qoq_pct": -1.18,
+        "gdp_level_idx": 181560.33
+      },
+      {
+        "period": "2018Q3",
+        "quarter_start_date": "2018-07-01",
+        "gdp_growth_yoy_pct": 5.5839,
+        "gdp_growth_qoq_pct": 2.0681,
+        "gdp_level_idx": 185354.087
+      },
+      {
+        "period": "2018Q4",
+        "quarter_start_date": "2018-10-01",
+        "gdp_growth_yoy_pct": 3.8566,
+        "gdp_growth_qoq_pct": 0.0681,
+        "gdp_level_idx": 185480.176
+      },
+      {
+        "period": "2019Q1",
+        "quarter_start_date": "2019-01-01",
+        "gdp_growth_yoy_pct": 3.4682,
+        "gdp_growth_qoq_pct": 2.4536,
+        "gdp_level_idx": 190087.659
+      },
+      {
+        "period": "2019Q2",
+        "quarter_start_date": "2019-04-01",
+        "gdp_growth_yoy_pct": 7.2763,
+        "gdp_growth_qoq_pct": 2.4338,
+        "gdp_level_idx": 194771.159
+      },
+      {
+        "period": "2019Q3",
+        "quarter_start_date": "2019-07-01",
+        "gdp_growth_yoy_pct": 5.738,
+        "gdp_growth_qoq_pct": 0.6238,
+        "gdp_level_idx": 195989.615
+      },
+      {
+        "period": "2019Q4",
+        "quarter_start_date": "2019-10-01",
+        "gdp_growth_yoy_pct": 5.1734,
+        "gdp_growth_qoq_pct": -0.4671,
+        "gdp_level_idx": 195075.783
+      },
+      {
+        "period": "2020Q1",
+        "quarter_start_date": "2020-01-01",
+        "gdp_growth_yoy_pct": 3.2132,
+        "gdp_growth_qoq_pct": 0.5725,
+        "gdp_level_idx": 196195.576
+      },
+      {
+        "period": "2020Q2",
+        "quarter_start_date": "2020-04-01",
+        "gdp_growth_yoy_pct": 0.3915,
+        "gdp_growth_qoq_pct": -0.3376,
+        "gdp_level_idx": 195533.74
+      },
+      {
+        "period": "2020Q3",
+        "quarter_start_date": "2020-07-01",
+        "gdp_growth_yoy_pct": 0.6051,
+        "gdp_growth_qoq_pct": 0.8361,
+        "gdp_level_idx": 197175.457
+      },
+      {
+        "period": "2020Q4",
+        "quarter_start_date": "2020-10-01",
+        "gdp_growth_yoy_pct": 5.6587,
+        "gdp_growth_qoq_pct": 4.4335,
+        "gdp_level_idx": 206114.562
+      },
+      {
+        "period": "2021Q1",
+        "quarter_start_date": "2021-01-01",
+        "gdp_growth_yoy_pct": 4.9798,
+        "gdp_growth_qoq_pct": -0.0722,
+        "gdp_level_idx": 205965.635
+      },
+      {
+        "period": "2021Q2",
+        "quarter_start_date": "2021-04-01",
+        "gdp_growth_yoy_pct": 9.8421,
+        "gdp_growth_qoq_pct": 4.1895,
+        "gdp_level_idx": 214778.403
+      },
+      {
+        "period": "2021Q3",
+        "quarter_start_date": "2021-07-01",
+        "gdp_growth_yoy_pct": 9.4462,
+        "gdp_growth_qoq_pct": 0.4751,
+        "gdp_level_idx": 215801.021
+      },
+      {
+        "period": "2021Q4",
+        "quarter_start_date": "2021-10-01",
+        "gdp_growth_yoy_pct": 5.3136,
+        "gdp_growth_qoq_pct": 0.5848,
+        "gdp_level_idx": 217066.642
+      },
+      {
+        "period": "2022Q1",
+        "quarter_start_date": "2022-01-01",
+        "gdp_growth_yoy_pct": 8.9464,
+        "gdp_growth_qoq_pct": 3.3189,
+        "gdp_level_idx": 224392.12
+      },
+      {
+        "period": "2022Q2",
+        "quarter_start_date": "2022-04-01",
+        "gdp_growth_yoy_pct": 2.8269,
+        "gdp_growth_qoq_pct": -1.5909,
+        "gdp_level_idx": 220849.954
+      },
+      {
+        "period": "2022Q3",
+        "quarter_start_date": "2022-07-01",
+        "gdp_growth_yoy_pct": 7.4648,
+        "gdp_growth_qoq_pct": 4.8863,
+        "gdp_level_idx": 231910.121
+      },
+      {
+        "period": "2022Q4",
+        "quarter_start_date": "2022-10-01",
+        "gdp_growth_yoy_pct": 7.2185,
+        "gdp_growth_qoq_pct": 0.3554,
+        "gdp_level_idx": 232735.653
+      },
+      {
+        "period": "2023Q1",
+        "quarter_start_date": "2023-01-01",
+        "gdp_growth_yoy_pct": 4.5334,
+        "gdp_growth_qoq_pct": 0.7828,
+        "gdp_level_idx": 234564.685
+      },
+      {
+        "period": "2023Q2",
+        "quarter_start_date": "2023-04-01",
+        "gdp_growth_yoy_pct": 10.1938,
+        "gdp_growth_qoq_pct": 3.6822,
+        "gdp_level_idx": 243362.869
+      },
+      {
+        "period": "2023Q3",
+        "quarter_start_date": "2023-07-01",
+        "gdp_growth_yoy_pct": 3.2648,
+        "gdp_growth_qoq_pct": -1.6075,
+        "gdp_level_idx": 239481.553
+      },
+      {
+        "period": "2023Q4",
+        "quarter_start_date": "2023-10-01",
+        "gdp_growth_yoy_pct": 10.0665,
+        "gdp_growth_qoq_pct": 6.7335,
+        "gdp_level_idx": 256163.918
+      },
+      {
+        "period": "2024Q1",
+        "quarter_start_date": "2024-01-01",
+        "gdp_growth_yoy_pct": 8.5113,
+        "gdp_growth_qoq_pct": -0.64,
+        "gdp_level_idx": 254529.148
+      },
+      {
+        "period": "2024Q2",
+        "quarter_start_date": "2024-04-01",
+        "gdp_growth_yoy_pct": 6.6449,
+        "gdp_growth_qoq_pct": 1.9472,
+        "gdp_level_idx": 259533.988
+      },
+      {
+        "period": "2024Q3",
+        "quarter_start_date": "2024-07-01",
+        "gdp_growth_yoy_pct": 10.2295,
+        "gdp_growth_qoq_pct": 1.6982,
+        "gdp_level_idx": 263979.327
+      },
+      {
+        "period": "2024Q4",
+        "quarter_start_date": "2024-10-01",
+        "gdp_growth_yoy_pct": 1.6241,
+        "gdp_growth_qoq_pct": -1.3938,
+        "gdp_level_idx": 260324.322
+      },
+      {
+        "period": "2025Q1",
+        "quarter_start_date": "2025-01-01",
+        "gdp_growth_yoy_pct": 5.3927,
+        "gdp_growth_qoq_pct": 3.0009,
+        "gdp_level_idx": 268255.236
+      },
+      {
+        "period": "2025Q2",
+        "quarter_start_date": "2025-04-01",
+        "gdp_growth_yoy_pct": 5.3793,
+        "gdp_growth_qoq_pct": 1.9343,
+        "gdp_level_idx": 273495
+      },
+      {
+        "period": "2025Q3",
+        "quarter_start_date": "2025-07-01",
+        "gdp_growth_yoy_pct": 5.1983,
+        "gdp_growth_qoq_pct": 1.5265,
+        "gdp_level_idx": 277701.812
+      },
+      {
+        "period": "2025Q4",
+        "quarter_start_date": "2025-10-01",
+        "gdp_growth_yoy_pct": 8.7027,
+        "gdp_growth_qoq_pct": 1.8826,
+        "gdp_level_idx": 282979.52
+      }
+    ]
+  },
+  "factor": {
+    "n_factors": 1,
+    "dates": ["2017-05-01", "2017-06-01", "2017-07-01", "2017-08-01", "2017-09-01", "2017-10-01", "2017-11-01", "2017-12-01", "2018-01-01", "2018-02-01", "2018-03-01", "2018-04-01", "2018-05-01", "2018-06-01", "2018-07-01", "2018-08-01", "2018-09-01", "2018-10-01", "2018-11-01", "2018-12-01", "2019-01-01", "2019-02-01", "2019-03-01", "2019-04-01", "2019-05-01", "2019-06-01", "2019-07-01", "2019-08-01", "2019-09-01", "2019-10-01", "2019-11-01", "2019-12-01", "2020-01-01", "2020-02-01", "2020-03-01", "2020-04-01", "2020-05-01", "2020-06-01", "2020-07-01", "2020-08-01", "2020-09-01", "2020-10-01", "2020-11-01", "2020-12-01", "2021-01-01", "2021-02-01", "2021-03-01", "2021-04-01", "2021-05-01", "2021-06-01", "2021-07-01", "2021-08-01", "2021-09-01", "2021-10-01", "2021-11-01", "2021-12-01", "2022-01-01", "2022-02-01", "2022-03-01", "2022-04-01", "2022-05-01", "2022-06-01", "2022-07-01", "2022-08-01", "2022-09-01", "2022-10-01", "2022-11-01", "2022-12-01", "2023-01-01", "2023-02-01", "2023-03-01", "2023-04-01", "2023-05-01", "2023-06-01", "2023-07-01", "2023-08-01", "2023-09-01", "2023-10-01", "2023-11-01", "2023-12-01", "2024-01-01", "2024-02-01", "2024-03-01", "2024-04-01", "2024-05-01", "2024-06-01", "2024-07-01", "2024-08-01", "2024-09-01", "2024-10-01", "2024-11-01", "2024-12-01", "2025-01-01", "2025-02-01", "2025-03-01", "2025-04-01", "2025-05-01", "2025-06-01", "2025-07-01", "2025-08-01", "2025-09-01", "2025-10-01", "2025-11-01", "2025-12-01"],
+    "path": [-0.605423, -0.18063, 0.037476, -0.132189, -0.170919, 0.849812, -0.109316, 0.04561, 0.349218, -0.185049, 0.53455, 1.016726, -0.73139, 0.093147, 0.033955, 0.132352, 0.369036, -0.071977, 0.452629, 0.232738, -2.405382, 0.142324, 0.128489, 0.148032, 0.0447, -0.057887, -0.0342, -0.066129, -0.14749, 0.073973, 0.050314, 0.334602, -1.873829, 0.284454, -0.170197, -1.71483, 0.239637, 0.657151, -1.230193, 0.101111, 0.87511, 0.138629, 0.869608, 0.254856, -1.17417, 0.769396, 1.211697, 0.839848, 0.149462, 0.058007, 0.142088, 0.181987, -0.096117, 0.252825, -0.075267, -0.022565, -0.240776, -0.2796, -0.420718, 0.119385, -0.028262, -0.222766, 0.211949, 0.033246, -0.084534, 0.090321, 0.073643, -0.071872, -6.395384, 3.192688, 3.105222, -0.095241, 0.189042, -0.005876, 0.153348, 0.14137, -0.0572, 0.016489, 0.103361, -0.126325, 3.146591, -0.060847, -3.335884, 1.271319, -0.566193, -0.060422, -0.063399, -0.113497, -0.041921, 0.079861, -0.103239, 0.09885, -0.607988, 0.580843, 0.057584, -0.092839, -0.048637, 0.070579, 0.009139, 0.019649, 0.275903, 0.027642, -0.116661, -0.06755],
+    "converged": true,
+    "n_iter": 155,
+    "loglik": 3157.2246,
+    "last_data_date": "2025-12-01",
+    "monthly_series_start": "2017-05-01"
+  },
+  "indicators": [
+    {
+      "indicator_id": "ip_uzs",
+      "label": "Industrial Production (UZS)",
+      "category": "Production",
+      "frequency": "monthly",
+      "loading": 0.097197,
+      "contribution": 0.006886,
+      "latest_value": 2.0689
+    },
+    {
+      "indicator_id": "ip_cppy",
+      "label": "Industrial Production Index",
+      "category": "Production",
+      "frequency": "monthly",
+      "loading": 0.022277,
+      "contribution": -9e-06,
+      "latest_value": 0
+    },
+    {
+      "indicator_id": "imp",
+      "label": "Imports (USD)",
+      "category": "Trade",
+      "frequency": "monthly",
+      "loading": -0.009665,
+      "contribution": 5.6e-05,
+      "latest_value": 0.8119
+    },
+    {
+      "indicator_id": "exp",
+      "label": "Exports (USD)",
+      "category": "Trade",
+      "frequency": "monthly",
+      "loading": -0.018274,
+      "contribution": -0.004933,
+      "latest_value": 22.6904
+    },
+    {
+      "indicator_id": "imp_agg",
+      "label": "Total Imports (USD)",
+      "category": "Trade",
+      "frequency": "monthly",
+      "loading": -0.027431,
+      "contribution": -0.010441,
+      "latest_value": 2.1515
+    },
+    {
+      "indicator_id": "exp_agg",
+      "label": "Total Exports (USD)",
+      "category": "Trade",
+      "frequency": "monthly",
+      "loading": 0.089381,
+      "contribution": 0.010721,
+      "latest_value": 1.5782
+    },
+    {
+      "indicator_id": "ent_new",
+      "label": "New Enterprises",
+      "category": "Business Statistics",
+      "frequency": "monthly",
+      "loading": 0.235017,
+      "contribution": 0.02935,
+      "latest_value": 8.606
+    },
+    {
+      "indicator_id": "cpi_services",
+      "label": "CPI Services",
+      "category": "Prices",
+      "frequency": "monthly",
+      "loading": 0.000612,
+      "contribution": 3e-06,
+      "latest_value": 0.3681
+    },
+    {
+      "indicator_id": "cpi_goods",
+      "label": "CPI Goods",
+      "category": "Prices",
+      "frequency": "monthly",
+      "loading": 0.000477,
+      "contribution": 1e-06,
+      "latest_value": 0.1736
+    },
+    {
+      "indicator_id": "ppi",
+      "label": "Producer Price Index",
+      "category": "Prices",
+      "frequency": "monthly",
+      "loading": 0.000122,
+      "contribution": -1e-06,
+      "latest_value": -0.699
+    },
+    {
+      "indicator_id": "m0",
+      "label": "Money Supply M0",
+      "category": "Money, Banking & Credit",
+      "frequency": "monthly",
+      "loading": -0.088204,
+      "contribution": 0.099383,
+      "latest_value": -2.9709
+    },
+    {
+      "indicator_id": "m2",
+      "label": "Money Supply M2",
+      "category": "Money, Banking & Credit",
+      "frequency": "monthly",
+      "loading": -0.090669,
+      "contribution": -0.010114,
+      "latest_value": 2.0319
+    },
+    {
+      "indicator_id": "financial_sound",
+      "label": "NPL Ratio",
+      "category": "Money, Banking & Credit",
+      "frequency": "monthly",
+      "loading": 0.002177,
+      "contribution": -0.000428,
+      "latest_value": -14.3693
+    },
+    {
+      "indicator_id": "rate_1y",
+      "label": "Deposit Rate (1Y)",
+      "category": "Interest & Exchange Rates",
+      "frequency": "monthly",
+      "loading": -0.046746,
+      "contribution": 0.01085,
+      "latest_value": -0.6172
+    },
+    {
+      "indicator_id": "uzs_usd",
+      "label": "UZS/USD Exchange Rate",
+      "category": "Interest & Exchange Rates",
+      "frequency": "monthly",
+      "loading": -0.026443,
+      "contribution": 0.004194,
+      "latest_value": 0.3913
+    },
+    {
+      "indicator_id": "kazakh_leadind",
+      "label": "Kazakhstan Leading Index",
+      "category": "Foreign Variables",
+      "frequency": "monthly",
+      "loading": 0.001152,
+      "contribution": 3e-06,
+      "latest_value": 0.2746
+    },
+    {
+      "indicator_id": "IDA_yoy",
+      "label": "Business Activity (YoY)",
+      "category": "Business survey",
+      "frequency": "monthly",
+      "loading": 0.229651,
+      "contribution": 0.196925,
+      "latest_value": 9.4911
+    },
+    {
+      "indicator_id": "IDA_mom",
+      "label": "Business Activity (MoM)",
+      "category": "Business survey",
+      "frequency": "monthly",
+      "loading": 0.393503,
+      "contribution": 0.286796,
+      "latest_value": 7.3186
+    },
+    {
+      "indicator_id": "bank_trans",
+      "label": "Banking Transactions",
+      "category": "Transactions",
+      "frequency": "monthly",
+      "loading": 0.369669,
+      "contribution": 0.160742,
+      "latest_value": 2.3023
+    },
+    {
+      "indicator_id": "real_est",
+      "label": "Real Estate Sales",
+      "category": "Real estate",
+      "frequency": "monthly",
+      "loading": 0.405417,
+      "contribution": 0.307054,
+      "latest_value": 22.9771
+    },
+    {
+      "indicator_id": "cars",
+      "label": "Car Sales",
+      "category": "Vehicle sales",
+      "frequency": "monthly",
+      "loading": 0.054355,
+      "contribution": 0.001337,
+      "latest_value": 3.0008
+    },
+    {
+      "indicator_id": "ind_percap_grwth",
+      "label": "Industrial Production per Capita",
+      "category": "Production",
+      "frequency": "monthly",
+      "loading": 0.02295,
+      "contribution": 2.2e-05,
+      "latest_value": 0.0955
+    },
+    {
+      "indicator_id": "construction (2021p)",
+      "label": "Construction Volume",
+      "category": "construction",
+      "frequency": "monthly",
+      "loading": 0.036058,
+      "contribution": 0.002656,
+      "latest_value": 0.9288
+    },
+    {
+      "indicator_id": "const_grwth",
+      "label": "Construction Growth",
+      "category": "construction",
+      "frequency": "monthly",
+      "loading": 0.054556,
+      "contribution": -0.000427,
+      "latest_value": -0.3451
+    },
+    {
+      "indicator_id": "IND_2021p",
+      "label": "Industry Volume (2021p)",
+      "category": "Production",
+      "frequency": "monthly",
+      "loading": 0.007044,
+      "contribution": 1.7e-05,
+      "latest_value": 0.7689
+    },
+    {
+      "indicator_id": "IND_YOY",
+      "label": "Industry YoY Growth",
+      "category": "Production",
+      "frequency": "monthly",
+      "loading": 0.381273,
+      "contribution": -0.029224,
+      "latest_value": -0.5017
+    },
+    {
+      "indicator_id": "wholesale_trade_grwth",
+      "label": "Wholesale Trade Growth",
+      "category": "Trade",
+      "frequency": "monthly",
+      "loading": 0.216741,
+      "contribution": -0.022242,
+      "latest_value": -0.2663
+    },
+    {
+      "indicator_id": "retail_trade_grwth",
+      "label": "Retail Trade Growth",
+      "category": "Trade",
+      "frequency": "monthly",
+      "loading": 0.223641,
+      "contribution": 0.05417,
+      "latest_value": 0.6326
+    },
+    {
+      "indicator_id": "retail_trade_2021p",
+      "label": "Retail Trade Volume",
+      "category": "Trade",
+      "frequency": "monthly",
+      "loading": 0.208802,
+      "contribution": 0.01696,
+      "latest_value": 1.0504
+    },
+    {
+      "indicator_id": "services_grwth",
+      "label": "Services Growth",
+      "category": "Services",
+      "frequency": "monthly",
+      "loading": 0.004492,
+      "contribution": 9e-06,
+      "latest_value": 0.0872
+    },
+    {
+      "indicator_id": "bus_clim",
+      "label": "Business Climate",
+      "category": "Business survey",
+      "frequency": "monthly",
+      "loading": 0.042729,
+      "contribution": 0.028175,
+      "latest_value": 9.6241
+    },
+    {
+      "indicator_id": "bus_clim_exp",
+      "label": "Business Climate Expectations",
+      "category": "Business survey",
+      "frequency": "monthly",
+      "loading": 0.019256,
+      "contribution": 0.024886,
+      "latest_value": 17.5239
+    },
+    {
+      "indicator_id": "manf=2021",
+      "label": "Manufacturing Volume",
+      "category": "Production",
+      "frequency": "monthly",
+      "loading": 0.010205,
+      "contribution": 0.000255,
+      "latest_value": 2.5818
+    },
+    {
+      "indicator_id": "manf_YOY",
+      "label": "Manufacturing YoY Growth",
+      "category": "Production",
+      "frequency": "monthly",
+      "loading": 0.318693,
+      "contribution": 0.191213,
+      "latest_value": 5.564
+    },
+    {
+      "indicator_id": "stock_deals",
+      "label": "Stock Market Deals",
+      "category": "Stock market",
+      "frequency": "monthly",
+      "loading": 0.044576,
+      "contribution": 0.075735,
+      "latest_value": 27.4797
+    },
+    {
+      "indicator_id": "gdp",
+      "label": "GDP (Quarterly)",
+      "category": "Target variable",
+      "frequency": "quarterly",
+      "loading": 0.038639,
+      "contribution": 0.009255,
+      "latest_value": 1.8827
+    }
+  ],
+  "caveats": [
+    {
+      "caveat_id": "dfm-single-factor",
+      "severity": "info",
+      "message": "Model uses a single common factor (n_factors = 1). A richer factor structure (e.g., tradable vs non-tradable) would capture more indicator heterogeneity but was judged unnecessary at current data length.",
+      "affected_metrics": ["gdp_growth"],
+      "affected_models": ["DFM"],
+      "source": "dfm_nowcast/dfm_data.js meta.n_factors"
+    },
+    {
+      "caveat_id": "dfm-fan-chart-rmse-constant",
+      "severity": "info",
+      "message": "Fan chart uses a constant sigma_base = 0.45 pp scaled by sqrt(h). This is the pooled out-of-sample RMSE; it does not vary with the current filtered-state covariance V_last. A V_last-aware band is a future enhancement.",
+      "affected_metrics": ["gdp_growth"],
+      "affected_models": ["DFM"],
+      "source": "dfm_nowcast/index.html:899-932"
+    },
+    {
+      "caveat_id": "dfm-quarterly-aggregation",
+      "severity": "info",
+      "message": "GDP is observed quarterly but the factor is monthly; the quarterly nowcast aggregates monthly factor filtered states through the loading C[gdp_idx]. Intra-quarter revisions to monthly indicators (PR 2+ consumer may surface a 'news decomposition' view) can shift the nowcast without new quarterly data.",
+      "affected_metrics": ["gdp_growth"],
+      "affected_models": ["DFM"],
+      "source": "dfm_nowcast/index.html kalmanStep(); mcp_server/models/dfm.py run_kalman_update()"
+    },
+    {
+      "caveat_id": "dfm-statoffice-latency",
+      "severity": "warning",
+      "message": "The current nowcast quarter is defined as any quarter strictly after meta.last_data_date. Official StatOffice YoY publication typically trails by 6-10 weeks, so the current nowcast quarter is expected to be partially or fully 'before publication' and subject to subsequent revision.",
+      "affected_metrics": ["gdp_growth"],
+      "affected_models": ["DFM"],
+      "source": "Convention; dfm_nowcast/index.html renderNowcastPage()"
+    },
+    {
+      "caveat_id": "dfm-parameters-frozen-at-refit",
+      "severity": "info",
+      "message": "State-space parameters (C, A, Q, R, means, sdevs) are produced by an offline EM refit (legacy export_dfm_for_web.R, not in this repository) and are not re-estimated by this export. The nightly export regenerates the consumer JSON from those frozen parameters; a refit is a separate modelling event.",
+      "affected_metrics": ["gdp_growth"],
+      "affected_models": ["DFM"],
+      "source": "dfm_nowcast/dfm_data.js header comment"
+    }
+  ],
+  "metadata": {
+    "exported_at": "2026-04-22T11:58:03Z",
+    "source_script_sha": null,
+    "solver_version": "0.1.0",
+    "source_artifact": "dfm_nowcast/dfm_data.js",
+    "source_artifact_exported_at": "2026-04-08 10:09:12"
+  }
+}

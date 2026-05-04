@@ -43,8 +43,12 @@ function toInitialTag(
 
 export function toComparisonScenario(saved: SavedScenarioRecord): ComparisonScenario {
   const assumptions = toAssumptionState(saved.assumptions, scenarioLabWorkspaceMock.assumptions)
-  const results = buildScenarioLabResults(assumptions)
-  const values = results.headline_metrics.reduce<Record<string, number>>((acc, metric) => {
+  // Prefer persisted run results when available — they carry the governed outputs of the
+  // run that produced them (TA-6a). Fall back to re-running the mock engine only when the
+  // saved record predates TA-6a or was saved without results.
+  const headlineMetrics =
+    saved.run_results?.headline_metrics ?? buildScenarioLabResults(assumptions).headline_metrics
+  const values = headlineMetrics.reduce<Record<string, number>>((acc, metric) => {
     acc[metric.metric_id] = metric.value
     return acc
   }, {})

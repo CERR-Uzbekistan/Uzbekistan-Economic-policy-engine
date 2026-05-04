@@ -2,9 +2,9 @@ name: Validate
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, epic/replatform-execution]
   push:
-    branches: [main, epic/frontend-replatform]
+    branches: [main, epic/replatform-execution]
 
 jobs:
   html-check:

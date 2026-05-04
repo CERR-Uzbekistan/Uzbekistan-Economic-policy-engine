@@ -8,10 +8,12 @@ import {
   type IntegrationSourceCore,
 } from '../source-state.js'
 import { toModelExplorerWorkspace } from '../adapters/model-explorer.js'
+import { enrichModelExplorerWorkspaceWithIoBridge } from '../adapters/model-explorer-io-enrichment.js'
 import {
   validateRawModelExplorerPayload,
   type ModelExplorerValidationIssue,
 } from '../adapters/model-explorer-guard.js'
+import { fetchIoBridgePayload } from '../bridge/io-client.js'
 import { modelExplorerWorkspaceMock } from '../mock/model-explorer.js'
 import {
   fetchModelExplorerLiveRawPayload,
@@ -57,6 +59,17 @@ function buildErrorState(
   }
 }
 
+async function enrichWithOptionalIoBridge(
+  workspace: ModelExplorerWorkspace,
+): Promise<ModelExplorerWorkspace> {
+  try {
+    const ioPayload = await fetchIoBridgePayload()
+    return enrichModelExplorerWorkspaceWithIoBridge(workspace, ioPayload)
+  } catch {
+    return workspace
+  }
+}
+
 export function getInitialModelExplorerSourceState(): ModelExplorerSourceState {
   const mode = resolveModelExplorerDataMode()
   return {
@@ -68,7 +81,7 @@ export function getInitialModelExplorerSourceState(): ModelExplorerSourceState {
 export async function loadModelExplorerSourceState(): Promise<ModelExplorerSourceState> {
   const mode = resolveModelExplorerDataMode()
   if (mode === 'mock') {
-    return buildReadyState(mode, modelExplorerWorkspaceMock)
+    return buildReadyState(mode, await enrichWithOptionalIoBridge(modelExplorerWorkspaceMock))
   }
 
   try {
@@ -84,7 +97,7 @@ export async function loadModelExplorerSourceState(): Promise<ModelExplorerSourc
       )
     }
 
-    const workspace = toModelExplorerWorkspace(validation.value)
+    const workspace = await enrichWithOptionalIoBridge(toModelExplorerWorkspace(validation.value))
     return buildReadyState(mode, workspace, validation.issues)
   } catch (error) {
     if (error instanceof ModelExplorerTransportError) {

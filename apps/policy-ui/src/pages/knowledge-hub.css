@@ -1,0 +1,139 @@
+/* Knowledge Hub — Shot 1 alignment. Primitives copied from spec_prototype.html:1253–1324. */
+
+.hub-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: var(--space-2xl);
+}
+
+.knowledge-hub-static-banner {
+  align-items: center;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  display: flex;
+  gap: var(--space-sm);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  margin: 0;
+  padding: var(--space-sm) var(--space-md);
+}
+
+@media (max-width: 1100px) {
+  .hub-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.timeline {
+  position: relative;
+  padding-left: var(--space-lg);
+  border-left: 1px solid var(--color-border);
+}
+
+.tl-item {
+  position: relative;
+  padding: 0 0 var(--space-lg) var(--space-md);
+}
+
+.tl-item::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--space-lg) - 5px);
+  top: 0.35rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 2px solid var(--color-brand);
+}
+
+.tl-item.in-progress::before {
+  background: var(--color-warn);
+  border-color: var(--color-warn);
+}
+
+.tl-item.planned::before {
+  border-style: dashed;
+}
+
+.tl-item .tl-date {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.04em;
+}
+
+.tl-item h4 {
+  margin: 0.15rem 0 0.3rem;
+  font-size: 0.98rem;
+  font-weight: 650;
+}
+
+.tl-item p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.tl-item .meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: var(--space-xs);
+}
+
+.tl-item__source-meta,
+.brief__source-meta {
+  color: var(--color-text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  gap: var(--space-xs);
+  letter-spacing: 0.04em;
+  margin-top: var(--space-xs);
+  text-transform: uppercase;
+}
+
+.brief-list {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.brief {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+}
+
+.brief__author {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.brief h4 {
+  margin: 0.25rem 0 var(--space-xs);
+  font-size: 1rem;
+  font-weight: 650;
+}
+
+.brief p {
+  margin: 0 0 var(--space-sm);
+  font-size: 0.86rem;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+}
+
+.brief .meta {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}

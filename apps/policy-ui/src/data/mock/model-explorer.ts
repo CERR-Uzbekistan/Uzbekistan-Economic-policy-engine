@@ -1,4 +1,9 @@
 import type { ModelExplorerWorkspace } from '../../contracts/data-contract'
+import { modelCatalogEntries, modelCatalogMeta } from './model-catalog.js'
+
+const modelCatalogEntriesById = Object.fromEntries(
+  modelCatalogEntries.map((entry) => [entry.id, entry]),
+)
 
 export const modelExplorerWorkspaceMock: ModelExplorerWorkspace = {
   workspace_id: 'model-explorer-v1',
@@ -204,4 +209,6 @@ export const modelExplorerWorkspaceMock: ModelExplorerWorkspace = {
       ],
     },
   },
+  catalog_entries_by_model_id: modelCatalogEntriesById,
+  meta: modelCatalogMeta,
 }

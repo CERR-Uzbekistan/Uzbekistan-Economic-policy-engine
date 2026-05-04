@@ -1,0 +1,432 @@
+{
+  "schema_version": "overview.v1",
+  "exported_at": "2026-04-29T11:18:20Z",
+  "generated_by": "scripts/overview/export-overview.mjs",
+  "validation_status": "warning",
+  "metrics": [
+    {
+      "id": "real_gdp_growth_annual_yoy",
+      "label": "Real GDP growth, latest year",
+      "block": "growth",
+      "claim_type": "observed",
+      "unit": "percent YoY",
+      "frequency": "annual",
+      "value": 7.7,
+      "previous_value": 6.7,
+      "source_label": "Statistics Agency SIAT annual GDP data, calculated YoY",
+      "source_period": "2025",
+      "validation_status": "valid",
+      "caveats": [
+        "SIAT 582 reports annual GDP growth rates as prior-year=100 index values; Overview stores index minus 100.",
+        "previous_value 6.7 is 2024 SIAT 582 index 106.7 minus 100.",
+        "SIAT 582 metadata note: for 2024 preliminary data."
+      ],
+      "warnings": [],
+      "exported_at": "2026-04-29T11:18:20Z",
+      "top_card": false
+    },
+    {
+      "id": "real_gdp_growth_quarter_yoy",
+      "label": "Real GDP growth, latest quarter",
+      "block": "growth",
+      "claim_type": "observed",
+      "unit": "percent YoY",
+      "frequency": "quarterly",
+      "value": 8.7,
+      "previous_value": 6.8,
+      "source_label": "Statistics Agency quarterly GDP",
+      "source_period": "2026 Q1",
+      "validation_status": "valid",
+      "caveats": [
+        "Preliminary quarterly national accounts release; owner verification is still required before public export.",
+        "previous_value 6.8 is the January-March 2025 real GDP growth rate shown in the same Statistics Agency Q1 GDP release."
+      ],
+      "warnings": [],
+      "exported_at": "2026-04-29T11:18:20Z",
+      "top_card": true,
+      "top_card_order": 1
+    },
+    {
+      "id": "gdp_nowcast_current_quarter",
+      "label": "GDP nowcast, current quarter",
+      "block": "growth",
+      "claim_type": "nowcast",
+      "unit": "percent YoY",
+      "frequency": "quarterly / model update cadence",
+      "value": 6,
+      "previous_value": null,
+      "source_label": "Owner-approved static Overview fallback",
+      "source_period": "2026 Q2 nowcast",
+      "validation_status": "warning",
+      "caveats": [
+        "Not an official GDP release; model nowcast only.",
+        "Owner-approved fallback value from the current static Overview estimate path; replace with accepted DFM Q2 artifact when available."
+      ],
+      "warnings": [
+        "Static fallback nowcast is owner-approved for Overview V1 but is not an accepted DFM Q2 artifact."
+      ],
+      "exported_at": "2026-04-29T11:18:20Z",
+      "top_card": true,
+      "top_card_order": 2
+    },
+    {
+      "id": "cpi_yoy",
+      "label": "CPI inflation, YoY",
+      "block": "inflation",
+      "claim_type": "observed",
+      "unit": "percent YoY",
+      "frequency": "monthly",
+      "value": 7.1,
+      "previous_value": 7.3,
+      "source_label": "Statistics Agency CPI",
+      "source_period": "March 2026",
+      "validation_status": "valid",
+      "caveats": [
+        "Official CPI release; owner verification is still required before public export.",
+        "previous_value 7.3 is the February 2026 annual CPI rate shown in the same Statistics Agency March 2026 CPI release."
+      ],
+      "warnings": [],
+      "exported_at": "2026-04-29T11:18:20Z",
+      "top_card": true,
+      "top_card_order": 3
+    },
+    {
+      "id": "cpi_mom",
+      "label": "CPI inflation, monthly",
+      "block": "inflation",
+      "claim_type": "observed",
+      "unit": "percent MoM",
+      "frequency": "monthly",
+      "value": 0.6,
+      "previous_value": 0.6,
+      "source_label": "Statistics Agency SIAT CPI data, calculated MoM",
+      "source_period": "March 2026",
+      "validation_status": "valid",
+      "caveats": [
+        "Monthly inflation can be volatile; do not present as trend alone.",
+        "previous_value 0.6 is February 2026 SIAT 4585 aggregate index 100.6 minus 100."
+      ],
+      "warnings": [],
+      "exported_at": "2026-04-29T11:18:20Z",
+      "top_card": false
+    },
+    {
+      "id": "food_cpi_yoy",
+      "label": "Food inflation, YoY",
+      "block": "inflation",
+      "claim_type": "observed",
+      "unit": "percent YoY",
+      "frequency": "monthly",
+      "value": 5.6,
+      "previous_value": 5.9,
+      "source_label": "Statistics Agency food CPI",
+      "source_period": "March 2026",
+      "validation_status": "valid",
+      "caveats": [
+        "Category definitions must be stable before comparing over time.",
+        "previous_value 5.9 is the February 2026 annual food CPI rate shown in the same Statistics Agency March 2026 CPI release."
+      ],
+      "warnings": [],
+      "exported_at": "2026-04-29T11:18:20Z",
+      "top_card": true,
+      "top_card_order": 4
+    },
+    {
+      "id": "exports_yoy",
+      "label": "Exports growth, YoY",
+      "block": "trade",
+      "claim_type": "observed",
+      "unit": "percent YoY",
+      "frequency": "monthly or quarterly",
+      "value": -23.61,
+      "previous_value": null,
+      "source_label": "Statistics Agency SIAT trade data, calculated YoY",
+      "source_period": "January-February 2026",
+      "validation_status": "warning",
+      "caveats": [
+        "Trade values can be revised; show latest-vintage status.",
+        "YoY rate calculated from official SIAT cumulative monthly export levels: USD 3,546.808 million for January-February 2026 versus USD 4,643 million for January-February 2025."
+      ],
+      "warnings": [
+        "Owner approved calculated YoY from official observed SIAT levels; current lock still classifies this metric as observed pending later cleanup."
+      ],
+      "exported_at": "2026-04-29T11:18:20Z",
+      "top_card": true,
+      "top_card_order": 5
+    },
+    {
+      "id": "imports_yoy",
+      "label": "Imports growth, YoY",
+      "block": "trade",
+      "claim_type": "observed",
+      "unit": "percent YoY",
+      "frequency": "monthly or quarterly",
+      "value": 29.92,
+      "previous_value": null,
+      "source_label": "Statistics Agency SIAT trade data, calculated YoY",
+      "source_period": "January-February 2026",
+      "validation_status": "warning",
+      "caveats": [
+        "Trade values can be revised; show latest-vintage status.",
+        "YoY rate calculated from official SIAT cumulative monthly import levels: USD 8,058.287 million for January-February 2026 versus USD 6,202.6 million for January-February 2025."
+      ],
+      "warnings": [
+        "Owner approved calculated YoY from official observed SIAT levels; current lock still classifies this metric as observed pending later cleanup."
+      ],
+      "exported_at": "2026-04-29T11:18:20Z",
+      "top_card": true,
+      "top_card_order": 6
+    },
+    {
+      "id": "trade_balance",
+      "label": "Trade balance",
+      "block": "trade",
+      "claim_type": "observed",
+      "unit": "USD million or USD billion",
+      "frequency": "monthly or quarterly",
+      "value": -4.51,
+      "previous_value": null,
+      "source_label": "Statistics Agency SIAT trade data, calculated",
+      "source_period": "January-February 2026",
+      "validation_status": "warning",
+      "caveats": [
+        "Displayed value is in USD billion (negative = goods trade deficit); calculated from SIAT cumulative monthly goods trade levels.",
+        "Label goods trade balance if services are excluded."
+      ],
+      "warnings": [
+        "Owner approved calculated trade balance from official observed SIAT export and import levels; current lock unit remains broad pending later cleanup."
+      ],
+      "exported_at": "2026-04-29T11:18:20Z",
+      "top_card": false
+    },
+    {
+      "id": "policy_rate",
+      "label": "CBU policy rate",
+      "block": "monetary_fx",
+      "claim_type": "observed_policy_setting",
+      "unit": "percent",
+      "frequency": "event-based",
+      "value": 14,
+      "previous_value": 14,
+      "source_label": "Central Bank of Uzbekistan policy rate",
+      "source_period": "Effective 18 March 2026",
+      "validation_status": "valid",
+      "caveats": [
+        "Event-based setting; do not infer policy stance without inflation context."
+      ],
+      "warnings": [],
+      "exported_at": "2026-04-29T11:18:20Z",
+      "top_card": true,
+      "top_card_order": 7
+    },
+    {
+      "id": "usd_uzs_level",
+      "label": "USD/UZS exchange rate",
+      "block": "monetary_fx",
+      "claim_type": "observed",
+      "unit": "UZS per USD",
+      "frequency": "daily",
+      "value": 12072.96,
+      "previous_value": 12179.87,
+      "source_label": "Central Bank of Uzbekistan exchange rate",
+      "source_period": "2026-04-28",
+      "validation_status": "valid",
+      "caveats": [
+        "Official/reference rate, not transaction-weighted market average.",
+        "Latest observation: requested 2026-04-28; actual CBU date/rate 2026-04-28, 12072.96 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-03-28; actual CBU date/rate 2026-03-27 returned for requested 2026-03-28, 12179.87 UZS per USD."
+      ],
+      "warnings": [
+        "Prior-month requested date 2026-03-28 differed from actual CBU date 2026-03-27; nearest available CBU observation was used."
+      ],
+      "exported_at": "2026-04-29T11:18:20Z",
+      "top_card": true,
+      "top_card_order": 8
+    },
+    {
+      "id": "usd_uzs_mom_change",
+      "label": "USD/UZS monthly change",
+      "block": "monetary_fx",
+      "claim_type": "calculated_identity",
+      "unit": "percent MoM",
+      "frequency": "monthly from daily observations",
+      "value": -0.88,
+      "previous_value": null,
+      "source_label": "CBU exchange rate, calculated",
+      "source_period": "2026-04-28 vs 2026-03-27",
+      "validation_status": "valid",
+      "caveats": [
+        "Latest observation: requested 2026-04-28; actual CBU date/rate 2026-04-28, 12072.96 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-03-28; actual CBU date/rate 2026-03-27 returned for requested 2026-03-28, 12179.87 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-04-28; actual CBU date/rate 2025-04-28, 12957.14 UZS per USD.",
+        "Formula: ((latest - comparison) / comparison) * 100.",
+        "Rounded to 2 decimal places.",
+        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
+      ],
+      "warnings": [
+        "Prior-month requested date 2026-03-28 differed from actual CBU date 2026-03-27; nearest available CBU observation was used."
+      ],
+      "exported_at": "2026-04-29T11:18:20Z",
+      "top_card": false
+    },
+    {
+      "id": "usd_uzs_yoy_change",
+      "label": "USD/UZS annual change",
+      "block": "monetary_fx",
+      "claim_type": "calculated_identity",
+      "unit": "percent YoY",
+      "frequency": "monthly from daily observations",
+      "value": -6.82,
+      "previous_value": null,
+      "source_label": "CBU exchange rate, calculated",
+      "source_period": "2026-04-28 vs 2025-04-28",
+      "validation_status": "valid",
+      "caveats": [
+        "Latest observation: requested 2026-04-28; actual CBU date/rate 2026-04-28, 12072.96 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-03-28; actual CBU date/rate 2026-03-27 returned for requested 2026-03-28, 12179.87 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-04-28; actual CBU date/rate 2025-04-28, 12957.14 UZS per USD.",
+        "Formula: ((latest - comparison) / comparison) * 100.",
+        "Rounded to 2 decimal places.",
+        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
+      ],
+      "warnings": [],
+      "exported_at": "2026-04-29T11:18:20Z",
+      "top_card": false
+    },
+    {
+      "id": "reer_level",
+      "label": "REER level",
+      "block": "monetary_fx",
+      "claim_type": "reference",
+      "unit": "index",
+      "frequency": "monthly or quarterly",
+      "value": 110.2,
+      "previous_value": 110,
+      "source_label": "CERR, REER",
+      "source_period": "March 2026",
+      "validation_status": "warning",
+      "caveats": [
+        "Index definition: 2019=100.",
+        "Methodology note: CPI-deflated real effective exchange rate, trade-weighted basket."
+      ],
+      "warnings": [
+        "Source URL is pending; replace this owner-supplied CERR value with accepted HFI-backed source when available."
+      ],
+      "exported_at": "2026-04-29T11:18:20Z",
+      "top_card": false
+    },
+    {
+      "id": "gold_price_level",
+      "label": "Gold price",
+      "block": "gold",
+      "claim_type": "observed_market_price",
+      "unit": "USD per troy ounce",
+      "frequency": "daily or monthly",
+      "value": 4855.54,
+      "previous_value": 5019.97,
+      "source_label": "World Bank Pink Sheet gold price",
+      "source_period": "March 2026 monthly average",
+      "validation_status": "valid",
+      "caveats": [
+        "External monthly average market price; not a CERR forecast."
+      ],
+      "warnings": [],
+      "exported_at": "2026-04-29T11:18:20Z",
+      "top_card": false
+    },
+    {
+      "id": "gold_price_change",
+      "label": "Gold price change",
+      "block": "gold",
+      "claim_type": "calculated_identity",
+      "unit": "percent MoM or YoY",
+      "frequency": "monthly",
+      "value": -3.28,
+      "previous_value": null,
+      "source_label": "World Bank Pink Sheet gold price, calculated",
+      "source_period": "March 2026 vs February 2026",
+      "validation_status": "valid",
+      "caveats": [
+        "Comparison basis is MoM."
+      ],
+      "warnings": [],
+      "exported_at": "2026-04-29T11:18:20Z",
+      "top_card": false
+    },
+    {
+      "id": "gold_price_forecast",
+      "label": "Gold price forecast",
+      "block": "gold",
+      "claim_type": "reference_forecast",
+      "unit": "USD per troy ounce",
+      "frequency": "semiannual / forecast release cadence",
+      "value": 3575,
+      "previous_value": null,
+      "source_label": "World Bank Commodity Markets Outlook gold forecast",
+      "source_period": "October 2025 forecast vintage, 2026 annual forecast",
+      "validation_status": "valid",
+      "caveats": [
+        "External reference assumption, not a CERR forecast or policy recommendation.",
+        "Forecast vintage predates the March 2026 spot reading; do not read the level gap as a CERR call."
+      ],
+      "warnings": [],
+      "exported_at": "2026-04-29T11:18:20Z",
+      "top_card": false
+    }
+  ],
+  "caveats": [
+    "Source snapshot is manually accepted and exported without live crawling."
+  ],
+  "warnings": [
+    "Provisional source metrics are present; top-level validation remains warning until TO CONFIRM sources are resolved."
+  ],
+  "panel_groups": [
+    {
+      "id": "growth",
+      "title": "Growth",
+      "metric_ids": [
+        "real_gdp_growth_annual_yoy",
+        "real_gdp_growth_quarter_yoy",
+        "gdp_nowcast_current_quarter"
+      ]
+    },
+    {
+      "id": "inflation",
+      "title": "Inflation",
+      "metric_ids": [
+        "cpi_yoy",
+        "cpi_mom",
+        "food_cpi_yoy"
+      ]
+    },
+    {
+      "id": "trade",
+      "title": "Trade",
+      "metric_ids": [
+        "exports_yoy",
+        "imports_yoy",
+        "trade_balance"
+      ]
+    },
+    {
+      "id": "monetary_fx",
+      "title": "Monetary / FX",
+      "metric_ids": [
+        "policy_rate",
+        "usd_uzs_level",
+        "usd_uzs_mom_change",
+        "usd_uzs_yoy_change",
+        "reer_level"
+      ]
+    },
+    {
+      "id": "gold",
+      "title": "Gold",
+      "metric_ids": [
+        "gold_price_level",
+        "gold_price_change",
+        "gold_price_forecast"
+      ]
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import type {
   CaveatSeverity,
+  ModelCatalogEntry,
   ModelExplorerWorkspace,
   ModelRunStatus,
 } from '../../contracts/data-contract'
@@ -82,6 +83,62 @@ function toCaveatSeverity(value: string | undefined): CaveatSeverity {
   return 'warning'
 }
 
+function toCatalogStatus(status: ModelRunStatus): ModelCatalogEntry['status'] {
+  if (status === 'active') {
+    return { label: 'Active', severity: 'ok' }
+  }
+  if (status === 'paused') {
+    return { label: 'Paused', severity: 'warn' }
+  }
+  return { label: 'Staging', severity: 'warn' }
+}
+
+function toCatalogEntryFromLegacyModel(
+  model: ModelExplorerWorkspace['models'][number],
+  detail: ModelExplorerWorkspace['details_by_model_id'][string],
+): ModelCatalogEntry {
+  return {
+    id: model.model_id,
+    title: model.model_name,
+    full_title: model.model_name,
+    lifecycle_label: `${model.model_type} - ${model.status}`,
+    status: toCatalogStatus(model.status),
+    model_type: model.model_type,
+    frequency: model.frequency,
+    methodology_signature: `${model.model_type} - ${model.frequency}`,
+    description: model.summary,
+    stats: [
+      { value: String(detail.equations.length), label: 'Equations' },
+      { value: String(detail.assumptions.length), label: 'Params' },
+      { value: model.frequency.slice(0, 1).toUpperCase(), label: 'Freq.' },
+    ],
+    purpose: detail.overview,
+    equations: detail.equations.map((equation) => ({
+      id: equation.equation_id,
+      label: equation.title,
+    })),
+    parameters: detail.assumptions.map((assumption) => ({
+      symbol: assumption.assumption_id,
+      name: assumption.label,
+      value: assumption.value,
+      range: 'Not specified',
+    })),
+    caveats: detail.caveats.map((caveat, index) => ({
+      id: caveat.caveat_id,
+      number: String(index + 1).padStart(2, '0'),
+      severity: caveat.severity,
+      title: caveat.message,
+      body: caveat.implication,
+    })),
+    data_sources: detail.data_sources.map((source) => ({
+      institution: source.provider,
+      description: source.name,
+      vintage_label: source.vintage,
+    })),
+    validation_summary: ['[SME content pending]'],
+  }
+}
+
 export function toModelExplorerWorkspace(raw: RawModelExplorerPayload): ModelExplorerWorkspace {
   const fallbackGeneratedAt = new Date().toISOString()
   const generatedAt = toIsoOrFallback(raw.generatedAt, fallbackGeneratedAt)
@@ -133,11 +190,33 @@ export function toModelExplorerWorkspace(raw: RawModelExplorerPayload): ModelExp
   const defaultModelId =
     raw.defaultModelId && detailsByModelId[raw.defaultModelId] ? raw.defaultModelId : models[0]?.model_id ?? ''
 
-  return {
+  const workspace: ModelExplorerWorkspace = {
     workspace_id: raw.workspaceId ?? 'model-explorer-workspace',
     generated_at: generatedAt,
     models,
     default_model_id: defaultModelId,
     details_by_model_id: detailsByModelId,
   }
+
+  workspace.catalog_entries_by_model_id = Object.fromEntries(
+    models.map((model) => [
+      model.model_id,
+      toCatalogEntryFromLegacyModel(model, detailsByModelId[model.model_id]),
+    ]),
+  )
+  workspace.meta = {
+    models_total: models.length,
+    models_live: models.filter((model) => model.status === 'active').length,
+    last_calibration_audit_label: new Intl.DateTimeFormat('en', {
+      month: 'short',
+      year: 'numeric',
+      timeZone: 'UTC',
+    }).format(new Date(generatedAt)),
+    open_methodology_issues: models.reduce(
+      (count, model) => count + detailsByModelId[model.model_id].caveats.length,
+      0,
+    ),
+  }
+
+  return workspace
 }

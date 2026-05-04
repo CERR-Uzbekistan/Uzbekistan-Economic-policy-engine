@@ -81,6 +81,33 @@ describe('scenario lab adapter', () => {
     assert.equal(adapted.results.headline_metrics[0].direction, 'down')
     assert.equal(adapted.results.charts_by_tab.headline_impact.chart_type, 'bar')
     assert.equal(adapted.results.interpretation.what_changed[0], 'Growth slowed.')
+    assert.equal(adapted.results.interpretation.metadata?.generation_mode, 'template')
+  })
+
+  it('maps raw governance fields into typed interpretation metadata only', () => {
+    const adapted = toScenarioLabData({
+      run: {
+        interpretation: {
+          whatChanged: ['Reviewed interpretation.'],
+          whyItChanged: ['Reviewed driver.'],
+          keyRisks: ['Reviewed risk.'],
+          policyImplications: ['Reviewed implication.'],
+          suggestedNextScenarios: ['Reviewed next.'],
+          generationMode: 'reviewed',
+          reviewerName: 'M. Usmanov',
+          reviewedAt: '2026-04-20T09:15:00+05:00',
+        },
+      },
+    })
+    const interpretation = adapted.results.interpretation as typeof adapted.results.interpretation &
+      Record<string, unknown>
+
+    assert.equal(adapted.results.interpretation.metadata?.generation_mode, 'reviewed')
+    assert.equal(adapted.results.interpretation.metadata?.reviewer_name, 'M. Usmanov')
+    assert.equal(adapted.results.interpretation.metadata?.reviewed_at, '2026-04-20T09:15:00+05:00')
+    assert.equal('generation_mode' in interpretation, false)
+    assert.equal('reviewer_name' in interpretation, false)
+    assert.equal('reviewed_at' in interpretation, false)
   })
 
   it('falls back safely when payload is degraded or partial', () => {

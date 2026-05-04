@@ -1,9 +1,20 @@
+import { useTranslation } from 'react-i18next'
 import type {
   ChartSpec,
   HeadlineMetric,
   ScenarioLabResultTab,
   ScenarioLabResultsBundle,
 } from '../../contracts/data-contract'
+import {
+  formatAxisUnitLabel,
+  formatNumber,
+  formatQuarterLabel,
+  formatSignedNumber,
+  formatUnavailable,
+  formatValueWithUnit,
+  getDefaultFractionDigitsForUnit,
+} from '../../lib/format/locale-format.js'
+import { ImpulseResponseChart } from './ImpulseResponseChart.js'
 
 type ResultsPanelProps = {
   activeTab: ScenarioLabResultTab
@@ -11,85 +22,78 @@ type ResultsPanelProps = {
   results: ScenarioLabResultsBundle
 }
 
-const TAB_LABELS: Record<ScenarioLabResultTab, string> = {
-  headline_impact: 'Headline impact',
-  macro_path: 'Macro path',
-  external_balance: 'External balance',
-  fiscal_effects: 'Fiscal effects',
+const TAB_LABEL_KEYS: Record<ScenarioLabResultTab, string> = {
+  headline_impact: 'scenarioLab.results.tabs.headlineImpact',
+  macro_path: 'scenarioLab.results.tabs.macroPath',
+  external_balance: 'scenarioLab.results.tabs.externalBalance',
+  fiscal_effects: 'scenarioLab.results.tabs.fiscalEffects',
+}
+
+const TAB_EXPLANATION_KEYS: Record<ScenarioLabResultTab, string> = {
+  headline_impact: 'scenarioLab.results.explanations.headlineImpact',
+  macro_path: 'scenarioLab.results.explanations.macroPath',
+  external_balance: 'scenarioLab.results.explanations.externalBalance',
+  fiscal_effects: 'scenarioLab.results.explanations.fiscalEffects',
+}
+
+const CLAIM_LABEL_KEYS: Record<ScenarioLabResultTab, string> = {
+  headline_impact: 'scenarioLab.results.claimLabels.headlineImpact',
+  macro_path: 'scenarioLab.results.claimLabels.macroPath',
+  external_balance: 'scenarioLab.results.claimLabels.externalBalance',
+  fiscal_effects: 'scenarioLab.results.claimLabels.fiscalEffects',
 }
 
 const HEADLINE_METRIC_ORDER = ['gdp_growth', 'inflation', 'current_account', 'policy_rate'] as const
 
-function formatMetricValue(metric: HeadlineMetric) {
-  if (metric.unit === 'UZS/USD') {
-    return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(metric.value)
-  }
-  return new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 }).format(metric.value)
+function formatMetricValue(metric: HeadlineMetric, locale: string | undefined) {
+  return formatNumber(metric.value, locale, {
+    maximumFractionDigits: getDefaultFractionDigitsForUnit(metric.unit),
+  })
 }
 
-const DIRECTION_GLYPH = { up: '▲', down: '▼', flat: '—' } as const
+const DIRECTION_GLYPH = { up: '↑', down: '↓', flat: '→' } as const
 
-function formatSignedDelta(value: number | null, unit: string) {
+function formatSignedDelta(value: number | null, unit: string, locale: string | undefined) {
   if (value === null) {
-    return 'n/a'
+    return formatUnavailable(locale)
   }
-  const sign = value > 0 ? '+' : value < 0 ? '−' : ''
-  const magnitude = Math.abs(value)
-  const precision = unit === 'UZS/USD' ? 0 : 1
-  return `${sign}${magnitude.toFixed(precision)}`
+  const precision = getDefaultFractionDigitsForUnit(unit)
+  return formatSignedNumber(value, locale, {
+    maximumFractionDigits: precision,
+    minimumFractionDigits: precision,
+  })
 }
 
-const BAR_AXIS_MAX = 6
-
-function ScenarioMainChart({ chart }: { chart: ChartSpec }) {
+// Non-headline tabs retain the existing table-view — they're out of scope for
+// Shot-1 structural alignment (prompt §4.4 drops only the bar chart).
+function ScenarioTabChart({ chart, activeTab }: { chart: ChartSpec; activeTab: ScenarioLabResultTab }) {
+  const { i18n, t } = useTranslation()
+  const locale = i18n.resolvedLanguage ?? i18n.language
   const titleId = `scenario-chart-title-${chart.chart_id}`
-
-  if (chart.chart_type === 'bar') {
-    const series = chart.series[0]
-    return (
-      <div className="scenario-main-chart" aria-labelledby={titleId}>
-        <div className="scenario-main-chart__head">
-          <h3 id={titleId}>{chart.title}</h3>
-          <p>{chart.subtitle}</p>
-        </div>
-        <ul className="scenario-chart-bars">
-          {chart.x.values.map((label, index) => {
-            const value = series?.values[index] ?? 0
-            const fillPercent = Math.min(50, (Math.abs(value) / BAR_AXIS_MAX) * 50)
-            const isNegative = value < 0
-            return (
-              <li key={label.toString()}>
-                <span className="scenario-chart-bars__label">{label}</span>
-                <div className="scenario-chart-bars__track" aria-hidden="true">
-                  <span className="scenario-chart-bars__axis" />
-                  <span
-                    className={`scenario-chart-bars__fill ${
-                      isNegative
-                        ? 'scenario-chart-bars__fill--negative'
-                        : 'scenario-chart-bars__fill--positive'
-                    }`}
-                    style={{ width: `${fillPercent}%` }}
-                  />
-                </div>
-                <strong className="scenario-chart-bars__value">
-                  {formatSignedDelta(value, chart.y.unit)}
-                  <span aria-hidden="true"> {chart.y.unit}</span>
-                </strong>
-              </li>
-            )
-          })}
-        </ul>
-        <p className="scenario-main-chart__takeaway">{chart.takeaway}</p>
-      </div>
-    )
-  }
-
+  const terminalIndex = Math.max(0, chart.x.values.length - 1)
   return (
     <div className="scenario-main-chart" aria-labelledby={titleId}>
+      <div className="scenario-output-context">
+        <span className="claim-label">{t(CLAIM_LABEL_KEYS[activeTab])}</span>
+        <p>{t(TAB_EXPLANATION_KEYS[activeTab])}</p>
+      </div>
       <div className="scenario-main-chart__head">
         <h3 id={titleId}>{chart.title}</h3>
         <p>{chart.subtitle}</p>
       </div>
+      <dl className="scenario-tab-summary" aria-label={chart.title}>
+        {chart.series.map((series) => (
+          <div key={series.series_id}>
+            <dt>{series.label}</dt>
+            <dd>
+              {formatValueWithUnit(series.values[terminalIndex], chart.y.unit, locale, {
+                maximumFractionDigits: 1,
+                minimumFractionDigits: 1,
+              })}
+            </dd>
+          </div>
+        ))}
+      </dl>
       <table className="scenario-chart-table">
         <thead>
           <tr>
@@ -104,9 +108,14 @@ function ScenarioMainChart({ chart }: { chart: ChartSpec }) {
         <tbody>
           {chart.x.values.map((xValue, index) => (
             <tr key={xValue.toString()}>
-              <th scope="row">{xValue}</th>
+              <th scope="row">{formatQuarterLabel(xValue, locale)}</th>
               {chart.series.map((series) => (
-                <td key={series.series_id}>{series.values[index]?.toFixed(1)}</td>
+                <td key={series.series_id}>
+                  {formatNumber(series.values[index], locale, {
+                    maximumFractionDigits: 1,
+                    minimumFractionDigits: 1,
+                  })}
+                </td>
               ))}
             </tr>
           ))}
@@ -118,6 +127,8 @@ function ScenarioMainChart({ chart }: { chart: ChartSpec }) {
 }
 
 export function ResultsPanel({ activeTab, onTabChange, results }: ResultsPanelProps) {
+  const { i18n, t } = useTranslation()
+  const locale = i18n.resolvedLanguage ?? i18n.language
   const activeChart = results.charts_by_tab[activeTab]
   const preferredHeadlineMetrics = HEADLINE_METRIC_ORDER.map((metricId) =>
     results.headline_metrics.find((metric) => metric.metric_id === metricId),
@@ -127,15 +138,24 @@ export function ResultsPanel({ activeTab, onTabChange, results }: ResultsPanelPr
       ? preferredHeadlineMetrics
       : results.headline_metrics.slice(0, HEADLINE_METRIC_ORDER.length)
 
+  const showImpulseResponse = activeTab === 'headline_impact' && results.impulse_response_chart
+
   return (
-    <section className="scenario-panel scenario-panel--results" aria-labelledby="scenario-results-title">
+    <section
+      className="scenario-panel scenario-panel--results lab-panel"
+      aria-labelledby="scenario-results-title"
+    >
       <div className="scenario-panel__head page-section-head">
-        <h2 id="scenario-results-title">Results</h2>
-        <p>Review headline effects and transmission paths for the current assumptions.</p>
+        <h2 id="scenario-results-title">{t('scenarioLab.results.title')}</h2>
+        <p>{t('scenarioLab.results.description')}</p>
       </div>
 
-      <div className="scenario-tab-control segmented-control" role="tablist" aria-label="Result views">
-        {(Object.keys(TAB_LABELS) as ScenarioLabResultTab[]).map((tab) => {
+      <div
+        className="scenario-tab-control segmented-control result-tabs"
+        role="tablist"
+        aria-label={t('scenarioLab.results.tabsAria')}
+      >
+        {(Object.keys(TAB_LABEL_KEYS) as ScenarioLabResultTab[]).map((tab) => {
           const isActive = activeTab === tab
           return (
             <button
@@ -149,28 +169,28 @@ export function ResultsPanel({ activeTab, onTabChange, results }: ResultsPanelPr
               className={isActive ? 'active' : ''}
               onClick={() => onTabChange(tab)}
             >
-              {TAB_LABELS[tab]}
+              {t(TAB_LABEL_KEYS[tab])}
             </button>
           )
         })}
       </div>
 
-      <div className="scenario-headline-grid hmetric-strip">
+      <div className="scenario-headline-grid hmetric-strip headline-metrics">
         {headlineMetrics.map((metric) => {
-          const deltaText = formatSignedDelta(metric.delta_abs, metric.unit)
+          const deltaText = formatSignedDelta(metric.delta_abs, metric.unit, locale)
           const glyph = DIRECTION_GLYPH[metric.direction]
           return (
             <article key={metric.metric_id} className="scenario-headline-card hmetric">
               <p className="scenario-headline-card__label hmetric__label">{metric.label}</p>
               <p className="scenario-headline-card__value hmetric__value">
-                {formatMetricValue(metric)} <span>{metric.unit}</span>
+                {formatMetricValue(metric, locale)} <span>{formatAxisUnitLabel(metric.unit, locale)}</span>
               </p>
               <span
                 className="scenario-headline-card__delta hmetric__delta"
-                aria-label={`Change vs baseline: ${deltaText}`}
+                aria-label={t('scenarioLab.results.deltaVsBaseline', { delta: deltaText })}
               >
                 <span aria-hidden="true">{glyph}</span>
-                <span>{deltaText} vs baseline</span>
+                <span>{t('scenarioLab.results.deltaVsBaseline', { delta: deltaText })}</span>
               </span>
             </article>
           )
@@ -182,7 +202,11 @@ export function ResultsPanel({ activeTab, onTabChange, results }: ResultsPanelPr
         id={`scenario-tabpanel-${activeTab}`}
         aria-labelledby={`scenario-tab-${activeTab}`}
       >
-        <ScenarioMainChart chart={activeChart} />
+        {showImpulseResponse && results.impulse_response_chart ? (
+          <ImpulseResponseChart chart={results.impulse_response_chart} />
+        ) : (
+          <ScenarioTabChart chart={activeChart} activeTab={activeTab} />
+        )}
       </div>
     </section>
   )

@@ -21,7 +21,7 @@ export type IntegrationValidationIssue = {
 
 function resolveSourceRetryCapability(
   status: IntegrationSourceStatus,
-  mode: 'mock' | 'live',
+  mode: string,
 ): boolean {
   if (status === 'loading') {
     return false
@@ -32,7 +32,7 @@ function resolveSourceRetryCapability(
   return true
 }
 
-export function createLoadingSourceCore<TMode extends 'mock' | 'live', TWarning>(
+export function createLoadingSourceCore<TMode extends string, TWarning>(
   mode: TMode,
 ): IntegrationSourceCore<TMode, TWarning> {
   return {
@@ -44,7 +44,7 @@ export function createLoadingSourceCore<TMode extends 'mock' | 'live', TWarning>
   }
 }
 
-export function createReadySourceCore<TMode extends 'mock' | 'live', TWarning>(
+export function createReadySourceCore<TMode extends string, TWarning>(
   mode: TMode,
   warnings: TWarning[] = [],
 ): IntegrationSourceCore<TMode, TWarning> {
@@ -57,7 +57,7 @@ export function createReadySourceCore<TMode extends 'mock' | 'live', TWarning>(
   }
 }
 
-export function createErrorSourceCore<TMode extends 'mock' | 'live', TWarning>(
+export function createErrorSourceCore<TMode extends string, TWarning>(
   mode: TMode,
   error: string,
   warnings: TWarning[] = [],
