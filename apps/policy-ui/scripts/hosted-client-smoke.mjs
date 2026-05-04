@@ -614,10 +614,10 @@ function delay(ms) {
   })
 }
 
-function expressionForRoute(route, language = 'en') {
+function expressionForRoute(route) {
   return `
     (async () => {
-      const expectedTitle = ${JSON.stringify(route.titles[language])};
+      const expectedTitles = ${JSON.stringify(Object.values(route.titles))};
       const selector = ${JSON.stringify(route.selector)};
       const deadline = Date.now() + ${ROUTE_TIMEOUT_MS};
       const isVisible = (element) => {
@@ -632,11 +632,12 @@ function expressionForRoute(route, language = 'en') {
         const target = document.querySelector(selector);
         const bodyText = document.body.innerText || '';
         const textLength = main ? (main.innerText || '').trim().length : 0;
+        const title = h1 ? h1.textContent.trim() : '';
         const extraOk = ${route.extraExpression ? `Boolean(${route.extraExpression})` : 'true'};
         if (
           main &&
           h1 &&
-          h1.textContent.trim() === expectedTitle &&
+          expectedTitles.includes(title) &&
           isVisible(target) &&
           textLength > 40 &&
           extraOk
@@ -855,7 +856,7 @@ async function navigateAndAssertRoute(client, baseUrl, route, details) {
     return failure(scope, `Browser navigation failed for ${url.href}: ${navigation.errorText}`, details)
   }
 
-  const routeResult = await evaluate(client, expressionForRoute(route, 'en'))
+  const routeResult = await evaluate(client, expressionForRoute(route))
   if (!routeResult?.ok) {
     return failure('route hydration failure', `Route did not render expected hydrated content: ${route.hash}`, [
       ...details,
