@@ -32,6 +32,47 @@ npm install
 npm run dev
 ```
 
+## Active-Preview Smoke
+
+The HTTP-only active-preview smoke checks the deployed shell and built JS/CSS
+asset paths without adding a browser automation dependency.
+
+```bash
+npm run smoke:active-preview -- https://cerr-uzbekistan.github.io/Uzbekistan-Economic-policy-engine/policy-ui/
+```
+
+For a local production preview, build with the active-preview base and run Vite
+preview before running the smoke:
+
+```bash
+POLICY_UI_BASE=/policy-ui/ npm run build
+npm run preview -- --host 127.0.0.1 --port 4173
+npm run smoke:active-preview -- http://127.0.0.1:4173/policy-ui/
+```
+
+The smoke verifies:
+
+- root app URL returns HTTP 200
+- built HTML shell references JS/CSS under `/policy-ui/assets/`
+- referenced JS/CSS assets return 2xx
+- hash-route shell requests return HTTP 200 for `#/overview`, `#/scenario-lab`, `#/comparison`, `#/model-explorer`, `#/data-registry`, and `#/knowledge-hub`
+
+HTTP-only mode cannot verify console errors, rendered route content, language
+switching, localStorage behavior, or client network calls such as
+`/api/v1/registry`.
+
+Manual browser/CDP checklist:
+
+- six routes render nonblank output or the shared pending surface
+- no console errors
+- no asset 404s
+- EN/RU/UZ switch works
+- Knowledge Hub is pending-only
+- Data Registry makes no `/api/v1/registry` request by default
+- HFI/PE/CGE/FPP/Synthesis remain planned/gated
+- Overview nowcast artifact quarter is aligned
+- Scenario Lab and Comparison preserve model-native boundaries
+
 ## Sprint 3 Internal-Preview Deployment
 
 The internal-preview app is published by GitHub Pages under the repository site
