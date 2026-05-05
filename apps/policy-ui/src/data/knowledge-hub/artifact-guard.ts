@@ -171,6 +171,7 @@ function validateRulebook(
 
   return {
     version: requireString(value, 'version', path, issues),
+    actual_reform_definition: stringValue(value.actual_reform_definition) ?? undefined,
     include_rules: validateRuleObjects(value.include_rules, `${path}.include_rules`, issues),
     exclude_rules: validateRuleObjects(value.exclude_rules, `${path}.exclude_rules`, issues),
     evidence_types: evidenceTypes,
@@ -320,6 +321,7 @@ export function validateKnowledgeHubArtifact(input: unknown): KnowledgeHubArtifa
       extraction_mode_label: extractionModeLabel,
       rulebook: rulebook ?? {
         version: '',
+        actual_reform_definition: undefined,
         include_rules: [],
         exclude_rules: [],
         evidence_types: [],

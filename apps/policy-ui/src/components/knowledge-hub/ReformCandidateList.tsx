@@ -13,7 +13,13 @@ function formatDate(value: string | undefined): string {
 
 export function ReformCandidateList({ candidates }: ReformCandidateListProps) {
   if (candidates.length === 0) {
-    return <p className="empty-state">No source-extracted reform candidates are available.</p>
+    return (
+      <p className="empty-state">
+        No hard reform candidates passed the intake rulebook. The tracker is intentionally empty
+        until source text identifies a legal or policy instrument, adopted measure, parameter
+        change, or named implementation update.
+      </p>
+    )
   }
 
   return (

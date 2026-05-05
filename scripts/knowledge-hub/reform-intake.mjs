@@ -126,78 +126,83 @@ const INCLUDE_RULE_DEFINITIONS = [
   {
     id: 'legal-or-regulatory-change',
     label: 'Legal or regulatory change',
-    description: 'Include laws, decrees, resolutions, regulations, code changes, orders, or amendments that create or alter a policy rule.',
+    description: 'Include legal or policy instruments only when the text identifies an adopted or amended law, decree, resolution, regulation, order, code, legal act, or rule package.',
     weight: 55,
     evidence_types: ['legal_text', 'official_policy_announcement'],
     category: 'other_policy',
     patterns: [
-      /\b(law|decree|resolution|regulation|code|order|rule|rules|amendment|amended|adopted|approved|enacted|introduced|legal act|normative legal act)\b/i,
+      /\b(?:law on|law of|draft law|new law|decree|resolution|regulation|code|order|amendments?|amended|legal act|normative legal act|rule package|rules amended|rules introduced)\b/i,
+    ],
+  },
+  {
+    id: 'adopted-policy-measure',
+    label: 'Adopted policy measure',
+    description: 'Include explicit adopted measures, approvals, launches, introduced packages, expanded incentives, or entered-into-force changes.',
+    weight: 50,
+    evidence_types: ['official_policy_announcement', 'implementation_program'],
+    category: 'other_policy',
+    patterns: [
+      /\b(?:adopted|approved|enacted|introduced|expands|expanded|abolished|reduced|launched|implemented|entered into force|came into force|signed into law|approves measures|approved measures)\b/i,
     ],
   },
   {
     id: 'monetary-or-financial-parameter',
     label: 'Monetary or financial-sector parameter',
-    description: 'Include policy-rate, reserve requirement, prudential, deposit, FX-market, bank, microfinance, or payment-system changes.',
+    description: 'Include monetary or financial-sector parameter changes, not previews, analytical material, or future policy-rate meetings.',
     weight: 50,
     evidence_types: ['regulatory_parameter_change', 'official_policy_announcement'],
     category: 'monetary_policy',
     patterns: [
-      /\b(policy[- ]rate decision framework|policy[- ]rate framework consultation|policy[- ]rate consultation|policy[- ]rate (?:change|changes|changed|increase|decrease|cut|hike|reduction|adjustment|set|kept|maintained|raised|lowered)|refinancing rate (?:change|changes|changed|increase|decrease|cut|hike|reduction|adjustment|set|kept|maintained|raised|lowered)|reserve requirement|foreign[- ]currency deposit|foreign exchange|fx market|prudential|capital requirement|liquidity requirement|payment system|microfinance|microcredit|banking regulation)\b/i,
+      /\b(?:policy[- ]rate|refinancing rate|reserve requirement|capital requirement|liquidity requirement|prudential ratio|foreign[- ]currency deposit requirement|fx-market rule|payment-system rule|banking regulation|microfinance regulation|microcredit regulation)\b.{0,90}\b(?:changed|increased|decreased|cut|hiked|reduced|adjusted|set|kept|maintained|raised|lowered|introduced|amended)\b/i,
+      /\b(?:changed|increased|decreased|cut|hiked|reduced|adjusted|set|kept|maintained|raised|lowered|introduced|amended)\b.{0,90}\b(?:policy[- ]rate|refinancing rate|reserve requirement|capital requirement|liquidity requirement|prudential ratio|foreign[- ]currency deposit requirement|fx-market rule|payment-system rule|banking regulation|microfinance regulation|microcredit regulation)\b/i,
     ],
   },
   {
     id: 'fiscal-tax-budget-measure',
     label: 'Fiscal, tax, budget, subsidy, or tariff measure',
-    description: 'Include tax, excise, duty, budget, public-finance, subsidy, tariff, compensation, or fiscal-monitoring changes.',
+    description: 'Include explicit fiscal, tax, budget, subsidy, duty, tariff, incentive, compensation, or fiscal-monitoring measures with an adopted or parameterized change.',
     weight: 50,
     evidence_types: ['budget_tax_measure', 'regulatory_parameter_change'],
     category: 'fiscal_tax',
     patterns: [
-      /\b(tax|excise|duty|budget|public finance|fiscal|subsidy|subsidies|tariff|compensation|fiscal monitoring|allocation)\b/i,
+      /\b(?:tax|excise|duty|budget|public finance|fiscal|subsidy|subsidies|tariff|compensation|fiscal monitoring|allocation|incentive|incentives)\b.{0,100}\b(?:introduced|amended|approved|adopted|expands|expanded|reduced|abolished|adjusted|parameter|parameters|rate|threshold|requirement|requirements)\b/i,
+      /\b(?:introduced|amended|approved|adopted|expands|expanded|reduced|abolished|adjusted)\b.{0,100}\b(?:tax|excise|duty|budget|subsidy|subsidies|tariff|compensation|fiscal monitoring|allocation|incentive|incentives)\b/i,
     ],
   },
   {
     id: 'trade-customs-modernization',
     label: 'Trade or customs modernization',
-    description: 'Include customs, border, clearance, declarations, trade corridor, import/export, WTO, or market-access measures.',
+    description: 'Include adopted trade, customs, border, declaration, WTO, or market-access measures, not general trade or customs news.',
     weight: 45,
-    evidence_types: ['consultation_notice', 'implementation_program'],
+    evidence_types: ['official_policy_announcement', 'implementation_program'],
     category: 'trade_customs',
     patterns: [
-      /\b(customs|border clearance|risk-based clearance|electronic declaration|trade corridor|import|export|wto|market access)\b/i,
+      /\b(?:customs|border clearance|risk-based clearance|electronic declaration|electronic declarations|trade corridor|import|export|wto|market access)\b.{0,100}\b(?:introduced|approved|adopted|amended|implemented|launched|rules|measures|schedule|schedule adopted)\b/i,
+      /\b(?:introduced|approved|adopted|amended|implemented|launched|approves measures)\b.{0,100}\b(?:customs|border clearance|risk-based clearance|electronic declaration|electronic declarations|trade corridor|import|export|wto|market access)\b/i,
     ],
   },
   {
     id: 'structural-implementation-program',
     label: 'Structural implementation program',
-    description: 'Include privatization, SOE, energy, infrastructure, agriculture, digital-government, or business-environment reforms with implementation steps.',
+    description: 'Include implementation updates tied to a named reform, law, resolution, strategy, master plan, roadmap, program, project, or adopted package.',
     weight: 45,
     evidence_types: ['implementation_program', 'official_policy_announcement'],
     category: 'business_environment',
     patterns: [
-      /\b(privatization|state-owned enterprise|soe|energy tariff|green economic development|master plan|infrastructure|agriculture|digital government|digitalization|public service|legal service|notarial|business environment|investment climate|small and medium-sized businesses|sme)\b/i,
-    ],
-  },
-  {
-    id: 'formal-consultation-or-draft',
-    label: 'Formal consultation or draft measure',
-    description: 'Include formal consultations and draft measures when the text identifies the proposed policy instrument or mechanism.',
-    weight: 40,
-    evidence_types: ['consultation_notice'],
-    category: 'other_policy',
-    patterns: [
-      /\b(consultation|draft|invited comments|public comment|stakeholder feedback)\b/i,
+      /\b(?:implementation|implemented|launched|rollout|roll-out|phase|stage|package)\b.{0,100}\b(?:reform|program|programme|strategy|master plan|roadmap|resolution|decree|law|project|rules|legal amendments|special economic zones|green economic development)\b/i,
+      /\b(?:reform|program|programme|strategy|master plan|roadmap|resolution|decree|law|project|rules|legal amendments|special economic zones|green economic development)\b.{0,100}\b(?:implementation|implemented|launched|rollout|roll-out|phase|stage|package|measures)\b/i,
     ],
   },
   {
     id: 'binding-international-financing-or-agreement',
     label: 'Binding international financing or agreement',
     description: 'Include signed agreements, grants, loans, and donor financing when tied to a policy program or implementation measure.',
-    weight: 42,
+    weight: 55,
     evidence_types: ['international_agreement', 'implementation_program'],
     category: 'infrastructure_investment',
     patterns: [
-      /\b(agreement was signed|signed agreement|grant|loan|financing|program agreement|memorandum approved)\b/i,
+      /\b(?:agreement was signed|signed agreement|grant|loan|financing|program agreement|memorandum approved)\b.{0,140}\b(?:reform|program|programme|strategy|master plan|roadmap|project|implementation|infrastructure|green economic development|special economic zones|policy)\b/i,
+      /\b(?:reform|program|programme|strategy|master plan|roadmap|project|implementation|infrastructure|green economic development|special economic zones|policy)\b.{0,140}\b(?:agreement was signed|signed agreement|grant|loan|financing|program agreement|memorandum approved)\b/i,
     ],
   },
 ]
@@ -210,7 +215,7 @@ const EXCLUDE_RULE_DEFINITIONS = [
     reason: 'routine_meeting_without_policy_measure',
     overridable_by_policy_measure: true,
     patterns: [
-      /\b(meeting held|meeting was held|board meeting|discussions held|discussions on cooperation|talks were held|roundtable discussion|met with|visit of|on the sidelines)\b/i,
+      /\b(meeting held|meeting was held|board meeting|discussions held|discussions on cooperation|talks were held|roundtable discussion|roundtable was held|met with|visit of|on the sidelines|personal reception)\b/i,
     ],
   },
   {
@@ -226,11 +231,21 @@ const EXCLUDE_RULE_DEFINITIONS = [
   {
     id: 'training-or-outreach',
     label: 'Training or outreach',
-    description: 'Exclude trainings, calendars, awareness weeks, conferences, and public outreach unless a policy measure is explicitly announced.',
+    description: 'Exclude trainings, calendars, awareness weeks, conferences, seminars, workshops, and public outreach even when they refer to an existing reform or resolution.',
     reason: 'training_or_outreach_only',
-    overridable_by_policy_measure: true,
+    overridable_by_policy_measure: false,
     patterns: [
       /\b(training|calendar|seminar|workshop|financial literacy|awareness|conference|forum)\b/i,
+    ],
+  },
+  {
+    id: 'analytical-report-only',
+    label: 'Analytical report only',
+    description: 'Exclude analytical reports, indicator reviews, monitoring notes, and statistics releases without an adopted measure or implementation update.',
+    reason: 'analytical_report_only',
+    overridable_by_policy_measure: false,
+    patterns: [
+      /\b(analytical report|analysis report|indicator review|target indicators|statistics release|published materials|inflation conditions|growth rate)\b/i,
     ],
   },
   {
@@ -253,6 +268,16 @@ const EXCLUDE_RULE_DEFINITIONS = [
       /\b(performance discipline|work carried out within the system|staffing|internal process|target indicators reviewed)\b/i,
     ],
   },
+  {
+    id: 'generic-announcement-without-action',
+    label: 'Generic announcement without action',
+    description: 'Exclude previews, future discussions, draft consultations, generic announcements, and published materials without an adopted measure or parameterized instrument.',
+    reason: 'generic_announcement_without_policy_action',
+    overridable_by_policy_measure: true,
+    patterns: [
+      /\b(will be discussed|to be discussed|announced for the next|upcoming rate decision|consultation opens|invited comments|public comment|stakeholder feedback|prospects|priorities reviewed)\b/i,
+    ],
+  },
 ]
 
 export const REFORM_EXCLUSION_REASONS = [
@@ -273,12 +298,20 @@ export const REFORM_EXCLUSION_REASONS = [
     description: 'The item is training, awareness, outreach, or event logistics only.',
   },
   {
+    id: 'analytical_report_only',
+    description: 'The item is an analytical report, indicator review, monitoring note, or statistics release without an adopted reform measure.',
+  },
+  {
     id: 'ceremonial_or_cultural_event',
     description: 'The item is ceremonial, cultural, commemorative, or protocol content.',
   },
   {
     id: 'administrative_update_only',
     description: 'The item is internal administrative reporting without a policy measure.',
+  },
+  {
+    id: 'generic_announcement_without_policy_action',
+    description: 'The item previews future activity, consultation, or generic priorities without an adopted measure, instrument, parameter change, or named implementation update.',
   },
   {
     id: 'low_relevance_score',
@@ -291,20 +324,53 @@ export const REFORM_EXCLUSION_REASONS = [
 ]
 
 export const REFORM_INTAKE_RULEBOOK = {
-  version: 'knowledge-hub-reform-intake-rulebook.v1',
+  version: 'knowledge-hub-reform-intake-rulebook.v2',
+  actual_reform_definition:
+    'Actual reform requires a legal or policy instrument, an explicit adopted measure, a parameter change, or an implementation update tied to a named reform, law, resolution, strategy, program, project, master plan, roadmap, or adopted package.',
   include_rules: INCLUDE_RULE_DEFINITIONS.map(({ patterns: _patterns, ...rule }) => rule),
   exclude_rules: EXCLUDE_RULE_DEFINITIONS.map(({ patterns: _patterns, ...rule }) => rule),
   evidence_types: REFORM_EVIDENCE_TYPES,
   reform_categories: REFORM_CATEGORIES,
   relevance_scoring: {
     range: [0, 100],
-    include_threshold: 40,
-    high_relevance: '70-100: explicit legal, regulatory, budget, monetary, trade, or implementation measure.',
-    medium_relevance: '40-69: plausible reform candidate with a formal consultation, program, agreement, or parameter signal.',
-    low_relevance: '0-39: generic news, routine activity, or insufficient source evidence.',
+    include_threshold: 50,
+    hard_gate:
+      'Domain relevance alone is insufficient. A candidate must match at least one include rule and at least one hard reform signal: instrument, adopted measure, parameter change, or named implementation update.',
+    high_relevance: '70-100: explicit adopted legal, regulatory, budget, monetary, trade, financing, or implementation measure.',
+    medium_relevance: '50-69: hard reform candidate with a single adopted instrument, measure, parameter, or implementation signal.',
+    low_relevance: '0-49: generic news, routine activity, reports, training, cooperation, consultations, or insufficient hard reform evidence.',
   },
   exclusion_reasons: REFORM_EXCLUSION_REASONS,
 }
+
+const ACTUAL_REFORM_SIGNAL_DEFINITIONS = [
+  {
+    id: 'legal_or_policy_instrument',
+    patterns: [
+      /\b(?:law on|law of|draft law|new law|decree|resolution|regulation|code|order|legal act|normative legal act|rule package|rules amended|rules introduced)\b/i,
+    ],
+  },
+  {
+    id: 'adopted_measure',
+    patterns: [
+      /\b(?:adopted|approved|enacted|introduced|expands|expanded|abolished|reduced|launched|implemented|entered into force|came into force|signed into law|approves measures|approved measures)\b/i,
+    ],
+  },
+  {
+    id: 'parameter_change',
+    patterns: [
+      /\b(?:rate|tariff|duty|excise|tax|reserve requirement|requirement|threshold|quota|allocation|incentive|incentives|grant|loan|financing|compensation)\b.{0,80}\b(?:\d+(?:[.,]\d+)?\s*(?:%|percent|percentage points?|pp|basis points?|bps|million|billion|trillion|€|\$|uzs|sum)|parameters?|adjusted|expands|expanded|introduced|amended|approved|reduced|raised|lowered)\b/i,
+      /\b(?:\d+(?:[.,]\d+)?\s*(?:%|percent|percentage points?|pp|basis points?|bps|million|billion|trillion|€|\$|uzs|sum)|parameters?|adjusted|expands|expanded|introduced|amended|approved|reduced|raised|lowered)\b.{0,80}\b(?:rate|tariff|duty|excise|tax|reserve requirement|requirement|threshold|quota|allocation|incentive|incentives|grant|loan|financing|compensation)\b/i,
+    ],
+  },
+  {
+    id: 'named_implementation_update',
+    patterns: [
+      /\b(?:implementation|implemented|launched|rollout|roll-out|phase|stage|package)\b.{0,100}\b(?:reform|program|programme|strategy|master plan|roadmap|resolution|decree|law|project|rules|legal amendments|special economic zones|green economic development)\b/i,
+      /\b(?:reform|program|programme|strategy|master plan|roadmap|resolution|decree|law|project|rules|legal amendments|special economic zones|green economic development)\b.{0,100}\b(?:implementation|implemented|launched|rollout|roll-out|phase|stage|package|measures)\b/i,
+    ],
+  },
+]
 
 function parseArgs(argv) {
   const args = {
@@ -399,8 +465,9 @@ function matchedRules(definitions, text) {
 export function classifyReformCandidateText(text) {
   const includeRules = matchedRules(INCLUDE_RULE_DEFINITIONS, text)
   const excludeRules = matchedRules(EXCLUDE_RULE_DEFINITIONS, text)
+  const actualReformSignals = matchedRules(ACTUAL_REFORM_SIGNAL_DEFINITIONS, text)
   const nonOverridableExcludeRule = excludeRules.find((rule) => rule.overridable_by_policy_measure !== true)
-  const hasPolicyMeasure = includeRules.length > 0
+  const hasPolicyMeasure = includeRules.length > 0 && actualReformSignals.length > 0
   const policyMeasureOverridesRoutine = hasPolicyMeasure && !nonOverridableExcludeRule
   const scoreBeforeExclusions = includeRules.reduce((score, rule) => score + rule.weight, 0)
   const exclusionPenalty = excludeRules.length > 0 && !policyMeasureOverridesRoutine ? 25 : 0
@@ -423,11 +490,12 @@ export function classifyReformCandidateText(text) {
   return {
     included,
     inclusion_reason: included
-      ? `Included by ${includeRules.map((rule) => rule.label).join(', ')} with source evidence: ${evidenceTypes.join(', ')}.`
+      ? `Included by ${includeRules.map((rule) => rule.label).join(', ')} with hard reform signal(s): ${actualReformSignals.map((rule) => rule.id).join(', ')}; source evidence: ${evidenceTypes.join(', ')}.`
       : '',
     exclusion_reason: exclusionReason,
     matched_include_rules: includeRules.map((rule) => rule.id),
     matched_exclude_rules: excludeRules.map((rule) => rule.id),
+    matched_actual_reform_signals: actualReformSignals.map((rule) => rule.id),
     evidence_types: evidenceTypes,
     reform_category: category,
     relevance_score: relevanceScore,

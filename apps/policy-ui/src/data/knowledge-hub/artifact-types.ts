@@ -10,6 +10,7 @@ export type KnowledgeHubArtifactSource = {
 
 export type KnowledgeHubRulebook = {
   version: string
+  actual_reform_definition?: string
   include_rules: Array<Record<string, unknown>>
   exclude_rules: Array<Record<string, unknown>>
   evidence_types: string[]
