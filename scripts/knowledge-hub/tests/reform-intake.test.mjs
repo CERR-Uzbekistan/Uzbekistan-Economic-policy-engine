@@ -64,8 +64,8 @@ describe('Knowledge Hub reform intake', () => {
     )
 
     assert.equal(candidate.title, 'Tax administration amendments introduced for electronic VAT reporting')
-    assert.equal(candidate.extraction_state, 'source-extracted')
-    assert.equal(candidate.review_state, 'unreviewed')
+    assert.equal(candidate.extraction_state, 'source_extracted')
+    assert.equal(candidate.review_state, 'candidate')
     assert.equal(candidate.review_status, 'needs_review')
     assert.equal(candidate.reform_category, 'fiscal_tax')
     assert.deepEqual(candidate.evidence_types, [
@@ -235,8 +235,8 @@ describe('Knowledge Hub reform intake', () => {
     assert.ok(candidate.evidence_types.includes('legal_text'))
     assert.ok(candidate.matched_include_rules.includes('legal-or-regulatory-change'))
     assert.ok(candidate.matched_include_rules.includes('trade-customs-modernization'))
-    assert.equal(candidate.extraction_state, 'source-extracted')
-    assert.equal(candidate.review_state, 'unreviewed')
+    assert.equal(candidate.extraction_state, 'source_extracted')
+    assert.equal(candidate.review_state, 'candidate')
   })
 
   it('builds a deterministic static artifact from source fixtures', async () => {
@@ -250,8 +250,8 @@ describe('Knowledge Hub reform intake', () => {
     assert.equal(artifact.rulebook.version, REFORM_INTAKE_RULEBOOK.version)
     assert.equal(artifact.sources.length, REFORM_SOURCE_DEFINITIONS.length)
     assert.equal(artifact.candidates.length, 7)
-    assert.ok(artifact.candidates.every((candidate) => candidate.extraction_state === 'source-extracted'))
-    assert.ok(artifact.candidates.every((candidate) => candidate.review_state === 'unreviewed'))
+    assert.ok(artifact.candidates.every((candidate) => candidate.extraction_state === 'source_extracted'))
+    assert.ok(artifact.candidates.every((candidate) => candidate.review_state === 'candidate'))
     assert.ok(artifact.candidates.every((candidate) => candidate.review_status === 'needs_review'))
     assert.ok(artifact.candidates.every((candidate) => candidate.inclusion_reason.length > 0))
     assert.ok(artifact.candidates.every((candidate) => candidate.evidence_types.length > 0))

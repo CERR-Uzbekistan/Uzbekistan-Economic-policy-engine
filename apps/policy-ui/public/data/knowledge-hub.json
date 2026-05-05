@@ -1,5 +1,5 @@
 {
-  "schema_version": "knowledge-hub-reform-candidates.v2",
+  "schema_version": "knowledge-hub-reform-tracker.v1",
   "generated_at": "2026-05-05T16:50:46.424Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
@@ -149,6 +149,7 @@
     "reform_categories": [
       "monetary_policy",
       "fiscal_tax",
+      "budget_public_finance",
       "trade_customs",
       "energy_tariffs",
       "financial_sector",
@@ -158,6 +159,9 @@
       "agriculture",
       "digital_public_admin",
       "infrastructure_investment",
+      "industrial_policy",
+      "competition_regulation",
+      "labor_market",
       "other_policy"
     ],
     "relevance_scoring": {
@@ -261,15 +265,20 @@
       "url": "https://gov.uz/en/adliya/news/news"
     }
   ],
+  "accepted_reforms": [],
   "candidates": [
     {
       "id": "investment-trade-ministry-news-2026-04-14-10-20-00-153388-uzbekistan-expands-tax-incentives-for-investors-finan",
-      "extraction_state": "source-extracted",
-      "review_state": "unreviewed",
+      "extraction_state": "source_extracted",
+      "review_state": "candidate",
       "review_status": "needs_review",
+      "status": "unknown",
       "title": "Uzbekistan Expands Tax Incentives for Investors Financing Infrastructure Projects",
       "summary": "Source API did not expose a summary for this configured extraction item.",
       "domain_tag": "Fiscal",
+      "domain_tags": [
+        "Fiscal"
+      ],
       "reform_category": "fiscal_tax",
       "evidence_types": [
         "official_policy_announcement",
@@ -279,14 +288,24 @@
       ],
       "relevance_score": 100,
       "inclusion_reason": "Included by Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): adopted_measure, parameter_change; source evidence: official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+      "matched_rules": [
+        "adopted-policy-measure",
+        "fiscal-tax-budget-measure"
+      ],
       "matched_include_rules": [
         "adopted-policy-measure",
         "fiscal-tax-budget-measure"
       ],
+      "source_title": "Uzbekistan Expands Tax Incentives for Investors Financing Infrastructure Projects",
       "source_institution": "Ministry of Investment, Industry and Trade of the Republic of Uzbekistan",
+      "source_owner": "Ministry of Investment, Industry and Trade of the Republic of Uzbekistan",
       "source_url": "https://gov.uz/en/miit/news/view/153388",
       "source_published_at": "2026-04-14 10:20:00",
+      "retrieved_at": "2026-05-05T16:50:46.424Z",
       "extracted_at": "2026-05-05T16:50:46.424Z",
+      "citation_permission": "pending",
+      "license_class": "unknown",
+      "translation_review_state": "not_translated",
       "caveats": [
         "Deterministic extraction from configured source text.",
         "Unreviewed candidate; not an official reviewed policy database entry."

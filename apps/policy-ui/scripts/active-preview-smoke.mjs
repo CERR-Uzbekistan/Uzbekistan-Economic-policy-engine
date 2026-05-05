@@ -14,7 +14,7 @@ const HASH_ROUTES = [
 ];
 const PUBLIC_DATA_ARTIFACTS = [
   { path: 'data/overview.json', label: 'Overview artifact' },
-  { path: 'data/knowledge-hub.json', label: 'Knowledge Hub candidate artifact' },
+  { path: 'data/knowledge-hub.json', label: 'Knowledge Hub reform tracker artifact' },
   { path: 'data/qpm.json', label: 'QPM bridge artifact' },
   { path: 'data/dfm.json', label: 'DFM bridge artifact' },
   { path: 'data/io.json', label: 'I-O bridge artifact' },

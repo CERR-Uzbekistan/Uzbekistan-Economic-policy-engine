@@ -645,23 +645,38 @@ export type ApiError = {
 }
 
 // ───────────────────────────────────────────────────────────────
-// Shot-1 Knowledge Hub types (prompt §4.1). Greenfield page — no prior
-// Knowledge Hub contract existed on epic. Seed content comes from
-// spec_prototype.html:2332–2412 verbatim.
+// Knowledge Hub Reform Tracker v1.
+// The public surface separates accepted reform records from unreviewed
+// source-extracted candidates. Research briefs and literature remain legacy
+// pilot types only and are not rendered by the tracker route.
 // ───────────────────────────────────────────────────────────────
 
-export type ReformStatus = 'completed' | 'in_progress' | 'planned'
-
-export type ReformTrackerItem = {
-  id: string
-  date_label: string
-  date_iso?: string
-  status: ReformStatus
-  title: string
-  mechanism: string
-  domain_tag: string
-  model_refs: string[]
-}
+export type ReformExtractionState = 'source_extracted' | 'manual_seed' | 'corrected'
+export type ReformReviewState =
+  | 'candidate'
+  | 'accepted_internal'
+  | 'accepted_public'
+  | 'rejected'
+  | 'superseded'
+  | 'retracted'
+export type ReformReviewStatus = 'needs_review' | 'owner_reviewed' | 'public_cleared'
+export type ReformStatus = 'adopted' | 'in_implementation' | 'planned' | 'superseded' | 'unknown'
+export type ReformCitationPermission = 'internal_only' | 'external_allowed' | 'prohibited' | 'pending'
+export type ReformLicenseClass =
+  | 'public_open'
+  | 'public_attribution_required'
+  | 'public_link_only'
+  | 'internal'
+  | 'licensed'
+  | 'restricted'
+  | 'unknown'
+export type ReformTranslationReviewState =
+  | 'not_translated'
+  | 'ai_drafted_unreviewed'
+  | 'human_translated_unreviewed'
+  | 'reviewed'
+  | 'blocked'
+  | 'not_applicable'
 
 export type ResearchBriefByline = {
   author?: string
@@ -680,9 +695,6 @@ export type ResearchBrief = {
   model_refs: string[]
 }
 
-export type ReformCandidateExtractionState = 'source-extracted'
-export type ReformCandidateReviewState = 'unreviewed'
-export type ReformCandidateReviewStatus = 'needs_review'
 export type ReformEvidenceType =
   | 'legal_text'
   | 'official_policy_announcement'
@@ -694,6 +706,7 @@ export type ReformEvidenceType =
 export type ReformCategory =
   | 'monetary_policy'
   | 'fiscal_tax'
+  | 'budget_public_finance'
   | 'trade_customs'
   | 'energy_tariffs'
   | 'financial_sector'
@@ -703,26 +716,55 @@ export type ReformCategory =
   | 'agriculture'
   | 'digital_public_admin'
   | 'infrastructure_investment'
+  | 'industrial_policy'
+  | 'competition_regulation'
+  | 'labor_market'
   | 'other_policy'
 
-export type ReformCandidateItem = {
+export type ReformTrackerRecordBase = {
   id: string
-  extraction_state: ReformCandidateExtractionState
-  review_state: ReformCandidateReviewState
-  review_status: ReformCandidateReviewStatus
+  extraction_state: ReformExtractionState
+  review_state: ReformReviewState
+  review_status: ReformReviewStatus
   title: string
   summary: string
   domain_tag: string
+  domain_tags: string[]
   reform_category: ReformCategory
   evidence_types: ReformEvidenceType[]
-  relevance_score: number
   inclusion_reason: string
-  matched_include_rules: string[]
+  matched_rules: string[]
+  matched_include_rules?: string[]
+  source_title: string
   source_institution: string
+  source_owner: string
   source_url: string
   source_published_at?: string
-  extracted_at: string
+  retrieved_at?: string
+  extracted_at?: string
+  as_of_date?: string
+  status_authority?: string
+  citation_permission: ReformCitationPermission
+  license_class: ReformLicenseClass
+  translation_review_state: ReformTranslationReviewState
   caveats: string[]
+}
+
+export type ReformTrackerItem = ReformTrackerRecordBase & {
+  review_state: 'accepted_internal' | 'accepted_public'
+  status: Exclude<ReformStatus, 'unknown'>
+  reviewer_of_record: string
+  review_date: string
+  review_scope: string
+  model_refs: string[]
+}
+
+export type ReformCandidateItem = ReformTrackerRecordBase & {
+  extraction_state: 'source_extracted'
+  review_state: 'candidate'
+  review_status: 'needs_review'
+  status: 'unknown'
+  relevance_score: number
 }
 
 export type KnowledgeHubMeta = {

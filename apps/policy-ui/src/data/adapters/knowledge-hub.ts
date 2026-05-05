@@ -22,7 +22,32 @@ export type RawKnowledgeHubReform = {
   status?: string
   title?: string
   mechanism?: string
+  summary?: string
+  extraction_state?: string
   domain_tag?: string
+  domain_tags?: unknown
+  reform_category?: string
+  evidence_types?: unknown
+  review_state?: string
+  review_status?: string
+  source_title?: string
+  source_institution?: string
+  source_owner?: string
+  source_url?: string
+  source_published_at?: string
+  retrieved_at?: string
+  extracted_at?: string
+  as_of_date?: string
+  status_authority?: string
+  inclusion_reason?: string
+  matched_rules?: unknown
+  caveats?: unknown
+  reviewer_of_record?: string
+  review_date?: string
+  review_scope?: string
+  citation_permission?: string
+  license_class?: string
+  translation_review_state?: string
   model_refs?: unknown
 }
 
@@ -43,6 +68,7 @@ export type RawKnowledgeHubPayload = {
     candidate_items?: number
     sources_configured?: number
   }
+  accepted_reforms?: RawKnowledgeHubReform[]
   reforms?: RawKnowledgeHubReform[]
   briefs?: RawKnowledgeHubBrief[]
   candidates?: ReformCandidateItem[]
@@ -52,8 +78,6 @@ export type RawKnowledgeHubPayload = {
   extraction_mode_label?: string
   source_artifact?: string
 }
-
-const REFORM_STATUS_VALUES: ReformStatus[] = ['completed', 'in_progress', 'planned']
 
 function asString(value: unknown, fallback = ''): string {
   return typeof value === 'string' ? value : fallback
@@ -70,19 +94,79 @@ function asStringArray(value: unknown): string[] {
   return value.filter((entry): entry is string => typeof entry === 'string')
 }
 
-function asReformStatus(value: unknown, fallback: ReformStatus = 'planned'): ReformStatus {
-  return REFORM_STATUS_VALUES.includes(value as ReformStatus) ? (value as ReformStatus) : fallback
+function asReformStatus(
+  value: unknown,
+  fallback: Exclude<ReformStatus, 'unknown'> = 'planned',
+): Exclude<ReformStatus, 'unknown'> {
+  if (value === 'completed') return 'adopted'
+  if (value === 'in_progress') return 'in_implementation'
+  const status = value as ReformStatus
+  if (status === 'adopted' || status === 'in_implementation' || status === 'planned' || status === 'superseded') {
+    return status
+  }
+  return fallback
 }
 
 function adaptReform(raw: RawKnowledgeHubReform, index: number): ReformTrackerItem {
+  const date = asString(raw.date_iso, asString(raw.date_label, ''))
+  const category = asString(raw.reform_category, 'other_policy') as ReformTrackerItem['reform_category']
+  const domainTag = asString(raw.domain_tag, 'Policy')
   return {
     id: asString(raw.id, `reform-${index}`),
-    date_label: asString(raw.date_label, ''),
-    date_iso: typeof raw.date_iso === 'string' ? raw.date_iso : undefined,
+    extraction_state: raw.extraction_state === 'source_extracted' || raw.extraction_state === 'corrected' ? raw.extraction_state : 'manual_seed',
+    review_state: raw.review_state === 'accepted_public' ? 'accepted_public' : 'accepted_internal',
+    review_status: raw.review_status === 'public_cleared' ? 'public_cleared' : 'owner_reviewed',
     status: asReformStatus(raw.status),
     title: asString(raw.title, 'Untitled reform'),
-    mechanism: asString(raw.mechanism, ''),
-    domain_tag: asString(raw.domain_tag, 'Other'),
+    summary: asString(raw.summary, asString(raw.mechanism, '')),
+    domain_tag: domainTag,
+    domain_tags: asStringArray(raw.domain_tags).length > 0 ? asStringArray(raw.domain_tags) : [domainTag],
+    reform_category: category,
+    evidence_types:
+      asStringArray(raw.evidence_types).length > 0
+        ? (asStringArray(raw.evidence_types) as ReformTrackerItem['evidence_types'])
+        : ['official_policy_announcement'],
+    inclusion_reason: asString(raw.inclusion_reason, 'Accepted reform record retained from static pilot content.'),
+    matched_rules: asStringArray(raw.matched_rules).length > 0 ? asStringArray(raw.matched_rules) : ['manual-static-pilot'],
+    source_title: asString(raw.source_title, asString(raw.title, 'Untitled source')),
+    source_institution: asString(raw.source_institution, 'Source institution pending review'),
+    source_owner: asString(raw.source_owner, asString(raw.source_institution, 'Source owner pending review')),
+    source_url: asString(raw.source_url, '#'),
+    source_published_at: typeof raw.source_published_at === 'string' ? raw.source_published_at : date || undefined,
+    retrieved_at: typeof raw.retrieved_at === 'string' ? raw.retrieved_at : undefined,
+    extracted_at: typeof raw.extracted_at === 'string' ? raw.extracted_at : undefined,
+    as_of_date: typeof raw.as_of_date === 'string' ? raw.as_of_date : date || undefined,
+    status_authority: asString(raw.status_authority, 'Static pilot status; authority pending source review'),
+    reviewer_of_record: asString(raw.reviewer_of_record, 'Internal preview owner pending'),
+    review_date: asString(raw.review_date, date || '2026-05-05'),
+    review_scope: asString(raw.review_scope, 'Static pilot copy only; source/legal currentness not cleared.'),
+    citation_permission:
+      raw.citation_permission === 'external_allowed' ||
+      raw.citation_permission === 'prohibited' ||
+      raw.citation_permission === 'pending'
+        ? raw.citation_permission
+        : 'internal_only',
+    license_class:
+      raw.license_class === 'public_open' ||
+      raw.license_class === 'public_attribution_required' ||
+      raw.license_class === 'public_link_only' ||
+      raw.license_class === 'internal' ||
+      raw.license_class === 'licensed' ||
+      raw.license_class === 'restricted'
+        ? raw.license_class
+        : 'unknown',
+    translation_review_state:
+      raw.translation_review_state === 'reviewed' ||
+      raw.translation_review_state === 'ai_drafted_unreviewed' ||
+      raw.translation_review_state === 'human_translated_unreviewed' ||
+      raw.translation_review_state === 'blocked' ||
+      raw.translation_review_state === 'not_applicable'
+        ? raw.translation_review_state
+        : 'not_translated',
+    caveats:
+      asStringArray(raw.caveats).length > 0
+        ? asStringArray(raw.caveats)
+        : ['Static pilot content. Do not treat this item as a live legal registry or current official notice.'],
     model_refs: asStringArray(raw.model_refs),
   }
 }
@@ -109,7 +193,8 @@ function adaptBrief(raw: RawKnowledgeHubBrief, index: number): ResearchBrief {
 }
 
 export function toKnowledgeHubContent(raw: RawKnowledgeHubPayload): KnowledgeHubContent {
-  const reforms = Array.isArray(raw.reforms) ? raw.reforms.map(adaptReform) : []
+  const rawReforms = Array.isArray(raw.accepted_reforms) ? raw.accepted_reforms : raw.reforms
+  const reforms = Array.isArray(rawReforms) ? rawReforms.map(adaptReform) : []
   const briefs = Array.isArray(raw.briefs) ? raw.briefs.map(adaptBrief) : []
   const candidates = Array.isArray(raw.candidates) ? raw.candidates : []
   const meta = raw.meta ?? {}
@@ -138,6 +223,7 @@ export function knowledgeHubArtifactToContent(artifact: KnowledgeHubArtifact): K
     extraction_mode: artifact.extraction_mode,
     extraction_mode_label: artifact.extraction_mode_label,
     source_artifact: '/data/knowledge-hub.json',
+    accepted_reforms: artifact.accepted_reforms,
     candidates: artifact.candidates,
     caveats: artifact.caveats,
     meta: {

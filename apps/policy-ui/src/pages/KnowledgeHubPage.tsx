@@ -32,17 +32,20 @@ export function KnowledgeHubPage() {
     setSourceState(nextState)
   }
 
+  const acceptedCount = sourceState.content?.meta.reforms_tracked ?? sourceState.content?.reforms.length ?? 0
   const candidateCount = sourceState.content?.meta.candidate_items ?? sourceState.content?.candidates?.length ?? 0
   const sourcesConfigured = sourceState.content?.meta.sources_configured ?? 0
-  const extractionModeLabel = sourceState.content?.extraction_mode_label ?? 'Candidate intake'
+  const extractionModeLabel = sourceState.content?.extraction_mode_label ?? 'Tracker artifact'
   const pageHeaderMeta = (
     <>
-      <span className="page-header__eyebrow">Automated reform intake</span>
+      <span className="page-header__eyebrow">Reform tracker</span>
       <span>{extractionModeLabel}</span>
-      <span>source-extracted</span>
-      <span>unreviewed / needs review</span>
+      <span>accepted records separated from candidates</span>
       <span>
         Sources <strong>{sourcesConfigured}</strong>
+      </span>
+      <span>
+        Accepted reforms <strong>{acceptedCount}</strong>
       </span>
       <span>
         Candidates <strong>{candidateCount}</strong>

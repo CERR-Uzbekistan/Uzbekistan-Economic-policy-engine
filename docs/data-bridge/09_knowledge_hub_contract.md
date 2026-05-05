@@ -4,6 +4,12 @@ Date: 2026-04-27
 Status: planning contract only; docs-only; no edits to `apps/policy-ui/**`; no edits to `apps/policy-ui/src/contracts/data-contract.ts`; no edits to `apps/policy-ui/src/data/mock/knowledge-hub.ts`; no backend code; no data files; no mock data changes; no source CRUD or schema edits authorized  
 Scope: governance contract for the current static Knowledge Hub and future source/citation lineage
 
+2026-05-05 implementation amendment: `docs/planning/knowledge-hub-reform-tracker-v1.md`
+authorizes the first narrow frontend/static-artifact slice for the Reform Tracker v1. That slice
+may edit Knowledge Hub frontend components, Knowledge Hub types/guards/adapters, the public static
+artifact shape, and reform-intake tests/rulebook while preserving the backend/API/CRUD/live-publish
+stop conditions below.
+
 Review resolution: Claude Code required reconciliation with current schema, binding to AI governance, item-level lineage, reform-status authority, `model_refs` whitelist, `domain_tag` control, per-item citation scope, takedown/correction protocol, copyright/translation/reviewer governance, and read-only-first API.
 
 Patch review resolution: Claude Code required AI-mode canonicalization, `reviewed_by` wording reconciliation, `literature_items` reconciliation, an explicit no-edit clause, transitional `model_refs` rules, operational cross-citation checking, and default states for existing pilot items.

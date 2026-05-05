@@ -87,18 +87,21 @@ const HASH_ROUTES = [
     extraExpression: `
       (() => {
       const text = (document.body.innerText || '').toLowerCase();
+      const hasAcceptedSection = !!document.querySelector('.accepted-section');
       const hasCandidateSection = !!document.querySelector('.candidate-section');
       const hasSourceMetadata =
         !!document.querySelector('.candidate-meta') &&
         !!document.querySelector('.candidate-meta a[href^="http"]');
       const hasReviewStatus =
-        text.includes('source-extracted') &&
+        text.includes('source_extracted') &&
+        text.includes('candidate') &&
         text.includes('unreviewed') &&
-        text.includes('needs review');
+        text.includes('needs_review');
       const hasNonOfficialCaveat =
         text.includes('not an official reviewed policy database') ||
         (text.includes('not an official') && text.includes('reviewed') && text.includes('database'));
       return (
+      hasAcceptedSection &&
       hasCandidateSection &&
       hasReviewStatus &&
       hasSourceMetadata &&
@@ -783,13 +786,13 @@ function languageSwitchExpression(language, expectedTitle) {
 function knowledgeHubCandidateExpression() {
   return `
     (() => {
+      const acceptedSection = document.querySelector('.knowledge-hub-page .accepted-section');
       const candidateSection = document.querySelector('.knowledge-hub-page .candidate-section');
       const candidateMeta = document.querySelector('.knowledge-hub-page .candidate-meta');
       const forbiddenSelectors = [
         '.pending-surface',
         '.knowledge-hub-static-banner',
         '.hub-grid',
-        '.knowledge-hub-reform-timeline-title',
       ];
       const forbiddenSelector = forbiddenSelectors.find((selector) => document.querySelector(selector));
       const text = document.body.innerText || '';
@@ -802,10 +805,12 @@ function knowledgeHubCandidateExpression() {
         'WTO accession',
       ].find((snippet) => normalizedText.includes(snippet.toLowerCase()));
       const requiredNormalizedText = [
-        'source-extracted',
+        'accepted reforms',
+        'source_extracted',
+        'candidate',
         'unreviewed',
-        'needs review',
-        'extracted_at',
+        'needs_review',
+        'retrieved_at',
       ];
       const missingText = requiredNormalizedText.filter((snippet) => !normalizedText.includes(snippet));
       const hasSourceMetadata = !!candidateMeta && !!candidateMeta.querySelector('a[href^="http"]');
@@ -817,12 +822,14 @@ function knowledgeHubCandidateExpression() {
       return {
         ok:
           !!candidateSection &&
+          !!acceptedSection &&
           missingText.length === 0 &&
           hasSourceMetadata &&
           hasNonOfficialCaveat &&
           !forbiddenSelector &&
           !forbiddenText,
         hasCandidateSection: !!candidateSection,
+        hasAcceptedSection: !!acceptedSection,
         hasSourceMetadata,
         hasNonOfficialCaveat,
         missingText,
@@ -1007,7 +1014,7 @@ async function navigateAndAssertRoute(client, baseUrl, route, details) {
         `Observed Knowledge Hub state: ${JSON.stringify(candidateResult)}`,
       ])
     }
-    details.push('Knowledge Hub rendered source-extracted candidate intake and kept hidden mock content out.')
+    details.push('Knowledge Hub rendered accepted/candidate tracker lanes and kept hidden mock content out.')
   }
 
   return null

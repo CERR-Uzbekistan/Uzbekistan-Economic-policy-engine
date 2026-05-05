@@ -10,5 +10,5 @@ export const PRIMARY_NAV_ITEMS: NavItem[] = [
   { labelKey: 'nav.comparison', path: '/comparison' },
   { labelKey: 'nav.modelExplorer', path: '/model-explorer' },
   { labelKey: 'nav.dataRegistry', path: '/data-registry' },
-  { labelKey: 'nav.knowledgeHub', path: '/knowledge-hub', badgeKey: 'nav.pending' },
+  { labelKey: 'nav.knowledgeHub', path: '/knowledge-hub' },
 ]

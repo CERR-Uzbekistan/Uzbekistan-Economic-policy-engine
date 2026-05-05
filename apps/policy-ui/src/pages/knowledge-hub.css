@@ -37,9 +37,46 @@
   font-size: 0.92rem;
 }
 
-.candidate-section {
+.tracker-summary {
+  display: grid;
+  gap: var(--space-sm);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.tracker-summary > div {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  display: grid;
+  gap: 0.15rem;
+  padding: var(--space-md);
+}
+
+.tracker-summary__value {
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.tracker-summary__label {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.accepted-section {
+  border-left: 3px solid var(--color-brand);
   display: grid;
   gap: var(--space-lg);
+  padding-left: var(--space-lg);
+}
+
+.candidate-section {
+  border-left: 3px solid var(--color-warn);
+  display: grid;
+  gap: var(--space-lg);
+  padding-left: var(--space-lg);
 }
 
 .candidate-list {
@@ -49,7 +86,7 @@
 
 .candidate-item {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-warn);
   border-radius: var(--radius-sm);
   display: grid;
   gap: var(--space-sm);
@@ -76,7 +113,16 @@
   margin: 0;
 }
 
-.candidate-meta {
+.candidate-item__caveat,
+.tracker-item-caveat {
+  background: var(--color-surface-muted);
+  border-left: 3px solid var(--color-border-strong);
+  color: var(--color-text);
+  padding: var(--space-xs) var(--space-sm);
+}
+
+.candidate-meta,
+.tracker-item-meta {
   border-top: 1px solid var(--color-border);
   display: grid;
   gap: var(--space-sm);
@@ -85,11 +131,13 @@
   padding-top: var(--space-sm);
 }
 
-.candidate-meta div {
+.candidate-meta div,
+.tracker-item-meta div {
   min-width: 0;
 }
 
-.candidate-meta dt {
+.candidate-meta dt,
+.tracker-item-meta dt {
   color: var(--color-text-muted);
   font-family: var(--font-mono);
   font-size: 0.66rem;
@@ -97,15 +145,30 @@
   text-transform: uppercase;
 }
 
-.candidate-meta dd {
+.candidate-meta dd,
+.tracker-item-meta dd {
   font-size: 0.84rem;
   line-height: 1.45;
   margin: 0;
   overflow-wrap: anywhere;
 }
 
-.candidate-meta a {
+.candidate-meta a,
+.tracker-item-meta a {
   color: var(--color-brand);
+}
+
+.candidate-inclusion {
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+  padding-top: var(--space-sm);
+}
+
+.candidate-inclusion summary {
+  color: var(--color-text);
+  cursor: pointer;
+  font-weight: 650;
 }
 
 .knowledge-hub-caveats {
@@ -127,7 +190,9 @@
 }
 
 @media (max-width: 720px) {
-  .candidate-meta {
+  .candidate-meta,
+  .tracker-item-meta,
+  .tracker-summary {
     grid-template-columns: 1fr;
   }
 }

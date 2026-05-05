@@ -1,10 +1,63 @@
 // Hidden pilot content. Not deployable. Gated by docs/data-bridge/09_knowledge_hub_contract.md
 // and CLAUDE.md preview gates. No data edits.
-import type { KnowledgeHubContent } from '../../contracts/data-contract.js'
+import type { KnowledgeHubContent, ReformTrackerItem } from '../../contracts/data-contract.js'
 
 // Content seeded verbatim from docs/alignment/spec_prototype.html:2332–2412.
 // Editorial voice is institutionally well-formed; Shot 2 will localize bylines
 // and mechanism paragraphs into RU/UZ (translation keys are already wired).
+
+type StaticPilotReform = {
+  id: string
+  date_label: string
+  date_iso?: string
+  status: 'completed' | 'in_progress' | 'planned'
+  title: string
+  mechanism: string
+  domain_tag: string
+  model_refs: string[]
+}
+
+function pilotReform(input: StaticPilotReform): ReformTrackerItem {
+  const statusMap = {
+    completed: 'adopted',
+    in_progress: 'in_implementation',
+    planned: 'planned',
+  } as const
+  const date = input.date_iso ?? input.date_label
+
+  return {
+    id: input.id,
+    extraction_state: 'manual_seed',
+    review_state: 'accepted_internal',
+    review_status: 'owner_reviewed',
+    status: statusMap[input.status],
+    title: input.title,
+    summary: input.mechanism,
+    domain_tag: input.domain_tag,
+    domain_tags: [input.domain_tag],
+    reform_category: 'other_policy',
+    evidence_types: ['official_policy_announcement'],
+    inclusion_reason: 'Static pilot reform retained for hidden internal-preview tests.',
+    matched_rules: ['manual-static-pilot'],
+    source_title: input.title,
+    source_institution: 'Static pilot content',
+    source_owner: 'CERR internal preview',
+    source_url: '#',
+    source_published_at: date,
+    as_of_date: date,
+    status_authority: 'Static pilot status; source/legal authority pending review',
+    reviewer_of_record: 'Internal preview owner pending',
+    review_date: input.date_iso ?? '2026-05-05',
+    review_scope: 'Static pilot copy only; source/legal currentness not cleared.',
+    citation_permission: 'internal_only',
+    license_class: 'unknown',
+    translation_review_state: 'not_translated',
+    caveats: [
+      'Static pilot content. Do not treat this item as a live legal registry or current official notice.',
+    ],
+    model_refs: input.model_refs,
+  }
+}
 
 export const knowledgeHubContentMock: KnowledgeHubContent = {
   meta: {
@@ -13,7 +66,7 @@ export const knowledgeHubContentMock: KnowledgeHubContent = {
     literature_items: 22,
   },
   reforms: [
-    {
+    pilotReform({
       id: 'pp-642-customs-phase-2',
       date_label: '14 APR 2026',
       date_iso: '2026-04-14',
@@ -23,8 +76,8 @@ export const knowledgeHubContentMock: KnowledgeHubContent = {
         'Risk-based customs clearance; reduces average physical-inspection rate to ~7%. Expected impact: ~0.4 pp ad-valorem trade-cost reduction.',
       domain_tag: 'Trade',
       model_refs: ['PE', 'CGE'],
-    },
-    {
+    }),
+    pilotReform({
       id: 'cbu-fx-rr-2026',
       date_label: '02 APR 2026',
       date_iso: '2026-04-02',
@@ -34,8 +87,8 @@ export const knowledgeHubContentMock: KnowledgeHubContent = {
         'Raised from 14% to 18%; intended to lower dollarization incentives. Secondary effect on credit channel under analysis.',
       domain_tag: 'Monetary',
       model_refs: ['QPM', 'FPP'],
-    },
-    {
+    }),
+    pilotReform({
       id: 'gas-tariff-adjustment-2026',
       date_label: '21 MAR 2026',
       date_iso: '2026-03-21',
@@ -45,8 +98,8 @@ export const knowledgeHubContentMock: KnowledgeHubContent = {
         'Quarterly indexation to an oil-linked benchmark with a 3-month lag; phased subsidy reduction across 2026–2028.',
       domain_tag: 'Fiscal / structural',
       model_refs: ['CGE', 'FPP'],
-    },
-    {
+    }),
+    pilotReform({
       id: 'wto-final-tariff-schedule',
       date_label: 'Q3 2026 · Planned',
       status: 'planned',
@@ -54,7 +107,7 @@ export const knowledgeHubContentMock: KnowledgeHubContent = {
       mechanism: 'Bound rates on HS 28–40 chapters; transition period 2026–2030.',
       domain_tag: 'Trade',
       model_refs: ['PE', 'CGE'],
-    },
+    }),
   ],
   briefs: [
     {

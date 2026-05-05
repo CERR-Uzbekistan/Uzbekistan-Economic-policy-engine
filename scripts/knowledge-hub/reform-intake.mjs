@@ -2,7 +2,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-export const KNOWLEDGE_HUB_SCHEMA_VERSION = 'knowledge-hub-reform-candidates.v2'
+export const KNOWLEDGE_HUB_SCHEMA_VERSION = 'knowledge-hub-reform-tracker.v1'
 export const FIXTURE_DEMO_EXTRACTION_MODE = 'fixture-demo'
 export const CONFIGURED_SOURCE_FETCH_EXTRACTION_MODE = 'configured-source-fetch'
 
@@ -110,6 +110,7 @@ export const REFORM_EVIDENCE_TYPES = [
 export const REFORM_CATEGORIES = [
   'monetary_policy',
   'fiscal_tax',
+  'budget_public_finance',
   'trade_customs',
   'energy_tariffs',
   'financial_sector',
@@ -119,6 +120,9 @@ export const REFORM_CATEGORIES = [
   'agriculture',
   'digital_public_admin',
   'infrastructure_investment',
+  'industrial_policy',
+  'competition_regulation',
+  'labor_market',
   'other_policy',
 ]
 
@@ -596,21 +600,30 @@ function sourceItemToDecision(source, item, extractedAt, summaryFallback) {
   return {
     candidate: {
       id: `${source.id}-${slugify(`${item.publishedAt}-${item.id ?? ''}-${item.title}`)}`,
-      extraction_state: 'source-extracted',
-      review_state: 'unreviewed',
+      extraction_state: 'source_extracted',
+      review_state: 'candidate',
       review_status: 'needs_review',
+      status: 'unknown',
       title: item.title,
       summary: item.summary || summaryFallback,
       domain_tag: categoryToDomainTag(classification.reform_category),
+      domain_tags: [categoryToDomainTag(classification.reform_category)],
       reform_category: classification.reform_category,
       evidence_types: classification.evidence_types,
       relevance_score: classification.relevance_score,
       inclusion_reason: classification.inclusion_reason,
+      matched_rules: classification.matched_include_rules,
       matched_include_rules: classification.matched_include_rules,
+      source_title: item.title,
       source_institution: source.institution,
+      source_owner: source.institution,
       source_url: sourceUrl,
       source_published_at: item.publishedAt || undefined,
+      retrieved_at: extractedAt,
       extracted_at: extractedAt,
+      citation_permission: 'pending',
+      license_class: 'unknown',
+      translation_review_state: 'not_translated',
       caveats: [
         'Deterministic extraction from configured source text.',
         'Unreviewed candidate; not an official reviewed policy database entry.',
@@ -898,6 +911,7 @@ export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options 
     extraction_mode_label: fetchSource ? 'Configured source fetch' : 'Fixture/demo intake',
     rulebook: REFORM_INTAKE_RULEBOOK,
     sources: sources.map(sourceDefinitionToArtifactSource),
+    accepted_reforms: [],
     candidates,
     caveats,
   }

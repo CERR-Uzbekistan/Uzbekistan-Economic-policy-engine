@@ -57,7 +57,7 @@ describe('knowledge hub adapter', () => {
     const content = toKnowledgeHubContent(raw)
 
     assert.equal(content.reforms.length, 1)
-    assert.equal(content.reforms[0].status, 'in_progress')
+    assert.equal(content.reforms[0].status, 'in_implementation')
     assert.deepEqual(content.reforms[0].model_refs, ['PE', 'CGE'])
     assert.equal(content.briefs.length, 1)
     assert.equal(content.briefs[0].byline.ai_drafted, true)
@@ -73,21 +73,30 @@ describe('knowledge hub adapter', () => {
       candidates: [
         {
           id: 'candidate-1',
-          extraction_state: 'source-extracted',
-          review_state: 'unreviewed',
+          extraction_state: 'source_extracted',
+          review_state: 'candidate',
           review_status: 'needs_review',
+          status: 'unknown',
           title: 'Policy rate consultation',
           summary: 'Consultation summary.',
           domain_tag: 'Monetary',
+          domain_tags: ['Monetary'],
           reform_category: 'monetary_policy',
           evidence_types: ['regulatory_parameter_change'],
           relevance_score: 50,
           inclusion_reason: 'Included by Monetary or financial-sector parameter.',
+          matched_rules: ['monetary-or-financial-parameter'],
           matched_include_rules: ['monetary-or-financial-parameter'],
+          source_title: 'Policy rate consultation',
           source_institution: 'Central Bank of Uzbekistan',
+          source_owner: 'Central Bank of Uzbekistan',
           source_url: 'https://cbu.uz/example',
           source_published_at: '2026-04-25',
+          retrieved_at: '2026-05-05T08:00:00.000Z',
           extracted_at: '2026-05-05T08:00:00.000Z',
+          citation_permission: 'pending',
+          license_class: 'unknown',
+          translation_review_state: 'not_translated',
           caveats: ['Unreviewed candidate.'],
         },
       ],
@@ -96,7 +105,7 @@ describe('knowledge hub adapter', () => {
     assert.equal(content.reforms.length, 0)
     assert.equal(content.briefs.length, 0)
     assert.equal(content.candidates?.length, 1)
-    assert.equal(content.candidates?.[0].extraction_state, 'source-extracted')
+    assert.equal(content.candidates?.[0].extraction_state, 'source_extracted')
     assert.equal(content.candidates?.[0].review_status, 'needs_review')
     assert.equal(content.extraction_mode, 'fixture-demo')
     assert.equal(content.extraction_mode_label, 'Fixture/demo intake')
@@ -140,13 +149,17 @@ describe('knowledge hub adapter', () => {
     assert.ok(validation.ok && validation.value.rulebook.exclusion_reasons.length > 0)
     assert.ok(validation.ok && validation.value.rulebook.actual_reform_definition?.includes('legal or policy instrument'))
     assert.ok(validation.ok && validation.value.candidates.length > 0)
-    assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.extraction_state === 'source-extracted'))
-    assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.review_state === 'unreviewed'))
+    assert.ok(validation.ok && validation.value.accepted_reforms.length === 0)
+    assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.extraction_state === 'source_extracted'))
+    assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.review_state === 'candidate'))
     assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.review_status === 'needs_review'))
+    assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.status === 'unknown'))
     assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.inclusion_reason.length > 0))
     assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.evidence_types.length > 0))
-    assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.matched_include_rules.length > 0))
+    assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.matched_rules.length > 0))
     assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.source_institution.length > 0))
+    assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.source_title.length > 0))
+    assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.caveats.length > 0))
     assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.source_url.startsWith('https://')))
 
     const content = knowledgeHubArtifactToContent(validation.ok ? validation.value : artifact)
@@ -189,7 +202,7 @@ describe('knowledge hub adapter', () => {
     assert.equal(state.content?.briefs.length, 0)
     assert.equal(state.content?.extraction_mode, 'configured-source-fetch')
     assert.equal(state.content?.extraction_mode_label, 'Configured source fetch')
-    assert.equal(state.content?.candidates?.[0].extraction_state, 'source-extracted')
+    assert.equal(state.content?.candidates?.[0].extraction_state, 'source_extracted')
     assert.equal(JSON.stringify(knowledgeHubContentMock), beforeMockSnapshot)
   })
 })
