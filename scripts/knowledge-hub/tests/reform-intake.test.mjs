@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
 import { describe, it } from 'node:test'
 import {
   buildKnowledgeHubCandidateArtifact,
@@ -146,7 +147,7 @@ describe('Knowledge Hub reform intake', () => {
     assert.equal(artifact.extraction_mode_label, 'Fixture/demo intake')
     assert.equal(artifact.rulebook.version, REFORM_INTAKE_RULEBOOK.version)
     assert.equal(artifact.sources.length, REFORM_SOURCE_DEFINITIONS.length)
-    assert.equal(artifact.candidates.length, 3)
+    assert.equal(artifact.candidates.length, 12)
     assert.ok(artifact.candidates.every((candidate) => candidate.extraction_state === 'source-extracted'))
     assert.ok(artifact.candidates.every((candidate) => candidate.review_state === 'unreviewed'))
     assert.ok(artifact.candidates.every((candidate) => candidate.review_status === 'needs_review'))
@@ -154,6 +155,46 @@ describe('Knowledge Hub reform intake', () => {
     assert.ok(artifact.candidates.every((candidate) => candidate.evidence_types.length > 0))
     assert.ok(artifact.caveats.some((caveat) => caveat.includes('Fixture/demo mode')))
     assert.ok(artifact.caveats.some((caveat) => caveat.includes('not an official reviewed policy database')))
+  })
+
+  it('configures official source coverage for the requested next batch', () => {
+    const sourceIds = REFORM_SOURCE_DEFINITIONS.map((source) => source.id)
+
+    assert.ok(sourceIds.includes('lex-official-legal-acts'))
+    assert.ok(sourceIds.includes('president-reform-news'))
+    assert.ok(sourceIds.includes('gov-portal-reform-news'))
+    assert.ok(sourceIds.includes('tax-committee-news'))
+    assert.ok(sourceIds.includes('customs-committee-news'))
+    assert.ok(sourceIds.includes('energy-ministry-news'))
+    assert.ok(sourceIds.includes('investment-trade-ministry-news'))
+    assert.ok(sourceIds.includes('justice-ministry-news'))
+    assert.ok(REFORM_SOURCE_DEFINITIONS.every((source) => source.fixture_path))
+    assert.ok(REFORM_SOURCE_DEFINITIONS.every((source) => source.url.startsWith('https://')))
+  })
+
+  it('has deterministic fixtures and extraction diagnostics for every configured source', async () => {
+    const diagnostics = await buildKnowledgeHubCandidateArtifactWithDiagnostics({
+      extractedAt: '2026-05-05T08:00:00.000Z',
+    })
+
+    assert.equal(diagnostics.source_results.length, REFORM_SOURCE_DEFINITIONS.length)
+    assert.equal(diagnostics.source_results.reduce((sum, source) => sum + source.candidate_count, 0), 13)
+    assert.equal(diagnostics.artifact.candidates.length, 12)
+    assert.equal(diagnostics.source_failures.length, 0)
+
+    for (const source of REFORM_SOURCE_DEFINITIONS) {
+      const fixture = readFileSync(source.fixture_path, 'utf8')
+      const decisions = extractCandidateDecisionsFromSource(source, fixture, '2026-05-05T08:00:00.000Z')
+      const result = diagnostics.source_results.find((entry) => entry.id === source.id)
+
+      assert.ok(result, `missing diagnostics for ${source.id}`)
+      assert.equal(result.ok, true)
+      assert.equal(result.parser, source.parser ?? 'auto')
+      assert.equal(result.fetch_url, source.api_url ?? source.url)
+      assert.equal(result.candidate_count, decisions.candidates.length)
+      assert.equal(result.excluded_count, decisions.exclusions.length)
+      assert.ok(decisions.candidates.length + decisions.exclusions.length > 0, `fixture should classify ${source.id}`)
+    }
   })
 
   it('uses the current official gov.uz Ministry News source for MEF intake', () => {
@@ -165,6 +206,7 @@ describe('Knowledge Hub reform intake', () => {
       code: 'imv',
       language: 'en',
     })
+    assert.equal(mefSource.parser, 'govuz-api')
   })
 
   it('extracts MEF candidates from the official gov.uz Ministry News API shape', () => {

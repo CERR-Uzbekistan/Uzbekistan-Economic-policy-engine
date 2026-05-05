@@ -9,25 +9,98 @@ export const CONFIGURED_SOURCE_FETCH_EXTRACTION_MODE = 'configured-source-fetch'
 const scriptDir = dirname(fileURLToPath(import.meta.url))
 const repoRoot = resolve(scriptDir, '..', '..')
 const defaultPublicArtifactPath = resolve(repoRoot, 'apps', 'policy-ui', 'public', 'data', 'knowledge-hub.json')
+const GOV_UZ_NEWS_API_URL = 'https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1'
+
+function fixturePath(fileName) {
+  return resolve(scriptDir, 'source-fixtures', fileName)
+}
+
+function govUzAuthorityNewsSource({ id, institution, code, url, fixture }) {
+  return {
+    id,
+    institution,
+    url,
+    api_url: GOV_UZ_NEWS_API_URL,
+    api_headers: {
+      code,
+      language: 'en',
+    },
+    parser: 'govuz-api',
+    fixture_path: fixturePath(fixture),
+  }
+}
 
 export const REFORM_SOURCE_DEFINITIONS = [
+  {
+    id: 'lex-official-legal-acts',
+    institution: 'National Database of Legislation of the Republic of Uzbekistan (Lex.uz)',
+    url: 'https://lex.uz/uz/search/official?lang=4&pub_date=month',
+    parser: 'html-articles',
+    fixture_path: fixturePath('lex-official-legal-acts.html'),
+  },
+  {
+    id: 'president-reform-news',
+    institution: 'Official website of the President of the Republic of Uzbekistan',
+    url: 'https://president.uz/en/lists/news',
+    parser: 'president-uz-list',
+    fixture_path: fixturePath('president-reform-news.html'),
+  },
+  {
+    id: 'gov-portal-reform-news',
+    institution: 'Government portal of the Republic of Uzbekistan',
+    url: 'https://gov.uz/en/news/news',
+    parser: 'html-articles',
+    fixture_path: fixturePath('gov-portal-reform-news.html'),
+  },
   {
     id: 'cbu-policy-news',
     institution: 'Central Bank of Uzbekistan',
     url: 'https://cbu.uz/en/press_center/news/',
-    fixture_path: resolve(scriptDir, 'source-fixtures', 'cbu-policy-news.html'),
+    parser: 'html-articles',
+    fixture_path: fixturePath('cbu-policy-news.html'),
   },
-  {
+  govUzAuthorityNewsSource({
     id: 'mef-policy-news',
     institution: 'Ministry of Economy and Finance of Uzbekistan',
+    code: 'imv',
     url: 'https://gov.uz/en/imv/news/news',
-    api_url: 'https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1',
-    api_headers: {
-      code: 'imv',
-      language: 'en',
-    },
-    fixture_path: resolve(scriptDir, 'source-fixtures', 'mef-policy-news.html'),
+    fixture: 'mef-policy-news.html',
+  }),
+  govUzAuthorityNewsSource({
+    id: 'tax-committee-news',
+    institution: 'Tax Committee of the Republic of Uzbekistan',
+    code: 'soliq',
+    url: 'https://gov.uz/en/soliq/news/news',
+    fixture: 'tax-committee-news.json',
+  }),
+  {
+    id: 'customs-committee-news',
+    institution: 'State Customs Committee of the Republic of Uzbekistan',
+    url: 'https://old.customs.uz/en/',
+    parser: 'html-articles',
+    fixture_path: fixturePath('customs-committee-news.html'),
   },
+  govUzAuthorityNewsSource({
+    id: 'energy-ministry-news',
+    institution: 'Ministry of Energy of the Republic of Uzbekistan',
+    code: 'minenergy',
+    url: 'https://gov.uz/en/minenergy/news/news',
+    fixture: 'energy-ministry-news.json',
+  }),
+  govUzAuthorityNewsSource({
+    id: 'investment-trade-ministry-news',
+    institution: 'Ministry of Investment, Industry and Trade of the Republic of Uzbekistan',
+    code: 'miit',
+    url: 'https://gov.uz/en/miit/news/news',
+    fixture: 'investment-trade-ministry-news.json',
+  }),
+  govUzAuthorityNewsSource({
+    id: 'justice-ministry-news',
+    institution: 'Ministry of Justice of the Republic of Uzbekistan',
+    code: 'adliya',
+    url: 'https://gov.uz/en/adliya/news/news',
+    fixture: 'justice-ministry-news.json',
+  }),
 ]
 
 export const REFORM_EVIDENCE_TYPES = [
@@ -64,7 +137,7 @@ const INCLUDE_RULE_DEFINITIONS = [
     evidence_types: ['legal_text', 'official_policy_announcement'],
     category: 'other_policy',
     patterns: [
-      /\b(law|decree|resolution|regulation|code|order|rule|rules|amendment|amended|adopted|approved|enacted|introduced)\b/i,
+      /\b(law|decree|resolution|regulation|code|order|rule|rules|amendment|amended|adopted|approved|enacted|introduced|legal act|normative legal act)\b/i,
     ],
   },
   {
@@ -108,7 +181,7 @@ const INCLUDE_RULE_DEFINITIONS = [
     evidence_types: ['implementation_program', 'official_policy_announcement'],
     category: 'business_environment',
     patterns: [
-      /\b(privatization|state-owned enterprise|soe|energy tariff|green economic development|master plan|infrastructure|agriculture|digital government|business environment|small and medium-sized businesses|sme)\b/i,
+      /\b(privatization|state-owned enterprise|soe|energy tariff|green economic development|master plan|infrastructure|agriculture|digital government|digitalization|public service|legal service|notarial|business environment|investment climate|small and medium-sized businesses|sme)\b/i,
     ],
   },
   {
@@ -311,9 +384,9 @@ function classifyDomain(text) {
   if (/(budget|tax|excise|fiscal|subsidy|duty)/.test(normalized)) return 'fiscal_tax'
   if (/(compensation|social protection|household)/.test(normalized)) return 'social_protection'
   if (/(agriculture|fisheries|forestry)/.test(normalized)) return 'agriculture'
-  if (/(digital|electronic declaration|e-government)/.test(normalized)) return 'digital_public_admin'
+  if (/(digital|electronic declaration|e-government|public service|notarial|legal service)/.test(normalized)) return 'digital_public_admin'
   if (/(infrastructure|grant|loan|financing|master plan|green economic development)/.test(normalized)) return 'infrastructure_investment'
-  if (/(business|sme|small and medium-sized)/.test(normalized)) return 'business_environment'
+  if (/(business|investment climate|investor|sme|small and medium-sized)/.test(normalized)) return 'business_environment'
   return 'other_policy'
 }
 
@@ -479,7 +552,48 @@ function extractDecisionsFromGovUzApi(source, payload, extractedAt) {
   }
 }
 
+function parsePresidentUzDate(value) {
+  const match = value.match(/^([0-3]\d)-([01]\d)-(\d{4})$/)
+  if (!match) return value
+  return `${match[3]}-${match[2]}-${match[1]}`
+}
+
+function extractDecisionsFromPresidentUzList(source, html, extractedAt) {
+  const matches = Array.from(
+    html.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>[\s\S]{0,500}?([0-3]\d-[01]\d-\d{4})/gi),
+  )
+  const decisions = matches
+    .map((match) => {
+      const title = normalizeWhitespace(match[2])
+      return {
+        title,
+        summary: title,
+        publishedAt: parsePresidentUzDate(match[3]),
+        sourceUrl: toAbsoluteUrl(match[1], source.url),
+        text: title,
+      }
+    })
+    .filter((item) => item.title.length > 20 && !/president of the republic of uzbekistan/i.test(item.title))
+    .map((item) =>
+      sourceItemToDecision(
+        source,
+        item,
+        extractedAt,
+        'President.uz list item did not expose a separate summary in the configured extraction block.',
+      ),
+    )
+
+  return {
+    candidates: decisions.flatMap((decision) => (decision.candidate ? [decision.candidate] : [])),
+    exclusions: decisions.flatMap((decision) => (decision.exclusion ? [decision.exclusion] : [])),
+  }
+}
+
 export function extractCandidateDecisionsFromSource(source, html, extractedAt) {
+  if (source.parser === 'president-uz-list') {
+    return extractDecisionsFromPresidentUzList(source, html, extractedAt)
+  }
+
   const jsonPayload = maybeParseJson(html)
   const apiDecisions = extractDecisionsFromGovUzApi(source, jsonPayload, extractedAt)
   if (apiDecisions.candidates.length > 0 || apiDecisions.exclusions.length > 0) return apiDecisions
@@ -611,6 +725,8 @@ export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options 
         const candidates = uniqueCandidatesById(decisions.candidates)
         return {
           ...sourceDefinitionToArtifactSource(source),
+          parser: source.parser ?? 'auto',
+          fetch_url: source.api_url ?? source.url,
           ok: true,
           candidate_count: candidates.length,
           excluded_count: decisions.exclusions.length,
@@ -620,6 +736,8 @@ export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options 
       } catch (error) {
         return {
           ...sourceDefinitionToArtifactSource(source),
+          parser: source.parser ?? 'auto',
+          fetch_url: source.api_url ?? source.url,
           ok: false,
           candidate_count: 0,
           excluded_count: 0,
@@ -635,7 +753,7 @@ export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options 
   )
   const sourceFailures = sourceResults
     .filter((result) => !result.ok)
-    .map(({ id, institution, url, error }) => ({ id, institution, url, error }))
+    .map(({ id, institution, url, parser, fetch_url, error }) => ({ id, institution, url, parser, fetch_url, error }))
   const caveats = [
     'This is a deterministic reform-candidate intake artifact.',
     fetchSource
