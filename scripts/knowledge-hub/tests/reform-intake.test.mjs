@@ -3,9 +3,11 @@ import { describe, it } from 'node:test'
 import {
   buildKnowledgeHubCandidateArtifact,
   buildKnowledgeHubCandidateArtifactWithDiagnostics,
+  extractCandidateDecisionsFromSource,
   extractCandidatesFromSource,
   FIXTURE_DEMO_EXTRACTION_MODE,
   KNOWLEDGE_HUB_SCHEMA_VERSION,
+  REFORM_INTAKE_RULEBOOK,
   REFORM_SOURCE_DEFINITIONS,
 } from '../reform-intake.mjs'
 
@@ -37,9 +39,101 @@ describe('Knowledge Hub reform intake', () => {
     assert.equal(candidate.extraction_state, 'source-extracted')
     assert.equal(candidate.review_state, 'unreviewed')
     assert.equal(candidate.review_status, 'needs_review')
+    assert.equal(candidate.reform_category, 'monetary_policy')
+    assert.deepEqual(candidate.evidence_types, ['regulatory_parameter_change', 'official_policy_announcement', 'consultation_notice'])
+    assert.equal(candidate.relevance_score, 90)
+    assert.deepEqual(candidate.matched_include_rules, ['monetary-or-financial-parameter', 'formal-consultation-or-draft'])
+    assert.match(candidate.inclusion_reason, /Included by Monetary or financial-sector parameter/)
     assert.equal(candidate.source_institution, 'Test Institution')
     assert.equal(candidate.source_url, 'https://example.test/policy-rate')
     assert.equal(candidate.extracted_at, '2026-05-05T08:00:00.000Z')
+  })
+
+  it('defines the reform intake rulebook with include, exclude, evidence, category, score, and reason rules', () => {
+    assert.equal(REFORM_INTAKE_RULEBOOK.version, 'knowledge-hub-reform-intake-rulebook.v1')
+    assert.ok(REFORM_INTAKE_RULEBOOK.include_rules.some((rule) => rule.id === 'legal-or-regulatory-change'))
+    assert.ok(REFORM_INTAKE_RULEBOOK.exclude_rules.some((rule) => rule.id === 'routine-meeting-without-policy-measure'))
+    assert.ok(REFORM_INTAKE_RULEBOOK.evidence_types.includes('legal_text'))
+    assert.ok(REFORM_INTAKE_RULEBOOK.reform_categories.includes('trade_customs'))
+    assert.equal(REFORM_INTAKE_RULEBOOK.relevance_scoring.include_threshold, 40)
+    assert.ok(REFORM_INTAKE_RULEBOOK.exclusion_reasons.some((reason) => reason.id === 'routine_meeting_without_policy_measure'))
+  })
+
+  it('excludes routine meetings and cooperation news when no policy measure is present', () => {
+    const html = `
+      <article>
+        <time datetime="2026-05-03">3 May 2026</time>
+        <h2><a href="/meeting">Discussions Held on Prospects for Expanding Cooperation with JBIC</a></h2>
+        <p>A meeting was held on the sidelines of an international forum to exchange views on future cooperation.</p>
+      </article>
+    `
+    const decisions = extractCandidateDecisionsFromSource(
+      {
+        id: 'test-source',
+        institution: 'Test Institution',
+        url: 'https://example.test/news/',
+      },
+      html,
+      '2026-05-05T08:00:00.000Z',
+    )
+
+    assert.equal(decisions.candidates.length, 0)
+    assert.equal(decisions.exclusions.length, 1)
+    assert.equal(decisions.exclusions[0].exclusion_reason, 'routine_meeting_without_policy_measure')
+    assert.deepEqual(decisions.exclusions[0].matched_include_rules, [])
+    assert.ok(decisions.exclusions[0].matched_exclude_rules.includes('routine-meeting-without-policy-measure'))
+  })
+
+  it('excludes policy-rate review previews that do not announce a parameter change', () => {
+    const html = `
+      <article>
+        <time datetime="2026-04-25">25 April 2026</time>
+        <h2><a href="/rate-review">Monetary policy rate review announced for the next Board meeting</a></h2>
+        <p>The Central Bank published materials on inflation conditions, policy rate options, and transmission risks for the upcoming rate decision.</p>
+      </article>
+    `
+    const decisions = extractCandidateDecisionsFromSource(
+      {
+        id: 'test-source',
+        institution: 'Test Institution',
+        url: 'https://example.test/news/',
+      },
+      html,
+      '2026-05-05T08:00:00.000Z',
+    )
+
+    assert.equal(decisions.candidates.length, 0)
+    assert.equal(decisions.exclusions.length, 1)
+    assert.equal(decisions.exclusions[0].exclusion_reason, 'routine_meeting_without_policy_measure')
+    assert.deepEqual(decisions.exclusions[0].matched_include_rules, [])
+    assert.ok(decisions.exclusions[0].matched_exclude_rules.includes('routine-meeting-without-policy-measure'))
+  })
+
+  it('retains explicit legal and policy changes even when announced in meeting coverage', () => {
+    const html = `
+      <article>
+        <time datetime="2026-05-04">4 May 2026</time>
+        <h2><a href="/customs-resolution">Meeting held on approved customs regulation amendments</a></h2>
+        <p>The Cabinet resolution approved amendments introducing risk-based customs clearance rules and electronic declarations.</p>
+      </article>
+    `
+    const [candidate] = extractCandidatesFromSource(
+      {
+        id: 'test-source',
+        institution: 'Test Institution',
+        url: 'https://example.test/news/',
+      },
+      html,
+      '2026-05-05T08:00:00.000Z',
+    )
+
+    assert.equal(candidate.title, 'Meeting held on approved customs regulation amendments')
+    assert.equal(candidate.reform_category, 'trade_customs')
+    assert.ok(candidate.evidence_types.includes('legal_text'))
+    assert.ok(candidate.matched_include_rules.includes('legal-or-regulatory-change'))
+    assert.ok(candidate.matched_include_rules.includes('trade-customs-modernization'))
+    assert.equal(candidate.extraction_state, 'source-extracted')
+    assert.equal(candidate.review_state, 'unreviewed')
   })
 
   it('builds a deterministic static artifact from source fixtures', async () => {
@@ -50,10 +144,14 @@ describe('Knowledge Hub reform intake', () => {
     assert.equal(artifact.schema_version, KNOWLEDGE_HUB_SCHEMA_VERSION)
     assert.equal(artifact.extraction_mode, FIXTURE_DEMO_EXTRACTION_MODE)
     assert.equal(artifact.extraction_mode_label, 'Fixture/demo intake')
+    assert.equal(artifact.rulebook.version, REFORM_INTAKE_RULEBOOK.version)
     assert.equal(artifact.sources.length, REFORM_SOURCE_DEFINITIONS.length)
-    assert.equal(artifact.candidates.length, 4)
+    assert.equal(artifact.candidates.length, 3)
     assert.ok(artifact.candidates.every((candidate) => candidate.extraction_state === 'source-extracted'))
+    assert.ok(artifact.candidates.every((candidate) => candidate.review_state === 'unreviewed'))
     assert.ok(artifact.candidates.every((candidate) => candidate.review_status === 'needs_review'))
+    assert.ok(artifact.candidates.every((candidate) => candidate.inclusion_reason.length > 0))
+    assert.ok(artifact.candidates.every((candidate) => candidate.evidence_types.length > 0))
     assert.ok(artifact.caveats.some((caveat) => caveat.includes('Fixture/demo mode')))
     assert.ok(artifact.caveats.some((caveat) => caveat.includes('not an official reviewed policy database')))
   })
@@ -75,8 +173,8 @@ describe('Knowledge Hub reform intake', () => {
         {
           id: 161792,
           date: '2026-05-05 14:25:00',
-          title: 'Analytical Report on the Fulfillment of Target Indicators in Agriculture, Forestry, and Fisheries',
-          anons: 'Budget and finance policy indicators were reviewed for the first quarter.',
+          title: 'Resolution approved on tax administration amendments for agriculture and fisheries',
+          anons: 'The resolution introduces tax reporting amendments and budget monitoring rules for the sector.',
         },
         {
           id: 161541,
@@ -96,10 +194,11 @@ describe('Knowledge Hub reform intake', () => {
       '2026-05-05T08:00:00.000Z',
     )
 
-    assert.equal(candidate.title, 'Analytical Report on the Fulfillment of Target Indicators in Agriculture, Forestry, and Fisheries')
+    assert.equal(candidate.title, 'Resolution approved on tax administration amendments for agriculture and fisheries')
     assert.equal(candidate.source_url, 'https://gov.uz/en/imv/news/view/161792')
     assert.equal(candidate.source_published_at, '2026-05-05 14:25:00')
     assert.equal(candidate.source_institution, 'Ministry of Economy and Finance of Uzbekistan')
+    assert.equal(candidate.reform_category, 'fiscal_tax')
     assert.equal(candidate.review_status, 'needs_review')
   })
 
@@ -137,20 +236,27 @@ describe('Knowledge Hub reform intake', () => {
     assert.equal(diagnostics.source_results.length, 2)
     assert.equal(diagnostics.source_results[0].ok, true)
     assert.equal(diagnostics.source_results[0].candidate_count, 1)
+    assert.equal(diagnostics.source_results[0].excluded_count, 0)
     assert.equal(diagnostics.source_results[1].ok, false)
     assert.equal(diagnostics.source_failures.length, 1)
     assert.equal(diagnostics.artifact.candidates[0].source_institution, 'OK Institution')
     assert.ok(diagnostics.artifact.caveats.some((caveat) => caveat.includes('configured sources failed')))
   })
 
-  it('deduplicates repeated source candidates by candidate id before artifact output', async () => {
+  it('deduplicates repeated candidates across source definitions before artifact output', async () => {
     const diagnostics = await buildKnowledgeHubCandidateArtifactWithDiagnostics({
       extractedAt: '2026-05-05T08:00:00.000Z',
       sources: [
         {
-          id: 'duplicate-source',
-          institution: 'Duplicate Institution',
+          id: 'duplicate-source-a',
+          institution: 'Duplicate Institution A',
           url: 'https://example.test/news/',
+          fixture_path: REFORM_SOURCE_DEFINITIONS[0].fixture_path,
+        },
+        {
+          id: 'duplicate-source-b',
+          institution: 'Duplicate Institution B',
+          url: 'https://mirror.example.test/news/',
           fixture_path: REFORM_SOURCE_DEFINITIONS[0].fixture_path,
         },
       ],
@@ -158,5 +264,7 @@ describe('Knowledge Hub reform intake', () => {
 
     const candidateIds = diagnostics.artifact.candidates.map((candidate) => candidate.id)
     assert.equal(candidateIds.length, new Set(candidateIds).size)
+    assert.equal(diagnostics.source_results[0].candidate_count, diagnostics.source_results[1].candidate_count)
+    assert.equal(diagnostics.artifact.candidates.length, diagnostics.source_results[0].candidate_count)
   })
 })
