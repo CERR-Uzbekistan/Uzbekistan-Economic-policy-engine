@@ -165,6 +165,53 @@ describe('Knowledge Hub reform intake', () => {
     assert.ok(decisions.exclusions[0].matched_exclude_rules.includes('analytical-report-only'))
   })
 
+  it('does not treat grant, loan, or financing amounts as parameter changes', () => {
+    const examples = [
+      'A €9 million grant was announced for regional green development.',
+      'A $50 million loan will finance infrastructure preparation.',
+      'Financing of 120 million dollars was discussed with partners.',
+    ]
+
+    for (const text of examples) {
+      const decision = classifyReformCandidateText(text)
+
+      assert.equal(decision.included, false, text)
+      assert.ok(!decision.matched_actual_reform_signals.includes('parameter_change'), text)
+    }
+  })
+
+  it('requires signed financing to be tied to a named adopted program with implementation measures', () => {
+    const weakGrantDecision = classifyReformCandidateText(
+      'An agreement was signed with GIZ to attract a €9 million grant to strengthen green economic development in the regions of Uzbekistan based on master plans.',
+    )
+
+    assert.equal(weakGrantDecision.included, false)
+    assert.ok(!weakGrantDecision.matched_actual_reform_signals.includes('binding_financing_program'))
+    assert.ok(!weakGrantDecision.matched_actual_reform_signals.includes('parameter_change'))
+
+    const bindingProgramDecision = classifyReformCandidateText(
+      'A financing agreement was signed for implementation of the approved Green Regions master plan with implementation measures and an action plan for regional rollout.',
+    )
+
+    assert.equal(bindingProgramDecision.included, true)
+    assert.ok(bindingProgramDecision.matched_include_rules.includes('binding-international-financing-or-agreement'))
+    assert.ok(bindingProgramDecision.matched_actual_reform_signals.includes('binding_financing_program'))
+    assert.ok(!bindingProgramDecision.matched_actual_reform_signals.includes('parameter_change'))
+  })
+
+  it('retains tax incentive items with real incentive measure evidence', () => {
+    const decision = classifyReformCandidateText(
+      'Uzbekistan Expands Tax Incentives for Investors Financing Infrastructure Projects',
+    )
+
+    assert.equal(decision.included, true)
+    assert.ok(decision.matched_include_rules.includes('adopted-policy-measure'))
+    assert.ok(decision.matched_include_rules.includes('fiscal-tax-budget-measure'))
+    assert.ok(!decision.matched_include_rules.includes('binding-international-financing-or-agreement'))
+    assert.ok(decision.matched_actual_reform_signals.includes('adopted_measure'))
+    assert.ok(decision.matched_actual_reform_signals.includes('parameter_change'))
+  })
+
   it('retains explicit legal and policy changes even when announced in meeting coverage', () => {
     const html = `
       <article>

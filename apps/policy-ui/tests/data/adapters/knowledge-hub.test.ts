@@ -155,7 +155,7 @@ describe('knowledge hub adapter', () => {
     assert.equal(content.candidates?.length, validation.ok ? validation.value.candidates.length : 0)
     assert.equal(content.meta.candidate_items, validation.ok ? validation.value.candidates.length : 0)
     assert.equal(content.meta.sources_configured, 9)
-    assert.equal(content.meta.candidate_items, 2)
+    assert.equal(content.meta.candidate_items, 1)
     assert.equal(content.extraction_mode_label, 'Configured source fetch')
     assert.ok(content.caveats?.some((caveat) => caveat.includes('configured source URLs')))
     assert.ok(content.caveats?.some((caveat) => caveat.includes('not an official reviewed policy database')))

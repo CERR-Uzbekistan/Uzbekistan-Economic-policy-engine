@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-candidates.v2",
-  "generated_at": "2026-05-05T16:08:12.575Z",
+  "generated_at": "2026-05-05T16:50:46.424Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -77,7 +77,7 @@
       {
         "id": "binding-international-financing-or-agreement",
         "label": "Binding international financing or agreement",
-        "description": "Include signed agreements, grants, loans, and donor financing when tied to a policy program or implementation measure.",
+        "description": "Include signed grants, loans, and donor financing only when tied to a named adopted reform, program, master plan, or roadmap with implementation measures.",
         "weight": 55,
         "evidence_types": [
           "international_agreement",
@@ -166,9 +166,9 @@
         100
       ],
       "include_threshold": 50,
-      "hard_gate": "Domain relevance alone is insufficient. A candidate must match at least one include rule and at least one hard reform signal: instrument, adopted measure, parameter change, or named implementation update.",
-      "high_relevance": "70-100: explicit adopted legal, regulatory, budget, monetary, trade, financing, or implementation measure.",
-      "medium_relevance": "50-69: hard reform candidate with a single adopted instrument, measure, parameter, or implementation signal.",
+      "hard_gate": "Domain relevance alone is insufficient. A candidate must match at least one include rule and at least one hard reform signal: instrument, adopted measure, parameter change, named implementation update, or binding financing program.",
+      "high_relevance": "70-100: explicit adopted legal, regulatory, budget, monetary, trade, binding financing program, or implementation measure.",
+      "medium_relevance": "50-69: hard reform candidate with a single adopted instrument, measure, parameter, implementation, or binding financing program signal.",
       "low_relevance": "0-49: generic news, routine activity, reports, training, cooperation, consultations, or insufficient hard reform evidence."
     },
     "exclusion_reasons": [
@@ -263,33 +263,6 @@
   ],
   "candidates": [
     {
-      "id": "mef-policy-news-2026-04-30-20-50-00-160157-an-agreement-was-signed-with-the-german-agency-for-in",
-      "extraction_state": "source-extracted",
-      "review_state": "unreviewed",
-      "review_status": "needs_review",
-      "title": "An agreement was signed with the German Agency for International Cooperation (GIZ) to attract a €9 million grant to strengthen green economic development in the regions of Uzbekistan based on master plans",
-      "summary": "On April 30, 2026, a meeting was held between Joachim Fritz, Country Director of the German Agency for International Cooperation (GIZ) in Uzbekistan, Beate Schoreit, a Program Manager in Uzbekistan, and Ilkhom Norkulov, First Deputy Minister of Economy and Finance of the Republic of Uzbekistan.",
-      "domain_tag": "Infrastructure",
-      "reform_category": "infrastructure_investment",
-      "evidence_types": [
-        "international_agreement",
-        "implementation_program"
-      ],
-      "relevance_score": 55,
-      "inclusion_reason": "Included by Binding international financing or agreement with hard reform signal(s): parameter_change; source evidence: international_agreement, implementation_program.",
-      "matched_include_rules": [
-        "binding-international-financing-or-agreement"
-      ],
-      "source_institution": "Ministry of Economy and Finance of Uzbekistan",
-      "source_url": "https://gov.uz/en/imv/news/view/160157",
-      "source_published_at": "2026-04-30 20:50:00",
-      "extracted_at": "2026-05-05T16:08:12.575Z",
-      "caveats": [
-        "Deterministic extraction from configured source text.",
-        "Unreviewed candidate; not an official reviewed policy database entry."
-      ]
-    },
-    {
       "id": "investment-trade-ministry-news-2026-04-14-10-20-00-153388-uzbekistan-expands-tax-incentives-for-investors-finan",
       "extraction_state": "source-extracted",
       "review_state": "unreviewed",
@@ -302,20 +275,18 @@
         "official_policy_announcement",
         "implementation_program",
         "budget_tax_measure",
-        "regulatory_parameter_change",
-        "international_agreement"
+        "regulatory_parameter_change"
       ],
       "relevance_score": 100,
-      "inclusion_reason": "Included by Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure, Binding international financing or agreement with hard reform signal(s): adopted_measure, parameter_change; source evidence: official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change, international_agreement.",
+      "inclusion_reason": "Included by Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): adopted_measure, parameter_change; source evidence: official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
       "matched_include_rules": [
         "adopted-policy-measure",
-        "fiscal-tax-budget-measure",
-        "binding-international-financing-or-agreement"
+        "fiscal-tax-budget-measure"
       ],
       "source_institution": "Ministry of Investment, Industry and Trade of the Republic of Uzbekistan",
       "source_url": "https://gov.uz/en/miit/news/view/153388",
       "source_published_at": "2026-04-14 10:20:00",
-      "extracted_at": "2026-05-05T16:08:12.575Z",
+      "extracted_at": "2026-05-05T16:50:46.424Z",
       "caveats": [
         "Deterministic extraction from configured source text.",
         "Unreviewed candidate; not an official reviewed policy database entry."

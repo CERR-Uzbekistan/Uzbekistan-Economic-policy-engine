@@ -196,13 +196,13 @@ const INCLUDE_RULE_DEFINITIONS = [
   {
     id: 'binding-international-financing-or-agreement',
     label: 'Binding international financing or agreement',
-    description: 'Include signed agreements, grants, loans, and donor financing when tied to a policy program or implementation measure.',
+    description: 'Include signed grants, loans, and donor financing only when tied to a named adopted reform, program, master plan, or roadmap with implementation measures.',
     weight: 55,
     evidence_types: ['international_agreement', 'implementation_program'],
     category: 'infrastructure_investment',
     patterns: [
-      /\b(?:agreement was signed|signed agreement|grant|loan|financing|program agreement|memorandum approved)\b.{0,140}\b(?:reform|program|programme|strategy|master plan|roadmap|project|implementation|infrastructure|green economic development|special economic zones|policy)\b/i,
-      /\b(?:reform|program|programme|strategy|master plan|roadmap|project|implementation|infrastructure|green economic development|special economic zones|policy)\b.{0,140}\b(?:agreement was signed|signed agreement|grant|loan|financing|program agreement|memorandum approved)\b/i,
+      /\b(?:agreement was signed|signed agreement|grant agreement|loan agreement|financing agreement|program agreement|signed\b.{0,60}\b(?:grant|loan|financing))\b.{0,180}\b(?:adopted|approved|named|under|within|as part of|for implementation of|to implement)\b.{0,120}\b(?:reform|program|programme|master plan|roadmap)\b.{0,140}\b(?:implementation measures|implementation of measures|measures for implementation|action plan|to implement|implementation roadmap)\b/i,
+      /\b(?:implementation measures|implementation of measures|measures for implementation|action plan|to implement|implementation roadmap)\b.{0,140}\b(?:adopted|approved|named|under|within|as part of|for implementation of)\b.{0,120}\b(?:reform|program|programme|master plan|roadmap)\b.{0,180}\b(?:agreement was signed|signed agreement|grant agreement|loan agreement|financing agreement|program agreement|signed\b.{0,60}\b(?:grant|loan|financing))\b/i,
     ],
   },
 ]
@@ -335,9 +335,9 @@ export const REFORM_INTAKE_RULEBOOK = {
     range: [0, 100],
     include_threshold: 50,
     hard_gate:
-      'Domain relevance alone is insufficient. A candidate must match at least one include rule and at least one hard reform signal: instrument, adopted measure, parameter change, or named implementation update.',
-    high_relevance: '70-100: explicit adopted legal, regulatory, budget, monetary, trade, financing, or implementation measure.',
-    medium_relevance: '50-69: hard reform candidate with a single adopted instrument, measure, parameter, or implementation signal.',
+      'Domain relevance alone is insufficient. A candidate must match at least one include rule and at least one hard reform signal: instrument, adopted measure, parameter change, named implementation update, or binding financing program.',
+    high_relevance: '70-100: explicit adopted legal, regulatory, budget, monetary, trade, binding financing program, or implementation measure.',
+    medium_relevance: '50-69: hard reform candidate with a single adopted instrument, measure, parameter, implementation, or binding financing program signal.',
     low_relevance: '0-49: generic news, routine activity, reports, training, cooperation, consultations, or insufficient hard reform evidence.',
   },
   exclusion_reasons: REFORM_EXCLUSION_REASONS,
@@ -359,8 +359,15 @@ const ACTUAL_REFORM_SIGNAL_DEFINITIONS = [
   {
     id: 'parameter_change',
     patterns: [
-      /\b(?:rate|tariff|duty|excise|tax|reserve requirement|requirement|threshold|quota|allocation|incentive|incentives|grant|loan|financing|compensation)\b.{0,80}\b(?:\d+(?:[.,]\d+)?\s*(?:%|percent|percentage points?|pp|basis points?|bps|million|billion|trillion|€|\$|uzs|sum)|parameters?|adjusted|expands|expanded|introduced|amended|approved|reduced|raised|lowered)\b/i,
-      /\b(?:\d+(?:[.,]\d+)?\s*(?:%|percent|percentage points?|pp|basis points?|bps|million|billion|trillion|€|\$|uzs|sum)|parameters?|adjusted|expands|expanded|introduced|amended|approved|reduced|raised|lowered)\b.{0,80}\b(?:rate|tariff|duty|excise|tax|reserve requirement|requirement|threshold|quota|allocation|incentive|incentives|grant|loan|financing|compensation)\b/i,
+      /\b(?:rate|tariff|duty|excise|tax|reserve requirement|requirement|threshold|quota|allocation|incentive|incentives|compensation)\b.{0,80}\b(?:\d+(?:[.,]\d+)?\s*(?:%|percent|percentage points?|pp|basis points?|bps|million|billion|trillion|€|\$|uzs|sum)|parameters?|adjusted|expands|expanded|introduced|amended|approved|reduced|raised|lowered)\b/i,
+      /\b(?:\d+(?:[.,]\d+)?\s*(?:%|percent|percentage points?|pp|basis points?|bps|million|billion|trillion|€|\$|uzs|sum)|parameters?|adjusted|expands|expanded|introduced|amended|approved|reduced|raised|lowered)\b.{0,80}\b(?:rate|tariff|duty|excise|tax|reserve requirement|requirement|threshold|quota|allocation|incentive|incentives|compensation)\b/i,
+    ],
+  },
+  {
+    id: 'binding_financing_program',
+    patterns: [
+      /\b(?:agreement was signed|signed agreement|grant agreement|loan agreement|financing agreement|program agreement|signed\b.{0,60}\b(?:grant|loan|financing))\b.{0,180}\b(?:adopted|approved|named|under|within|as part of|for implementation of|to implement)\b.{0,120}\b(?:reform|program|programme|master plan|roadmap)\b.{0,140}\b(?:implementation measures|implementation of measures|measures for implementation|action plan|to implement|implementation roadmap)\b/i,
+      /\b(?:implementation measures|implementation of measures|measures for implementation|action plan|to implement|implementation roadmap)\b.{0,140}\b(?:adopted|approved|named|under|within|as part of|for implementation of)\b.{0,120}\b(?:reform|program|programme|master plan|roadmap)\b.{0,180}\b(?:agreement was signed|signed agreement|grant agreement|loan agreement|financing agreement|program agreement|signed\b.{0,60}\b(?:grant|loan|financing))\b/i,
     ],
   },
   {
