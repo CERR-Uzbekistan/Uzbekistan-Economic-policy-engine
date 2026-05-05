@@ -79,6 +79,11 @@ describe('knowledge hub adapter', () => {
           title: 'Policy rate consultation',
           summary: 'Consultation summary.',
           domain_tag: 'Monetary',
+          reform_category: 'monetary_policy',
+          evidence_types: ['regulatory_parameter_change'],
+          relevance_score: 50,
+          inclusion_reason: 'Included by Monetary or financial-sector parameter.',
+          matched_include_rules: ['monetary-or-financial-parameter'],
           source_institution: 'Central Bank of Uzbekistan',
           source_url: 'https://cbu.uz/example',
           source_published_at: '2026-04-25',
@@ -128,12 +133,18 @@ describe('knowledge hub adapter', () => {
 
     assert.equal(validation.ok, true)
     assert.equal(validation.ok ? validation.value.schema_version : null, KNOWLEDGE_HUB_ARTIFACT_SCHEMA_VERSION)
-    assert.equal(validation.ok ? validation.value.extraction_mode : null, 'configured-source-fetch')
-    assert.equal(validation.ok ? validation.value.extraction_mode_label : null, 'Configured source fetch')
+    assert.equal(validation.ok ? validation.value.extraction_mode : null, 'fixture-demo')
+    assert.equal(validation.ok ? validation.value.extraction_mode_label : null, 'Fixture/demo intake')
+    assert.ok(validation.ok && validation.value.rulebook.include_rules.length > 0)
+    assert.ok(validation.ok && validation.value.rulebook.exclude_rules.length > 0)
+    assert.ok(validation.ok && validation.value.rulebook.exclusion_reasons.length > 0)
     assert.ok(validation.ok && validation.value.candidates.length > 0)
     assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.extraction_state === 'source-extracted'))
     assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.review_state === 'unreviewed'))
     assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.review_status === 'needs_review'))
+    assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.inclusion_reason.length > 0))
+    assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.evidence_types.length > 0))
+    assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.matched_include_rules.length > 0))
     assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.source_institution.length > 0))
     assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.source_url.startsWith('https://')))
 
@@ -143,8 +154,8 @@ describe('knowledge hub adapter', () => {
     assert.equal(content.candidates?.length, validation.ok ? validation.value.candidates.length : 0)
     assert.equal(content.meta.candidate_items, validation.ok ? validation.value.candidates.length : 0)
     assert.equal(content.meta.sources_configured, 2)
-    assert.equal(content.extraction_mode_label, 'Configured source fetch')
-    assert.ok(content.caveats?.some((caveat) => caveat.includes('Generated from configured source URLs')))
+    assert.equal(content.extraction_mode_label, 'Fixture/demo intake')
+    assert.ok(content.caveats?.some((caveat) => caveat.includes('Fixture/demo mode')))
     assert.ok(content.caveats?.some((caveat) => caveat.includes('not an official reviewed policy database')))
   })
 
@@ -174,8 +185,8 @@ describe('knowledge hub adapter', () => {
     assert.equal(state.content?.meta.candidate_items, artifact.candidates.length)
     assert.equal(state.content?.reforms.length, 0)
     assert.equal(state.content?.briefs.length, 0)
-    assert.equal(state.content?.extraction_mode, 'configured-source-fetch')
-    assert.equal(state.content?.extraction_mode_label, 'Configured source fetch')
+    assert.equal(state.content?.extraction_mode, 'fixture-demo')
+    assert.equal(state.content?.extraction_mode_label, 'Fixture/demo intake')
     assert.equal(state.content?.candidates?.[0].extraction_state, 'source-extracted')
     assert.equal(JSON.stringify(knowledgeHubContentMock), beforeMockSnapshot)
   })

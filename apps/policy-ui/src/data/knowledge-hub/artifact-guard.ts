@@ -1,7 +1,8 @@
-import type { ReformCandidateItem } from '../../contracts/data-contract.js'
+import type { ReformCandidateItem, ReformCategory, ReformEvidenceType } from '../../contracts/data-contract.js'
 import {
   KNOWLEDGE_HUB_ARTIFACT_SCHEMA_VERSION,
   type KnowledgeHubArtifact,
+  type KnowledgeHubRulebook,
   type KnowledgeHubArtifactSource,
 } from './artifact-types.js'
 
@@ -34,6 +35,43 @@ function stringArray(value: unknown, path: string, issues: KnowledgeHubArtifactV
     issues.push({ path: `${path}[${index}]`, message: 'Expected a string.', severity: 'error' })
     return []
   })
+}
+
+const REFORM_EVIDENCE_TYPE_VALUES: ReformEvidenceType[] = [
+  'legal_text',
+  'official_policy_announcement',
+  'consultation_notice',
+  'budget_tax_measure',
+  'regulatory_parameter_change',
+  'implementation_program',
+  'international_agreement',
+]
+
+const REFORM_CATEGORY_VALUES: ReformCategory[] = [
+  'monetary_policy',
+  'fiscal_tax',
+  'trade_customs',
+  'energy_tariffs',
+  'financial_sector',
+  'soe_privatization',
+  'social_protection',
+  'business_environment',
+  'agriculture',
+  'digital_public_admin',
+  'infrastructure_investment',
+  'other_policy',
+]
+
+function requireNumber(
+  record: Record<string, unknown>,
+  key: string,
+  path: string,
+  issues: KnowledgeHubArtifactValidationIssue[],
+): number {
+  const value = record[key]
+  if (typeof value === 'number' && Number.isFinite(value)) return value
+  issues.push({ path: `${path}.${key}`, message: 'Expected a finite number.', severity: 'error' })
+  return 0
 }
 
 function requireString(
@@ -83,6 +121,65 @@ function validateSource(
   return source
 }
 
+function validateRuleObjects(value: unknown, path: string, issues: KnowledgeHubArtifactValidationIssue[]): Array<Record<string, unknown>> {
+  if (!Array.isArray(value)) {
+    issues.push({ path, message: 'Expected an array of rule objects.', severity: 'error' })
+    return []
+  }
+
+  return value.flatMap((entry, index) => {
+    if (!isRecord(entry)) {
+      issues.push({ path: `${path}[${index}]`, message: 'Expected a rule object.', severity: 'error' })
+      return []
+    }
+    if (!stringValue(entry.id)) {
+      issues.push({ path: `${path}[${index}].id`, message: 'Expected a non-empty rule id.', severity: 'error' })
+    }
+    if (!stringValue(entry.description)) {
+      issues.push({ path: `${path}[${index}].description`, message: 'Expected a non-empty rule description.', severity: 'error' })
+    }
+    return [entry]
+  })
+}
+
+function validateRulebook(
+  value: unknown,
+  path: string,
+  issues: KnowledgeHubArtifactValidationIssue[],
+): KnowledgeHubRulebook | null {
+  if (!isRecord(value)) {
+    issues.push({ path, message: 'Expected a rulebook object.', severity: 'error' })
+    return null
+  }
+
+  const evidenceTypes = stringArray(value.evidence_types, `${path}.evidence_types`, issues)
+  const reformCategories = stringArray(value.reform_categories, `${path}.reform_categories`, issues)
+  for (const evidenceType of evidenceTypes) {
+    if (!REFORM_EVIDENCE_TYPE_VALUES.includes(evidenceType as ReformEvidenceType)) {
+      issues.push({ path: `${path}.evidence_types`, message: `Unknown evidence type ${evidenceType}.`, severity: 'error' })
+    }
+  }
+  for (const category of reformCategories) {
+    if (!REFORM_CATEGORY_VALUES.includes(category as ReformCategory)) {
+      issues.push({ path: `${path}.reform_categories`, message: `Unknown reform category ${category}.`, severity: 'error' })
+    }
+  }
+
+  if (!isRecord(value.relevance_scoring)) {
+    issues.push({ path: `${path}.relevance_scoring`, message: 'Expected a relevance scoring object.', severity: 'error' })
+  }
+
+  return {
+    version: requireString(value, 'version', path, issues),
+    include_rules: validateRuleObjects(value.include_rules, `${path}.include_rules`, issues),
+    exclude_rules: validateRuleObjects(value.exclude_rules, `${path}.exclude_rules`, issues),
+    evidence_types: evidenceTypes,
+    reform_categories: reformCategories,
+    relevance_scoring: isRecord(value.relevance_scoring) ? value.relevance_scoring : {},
+    exclusion_reasons: validateRuleObjects(value.exclusion_reasons, `${path}.exclusion_reasons`, issues),
+  }
+}
+
 function validateCandidate(
   value: unknown,
   path: string,
@@ -101,6 +198,11 @@ function validateCandidate(
     title: requireString(value, 'title', path, issues),
     summary: requireString(value, 'summary', path, issues),
     domain_tag: requireString(value, 'domain_tag', path, issues),
+    reform_category: requireString(value, 'reform_category', path, issues) as ReformCategory,
+    evidence_types: stringArray(value.evidence_types, `${path}.evidence_types`, issues) as ReformEvidenceType[],
+    relevance_score: requireNumber(value, 'relevance_score', path, issues),
+    inclusion_reason: requireString(value, 'inclusion_reason', path, issues),
+    matched_include_rules: stringArray(value.matched_include_rules, `${path}.matched_include_rules`, issues),
     source_institution: requireString(value, 'source_institution', path, issues),
     source_url: requireString(value, 'source_url', path, issues),
     source_published_at: stringValue(value.source_published_at) ?? undefined,
@@ -116,6 +218,23 @@ function validateCandidate(
   }
   if (value.review_status !== 'needs_review') {
     issues.push({ path: `${path}.review_status`, message: 'Expected needs_review.', severity: 'error' })
+  }
+  if (!REFORM_CATEGORY_VALUES.includes(candidate.reform_category)) {
+    issues.push({ path: `${path}.reform_category`, message: 'Unknown reform category.', severity: 'error' })
+  }
+  for (const evidenceType of candidate.evidence_types) {
+    if (!REFORM_EVIDENCE_TYPE_VALUES.includes(evidenceType)) {
+      issues.push({ path: `${path}.evidence_types`, message: `Unknown evidence type ${evidenceType}.`, severity: 'error' })
+    }
+  }
+  if (candidate.evidence_types.length === 0) {
+    issues.push({ path: `${path}.evidence_types`, message: 'Expected at least one evidence type.', severity: 'error' })
+  }
+  if (candidate.matched_include_rules.length === 0) {
+    issues.push({ path: `${path}.matched_include_rules`, message: 'Expected at least one include rule.', severity: 'error' })
+  }
+  if (candidate.relevance_score < 0 || candidate.relevance_score > 100) {
+    issues.push({ path: `${path}.relevance_score`, message: 'Expected a score from 0 to 100.', severity: 'error' })
   }
   validateUrl(candidate.source_url, `${path}.source_url`, issues)
   if (!isIsoLike(candidate.extracted_at)) {
@@ -159,6 +278,7 @@ export function validateKnowledgeHubArtifact(input: unknown): KnowledgeHubArtifa
     })
   }
   const extractionModeLabel = requireString(input, 'extraction_mode_label', '$', issues)
+  const rulebook = validateRulebook(input.rulebook, 'rulebook', issues)
 
   const sources = Array.isArray(input.sources)
     ? input.sources
@@ -198,6 +318,15 @@ export function validateKnowledgeHubArtifact(input: unknown): KnowledgeHubArtifa
       generated_by: stringValue(input.generated_by) ?? undefined,
       extraction_mode: input.extraction_mode as KnowledgeHubArtifact['extraction_mode'],
       extraction_mode_label: extractionModeLabel,
+      rulebook: rulebook ?? {
+        version: '',
+        include_rules: [],
+        exclude_rules: [],
+        evidence_types: [],
+        reform_categories: [],
+        relevance_scoring: {},
+        exclusion_reasons: [],
+      },
       sources,
       candidates,
       caveats,

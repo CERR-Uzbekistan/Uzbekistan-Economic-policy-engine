@@ -683,6 +683,27 @@ export type ResearchBrief = {
 export type ReformCandidateExtractionState = 'source-extracted'
 export type ReformCandidateReviewState = 'unreviewed'
 export type ReformCandidateReviewStatus = 'needs_review'
+export type ReformEvidenceType =
+  | 'legal_text'
+  | 'official_policy_announcement'
+  | 'consultation_notice'
+  | 'budget_tax_measure'
+  | 'regulatory_parameter_change'
+  | 'implementation_program'
+  | 'international_agreement'
+export type ReformCategory =
+  | 'monetary_policy'
+  | 'fiscal_tax'
+  | 'trade_customs'
+  | 'energy_tariffs'
+  | 'financial_sector'
+  | 'soe_privatization'
+  | 'social_protection'
+  | 'business_environment'
+  | 'agriculture'
+  | 'digital_public_admin'
+  | 'infrastructure_investment'
+  | 'other_policy'
 
 export type ReformCandidateItem = {
   id: string
@@ -692,6 +713,11 @@ export type ReformCandidateItem = {
   title: string
   summary: string
   domain_tag: string
+  reform_category: ReformCategory
+  evidence_types: ReformEvidenceType[]
+  relevance_score: number
+  inclusion_reason: string
+  matched_include_rules: string[]
   source_institution: string
   source_url: string
   source_published_at?: string

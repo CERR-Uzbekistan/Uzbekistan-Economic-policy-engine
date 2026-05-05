@@ -2,7 +2,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-export const KNOWLEDGE_HUB_SCHEMA_VERSION = 'knowledge-hub-reform-candidates.v1'
+export const KNOWLEDGE_HUB_SCHEMA_VERSION = 'knowledge-hub-reform-candidates.v2'
 export const FIXTURE_DEMO_EXTRACTION_MODE = 'fixture-demo'
 export const CONFIGURED_SOURCE_FETCH_EXTRACTION_MODE = 'configured-source-fetch'
 
@@ -30,23 +30,210 @@ export const REFORM_SOURCE_DEFINITIONS = [
   },
 ]
 
-const REFORM_KEYWORDS = [
-  'budget',
-  'customs',
-  'deposit',
-  'energy',
-  'excise',
-  'finance',
-  'fiscal',
-  'foreign exchange',
-  'fx',
-  'policy rate',
-  'privatization',
-  'reserve requirement',
-  'subsidy',
-  'tariff',
-  'tax',
+export const REFORM_EVIDENCE_TYPES = [
+  'legal_text',
+  'official_policy_announcement',
+  'consultation_notice',
+  'budget_tax_measure',
+  'regulatory_parameter_change',
+  'implementation_program',
+  'international_agreement',
 ]
+
+export const REFORM_CATEGORIES = [
+  'monetary_policy',
+  'fiscal_tax',
+  'trade_customs',
+  'energy_tariffs',
+  'financial_sector',
+  'soe_privatization',
+  'social_protection',
+  'business_environment',
+  'agriculture',
+  'digital_public_admin',
+  'infrastructure_investment',
+  'other_policy',
+]
+
+const INCLUDE_RULE_DEFINITIONS = [
+  {
+    id: 'legal-or-regulatory-change',
+    label: 'Legal or regulatory change',
+    description: 'Include laws, decrees, resolutions, regulations, code changes, orders, or amendments that create or alter a policy rule.',
+    weight: 55,
+    evidence_types: ['legal_text', 'official_policy_announcement'],
+    category: 'other_policy',
+    patterns: [
+      /\b(law|decree|resolution|regulation|code|order|rule|rules|amendment|amended|adopted|approved|enacted|introduced)\b/i,
+    ],
+  },
+  {
+    id: 'monetary-or-financial-parameter',
+    label: 'Monetary or financial-sector parameter',
+    description: 'Include policy-rate, reserve requirement, prudential, deposit, FX-market, bank, microfinance, or payment-system changes.',
+    weight: 50,
+    evidence_types: ['regulatory_parameter_change', 'official_policy_announcement'],
+    category: 'monetary_policy',
+    patterns: [
+      /\b(policy[- ]rate decision framework|policy[- ]rate framework consultation|policy[- ]rate consultation|policy[- ]rate (?:change|changes|changed|increase|decrease|cut|hike|reduction|adjustment|set|kept|maintained|raised|lowered)|refinancing rate (?:change|changes|changed|increase|decrease|cut|hike|reduction|adjustment|set|kept|maintained|raised|lowered)|reserve requirement|foreign[- ]currency deposit|foreign exchange|fx market|prudential|capital requirement|liquidity requirement|payment system|microfinance|microcredit|banking regulation)\b/i,
+    ],
+  },
+  {
+    id: 'fiscal-tax-budget-measure',
+    label: 'Fiscal, tax, budget, subsidy, or tariff measure',
+    description: 'Include tax, excise, duty, budget, public-finance, subsidy, tariff, compensation, or fiscal-monitoring changes.',
+    weight: 50,
+    evidence_types: ['budget_tax_measure', 'regulatory_parameter_change'],
+    category: 'fiscal_tax',
+    patterns: [
+      /\b(tax|excise|duty|budget|public finance|fiscal|subsidy|subsidies|tariff|compensation|fiscal monitoring|allocation)\b/i,
+    ],
+  },
+  {
+    id: 'trade-customs-modernization',
+    label: 'Trade or customs modernization',
+    description: 'Include customs, border, clearance, declarations, trade corridor, import/export, WTO, or market-access measures.',
+    weight: 45,
+    evidence_types: ['consultation_notice', 'implementation_program'],
+    category: 'trade_customs',
+    patterns: [
+      /\b(customs|border clearance|risk-based clearance|electronic declaration|trade corridor|import|export|wto|market access)\b/i,
+    ],
+  },
+  {
+    id: 'structural-implementation-program',
+    label: 'Structural implementation program',
+    description: 'Include privatization, SOE, energy, infrastructure, agriculture, digital-government, or business-environment reforms with implementation steps.',
+    weight: 45,
+    evidence_types: ['implementation_program', 'official_policy_announcement'],
+    category: 'business_environment',
+    patterns: [
+      /\b(privatization|state-owned enterprise|soe|energy tariff|green economic development|master plan|infrastructure|agriculture|digital government|business environment|small and medium-sized businesses|sme)\b/i,
+    ],
+  },
+  {
+    id: 'formal-consultation-or-draft',
+    label: 'Formal consultation or draft measure',
+    description: 'Include formal consultations and draft measures when the text identifies the proposed policy instrument or mechanism.',
+    weight: 40,
+    evidence_types: ['consultation_notice'],
+    category: 'other_policy',
+    patterns: [
+      /\b(consultation|draft|invited comments|public comment|stakeholder feedback)\b/i,
+    ],
+  },
+  {
+    id: 'binding-international-financing-or-agreement',
+    label: 'Binding international financing or agreement',
+    description: 'Include signed agreements, grants, loans, and donor financing when tied to a policy program or implementation measure.',
+    weight: 42,
+    evidence_types: ['international_agreement', 'implementation_program'],
+    category: 'infrastructure_investment',
+    patterns: [
+      /\b(agreement was signed|signed agreement|grant|loan|financing|program agreement|memorandum approved)\b/i,
+    ],
+  },
+]
+
+const EXCLUDE_RULE_DEFINITIONS = [
+  {
+    id: 'routine-meeting-without-policy-measure',
+    label: 'Routine meeting without policy measure',
+    description: 'Exclude meetings, talks, roundtables, visits, and side-event diplomacy unless the text states a legal, budgetary, regulatory, or implementation measure.',
+    reason: 'routine_meeting_without_policy_measure',
+    overridable_by_policy_measure: true,
+    patterns: [
+      /\b(meeting held|meeting was held|board meeting|discussions held|discussions on cooperation|talks were held|roundtable discussion|met with|visit of|on the sidelines)\b/i,
+    ],
+  },
+  {
+    id: 'cooperation-news-without-instrument',
+    label: 'Cooperation news without instrument',
+    description: 'Exclude generic cooperation, partnership, or prospect-expansion announcements without a signed instrument, financing amount, or concrete policy action.',
+    reason: 'cooperation_news_without_policy_measure',
+    overridable_by_policy_measure: true,
+    patterns: [
+      /\b(cooperation|partnership|prospects for expanding|exchange of views|strengthening relations)\b/i,
+    ],
+  },
+  {
+    id: 'training-or-outreach',
+    label: 'Training or outreach',
+    description: 'Exclude trainings, calendars, awareness weeks, conferences, and public outreach unless a policy measure is explicitly announced.',
+    reason: 'training_or_outreach_only',
+    overridable_by_policy_measure: true,
+    patterns: [
+      /\b(training|calendar|seminar|workshop|financial literacy|awareness|conference|forum)\b/i,
+    ],
+  },
+  {
+    id: 'ceremonial-cultural-event',
+    label: 'Ceremonial or cultural event',
+    description: 'Exclude commemorative, cultural, spiritual, award, and protocol events.',
+    reason: 'ceremonial_or_cultural_event',
+    overridable_by_policy_measure: false,
+    patterns: [
+      /\b(spiritual|enlightenment|anniversary|birthday|award ceremony|commemorative|cultural event|protocol event)\b/i,
+    ],
+  },
+  {
+    id: 'administrative-update-only',
+    label: 'Administrative update only',
+    description: 'Exclude internal performance-discipline, reporting, staffing, and ministry process updates without a policy measure.',
+    reason: 'administrative_update_only',
+    overridable_by_policy_measure: true,
+    patterns: [
+      /\b(performance discipline|work carried out within the system|staffing|internal process|target indicators reviewed)\b/i,
+    ],
+  },
+]
+
+export const REFORM_EXCLUSION_REASONS = [
+  {
+    id: 'no_policy_measure',
+    description: 'The text does not identify a legal, regulatory, fiscal, monetary, trade, implementation, or financing measure.',
+  },
+  {
+    id: 'routine_meeting_without_policy_measure',
+    description: 'The item is routine meeting or diplomatic engagement coverage without an explicit policy measure.',
+  },
+  {
+    id: 'cooperation_news_without_policy_measure',
+    description: 'The item announces cooperation or prospects but no signed instrument, financing commitment, or policy change.',
+  },
+  {
+    id: 'training_or_outreach_only',
+    description: 'The item is training, awareness, outreach, or event logistics only.',
+  },
+  {
+    id: 'ceremonial_or_cultural_event',
+    description: 'The item is ceremonial, cultural, commemorative, or protocol content.',
+  },
+  {
+    id: 'administrative_update_only',
+    description: 'The item is internal administrative reporting without a policy measure.',
+  },
+  {
+    id: 'low_relevance_score',
+    description: 'The text matched weak signals but not enough evidence for intake.',
+  },
+]
+
+export const REFORM_INTAKE_RULEBOOK = {
+  version: 'knowledge-hub-reform-intake-rulebook.v1',
+  include_rules: INCLUDE_RULE_DEFINITIONS.map(({ patterns: _patterns, ...rule }) => rule),
+  exclude_rules: EXCLUDE_RULE_DEFINITIONS.map(({ patterns: _patterns, ...rule }) => rule),
+  evidence_types: REFORM_EVIDENCE_TYPES,
+  reform_categories: REFORM_CATEGORIES,
+  relevance_scoring: {
+    range: [0, 100],
+    include_threshold: 40,
+    high_relevance: '70-100: explicit legal, regulatory, budget, monetary, trade, or implementation measure.',
+    medium_relevance: '40-69: plausible reform candidate with a formal consultation, program, agreement, or parameter signal.',
+    low_relevance: '0-39: generic news, routine activity, or insufficient source evidence.',
+  },
+  exclusion_reasons: REFORM_EXCLUSION_REASONS,
+}
 
 function parseArgs(argv) {
   const args = {
@@ -117,16 +304,63 @@ function slugify(value) {
 
 function classifyDomain(text) {
   const normalized = text.toLowerCase()
-  if (/(energy|gas|privatization|state-owned|infrastructure)/.test(normalized)) return 'Structural'
-  if (/(customs|tariff|trade|wto|import|export)/.test(normalized)) return 'Trade'
-  if (/(policy rate|reserve requirement|foreign exchange|fx|deposit|bank)/.test(normalized)) return 'Monetary'
-  if (/(budget|tax|excise|fiscal|subsidy)/.test(normalized)) return 'Fiscal'
-  return 'Policy'
+  if (/(energy|gas|tariff adjustment)/.test(normalized)) return 'energy_tariffs'
+  if (/(privatization|state-owned|soe)/.test(normalized)) return 'soe_privatization'
+  if (/(customs|trade|wto|import|export|clearance)/.test(normalized)) return 'trade_customs'
+  if (/(policy rate|reserve requirement|foreign exchange|fx|deposit|bank|microfinance|microcredit)/.test(normalized)) return 'monetary_policy'
+  if (/(budget|tax|excise|fiscal|subsidy|duty)/.test(normalized)) return 'fiscal_tax'
+  if (/(compensation|social protection|household)/.test(normalized)) return 'social_protection'
+  if (/(agriculture|fisheries|forestry)/.test(normalized)) return 'agriculture'
+  if (/(digital|electronic declaration|e-government)/.test(normalized)) return 'digital_public_admin'
+  if (/(infrastructure|grant|loan|financing|master plan|green economic development)/.test(normalized)) return 'infrastructure_investment'
+  if (/(business|sme|small and medium-sized)/.test(normalized)) return 'business_environment'
+  return 'other_policy'
 }
 
-function isLikelyReformCandidate(text) {
-  const normalized = text.toLowerCase()
-  return REFORM_KEYWORDS.some((keyword) => normalized.includes(keyword))
+function uniqueStrings(values) {
+  return Array.from(new Set(values))
+}
+
+function matchedRules(definitions, text) {
+  return definitions.filter((rule) => rule.patterns.some((pattern) => pattern.test(text)))
+}
+
+export function classifyReformCandidateText(text) {
+  const includeRules = matchedRules(INCLUDE_RULE_DEFINITIONS, text)
+  const excludeRules = matchedRules(EXCLUDE_RULE_DEFINITIONS, text)
+  const nonOverridableExcludeRule = excludeRules.find((rule) => rule.overridable_by_policy_measure !== true)
+  const hasPolicyMeasure = includeRules.length > 0
+  const policyMeasureOverridesRoutine = hasPolicyMeasure && !nonOverridableExcludeRule
+  const scoreBeforeExclusions = includeRules.reduce((score, rule) => score + rule.weight, 0)
+  const exclusionPenalty = excludeRules.length > 0 && !policyMeasureOverridesRoutine ? 25 : 0
+  const relevanceScore = Math.max(0, Math.min(100, scoreBeforeExclusions - exclusionPenalty))
+  const includeThreshold = REFORM_INTAKE_RULEBOOK.relevance_scoring.include_threshold
+
+  let exclusionReason = null
+  if (nonOverridableExcludeRule) {
+    exclusionReason = nonOverridableExcludeRule.reason
+  } else if (!hasPolicyMeasure) {
+    exclusionReason = excludeRules[0]?.reason ?? 'no_policy_measure'
+  } else if (relevanceScore < includeThreshold) {
+    exclusionReason = 'low_relevance_score'
+  }
+
+  const included = exclusionReason === null
+  const evidenceTypes = uniqueStrings(includeRules.flatMap((rule) => rule.evidence_types))
+  const category = classifyDomain(text)
+
+  return {
+    included,
+    inclusion_reason: included
+      ? `Included by ${includeRules.map((rule) => rule.label).join(', ')} with source evidence: ${evidenceTypes.join(', ')}.`
+      : '',
+    exclusion_reason: exclusionReason,
+    matched_include_rules: includeRules.map((rule) => rule.id),
+    matched_exclude_rules: excludeRules.map((rule) => rule.id),
+    evidence_types: evidenceTypes,
+    reform_category: category,
+    relevance_score: relevanceScore,
+  }
 }
 
 function extractArticleBlocks(html) {
@@ -143,10 +377,77 @@ function maybeParseJson(value) {
   }
 }
 
-function extractCandidatesFromGovUzApi(source, payload, extractedAt) {
-  if (!payload || typeof payload !== 'object' || !Array.isArray(payload.data)) return []
+function sourceItemToDecision(source, item, extractedAt, summaryFallback) {
+  const classification = classifyReformCandidateText(item.text)
+  const sourceUrl = item.sourceUrl ?? source.url
 
-  return payload.data
+  if (!classification.included) {
+    return {
+      candidate: null,
+      exclusion: {
+        title: item.title,
+        source_institution: source.institution,
+        source_url: sourceUrl,
+        source_published_at: item.publishedAt || undefined,
+        exclusion_reason: classification.exclusion_reason ?? 'no_policy_measure',
+        matched_include_rules: classification.matched_include_rules,
+        matched_exclude_rules: classification.matched_exclude_rules,
+        relevance_score: classification.relevance_score,
+      },
+    }
+  }
+
+  return {
+    candidate: {
+      id: `${source.id}-${slugify(`${item.publishedAt}-${item.id ?? ''}-${item.title}`)}`,
+      extraction_state: 'source-extracted',
+      review_state: 'unreviewed',
+      review_status: 'needs_review',
+      title: item.title,
+      summary: item.summary || summaryFallback,
+      domain_tag: categoryToDomainTag(classification.reform_category),
+      reform_category: classification.reform_category,
+      evidence_types: classification.evidence_types,
+      relevance_score: classification.relevance_score,
+      inclusion_reason: classification.inclusion_reason,
+      matched_include_rules: classification.matched_include_rules,
+      source_institution: source.institution,
+      source_url: sourceUrl,
+      source_published_at: item.publishedAt || undefined,
+      extracted_at: extractedAt,
+      caveats: [
+        'Deterministic extraction from configured source text.',
+        'Unreviewed candidate; not an official reviewed policy database entry.',
+      ],
+    },
+    exclusion: null,
+  }
+}
+
+function categoryToDomainTag(category) {
+  const labels = {
+    monetary_policy: 'Monetary',
+    fiscal_tax: 'Fiscal',
+    trade_customs: 'Trade',
+    energy_tariffs: 'Energy',
+    financial_sector: 'Financial sector',
+    soe_privatization: 'SOE',
+    social_protection: 'Social protection',
+    business_environment: 'Business environment',
+    agriculture: 'Agriculture',
+    digital_public_admin: 'Digital public administration',
+    infrastructure_investment: 'Infrastructure',
+    other_policy: 'Policy',
+  }
+  return labels[category] ?? 'Policy'
+}
+
+function extractDecisionsFromGovUzApi(source, payload, extractedAt) {
+  if (!payload || typeof payload !== 'object' || !Array.isArray(payload.data)) {
+    return { candidates: [], exclusions: [] }
+  }
+
+  const decisions = payload.data
     .map((item) => {
       const id = typeof item.id === 'number' || typeof item.id === 'string' ? String(item.id) : ''
       const title = typeof item.title === 'string' ? normalizeWhitespace(item.title) : ''
@@ -162,32 +463,28 @@ function extractCandidatesFromGovUzApi(source, payload, extractedAt) {
         text,
       }
     })
-    .filter((item) => item.id && item.title && isLikelyReformCandidate(item.text))
-    .map((item) => ({
-      id: `${source.id}-${slugify(`${item.publishedAt}-${item.id}-${item.title}`)}`,
-      extraction_state: 'source-extracted',
-      review_state: 'unreviewed',
-      review_status: 'needs_review',
-      title: item.title,
-      summary: item.summary || 'Source API did not expose a summary for this configured extraction item.',
-      domain_tag: classifyDomain(item.text),
-      source_institution: source.institution,
-      source_url: item.sourceUrl,
-      source_published_at: item.publishedAt || undefined,
-      extracted_at: extractedAt,
-      caveats: [
-        'Deterministic extraction from configured source text.',
-        'Unreviewed candidate; not an official reviewed policy database entry.',
-      ],
-    }))
+    .filter((item) => item.id && item.title)
+    .map((item) =>
+      sourceItemToDecision(
+        source,
+        item,
+        extractedAt,
+        'Source API did not expose a summary for this configured extraction item.',
+      ),
+    )
+
+  return {
+    candidates: decisions.flatMap((decision) => (decision.candidate ? [decision.candidate] : [])),
+    exclusions: decisions.flatMap((decision) => (decision.exclusion ? [decision.exclusion] : [])),
+  }
 }
 
-export function extractCandidatesFromSource(source, html, extractedAt) {
+export function extractCandidateDecisionsFromSource(source, html, extractedAt) {
   const jsonPayload = maybeParseJson(html)
-  const apiCandidates = extractCandidatesFromGovUzApi(source, jsonPayload, extractedAt)
-  if (apiCandidates.length > 0) return apiCandidates
+  const apiDecisions = extractDecisionsFromGovUzApi(source, jsonPayload, extractedAt)
+  if (apiDecisions.candidates.length > 0 || apiDecisions.exclusions.length > 0) return apiDecisions
 
-  return extractArticleBlocks(html)
+  const decisions = extractArticleBlocks(html)
     .map((block) => {
       const href = firstMatch(block, [/<a\b[^>]*href=["']([^"']+)["']/i])
       const title = normalizeWhitespace(
@@ -215,24 +512,24 @@ export function extractCandidatesFromSource(source, html, extractedAt) {
         text,
       }
     })
-    .filter((item) => item.title && isLikelyReformCandidate(item.text))
-    .map((item) => ({
-      id: `${source.id}-${slugify(`${item.publishedAt}-${item.title}`)}`,
-      extraction_state: 'source-extracted',
-      review_state: 'unreviewed',
-      review_status: 'needs_review',
-      title: item.title,
-      summary: item.summary || 'Source page did not expose a summary in the configured extraction block.',
-      domain_tag: classifyDomain(item.text),
-      source_institution: source.institution,
-      source_url: item.sourceUrl,
-      source_published_at: item.publishedAt || undefined,
-      extracted_at: extractedAt,
-      caveats: [
-        'Deterministic extraction from configured source text.',
-        'Unreviewed candidate; not an official reviewed policy database entry.',
-      ],
-    }))
+    .filter((item) => item.title)
+    .map((item) =>
+      sourceItemToDecision(
+        source,
+        item,
+        extractedAt,
+        'Source page did not expose a summary in the configured extraction block.',
+      ),
+    )
+
+  return {
+    candidates: decisions.flatMap((decision) => (decision.candidate ? [decision.candidate] : [])),
+    exclusions: decisions.flatMap((decision) => (decision.exclusion ? [decision.exclusion] : [])),
+  }
+}
+
+export function extractCandidatesFromSource(source, html, extractedAt) {
+  return extractCandidateDecisionsFromSource(source, html, extractedAt).candidates
 }
 
 async function readSource(source, fetchSource, fetchImpl = fetch) {
@@ -278,6 +575,26 @@ function uniqueCandidatesById(candidates) {
   })
 }
 
+function candidateDedupeKey(candidate) {
+  const normalizedTitle = candidate.title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+  const publishedDate = candidate.source_published_at?.slice(0, 10) ?? ''
+  return `${publishedDate}:${normalizedTitle}`
+}
+
+function uniqueCandidatesAcrossSources(candidates) {
+  const seen = new Set()
+  return candidates.filter((candidate) => {
+    const key = candidateDedupeKey(candidate)
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
+}
+
 export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options = {}) {
   const extractedAt = options.extractedAt ?? new Date().toISOString()
   const sources = options.sources ?? REFORM_SOURCE_DEFINITIONS
@@ -290,11 +607,14 @@ export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options 
     sources.map(async (source) => {
       try {
         const html = await readSource(source, fetchSource, fetchImpl)
-        const candidates = uniqueCandidatesById(extractCandidatesFromSource(source, html, extractedAt))
+        const decisions = extractCandidateDecisionsFromSource(source, html, extractedAt)
+        const candidates = uniqueCandidatesById(decisions.candidates)
         return {
           ...sourceDefinitionToArtifactSource(source),
           ok: true,
           candidate_count: candidates.length,
+          excluded_count: decisions.exclusions.length,
+          exclusions: decisions.exclusions,
           candidates,
         }
       } catch (error) {
@@ -302,13 +622,17 @@ export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options 
           ...sourceDefinitionToArtifactSource(source),
           ok: false,
           candidate_count: 0,
+          excluded_count: 0,
+          exclusions: [],
           candidates: [],
           error: formatError(error),
         }
       }
     }),
   )
-  const candidates = uniqueCandidatesById(sortCandidates(sourceResults.flatMap((result) => result.candidates)))
+  const candidates = uniqueCandidatesAcrossSources(
+    uniqueCandidatesById(sortCandidates(sourceResults.flatMap((result) => result.candidates))),
+  )
   const sourceFailures = sourceResults
     .filter((result) => !result.ok)
     .map(({ id, institution, url, error }) => ({ id, institution, url, error }))
@@ -331,6 +655,7 @@ export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options 
     generated_by: options.generatedBy ?? 'scripts/knowledge-hub/reform-intake.mjs',
     extraction_mode: extractionMode,
     extraction_mode_label: fetchSource ? 'Configured source fetch' : 'Fixture/demo intake',
+    rulebook: REFORM_INTAKE_RULEBOOK,
     sources: sources.map(sourceDefinitionToArtifactSource),
     candidates,
     caveats,
