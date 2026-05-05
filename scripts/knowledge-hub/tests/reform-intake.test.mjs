@@ -142,4 +142,21 @@ describe('Knowledge Hub reform intake', () => {
     assert.equal(diagnostics.artifact.candidates[0].source_institution, 'OK Institution')
     assert.ok(diagnostics.artifact.caveats.some((caveat) => caveat.includes('configured sources failed')))
   })
+
+  it('deduplicates repeated source candidates by candidate id before artifact output', async () => {
+    const diagnostics = await buildKnowledgeHubCandidateArtifactWithDiagnostics({
+      extractedAt: '2026-05-05T08:00:00.000Z',
+      sources: [
+        {
+          id: 'duplicate-source',
+          institution: 'Duplicate Institution',
+          url: 'https://example.test/news/',
+          fixture_path: REFORM_SOURCE_DEFINITIONS[0].fixture_path,
+        },
+      ],
+    })
+
+    const candidateIds = diagnostics.artifact.candidates.map((candidate) => candidate.id)
+    assert.equal(candidateIds.length, new Set(candidateIds).size)
+  })
 })

@@ -1,9 +1,9 @@
 {
   "schema_version": "knowledge-hub-reform-candidates.v1",
-  "generated_at": "2026-05-05T08:00:00.000Z",
-  "generated_by": "scripts/knowledge-hub/generate-fixture-artifact.mjs",
-  "extraction_mode": "fixture-demo",
-  "extraction_mode_label": "Fixture/demo intake",
+  "generated_at": "2026-05-05T13:57:31.581Z",
+  "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
+  "extraction_mode": "configured-source-fetch",
+  "extraction_mode_label": "Configured source fetch",
   "sources": [
     {
       "id": "cbu-policy-news",
@@ -13,73 +13,237 @@
     {
       "id": "mef-policy-news",
       "institution": "Ministry of Economy and Finance of Uzbekistan",
-      "url": "https://imv.uz/en/news"
+      "url": "https://gov.uz/en/imv/news/news"
     }
   ],
   "candidates": [
     {
-      "id": "cbu-policy-news-2026-04-25-monetary-policy-rate-review-announced-for-the-next-board-meeting",
+      "id": "mef-policy-news-2026-05-05-15-45-00-161846-a-roundtable-discussion-was-held-on-the-development-o",
       "extraction_state": "source-extracted",
       "review_state": "unreviewed",
       "review_status": "needs_review",
-      "title": "Monetary policy rate review announced for the next Board meeting",
-      "summary": "The Central Bank published materials on inflation conditions, policy rate options, and transmission risks for the upcoming rate decision.",
-      "domain_tag": "Monetary",
-      "source_institution": "Central Bank of Uzbekistan",
-      "source_url": "https://cbu.uz/en/press_center/news/monetary-policy-rate-review/",
-      "source_published_at": "2026-04-25",
-      "extracted_at": "2026-05-05T08:00:00.000Z",
+      "title": "A roundtable discussion was held on the development of small and medium-sized businesses and increasing employment in Uzbekistan",
+      "summary": "On May 5 of this year, a high-level roundtable discussion was held at the Ministry of Economy and Finance of the Republic of Uzbekistan, dedicated to the development of small and medium-sized businesses and the acceleration of sustainable job creation.",
+      "domain_tag": "Policy",
+      "source_institution": "Ministry of Economy and Finance of Uzbekistan",
+      "source_url": "https://gov.uz/en/imv/news/view/161846",
+      "source_published_at": "2026-05-05 15:45:00",
+      "extracted_at": "2026-05-05T13:57:31.581Z",
       "caveats": [
         "Deterministic extraction from configured source text.",
         "Unreviewed candidate; not an official reviewed policy database entry."
       ]
     },
     {
-      "id": "mef-policy-news-2026-04-22-consultation-opens-on-customs-digital-corridor-and-risk-based-clearan",
+      "id": "mef-policy-news-2026-05-04-19-50-00-161541-discussions-on-cooperation-were-held-with-the-head-of",
       "extraction_state": "source-extracted",
       "review_state": "unreviewed",
       "review_status": "needs_review",
-      "title": "Consultation opens on customs digital corridor and risk-based clearance",
-      "summary": "The Ministry invited comments on customs modernization steps, electronic declarations, and risk-based clearance for selected trade corridors.",
+      "title": "Discussions on cooperation were held with the head of the company ACWA Power",
+      "summary": "On May 4, 2026, a meeting was held in Samarkand between Muhammad Abunayyan, the head of the Saudi Arabian company ACWA Power, and Jamshid Kuchkarov, Deputy Prime Minister and Minister of Economy and Finance of the Republic of Uzbekistan, on the sidelines of the 59th Annual Meeting of the Asian Development Bank's Board of Governors.",
+      "domain_tag": "Monetary",
+      "source_institution": "Ministry of Economy and Finance of Uzbekistan",
+      "source_url": "https://gov.uz/en/imv/news/view/161541",
+      "source_published_at": "2026-05-04 19:50:00",
+      "extracted_at": "2026-05-05T13:57:31.581Z",
+      "caveats": [
+        "Deterministic extraction from configured source text.",
+        "Unreviewed candidate; not an official reviewed policy database entry."
+      ]
+    },
+    {
+      "id": "mef-policy-news-2026-05-04-17-00-00-161856-a-new-stage-of-international-cooperation-to-support-s",
+      "extraction_state": "source-extracted",
+      "review_state": "unreviewed",
+      "review_status": "needs_review",
+      "title": "A new stage of international cooperation to support small and medium-sized businesses and create new jobs will be discussed",
+      "summary": "On May 5 of this year, the Ministry of Economy and Finance will host a high-level roundtable dedicated to the development of small and medium-sized businesses and the expansion of job creation.",
+      "domain_tag": "Policy",
+      "source_institution": "Ministry of Economy and Finance of Uzbekistan",
+      "source_url": "https://gov.uz/en/imv/news/view/161856",
+      "source_published_at": "2026-05-04 17:00:00",
+      "extracted_at": "2026-05-05T13:57:31.581Z",
+      "caveats": [
+        "Deterministic extraction from configured source text.",
+        "Unreviewed candidate; not an official reviewed policy database entry."
+      ]
+    },
+    {
+      "id": "mef-policy-news-2026-05-03-18-50-00-160896-discussions-held-on-prospects-for-expanding-cooperati",
+      "extraction_state": "source-extracted",
+      "review_state": "unreviewed",
+      "review_status": "needs_review",
+      "title": "Discussions Held on Prospects for Expanding Cooperation with the Chairman of JBIC",
+      "summary": "On May 3, 2026, a meeting was held in Samarkand between Nobumitsu Hayashi, Chairman of the Board of the Japan Bank for International Cooperation (JBIC), and Jamshid Kuchkarov, Deputy Prime Minister and Minister of Economy and Finance of the Republic of Uzbekistan, on the sidelines of the 59th Annual Meeting of the Asian Development Bank's Board of Governors.",
+      "domain_tag": "Monetary",
+      "source_institution": "Ministry of Economy and Finance of Uzbekistan",
+      "source_url": "https://gov.uz/en/imv/news/view/160896",
+      "source_published_at": "2026-05-03 18:50:00",
+      "extracted_at": "2026-05-05T13:57:31.581Z",
+      "caveats": [
+        "Deterministic extraction from configured source text.",
+        "Unreviewed candidate; not an official reviewed policy database entry."
+      ]
+    },
+    {
+      "id": "mef-policy-news-2026-05-03-18-10-00-160895-meeting-held-with-deputy-prime-minister-and-minister-",
+      "extraction_state": "source-extracted",
+      "review_state": "unreviewed",
+      "review_status": "needs_review",
+      "title": "Meeting Held with Deputy Prime Minister and Minister of Economy and Finance of the Republic of Korea",
+      "summary": "On May 3, 2026, a meeting was held on the sidelines of the 59th Annual Meeting of the Board of Governors of the Asian Development Bank in Samarkand between the Deputy Prime Minister and Minister of Economy and Finance of the Republic of Korea, Koo Yun-cheol and the Deputy Prime Minister and Minister of Economy and Finance of the Republic of Uzbekistan, Jamshid Kuchkarov, and the Deputy Prime Minister of the Republic of Uzbekistan, Jamshid Khodjaev.",
+      "domain_tag": "Monetary",
+      "source_institution": "Ministry of Economy and Finance of Uzbekistan",
+      "source_url": "https://gov.uz/en/imv/news/view/160895",
+      "source_published_at": "2026-05-03 18:10:00",
+      "extracted_at": "2026-05-05T13:57:31.581Z",
+      "caveats": [
+        "Deterministic extraction from configured source text.",
+        "Unreviewed candidate; not an official reviewed policy database entry."
+      ]
+    },
+    {
+      "id": "mef-policy-news-2026-05-01-12-20-00-160286-information-on-the-work-carried-out-within-the-system",
+      "extraction_state": "source-extracted",
+      "review_state": "unreviewed",
+      "review_status": "needs_review",
+      "title": "Information on the work carried out within the system of the Ministry of Economy and Finance to ensure the timely execution of tasks and strengthen performance discipline",
+      "summary": "Source API did not expose a summary for this configured extraction item.",
+      "domain_tag": "Policy",
+      "source_institution": "Ministry of Economy and Finance of Uzbekistan",
+      "source_url": "https://gov.uz/en/imv/news/view/160286",
+      "source_published_at": "2026-05-01 12:20:00",
+      "extracted_at": "2026-05-05T13:57:31.581Z",
+      "caveats": [
+        "Deterministic extraction from configured source text.",
+        "Unreviewed candidate; not an official reviewed policy database entry."
+      ]
+    },
+    {
+      "id": "mef-policy-news-2026-04-30-20-50-00-160157-an-agreement-was-signed-with-the-german-agency-for-in",
+      "extraction_state": "source-extracted",
+      "review_state": "unreviewed",
+      "review_status": "needs_review",
+      "title": "An agreement was signed with the German Agency for International Cooperation (GIZ) to attract a €9 million grant to strengthen green economic development in the regions of Uzbekistan based on master plans",
+      "summary": "On April 30, 2026, a meeting was held between Joachim Fritz, Country Director of the German Agency for International Cooperation (GIZ) in Uzbekistan, Beate Schoreit, a Program Manager in Uzbekistan, and Ilkhom Norkulov, First Deputy Minister of Economy and Finance of the Republic of Uzbekistan.",
+      "domain_tag": "Policy",
+      "source_institution": "Ministry of Economy and Finance of Uzbekistan",
+      "source_url": "https://gov.uz/en/imv/news/view/160157",
+      "source_published_at": "2026-04-30 20:50:00",
+      "extracted_at": "2026-05-05T13:57:31.581Z",
+      "caveats": [
+        "Deterministic extraction from configured source text.",
+        "Unreviewed candidate; not an official reviewed policy database entry."
+      ]
+    },
+    {
+      "id": "mef-policy-news-2026-04-30-17-30-00-161672-spiritual-and-enlightenment-event-held-to-mark-the-85",
+      "extraction_state": "source-extracted",
+      "review_state": "unreviewed",
+      "review_status": "needs_review",
+      "title": "SPIRITUAL AND ENLIGHTENMENT EVENT HELD TO MARK THE 85TH BIRTH ANNIVERSARY OF ABDULLA ORIPOV",
+      "summary": "On April 30, 2026, the Ministry of Economy and Finance hosted a spiritual and enlightenment event dedicated to the 85th birth anniversary of Abdulla Oripov, People's Poet of Uzbekistan, Hero of Uzbekistan, and author of the National Anthem.",
+      "domain_tag": "Policy",
+      "source_institution": "Ministry of Economy and Finance of Uzbekistan",
+      "source_url": "https://gov.uz/en/imv/news/view/161672",
+      "source_published_at": "2026-04-30 17:30:00",
+      "extracted_at": "2026-05-05T13:57:31.581Z",
+      "caveats": [
+        "Deterministic extraction from configured source text.",
+        "Unreviewed candidate; not an official reviewed policy database entry."
+      ]
+    },
+    {
+      "id": "cbu-policy-news-fiscal-agent-operations",
+      "extraction_state": "source-extracted",
+      "review_state": "unreviewed",
+      "review_status": "needs_review",
+      "title": "Fiscal agent operations",
+      "summary": "Source page did not expose a summary in the configured extraction block.",
+      "domain_tag": "Fiscal",
+      "source_institution": "Central Bank of Uzbekistan",
+      "source_url": "https://cbu.uz/en/monetary-policy/operations/fiscal-agent/",
+      "extracted_at": "2026-05-05T13:57:31.581Z",
+      "caveats": [
+        "Deterministic extraction from configured source text.",
+        "Unreviewed candidate; not an official reviewed policy database entry."
+      ]
+    },
+    {
+      "id": "cbu-policy-news-fx-market-code-of-ethics",
+      "extraction_state": "source-extracted",
+      "review_state": "unreviewed",
+      "review_status": "needs_review",
+      "title": "FX market Code of Ethics",
+      "summary": "Source page did not expose a summary in the configured extraction block.",
+      "domain_tag": "Monetary",
+      "source_institution": "Central Bank of Uzbekistan",
+      "source_url": "https://cbu.uz/en/monetary-policy/market/",
+      "extracted_at": "2026-05-05T13:57:31.581Z",
+      "caveats": [
+        "Deterministic extraction from configured source text.",
+        "Unreviewed candidate; not an official reviewed policy database entry."
+      ]
+    },
+    {
+      "id": "cbu-policy-news-microfinance-organizations",
+      "extraction_state": "source-extracted",
+      "review_state": "unreviewed",
+      "review_status": "needs_review",
+      "title": "Microfinance organizations",
+      "summary": "Source page did not expose a summary in the configured extraction block.",
+      "domain_tag": "Policy",
+      "source_institution": "Central Bank of Uzbekistan",
+      "source_url": "https://cbu.uz/en/credit-organizations/microcredit/",
+      "extracted_at": "2026-05-05T13:57:31.581Z",
+      "caveats": [
+        "Deterministic extraction from configured source text.",
+        "Unreviewed candidate; not an official reviewed policy database entry."
+      ]
+    },
+    {
+      "id": "cbu-policy-news-policy-rate",
+      "extraction_state": "source-extracted",
+      "review_state": "unreviewed",
+      "review_status": "needs_review",
+      "title": "Policy rate",
+      "summary": "Source page did not expose a summary in the configured extraction block.",
+      "domain_tag": "Monetary",
+      "source_institution": "Central Bank of Uzbekistan",
+      "source_url": "https://cbu.uz/en/monetary-policy/refinancing-rate/",
+      "extracted_at": "2026-05-05T13:57:31.581Z",
+      "caveats": [
+        "Deterministic extraction from configured source text.",
+        "Unreviewed candidate; not an official reviewed policy database entry."
+      ]
+    },
+    {
+      "id": "cbu-policy-news-reserve-requirements",
+      "extraction_state": "source-extracted",
+      "review_state": "unreviewed",
+      "review_status": "needs_review",
+      "title": "Reserve requirements",
+      "summary": "Source page did not expose a summary in the configured extraction block.",
+      "domain_tag": "Monetary",
+      "source_institution": "Central Bank of Uzbekistan",
+      "source_url": "https://cbu.uz/en/monetary-policy/standards-required-reserves/",
+      "extracted_at": "2026-05-05T13:57:31.581Z",
+      "caveats": [
+        "Deterministic extraction from configured source text.",
+        "Unreviewed candidate; not an official reviewed policy database entry."
+      ]
+    },
+    {
+      "id": "cbu-policy-news-tariffs-for-payment-services",
+      "extraction_state": "source-extracted",
+      "review_state": "unreviewed",
+      "review_status": "needs_review",
+      "title": "Tariffs for payment services",
+      "summary": "Source page did not expose a summary in the configured extraction block.",
       "domain_tag": "Trade",
-      "source_institution": "Ministry of Economy and Finance of Uzbekistan",
-      "source_url": "https://imv.uz/en/news/customs-digital-corridor-consultation",
-      "source_published_at": "2026-04-22",
-      "extracted_at": "2026-05-05T08:00:00.000Z",
-      "caveats": [
-        "Deterministic extraction from configured source text.",
-        "Unreviewed candidate; not an official reviewed policy database entry."
-      ]
-    },
-    {
-      "id": "mef-policy-news-2026-04-18-energy-tariff-adjustment-draft-paired-with-social-compensation-measur",
-      "extraction_state": "source-extracted",
-      "review_state": "unreviewed",
-      "review_status": "needs_review",
-      "title": "Energy tariff adjustment draft paired with social compensation measures",
-      "summary": "The draft describes household tariff adjustment parameters, compensation targeting, and fiscal monitoring requirements.",
-      "domain_tag": "Structural",
-      "source_institution": "Ministry of Economy and Finance of Uzbekistan",
-      "source_url": "https://imv.uz/en/news/energy-tariff-social-compensation",
-      "source_published_at": "2026-04-18",
-      "extracted_at": "2026-05-05T08:00:00.000Z",
-      "caveats": [
-        "Deterministic extraction from configured source text.",
-        "Unreviewed candidate; not an official reviewed policy database entry."
-      ]
-    },
-    {
-      "id": "cbu-policy-news-2026-04-12-reserve-requirement-rules-for-foreign-currency-deposits-updated",
-      "extraction_state": "source-extracted",
-      "review_state": "unreviewed",
-      "review_status": "needs_review",
-      "title": "Reserve requirement rules for foreign-currency deposits updated",
-      "summary": "The update describes a phased reserve requirement change for banks' foreign-currency deposit liabilities and the expected prudential review process.",
-      "domain_tag": "Monetary",
       "source_institution": "Central Bank of Uzbekistan",
-      "source_url": "https://cbu.uz/en/press_center/news/fx-deposit-reserve-requirements/",
-      "source_published_at": "2026-04-12",
-      "extracted_at": "2026-05-05T08:00:00.000Z",
+      "source_url": "https://cbu.uz/en/payment-systems/tariffs-for-payment-services/",
+      "extracted_at": "2026-05-05T13:57:31.581Z",
       "caveats": [
         "Deterministic extraction from configured source text.",
         "Unreviewed candidate; not an official reviewed policy database entry."
@@ -88,7 +252,7 @@
   ],
   "caveats": [
     "This is a deterministic reform-candidate intake artifact.",
-    "Fixture/demo mode: generated from checked-in HTML fixtures for deterministic review and smoke testing.",
+    "Generated from configured source URLs at artifact build time.",
     "Items are source-extracted and unreviewed; this is not an official reviewed policy database.",
     "The frontend loads this static JSON artifact only and does not scrape source pages in the browser."
   ]
