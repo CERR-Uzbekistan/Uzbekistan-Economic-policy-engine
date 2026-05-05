@@ -1,0 +1,111 @@
+name: Knowledge Hub Source Fetch Artifact
+
+on:
+  workflow_dispatch:
+    inputs:
+      extracted_at:
+        description: Optional ISO timestamp to stamp into the generated artifact
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  generate-source-fetch-artifact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GENERATED_DIR: ${{ runner.temp }}/knowledge-hub-source-fetch
+      GENERATED_PUBLIC_PATH: ${{ runner.temp }}/knowledge-hub-source-fetch/apps/policy-ui/public/data/knowledge-hub.json
+      REPORT_PATH: ${{ runner.temp }}/knowledge-hub-source-fetch/source-fetch-report.json
+      SUMMARY_PATH: ${{ runner.temp }}/knowledge-hub-source-fetch/summary.md
+      DIFF_PATH: ${{ runner.temp }}/knowledge-hub-source-fetch/knowledge-hub-json.diff
+      PUBLIC_ARTIFACT_PATH: apps/policy-ui/public/data/knowledge-hub.json
+      INPUT_EXTRACTED_AT: ${{ inputs.extracted_at }}
+    steps:
+      - name: Check workflow trigger
+        run: |
+          if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "::error::Knowledge Hub source fetch must only run by manual workflow_dispatch."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check Knowledge Hub intake scripts
+        run: |
+          node --check scripts/knowledge-hub/reform-intake.mjs
+          node --check scripts/knowledge-hub/generate-source-fetch-artifact.mjs
+          node --test scripts/knowledge-hub/tests/*.test.mjs
+
+      - name: Generate configured-source Knowledge Hub artifact
+        id: generate
+        run: |
+          mkdir -p "$(dirname "$GENERATED_PUBLIC_PATH")"
+
+          args=(
+            "scripts/knowledge-hub/generate-source-fetch-artifact.mjs"
+            "--output" "$GENERATED_PUBLIC_PATH"
+            "--report" "$REPORT_PATH"
+            "--summary" "$SUMMARY_PATH"
+          )
+
+          if [ -n "$INPUT_EXTRACTED_AT" ]; then
+            args+=("--extracted-at" "$INPUT_EXTRACTED_AT")
+          fi
+
+          set +e
+          node "${args[@]}"
+          status=$?
+          set -e
+
+          if [ -s "$SUMMARY_PATH" ]; then
+            cat "$SUMMARY_PATH" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          if [ "$status" -ne 0 ]; then
+            echo "::warning::Knowledge Hub source fetch completed with one or more configured-source failures. See uploaded report artifact."
+          fi
+
+      - name: Prepare PR-ready public artifact diff
+        run: |
+          test -s "$GENERATED_PUBLIC_PATH"
+          node -e "JSON.parse(require('node:fs').readFileSync(process.env.GENERATED_PUBLIC_PATH, 'utf8'))"
+
+          cp "$GENERATED_PUBLIC_PATH" "$PUBLIC_ARTIFACT_PATH"
+          git diff -- "$PUBLIC_ARTIFACT_PATH" > "$DIFF_PATH"
+          if [ ! -s "$DIFF_PATH" ]; then
+            printf 'No diff against %s\n' "$PUBLIC_ARTIFACT_PATH" > "$DIFF_PATH"
+          fi
+
+          disallowed="$(git status --porcelain --untracked-files=all | awk '{print $2}' | grep -Fvx "$PUBLIC_ARTIFACT_PATH" || true)"
+          if [ -n "$disallowed" ]; then
+            echo "::error::Manual source-fetch workflow changed files outside $PUBLIC_ARTIFACT_PATH:"
+            echo "$disallowed"
+            exit 1
+          fi
+
+      - name: Upload generated Knowledge Hub artifact bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: knowledge-hub-source-fetch-${{ github.run_id }}
+          if-no-files-found: error
+          path: |
+            ${{ env.GENERATED_PUBLIC_PATH }}
+            ${{ env.REPORT_PATH }}
+            ${{ env.SUMMARY_PATH }}
+            ${{ env.DIFF_PATH }}
+
+      - name: Fail if configured-source fetch had source failures
+        run: |
+          if [ "${{ steps.generate.outputs.status }}" != "0" ]; then
+            echo "::error::Knowledge Hub configured-source fetch reported source failures. Review the uploaded artifact bundle before publishing any diff."
+            exit 1
+          fi

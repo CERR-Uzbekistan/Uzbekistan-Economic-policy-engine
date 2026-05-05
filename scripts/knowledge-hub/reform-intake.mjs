@@ -179,10 +179,10 @@ export function extractCandidatesFromSource(source, html, extractedAt) {
     }))
 }
 
-async function readSource(source, fetchSource) {
+async function readSource(source, fetchSource, fetchImpl = fetch) {
   if (!fetchSource) return readFileSync(source.fixture_path, 'utf8')
 
-  const response = await fetch(source.url, {
+  const response = await fetchImpl(source.url, {
     headers: {
       Accept: 'text/html',
       'User-Agent': 'Uzbekistan-Economic-Policy-Engine/knowledge-hub-intake (+manual-review)',
@@ -192,43 +192,101 @@ async function readSource(source, fetchSource) {
   return response.text()
 }
 
-export async function buildKnowledgeHubCandidateArtifact(options = {}) {
-  const extractedAt = options.extractedAt ?? new Date().toISOString()
-  const sources = options.sources ?? REFORM_SOURCE_DEFINITIONS
-  const fetchSource = options.fetchSource === true
-  const extractionMode = fetchSource
-    ? CONFIGURED_SOURCE_FETCH_EXTRACTION_MODE
-    : FIXTURE_DEMO_EXTRACTION_MODE
-  const candidatesBySource = await Promise.all(
-    sources.map(async (source) => extractCandidatesFromSource(source, await readSource(source, fetchSource), extractedAt)),
-  )
-  const candidates = candidatesBySource.flat().sort((left, right) => {
+function sourceDefinitionToArtifactSource(source) {
+  return {
+    id: source.id,
+    institution: source.institution,
+    url: source.url,
+  }
+}
+
+function formatError(error) {
+  return error instanceof Error ? `${error.name}: ${error.message}` : String(error)
+}
+
+function sortCandidates(candidates) {
+  return candidates.sort((left, right) => {
     const leftDate = left.source_published_at ?? ''
     const rightDate = right.source_published_at ?? ''
     return rightDate.localeCompare(leftDate) || left.title.localeCompare(right.title)
   })
+}
 
-  return {
+export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options = {}) {
+  const extractedAt = options.extractedAt ?? new Date().toISOString()
+  const sources = options.sources ?? REFORM_SOURCE_DEFINITIONS
+  const fetchSource = options.fetchSource === true
+  const fetchImpl = options.fetchImpl ?? fetch
+  const extractionMode = fetchSource
+    ? CONFIGURED_SOURCE_FETCH_EXTRACTION_MODE
+    : FIXTURE_DEMO_EXTRACTION_MODE
+  const sourceResults = await Promise.all(
+    sources.map(async (source) => {
+      try {
+        const html = await readSource(source, fetchSource, fetchImpl)
+        const candidates = extractCandidatesFromSource(source, html, extractedAt)
+        return {
+          ...sourceDefinitionToArtifactSource(source),
+          ok: true,
+          candidate_count: candidates.length,
+          candidates,
+        }
+      } catch (error) {
+        return {
+          ...sourceDefinitionToArtifactSource(source),
+          ok: false,
+          candidate_count: 0,
+          candidates: [],
+          error: formatError(error),
+        }
+      }
+    }),
+  )
+  const candidates = sortCandidates(sourceResults.flatMap((result) => result.candidates))
+  const sourceFailures = sourceResults
+    .filter((result) => !result.ok)
+    .map(({ id, institution, url, error }) => ({ id, institution, url, error }))
+  const caveats = [
+    'This is a deterministic reform-candidate intake artifact.',
+    fetchSource
+      ? 'Generated from configured source URLs at artifact build time.'
+      : 'Fixture/demo mode: generated from checked-in HTML fixtures for deterministic review and smoke testing.',
+    'Items are source-extracted and unreviewed; this is not an official reviewed policy database.',
+    'The frontend loads this static JSON artifact only and does not scrape source pages in the browser.',
+  ]
+
+  if (sourceFailures.length > 0) {
+    caveats.push('One or more configured sources failed during this manual intake run; inspect the workflow report before review.')
+  }
+
+  const artifact = {
     schema_version: KNOWLEDGE_HUB_SCHEMA_VERSION,
     generated_at: extractedAt,
     generated_by: options.generatedBy ?? 'scripts/knowledge-hub/reform-intake.mjs',
     extraction_mode: extractionMode,
     extraction_mode_label: fetchSource ? 'Configured source fetch' : 'Fixture/demo intake',
-    sources: sources.map((source) => ({
-      id: source.id,
-      institution: source.institution,
-      url: source.url,
-    })),
+    sources: sources.map(sourceDefinitionToArtifactSource),
     candidates,
-    caveats: [
-      'This is a deterministic reform-candidate intake artifact.',
-      fetchSource
-        ? 'Generated from configured source URLs at artifact build time.'
-        : 'Fixture/demo mode: generated from checked-in HTML fixtures for deterministic review and smoke testing.',
-      'Items are source-extracted and unreviewed; this is not an official reviewed policy database.',
-      'The frontend loads this static JSON artifact only and does not scrape source pages in the browser.',
-    ],
+    caveats,
   }
+
+  return {
+    artifact,
+    candidate_count: candidates.length,
+    source_results: sourceResults.map(({ candidates: _candidates, ...result }) => result),
+    source_failures: sourceFailures,
+  }
+}
+
+export async function buildKnowledgeHubCandidateArtifact(options = {}) {
+  const diagnostics = await buildKnowledgeHubCandidateArtifactWithDiagnostics(options)
+  if (diagnostics.source_failures.length > 0) {
+    throw new Error(
+      `Failed to read ${diagnostics.source_failures.length} Knowledge Hub source(s): ` +
+        diagnostics.source_failures.map((failure) => `${failure.id} (${failure.error})`).join('; '),
+    )
+  }
+  return diagnostics.artifact
 }
 
 async function main() {
