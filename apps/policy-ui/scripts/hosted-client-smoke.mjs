@@ -19,6 +19,9 @@ const REQUEST_TIMEOUT_MS = 15_000
 const ROUTE_TIMEOUT_MS = 30_000
 const LANGUAGE_TIMEOUT_MS = 15_000
 const DEVTOOLS_TIMEOUT_MS = 15_000
+const BROWSER_EXIT_TIMEOUT_MS = 1_500
+const PROFILE_CLEANUP_MAX_RETRIES = 5
+const PROFILE_CLEANUP_RETRY_DELAY_MS = 250
 const HASH_ROUTES = [
   {
     hash: '#/overview',
@@ -312,6 +315,34 @@ async function waitForDevToolsPort(userDataDir) {
   throw new Error(`Chrome did not expose DevToolsActivePort within ${DEVTOOLS_TIMEOUT_MS}ms.`)
 }
 
+async function cleanupUserDataDir(userDataDir) {
+  try {
+    await rm(userDataDir, {
+      recursive: true,
+      force: true,
+      maxRetries: PROFILE_CLEANUP_MAX_RETRIES,
+      retryDelay: PROFILE_CLEANUP_RETRY_DELAY_MS,
+    })
+  } catch (error) {
+    console.warn(
+      `[hosted-client-smoke] WARNING: unable to remove temporary Chrome profile ${userDataDir}: ` +
+        `${error.name}: ${error.message}`,
+    )
+  }
+}
+
+async function waitForBrowserExit(browser) {
+  if (browser.exited) return
+
+  await new Promise((resolve) => {
+    const timeout = setTimeout(resolve, BROWSER_EXIT_TIMEOUT_MS)
+    browser.child.once('exit', () => {
+      clearTimeout(timeout)
+      resolve()
+    })
+  })
+}
+
 async function launchBrowser() {
   const executable = await findBrowserExecutable()
   if (!executable) {
@@ -366,7 +397,8 @@ async function launchBrowser() {
     return { child, executable, port, userDataDir, stderr, stdout, get exited() { return exited } }
   } catch (error) {
     child.kill('SIGTERM')
-    await rm(userDataDir, { recursive: true, force: true })
+    await waitForBrowserExit({ child, get exited() { return exited } })
+    await cleanupUserDataDir(userDataDir)
     error.message = `${error.message}\nBrowser stderr:\n${stderr.join('').slice(-2000)}`
     throw error
   }
@@ -381,8 +413,9 @@ async function closeBrowser(browser, client) {
   } finally {
     if (!browser.exited) {
       browser.child.kill('SIGTERM')
+      await waitForBrowserExit(browser)
     }
-    await rm(browser.userDataDir, { recursive: true, force: true })
+    await cleanupUserDataDir(browser.userDataDir)
   }
 }
 
