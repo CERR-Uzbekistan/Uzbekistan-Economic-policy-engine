@@ -269,6 +269,15 @@ function sortCandidates(candidates) {
   })
 }
 
+function uniqueCandidatesById(candidates) {
+  const seen = new Set()
+  return candidates.filter((candidate) => {
+    if (seen.has(candidate.id)) return false
+    seen.add(candidate.id)
+    return true
+  })
+}
+
 export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options = {}) {
   const extractedAt = options.extractedAt ?? new Date().toISOString()
   const sources = options.sources ?? REFORM_SOURCE_DEFINITIONS
@@ -281,7 +290,7 @@ export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options 
     sources.map(async (source) => {
       try {
         const html = await readSource(source, fetchSource, fetchImpl)
-        const candidates = extractCandidatesFromSource(source, html, extractedAt)
+        const candidates = uniqueCandidatesById(extractCandidatesFromSource(source, html, extractedAt))
         return {
           ...sourceDefinitionToArtifactSource(source),
           ok: true,
@@ -299,7 +308,7 @@ export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options 
       }
     }),
   )
-  const candidates = sortCandidates(sourceResults.flatMap((result) => result.candidates))
+  const candidates = uniqueCandidatesById(sortCandidates(sourceResults.flatMap((result) => result.candidates)))
   const sourceFailures = sourceResults
     .filter((result) => !result.ok)
     .map(({ id, institution, url, error }) => ({ id, institution, url, error }))
