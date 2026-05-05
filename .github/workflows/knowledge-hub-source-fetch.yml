@@ -16,11 +16,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      GENERATED_DIR: ${{ runner.temp }}/knowledge-hub-source-fetch
-      GENERATED_PUBLIC_PATH: ${{ runner.temp }}/knowledge-hub-source-fetch/apps/policy-ui/public/data/knowledge-hub.json
-      REPORT_PATH: ${{ runner.temp }}/knowledge-hub-source-fetch/source-fetch-report.json
-      SUMMARY_PATH: ${{ runner.temp }}/knowledge-hub-source-fetch/summary.md
-      DIFF_PATH: ${{ runner.temp }}/knowledge-hub-source-fetch/knowledge-hub-json.diff
+      GENERATED_DIR: knowledge-hub-source-fetch-output
+      GENERATED_PUBLIC_PATH: knowledge-hub-source-fetch-output/apps/policy-ui/public/data/knowledge-hub.json
+      REPORT_PATH: knowledge-hub-source-fetch-output/source-fetch-report.json
+      SUMMARY_PATH: knowledge-hub-source-fetch-output/summary.md
+      DIFF_PATH: knowledge-hub-source-fetch-output/knowledge-hub-json.diff
       PUBLIC_ARTIFACT_PATH: apps/policy-ui/public/data/knowledge-hub.json
       INPUT_EXTRACTED_AT: ${{ inputs.extracted_at }}
     steps:
@@ -84,7 +84,13 @@ jobs:
             printf 'No diff against %s\n' "$PUBLIC_ARTIFACT_PATH" > "$DIFF_PATH"
           fi
 
-          disallowed="$(git status --porcelain --untracked-files=all | awk '{print $2}' | grep -Fvx "$PUBLIC_ARTIFACT_PATH" || true)"
+          disallowed="$(
+            git status --porcelain --untracked-files=all |
+              awk '{print $2}' |
+              grep -Fvx "$PUBLIC_ARTIFACT_PATH" |
+              grep -v "^$GENERATED_DIR/" ||
+              true
+          )"
           if [ -n "$disallowed" ]; then
             echo "::error::Manual source-fetch workflow changed files outside $PUBLIC_ARTIFACT_PATH:"
             echo "$disallowed"
