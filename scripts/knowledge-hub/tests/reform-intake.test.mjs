@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 import {
   buildKnowledgeHubCandidateArtifact,
+  buildKnowledgeHubCandidateArtifactWithDiagnostics,
   extractCandidatesFromSource,
   FIXTURE_DEMO_EXTRACTION_MODE,
   KNOWLEDGE_HUB_SCHEMA_VERSION,
@@ -55,5 +56,45 @@ describe('Knowledge Hub reform intake', () => {
     assert.ok(artifact.candidates.every((candidate) => candidate.review_status === 'needs_review'))
     assert.ok(artifact.caveats.some((caveat) => caveat.includes('Fixture/demo mode')))
     assert.ok(artifact.caveats.some((caveat) => caveat.includes('not an official reviewed policy database')))
+  })
+
+  it('reports configured-source fetch counts and failures without dropping successful candidates', async () => {
+    const diagnostics = await buildKnowledgeHubCandidateArtifactWithDiagnostics({
+      fetchSource: true,
+      extractedAt: '2026-05-05T08:00:00.000Z',
+      sources: [
+        {
+          id: 'ok-source',
+          institution: 'OK Institution',
+          url: 'https://example.test/ok',
+        },
+        {
+          id: 'failed-source',
+          institution: 'Failed Institution',
+          url: 'https://example.test/fail',
+        },
+      ],
+      fetchImpl: async (url) => {
+        if (url.includes('/fail')) {
+          throw new Error('synthetic fetch failure')
+        }
+        return new Response(`
+          <article>
+            <time datetime="2026-05-03">3 May 2026</time>
+            <h2><a href="/tax">Tax administration reform notice</a></h2>
+            <p>Tax and budget reform candidate text.</p>
+          </article>
+        `)
+      },
+    })
+
+    assert.equal(diagnostics.candidate_count, 1)
+    assert.equal(diagnostics.source_results.length, 2)
+    assert.equal(diagnostics.source_results[0].ok, true)
+    assert.equal(diagnostics.source_results[0].candidate_count, 1)
+    assert.equal(diagnostics.source_results[1].ok, false)
+    assert.equal(diagnostics.source_failures.length, 1)
+    assert.equal(diagnostics.artifact.candidates[0].source_institution, 'OK Institution')
+    assert.ok(diagnostics.artifact.caveats.some((caveat) => caveat.includes('configured sources failed')))
   })
 })
