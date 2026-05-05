@@ -147,7 +147,7 @@ describe('Knowledge Hub reform intake', () => {
     assert.equal(artifact.extraction_mode_label, 'Fixture/demo intake')
     assert.equal(artifact.rulebook.version, REFORM_INTAKE_RULEBOOK.version)
     assert.equal(artifact.sources.length, REFORM_SOURCE_DEFINITIONS.length)
-    assert.equal(artifact.candidates.length, 12)
+    assert.equal(artifact.candidates.length, 10)
     assert.ok(artifact.candidates.every((candidate) => candidate.extraction_state === 'source-extracted'))
     assert.ok(artifact.candidates.every((candidate) => candidate.review_state === 'unreviewed'))
     assert.ok(artifact.candidates.every((candidate) => candidate.review_status === 'needs_review'))
@@ -164,7 +164,7 @@ describe('Knowledge Hub reform intake', () => {
     assert.ok(sourceIds.includes('president-reform-news'))
     assert.ok(sourceIds.includes('gov-portal-reform-news'))
     assert.ok(sourceIds.includes('tax-committee-news'))
-    assert.ok(sourceIds.includes('customs-committee-news'))
+    assert.ok(!sourceIds.includes('customs-committee-news'))
     assert.ok(sourceIds.includes('energy-ministry-news'))
     assert.ok(sourceIds.includes('investment-trade-ministry-news'))
     assert.ok(sourceIds.includes('justice-ministry-news'))
@@ -178,8 +178,8 @@ describe('Knowledge Hub reform intake', () => {
     })
 
     assert.equal(diagnostics.source_results.length, REFORM_SOURCE_DEFINITIONS.length)
-    assert.equal(diagnostics.source_results.reduce((sum, source) => sum + source.candidate_count, 0), 13)
-    assert.equal(diagnostics.artifact.candidates.length, 12)
+    assert.equal(diagnostics.source_results.reduce((sum, source) => sum + source.candidate_count, 0), 11)
+    assert.equal(diagnostics.artifact.candidates.length, 10)
     assert.equal(diagnostics.source_failures.length, 0)
 
     for (const source of REFORM_SOURCE_DEFINITIONS) {

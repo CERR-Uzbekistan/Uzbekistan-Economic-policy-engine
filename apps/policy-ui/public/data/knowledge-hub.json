@@ -1,9 +1,9 @@
 {
   "schema_version": "knowledge-hub-reform-candidates.v2",
-  "generated_at": "2026-05-05T08:00:00.000Z",
-  "generated_by": "scripts/knowledge-hub/generate-fixture-artifact.mjs",
-  "extraction_mode": "fixture-demo",
-  "extraction_mode_label": "Fixture/demo intake",
+  "generated_at": "2026-05-05T16:08:12.575Z",
+  "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
+  "extraction_mode": "configured-source-fetch",
+  "extraction_mode_label": "Configured source fetch",
   "rulebook": {
     "version": "knowledge-hub-reform-intake-rulebook.v1",
     "include_rules": [
@@ -182,6 +182,10 @@
       {
         "id": "low_relevance_score",
         "description": "The text matched weak signals but not enough evidence for intake."
+      },
+      {
+        "id": "source_link_unusable",
+        "description": "The item did not expose a stable item-level source link."
       }
     ]
   },
@@ -217,11 +221,6 @@
       "url": "https://gov.uz/en/soliq/news/news"
     },
     {
-      "id": "customs-committee-news",
-      "institution": "State Customs Committee of the Republic of Uzbekistan",
-      "url": "https://old.customs.uz/en/"
-    },
-    {
       "id": "energy-ministry-news",
       "institution": "Ministry of Energy of the Republic of Uzbekistan",
       "url": "https://gov.uz/en/minenergy/news/news"
@@ -239,14 +238,14 @@
   ],
   "candidates": [
     {
-      "id": "president-reform-news-2026-05-01-artificial-intelligence-and-digitalization-priorities-reviewed",
+      "id": "mef-policy-news-2026-05-05-15-45-00-161846-a-roundtable-discussion-was-held-on-the-development-o",
       "extraction_state": "source-extracted",
       "review_state": "unreviewed",
       "review_status": "needs_review",
-      "title": "Artificial intelligence and digitalization priorities reviewed",
-      "summary": "Artificial intelligence and digitalization priorities reviewed",
-      "domain_tag": "Digital public administration",
-      "reform_category": "digital_public_admin",
+      "title": "A roundtable discussion was held on the development of small and medium-sized businesses and increasing employment in Uzbekistan",
+      "summary": "On May 5 of this year, a high-level roundtable discussion was held at the Ministry of Economy and Finance of the Republic of Uzbekistan, dedicated to the development of small and medium-sized businesses and the acceleration of sustainable job creation.",
+      "domain_tag": "Business environment",
+      "reform_category": "business_environment",
       "evidence_types": [
         "implementation_program",
         "official_policy_announcement"
@@ -256,286 +255,132 @@
       "matched_include_rules": [
         "structural-implementation-program"
       ],
-      "source_institution": "Official website of the President of the Republic of Uzbekistan",
-      "source_url": "https://president.uz/en/lists/view/12345",
-      "source_published_at": "2026-05-01",
-      "extracted_at": "2026-05-05T08:00:00.000Z",
+      "source_institution": "Ministry of Economy and Finance of Uzbekistan",
+      "source_url": "https://gov.uz/en/imv/news/view/161846",
+      "source_published_at": "2026-05-05 15:45:00",
+      "extracted_at": "2026-05-05T16:08:12.575Z",
       "caveats": [
         "Deterministic extraction from configured source text.",
         "Unreviewed candidate; not an official reviewed policy database entry."
       ]
     },
     {
-      "id": "president-reform-news-2026-04-30-president-approves-measures-for-risk-based-customs-clearance-and-elec",
+      "id": "mef-policy-news-2026-05-05-14-25-00-161792-analytical-report-on-the-fulfillment-of-target-indica",
       "extraction_state": "source-extracted",
       "review_state": "unreviewed",
       "review_status": "needs_review",
-      "title": "President approves measures for risk-based customs clearance and electronic declarations",
-      "summary": "President approves measures for risk-based customs clearance and electronic declarations",
+      "title": "Analytical Report on the Fulfillment of Target Indicators in Agriculture, Forestry, and Fisheries for the First Quarter of 2026",
+      "summary": "In the first quarter of 2026, the output growth rate in agriculture, forestry, and fisheries was 5.1 percent, compared to the same period last year. This included a 4.8 percent increase in agriculture, 3.1 percent in forestry, and 6.1 percent in fisheries.",
+      "domain_tag": "Agriculture",
+      "reform_category": "agriculture",
+      "evidence_types": [
+        "implementation_program",
+        "official_policy_announcement"
+      ],
+      "relevance_score": 45,
+      "inclusion_reason": "Included by Structural implementation program with source evidence: implementation_program, official_policy_announcement.",
+      "matched_include_rules": [
+        "structural-implementation-program"
+      ],
+      "source_institution": "Ministry of Economy and Finance of Uzbekistan",
+      "source_url": "https://gov.uz/en/imv/news/view/161792",
+      "source_published_at": "2026-05-05 14:25:00",
+      "extracted_at": "2026-05-05T16:08:12.575Z",
+      "caveats": [
+        "Deterministic extraction from configured source text.",
+        "Unreviewed candidate; not an official reviewed policy database entry."
+      ]
+    },
+    {
+      "id": "justice-ministry-news-2026-05-04-17-05-00-161988-ensuring-the-rule-of-law-an-important-meeting-was-hel",
+      "extraction_state": "source-extracted",
+      "review_state": "unreviewed",
+      "review_status": "needs_review",
+      "title": "Ensuring the rule of law: an important meeting was held within the framework of an international project",
+      "summary": "Source API did not expose a summary for this configured extraction item.",
       "domain_tag": "Trade",
       "reform_category": "trade_customs",
       "evidence_types": [
-        "consultation_notice",
-        "implementation_program"
-      ],
-      "relevance_score": 45,
-      "inclusion_reason": "Included by Trade or customs modernization with source evidence: consultation_notice, implementation_program.",
-      "matched_include_rules": [
-        "trade-customs-modernization"
-      ],
-      "source_institution": "Official website of the President of the Republic of Uzbekistan",
-      "source_url": "https://president.uz/en/lists/view/12344",
-      "source_published_at": "2026-04-30",
-      "extracted_at": "2026-05-05T08:00:00.000Z",
-      "caveats": [
-        "Deterministic extraction from configured source text.",
-        "Unreviewed candidate; not an official reviewed policy database entry."
-      ]
-    },
-    {
-      "id": "tax-committee-news-2026-04-28-09-30-00-210001-tax-administration-amendments-introduced-for-electron",
-      "extraction_state": "source-extracted",
-      "review_state": "unreviewed",
-      "review_status": "needs_review",
-      "title": "Tax administration amendments introduced for electronic VAT reporting",
-      "summary": "The committee announced amended tax reporting rules, electronic declarations, and budget monitoring steps for taxpayers.",
-      "domain_tag": "Fiscal",
-      "reform_category": "fiscal_tax",
-      "evidence_types": [
         "legal_text",
-        "official_policy_announcement",
-        "budget_tax_measure",
-        "regulatory_parameter_change"
+        "official_policy_announcement"
       ],
-      "relevance_score": 100,
-      "inclusion_reason": "Included by Legal or regulatory change, Fiscal, tax, budget, subsidy, or tariff measure with source evidence: legal_text, official_policy_announcement, budget_tax_measure, regulatory_parameter_change.",
+      "relevance_score": 55,
+      "inclusion_reason": "Included by Legal or regulatory change with source evidence: legal_text, official_policy_announcement.",
       "matched_include_rules": [
-        "legal-or-regulatory-change",
-        "fiscal-tax-budget-measure"
+        "legal-or-regulatory-change"
       ],
-      "source_institution": "Tax Committee of the Republic of Uzbekistan",
-      "source_url": "https://gov.uz/en/imv/news/view/210001",
-      "source_published_at": "2026-04-28 09:30:00",
-      "extracted_at": "2026-05-05T08:00:00.000Z",
+      "source_institution": "Ministry of Justice of the Republic of Uzbekistan",
+      "source_url": "https://gov.uz/en/adliya/news/view/161988",
+      "source_published_at": "2026-05-04 17:05:00",
+      "extracted_at": "2026-05-05T16:08:12.575Z",
       "caveats": [
         "Deterministic extraction from configured source text.",
         "Unreviewed candidate; not an official reviewed policy database entry."
       ]
     },
     {
-      "id": "energy-ministry-news-2026-04-26-13-20-00-220001-energy-tariff-adjustment-draft-includes-household-com",
+      "id": "mef-policy-news-2026-05-04-17-00-00-161856-a-new-stage-of-international-cooperation-to-support-s",
       "extraction_state": "source-extracted",
       "review_state": "unreviewed",
       "review_status": "needs_review",
-      "title": "Energy tariff adjustment draft includes household compensation mechanism",
-      "summary": "The draft describes tariff adjustment parameters, targeted compensation, and fiscal monitoring requirements.",
-      "domain_tag": "Energy",
-      "reform_category": "energy_tariffs",
-      "evidence_types": [
-        "budget_tax_measure",
-        "regulatory_parameter_change",
-        "implementation_program",
-        "official_policy_announcement",
-        "consultation_notice"
-      ],
-      "relevance_score": 100,
-      "inclusion_reason": "Included by Fiscal, tax, budget, subsidy, or tariff measure, Structural implementation program, Formal consultation or draft measure with source evidence: budget_tax_measure, regulatory_parameter_change, implementation_program, official_policy_announcement, consultation_notice.",
-      "matched_include_rules": [
-        "fiscal-tax-budget-measure",
-        "structural-implementation-program",
-        "formal-consultation-or-draft"
-      ],
-      "source_institution": "Ministry of Energy of the Republic of Uzbekistan",
-      "source_url": "https://gov.uz/en/imv/news/view/220001",
-      "source_published_at": "2026-04-26 13:20:00",
-      "extracted_at": "2026-05-05T08:00:00.000Z",
-      "caveats": [
-        "Deterministic extraction from configured source text.",
-        "Unreviewed candidate; not an official reviewed policy database entry."
-      ]
-    },
-    {
-      "id": "investment-trade-ministry-news-2026-04-24-18-10-00-230001-investment-climate-regulation-package-approved-for-sp",
-      "extraction_state": "source-extracted",
-      "review_state": "unreviewed",
-      "review_status": "needs_review",
-      "title": "Investment climate regulation package approved for special economic zones",
-      "summary": "The package introduces legal amendments, investor service rules, and implementation measures for special economic zones.",
+      "title": "A new stage of international cooperation to support small and medium-sized businesses and create new jobs will be discussed",
+      "summary": "On May 5 of this year, the Ministry of Economy and Finance will host a high-level roundtable dedicated to the development of small and medium-sized businesses and the expansion of job creation.",
       "domain_tag": "Business environment",
       "reform_category": "business_environment",
       "evidence_types": [
-        "legal_text",
-        "official_policy_announcement",
-        "implementation_program"
-      ],
-      "relevance_score": 100,
-      "inclusion_reason": "Included by Legal or regulatory change, Structural implementation program with source evidence: legal_text, official_policy_announcement, implementation_program.",
-      "matched_include_rules": [
-        "legal-or-regulatory-change",
-        "structural-implementation-program"
-      ],
-      "source_institution": "Ministry of Investment, Industry and Trade of the Republic of Uzbekistan",
-      "source_url": "https://gov.uz/en/imv/news/view/230001",
-      "source_published_at": "2026-04-24 18:10:00",
-      "extracted_at": "2026-05-05T08:00:00.000Z",
-      "caveats": [
-        "Deterministic extraction from configured source text.",
-        "Unreviewed candidate; not an official reviewed policy database entry."
-      ]
-    },
-    {
-      "id": "justice-ministry-news-2026-04-22-15-45-00-240001-public-service-rules-amended-for-online-notarial-acti",
-      "extraction_state": "source-extracted",
-      "review_state": "unreviewed",
-      "review_status": "needs_review",
-      "title": "Public service rules amended for online notarial actions",
-      "summary": "The Ministry of Justice announced amended public service rules, digital legal service implementation steps, and notarial process changes.",
-      "domain_tag": "Digital public administration",
-      "reform_category": "digital_public_admin",
-      "evidence_types": [
-        "legal_text",
-        "official_policy_announcement",
-        "implementation_program"
-      ],
-      "relevance_score": 100,
-      "inclusion_reason": "Included by Legal or regulatory change, Structural implementation program with source evidence: legal_text, official_policy_announcement, implementation_program.",
-      "matched_include_rules": [
-        "legal-or-regulatory-change",
-        "structural-implementation-program"
-      ],
-      "source_institution": "Ministry of Justice of the Republic of Uzbekistan",
-      "source_url": "https://gov.uz/en/imv/news/view/240001",
-      "source_published_at": "2026-04-22 15:45:00",
-      "extracted_at": "2026-05-05T08:00:00.000Z",
-      "caveats": [
-        "Deterministic extraction from configured source text.",
-        "Unreviewed candidate; not an official reviewed policy database entry."
-      ]
-    },
-    {
-      "id": "mef-policy-news-2026-04-22-consultation-opens-on-customs-digital-corridor-and-risk-based-clearan",
-      "extraction_state": "source-extracted",
-      "review_state": "unreviewed",
-      "review_status": "needs_review",
-      "title": "Consultation opens on customs digital corridor and risk-based clearance",
-      "summary": "The Ministry invited comments on customs modernization steps, electronic declarations, and risk-based clearance for selected trade corridors.",
-      "domain_tag": "Trade",
-      "reform_category": "trade_customs",
-      "evidence_types": [
-        "consultation_notice",
-        "implementation_program"
-      ],
-      "relevance_score": 85,
-      "inclusion_reason": "Included by Trade or customs modernization, Formal consultation or draft measure with source evidence: consultation_notice, implementation_program.",
-      "matched_include_rules": [
-        "trade-customs-modernization",
-        "formal-consultation-or-draft"
-      ],
-      "source_institution": "Ministry of Economy and Finance of Uzbekistan",
-      "source_url": "https://gov.uz/en/news/customs-digital-corridor-consultation",
-      "source_published_at": "2026-04-22",
-      "extracted_at": "2026-05-05T08:00:00.000Z",
-      "caveats": [
-        "Deterministic extraction from configured source text.",
-        "Unreviewed candidate; not an official reviewed policy database entry."
-      ]
-    },
-    {
-      "id": "customs-committee-news-2026-04-20-single-window-customs-declaration-rules-introduced-for-importers",
-      "extraction_state": "source-extracted",
-      "review_state": "unreviewed",
-      "review_status": "needs_review",
-      "title": "Single Window customs declaration rules introduced for importers",
-      "summary": "The State Customs Committee describes new electronic declaration rules, import clearance measures, and risk-based control steps.",
-      "domain_tag": "Trade",
-      "reform_category": "trade_customs",
-      "evidence_types": [
-        "legal_text",
-        "official_policy_announcement",
-        "consultation_notice",
-        "implementation_program"
-      ],
-      "relevance_score": 100,
-      "inclusion_reason": "Included by Legal or regulatory change, Trade or customs modernization with source evidence: legal_text, official_policy_announcement, consultation_notice, implementation_program.",
-      "matched_include_rules": [
-        "legal-or-regulatory-change",
-        "trade-customs-modernization"
-      ],
-      "source_institution": "State Customs Committee of the Republic of Uzbekistan",
-      "source_url": "https://old.customs.uz/en/news/view/99001",
-      "source_published_at": "2026-04-20",
-      "extracted_at": "2026-05-05T08:00:00.000Z",
-      "caveats": [
-        "Deterministic extraction from configured source text.",
-        "Unreviewed candidate; not an official reviewed policy database entry."
-      ]
-    },
-    {
-      "id": "customs-committee-news-2026-04-19-customs-officers-complete-training-course",
-      "extraction_state": "source-extracted",
-      "review_state": "unreviewed",
-      "review_status": "needs_review",
-      "title": "Customs officers complete training course",
-      "summary": "Training event only.",
-      "domain_tag": "Trade",
-      "reform_category": "trade_customs",
-      "evidence_types": [
-        "consultation_notice",
-        "implementation_program"
+        "implementation_program",
+        "official_policy_announcement"
       ],
       "relevance_score": 45,
-      "inclusion_reason": "Included by Trade or customs modernization with source evidence: consultation_notice, implementation_program.",
+      "inclusion_reason": "Included by Structural implementation program with source evidence: implementation_program, official_policy_announcement.",
       "matched_include_rules": [
-        "trade-customs-modernization"
-      ],
-      "source_institution": "State Customs Committee of the Republic of Uzbekistan",
-      "source_url": "https://old.customs.uz/en/news/view/99000",
-      "source_published_at": "2026-04-19",
-      "extracted_at": "2026-05-05T08:00:00.000Z",
-      "caveats": [
-        "Deterministic extraction from configured source text.",
-        "Unreviewed candidate; not an official reviewed policy database entry."
-      ]
-    },
-    {
-      "id": "mef-policy-news-2026-04-18-energy-tariff-adjustment-draft-paired-with-social-compensation-measur",
-      "extraction_state": "source-extracted",
-      "review_state": "unreviewed",
-      "review_status": "needs_review",
-      "title": "Energy tariff adjustment draft paired with social compensation measures",
-      "summary": "The draft describes household tariff adjustment parameters, compensation targeting, and fiscal monitoring requirements.",
-      "domain_tag": "Energy",
-      "reform_category": "energy_tariffs",
-      "evidence_types": [
-        "budget_tax_measure",
-        "regulatory_parameter_change",
-        "implementation_program",
-        "official_policy_announcement",
-        "consultation_notice"
-      ],
-      "relevance_score": 100,
-      "inclusion_reason": "Included by Fiscal, tax, budget, subsidy, or tariff measure, Structural implementation program, Formal consultation or draft measure with source evidence: budget_tax_measure, regulatory_parameter_change, implementation_program, official_policy_announcement, consultation_notice.",
-      "matched_include_rules": [
-        "fiscal-tax-budget-measure",
-        "structural-implementation-program",
-        "formal-consultation-or-draft"
+        "structural-implementation-program"
       ],
       "source_institution": "Ministry of Economy and Finance of Uzbekistan",
-      "source_url": "https://gov.uz/en/news/energy-tariff-social-compensation",
-      "source_published_at": "2026-04-18",
-      "extracted_at": "2026-05-05T08:00:00.000Z",
+      "source_url": "https://gov.uz/en/imv/news/view/161856",
+      "source_published_at": "2026-05-04 17:00:00",
+      "extracted_at": "2026-05-05T16:08:12.575Z",
       "caveats": [
         "Deterministic extraction from configured source text.",
         "Unreviewed candidate; not an official reviewed policy database entry."
       ]
     },
     {
-      "id": "lex-official-legal-acts-2026-04-16-law-on-amendments-to-local-state-power-legislation-adopted",
+      "id": "mef-policy-news-2026-04-30-20-50-00-160157-an-agreement-was-signed-with-the-german-agency-for-in",
       "extraction_state": "source-extracted",
       "review_state": "unreviewed",
       "review_status": "needs_review",
-      "title": "Law on amendments to local state power legislation adopted",
-      "summary": "The legal act amends local state power rules and introduces implementation measures for public administration.",
+      "title": "An agreement was signed with the German Agency for International Cooperation (GIZ) to attract a €9 million grant to strengthen green economic development in the regions of Uzbekistan based on master plans",
+      "summary": "On April 30, 2026, a meeting was held between Joachim Fritz, Country Director of the German Agency for International Cooperation (GIZ) in Uzbekistan, Beate Schoreit, a Program Manager in Uzbekistan, and Ilkhom Norkulov, First Deputy Minister of Economy and Finance of the Republic of Uzbekistan.",
+      "domain_tag": "Infrastructure",
+      "reform_category": "infrastructure_investment",
+      "evidence_types": [
+        "implementation_program",
+        "official_policy_announcement",
+        "international_agreement"
+      ],
+      "relevance_score": 87,
+      "inclusion_reason": "Included by Structural implementation program, Binding international financing or agreement with source evidence: implementation_program, official_policy_announcement, international_agreement.",
+      "matched_include_rules": [
+        "structural-implementation-program",
+        "binding-international-financing-or-agreement"
+      ],
+      "source_institution": "Ministry of Economy and Finance of Uzbekistan",
+      "source_url": "https://gov.uz/en/imv/news/view/160157",
+      "source_published_at": "2026-04-30 20:50:00",
+      "extracted_at": "2026-05-05T16:08:12.575Z",
+      "caveats": [
+        "Deterministic extraction from configured source text.",
+        "Unreviewed candidate; not an official reviewed policy database entry."
+      ]
+    },
+    {
+      "id": "justice-ministry-news-2026-04-28-14-00-00-159488-nsuring-the-implementation-of-the-resolution-training",
+      "extraction_state": "source-extracted",
+      "review_state": "unreviewed",
+      "review_status": "needs_review",
+      "title": "nsuring the implementation of the resolution: training seminar held for responsible officials",
+      "summary": "Source API did not expose a summary for this configured extraction item.",
       "domain_tag": "Policy",
       "reform_category": "other_policy",
       "evidence_types": [
@@ -547,39 +392,42 @@
       "matched_include_rules": [
         "legal-or-regulatory-change"
       ],
-      "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-      "source_url": "https://lex.uz/docs/7962424",
-      "source_published_at": "2026-04-16",
-      "extracted_at": "2026-05-05T08:00:00.000Z",
+      "source_institution": "Ministry of Justice of the Republic of Uzbekistan",
+      "source_url": "https://gov.uz/en/adliya/news/view/159488",
+      "source_published_at": "2026-04-28 14:00:00",
+      "extracted_at": "2026-05-05T16:08:12.575Z",
       "caveats": [
         "Deterministic extraction from configured source text.",
         "Unreviewed candidate; not an official reviewed policy database entry."
       ]
     },
     {
-      "id": "cbu-policy-news-2026-04-12-reserve-requirement-rules-for-foreign-currency-deposits-updated",
+      "id": "investment-trade-ministry-news-2026-04-14-10-20-00-153388-uzbekistan-expands-tax-incentives-for-investors-finan",
       "extraction_state": "source-extracted",
       "review_state": "unreviewed",
       "review_status": "needs_review",
-      "title": "Reserve requirement rules for foreign-currency deposits updated",
-      "summary": "The update describes a phased reserve requirement change for banks' foreign-currency deposit liabilities and the expected prudential review process.",
-      "domain_tag": "Monetary",
-      "reform_category": "monetary_policy",
+      "title": "Uzbekistan Expands Tax Incentives for Investors Financing Infrastructure Projects",
+      "summary": "Source API did not expose a summary for this configured extraction item.",
+      "domain_tag": "Fiscal",
+      "reform_category": "fiscal_tax",
       "evidence_types": [
-        "legal_text",
+        "budget_tax_measure",
+        "regulatory_parameter_change",
+        "implementation_program",
         "official_policy_announcement",
-        "regulatory_parameter_change"
+        "international_agreement"
       ],
       "relevance_score": 100,
-      "inclusion_reason": "Included by Legal or regulatory change, Monetary or financial-sector parameter with source evidence: legal_text, official_policy_announcement, regulatory_parameter_change.",
+      "inclusion_reason": "Included by Fiscal, tax, budget, subsidy, or tariff measure, Structural implementation program, Binding international financing or agreement with source evidence: budget_tax_measure, regulatory_parameter_change, implementation_program, official_policy_announcement, international_agreement.",
       "matched_include_rules": [
-        "legal-or-regulatory-change",
-        "monetary-or-financial-parameter"
+        "fiscal-tax-budget-measure",
+        "structural-implementation-program",
+        "binding-international-financing-or-agreement"
       ],
-      "source_institution": "Central Bank of Uzbekistan",
-      "source_url": "https://cbu.uz/en/press_center/news/fx-deposit-reserve-requirements/",
-      "source_published_at": "2026-04-12",
-      "extracted_at": "2026-05-05T08:00:00.000Z",
+      "source_institution": "Ministry of Investment, Industry and Trade of the Republic of Uzbekistan",
+      "source_url": "https://gov.uz/en/miit/news/view/153388",
+      "source_published_at": "2026-04-14 10:20:00",
+      "extracted_at": "2026-05-05T16:08:12.575Z",
       "caveats": [
         "Deterministic extraction from configured source text.",
         "Unreviewed candidate; not an official reviewed policy database entry."
@@ -588,7 +436,7 @@
   ],
   "caveats": [
     "This is a deterministic reform-candidate intake artifact.",
-    "Fixture/demo mode: generated from checked-in HTML fixtures for deterministic review and smoke testing.",
+    "Generated from configured source URLs at artifact build time.",
     "Items are source-extracted and unreviewed; this is not an official reviewed policy database.",
     "The frontend loads this static JSON artifact only and does not scrape source pages in the browser."
   ]

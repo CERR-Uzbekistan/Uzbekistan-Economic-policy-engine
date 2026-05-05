@@ -57,6 +57,7 @@ export const REFORM_SOURCE_DEFINITIONS = [
     institution: 'Central Bank of Uzbekistan',
     url: 'https://cbu.uz/en/press_center/news/',
     parser: 'html-articles',
+    candidate_url_prefix: 'https://cbu.uz/en/press_center/news/',
     fixture_path: fixturePath('cbu-policy-news.html'),
   },
   govUzAuthorityNewsSource({
@@ -73,13 +74,6 @@ export const REFORM_SOURCE_DEFINITIONS = [
     url: 'https://gov.uz/en/soliq/news/news',
     fixture: 'tax-committee-news.json',
   }),
-  {
-    id: 'customs-committee-news',
-    institution: 'State Customs Committee of the Republic of Uzbekistan',
-    url: 'https://old.customs.uz/en/',
-    parser: 'html-articles',
-    fixture_path: fixturePath('customs-committee-news.html'),
-  },
   govUzAuthorityNewsSource({
     id: 'energy-ministry-news',
     institution: 'Ministry of Energy of the Republic of Uzbekistan',
@@ -290,6 +284,10 @@ export const REFORM_EXCLUSION_REASONS = [
     id: 'low_relevance_score',
     description: 'The text matched weak signals but not enough evidence for intake.',
   },
+  {
+    id: 'source_link_unusable',
+    description: 'The item did not expose a stable item-level source link.',
+  },
 ]
 
 export const REFORM_INTAKE_RULEBOOK = {
@@ -450,9 +448,59 @@ function maybeParseJson(value) {
   }
 }
 
+function normalizeUrlForComparison(value) {
+  try {
+    const parsed = new URL(value)
+    parsed.hash = ''
+    return parsed.href.replace(/\/$/, '')
+  } catch {
+    return ''
+  }
+}
+
+function isUsableCandidateSourceUrl(source, sourceUrl) {
+  if (!sourceUrl || sourceUrl.endsWith('#')) return false
+  const normalizedSourceUrl = normalizeUrlForComparison(sourceUrl)
+  if (!normalizedSourceUrl) return false
+  if (normalizedSourceUrl === normalizeUrlForComparison(source.url)) return false
+  if (source.candidate_url_prefix && !sourceUrl.startsWith(source.candidate_url_prefix)) return false
+  return true
+}
+
+function govUzAuthorityViewUrl(source, id) {
+  let authorityCode = typeof source.api_headers?.code === 'string' ? source.api_headers.code : ''
+  if (!authorityCode) {
+    try {
+      const match = new URL(source.url).pathname.match(/^\/en\/([^/]+)\/news\//)
+      authorityCode = match?.[1] ?? ''
+    } catch {
+      authorityCode = ''
+    }
+  }
+  if (authorityCode) return toAbsoluteUrl(`/en/${authorityCode}/news/view/${id}`, source.url)
+  return toAbsoluteUrl(`/en/news/view/${id}`, source.url)
+}
+
 function sourceItemToDecision(source, item, extractedAt, summaryFallback) {
-  const classification = classifyReformCandidateText(item.text)
   const sourceUrl = item.sourceUrl ?? source.url
+
+  if (!isUsableCandidateSourceUrl(source, sourceUrl)) {
+    return {
+      candidate: null,
+      exclusion: {
+        title: item.title,
+        source_institution: source.institution,
+        source_url: sourceUrl,
+        source_published_at: item.publishedAt || undefined,
+        exclusion_reason: 'source_link_unusable',
+        matched_include_rules: [],
+        matched_exclude_rules: [],
+        relevance_score: 0,
+      },
+    }
+  }
+
+  const classification = classifyReformCandidateText(item.text)
 
   if (!classification.included) {
     return {
@@ -532,7 +580,7 @@ function extractDecisionsFromGovUzApi(source, payload, extractedAt) {
         title,
         summary,
         publishedAt,
-        sourceUrl: id ? toAbsoluteUrl(`/en/imv/news/view/${id}`, source.url) : source.url,
+        sourceUrl: id ? govUzAuthorityViewUrl(source, id) : source.url,
         text,
       }
     })
