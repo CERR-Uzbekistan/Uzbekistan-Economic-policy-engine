@@ -121,26 +121,27 @@ function resetRouteLanguageExpression(expectedTitle) {
   return `
     (async () => {
       const expectedTitle = ${JSON.stringify(expectedTitle)};
-      const select = document.querySelector('.language-switcher select');
-      if (!select) {
-        return { ok: false, reason: 'language select not found' };
-      }
-      if (select.value !== ${JSON.stringify(ENGLISH_ROUTE_LANGUAGE)}) {
-        select.value = ${JSON.stringify(ENGLISH_ROUTE_LANGUAGE)};
-        select.dispatchEvent(new Event('change', { bubbles: true }));
-      }
       const deadline = Date.now() + ${LANGUAGE_TIMEOUT_MS};
       while (Date.now() < deadline) {
+        const select = document.querySelector('.language-switcher select');
         const h1 = document.querySelector('.page-header h1')?.textContent?.trim() ?? '';
-        if (select.value === ${JSON.stringify(ENGLISH_ROUTE_LANGUAGE)} && h1 === expectedTitle) {
-          return { ok: true, language: ${JSON.stringify(ENGLISH_ROUTE_LANGUAGE)}, title: h1 };
+        if (select) {
+          if (select.value !== ${JSON.stringify(ENGLISH_ROUTE_LANGUAGE)}) {
+            select.value = ${JSON.stringify(ENGLISH_ROUTE_LANGUAGE)};
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+          if (select.value === ${JSON.stringify(ENGLISH_ROUTE_LANGUAGE)} && h1 === expectedTitle) {
+            return { ok: true, language: ${JSON.stringify(ENGLISH_ROUTE_LANGUAGE)}, title: h1 };
+          }
         }
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
+      const select = document.querySelector('.language-switcher select');
       return {
         ok: false,
         language: ${JSON.stringify(ENGLISH_ROUTE_LANGUAGE)},
-        selectValue: select.value,
+        reason: select ? 'language did not reset before timeout' : 'language select not found',
+        selectValue: select?.value ?? null,
         title: document.querySelector('.page-header h1')?.textContent?.trim() ?? null,
       };
     })()
