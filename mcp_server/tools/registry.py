@@ -25,7 +25,7 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
                     "description": (
                         "Simulates monetary policy transmission via IS curve, Phillips curve, "
                         "Taylor rule, and UIP. Produces impulse response functions for demand, "
-                        "cost-push, exchange rate, and monetary shocks."
+                        "cost-push, exchange rate, monetary, and external-demand shocks."
                     ),
                     "tools": ["qpm_impulse_response", "qpm_baseline_forecast"],
                     "key_outputs": [
@@ -150,7 +150,8 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
         Args:
             shock_type: Type of shock. One of: "demand" (aggregate demand),
                 "cost_push" (cost-push inflation), "depreciation" (UZS depreciation),
-                "monetary" (monetary policy tightening).
+                "monetary" (monetary policy tightening), "external_demand"
+                (foreign output gap spillover).
             shock_size: Shock magnitude in percentage points (0.25 to 5.0).
             horizon: Forecast horizon in quarters (8 to 32).
             b1: IS curve — output gap persistence (0.3 to 0.95).
@@ -171,7 +172,7 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
         from helpers.validation import validate_qpm_params
         from models.qpm import solve_irf
 
-        valid_types = ("demand", "cost_push", "depreciation", "monetary")
+        valid_types = ("demand", "cost_push", "depreciation", "monetary", "external_demand", "external")
         if shock_type not in valid_types:
             return {"error": f"Invalid shock_type. Must be one of: {valid_types}"}
 

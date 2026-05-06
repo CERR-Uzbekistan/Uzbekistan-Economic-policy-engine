@@ -203,6 +203,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
       <button class="sbtn" onclick="setShock('risk',this)">
         <div class="ico">⚠️</div><div class="lbl">Risk<br>Premium</div>
       </button>
+      <button class="sbtn" onclick="setShock('external',this)">
+        <div class="ico">🌍</div><div class="lbl" data-i18n="qpm_shock_external">External<br>Demand</div>
+      </button>
     </div>
     <div class="shk-size">
       <div class="shk-size-hd" data-i18n="qpm_sim_settings">Simulation Settings</div>
@@ -475,6 +478,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
         <div class="eq">Z_gap  = (L_S + L_CPI_RW − L_CPI) − L_Z_BAR</div>
         <div class="eq">D4L_S  = L_S − L_S{−4}   (YoY NER)</div>
         <div class="eq">D4L_CPI= L_CPI − L_CPI{−4} (YoY inflation)</div>
+        <div class="eq">gap*_t = 0.75·gap*_{t-1} + ε_ext  (foreign output gap AR(1))</div>
       </div>
       <div class="acard">
         <h3 data-i18n="qpm_param_hd">Calibrated Parameters</h3>
@@ -504,6 +508,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
           <li><strong>π* = 5%</strong> — CBU medium-term inflation target</li>
           <li><strong>r̄ = 3.5%</strong> — neutral real rate (structural premium over EM average)</li>
           <li><strong>Balassa-Samuelson:</strong> RER trend appreciation of −1% p.a. from productivity catch-up</li>
+          <li><strong>b₃ = 0.30 (active):</strong> external demand transmits via the IS curve; gap*_t follows AR(1) with ρ=0.75</li>
         </ul>
       </div>
     </div>
@@ -598,6 +603,10 @@ function solveIRF(p, shockType, shockSize, T, initConds) {
   if (shockType === 'monetary')  shk_rs[ST]  = shockSize;
   if (shockType === 'risk')      shk_rho[ST] = shockSize;
 
+  const gap_star = z();
+  if (shockType === 'external') gap_star[ST] = shockSize;
+  for (let t = ST + 1; t < N; t++) gap_star[t] = 0.75 * gap_star[t - 1];
+
   const { b1, b2, b3, b4, a1, a2, a3, a4, g1, g2, g3, e1 } = p;
 
   // Safe array accessor (zero outside bounds)
@@ -662,8 +671,8 @@ function solveIRF(p, shockType, shockSize, T, initConds) {
       // MCI = b4*RR_GAP + (1-b4)*(-Z_GAP)
       mci[t] = b4 * rr_gap[t] - (1-b4) * l_z_gap[t];
 
-      // IS curve: gap_t = b1*gap_{t-1} - b2*MCI + shk
-      gap[t] = b1*G(gap,t-1) - b2*mci[t] + shk_gap[t];
+      // IS curve: gap_t = b1*gap_{t-1} - b2*MCI + b3*gap* + shk
+      gap[t] = b1*G(gap,t-1) - b2*mci[t] + b3*gap_star[t] + shk_gap[t];
 
       // Final refresh: update RMC and Phillips with realised gap
       rmc[t]     = a3*gap[t] + (1-a3)*l_z_gap[t];
@@ -799,6 +808,7 @@ const SHOCK_NAMES = {
   exchange:  'UZS Depreciation Shock',
   monetary:  'Monetary Policy Tightening Shock',
   risk:      'Risk Premium Shock',
+  external:  'External Demand Shock',
 };
 // Localised helpers: pull from window.MODEL_LANGS if available
 function t(key, fallback) {
@@ -811,6 +821,7 @@ function getShockName(shock) {
     inflation: 'qpm_shock_inflation_full',
     exchange:  'qpm_shock_exchange_full',
     monetary:  'qpm_shock_monetary_full',
+    external:  'qpm_shock_external_full',
   };
   return t(map[shock], SHOCK_NAMES[shock]);
 }

@@ -36,6 +36,7 @@ window.MODEL_LANGS = {
     qpm_shock_inflation:'Cost-Push\nInflation',
     qpm_shock_exchange: 'UZS\nDepreciation',
     qpm_shock_monetary: 'Monetary\nTightening',
+    qpm_shock_external: 'External\nDemand',
     qpm_sim_settings:   'Simulation Settings',
     qpm_shock_size:     'Shock size',
     qpm_horizon:        'Horizon',
@@ -98,6 +99,7 @@ window.MODEL_LANGS = {
     qpm_shock_inflation_full:'Cost-Push Inflation Shock',
     qpm_shock_exchange_full: 'UZS Depreciation Shock',
     qpm_shock_monetary_full: 'Monetary Policy Tightening Shock',
+    qpm_shock_external_full: 'External Demand Shock',
 
     // QPM Baseline page
     qpm_bl_title:       'Baseline Macroeconomic Forecast',
@@ -301,6 +303,7 @@ window.MODEL_LANGS = {
     qpm_shock_inflation:'Инфляция\n(издержки)',
     qpm_shock_exchange: 'Валюта\n(курс)',
     qpm_shock_monetary: 'Ужесточение\nДКП',
+    qpm_shock_external: 'Внешний\nспрос',
     qpm_sim_settings:   'Параметры симуляции',
     qpm_shock_size:     'Размер шока',
     qpm_horizon:        'Горизонт',
@@ -363,6 +366,7 @@ window.MODEL_LANGS = {
     qpm_shock_inflation_full:'Инфляционный шок (издержки)',
     qpm_shock_exchange_full: 'Шок обесценения валюты',
     qpm_shock_monetary_full: 'Шок ужесточения ДКП',
+    qpm_shock_external_full: 'Шок внешнего спроса',
 
     // QPM Baseline page (RU)
     qpm_bl_title:       'Базовый макроэкономический прогноз',
@@ -566,6 +570,7 @@ window.MODEL_LANGS = {
     qpm_shock_inflation:'Inflatsiya\n(xarajat)',
     qpm_shock_exchange: 'Valyuta\n(kurs)',
     qpm_shock_monetary: 'Pul siyosati\nqat\'iylashuvi',
+    qpm_shock_external: 'Tashqi\ntalab',
     qpm_sim_settings:   'Simulyatsiya sozlamalari',
     qpm_shock_size:     'Shok hajmi',
     qpm_horizon:        'Gorizont',
@@ -628,6 +633,7 @@ window.MODEL_LANGS = {
     qpm_shock_inflation_full:'Inflyatsiya shoki (xarajat)',
     qpm_shock_exchange_full: 'Valyuta kursi shoki',
     qpm_shock_monetary_full: 'Pul siyosati qattiqlashuvi shoki',
+    qpm_shock_external_full: 'Tashqi talab shoki',
 
     // QPM Baseline page (UZ)
     qpm_bl_title:       'Asosiy makroiqtisodiy prognoz',
