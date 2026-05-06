@@ -1,4 +1,5 @@
 import type { DfmContributionDetail } from '../../data/overview/dfm-contribution-detail.js'
+import { useTranslation } from 'react-i18next'
 import {
   formatNumber,
   formatSignedNumber,
@@ -29,6 +30,7 @@ function formatContribution(value: number, locale: string): string {
 }
 
 export function DfmContributionDetailPanel({ rows, locale }: DfmContributionDetailPanelProps) {
+  const { t } = useTranslation()
   if (!rows || rows.length === 0) {
     return null
   }
@@ -42,11 +44,15 @@ export function DfmContributionDetailPanel({ rows, locale }: DfmContributionDeta
     >
       <div className="dfm-contribution-detail__head">
         <div>
-          <p className="overview-section-kicker">DFM contribution detail</p>
-          <h3 id="dfm-contribution-detail-title">Latest indicator contribution slice</h3>
+          <p className="overview-section-kicker">
+            {t('overview.dfmContributionDetail.kicker')}
+          </p>
+          <h3 id="dfm-contribution-detail-title">
+            {t('overview.dfmContributionDetail.title')}
+          </h3>
         </div>
         <p>
-          Top contributors by absolute contribution, with Industry YoY and Wholesale Trade Growth pinned when needed.
+          {t('overview.dfmContributionDetail.description')}
         </p>
       </div>
 
@@ -54,10 +60,10 @@ export function DfmContributionDetailPanel({ rows, locale }: DfmContributionDeta
         <table className="dfm-contribution-detail__table">
           <thead>
             <tr>
-              <th scope="col">Indicator</th>
-              <th scope="col">Signal</th>
-              <th scope="col">Latest</th>
-              <th scope="col">Contribution</th>
+              <th scope="col">{t('overview.dfmContributionDetail.headers.indicator')}</th>
+              <th scope="col">{t('overview.dfmContributionDetail.headers.signal')}</th>
+              <th scope="col">{t('overview.dfmContributionDetail.headers.latest')}</th>
+              <th scope="col">{t('overview.dfmContributionDetail.headers.contribution')}</th>
             </tr>
           </thead>
           <tbody>
@@ -73,7 +79,7 @@ export function DfmContributionDetailPanel({ rows, locale }: DfmContributionDeta
                     <span>{row.label}</span>
                     <small>
                       {row.category}
-                      {row.isPinned ? ' - pinned' : ''}
+                      {row.isPinned ? ` - ${t('overview.dfmContributionDetail.pinnedSuffix')}` : ''}
                     </small>
                   </th>
                   <td>
@@ -81,7 +87,9 @@ export function DfmContributionDetailPanel({ rows, locale }: DfmContributionDeta
                       className={`dfm-contribution-detail__signal dfm-contribution-detail__signal--${row.signal.tone}`}
                       data-dfm-signal-kind={row.signal.kind}
                     >
-                      {row.signal.label}
+                      {t(`overview.dfmContributionDetail.signals.${row.signal.kind}`, {
+                        defaultValue: row.signal.label,
+                      })}
                     </span>
                   </td>
                   <td>

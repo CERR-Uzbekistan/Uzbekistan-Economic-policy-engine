@@ -9,6 +9,8 @@ const TOP_CONTRIBUTION_LIMIT = 12
 const GROWTH_RATE_PATTERN = /(^|[_\s-])(yoy|mom)($|[_\s-])|grwth|growth/i
 const LEVEL_PATTERN = /index|volume|sales|transactions|deals|enterprises|activity|climate/i
 const NATIVE_UNIT_PATTERN = /\b(usd|uzs)\b/i
+const INTEREST_RATE_PATTERN = /interest|deposit|lending|loan|policy rate|refinanc|rate_[a-z0-9]+/i
+const FX_RATE_PATTERN = /exchange rate|uzs\/usd|fx/i
 
 export type DfmContributionSignalKind =
   | 'contracting'
@@ -68,18 +70,18 @@ function nonGrowthSignal(indicator: DfmIndicatorView): DfmContributionSignal {
       isGrowthRate: false,
     }
   }
-  if (/exchange rate|uzs\/usd|fx/.test(text)) {
+  if (INTEREST_RATE_PATTERN.test(text)) {
     return {
-      kind: 'fx-native',
-      label: 'FX rate, native units',
+      kind: 'interest-rate-native',
+      label: 'Rate, native units',
       tone: 'neutral',
       isGrowthRate: false,
     }
   }
-  if (/\brate\b|interest/.test(text)) {
+  if (FX_RATE_PATTERN.test(text)) {
     return {
-      kind: 'interest-rate-native',
-      label: 'Rate, native units',
+      kind: 'fx-native',
+      label: 'FX rate, native units',
       tone: 'neutral',
       isGrowthRate: false,
     }

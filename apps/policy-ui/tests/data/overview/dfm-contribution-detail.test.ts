@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, it } from 'node:test'
-import { toDfmAdapterOutput } from '../../../src/data/bridge/dfm-adapter.js'
+import { toDfmAdapterOutput, type DfmIndicatorView } from '../../../src/data/bridge/dfm-adapter.js'
 import type { DfmBridgePayload } from '../../../src/data/bridge/dfm-types.js'
 import {
   classifyDfmContribution,
@@ -19,6 +19,19 @@ function findIndicator(payload: DfmBridgePayload, indicatorId: string) {
   const indicator = payload.indicators.find((item) => item.indicator_id === indicatorId)
   assert.ok(indicator, `expected ${indicatorId} in DFM artifact`)
   return indicator
+}
+
+function indicator(overrides: Partial<DfmIndicatorView>): DfmIndicatorView {
+  return {
+    indicator_id: 'mock',
+    label: 'Mock indicator',
+    category: 'Mock category',
+    frequency: 'monthly',
+    loading: 0.1,
+    contribution: 0.01,
+    latest_value: 1,
+    ...overrides,
+  }
 }
 
 describe('dfm contribution detail', () => {
@@ -41,6 +54,60 @@ describe('dfm contribution detail', () => {
     assert.equal(signal.kind, 'contracting')
     assert.equal(signal.tone, 'negative')
     assert.equal(signal.isGrowthRate, true)
+  })
+
+  it('classifies representative rate, FX, NPL, M0, IND_YOY, and wholesale indicators', () => {
+    assert.equal(
+      classifyDfmContribution(indicator({
+        indicator_id: 'rate_1y',
+        label: '1Y deposit rate',
+        category: 'Money, Banking & FX',
+      })).kind,
+      'interest-rate-native',
+    )
+    assert.equal(
+      classifyDfmContribution(indicator({
+        indicator_id: 'exchange_rate',
+        label: 'USD/UZS exchange rate',
+        category: 'FX',
+      })).kind,
+      'fx-native',
+    )
+    assert.equal(
+      classifyDfmContribution(indicator({
+        indicator_id: 'npl_ratio',
+        label: 'NPL ratio',
+        category: 'Money, Banking & Credit',
+      })).kind,
+      'npl-native',
+    )
+    assert.equal(
+      classifyDfmContribution(indicator({
+        indicator_id: 'm0',
+        label: 'Money Supply M0',
+        category: 'Money, Banking & Credit',
+        latest_value: -2.97,
+      })).kind,
+      'monetary-aggregate-native',
+    )
+    assert.equal(
+      classifyDfmContribution(indicator({
+        indicator_id: 'IND_YOY',
+        label: 'Industry YoY Growth',
+        category: 'Production',
+        latest_value: -0.5,
+      })).kind,
+      'contracting',
+    )
+    assert.equal(
+      classifyDfmContribution(indicator({
+        indicator_id: 'wholesale_trade_grwth',
+        label: 'Wholesale Trade Growth',
+        category: 'Trade',
+        latest_value: -0.2,
+      })).kind,
+      'contracting',
+    )
   })
 
   it('keeps Wholesale Trade Growth visible even when pinned rows are needed', () => {

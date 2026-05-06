@@ -310,6 +310,30 @@
         "retry": "Retry"
       }
     },
+    "dfmContributionDetail": {
+      "kicker": "DFM contribution detail",
+      "title": "Latest indicator contribution slice",
+      "description": "Top contributors by absolute contribution, with Industry YoY and Wholesale Trade Growth pinned when needed.",
+      "pinnedSuffix": "pinned",
+      "headers": {
+        "indicator": "Indicator",
+        "signal": "Signal",
+        "latest": "Latest",
+        "contribution": "Contribution"
+      },
+      "signals": {
+        "contracting": "Contracting growth signal",
+        "below-trend": "Growing below trend",
+        "above-trend": "Growing above trend",
+        "interest-rate-native": "Rate, native units",
+        "monetary-aggregate-native": "Monetary aggregate, native units",
+        "npl-native": "NPL ratio, native units",
+        "fx-native": "FX rate, native units",
+        "level-native": "Level indicator, native units",
+        "native-unit": "Native-unit indicator",
+        "other-non-growth": "Non-growth indicator"
+      }
+    },
     "caveats": {
       "title": "Model caveats",
       "description": "Known limitations affecting the metrics above. Read before citing.",
