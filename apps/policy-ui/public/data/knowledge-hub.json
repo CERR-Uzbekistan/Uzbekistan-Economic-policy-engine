@@ -515,7 +515,7 @@
           "source_url_status": "verified"
         }
       ],
-      "caveat": "Automatic official-source tracker entry. It is not an official legal registry and does not assert legal force beyond the cited official source."
+      "caveat": "Automatic official-source tracker entry assembled from a verified source event. It is not an official legal registry and does not assert legal force beyond the cited official source."
     }
   ],
   "accepted_reforms": [],

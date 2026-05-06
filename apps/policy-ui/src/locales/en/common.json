@@ -941,6 +941,35 @@
         "confidence": "Confidence",
         "relatedNext": "Related next milestones"
       },
+      "labels": {
+        "sourceConfidence": {
+          "high": "High",
+          "medium": "Medium",
+          "low": "Low"
+        },
+        "eventType": {
+          "instructions_issued": "Instructions issued",
+          "consultation": "Consultation",
+          "approved": "Approved",
+          "effective_date": "Effective date",
+          "implementation_milestone": "Implementation milestone",
+          "financing_allocated": "Financing allocated",
+          "monitoring_update": "Monitoring update",
+          "target_deadline": "Target deadline",
+          "amended": "Amended",
+          "completed": "Completed",
+          "superseded": "Superseded"
+        },
+        "evidenceType": {
+          "legal_text": "Legal text",
+          "official_policy_announcement": "Official policy announcement",
+          "consultation_notice": "Consultation notice",
+          "budget_tax_measure": "Budget or tax measure",
+          "regulatory_parameter_change": "Regulatory parameter change",
+          "implementation_program": "Implementation program",
+          "international_agreement": "International agreement"
+        }
+      },
       "methodology": {
         "title": "Methodology note",
         "includedTitle": "Included",

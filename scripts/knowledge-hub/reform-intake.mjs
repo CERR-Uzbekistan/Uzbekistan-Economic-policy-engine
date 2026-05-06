@@ -130,7 +130,7 @@ export const REFORM_CATEGORIES = [
   'other_policy',
 ]
 
-export const SEEDED_REFORM_PACKAGES = [
+export const FIXTURE_DEMO_REFORM_PACKAGES = [
   {
     package_id: 'pkg-healthcare-quality-licensing-private-sector-2026',
     title: 'Healthcare quality, licensing, and private-sector participation reform',
@@ -217,12 +217,94 @@ export const SEEDED_REFORM_PACKAGES = [
         evidence_type: 'official_policy_announcement',
         event_type: 'instructions_issued',
         summary: 'Official presidential source describing instructions on licensing, accreditation, state hospital rollout, preferential credit resources, private investment, and the medical PPP agency.',
-        source_url_status: 'verified',
+        source_url_status: 'not_checked_fixture',
       },
     ],
-    caveat: 'Automatic official-source tracker entry. It is not an official legal registry and does not assert legal force beyond the cited official source.',
+    caveat: 'Fixture/demo reform package for deterministic UI review. It is not configured-source automatic output, not an official legal registry, and does not assert legal force beyond the cited official source.',
   },
 ]
+
+function healthcarePackageFromSourceEvent(sourceEvent) {
+  return {
+    package_id: 'pkg-healthcare-quality-licensing-private-sector-2026',
+    title: 'Healthcare quality, licensing, and private-sector participation reform',
+    policy_area: 'Healthcare services and private-sector participation',
+    reform_category: 'social_protection',
+    current_stage: 'Instructions issued',
+    current_stage_date: sourceEvent.source_published_at,
+    next_milestone: 'Revised licensing procedures start',
+    next_milestone_date: '2026-07-01',
+    responsible_institutions: [
+      'Ministry of Health',
+      'National Health Insurance Fund',
+      'Agency for Attracting Investments and Implementing PPP Projects in Medicine',
+    ],
+    legal_basis: 'Official presidential instruction package on healthcare quality, licensing, accreditation, and private-sector participation.',
+    official_basis: `${sourceEvent.source_institution}, ${sourceEvent.source_published_at}.`,
+    financing_or_incentive: '200 billion soums preferential credit resources; loans up to 10 billion soums',
+    source_confidence: 'high',
+    why_tracked: 'The official source sets dated licensing, accreditation, state-funded service eligibility, credit, and institutional implementation milestones that affect health-sector service delivery and public financing channels.',
+    model_relevance: ['Social spending', 'Private investment', 'Public finance', 'Service-sector productivity'],
+    measure_tracks: [
+      { id: 'healthcare-licensing-reform', label: 'licensing reform', status: 'instructions issued' },
+      { id: 'healthcare-accreditation-state-funded', label: 'accreditation and state-funded service eligibility', status: 'planned' },
+      { id: 'healthcare-state-hospital-licensing', label: 'state hospital licensing rollout', status: 'scheduled' },
+      { id: 'healthcare-preferential-credit-support', label: 'preferential credit support', status: 'announced' },
+      { id: 'healthcare-investment-ppp-agency', label: 'investment and PPP agency setup', status: 'announced' },
+    ],
+    implementation_milestones: [
+      {
+        id: 'healthcare-licensing-procedures-start-2026-07-01',
+        label: 'revised licensing procedures start',
+        date: '2026-07-01',
+        date_precision: 'day',
+        event_type: 'effective_date',
+        responsible_institutions: ['Ministry of Health'],
+        evidence_type: 'implementation_program',
+        source_event_ids: [sourceEvent.id],
+        confidence: 'high',
+        related_next_milestone_ids: ['healthcare-republican-institutions-deadline-2027-04-01'],
+      },
+      {
+        id: 'healthcare-republican-institutions-deadline-2027-04-01',
+        label: 'republican institutions licensing deadline',
+        date: '2027-04-01',
+        date_precision: 'day',
+        event_type: 'target_deadline',
+        responsible_institutions: ['Ministry of Health', 'Republican medical institutions'],
+        evidence_type: 'implementation_program',
+        source_event_ids: [sourceEvent.id],
+        confidence: 'high',
+        related_next_milestone_ids: ['healthcare-insurance-fund-accreditation-rule-2028'],
+      },
+      {
+        id: 'healthcare-insurance-fund-accreditation-rule-2028',
+        label: 'Insurance Fund accreditation purchasing rule starts',
+        date: '2028',
+        date_precision: 'year',
+        event_type: 'effective_date',
+        responsible_institutions: ['National Health Insurance Fund', 'Accredited medical organizations'],
+        evidence_type: 'implementation_program',
+        source_event_ids: [sourceEvent.id],
+        confidence: 'high',
+        related_next_milestone_ids: ['healthcare-district-city-licensing-target-2030-12-31'],
+      },
+      {
+        id: 'healthcare-district-city-licensing-target-2030-12-31',
+        label: 'district/city licensing target',
+        date: '2030-12-31',
+        date_precision: 'day',
+        event_type: 'target_deadline',
+        responsible_institutions: ['Ministry of Health', 'District and city medical associations'],
+        evidence_type: 'implementation_program',
+        source_event_ids: [sourceEvent.id],
+        confidence: 'high',
+      },
+    ],
+    official_source_events: [sourceEvent],
+    caveat: 'Automatic official-source tracker entry assembled from a verified source event. It is not an official legal registry and does not assert legal force beyond the cited official source.',
+  }
+}
 
 const INCLUDE_RULE_DEFINITIONS = [
   {
@@ -952,6 +1034,43 @@ function candidateWithRunMetadata(candidate, extractionMode, sourceUrlStatus, ex
   }
 }
 
+function candidateToSourceEvent(candidate) {
+  return {
+    id: candidate.source_url.includes('/9164')
+      ? 'president-healthcare-quality-2026-05-01'
+      : `source-event-${slugify(`${candidate.source_published_at ?? candidate.id}-${candidate.title}`)}`,
+    title: candidate.source_title || candidate.title,
+    source_institution: candidate.source_institution,
+    source_url: candidate.source_url,
+    source_published_at: candidate.source_published_at?.slice(0, 10) ?? candidate.extracted_at?.slice(0, 10) ?? '',
+    evidence_type: candidate.evidence_types.includes('official_policy_announcement')
+      ? 'official_policy_announcement'
+      : candidate.evidence_types[0],
+    event_type: candidate.title.toLowerCase().includes('approved') ? 'approved' : 'instructions_issued',
+    summary: candidate.summary || candidate.inclusion_reason,
+    source_url_status: candidate.source_url_status,
+    extracted_at: candidate.extracted_at,
+  }
+}
+
+function isVerifiedHealthcareSourceEvent(candidate) {
+  const text = `${candidate.title} ${candidate.summary} ${candidate.source_url}`.toLowerCase()
+  return (
+    candidate.extraction_mode === CONFIGURED_SOURCE_FETCH_EXTRACTION_MODE &&
+    candidate.source_url_status === 'verified' &&
+    candidate.source_url.includes('president.uz') &&
+    (candidate.source_url.includes('/9164') ||
+      (text.includes('healthcare') && text.includes('licensing') && text.includes('private-sector')))
+  )
+}
+
+export function assembleReformPackagesFromCandidates(candidates) {
+  return candidates
+    .filter(isVerifiedHealthcareSourceEvent)
+    .slice(0, 1)
+    .map((candidate) => healthcarePackageFromSourceEvent(candidateToSourceEvent(candidate)))
+}
+
 async function validateCandidateSourceLink(candidate, fetchImpl) {
   try {
     const host = new URL(candidate.source_url).hostname
@@ -1034,7 +1153,6 @@ function sourceResultToArtifactDiagnostic(result) {
 export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options = {}) {
   const extractedAt = options.extractedAt ?? new Date().toISOString()
   const sources = options.sources ?? REFORM_SOURCE_DEFINITIONS
-  const reformPackages = options.reformPackages ?? SEEDED_REFORM_PACKAGES
   const fetchSource = options.fetchSource === true
   const fetchImpl = options.fetchImpl ?? fetch
   const extractionMode = fetchSource
@@ -1084,6 +1202,11 @@ export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options 
   const candidates = uniqueCandidatesAcrossSources(
     uniqueCandidatesById(sortCandidates(sourceResults.flatMap((result) => result.candidates))),
   )
+  const reformPackages = Array.isArray(options.reformPackages)
+    ? options.reformPackages
+    : fetchSource
+      ? assembleReformPackagesFromCandidates(candidates)
+      : FIXTURE_DEMO_REFORM_PACKAGES
   const sourceFailures = sourceResults
     .filter((result) => !result.ok)
     .map(({ id, institution, url, parser, fetch_url, error }) => ({ id, institution, url, parser, fetch_url, error }))

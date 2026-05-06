@@ -941,6 +941,35 @@
         "confidence": "Ishonch",
         "relatedNext": "Bog'liq keyingi bosqichlar"
       },
+      "labels": {
+        "sourceConfidence": {
+          "high": "Yuqori",
+          "medium": "O'rta",
+          "low": "Past"
+        },
+        "eventType": {
+          "instructions_issued": "Topshiriqlar berildi",
+          "consultation": "Maslahatlashuv",
+          "approved": "Tasdiqlandi",
+          "effective_date": "Kuchga kirish sanasi",
+          "implementation_milestone": "Amalga oshirish bosqichi",
+          "financing_allocated": "Moliyalashtirish ajratildi",
+          "monitoring_update": "Monitoring yangilanishi",
+          "target_deadline": "Maqsadli muddat",
+          "amended": "O'zgartirildi",
+          "completed": "Yakunlandi",
+          "superseded": "Almashtirildi"
+        },
+        "evidenceType": {
+          "legal_text": "Huquqiy matn",
+          "official_policy_announcement": "Rasmiy siyosat bayonoti",
+          "consultation_notice": "Maslahatlashuv xabarnomasi",
+          "budget_tax_measure": "Byudjet yoki soliq chorasi",
+          "regulatory_parameter_change": "Regulyator parametr o'zgarishi",
+          "implementation_program": "Amalga oshirish dasturi",
+          "international_agreement": "Xalqaro kelishuv"
+        }
+      },
       "methodology": {
         "title": "Metodologiya eslatmasi",
         "includedTitle": "Kiritiladi",

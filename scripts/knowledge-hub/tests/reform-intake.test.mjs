@@ -5,13 +5,15 @@ import {
   buildKnowledgeHubCandidateArtifact,
   buildKnowledgeHubCandidateArtifactWithDiagnostics,
   classifyReformCandidateText,
+  CONFIGURED_SOURCE_FETCH_EXTRACTION_MODE,
   extractCandidateDecisionsFromSource,
   extractCandidatesFromSource,
+  FIXTURE_DEMO_REFORM_PACKAGES,
   FIXTURE_DEMO_EXTRACTION_MODE,
   KNOWLEDGE_HUB_SCHEMA_VERSION,
   REFORM_INTAKE_RULEBOOK,
   REFORM_SOURCE_DEFINITIONS,
-  SEEDED_REFORM_PACKAGES,
+  assembleReformPackagesFromCandidates,
 } from '../reform-intake.mjs'
 
 describe('Knowledge Hub reform intake', () => {
@@ -272,10 +274,12 @@ describe('Knowledge Hub reform intake', () => {
     assert.ok(artifact.caveats.some((caveat) => caveat.includes('not an official reviewed policy database')))
   })
 
-  it('defines the healthcare reform package seed used by the tracker surface', () => {
-    const healthcarePackage = SEEDED_REFORM_PACKAGES[0]
+  it('marks fixture/demo healthcare package data as fixture-only', () => {
+    const healthcarePackage = FIXTURE_DEMO_REFORM_PACKAGES[0]
 
     assert.equal(healthcarePackage.title, 'Healthcare quality, licensing, and private-sector participation reform')
+    assert.equal(healthcarePackage.official_source_events[0].source_url_status, 'not_checked_fixture')
+    assert.match(healthcarePackage.caveat, /Fixture\/demo/)
     assert.deepEqual(
       healthcarePackage.measure_tracks.map((track) => track.label),
       [
@@ -290,6 +294,88 @@ describe('Knowledge Hub reform intake', () => {
       healthcarePackage.implementation_milestones.map((milestone) => milestone.date),
       ['2026-07-01', '2027-04-01', '2028', '2030-12-31'],
     )
+  })
+
+  it('assembles configured-source healthcare packages only from verified source events', async () => {
+    const diagnostics = await buildKnowledgeHubCandidateArtifactWithDiagnostics({
+      fetchSource: true,
+      extractedAt: '2026-05-05T08:00:00.000Z',
+      sources: [
+        {
+          id: 'president-reform-news',
+          institution: 'Official website of the President of the Republic of Uzbekistan',
+          url: 'https://president.uz/en/lists/news',
+          parser: 'president-uz-list',
+        },
+      ],
+      fetchImpl: async (url) => {
+        if (String(url).includes('/lists/view/9164')) return new Response('<html>ok</html>')
+        return new Response(`
+          <a href="/en/lists/view/9164">Healthcare quality, licensing, and private-sector participation reform package approved</a>
+          <span>01-05-2026</span>
+        `)
+      },
+    })
+
+    assert.equal(diagnostics.artifact.extraction_mode, CONFIGURED_SOURCE_FETCH_EXTRACTION_MODE)
+    assert.equal(diagnostics.artifact.candidates.length, 1)
+    assert.equal(diagnostics.artifact.candidates[0].source_url_status, 'verified')
+    assert.equal(diagnostics.artifact.reform_packages.length, 1)
+    assert.equal(diagnostics.artifact.reform_packages[0].title, 'Healthcare quality, licensing, and private-sector participation reform')
+    assert.equal(diagnostics.artifact.reform_packages[0].official_source_events[0].source_url, 'https://president.uz/en/lists/view/9164')
+    assert.equal(diagnostics.artifact.reform_packages[0].official_source_events[0].source_url_status, 'verified')
+    assert.match(diagnostics.artifact.reform_packages[0].caveat, /assembled from a verified source event/)
+    assert.equal(diagnostics.artifact.reform_packages[0].financing_or_incentive, '200 billion soums preferential credit resources; loans up to 10 billion soums')
+    assert.deepEqual(
+      diagnostics.artifact.reform_packages[0].implementation_milestones.map((milestone) => milestone.date),
+      ['2026-07-01', '2027-04-01', '2028', '2030-12-31'],
+    )
+  })
+
+  it('does not assemble configured-source packages from unverified source events', async () => {
+    const diagnostics = await buildKnowledgeHubCandidateArtifactWithDiagnostics({
+      fetchSource: true,
+      extractedAt: '2026-05-05T08:00:00.000Z',
+      sources: [
+        {
+          id: 'president-reform-news',
+          institution: 'Official website of the President of the Republic of Uzbekistan',
+          url: 'https://president.uz/en/lists/news',
+          parser: 'president-uz-list',
+        },
+      ],
+      fetchImpl: async (url) => {
+        if (String(url).includes('/lists/view/9164')) return new Response('missing', { status: 404 })
+        return new Response(`
+          <a href="/en/lists/view/9164">Healthcare quality, licensing, and private-sector participation reform package approved</a>
+          <span>01-05-2026</span>
+        `)
+      },
+    })
+
+    assert.equal(diagnostics.artifact.candidates.length, 0)
+    assert.equal(diagnostics.artifact.reform_packages.length, 0)
+    assert.equal(diagnostics.source_results[0].link_invalid_count, 1)
+  })
+
+  it('keeps automatic package assembly empty for unrelated verified candidates', () => {
+    const packages = assembleReformPackagesFromCandidates([
+      {
+        title: 'Resolution approved on tax administration amendments',
+        summary: 'Tax reporting rules amended.',
+        source_url: 'https://gov.uz/en/imv/news/view/161792',
+        source_title: 'Resolution approved on tax administration amendments',
+        source_institution: 'Ministry of Economy and Finance of Uzbekistan',
+        source_published_at: '2026-05-05',
+        evidence_types: ['legal_text'],
+        inclusion_reason: 'Legal or regulatory change.',
+        extraction_mode: CONFIGURED_SOURCE_FETCH_EXTRACTION_MODE,
+        source_url_status: 'verified',
+        extracted_at: '2026-05-05T08:00:00.000Z',
+      },
+    ])
+
+    assert.deepEqual(packages, [])
   })
 
   it('configures official source coverage for the requested next batch', () => {

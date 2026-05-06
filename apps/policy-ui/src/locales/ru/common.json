@@ -941,6 +941,35 @@
         "confidence": "Уверенность",
         "relatedNext": "Связанные следующие этапы"
       },
+      "labels": {
+        "sourceConfidence": {
+          "high": "Высокая",
+          "medium": "Средняя",
+          "low": "Низкая"
+        },
+        "eventType": {
+          "instructions_issued": "Поручения даны",
+          "consultation": "Консультация",
+          "approved": "Одобрено",
+          "effective_date": "Дата вступления в силу",
+          "implementation_milestone": "Этап внедрения",
+          "financing_allocated": "Финансирование выделено",
+          "monitoring_update": "Мониторинговое обновление",
+          "target_deadline": "Целевой срок",
+          "amended": "Изменено",
+          "completed": "Завершено",
+          "superseded": "Заменено"
+        },
+        "evidenceType": {
+          "legal_text": "Правовой текст",
+          "official_policy_announcement": "Официальное объявление о мере политики",
+          "consultation_notice": "Уведомление о консультации",
+          "budget_tax_measure": "Бюджетная или налоговая мера",
+          "regulatory_parameter_change": "Изменение регуляторного параметра",
+          "implementation_program": "Программа внедрения",
+          "international_agreement": "Международное соглашение"
+        }
+      },
       "methodology": {
         "title": "Методологическая заметка",
         "includedTitle": "Включено",

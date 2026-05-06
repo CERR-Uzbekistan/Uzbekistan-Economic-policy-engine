@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import type {
   KnowledgeHubContent,
   ReformPackage,
@@ -12,6 +13,7 @@ type KnowledgeHubContentViewProps = {
 }
 
 type TrackerTab = 'packages' | 'timeline'
+type LabelNamespace = 'sourceConfidence' | 'eventType' | 'evidenceType'
 
 type TimelineMilestone = {
   milestone: ReformPackageMilestone
@@ -65,6 +67,10 @@ function groupMilestones(items: TimelineMilestone[]): Array<[string, TimelineMil
     groups.set(key, [...(groups.get(key) ?? []), item])
   }
   return Array.from(groups.entries())
+}
+
+function trackerLabel(t: TFunction, namespace: LabelNamespace, value: string): string {
+  return t(`knowledgeHub.reformTracker.labels.${namespace}.${value}`)
 }
 
 function MetricStrip({ content, packages }: { content: KnowledgeHubContent; packages: ReformPackage[] }) {
@@ -159,7 +165,7 @@ function DossierPanel({ reformPackage }: { reformPackage: ReformPackage }) {
           {reformPackage.official_source_events.map((event) => (
             <li key={event.id}>
               <a href={event.source_url}>{event.title}</a>
-              <span className="mono-date">{formatDisplayDate(event.source_published_at)}</span>
+              <span className="mono-date">{`${formatDisplayDate(event.source_published_at)} · ${trackerLabel(t, 'eventType', event.event_type)}`}</span>
             </li>
           ))}
         </ul>
@@ -226,7 +232,9 @@ function ReformPackagesView({ packages }: { packages: ReformPackage[] }) {
                 <td>{reformPackage.financing_or_incentive ?? t('format.notAvailable')}</td>
                 <td>{reformPackage.legal_basis}</td>
                 <td>
-                  <span className="ui-chip ui-chip--accent">{reformPackage.source_confidence}</span>
+                  <span className="ui-chip ui-chip--accent">
+                    {trackerLabel(t, 'sourceConfidence', reformPackage.source_confidence)}
+                  </span>
                 </td>
               </tr>
             ))}
@@ -246,7 +254,7 @@ function TimelineDetail({ item }: { item: TimelineMilestone }) {
 
   return (
     <aside className="timeline-detail" aria-label={t('knowledgeHub.reformTracker.timeline.detailAria')}>
-      <span className="ui-chip ui-chip--accent">{item.milestone.event_type}</span>
+      <span className="ui-chip ui-chip--accent">{trackerLabel(t, 'eventType', item.milestone.event_type)}</span>
       <h2>{item.milestone.label}</h2>
       <dl className="reform-dossier__meta">
         <div>
@@ -261,7 +269,7 @@ function TimelineDetail({ item }: { item: TimelineMilestone }) {
         </div>
         <div>
           <dt>{t('knowledgeHub.reformTracker.timeline.evidenceType')}</dt>
-          <dd>{item.milestone.evidence_type}</dd>
+          <dd>{trackerLabel(t, 'evidenceType', item.milestone.evidence_type)}</dd>
         </div>
         <div>
           <dt>{t('knowledgeHub.reformTracker.timeline.institution')}</dt>
@@ -269,7 +277,7 @@ function TimelineDetail({ item }: { item: TimelineMilestone }) {
         </div>
         <div>
           <dt>{t('knowledgeHub.reformTracker.timeline.confidence')}</dt>
-          <dd>{item.milestone.confidence}</dd>
+          <dd>{trackerLabel(t, 'sourceConfidence', item.milestone.confidence)}</dd>
         </div>
       </dl>
       {related && related.length > 0 ? (
@@ -316,7 +324,7 @@ function ImplementationTimelineView({ packages }: { packages: ReformPackage[] })
                 <span className="mono-date">{formatDisplayDate(item.milestone.date)}</span>
                 <span>{item.milestone.label}</span>
                 <span>{item.reformPackage.policy_area}</span>
-                <span className="ui-chip">{item.milestone.event_type}</span>
+                <span className="ui-chip">{trackerLabel(t, 'eventType', item.milestone.event_type)}</span>
               </button>
             ))}
           </section>
