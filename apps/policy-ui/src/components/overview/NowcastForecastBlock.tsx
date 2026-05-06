@@ -7,9 +7,12 @@ import {
   formatValueWithUnit,
 } from '../../lib/format/locale-format.js'
 import { ChartRenderer } from '../system/ChartRenderer.js'
+import { DfmContributionDetailPanel } from './DfmContributionDetailPanel.js'
+import type { DfmContributionDetail } from '../../data/overview/dfm-contribution-detail.js'
 
 type NowcastForecastBlockProps = {
   chart: ChartSpec
+  contributionDetails?: DfmContributionDetail[]
   headerSlot?: ReactNode
   statusSlot?: ReactNode
 }
@@ -187,7 +190,12 @@ function getVintageLine(chart: ChartSpec): string | null {
   return parts.length > 0 ? parts.join(' · ') : null
 }
 
-export function NowcastForecastBlock({ chart, headerSlot, statusSlot }: NowcastForecastBlockProps) {
+export function NowcastForecastBlock({
+  chart,
+  contributionDetails,
+  headerSlot,
+  statusSlot,
+}: NowcastForecastBlockProps) {
   const { i18n, t } = useTranslation()
   const locale = i18n.resolvedLanguage ?? i18n.language
   const headline = getHeadline(chart)
@@ -294,6 +302,8 @@ export function NowcastForecastBlock({ chart, headerSlot, statusSlot }: NowcastF
       <p className="overview-panel-takeaway overview-nowcast-note">
         {t('overview.nowcast.modelNotOfficial')}
       </p>
+
+      <DfmContributionDetailPanel rows={contributionDetails} locale={locale} />
 
       <div className="sr-only">
         <table className="overview-nowcast-series">

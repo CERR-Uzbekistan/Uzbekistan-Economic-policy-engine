@@ -6,6 +6,7 @@ import { createElement } from 'react'
 import { initReactI18next, I18nextProvider } from 'react-i18next'
 import { NowcastForecastBlock } from '../../../src/components/overview/NowcastForecastBlock.js'
 import type { ChartSpec } from '../../../src/contracts/data-contract.js'
+import type { DfmContributionDetail } from '../../../src/data/overview/dfm-contribution-detail.js'
 import type { i18n as I18nInstance } from 'i18next'
 
 const attribution = {
@@ -485,5 +486,66 @@ describe('NowcastForecastBlock (shape-agnostic)', () => {
     assert.match(html, /2026Q1/)
     assert.match(html, /aria-label="Nowcast and forecast\. Current-quarter nowcast: 7\.0% YoY \(2026Q1\)\. Current nowcast: Q1 2026, 7\.0%\./)
     assert.match(html, /<th scope="row">Q1 2017<\/th>/)
+  })
+
+  it('renders DFM contribution detail rows without treating native M0 as contracting', async () => {
+    const i18n = await createTestI18n()
+    const contributionDetails: DfmContributionDetail[] = [
+      {
+        indicatorId: 'IND_YOY',
+        label: 'Industry YoY Growth',
+        category: 'Production',
+        latestValue: -0.5017,
+        contribution: -0.029224,
+        loading: 0.381273,
+        isPinned: true,
+        signal: {
+          kind: 'contracting',
+          label: 'Contracting growth signal',
+          tone: 'negative',
+          isGrowthRate: true,
+        },
+      },
+      {
+        indicatorId: 'wholesale_trade_grwth',
+        label: 'Wholesale Trade Growth',
+        category: 'Trade',
+        latestValue: -0.2663,
+        contribution: -0.022242,
+        loading: 0.216741,
+        isPinned: true,
+        signal: {
+          kind: 'contracting',
+          label: 'Contracting growth signal',
+          tone: 'negative',
+          isGrowthRate: true,
+        },
+      },
+      {
+        indicatorId: 'm0',
+        label: 'Money Supply M0',
+        category: 'Money, Banking & Credit',
+        latestValue: -2.9709,
+        contribution: 0.099383,
+        loading: -0.088204,
+        isPinned: false,
+        signal: {
+          kind: 'monetary-aggregate-native',
+          label: 'Monetary aggregate, native units',
+          tone: 'neutral',
+          isGrowthRate: false,
+        },
+      },
+    ]
+
+    const html = renderBlock(buildShortSegmentedChart(), { contributionDetails }, i18n)
+
+    assert.match(html, /Latest indicator contribution slice/)
+    assert.match(html, /Industry YoY Growth/)
+    assert.match(html, /Wholesale Trade Growth/)
+    assert.match(html, /Money Supply M0/)
+    assert.match(html, /data-dfm-indicator-id="m0"/)
+    assert.match(html, /data-dfm-signal-kind="monetary-aggregate-native"/)
+    assert.equal(/data-dfm-indicator-id="m0"[\s\S]*?Contracting growth signal/.test(html), false)
   })
 })
