@@ -78,37 +78,43 @@ const HASH_ROUTES = [
   },
   {
     hash: '#/knowledge-hub',
-    selector: '.candidate-section',
+    selector: '.reform-packages-layout',
     titles: {
-      en: 'Knowledge Hub',
-      ru: '\u0411\u0430\u0437\u0430 \u0437\u043d\u0430\u043d\u0438\u0439',
-      uz: 'Bilimlar markazi',
+      en: 'Reform Tracker',
+      ru: '\u0422\u0440\u0435\u043a\u0435\u0440 \u0440\u0435\u0444\u043e\u0440\u043c',
+      uz: 'Islohotlar monitoringi',
     },
     extraExpression: `
       (() => {
       const text = (document.body.innerText || '').toLowerCase();
-      const hasAcceptedSection = !!document.querySelector('.accepted-section');
-      const hasCandidateSection = !!document.querySelector('.candidate-section');
-      const hasSourceMetadata =
-        !!document.querySelector('.candidate-meta') &&
-        !!document.querySelector('.candidate-meta a[href^="http"]');
-      const hasReviewStatus =
-        text.includes('source_extracted') &&
-        text.includes('candidate') &&
-        text.includes('unreviewed') &&
-        text.includes('needs_review');
-      const hasNonOfficialCaveat =
-        text.includes('not an official reviewed policy database') ||
-        (text.includes('not an official') && text.includes('reviewed') && text.includes('database'));
+      const hasPackagesLayout = !!document.querySelector('.reform-packages-layout');
+      const hasPackageTable = !!document.querySelector('.reform-package-table');
+      const hasDossier = !!document.querySelector('.reform-dossier');
+      const hasTrackerTabs = !!document.querySelector('.tracker-tabs');
+      const hasVerifiedSourceLink = !!document.querySelector('.reform-dossier a[href^="http"]');
+      const hasPackageContent =
+        text.includes('automatic official-source tracker') &&
+        text.includes('reform packages') &&
+        text.includes('implementation timeline') &&
+        text.includes('healthcare quality') &&
+        text.includes('verified links');
+      const hasCaveat =
+        text.includes('not an official legal registry') ||
+        (text.includes('automatic official-source tracker') && text.includes('invalid') && text.includes('unverified'));
       return (
-      hasAcceptedSection &&
-      hasCandidateSection &&
-      hasReviewStatus &&
-      hasSourceMetadata &&
-      hasNonOfficialCaveat &&
+      hasPackagesLayout &&
+      hasPackageTable &&
+      hasDossier &&
+      hasTrackerTabs &&
+      hasVerifiedSourceLink &&
+      hasPackageContent &&
+      hasCaveat &&
       !document.querySelector('.pending-surface') &&
       !document.querySelector('.knowledge-hub-static-banner') &&
+      !document.querySelector('.candidate-section') &&
+      !document.querySelector('.accepted-section') &&
       !document.querySelector('.hub-grid') &&
+      !text.includes('review queue') &&
       !text.includes('curated static pilot content') &&
       !text.includes('research briefs') &&
       !text.includes('wto accession')
@@ -783,15 +789,19 @@ function languageSwitchExpression(language, expectedTitle) {
   `
 }
 
-function knowledgeHubCandidateExpression() {
+function knowledgeHubTrackerExpression() {
   return `
     (() => {
-      const acceptedSection = document.querySelector('.knowledge-hub-page .accepted-section');
-      const candidateSection = document.querySelector('.knowledge-hub-page .candidate-section');
-      const candidateMeta = document.querySelector('.knowledge-hub-page .candidate-meta');
+      const packagesLayout = document.querySelector('.knowledge-hub-page .reform-packages-layout');
+      const packageTable = document.querySelector('.knowledge-hub-page .reform-package-table');
+      const dossier = document.querySelector('.knowledge-hub-page .reform-dossier');
+      const trackerTabs = document.querySelector('.knowledge-hub-page .tracker-tabs');
+      const methodology = document.querySelector('.knowledge-hub-page .tracker-methodology');
       const forbiddenSelectors = [
         '.pending-surface',
         '.knowledge-hub-static-banner',
+        '.candidate-section',
+        '.accepted-section',
         '.hub-grid',
       ];
       const forbiddenSelector = forbiddenSelectors.find((selector) => document.querySelector(selector));
@@ -803,35 +813,36 @@ function knowledgeHubCandidateExpression() {
         'BriefCard',
         'ResearchBriefList',
         'WTO accession',
+        'Review queue',
       ].find((snippet) => normalizedText.includes(snippet.toLowerCase()));
       const requiredNormalizedText = [
-        'accepted reforms',
-        'source_extracted',
-        'candidate',
-        'unreviewed',
-        'needs_review',
-        'retrieved_at',
+        'automatic official-source tracker',
+        'reform packages',
+        'implementation timeline',
+        'healthcare quality',
+        'official website of the president',
+        'verified links',
+        'not an official legal registry',
       ];
       const missingText = requiredNormalizedText.filter((snippet) => !normalizedText.includes(snippet));
-      const hasSourceMetadata = !!candidateMeta && !!candidateMeta.querySelector('a[href^="http"]');
-      const hasNonOfficialCaveat =
-        normalizedText.includes('not an official reviewed policy database') ||
-        (normalizedText.includes('not an official') &&
-          normalizedText.includes('reviewed') &&
-          normalizedText.includes('database'));
+      const hasSourceMetadata = !!dossier && !!dossier.querySelector('a[href^="http"]');
       return {
         ok:
-          !!candidateSection &&
-          !!acceptedSection &&
+          !!packagesLayout &&
+          !!packageTable &&
+          !!dossier &&
+          !!trackerTabs &&
+          !!methodology &&
           missingText.length === 0 &&
           hasSourceMetadata &&
-          hasNonOfficialCaveat &&
           !forbiddenSelector &&
           !forbiddenText,
-        hasCandidateSection: !!candidateSection,
-        hasAcceptedSection: !!acceptedSection,
+        hasPackagesLayout: !!packagesLayout,
+        hasPackageTable: !!packageTable,
+        hasDossier: !!dossier,
+        hasTrackerTabs: !!trackerTabs,
+        hasMethodology: !!methodology,
         hasSourceMetadata,
-        hasNonOfficialCaveat,
         missingText,
         forbiddenSelector: forbiddenSelector ?? null,
         forbiddenText: forbiddenText ?? null,
@@ -1007,14 +1018,21 @@ async function navigateAndAssertRoute(client, baseUrl, route, details) {
   details.push(`${route.hash} switched EN/RU/UZ through the real language select.`)
 
   if (route.hash === '#/knowledge-hub') {
-    const candidateResult = await evaluate(client, knowledgeHubCandidateExpression())
-    if (!candidateResult?.ok) {
-      return failure('Knowledge Hub candidate-intake failure', 'Knowledge Hub did not render the candidate-intake contract.', [
+    const englishResetResult = await evaluate(client, resetRouteLanguageExpression(route.titles.en))
+    if (!englishResetResult?.ok) {
+      return failure('Knowledge Hub language reset failure', 'Knowledge Hub did not reset to English before tracker contract assertion.', [
         ...details,
-        `Observed Knowledge Hub state: ${JSON.stringify(candidateResult)}`,
+        `Observed Knowledge Hub reset state: ${JSON.stringify(englishResetResult)}`,
       ])
     }
-    details.push('Knowledge Hub rendered accepted/candidate tracker lanes and kept hidden mock content out.')
+    const trackerResult = await evaluate(client, knowledgeHubTrackerExpression())
+    if (!trackerResult?.ok) {
+      return failure('Knowledge Hub reform-tracker failure', 'Knowledge Hub did not render the reform package tracker contract.', [
+        ...details,
+        `Observed Knowledge Hub state: ${JSON.stringify(trackerResult)}`,
+      ])
+    }
+    details.push('Knowledge Hub rendered reform package tracker, verified source evidence, and kept hidden mock content out.')
   }
 
   return null
