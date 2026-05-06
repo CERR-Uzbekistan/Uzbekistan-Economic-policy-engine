@@ -10,6 +10,10 @@ const scriptDir = dirname(fileURLToPath(import.meta.url))
 const repoRoot = resolve(scriptDir, '..', '..')
 const defaultPublicArtifactPath = resolve(repoRoot, 'apps', 'policy-ui', 'public', 'data', 'knowledge-hub.json')
 const GOV_UZ_NEWS_API_URL = 'https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1'
+const SOURCE_LINK_VALIDATION_HEADERS = {
+  Accept: 'text/html,application/xhtml+xml,application/json;q=0.8,*/*;q=0.5',
+  'User-Agent': 'Uzbekistan-Economic-Policy-Engine/knowledge-hub-intake (+manual-review)',
+}
 
 function fixturePath(fileName) {
   return resolve(scriptDir, 'source-fixtures', fileName)
@@ -845,6 +849,94 @@ function uniqueCandidatesAcrossSources(candidates) {
   })
 }
 
+function candidateWithRunMetadata(candidate, extractionMode, sourceUrlStatus, extractedAt) {
+  return {
+    ...candidate,
+    extraction_mode: extractionMode,
+    source_url_status: sourceUrlStatus,
+    ...(sourceUrlStatus === 'verified' ? { source_url_verified_at: extractedAt } : {}),
+  }
+}
+
+async function validateCandidateSourceLink(candidate, fetchImpl) {
+  try {
+    const host = new URL(candidate.source_url).hostname
+    if (/\.test$/i.test(host) || /^(?:example|localhost|127\.0\.0\.1)(?:\.|$)/i.test(host)) {
+      return { ok: false, error: 'Synthetic or local candidate source host' }
+    }
+    const response = await fetchImpl(candidate.source_url, {
+      method: 'GET',
+      headers: SOURCE_LINK_VALIDATION_HEADERS,
+    })
+    if (!response.ok) {
+      return { ok: false, error: `HTTP ${response.status}` }
+    }
+    return { ok: true, error: null }
+  } catch (error) {
+    return { ok: false, error: formatError(error) }
+  }
+}
+
+async function validateCandidateSourceLinks(candidates, { fetchSource, fetchImpl, extractionMode, extractedAt }) {
+  if (!fetchSource) {
+    return {
+      candidates: candidates.map((candidate) =>
+        candidateWithRunMetadata(candidate, extractionMode, 'not_checked_fixture', extractedAt),
+      ),
+      exclusions: [],
+    }
+  }
+
+  const decisions = await Promise.all(
+    candidates.map(async (candidate) => {
+      const sourceLink = await validateCandidateSourceLink(candidate, fetchImpl)
+      if (sourceLink.ok) {
+        return {
+          candidate: candidateWithRunMetadata(candidate, extractionMode, 'verified', extractedAt),
+          exclusion: null,
+        }
+      }
+
+      return {
+        candidate: null,
+        exclusion: {
+          title: candidate.title,
+          source_institution: candidate.source_institution,
+          source_url: candidate.source_url,
+          source_published_at: candidate.source_published_at,
+          exclusion_reason: 'source_link_unusable',
+          matched_include_rules: candidate.matched_include_rules ?? candidate.matched_rules,
+          matched_exclude_rules: [],
+          relevance_score: candidate.relevance_score,
+          source_url_error: sourceLink.error,
+        },
+      }
+    }),
+  )
+
+  return {
+    candidates: decisions.flatMap((decision) => (decision.candidate ? [decision.candidate] : [])),
+    exclusions: decisions.flatMap((decision) => (decision.exclusion ? [decision.exclusion] : [])),
+  }
+}
+
+function sourceResultToArtifactDiagnostic(result) {
+  const diagnostic = {
+    id: result.id,
+    institution: result.institution,
+    url: result.url,
+    parser: result.parser,
+    fetch_url: result.fetch_url,
+    ok: result.ok,
+    candidate_count: result.candidate_count,
+    excluded_count: result.excluded_count,
+    link_invalid_count: result.link_invalid_count,
+    fetched_at: result.fetched_at,
+  }
+  if (result.error) diagnostic.error = result.error
+  return diagnostic
+}
+
 export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options = {}) {
   const extractedAt = options.extractedAt ?? new Date().toISOString()
   const sources = options.sources ?? REFORM_SOURCE_DEFINITIONS
@@ -858,16 +950,24 @@ export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options 
       try {
         const html = await readSource(source, fetchSource, fetchImpl)
         const decisions = extractCandidateDecisionsFromSource(source, html, extractedAt)
-        const candidates = uniqueCandidatesById(decisions.candidates)
+        const linkValidation = await validateCandidateSourceLinks(uniqueCandidatesById(decisions.candidates), {
+          fetchSource,
+          fetchImpl,
+          extractionMode,
+          extractedAt,
+        })
+        const exclusions = [...decisions.exclusions, ...linkValidation.exclusions]
         return {
           ...sourceDefinitionToArtifactSource(source),
           parser: source.parser ?? 'auto',
           fetch_url: source.api_url ?? source.url,
           ok: true,
-          candidate_count: candidates.length,
-          excluded_count: decisions.exclusions.length,
-          exclusions: decisions.exclusions,
-          candidates,
+          candidate_count: linkValidation.candidates.length,
+          excluded_count: exclusions.length,
+          link_invalid_count: linkValidation.exclusions.length,
+          fetched_at: extractedAt,
+          exclusions,
+          candidates: linkValidation.candidates,
         }
       } catch (error) {
         return {
@@ -877,6 +977,8 @@ export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options 
           ok: false,
           candidate_count: 0,
           excluded_count: 0,
+          link_invalid_count: 0,
+          fetched_at: extractedAt,
           exclusions: [],
           candidates: [],
           error: formatError(error),
@@ -911,6 +1013,7 @@ export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options 
     extraction_mode_label: fetchSource ? 'Configured source fetch' : 'Fixture/demo intake',
     rulebook: REFORM_INTAKE_RULEBOOK,
     sources: sources.map(sourceDefinitionToArtifactSource),
+    source_diagnostics: sourceResults.map(sourceResultToArtifactDiagnostic),
     accepted_reforms: [],
     candidates,
     caveats,

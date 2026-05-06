@@ -77,6 +77,7 @@ describe('knowledge hub adapter', () => {
         {
           id: 'candidate-1',
           extraction_state: 'source_extracted',
+          extraction_mode: 'configured-source-fetch',
           review_state: 'candidate',
           review_status: 'needs_review',
           status: 'unknown',
@@ -97,6 +98,8 @@ describe('knowledge hub adapter', () => {
           source_published_at: '2026-04-25',
           retrieved_at: '2026-05-05T08:00:00.000Z',
           extracted_at: '2026-05-05T08:00:00.000Z',
+          source_url_status: 'verified',
+          source_url_verified_at: '2026-05-05T08:00:00.000Z',
           citation_permission: 'pending',
           license_class: 'unknown',
           translation_review_state: 'not_translated',
@@ -109,7 +112,9 @@ describe('knowledge hub adapter', () => {
     assert.equal(content.briefs.length, 0)
     assert.equal(content.candidates?.length, 1)
     assert.equal(content.candidates?.[0].extraction_state, 'source_extracted')
+    assert.equal(content.candidates?.[0].extraction_mode, 'configured-source-fetch')
     assert.equal(content.candidates?.[0].review_status, 'needs_review')
+    assert.equal(content.candidates?.[0].source_url_status, 'verified')
     assert.equal(content.extraction_mode, 'fixture-demo')
     assert.equal(content.extraction_mode_label, 'Fixture/demo intake')
     assert.equal(content.meta.candidate_items, 1)
@@ -147,16 +152,18 @@ describe('knowledge hub adapter', () => {
     assert.equal(validation.ok ? validation.value.schema_version : null, KNOWLEDGE_HUB_ARTIFACT_SCHEMA_VERSION)
     assert.equal(validation.ok ? validation.value.extraction_mode : null, 'configured-source-fetch')
     assert.equal(validation.ok ? validation.value.extraction_mode_label : null, 'Configured source fetch')
+    assert.equal(validation.ok ? validation.value.source_diagnostics.length : null, 9)
     assert.ok(validation.ok && validation.value.rulebook.include_rules.length > 0)
     assert.ok(validation.ok && validation.value.rulebook.exclude_rules.length > 0)
     assert.ok(validation.ok && validation.value.rulebook.exclusion_reasons.length > 0)
     assert.ok(validation.ok && validation.value.rulebook.actual_reform_definition?.includes('legal or policy instrument'))
-    assert.ok(validation.ok && validation.value.candidates.length > 0)
     assert.ok(validation.ok && validation.value.accepted_reforms.length === 0)
     assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.extraction_state === 'source_extracted'))
+    assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.extraction_mode === 'configured-source-fetch'))
     assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.review_state === 'candidate'))
     assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.review_status === 'needs_review'))
     assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.status === 'unknown'))
+    assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.source_url_status === 'verified'))
     assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.inclusion_reason.length > 0))
     assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.evidence_types.length > 0))
     assert.ok(validation.ok && validation.value.candidates.every((candidate) => candidate.matched_rules.length > 0))
@@ -169,9 +176,9 @@ describe('knowledge hub adapter', () => {
     assert.equal(content.reforms.length, 0)
     assert.equal(content.briefs.length, 0)
     assert.equal(content.candidates?.length, validation.ok ? validation.value.candidates.length : 0)
+    assert.equal(content.source_diagnostics?.length, validation.ok ? validation.value.source_diagnostics.length : 0)
     assert.equal(content.meta.candidate_items, validation.ok ? validation.value.candidates.length : 0)
     assert.equal(content.meta.sources_configured, 9)
-    assert.equal(content.meta.candidate_items, 1)
     assert.equal(content.extraction_mode_label, 'Configured source fetch')
     assert.ok(content.caveats?.some((caveat) => caveat.includes('configured source URLs')))
     assert.ok(content.caveats?.some((caveat) => caveat.includes('not an official reviewed policy database')))

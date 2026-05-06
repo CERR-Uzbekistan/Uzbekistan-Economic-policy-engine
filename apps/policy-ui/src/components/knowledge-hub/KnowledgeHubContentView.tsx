@@ -11,6 +11,9 @@ export function KnowledgeHubContentView({ content }: KnowledgeHubContentViewProp
   const reforms = content.reforms ?? []
   const modeLabel = content.extraction_mode_label ?? 'Candidate intake'
   const isFixtureDemo = content.extraction_mode === 'fixture-demo'
+  const sourceDiagnostics = content.source_diagnostics ?? []
+  const sourceFailures = sourceDiagnostics.filter((source) => !source.ok).length
+  const invalidLinkCount = sourceDiagnostics.reduce((sum, source) => sum + source.link_invalid_count, 0)
 
   return (
     <>
@@ -26,6 +29,10 @@ export function KnowledgeHubContentView({ content }: KnowledgeHubContentViewProp
         <div>
           <span className="tracker-summary__value">{content.meta.sources_configured ?? 0}</span>
           <span className="tracker-summary__label">sources monitored</span>
+        </div>
+        <div>
+          <span className="tracker-summary__value">{invalidLinkCount}</span>
+          <span className="tracker-summary__label">invalid links blocked</span>
         </div>
       </section>
       <div className="knowledge-hub-intake-banner">
@@ -44,6 +51,60 @@ export function KnowledgeHubContentView({ content }: KnowledgeHubContentViewProp
           <span>{modeLabel}: this public artifact was generated from configured source URLs.</span>
         )}
       </div>
+      {sourceDiagnostics.length > 0 ? (
+        <section aria-labelledby="knowledge-hub-source-status-title" className="source-status-section">
+          <div className="page-section-head">
+            <h2 id="knowledge-hub-source-status-title">Source fetch status</h2>
+            <p>
+              {sourceFailures === 0
+                ? 'Configured sources were read for this artifact; invalid item links are excluded before publication.'
+                : 'One or more configured sources failed during intake; successful sources remain visible for review.'}
+            </p>
+          </div>
+          <div className="source-status-list">
+            {sourceDiagnostics.map((source) => (
+              <article key={source.id} className="source-status-item">
+                <div className="candidate-item__topline">
+                  <span className={source.ok ? 'ui-chip' : 'ui-chip ui-chip--warn'}>
+                    {source.ok ? 'source ok' : 'source failed'}
+                  </span>
+                  <span className="ui-chip">{source.parser}</span>
+                  {source.link_invalid_count > 0 ? (
+                    <span className="ui-chip ui-chip--warn">{source.link_invalid_count} link blocked</span>
+                  ) : null}
+                </div>
+                <h3>{source.institution}</h3>
+                <dl className="candidate-meta" aria-label={`${source.institution} intake status`}>
+                  <div>
+                    <dt>Fetch URL</dt>
+                    <dd>
+                      <a href={source.fetch_url}>{source.fetch_url}</a>
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Fetched at</dt>
+                    <dd>{source.fetched_at ?? content.generated_at ?? 'Unavailable'}</dd>
+                  </div>
+                  <div>
+                    <dt>Candidates</dt>
+                    <dd>{source.candidate_count}</dd>
+                  </div>
+                  <div>
+                    <dt>Excluded</dt>
+                    <dd>{source.excluded_count}</dd>
+                  </div>
+                  {source.error ? (
+                    <div>
+                      <dt>Error</dt>
+                      <dd>{source.error}</dd>
+                    </div>
+                  ) : null}
+                </dl>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
       <ReformTimeline reforms={reforms} />
       <ReformCandidateList candidates={candidates} />
       {content.caveats && content.caveats.length > 0 ? (

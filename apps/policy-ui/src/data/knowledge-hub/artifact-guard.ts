@@ -3,11 +3,14 @@ import type {
   ReformCategory,
   ReformCitationPermission,
   ReformEvidenceType,
+  ReformArtifactExtractionMode,
   ReformLicenseClass,
   ReformReviewState,
+  ReformSourceUrlStatus,
   ReformStatus,
   ReformTrackerItem,
   ReformTranslationReviewState,
+  KnowledgeHubSourceDiagnostic,
 } from '../../contracts/data-contract.js'
 import {
   KNOWLEDGE_HUB_ARTIFACT_SCHEMA_VERSION,
@@ -117,6 +120,16 @@ const REFORM_TRANSLATION_REVIEW_STATE_VALUES: ReformTranslationReviewState[] = [
   'reviewed',
   'blocked',
   'not_applicable',
+]
+
+const REFORM_ARTIFACT_EXTRACTION_MODE_VALUES: ReformArtifactExtractionMode[] = [
+  'fixture-demo',
+  'configured-source-fetch',
+]
+
+const REFORM_SOURCE_URL_STATUS_VALUES: ReformSourceUrlStatus[] = [
+  'verified',
+  'not_checked_fixture',
 ]
 
 function requireNumber(
@@ -253,11 +266,69 @@ function requireEnum<T extends string>(
   return allowed[0]
 }
 
+function validateSourceDiagnostic(
+  value: unknown,
+  path: string,
+  issues: KnowledgeHubArtifactValidationIssue[],
+): KnowledgeHubSourceDiagnostic | null {
+  if (!isRecord(value)) {
+    issues.push({ path, message: 'Source diagnostic entry must be an object.', severity: 'error' })
+    return null
+  }
+
+  const diagnostic: KnowledgeHubSourceDiagnostic = {
+    id: requireString(value, 'id', path, issues),
+    institution: requireString(value, 'institution', path, issues),
+    url: requireString(value, 'url', path, issues),
+    parser: requireString(value, 'parser', path, issues),
+    fetch_url: requireString(value, 'fetch_url', path, issues),
+    ok: value.ok === true,
+    candidate_count: requireNumber(value, 'candidate_count', path, issues),
+    excluded_count: requireNumber(value, 'excluded_count', path, issues),
+    link_invalid_count: requireNumber(value, 'link_invalid_count', path, issues),
+    fetched_at: stringValue(value.fetched_at) ?? undefined,
+    error: stringValue(value.error) ?? undefined,
+  }
+
+  if (typeof value.ok !== 'boolean') {
+    issues.push({ path: `${path}.ok`, message: 'Expected a boolean.', severity: 'error' })
+  }
+  validateUrl(diagnostic.url, `${path}.url`, issues)
+  validateUrl(diagnostic.fetch_url, `${path}.fetch_url`, issues)
+  if (diagnostic.candidate_count < 0) {
+    issues.push({ path: `${path}.candidate_count`, message: 'Expected a non-negative count.', severity: 'error' })
+  }
+  if (diagnostic.excluded_count < 0) {
+    issues.push({ path: `${path}.excluded_count`, message: 'Expected a non-negative count.', severity: 'error' })
+  }
+  if (diagnostic.link_invalid_count < 0) {
+    issues.push({ path: `${path}.link_invalid_count`, message: 'Expected a non-negative count.', severity: 'error' })
+  }
+  if (diagnostic.fetched_at && !isIsoLike(diagnostic.fetched_at)) {
+    issues.push({ path: `${path}.fetched_at`, message: 'Expected an ISO-like timestamp.', severity: 'error' })
+  }
+  if (!diagnostic.ok && !diagnostic.error) {
+    issues.push({ path: `${path}.error`, message: 'Failed sources require an error message.', severity: 'error' })
+  }
+
+  return diagnostic
+}
+
 function validateTrackerCommon(
   value: unknown,
   path: string,
   issues: KnowledgeHubArtifactValidationIssue[],
-): Omit<ReformCandidateItem, 'extraction_state' | 'review_state' | 'review_status' | 'status' | 'relevance_score'> | null {
+): Omit<
+  ReformCandidateItem,
+  | 'extraction_state'
+  | 'extraction_mode'
+  | 'review_state'
+  | 'review_status'
+  | 'status'
+  | 'relevance_score'
+  | 'source_url_status'
+  | 'source_url_verified_at'
+> | null {
   if (!isRecord(value)) {
     issues.push({ path, message: 'Tracker entry must be an object.', severity: 'error' })
     return null
@@ -348,14 +419,27 @@ function validateCandidate(
   const candidate: ReformCandidateItem = {
     ...common,
     extraction_state: requireEnum(value, 'extraction_state', path, ['source_extracted'], issues),
+    extraction_mode: requireEnum(value, 'extraction_mode', path, REFORM_ARTIFACT_EXTRACTION_MODE_VALUES, issues),
     review_state: requireEnum(value, 'review_state', path, ['candidate'], issues),
     review_status: requireEnum(value, 'review_status', path, ['needs_review'], issues),
     status: requireEnum(value, 'status', path, ['unknown'], issues),
     relevance_score: requireNumber(value, 'relevance_score', path, issues),
+    source_url_status: requireEnum(value, 'source_url_status', path, REFORM_SOURCE_URL_STATUS_VALUES, issues),
+    source_url_verified_at: stringValue(value.source_url_verified_at) ?? undefined,
   }
 
   if (candidate.relevance_score < 0 || candidate.relevance_score > 100) {
     issues.push({ path: `${path}.relevance_score`, message: 'Expected a score from 0 to 100.', severity: 'error' })
+  }
+  if (candidate.extraction_mode === 'configured-source-fetch' && candidate.source_url_status !== 'verified') {
+    issues.push({
+      path: `${path}.source_url_status`,
+      message: 'Configured-source candidates require a verified source URL.',
+      severity: 'error',
+    })
+  }
+  if (candidate.source_url_verified_at && !isIsoLike(candidate.source_url_verified_at)) {
+    issues.push({ path: `${path}.source_url_verified_at`, message: 'Expected an ISO-like timestamp.', severity: 'error' })
   }
 
   return candidate
@@ -453,6 +537,15 @@ export function validateKnowledgeHubArtifact(input: unknown): KnowledgeHubArtifa
     issues.push({ path: 'sources', message: 'Expected a source array.', severity: 'error' })
   }
 
+  const sourceDiagnostics = Array.isArray(input.source_diagnostics)
+    ? input.source_diagnostics
+        .map((entry, index) => validateSourceDiagnostic(entry, `source_diagnostics[${index}]`, issues))
+        .filter((entry): entry is KnowledgeHubSourceDiagnostic => entry !== null)
+    : []
+  if (!Array.isArray(input.source_diagnostics)) {
+    issues.push({ path: 'source_diagnostics', message: 'Expected a source diagnostics array.', severity: 'error' })
+  }
+
   const acceptedReforms = Array.isArray(input.accepted_reforms)
     ? input.accepted_reforms
         .map((entry, index) => validateAcceptedReform(entry, `accepted_reforms[${index}]`, issues))
@@ -508,6 +601,7 @@ export function validateKnowledgeHubArtifact(input: unknown): KnowledgeHubArtifa
         exclusion_reasons: [],
       },
       sources,
+      source_diagnostics: sourceDiagnostics,
       accepted_reforms: acceptedReforms,
       candidates,
       caveats,

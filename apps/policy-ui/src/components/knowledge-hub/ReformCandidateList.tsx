@@ -34,7 +34,9 @@ export function ReformCandidateList({ candidates }: ReformCandidateListProps) {
             <div className="candidate-item__topline">
               <span className="ui-chip ui-chip--warn">candidate</span>
               <span className="ui-chip">{candidate.extraction_state}</span>
+              <span className="ui-chip">{candidate.extraction_mode}</span>
               <span className="ui-chip ui-chip--warn">{candidate.review_status}</span>
+              <span className="ui-chip">{candidate.source_url_status}</span>
               <span className="ui-chip">{candidate.domain_tag}</span>
             </div>
             <h3>{candidate.title}</h3>
@@ -72,6 +74,17 @@ export function ReformCandidateList({ candidates }: ReformCandidateListProps) {
               <div>
                 <dt>retrieved_at</dt>
                 <dd>{candidate.retrieved_at ?? candidate.extracted_at ?? 'Unavailable'}</dd>
+              </div>
+              <div>
+                <dt>source_url_status</dt>
+                <dd>
+                  {candidate.source_url_status}
+                  {candidate.source_url_verified_at ? ` at ${candidate.source_url_verified_at}` : ''}
+                </dd>
+              </div>
+              <div>
+                <dt>Extraction mode</dt>
+                <dd>{candidate.extraction_mode}</dd>
               </div>
             </dl>
             <details className="candidate-inclusion">

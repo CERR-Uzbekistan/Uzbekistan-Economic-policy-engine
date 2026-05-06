@@ -652,6 +652,8 @@ export type ApiError = {
 // ───────────────────────────────────────────────────────────────
 
 export type ReformExtractionState = 'source_extracted' | 'manual_seed' | 'corrected'
+export type ReformArtifactExtractionMode = 'fixture-demo' | 'configured-source-fetch'
+export type ReformSourceUrlStatus = 'verified' | 'not_checked_fixture'
 export type ReformReviewState =
   | 'candidate'
   | 'accepted_internal'
@@ -761,10 +763,13 @@ export type ReformTrackerItem = ReformTrackerRecordBase & {
 
 export type ReformCandidateItem = ReformTrackerRecordBase & {
   extraction_state: 'source_extracted'
+  extraction_mode: ReformArtifactExtractionMode
   review_state: 'candidate'
   review_status: 'needs_review'
   status: 'unknown'
   relevance_score: number
+  source_url_status: ReformSourceUrlStatus
+  source_url_verified_at?: string
 }
 
 export type KnowledgeHubMeta = {
@@ -775,10 +780,25 @@ export type KnowledgeHubMeta = {
   sources_configured?: number
 }
 
+export type KnowledgeHubSourceDiagnostic = {
+  id: string
+  institution: string
+  url: string
+  parser: string
+  fetch_url: string
+  ok: boolean
+  candidate_count: number
+  excluded_count: number
+  link_invalid_count: number
+  fetched_at?: string
+  error?: string
+}
+
 export type KnowledgeHubContent = {
   reforms: ReformTrackerItem[]
   briefs: ResearchBrief[]
   candidates?: ReformCandidateItem[]
+  source_diagnostics?: KnowledgeHubSourceDiagnostic[]
   caveats?: string[]
   generated_at?: string
   extraction_mode?: string

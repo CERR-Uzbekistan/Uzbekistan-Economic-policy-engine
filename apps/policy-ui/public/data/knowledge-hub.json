@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-05-05T16:50:46.424Z",
+  "generated_at": "2026-05-06T09:28:01.133Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -265,6 +265,116 @@
       "url": "https://gov.uz/en/adliya/news/news"
     }
   ],
+  "source_diagnostics": [
+    {
+      "id": "lex-official-legal-acts",
+      "institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+      "url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
+      "parser": "html-articles",
+      "fetch_url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
+      "ok": true,
+      "candidate_count": 0,
+      "excluded_count": 13,
+      "link_invalid_count": 0,
+      "fetched_at": "2026-05-06T09:28:01.133Z"
+    },
+    {
+      "id": "president-reform-news",
+      "institution": "Official website of the President of the Republic of Uzbekistan",
+      "url": "https://president.uz/en/lists/news",
+      "parser": "president-uz-list",
+      "fetch_url": "https://president.uz/en/lists/news",
+      "ok": true,
+      "candidate_count": 0,
+      "excluded_count": 14,
+      "link_invalid_count": 0,
+      "fetched_at": "2026-05-06T09:28:01.133Z"
+    },
+    {
+      "id": "gov-portal-reform-news",
+      "institution": "Government portal of the Republic of Uzbekistan",
+      "url": "https://gov.uz/en/news/news",
+      "parser": "html-articles",
+      "fetch_url": "https://gov.uz/en/news/news",
+      "ok": true,
+      "candidate_count": 0,
+      "excluded_count": 0,
+      "link_invalid_count": 0,
+      "fetched_at": "2026-05-06T09:28:01.133Z"
+    },
+    {
+      "id": "cbu-policy-news",
+      "institution": "Central Bank of Uzbekistan",
+      "url": "https://cbu.uz/en/press_center/news/",
+      "parser": "html-articles",
+      "fetch_url": "https://cbu.uz/en/press_center/news/",
+      "ok": true,
+      "candidate_count": 0,
+      "excluded_count": 347,
+      "link_invalid_count": 0,
+      "fetched_at": "2026-05-06T09:28:01.133Z"
+    },
+    {
+      "id": "mef-policy-news",
+      "institution": "Ministry of Economy and Finance of Uzbekistan",
+      "url": "https://gov.uz/en/imv/news/news",
+      "parser": "govuz-api",
+      "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
+      "ok": true,
+      "candidate_count": 0,
+      "excluded_count": 12,
+      "link_invalid_count": 0,
+      "fetched_at": "2026-05-06T09:28:01.133Z"
+    },
+    {
+      "id": "tax-committee-news",
+      "institution": "Tax Committee of the Republic of Uzbekistan",
+      "url": "https://gov.uz/en/soliq/news/news",
+      "parser": "govuz-api",
+      "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
+      "ok": true,
+      "candidate_count": 0,
+      "excluded_count": 0,
+      "link_invalid_count": 0,
+      "fetched_at": "2026-05-06T09:28:01.133Z"
+    },
+    {
+      "id": "energy-ministry-news",
+      "institution": "Ministry of Energy of the Republic of Uzbekistan",
+      "url": "https://gov.uz/en/minenergy/news/news",
+      "parser": "govuz-api",
+      "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
+      "ok": true,
+      "candidate_count": 0,
+      "excluded_count": 12,
+      "link_invalid_count": 0,
+      "fetched_at": "2026-05-06T09:28:01.133Z"
+    },
+    {
+      "id": "investment-trade-ministry-news",
+      "institution": "Ministry of Investment, Industry and Trade of the Republic of Uzbekistan",
+      "url": "https://gov.uz/en/miit/news/news",
+      "parser": "govuz-api",
+      "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
+      "ok": true,
+      "candidate_count": 1,
+      "excluded_count": 11,
+      "link_invalid_count": 0,
+      "fetched_at": "2026-05-06T09:28:01.133Z"
+    },
+    {
+      "id": "justice-ministry-news",
+      "institution": "Ministry of Justice of the Republic of Uzbekistan",
+      "url": "https://gov.uz/en/adliya/news/news",
+      "parser": "govuz-api",
+      "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
+      "ok": true,
+      "candidate_count": 0,
+      "excluded_count": 12,
+      "link_invalid_count": 0,
+      "fetched_at": "2026-05-06T09:28:01.133Z"
+    }
+  ],
   "accepted_reforms": [],
   "candidates": [
     {
@@ -301,15 +411,18 @@
       "source_owner": "Ministry of Investment, Industry and Trade of the Republic of Uzbekistan",
       "source_url": "https://gov.uz/en/miit/news/view/153388",
       "source_published_at": "2026-04-14 10:20:00",
-      "retrieved_at": "2026-05-05T16:50:46.424Z",
-      "extracted_at": "2026-05-05T16:50:46.424Z",
+      "retrieved_at": "2026-05-06T09:28:01.133Z",
+      "extracted_at": "2026-05-06T09:28:01.133Z",
       "citation_permission": "pending",
       "license_class": "unknown",
       "translation_review_state": "not_translated",
       "caveats": [
         "Deterministic extraction from configured source text.",
         "Unreviewed candidate; not an official reviewed policy database entry."
-      ]
+      ],
+      "extraction_mode": "configured-source-fetch",
+      "source_url_status": "verified",
+      "source_url_verified_at": "2026-05-06T09:28:01.133Z"
     }
   ],
   "caveats": [

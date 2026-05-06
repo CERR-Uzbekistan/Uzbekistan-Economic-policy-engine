@@ -249,10 +249,17 @@ describe('Knowledge Hub reform intake', () => {
     assert.equal(artifact.extraction_mode_label, 'Fixture/demo intake')
     assert.equal(artifact.rulebook.version, REFORM_INTAKE_RULEBOOK.version)
     assert.equal(artifact.sources.length, REFORM_SOURCE_DEFINITIONS.length)
+    assert.equal(artifact.source_diagnostics.length, REFORM_SOURCE_DEFINITIONS.length)
+    assert.deepEqual(artifact.accepted_reforms, [])
     assert.equal(artifact.candidates.length, 7)
     assert.ok(artifact.candidates.every((candidate) => candidate.extraction_state === 'source_extracted'))
+    assert.ok(artifact.candidates.every((candidate) => candidate.extraction_mode === 'fixture-demo'))
     assert.ok(artifact.candidates.every((candidate) => candidate.review_state === 'candidate'))
     assert.ok(artifact.candidates.every((candidate) => candidate.review_status === 'needs_review'))
+    assert.ok(artifact.candidates.every((candidate) => candidate.source_url_status === 'not_checked_fixture'))
+    assert.ok(artifact.candidates.every((candidate) => candidate.source_institution.length > 0))
+    assert.ok(artifact.candidates.every((candidate) => candidate.source_url.startsWith('https://')))
+    assert.ok(artifact.candidates.every((candidate) => candidate.source_published_at || candidate.retrieved_at))
     assert.ok(artifact.candidates.every((candidate) => candidate.inclusion_reason.length > 0))
     assert.ok(artifact.candidates.every((candidate) => candidate.evidence_types.length > 0))
     assert.ok(artifact.caveats.some((caveat) => caveat.includes('Fixture/demo mode')))
@@ -354,12 +361,12 @@ describe('Knowledge Hub reform intake', () => {
         {
           id: 'ok-source',
           institution: 'OK Institution',
-          url: 'https://example.test/ok',
+          url: 'https://gov.uz/en/ok/news/news',
         },
         {
           id: 'failed-source',
           institution: 'Failed Institution',
-          url: 'https://example.test/fail',
+          url: 'https://gov.uz/en/fail/news/news',
         },
       ],
       fetchImpl: async (url) => {
@@ -381,10 +388,46 @@ describe('Knowledge Hub reform intake', () => {
     assert.equal(diagnostics.source_results[0].ok, true)
     assert.equal(diagnostics.source_results[0].candidate_count, 1)
     assert.equal(diagnostics.source_results[0].excluded_count, 0)
+    assert.equal(diagnostics.source_results[0].link_invalid_count, 0)
     assert.equal(diagnostics.source_results[1].ok, false)
     assert.equal(diagnostics.source_failures.length, 1)
+    assert.equal(diagnostics.artifact.source_diagnostics.length, 2)
+    assert.equal(diagnostics.artifact.source_diagnostics[0].ok, true)
+    assert.equal(diagnostics.artifact.source_diagnostics[0].fetched_at, '2026-05-05T08:00:00.000Z')
     assert.equal(diagnostics.artifact.candidates[0].source_institution, 'OK Institution')
+    assert.equal(diagnostics.artifact.candidates[0].extraction_mode, 'configured-source-fetch')
+    assert.equal(diagnostics.artifact.candidates[0].source_url_status, 'verified')
+    assert.equal(diagnostics.artifact.candidates[0].source_url_verified_at, '2026-05-05T08:00:00.000Z')
     assert.ok(diagnostics.artifact.caveats.some((caveat) => caveat.includes('configured sources failed')))
+  })
+
+  it('blocks synthetic or unusable source links from configured-source artifacts', async () => {
+    const diagnostics = await buildKnowledgeHubCandidateArtifactWithDiagnostics({
+      fetchSource: true,
+      extractedAt: '2026-05-05T08:00:00.000Z',
+      sources: [
+        {
+          id: 'synthetic-source',
+          institution: 'Synthetic Institution',
+          url: 'https://example.test/news/',
+        },
+      ],
+      fetchImpl: async () =>
+        new Response(`
+          <article>
+            <time datetime="2026-05-03">3 May 2026</time>
+            <h2><a href="/tax">Tax administration amendments introduced for electronic VAT reporting</a></h2>
+            <p>The resolution introduces amended tax reporting rules and budget monitoring requirements.</p>
+          </article>
+        `),
+    })
+
+    assert.equal(diagnostics.candidate_count, 0)
+    assert.equal(diagnostics.artifact.candidates.length, 0)
+    assert.equal(diagnostics.source_results[0].candidate_count, 0)
+    assert.equal(diagnostics.source_results[0].link_invalid_count, 1)
+    assert.equal(diagnostics.source_results[0].exclusions[0].exclusion_reason, 'source_link_unusable')
+    assert.match(diagnostics.source_results[0].exclusions[0].source_url_error, /Synthetic or local/)
   })
 
   it('deduplicates repeated candidates across source definitions before artifact output', async () => {

@@ -1,4 +1,8 @@
-import type { ReformCandidateItem, ReformTrackerItem } from '../../contracts/data-contract.js'
+import type {
+  KnowledgeHubSourceDiagnostic,
+  ReformCandidateItem,
+  ReformTrackerItem,
+} from '../../contracts/data-contract.js'
 
 export const KNOWLEDGE_HUB_ARTIFACT_SCHEMA_VERSION = 'knowledge-hub-reform-tracker.v1'
 
@@ -27,6 +31,7 @@ export type KnowledgeHubArtifact = {
   extraction_mode_label: string
   rulebook: KnowledgeHubRulebook
   sources: KnowledgeHubArtifactSource[]
+  source_diagnostics: KnowledgeHubSourceDiagnostic[]
   accepted_reforms: ReformTrackerItem[]
   candidates: ReformCandidateItem[]
   caveats: string[]

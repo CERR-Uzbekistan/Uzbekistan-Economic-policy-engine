@@ -1,5 +1,6 @@
 import type {
   KnowledgeHubContent,
+  KnowledgeHubSourceDiagnostic,
   ReformCandidateItem,
   ReformStatus,
   ReformTrackerItem,
@@ -72,6 +73,7 @@ export type RawKnowledgeHubPayload = {
   reforms?: RawKnowledgeHubReform[]
   briefs?: RawKnowledgeHubBrief[]
   candidates?: ReformCandidateItem[]
+  source_diagnostics?: KnowledgeHubSourceDiagnostic[]
   caveats?: string[]
   generated_at?: string
   extraction_mode?: string
@@ -197,11 +199,13 @@ export function toKnowledgeHubContent(raw: RawKnowledgeHubPayload): KnowledgeHub
   const reforms = Array.isArray(rawReforms) ? rawReforms.map(adaptReform) : []
   const briefs = Array.isArray(raw.briefs) ? raw.briefs.map(adaptBrief) : []
   const candidates = Array.isArray(raw.candidates) ? raw.candidates : []
+  const sourceDiagnostics = Array.isArray(raw.source_diagnostics) ? raw.source_diagnostics : []
   const meta = raw.meta ?? {}
   return {
     reforms,
     briefs,
     candidates,
+    source_diagnostics: sourceDiagnostics,
     caveats: asStringArray(raw.caveats),
     generated_at: typeof raw.generated_at === 'string' ? raw.generated_at : undefined,
     extraction_mode: typeof raw.extraction_mode === 'string' ? raw.extraction_mode : undefined,
@@ -225,6 +229,7 @@ export function knowledgeHubArtifactToContent(artifact: KnowledgeHubArtifact): K
     source_artifact: '/data/knowledge-hub.json',
     accepted_reforms: artifact.accepted_reforms,
     candidates: artifact.candidates,
+    source_diagnostics: artifact.source_diagnostics,
     caveats: artifact.caveats,
     meta: {
       candidate_items: artifact.candidates.length,
