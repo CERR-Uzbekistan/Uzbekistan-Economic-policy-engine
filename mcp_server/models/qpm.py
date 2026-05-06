@@ -17,7 +17,8 @@ def solve_irf(
 
     Args:
         params: Structural parameters (b1-e1, inflation_target, neutral_real_rate, potential_growth).
-        shock_type: One of 'demand', 'cost_push', 'depreciation', 'monetary'.
+        shock_type: One of 'demand', 'cost_push', 'depreciation', 'monetary',
+            'external_demand', or 'external'.
         shock_size: Shock magnitude in percentage points.
         horizon: Number of quarters (8-32).
 
@@ -26,6 +27,7 @@ def solve_irf(
     """
     b1 = params["b1"]
     b2 = params["b2"]
+    b3 = params["b3"]
     b4 = params["b4"]
     a1 = params["a1"]
     a2 = params["a2"]
@@ -57,6 +59,7 @@ def solve_irf(
     shk_pi = np.zeros(N)
     shk_s = np.zeros(N)
     shk_rs = np.zeros(N)
+    gap_star = np.zeros(N)
 
     shock_map = {
         "demand": shk_gap,
@@ -66,6 +69,10 @@ def solve_irf(
     }
     if shock_type in shock_map:
         shock_map[shock_type][ST] = shock_size
+    if shock_type in ("external_demand", "external"):
+        gap_star[ST] = shock_size
+    for t in range(ST + 1, N):
+        gap_star[t] = 0.75 * gap_star[t - 1]
 
     def g(arr, t):
         """Safe array accessor (zero outside bounds)."""
@@ -119,7 +126,7 @@ def solve_irf(
             mci[t] = b4 * rr_gap[t] - (1 - b4) * l_z_gap[t]
 
             # IS curve
-            gap[t] = b1 * g(gap, t - 1) - b2 * mci[t] + shk_gap[t]
+            gap[t] = b1 * g(gap, t - 1) - b2 * mci[t] + b3 * gap_star[t] + shk_gap[t]
 
             # Final refresh: update RMC and Phillips with realised gap
             rmc[t] = a3 * gap[t] + (1 - a3) * l_z_gap[t]
