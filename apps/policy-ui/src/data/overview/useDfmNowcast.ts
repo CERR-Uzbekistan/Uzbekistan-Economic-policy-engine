@@ -7,10 +7,14 @@ import {
   fetchDfmBridgePayload,
 } from '../bridge/dfm-client.js'
 import { composeDfmNowcastChart } from './dfm-composition.js'
+import {
+  composeDfmContributionDetails,
+  type DfmContributionDetail,
+} from './dfm-contribution-detail.js'
 
 export type DfmNowcastState =
   | { status: 'loading' }
-  | { status: 'bridge'; chart: ChartSpec }
+  | { status: 'bridge'; chart: ChartSpec; contributionDetails: DfmContributionDetail[] }
   | { status: 'degraded'; error: DfmTransportError | DfmValidationError }
 
 export type DfmNowcastHookResult = {
@@ -38,7 +42,8 @@ export function useDfmNowcast(fetchImpl?: FetchLike): DfmNowcastHookResult {
         if (cancelled) return
         const adapter = toDfmAdapterOutput(payload)
         const chart = composeDfmNowcastChart(adapter)
-        setState({ status: 'bridge', chart })
+        const contributionDetails = composeDfmContributionDetails(adapter)
+        setState({ status: 'bridge', chart, contributionDetails })
       } catch (error) {
         if (cancelled) return
         if (error instanceof DfmTransportError || error instanceof DfmValidationError) {

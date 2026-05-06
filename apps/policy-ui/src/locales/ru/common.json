@@ -310,6 +310,30 @@
         "retry": "Повторить"
       }
     },
+    "dfmContributionDetail": {
+      "kicker": "Детализация вклада DFM",
+      "title": "Последний срез вкладов индикаторов",
+      "description": "Крупнейшие вклады по абсолютной величине; Industry YoY и Wholesale Trade Growth закрепляются при необходимости.",
+      "pinnedSuffix": "закреплено",
+      "headers": {
+        "indicator": "Индикатор",
+        "signal": "Сигнал",
+        "latest": "Последнее",
+        "contribution": "Вклад"
+      },
+      "signals": {
+        "contracting": "Сигнал сокращения роста",
+        "below-trend": "Рост ниже тренда",
+        "above-trend": "Рост выше тренда",
+        "interest-rate-native": "Ставка, нативные единицы",
+        "monetary-aggregate-native": "Денежный агрегат, нативные единицы",
+        "npl-native": "Доля NPL, нативные единицы",
+        "fx-native": "Курс FX, нативные единицы",
+        "level-native": "Уровневый индикатор, нативные единицы",
+        "native-unit": "Индикатор в нативных единицах",
+        "other-non-growth": "Не ростовой индикатор"
+      }
+    },
     "caveats": {
       "title": "Оговорки по моделям",
       "description": "Известные ограничения, влияющие на показатели выше. Прочтите перед цитированием.",

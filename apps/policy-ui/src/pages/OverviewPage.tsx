@@ -232,6 +232,11 @@ export function OverviewPage() {
           ) : null}
           <NowcastForecastBlock
             chart={displayedNowcastChart}
+            contributionDetails={
+              useLiveDfmNowcastChart && dfmState.status === 'bridge'
+                ? dfmState.contributionDetails
+                : undefined
+            }
             headerSlot={
               <TrustStateLabel
                 id={displayedNowcastTrustId}

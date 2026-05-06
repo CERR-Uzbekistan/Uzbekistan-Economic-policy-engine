@@ -310,6 +310,30 @@
         "retry": "Qayta urinish"
       }
     },
+    "dfmContributionDetail": {
+      "kicker": "DFM hissasi tafsiloti",
+      "title": "So'nggi indikator hissalari kesimi",
+      "description": "Mutlaq hissa bo'yicha eng katta omillar; kerak bo'lsa Industry YoY va Wholesale Trade Growth mahkamlanadi.",
+      "pinnedSuffix": "mahkamlangan",
+      "headers": {
+        "indicator": "Indikator",
+        "signal": "Signal",
+        "latest": "So'nggi",
+        "contribution": "Hissa"
+      },
+      "signals": {
+        "contracting": "O'sish qisqarishi signali",
+        "below-trend": "Trenddan past o'sish",
+        "above-trend": "Trenddan yuqori o'sish",
+        "interest-rate-native": "Stavka, asl birliklar",
+        "monetary-aggregate-native": "Pul agregati, asl birliklar",
+        "npl-native": "NPL ulushi, asl birliklar",
+        "fx-native": "FX kursi, asl birliklar",
+        "level-native": "Daraja indikatori, asl birliklar",
+        "native-unit": "Asl birlikdagi indikator",
+        "other-non-growth": "O'sish bo'lmagan indikator"
+      }
+    },
     "caveats": {
       "title": "Model bo'yicha izohlar",
       "description": "Yuqoridagi ko'rsatkichlarga ta'sir qiluvchi ma'lum cheklovlar. Iqtibos qilishdan oldin o'qing.",

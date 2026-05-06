@@ -58,13 +58,16 @@ describe('useDfmNowcast', () => {
     const { fetchDfmBridgePayload } = await import('../../../src/data/bridge/dfm-client.js')
     const { toDfmAdapterOutput } = await import('../../../src/data/bridge/dfm-adapter.js')
     const { composeDfmNowcastChart } = await import('../../../src/data/overview/dfm-composition.js')
+    const { composeDfmContributionDetails } = await import('../../../src/data/overview/dfm-contribution-detail.js')
 
     const payload = await fetchDfmBridgePayload(makeFetchOk())
     const adapter = toDfmAdapterOutput(payload)
     const chart = composeDfmNowcastChart(adapter)
+    const contributionDetails = composeDfmContributionDetails(adapter)
     // Segmented composition emits at minimum the history + nowcast pair.
     assert.ok(chart.series.length >= 2)
     assert.equal(chart.uncertainty.length, 3)
+    assert.ok(contributionDetails.length > 0)
   })
 
   it('classifies HTTP non-ok responses as transport errors', async () => {
