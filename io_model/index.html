@@ -1131,6 +1131,9 @@ function runDemandModel(){
   window._demandResult={dY,dX,dVA,dEmp,jObj};
   lastDemandKPIs={totalDY,totalDX,totalDVA,totalDEmp,
     multiplier:totalDY!==0?+(totalDX/totalDY).toFixed(3):null};
+
+  /* Auto-generate post-simulation policy brief (#15) */
+  try { ioAutoBrief(); } catch (e) { console.warn('ioAutoBrief failed', e); }
 }
 
 function clearDemandModel(){
@@ -1593,28 +1596,55 @@ function ioSaveScenario() {
   Toast.show('Scenario saved: '+name,'success');
 }
 
+function _ioBuildPayload() {
+  if (!lastDemandKPIs) return null;
+  const k = lastDemandKPIs;
+  const mode = document.getElementById('demand-mode').value;
+  const shockType = mode === 'agg' ? 'aggregate' : 'sector';
+  const affectedSectors = mode === 'agg'
+    ? 'All (' + document.getElementById('agg-dist').value + ')'
+    : demandShocks.map(s => s.code).join(', ');
+  return {
+    params: { shockType, affectedSectors, shockSize: fmtN(k.totalDY) + ' bln UZS' },
+    results: { kpis: [
+      { label: 'Output Multiplier',     value: k.multiplier !== null ? k.multiplier.toFixed(2) : '--' },
+      { label: 'Employment Effect',     value: fmtN(Math.round(k.totalDEmp)) + ' persons' },
+      { label: 'Total Output Effect',   value: fmtN(k.totalDX) + ' bln UZS' },
+      { label: 'VA Effect',             value: fmtN(k.totalDVA) + ' bln UZS' }
+    ] }
+  };
+}
+
+function _ioEnsurePanel() {
+  let c = document.getElementById('io-ai-output');
+  if (!c) {
+    c = document.createElement('div');
+    c.id = 'io-ai-output';
+    c.style.margin = '20px 0';
+    document.getElementById('page-overview')?.appendChild(c);
+  }
+  return c;
+}
+
+/* Offline post-simulation policy brief (#15). */
+function ioAutoBrief() {
+  if (!window.PolicyAdvisor) return;
+  const payload = _ioBuildPayload();
+  if (!payload) return;
+  _ioEnsurePanel();
+  const analysis = PolicyAdvisor.briefSim('io', payload.params, payload.results);
+  PolicyAdvisor.renderAdvisorPanel('io-ai-output', analysis);
+}
+
 async function ioAIAnalysis() {
   if(!lastDemandKPIs){ Toast.show('Run demand model first','warning'); return; }
   if(!window.PolicyAdvisor){ Toast.show('AI advisor not loaded','error'); return; }
-  const k=lastDemandKPIs;
-  const mode=document.getElementById('demand-mode').value;
-  const shockType=mode==='agg'?'aggregate':'sector';
-  const affectedSectors=mode==='agg'?'All ('+document.getElementById('agg-dist').value+')'
-    :demandShocks.map(s=>s.code).join(', ');
-
-  let c=document.getElementById('io-ai-output');
-  if(!c){c=document.createElement('div');c.id='io-ai-output';c.style.margin='20px 0';document.getElementById('page-overview')?.appendChild(c);}
-  c.innerHTML='<div style="padding:20px;color:#475569;">Analyzing...</div>';
-  const analysis=await PolicyAdvisor.analyzeSim('io',
-    {shockType,affectedSectors,shockSize:fmtN(k.totalDY)+' bln UZS'},
-    {kpis:[
-      {label:'Output Multiplier',value:k.multiplier!==null?k.multiplier.toFixed(2):'--'},
-      {label:'Employment Effect',value:fmtN(Math.round(k.totalDEmp))+' persons'},
-      {label:'Total Output Effect',value:fmtN(k.totalDX)+' bln UZS'},
-      {label:'VA Effect',value:fmtN(k.totalDVA)+' bln UZS'}
-    ]}
-  );
-  PolicyAdvisor.renderAdvisorPanel('io-ai-output',analysis);
+  const payload = _ioBuildPayload();
+  const c = _ioEnsurePanel();
+  c.innerHTML='<div style="padding:20px;color:#475569;">Analyzing…</div>';
+  c.scrollIntoView({behavior:'smooth'});
+  const analysis = await PolicyAdvisor.analyzeSim('io', payload.params, payload.results);
+  PolicyAdvisor.renderAdvisorPanel('io-ai-output', analysis);
 }
 
 // ═══════════════════════════════════════

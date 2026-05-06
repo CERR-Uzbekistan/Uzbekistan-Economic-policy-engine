@@ -870,6 +870,9 @@ function run() {
       options: chartOpts(),
     });
   });
+
+  /* Auto-generate post-simulation policy brief (#15) */
+  try { qpmAutoBrief(); } catch (e) { console.warn('qpmAutoBrief failed', e); }
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1686,45 +1689,68 @@ function buildQPMExpertAnalysis() {
   };
 }
 
-/* ── AI analysis ── */
-async function qpmAIAnalysis() {
-  if (!lastIRF) { Toast.show('Run the simulation first', 'warning'); return; }
-  if (!window.PolicyAdvisor) { Toast.show('AI advisor not loaded', 'error'); return; }
+/* ── Build the params/results payload from current state ── */
+function _qpmBuildPayload() {
+  if (!lastIRF) return null;
   const { shock, sz, T } = lastIRF;
   const p = P();
-  let container = document.getElementById('qpm-ai-output');
-  if (!container) {
-    container = document.createElement('div');
-    container.id = 'qpm-ai-output';
-    container.style.cssText = 'margin-top:20px;';
-    document.querySelector('.main')?.appendChild(container);
-  }
-  container.innerHTML = '<div style="display:flex;align-items:center;gap:10px;padding:20px;font-size:13px;color:#475569;"><span style="display:inline-block;width:20px;height:20px;border:3px solid #e2e8f0;border-top-color:#2563eb;border-radius:50%;animation:spin .8s linear infinite;"></span> Analyzing...</div>';
-  container.scrollIntoView({ behavior: 'smooth' });
-
-  // Try API-powered analysis first; fall back to expert template
-  let analysis;
-  try {
-    analysis = await PolicyAdvisor.analyzeSim('qpm', {
+  return {
+    params: {
       shockType: SHOCK_NAMES[shock], shockSize: sz, horizon: T,
       IS: { b1: p.b1, b2: p.b2, b3: p.b3, b4: p.b4 },
       Phillips: { a1: p.a1, a2: p.a2, a3: p.a3, a4: p.a4 },
       Taylor: { g1: p.g1, g2: p.g2, g3: p.g3 },
       steadyState: { pi_ss: p.pi_ss, rs_ss: p.rs_ss, g_ss: p.g_ss }
-    }, {
-      kpis: [
-        { label: 'Peak Inflation', value: document.getElementById('kpi0')?.textContent || '—' },
-        { label: 'Peak Output Gap', value: document.getElementById('kpi1')?.textContent || '—' },
-        { label: 'Peak Policy Rate', value: document.getElementById('kpi2')?.textContent || '—' },
-        { label: 'Peak NER Depreciation', value: document.getElementById('kpi3')?.textContent || '—' },
-      ]
-    });
-    // If it's a generic template (no API), override with expert version
-    if (analysis.model === 'template-fallback') {
+    },
+    results: { kpis: [
+      { label: 'Peak Inflation',         value: document.getElementById('kpi0')?.textContent || '—' },
+      { label: 'Peak Output Gap',        value: document.getElementById('kpi1')?.textContent || '—' },
+      { label: 'Peak Policy Rate',       value: document.getElementById('kpi2')?.textContent || '—' },
+      { label: 'Peak NER Depreciation',  value: document.getElementById('kpi3')?.textContent || '—' }
+    ] }
+  };
+}
+
+function _qpmEnsurePanel() {
+  let c = document.getElementById('qpm-ai-output');
+  if (!c) {
+    c = document.createElement('div');
+    c.id = 'qpm-ai-output';
+    c.style.cssText = 'margin-top:20px;';
+    document.querySelector('.main')?.appendChild(c);
+  }
+  return c;
+}
+
+/* Offline post-simulation policy brief (#15). Always uses templates so it's
+   safe to fire on every shock iteration without API charges. */
+function qpmAutoBrief() {
+  if (!window.PolicyAdvisor) return;
+  const payload = _qpmBuildPayload();
+  if (!payload) return;
+  _qpmEnsurePanel();
+  const analysis = PolicyAdvisor.briefSim('qpm', payload.params, payload.results);
+  PolicyAdvisor.renderAdvisorPanel('qpm-ai-output', analysis);
+}
+
+/* ── AI analysis ── */
+async function qpmAIAnalysis() {
+  if (!lastIRF) { Toast.show('Run the simulation first', 'warning'); return; }
+  if (!window.PolicyAdvisor) { Toast.show('AI advisor not loaded', 'error'); return; }
+  const payload = _qpmBuildPayload();
+  const container = _qpmEnsurePanel();
+  container.innerHTML = '<div style="display:flex;align-items:center;gap:10px;padding:20px;font-size:13px;color:#475569;"><span style="display:inline-block;width:20px;height:20px;border:3px solid #e2e8f0;border-top-color:#2563eb;border-radius:50%;animation:spin .8s linear infinite;"></span> Analyzing…</div>';
+  container.scrollIntoView({ behavior: 'smooth' });
+
+  let analysis;
+  try {
+    analysis = await PolicyAdvisor.analyzeSim('qpm', payload.params, payload.results);
+    /* Prefer the QPM-specific expert template over the generic engine when no API key is set */
+    if (analysis.model === 'template-fallback' && typeof buildQPMExpertAnalysis === 'function') {
       analysis = buildQPMExpertAnalysis() || analysis;
     }
-  } catch(e) {
-    analysis = buildQPMExpertAnalysis();
+  } catch (e) {
+    analysis = (typeof buildQPMExpertAnalysis === 'function' && buildQPMExpertAnalysis()) || PolicyAdvisor.briefSim('qpm', payload.params, payload.results);
   }
   PolicyAdvisor.renderAdvisorPanel('qpm-ai-output', analysis);
 }
