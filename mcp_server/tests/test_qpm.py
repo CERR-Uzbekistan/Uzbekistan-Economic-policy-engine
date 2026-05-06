@@ -90,6 +90,22 @@ def test_qpm_external_demand_response_scales_with_b3():
     assert high["irf_paths"]["output_gap"][0] > low["irf_paths"]["output_gap"][0]
 
 
+def test_qpm_external_demand_gap_star_decays_ar1():
+    """External-demand gap should decay as gap*_t = 0.75 * gap*_{t-1}."""
+    params = validate_qpm_params({})
+    params["b1"] = 0.0
+    params["b2"] = 0.0
+    params["b3"] = 0.40
+    params["a2"] = 0.0
+
+    result = solve_irf(params, "external_demand", 1.0, 8)
+    output_gap = result["irf_paths"]["output_gap"]
+    expected = [params["b3"] * (0.75 ** quarter) for quarter in range(5)]
+
+    assert result["solver"]["converged"] is True
+    assert output_gap[:5] == [round(value, 6) for value in expected]
+
+
 def test_qpm_baseline_runs():
     """Baseline forecast should produce reasonable output."""
     params = validate_qpm_params({})
@@ -111,5 +127,6 @@ if __name__ == "__main__":
     test_qpm_larger_shock_larger_response()
     test_qpm_external_demand_shock_uses_b3_channel()
     test_qpm_external_demand_response_scales_with_b3()
+    test_qpm_external_demand_gap_star_decays_ar1()
     test_qpm_baseline_runs()
     print("All QPM tests passed!")

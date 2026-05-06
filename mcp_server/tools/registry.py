@@ -25,7 +25,9 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
                     "description": (
                         "Simulates monetary policy transmission via IS curve, Phillips curve, "
                         "Taylor rule, and UIP. Produces impulse response functions for demand, "
-                        "cost-push, exchange rate, monetary, and external-demand shocks."
+                        "cost-push, exchange rate, monetary, and external-demand shocks. "
+                        "The external-demand gap gap*_t follows AR(1) decay with rho=0.75 "
+                        "and enters the IS curve as b3 * gap*_t."
                     ),
                     "tools": ["qpm_impulse_response", "qpm_baseline_forecast"],
                     "key_outputs": [
@@ -146,6 +148,8 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
 
         Simulates how the economy responds to a one-time shock using a New-Keynesian
         DSGE model with IS curve, Phillips curve, Taylor rule, and UIP equation.
+        For external-demand shocks, the foreign output gap gap*_t follows AR(1)
+        decay with rho=0.75 and enters the IS curve as b3 * gap*_t.
 
         Args:
             shock_type: Type of shock. One of: "demand" (aggregate demand),
