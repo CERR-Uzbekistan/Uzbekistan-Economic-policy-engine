@@ -50,6 +50,14 @@ export const REFORM_SOURCE_DEFINITIONS = [
     fixture_path: fixturePath('president-reform-news.html'),
   },
   {
+    id: 'president-healthcare-reform-detail',
+    institution: 'Official website of the President of the Republic of Uzbekistan',
+    url: 'https://president.uz/en/lists/view/9164',
+    parser: 'president-uz-detail',
+    allow_source_url_as_candidate: true,
+    fixture_path: fixturePath('president-healthcare-reform-detail.html'),
+  },
+  {
     id: 'gov-portal-reform-news',
     institution: 'Government portal of the Republic of Uzbekistan',
     url: 'https://gov.uz/en/news/news',
@@ -63,6 +71,13 @@ export const REFORM_SOURCE_DEFINITIONS = [
     parser: 'html-articles',
     candidate_url_prefix: 'https://cbu.uz/en/press_center/news/',
     fixture_path: fixturePath('cbu-policy-news.html'),
+  },
+  {
+    id: 'customs-committee-news',
+    institution: 'State Customs Committee of the Republic of Uzbekistan',
+    url: 'https://www.customs.uz/en',
+    parser: 'html-articles',
+    fixture_path: fixturePath('customs-committee-news.html'),
   },
   govUzAuthorityNewsSource({
     id: 'mef-policy-news',
@@ -633,6 +648,7 @@ function slugify(value) {
 function classifyDomain(text) {
   const normalized = text.toLowerCase()
   if (/(energy|gas|tariff adjustment)/.test(normalized)) return 'energy_tariffs'
+  if (/(healthcare|medical|clinic|clinics|health insurance|insurance fund|state-funded medical)/.test(normalized)) return 'social_protection'
   if (/(privatization|state-owned|soe)/.test(normalized)) return 'soe_privatization'
   if (/(customs|trade|wto|import|export|clearance)/.test(normalized)) return 'trade_customs'
   if (/(policy rate|reserve requirement|foreign exchange|fx|deposit|bank|microfinance|microcredit)/.test(normalized)) return 'monetary_policy'
@@ -721,7 +737,7 @@ function isUsableCandidateSourceUrl(source, sourceUrl) {
   if (!sourceUrl || sourceUrl.endsWith('#')) return false
   const normalizedSourceUrl = normalizeUrlForComparison(sourceUrl)
   if (!normalizedSourceUrl) return false
-  if (normalizedSourceUrl === normalizeUrlForComparison(source.url)) return false
+  if (normalizedSourceUrl === normalizeUrlForComparison(source.url) && !source.allow_source_url_as_candidate) return false
   if (source.candidate_url_prefix && !sourceUrl.startsWith(source.candidate_url_prefix)) return false
   return true
 }
@@ -869,7 +885,7 @@ function extractDecisionsFromGovUzApi(source, payload, extractedAt) {
 }
 
 function parsePresidentUzDate(value) {
-  const match = value.match(/^([0-3]\d)-([01]\d)-(\d{4})$/)
+  const match = value.match(/^([0-3]\d)[.-]([01]\d)[.-](\d{4})$/)
   if (!match) return value
   return `${match[3]}-${match[2]}-${match[1]}`
 }
@@ -905,9 +921,58 @@ function extractDecisionsFromPresidentUzList(source, html, extractedAt) {
   }
 }
 
+function extractDecisionsFromPresidentUzDetail(source, html, extractedAt) {
+  const title = normalizeWhitespace(
+    firstMatch(html, [
+      /<meta\b[^>]*(?:property|name)=["'](?:og:title|twitter:title)["'][^>]*content=["']([^"']+)["'][^>]*>/i,
+      /<title\b[^>]*>([\s\S]*?)<\/title>/i,
+      /<h1\b[^>]*>([\s\S]*?)<\/h1>/i,
+      /<h[2-3]\b[^>]*class=["'][^"']*(?:title|news|article)[^"']*["'][^>]*>([\s\S]*?)<\/h[2-3]>/i,
+    ]),
+  ).replace(/\s*[-|]\s*.*$/, '')
+  const publishedAt = parsePresidentUzDate(
+    firstMatch(html, [
+      /<time\b[^>]*datetime=["']([^"']+)["']/i,
+      /\b([0-3]\d[.-][01]\d[.-]\d{4})\b/i,
+    ]),
+  )
+  const paragraphs = Array.from(html.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/gi), (match) => normalizeWhitespace(match[1]))
+    .filter((paragraph) => paragraph.length > 40)
+  const fallbackBodyText = normalizeWhitespace(
+    firstMatch(html, [/<article\b[^>]*>([\s\S]*?)<\/article>/i, /<main\b[^>]*>([\s\S]*?)<\/main>/i, /<body\b[^>]*>([\s\S]*?)<\/body>/i]) ||
+      html,
+  )
+  const bodyText = paragraphs.length > 0 ? paragraphs.join(' ') : fallbackBodyText
+  const summary = bodyText.slice(0, 700)
+
+  if (!title) return { candidates: [], exclusions: [] }
+
+  const decision = sourceItemToDecision(
+    source,
+    {
+      id: 'detail',
+      title,
+      summary,
+      publishedAt,
+      sourceUrl: source.url,
+      text: `${title} ${bodyText}`,
+    },
+    extractedAt,
+    'President.uz detail page did not expose a separate summary in the configured extraction block.',
+  )
+
+  return {
+    candidates: decision.candidate ? [decision.candidate] : [],
+    exclusions: decision.exclusion ? [decision.exclusion] : [],
+  }
+}
+
 export function extractCandidateDecisionsFromSource(source, html, extractedAt) {
   if (source.parser === 'president-uz-list') {
     return extractDecisionsFromPresidentUzList(source, html, extractedAt)
+  }
+  if (source.parser === 'president-uz-detail') {
+    return extractDecisionsFromPresidentUzDetail(source, html, extractedAt)
   }
 
   const jsonPayload = maybeParseJson(html)
@@ -1035,6 +1100,7 @@ function candidateWithRunMetadata(candidate, extractionMode, sourceUrlStatus, ex
 }
 
 function candidateToSourceEvent(candidate) {
+  const text = `${candidate.title} ${candidate.summary}`.toLowerCase()
   return {
     id: candidate.source_url.includes('/9164')
       ? 'president-healthcare-quality-2026-05-01'
@@ -1046,29 +1112,304 @@ function candidateToSourceEvent(candidate) {
     evidence_type: candidate.evidence_types.includes('official_policy_announcement')
       ? 'official_policy_announcement'
       : candidate.evidence_types[0],
-    event_type: candidate.title.toLowerCase().includes('approved') ? 'approved' : 'instructions_issued',
+    event_type: text.includes('amended') || text.includes('amendments')
+      ? 'amended'
+      : text.includes('approved') || text.includes('adopted')
+        ? 'approved'
+        : text.includes('financing') || text.includes('loan') || text.includes('grant')
+          ? 'financing_allocated'
+          : text.includes('implemented') || text.includes('launched') || text.includes('introduced')
+            ? 'implementation_milestone'
+            : 'instructions_issued',
     summary: candidate.summary || candidate.inclusion_reason,
     source_url_status: candidate.source_url_status,
     extracted_at: candidate.extracted_at,
   }
 }
 
+function isConfiguredVerifiedCandidate(candidate) {
+  if (
+    candidate.extraction_mode !== CONFIGURED_SOURCE_FETCH_EXTRACTION_MODE ||
+    candidate.source_url_status !== 'verified'
+  ) {
+    return false
+  }
+
+  try {
+    const host = new URL(candidate.source_url).hostname.toLowerCase()
+    if (/\.test$/i.test(host) || /^(?:example|localhost|127\.0\.0\.1)(?:\.|$)/i.test(host)) return false
+    return (
+      host === 'president.uz' ||
+      host.endsWith('.president.uz') ||
+      host === 'lex.uz' ||
+      host.endsWith('.lex.uz') ||
+      host === 'gov.uz' ||
+      host.endsWith('.gov.uz') ||
+      host === 'cbu.uz' ||
+      host.endsWith('.cbu.uz') ||
+      host === 'customs.uz' ||
+      host.endsWith('.customs.uz')
+    )
+  } catch {
+    return false
+  }
+}
+
 function isVerifiedHealthcareSourceEvent(candidate) {
   const text = `${candidate.title} ${candidate.summary} ${candidate.source_url}`.toLowerCase()
   return (
-    candidate.extraction_mode === CONFIGURED_SOURCE_FETCH_EXTRACTION_MODE &&
-    candidate.source_url_status === 'verified' &&
+    isConfiguredVerifiedCandidate(candidate) &&
     candidate.source_url.includes('president.uz') &&
     (candidate.source_url.includes('/9164') ||
       (text.includes('healthcare') && text.includes('licensing') && text.includes('private-sector')))
   )
 }
 
+const PACKAGE_TOPIC_DEFINITIONS = [
+  {
+    id: 'customs-clearance-digitalization',
+    title: 'Risk-based customs clearance and electronic declaration reform',
+    policy_area: 'Trade facilitation and customs digitalization',
+    patterns: [/\b(customs|clearance|electronic declaration|single window|risk-based)\b/i],
+  },
+  {
+    id: 'tax-administration-incentives',
+    title: 'Tax administration and investment incentive reform',
+    policy_area: 'Tax administration and fiscal incentives',
+    patterns: [/\b(tax|vat|incentive|incentives|excise|duty)\b/i],
+  },
+  {
+    id: 'energy-tariff-compensation',
+    title: 'Energy tariff adjustment and compensation reform',
+    policy_area: 'Energy tariffs, household compensation, and fiscal monitoring',
+    patterns: [/\b(energy|tariff|gas|electricity|compensation)\b/i],
+  },
+  {
+    id: 'public-services-digital-legal',
+    title: 'Digital public service and legal process reform',
+    policy_area: 'Digital public administration and legal services',
+    patterns: [/\b(public service|notarial|notary|legal service|digital|online)\b/i],
+  },
+  {
+    id: 'investment-climate-sez',
+    title: 'Investment climate and special economic zone reform',
+    policy_area: 'Investment climate and special economic zones',
+    patterns: [/\b(investment climate|special economic zones|investor service|investors?)\b/i],
+  },
+  {
+    id: 'monetary-prudential-parameters',
+    title: 'Monetary and financial-sector parameter reform',
+    policy_area: 'Monetary policy and prudential regulation',
+    patterns: [/\b(policy rate|reserve requirement|prudential|bank|foreign-currency deposit)\b/i],
+  },
+  {
+    id: 'public-administration-legal',
+    title: 'Public administration legal framework reform',
+    policy_area: 'Public administration and local state power rules',
+    patterns: [/\b(local state power|public administration|state power legislation)\b/i],
+  },
+]
+
+const CATEGORY_PACKAGE_DEFAULTS = {
+  monetary_policy: {
+    title: 'Monetary and financial-sector policy reform',
+    policy_area: 'Monetary policy and financial-sector regulation',
+    model_relevance: ['Inflation', 'Credit conditions', 'Financial stability'],
+  },
+  fiscal_tax: {
+    title: 'Fiscal, tax, and budget measure reform',
+    policy_area: 'Fiscal policy, tax administration, and budget monitoring',
+    model_relevance: ['Fiscal balance', 'Investment', 'Business costs'],
+  },
+  budget_public_finance: {
+    title: 'Public finance management reform',
+    policy_area: 'Budget execution and public finance management',
+    model_relevance: ['Fiscal balance', 'Public spending', 'Debt dynamics'],
+  },
+  trade_customs: {
+    title: 'Trade and customs modernization reform',
+    policy_area: 'Trade facilitation, customs, and market access',
+    model_relevance: ['Trade flows', 'Import costs', 'Export competitiveness'],
+  },
+  energy_tariffs: {
+    title: 'Energy tariff and compensation reform',
+    policy_area: 'Energy tariffs and social compensation',
+    model_relevance: ['Inflation', 'Household income', 'Fiscal costs'],
+  },
+  financial_sector: {
+    title: 'Financial-sector regulatory reform',
+    policy_area: 'Banking, payments, and financial-sector regulation',
+    model_relevance: ['Credit conditions', 'Financial stability', 'Investment'],
+  },
+  soe_privatization: {
+    title: 'SOE and privatization reform',
+    policy_area: 'State-owned enterprise reform and privatization',
+    model_relevance: ['Public assets', 'Investment', 'Productivity'],
+  },
+  social_protection: {
+    title: 'Social protection and service delivery reform',
+    policy_area: 'Social protection and public service delivery',
+    model_relevance: ['Household income', 'Public spending', 'Labor supply'],
+  },
+  business_environment: {
+    title: 'Business environment reform',
+    policy_area: 'Business regulation and investment climate',
+    model_relevance: ['Private investment', 'Productivity', 'Business costs'],
+  },
+  agriculture: {
+    title: 'Agriculture policy reform',
+    policy_area: 'Agriculture, fisheries, and food-sector regulation',
+    model_relevance: ['Agricultural output', 'Food prices', 'Rural income'],
+  },
+  digital_public_admin: {
+    title: 'Digital public administration reform',
+    policy_area: 'Digital public services and administrative procedures',
+    model_relevance: ['Public administration', 'Transaction costs', 'Productivity'],
+  },
+  infrastructure_investment: {
+    title: 'Infrastructure investment program reform',
+    policy_area: 'Infrastructure investment and program financing',
+    model_relevance: ['Investment', 'Public spending', 'Potential growth'],
+  },
+  industrial_policy: {
+    title: 'Industrial policy reform',
+    policy_area: 'Industrial development and sector support',
+    model_relevance: ['Industrial output', 'Investment', 'Productivity'],
+  },
+  competition_regulation: {
+    title: 'Competition and market regulation reform',
+    policy_area: 'Competition policy and market regulation',
+    model_relevance: ['Prices', 'Market structure', 'Productivity'],
+  },
+  labor_market: {
+    title: 'Labor-market reform',
+    policy_area: 'Labor-market regulation and workforce measures',
+    model_relevance: ['Employment', 'Wages', 'Labor supply'],
+  },
+  other_policy: {
+    title: 'Policy implementation reform',
+    policy_area: 'Official policy implementation',
+    model_relevance: ['Public administration', 'Investment', 'Growth'],
+  },
+}
+
+function candidateTopic(candidate) {
+  const text = `${candidate.title} ${candidate.summary} ${candidate.inclusion_reason}`.toLowerCase()
+  return PACKAGE_TOPIC_DEFINITIONS.find((topic) => topic.patterns.some((pattern) => pattern.test(text))) ?? null
+}
+
+function packageAssemblyKey(candidate) {
+  const topic = candidateTopic(candidate)
+  const category = candidate.reform_category ?? 'other_policy'
+  if (topic) return `${category}:${topic.id}`
+  return `${category}:${slugify(candidate.title).slice(0, 48)}`
+}
+
+function packageDate(candidate) {
+  return candidate.source_published_at?.slice(0, 10) ?? candidate.extracted_at?.slice(0, 10) ?? ''
+}
+
+function sourceConfidenceForCandidates(candidates) {
+  return candidates.every((candidate) => candidate.relevance_score >= 70) ? 'high' : 'medium'
+}
+
+function measureLabelFromCandidate(candidate) {
+  const text = candidate.title.toLowerCase()
+  if (text.includes('amend')) return 'amended rules'
+  if (text.includes('approved')) return 'approved measures'
+  if (text.includes('introduced')) return 'introduced rules'
+  if (text.includes('expanded') || text.includes('expands')) return 'expanded incentives'
+  if (text.includes('launched')) return 'launched implementation'
+  return 'verified official measure'
+}
+
+function financingOrIncentiveFromCandidates(candidates) {
+  const candidate = candidates.find((item) => /\b(financing|grant|loan|tax incentive|incentives|allocation|subsidy|compensation)\b/i.test(`${item.title} ${item.summary}`))
+  if (!candidate) return undefined
+  if (/\btax incentive|incentives\b/i.test(candidate.title)) return 'Tax incentive measure identified in verified official source event'
+  if (/\bcompensation\b/i.test(`${candidate.title} ${candidate.summary}`)) return 'Compensation measure identified in verified official source event'
+  return 'Financing or incentive measure identified in verified official source event'
+}
+
+function genericPackageFromCandidateGroup(candidates) {
+  const sortedCandidates = [...candidates].sort((left, right) => packageDate(left).localeCompare(packageDate(right)))
+  const first = sortedCandidates[0]
+  const latest = sortedCandidates[sortedCandidates.length - 1]
+  const topic = candidateTopic(first)
+  const category = first.reform_category ?? 'other_policy'
+  const defaults = CATEGORY_PACKAGE_DEFAULTS[category] ?? CATEGORY_PACKAGE_DEFAULTS.other_policy
+  const sourceEvents = sortedCandidates.map(candidateToSourceEvent)
+  const currentStageDate = packageDate(latest)
+  const packageSlug = topic?.id ?? slugify(`${first.reform_category}-${first.title}`)
+  const confidence = sourceConfidenceForCandidates(sortedCandidates)
+  const milestones = sourceEvents.map((event, index) => ({
+    id: `${packageSlug}-${event.event_type}-${event.source_published_at || index + 1}`,
+    label: event.event_type === 'approved'
+      ? 'official measure approved'
+      : event.event_type === 'amended'
+        ? 'rules amended'
+        : event.event_type === 'implementation_milestone'
+          ? 'implementation measure recorded'
+          : event.event_type === 'financing_allocated'
+            ? 'financing or incentive measure recorded'
+            : 'official measure recorded',
+    date: event.source_published_at,
+    date_precision: 'day',
+    event_type: event.event_type,
+    responsible_institutions: [event.source_institution],
+    evidence_type: event.evidence_type,
+    source_event_ids: [event.id],
+    confidence,
+    ...(index < sourceEvents.length - 1
+      ? { related_next_milestone_ids: [`${packageSlug}-${sourceEvents[index + 1].event_type}-${sourceEvents[index + 1].source_published_at || index + 2}`] }
+      : {}),
+  }))
+
+  return {
+    package_id: `pkg-${packageSlug}-${currentStageDate || slugify(first.source_institution)}`,
+    title: topic?.title ?? defaults.title,
+    policy_area: topic?.policy_area ?? defaults.policy_area,
+    reform_category: category,
+    current_stage: sortedCandidates.length > 1 ? 'Multiple verified source events' : 'Verified official measure',
+    current_stage_date: currentStageDate,
+    next_milestone: milestones[0]?.label ?? 'official measure recorded',
+    next_milestone_date: milestones[0]?.date ?? currentStageDate,
+    responsible_institutions: uniqueStrings(sortedCandidates.map((candidate) => candidate.source_institution)),
+    legal_basis: `Verified official source event${sourceEvents.length > 1 ? 's' : ''}: ${sourceEvents.map((event) => event.title).join('; ')}.`,
+    official_basis: uniqueStrings(sourceEvents.map((event) => event.source_institution)).join('; '),
+    financing_or_incentive: financingOrIncentiveFromCandidates(sortedCandidates),
+    source_confidence: confidence,
+    why_tracked: `The package is assembled from ${sourceEvents.length} verified official source event${sourceEvents.length > 1 ? 's' : ''} with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.`,
+    model_relevance: defaults.model_relevance,
+    measure_tracks: sortedCandidates.map((candidate, index) => ({
+      id: `${packageSlug}-measure-${index + 1}`,
+      label: measureLabelFromCandidate(candidate),
+      status: candidateToSourceEvent(candidate).event_type === 'approved' ? 'approved' : 'source verified',
+    })),
+    implementation_milestones: milestones,
+    official_source_events: sourceEvents,
+    caveat: 'Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.',
+  }
+}
+
 export function assembleReformPackagesFromCandidates(candidates) {
-  return candidates
+  const verifiedCandidates = candidates.filter(isConfiguredVerifiedCandidate)
+  const healthcarePackages = verifiedCandidates
     .filter(isVerifiedHealthcareSourceEvent)
     .slice(0, 1)
     .map((candidate) => healthcarePackageFromSourceEvent(candidateToSourceEvent(candidate)))
+  const genericGroups = new Map()
+
+  for (const candidate of verifiedCandidates.filter((item) => !isVerifiedHealthcareSourceEvent(item))) {
+    const key = packageAssemblyKey(candidate)
+    genericGroups.set(key, [...(genericGroups.get(key) ?? []), candidate])
+  }
+
+  const genericPackages = Array.from(genericGroups.values())
+    .map(genericPackageFromCandidateGroup)
+    .sort((left, right) => right.current_stage_date.localeCompare(left.current_stage_date))
+
+  return [...healthcarePackages, ...genericPackages]
 }
 
 async function validateCandidateSourceLink(candidate, fetchImpl) {

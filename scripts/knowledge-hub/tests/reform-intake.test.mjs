@@ -259,7 +259,7 @@ describe('Knowledge Hub reform intake', () => {
     assert.equal(artifact.reform_packages[0].implementation_milestones.length, 4)
     assert.equal(artifact.reform_packages[0].financing_or_incentive, '200 billion soums preferential credit resources; loans up to 10 billion soums')
     assert.deepEqual(artifact.accepted_reforms, [])
-    assert.equal(artifact.candidates.length, 7)
+    assert.equal(artifact.candidates.length, 9)
     assert.ok(artifact.candidates.every((candidate) => candidate.extraction_state === 'source_extracted'))
     assert.ok(artifact.candidates.every((candidate) => candidate.extraction_mode === 'fixture-demo'))
     assert.ok(artifact.candidates.every((candidate) => candidate.review_state === 'candidate'))
@@ -358,7 +358,7 @@ describe('Knowledge Hub reform intake', () => {
     assert.equal(diagnostics.source_results[0].link_invalid_count, 1)
   })
 
-  it('keeps automatic package assembly empty for unrelated verified candidates', () => {
+  it('assembles generic packages from unrelated verified source events', () => {
     const packages = assembleReformPackagesFromCandidates([
       {
         title: 'Resolution approved on tax administration amendments',
@@ -367,10 +367,73 @@ describe('Knowledge Hub reform intake', () => {
         source_title: 'Resolution approved on tax administration amendments',
         source_institution: 'Ministry of Economy and Finance of Uzbekistan',
         source_published_at: '2026-05-05',
+        reform_category: 'fiscal_tax',
         evidence_types: ['legal_text'],
         inclusion_reason: 'Legal or regulatory change.',
         extraction_mode: CONFIGURED_SOURCE_FETCH_EXTRACTION_MODE,
         source_url_status: 'verified',
+        extracted_at: '2026-05-05T08:00:00.000Z',
+      },
+    ])
+
+    assert.equal(packages.length, 1)
+    assert.equal(packages[0].title, 'Tax administration and investment incentive reform')
+    assert.equal(packages[0].reform_category, 'fiscal_tax')
+    assert.equal(packages[0].official_source_events[0].source_url_status, 'verified')
+    assert.equal(packages[0].implementation_milestones.length, 1)
+    assert.equal(packages[0].implementation_milestones[0].source_event_ids[0], packages[0].official_source_events[0].id)
+  })
+
+  it('groups related verified source events into one reform package', () => {
+    const baseCandidate = {
+      summary: 'The source describes electronic declarations and risk-based customs clearance measures.',
+      source_institution: 'State Customs Committee of the Republic of Uzbekistan',
+      reform_category: 'trade_customs',
+      evidence_types: ['official_policy_announcement', 'implementation_program'],
+      inclusion_reason: 'Trade or customs modernization.',
+      extraction_mode: CONFIGURED_SOURCE_FETCH_EXTRACTION_MODE,
+      source_url_status: 'verified',
+      extracted_at: '2026-05-05T08:00:00.000Z',
+    }
+    const packages = assembleReformPackagesFromCandidates([
+      {
+        ...baseCandidate,
+        title: 'Single Window customs declaration rules introduced for importers',
+        source_title: 'Single Window customs declaration rules introduced for importers',
+        source_url: 'https://old.customs.uz/en/news/view/99001',
+        source_published_at: '2026-04-20',
+      },
+      {
+        ...baseCandidate,
+        title: 'President approves measures for risk-based customs clearance and electronic declarations',
+        source_title: 'President approves measures for risk-based customs clearance and electronic declarations',
+        source_institution: 'Official website of the President of the Republic of Uzbekistan',
+        source_url: 'https://president.uz/en/lists/view/12344',
+        source_published_at: '2026-04-30',
+      },
+    ])
+
+    assert.equal(packages.length, 1)
+    assert.equal(packages[0].title, 'Risk-based customs clearance and electronic declaration reform')
+    assert.equal(packages[0].official_source_events.length, 2)
+    assert.equal(packages[0].implementation_milestones.length, 2)
+    assert.equal(packages[0].current_stage, 'Multiple verified source events')
+  })
+
+  it('does not assemble packages from direct unverified source events', () => {
+    const packages = assembleReformPackagesFromCandidates([
+      {
+        title: 'Resolution approved on tax administration amendments',
+        summary: 'Tax reporting rules amended.',
+        source_url: 'https://gov.uz/en/imv/news/view/161792',
+        source_title: 'Resolution approved on tax administration amendments',
+        source_institution: 'Ministry of Economy and Finance of Uzbekistan',
+        source_published_at: '2026-05-05',
+        reform_category: 'fiscal_tax',
+        evidence_types: ['legal_text'],
+        inclusion_reason: 'Legal or regulatory change.',
+        extraction_mode: CONFIGURED_SOURCE_FETCH_EXTRACTION_MODE,
+        source_url_status: 'not_checked_fixture',
         extracted_at: '2026-05-05T08:00:00.000Z',
       },
     ])
@@ -385,7 +448,7 @@ describe('Knowledge Hub reform intake', () => {
     assert.ok(sourceIds.includes('president-reform-news'))
     assert.ok(sourceIds.includes('gov-portal-reform-news'))
     assert.ok(sourceIds.includes('tax-committee-news'))
-    assert.ok(!sourceIds.includes('customs-committee-news'))
+    assert.ok(sourceIds.includes('customs-committee-news'))
     assert.ok(sourceIds.includes('energy-ministry-news'))
     assert.ok(sourceIds.includes('investment-trade-ministry-news'))
     assert.ok(sourceIds.includes('justice-ministry-news'))
@@ -399,8 +462,8 @@ describe('Knowledge Hub reform intake', () => {
     })
 
     assert.equal(diagnostics.source_results.length, REFORM_SOURCE_DEFINITIONS.length)
-    assert.equal(diagnostics.source_results.reduce((sum, source) => sum + source.candidate_count, 0), 8)
-    assert.equal(diagnostics.artifact.candidates.length, 7)
+    assert.equal(diagnostics.source_results.reduce((sum, source) => sum + source.candidate_count, 0), 10)
+    assert.equal(diagnostics.artifact.candidates.length, 9)
     assert.equal(diagnostics.source_failures.length, 0)
 
     for (const source of REFORM_SOURCE_DEFINITIONS) {

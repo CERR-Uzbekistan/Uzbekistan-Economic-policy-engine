@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-05-06T09:28:01.133Z",
+  "generated_at": "2026-05-06T12:30:00.000Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -230,6 +230,11 @@
       "url": "https://president.uz/en/lists/news"
     },
     {
+      "id": "president-healthcare-reform-detail",
+      "institution": "Official website of the President of the Republic of Uzbekistan",
+      "url": "https://president.uz/en/lists/view/9164"
+    },
+    {
       "id": "gov-portal-reform-news",
       "institution": "Government portal of the Republic of Uzbekistan",
       "url": "https://gov.uz/en/news/news"
@@ -238,6 +243,11 @@
       "id": "cbu-policy-news",
       "institution": "Central Bank of Uzbekistan",
       "url": "https://cbu.uz/en/press_center/news/"
+    },
+    {
+      "id": "customs-committee-news",
+      "institution": "State Customs Committee of the Republic of Uzbekistan",
+      "url": "https://www.customs.uz/en"
     },
     {
       "id": "mef-policy-news",
@@ -276,7 +286,7 @@
       "candidate_count": 0,
       "excluded_count": 13,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-06T09:28:01.133Z"
+      "fetched_at": "2026-05-06T12:30:00.000Z"
     },
     {
       "id": "president-reform-news",
@@ -288,7 +298,19 @@
       "candidate_count": 0,
       "excluded_count": 14,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-06T09:28:01.133Z"
+      "fetched_at": "2026-05-06T12:30:00.000Z"
+    },
+    {
+      "id": "president-healthcare-reform-detail",
+      "institution": "Official website of the President of the Republic of Uzbekistan",
+      "url": "https://president.uz/en/lists/view/9164",
+      "parser": "president-uz-detail",
+      "fetch_url": "https://president.uz/en/lists/view/9164",
+      "ok": true,
+      "candidate_count": 1,
+      "excluded_count": 0,
+      "link_invalid_count": 0,
+      "fetched_at": "2026-05-06T12:30:00.000Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -300,7 +322,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-06T09:28:01.133Z"
+      "fetched_at": "2026-05-06T12:30:00.000Z"
     },
     {
       "id": "cbu-policy-news",
@@ -312,7 +334,19 @@
       "candidate_count": 0,
       "excluded_count": 347,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-06T09:28:01.133Z"
+      "fetched_at": "2026-05-06T12:30:00.000Z"
+    },
+    {
+      "id": "customs-committee-news",
+      "institution": "State Customs Committee of the Republic of Uzbekistan",
+      "url": "https://www.customs.uz/en",
+      "parser": "html-articles",
+      "fetch_url": "https://www.customs.uz/en",
+      "ok": true,
+      "candidate_count": 0,
+      "excluded_count": 0,
+      "link_invalid_count": 0,
+      "fetched_at": "2026-05-06T12:30:00.000Z"
     },
     {
       "id": "mef-policy-news",
@@ -324,7 +358,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-06T09:28:01.133Z"
+      "fetched_at": "2026-05-06T12:30:00.000Z"
     },
     {
       "id": "tax-committee-news",
@@ -336,7 +370,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-06T09:28:01.133Z"
+      "fetched_at": "2026-05-06T12:30:00.000Z"
     },
     {
       "id": "energy-ministry-news",
@@ -348,7 +382,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-06T09:28:01.133Z"
+      "fetched_at": "2026-05-06T12:30:00.000Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -360,7 +394,7 @@
       "candidate_count": 1,
       "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-06T09:28:01.133Z"
+      "fetched_at": "2026-05-06T12:30:00.000Z"
     },
     {
       "id": "justice-ministry-news",
@@ -372,7 +406,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-06T09:28:01.133Z"
+      "fetched_at": "2026-05-06T12:30:00.000Z"
     }
   ],
   "reform_packages": [
@@ -391,7 +425,7 @@
         "Agency for Attracting Investments and Implementing PPP Projects in Medicine"
       ],
       "legal_basis": "Official presidential instruction package on healthcare quality, licensing, accreditation, and private-sector participation.",
-      "official_basis": "Official website of the President of the Republic of Uzbekistan, 1 May 2026.",
+      "official_basis": "Official website of the President of the Republic of Uzbekistan, 2026-05-01.",
       "financing_or_incentive": "200 billion soums preferential credit resources; loans up to 10 billion soums",
       "source_confidence": "high",
       "why_tracked": "The official source sets dated licensing, accreditation, state-funded service eligibility, credit, and institutional implementation milestones that affect health-sector service delivery and public financing channels.",
@@ -505,21 +539,133 @@
       "official_source_events": [
         {
           "id": "president-healthcare-quality-2026-05-01",
-          "title": "Presentation on reforms in the healthcare system",
+          "title": "Healthcare system development issues discussed",
           "source_institution": "Official website of the President of the Republic of Uzbekistan",
           "source_url": "https://president.uz/en/lists/view/9164",
           "source_published_at": "2026-05-01",
           "evidence_type": "official_policy_announcement",
           "event_type": "instructions_issued",
-          "summary": "Official presidential source describing instructions on licensing, accreditation, state hospital rollout, preferential credit resources, private investment, and the medical PPP agency.",
-          "source_url_status": "verified"
+          "summary": "President Shavkat Mirziyoyev reviewed measures for the further development of the healthcare system, enhancement of the quality of medical services, and expansion of private sector participation. Consistent efforts are underway nationwide to provide the population with high-quality, modern medical care, improve management efficiency in the sector, make broader use of private sector potential, and elevate regional healthcare infrastructure to a new level. The role of the private sector in advancing the industry, along with the opportunities available in this area, was also examined. As noted, while 3,200 private clinics were operating in the country in 2016, their number is expected to reach ",
+          "source_url_status": "verified",
+          "extracted_at": "2026-05-06T12:30:00.000Z"
         }
       ],
       "caveat": "Automatic official-source tracker entry assembled from a verified source event. It is not an official legal registry and does not assert legal force beyond the cited official source."
+    },
+    {
+      "package_id": "pkg-tax-administration-incentives-2026-04-14",
+      "title": "Tax administration and investment incentive reform",
+      "policy_area": "Tax administration and fiscal incentives",
+      "reform_category": "fiscal_tax",
+      "current_stage": "Verified official measure",
+      "current_stage_date": "2026-04-14",
+      "next_milestone": "financing or incentive measure recorded",
+      "next_milestone_date": "2026-04-14",
+      "responsible_institutions": [
+        "Ministry of Investment, Industry and Trade of the Republic of Uzbekistan"
+      ],
+      "legal_basis": "Verified official source event: Uzbekistan Expands Tax Incentives for Investors Financing Infrastructure Projects.",
+      "official_basis": "Ministry of Investment, Industry and Trade of the Republic of Uzbekistan",
+      "financing_or_incentive": "Tax incentive measure identified in verified official source event",
+      "source_confidence": "high",
+      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "model_relevance": [
+        "Fiscal balance",
+        "Investment",
+        "Business costs"
+      ],
+      "measure_tracks": [
+        {
+          "id": "tax-administration-incentives-measure-1",
+          "label": "expanded incentives",
+          "status": "source verified"
+        }
+      ],
+      "implementation_milestones": [
+        {
+          "id": "tax-administration-incentives-financing_allocated-2026-04-14",
+          "label": "financing or incentive measure recorded",
+          "date": "2026-04-14",
+          "date_precision": "day",
+          "event_type": "financing_allocated",
+          "responsible_institutions": [
+            "Ministry of Investment, Industry and Trade of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-04-14-10-20-00-uzbekistan-expands-tax-incentives-for-investors-financing-in"
+          ],
+          "confidence": "high"
+        }
+      ],
+      "official_source_events": [
+        {
+          "id": "source-event-2026-04-14-10-20-00-uzbekistan-expands-tax-incentives-for-investors-financing-in",
+          "title": "Uzbekistan Expands Tax Incentives for Investors Financing Infrastructure Projects",
+          "source_institution": "Ministry of Investment, Industry and Trade of the Republic of Uzbekistan",
+          "source_url": "https://gov.uz/en/miit/news/view/153388",
+          "source_published_at": "2026-04-14",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "financing_allocated",
+          "summary": "Source API did not expose a summary for this configured extraction item.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-05-06T12:30:00.000Z"
+        }
+      ],
+      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources."
     }
   ],
   "accepted_reforms": [],
   "candidates": [
+    {
+      "id": "president-healthcare-reform-detail-2026-05-01-detail-healthcare-system-development-issues-discussed",
+      "extraction_state": "source_extracted",
+      "review_state": "candidate",
+      "review_status": "needs_review",
+      "status": "unknown",
+      "title": "Healthcare system development issues discussed",
+      "summary": "President Shavkat Mirziyoyev reviewed measures for the further development of the healthcare system, enhancement of the quality of medical services, and expansion of private sector participation. Consistent efforts are underway nationwide to provide the population with high-quality, modern medical care, improve management efficiency in the sector, make broader use of private sector potential, and elevate regional healthcare infrastructure to a new level. The role of the private sector in advancing the industry, along with the opportunities available in this area, was also examined. As noted, while 3,200 private clinics were operating in the country in 2016, their number is expected to reach ",
+      "domain_tag": "Social protection",
+      "domain_tags": [
+        "Social protection"
+      ],
+      "reform_category": "social_protection",
+      "evidence_types": [
+        "official_policy_announcement",
+        "implementation_program",
+        "budget_tax_measure",
+        "regulatory_parameter_change"
+      ],
+      "relevance_score": 100,
+      "inclusion_reason": "Included by Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure, Structural implementation program with hard reform signal(s): adopted_measure, parameter_change, named_implementation_update; source evidence: official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+      "matched_rules": [
+        "adopted-policy-measure",
+        "fiscal-tax-budget-measure",
+        "structural-implementation-program"
+      ],
+      "matched_include_rules": [
+        "adopted-policy-measure",
+        "fiscal-tax-budget-measure",
+        "structural-implementation-program"
+      ],
+      "source_title": "Healthcare system development issues discussed",
+      "source_institution": "Official website of the President of the Republic of Uzbekistan",
+      "source_owner": "Official website of the President of the Republic of Uzbekistan",
+      "source_url": "https://president.uz/en/lists/view/9164",
+      "source_published_at": "2026-05-01",
+      "retrieved_at": "2026-05-06T12:30:00.000Z",
+      "extracted_at": "2026-05-06T12:30:00.000Z",
+      "citation_permission": "pending",
+      "license_class": "unknown",
+      "translation_review_state": "not_translated",
+      "caveats": [
+        "Deterministic extraction from configured source text.",
+        "Unreviewed candidate; not an official reviewed policy database entry."
+      ],
+      "extraction_mode": "configured-source-fetch",
+      "source_url_status": "verified",
+      "source_url_verified_at": "2026-05-06T12:30:00.000Z"
+    },
     {
       "id": "investment-trade-ministry-news-2026-04-14-10-20-00-153388-uzbekistan-expands-tax-incentives-for-investors-finan",
       "extraction_state": "source_extracted",
@@ -554,8 +700,8 @@
       "source_owner": "Ministry of Investment, Industry and Trade of the Republic of Uzbekistan",
       "source_url": "https://gov.uz/en/miit/news/view/153388",
       "source_published_at": "2026-04-14 10:20:00",
-      "retrieved_at": "2026-05-06T09:28:01.133Z",
-      "extracted_at": "2026-05-06T09:28:01.133Z",
+      "retrieved_at": "2026-05-06T12:30:00.000Z",
+      "extracted_at": "2026-05-06T12:30:00.000Z",
       "citation_permission": "pending",
       "license_class": "unknown",
       "translation_review_state": "not_translated",
@@ -565,7 +711,7 @@
       ],
       "extraction_mode": "configured-source-fetch",
       "source_url_status": "verified",
-      "source_url_verified_at": "2026-05-06T09:28:01.133Z"
+      "source_url_verified_at": "2026-05-06T12:30:00.000Z"
     }
   ],
   "caveats": [
