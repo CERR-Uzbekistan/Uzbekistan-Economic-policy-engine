@@ -31,6 +31,9 @@ async function createTestI18n() {
               artifactStrapPlural: 'Snapshot · {{date}} · {{count}} review notes',
               artifactSummaryMeta: 'Snapshot summary · {{count}} metrics',
               staticFallbackNotice: 'Reference summary · current snapshot unavailable',
+              artifactBrief: {
+                summary: 'Growth is above the current nowcast path; inflation and external indicators remain on watch.',
+              },
               summary: {
                 template: '{{items}}.',
                 item: '{{label}} {{value}} {{unit}}{{qualifier}}',
@@ -139,6 +142,7 @@ describe('EconomicStateHeader', () => {
       </I18nextProvider>,
     )
 
+    assert.match(markup, /Growth is above the current nowcast path/)
     assert.match(markup, /GDP[\s\S]*5\.7 %/)
     assert.match(markup, /CPI[\s\S]*8\.1 % YoY \/ 0\.7 % MoM/)
     assert.match(markup, /Trade balance[\s\S]*USD 1\.20bn deficit/)
@@ -175,6 +179,7 @@ describe('EconomicStateHeader', () => {
       </I18nextProvider>,
     )
 
+    assert.match(markup, /Growth is above the current nowcast path/)
     assert.match(markup, /GDP[\s\S]*8\.7 %/)
     assert.match(markup, /CPI[\s\S]*7\.1 % YoY \/ 0\.6 % MoM/)
     assert.match(markup, /Trade balance[\s\S]*USD 4\.51bn deficit/)

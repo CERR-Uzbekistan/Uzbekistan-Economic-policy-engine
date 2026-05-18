@@ -8,6 +8,7 @@ import { HISTORY_SERIES_ID, NOWCAST_SERIES_ID } from './dfm-composition.js'
 
 const ACTUAL_GDP_METRIC_ID = 'real_gdp_growth_quarter_yoy'
 const CURRENT_NOWCAST_METRIC_ID = 'gdp_nowcast_current_quarter'
+const MAX_CONTEXT_HISTORY_POINTS = 7
 
 type QuarterRef = {
   year: number
@@ -35,6 +36,10 @@ export function formatOverviewQuarterDisplay(
 
 function compareQuarter(left: QuarterRef, right: QuarterRef): number {
   return (left.year - right.year) * 4 + (left.quarter - right.quarter)
+}
+
+function quarterKey(value: QuarterRef): string {
+  return `${value.year}Q${value.quarter}`
 }
 
 function latestFiniteSeriesQuarter(chart: ChartSpec, preferredSeriesId: string): QuarterRef | null {
@@ -87,7 +92,53 @@ function mergedAttribution(nowcast: HeadlineMetric, actual: HeadlineMetric): Mod
   return items
 }
 
-export function buildArtifactAlignedNowcastChart(metrics: HeadlineMetric[]): ChartSpec | null {
+function buildContextHistory(
+  contextChart: ChartSpec | undefined,
+  actualPeriod: string,
+  actualValue: number,
+): Array<{ period: string; value: number }> {
+  if (!contextChart) {
+    return []
+  }
+
+  const actualQuarter = parseOverviewQuarterLabel(actualPeriod)
+  const historySeries =
+    contextChart.series.find((series) => series.series_id === HISTORY_SERIES_ID) ?? contextChart.series[0]
+  if (!actualQuarter || !historySeries) {
+    return []
+  }
+
+  const values: Array<{ period: string; value: number; key: string }> = []
+  for (let index = 0; index < contextChart.x.values.length; index += 1) {
+    const quarter = parseOverviewQuarterLabel(contextChart.x.values[index])
+    const value = historySeries.values[index]
+    if (!quarter || !isFiniteNumber(value) || compareQuarter(quarter, actualQuarter) > 0) {
+      continue
+    }
+    values.push({
+      period: contextChart.x.values[index]?.toString() ?? quarterKey(quarter),
+      value,
+      key: quarterKey(quarter),
+    })
+  }
+
+  const actualKey = quarterKey(actualQuarter)
+  const actualIndex = values.findIndex((item) => item.key === actualKey)
+  if (actualIndex >= 0) {
+    values[actualIndex] = { period: actualPeriod, value: actualValue, key: actualKey }
+  } else {
+    values.push({ period: actualPeriod, value: actualValue, key: actualKey })
+  }
+
+  return values
+    .slice(-MAX_CONTEXT_HISTORY_POINTS)
+    .map(({ period, value }) => ({ period, value }))
+}
+
+export function buildArtifactAlignedNowcastChart(
+  metrics: HeadlineMetric[],
+  contextChart?: ChartSpec,
+): ChartSpec | null {
   const actual = findMetric(metrics, ACTUAL_GDP_METRIC_ID)
   const nowcast = findMetric(metrics, CURRENT_NOWCAST_METRIC_ID)
   if (!actual || !nowcast || !isFiniteNumber(actual.value) || !isFiniteNumber(nowcast.value)) {
@@ -101,34 +152,50 @@ export function buildArtifactAlignedNowcastChart(metrics: HeadlineMetric[]): Cha
   }
 
   const unit = nowcast.unit || actual.unit || '%'
+  const history = buildContextHistory(contextChart, actualPeriod, actual.value)
+  const timeline = history.length > 0
+    ? [...history, { period: nowcastPeriod, value: nowcast.value }]
+    : [
+        { period: actualPeriod, value: actual.value },
+        { period: nowcastPeriod, value: nowcast.value },
+      ]
+  const actualIndex = Math.max(0, timeline.length - 2)
+  const nowcastIndex = timeline.length - 1
+  const historyValues = timeline.map((item, index) => (index <= actualIndex ? item.value : Number.NaN))
+  const nowcastValues = timeline.map((item, index) => {
+    if (index === actualIndex || index === nowcastIndex) {
+      return item.value
+    }
+    return Number.NaN
+  })
 
   return {
     chart_id: 'artifact_nowcast_forecast',
     title: 'Nowcast and forecast',
-    subtitle: 'Real GDP growth (YoY, %) - accepted actual and current Overview nowcast',
+    subtitle: 'Real GDP growth (YoY, %) — recent actual history and current Overview nowcast',
     chart_type: 'line',
     x: {
       label: 'Quarter',
       unit: '',
-      values: [actualPeriod, nowcastPeriod],
+      values: timeline.map((item) => item.period),
     },
     y: {
       label: 'GDP growth (YoY)',
       unit,
-      values: [actual.value, nowcast.value],
+      values: timeline.map((item) => item.value),
     },
     series: [
       {
         series_id: HISTORY_SERIES_ID,
         label: 'GDP growth - actual (YoY, %)',
         semantic_role: 'baseline',
-        values: [actual.value, Number.NaN],
+        values: historyValues,
       },
       {
         series_id: NOWCAST_SERIES_ID,
         label: 'GDP growth - current nowcast (YoY, %)',
         semantic_role: 'alternative',
-        values: [actual.value, nowcast.value],
+        values: nowcastValues,
       },
     ],
     view_mode: 'level',

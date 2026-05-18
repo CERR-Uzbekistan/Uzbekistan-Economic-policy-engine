@@ -172,6 +172,9 @@
       "artifactStrapPlural": "Kesim · {{date}} · {{count}} ko'rib chiqish eslatmasi",
       "artifactSummaryMeta": "Kesim xulosasi · {{count}} ko'rsatkich",
       "staticFallbackNotice": "Namuna xulosa · joriy kesim mavjud emas",
+      "artifactBrief": {
+        "summary": "O'sish joriy chorak nowcast trayektoriyasidan yuqorida, inflyatsiya hali baland, savdo va valyuta ko'rsatkichlari esa tashqi kanalni kuzatuvda qoldiradi. Quyida FX pass-through, inflyatsiya inertligi va pul o'tkazmalari pasayishi stsenariylarini tekshiring."
+      },
       "summary": {
         "template": "{{items}}.",
         "item": "{{label}} {{value}} {{unit}}{{qualifier}}",
@@ -218,6 +221,13 @@
         "down": "pastroq",
         "flat": "o'zgarmagan"
       }
+    },
+    "supportingTable": {
+      "indicator": "Ko'rsatkich",
+      "latest": "So'nggi",
+      "change": "O'zgarish",
+      "period": "Davr",
+      "source": "Manba"
     },
     "comparisonBasis": {
       "real_gdp_growth_annual_yoy": "reliz",
@@ -276,8 +286,8 @@
     },
     "feeds": {
       "sectionAria": "Umumiy ko'rinish lentasi panellari",
-      "title": "Dalillar izi",
-      "description": "Kesim nima uchun o'zgarganini tushuntiradigan so'nggi siyosiy harakatlar, ma'lumot yangilanishlari va saqlangan ishlar.",
+      "title": "So'nggi kontekst",
+      "description": "Kesimni tushuntirishga yordam beradigan so'nggi siyosiy harakatlar va model ma'lumotlari yangilanishlari.",
       "reforms": {
         "title": "Islohotlar",
         "empty": "So'nggi siyosiy qarorlar yo'q.",
@@ -292,6 +302,10 @@
         "title": "Ma'lumot yangilanishlari",
         "empty": "Yangi model ma'lumotlari mavjud emas.",
         "refreshSuffix": "yangilanishi"
+      },
+      "note": {
+        "title": "Bu izni qanday o'qish kerak",
+        "description": "Bu yozuvlar kesim oldingisidan nimalar bilan farq qilganini ko'rsatadi. Saqlangan stsenariylar Overviewda emas, Stsenariy laboratoriyasida qoladi."
       },
       "savedScenarios": {
         "title": "Saqlangan stsenariylaringiz",
@@ -365,6 +379,7 @@
       "warningMetricCountPlural": "{{count}} ogohlantirishli metrika",
       "noteCount": "{{count}} manba izohi",
       "noteCountPlural": "{{count}} manba izohi",
+      "summaryLine": "Kesimni iqtibos qilish yoki taqqoslashdan oldin manba izohlarini oching.",
       "severityCounts": "{{critical}} kritik · {{warning}} ogohl. · {{info}} info",
       "exportedAt": "Yangilangan {{date}}"
     },

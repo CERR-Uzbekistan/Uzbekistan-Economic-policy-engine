@@ -248,6 +248,7 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
       <XAxis
         dataKey={X_KEY}
         axisLine={false}
+        padding={{ left: 14, right: 28 }}
         tick={Y_AXIS_TICK_STYLE}
         tickFormatter={(value) => formatQuarterLabel(value, locale)}
         tickLine={{ stroke: 'var(--color-border-strong)', strokeWidth: 0.75 }}

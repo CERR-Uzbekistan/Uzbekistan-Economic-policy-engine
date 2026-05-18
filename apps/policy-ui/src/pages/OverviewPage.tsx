@@ -9,6 +9,7 @@ import { OverviewFeeds } from '../components/overview/OverviewFeeds'
 import { QuickActions } from '../components/overview/QuickActions'
 import { ReferencesFooter } from '../components/overview/ReferencesFooter'
 import { RiskPanel } from '../components/overview/RiskPanel'
+import { SupportingMetricTable } from '../components/overview/SupportingMetricTable'
 import { PageContainer } from '../components/layout/PageContainer'
 import { PageHeader } from '../components/layout/PageHeader'
 import { TrustStateLabel } from '../components/system/TrustStateLabel'
@@ -169,7 +170,10 @@ export function OverviewPage() {
   const primaryHeadlineMetrics = headline_metrics.slice(0, 3)
   const supportingHeadlineMetrics = headline_metrics.slice(3)
   const macroPulseTokens = buildOverviewMacroPulseTokens(overviewNowcastMetrics, locale, t)
-  const artifactAlignedNowcastChart = buildArtifactAlignedNowcastChart(overviewNowcastMetrics)
+  const artifactAlignedNowcastChart = buildArtifactAlignedNowcastChart(
+    overviewNowcastMetrics,
+    dfmState.status === 'bridge' ? dfmState.chart : nowcast_forecast,
+  )
   const useLiveDfmNowcastChart =
     dfmState.status === 'bridge' && shouldUseDfmNowcastChart(dfmState.chart, overviewNowcastMetrics)
   const displayedNowcastChart =
@@ -249,12 +253,7 @@ export function OverviewPage() {
             <h2 id="overview-supporting-signals-title">{t('overview.briefing.supportingSignalsTitle')}</h2>
             <p>{t('overview.briefing.supportingSignalsDescription')}</p>
           </div>
-          <KpiStrip
-            metrics={supportingHeadlineMetrics}
-            headingId="overview-supporting-kpi-title"
-            title={t('overview.briefing.supportingSignalsTitle')}
-            variant="supporting"
-          />
+          <SupportingMetricTable metrics={supportingHeadlineMetrics} />
         </section>
       ) : null}
 

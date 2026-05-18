@@ -37,6 +37,7 @@ async function createTestI18n() {
               warningMetricCountPlural: '{{count}} warning metrics',
               noteCount: '{{count}} source note',
               noteCountPlural: '{{count}} source notes',
+              summaryLine: 'Open source notes before citing.',
               severityCounts: '{{critical}} critical · {{warning}} warning · {{info}} info',
               exportedAt: 'Exported {{date}}',
             },
@@ -159,6 +160,7 @@ describe('CaveatPanel', () => {
 
     assert.match(markup, /<details/)
     assert.match(markup, /Data notes/)
+    assert.match(markup, /Open source notes before citing/)
     assert.match(markup, /1 warning metric/)
     assert.match(markup, /2 source notes/)
     assert.match(markup, /0 critical · 1 warning · 1 info/)

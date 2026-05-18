@@ -7,6 +7,8 @@ type OverviewFeedsProps = {
   activityFeed: OverviewActivityFeed
 }
 
+const ACTIVE_OVERVIEW_REFRESH_MODELS = new Set(['dfm_nowcast', 'qpm_uzbekistan', 'io_model'])
+
 function toEpoch(isoTimestamp: string): number {
   const parsed = Date.parse(isoTimestamp)
   return Number.isFinite(parsed) ? parsed : Number.NEGATIVE_INFINITY
@@ -18,13 +20,11 @@ export function OverviewFeeds({ activityFeed }: OverviewFeedsProps) {
 
   const policyActions = [...activityFeed.policy_actions]
     .sort((a, b) => toEpoch(b.occurred_at) - toEpoch(a.occurred_at))
-    .slice(0, 5)
+    .slice(0, 3)
   const dataRefreshes = [...activityFeed.data_refreshes]
+    .filter((refresh) => ACTIVE_OVERVIEW_REFRESH_MODELS.has(refresh.model_id))
     .sort((a, b) => toEpoch(b.refreshed_at) - toEpoch(a.refreshed_at))
-    .slice(0, 5)
-  const savedScenarios = [...activityFeed.saved_scenarios]
-    .sort((a, b) => toEpoch(b.saved_at) - toEpoch(a.saved_at))
-    .slice(0, 5)
+    .slice(0, 3)
 
   return (
     <section className="feed" aria-labelledby="overview-feeds-title">
@@ -81,22 +81,10 @@ export function OverviewFeeds({ activityFeed }: OverviewFeedsProps) {
         )}
       </article>
 
-      <article className="feed-col">
-        <h3>{t('overview.feeds.savedScenarios.title')}</h3>
-        {savedScenarios.length === 0 ? (
-          <p className="empty-state">{t('overview.feeds.savedScenarios.empty')}</p>
-        ) : (
-          <div className="feed-list">
-            {savedScenarios.map((scenario) => (
-              <article key={scenario.activity_id} className="feed-item">
-                <p className="feed-item__date">{toDateEyebrow(scenario.saved_at, locale)}</p>
-                <p className="feed-item__title">{scenario.scenario_name}</p>
-                <p className="feed-item__meta">{scenario.author}</p>
-              </article>
-            ))}
-          </div>
-        )}
-      </article>
+      <aside className="feed-col feed-col--note">
+        <h3>{t('overview.feeds.note.title')}</h3>
+        <p>{t('overview.feeds.note.description')}</p>
+      </aside>
     </section>
   )
 }

@@ -68,12 +68,20 @@ export function CaveatPanel({ caveats, exportedAt }: CaveatPanelProps) {
       </div>
       <details className="overview-data-notes__details">
         <summary className="overview-data-notes__summary">
-          <span>
+          <span className="overview-data-notes__summary-main">
+            {t('overview.dataNotes.summaryLine')}
+          </span>
+          <span className="overview-data-notes__summary-meta">
             {t(pluralKey('overview.dataNotes.warningMetricCount', warningMetricCount), {
               count: warningMetricCount,
             })}
+            {' '}
+            {t('overview.common.middleDot')}
+            {' '}
+            {t(pluralKey('overview.dataNotes.noteCount', noteCount), { count: noteCount })}
           </span>
-          <span>{t(pluralKey('overview.dataNotes.noteCount', noteCount), { count: noteCount })}</span>
+        </summary>
+        <div className="overview-data-notes__audit-line">
           <span>
             {t('overview.dataNotes.severityCounts', {
               critical: severityCounts.critical,
@@ -82,7 +90,7 @@ export function CaveatPanel({ caveats, exportedAt }: CaveatPanelProps) {
             })}
           </span>
           <span>{t('overview.dataNotes.exportedAt', { date: formatDate(exportedAt, locale) })}</span>
-        </summary>
+        </div>
         <ul className="overview-caveats__list">
           {sorted.map((caveat) => (
             <li

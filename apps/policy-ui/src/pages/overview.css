@@ -81,6 +81,15 @@ body:has(.overview-page) {
   overflow-wrap: anywhere;
 }
 
+.overview-state-header__brief {
+  display: block;
+  font-size: clamp(1rem, 1.25vw, 1.08rem);
+  font-weight: 650;
+  line-height: 1.45;
+  margin-bottom: var(--space-sm);
+  max-width: 70ch;
+}
+
 .overview-state-header__pulse-token {
   display: inline;
 }
@@ -271,6 +280,70 @@ body:has(.overview-page) {
   padding-bottom: var(--space-lg);
 }
 
+.overview-supporting-table-wrap {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  overflow-x: auto;
+}
+
+.overview-supporting-table {
+  border-collapse: collapse;
+  font-size: 0.83rem;
+  min-width: 54rem;
+  width: 100%;
+}
+
+.overview-supporting-table th,
+.overview-supporting-table td {
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.72rem 0.85rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.overview-supporting-table thead th {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.overview-supporting-table tbody tr:last-child th,
+.overview-supporting-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.overview-supporting-table__label {
+  color: var(--color-text);
+  display: block;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.overview-supporting-table__claim {
+  color: var(--color-text-muted);
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.03em;
+  margin-top: 0.2rem;
+  text-transform: uppercase;
+}
+
+.overview-supporting-table__value,
+.overview-supporting-table__change,
+.overview-supporting-table__period {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.overview-supporting-table__source {
+  color: var(--color-text-muted);
+  max-width: 18rem;
+}
+
 .kpi-strip {
   display: grid;
   gap: var(--space-md);
@@ -335,7 +408,7 @@ body:has(.overview-page) {
   padding: 0.18rem 0.28rem;
   text-align: center;
   text-transform: uppercase;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
 }
 
 .kpi__name,
@@ -1134,8 +1207,8 @@ body:has(.overview-page) {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   display: grid;
-  gap: var(--space-md);
-  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-sm);
+  grid-template-columns: 1fr;
   padding: var(--space-md);
 }
 
@@ -1163,18 +1236,19 @@ body:has(.overview-page) {
 }
 
 .risk-item__action {
-  align-items: flex-end;
-  display: grid;
-  gap: var(--space-xs);
-  justify-items: end;
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs) var(--space-sm);
+  justify-content: space-between;
 }
 
 .risk-item__label {
   color: var(--color-text-muted);
   font-size: 0.74rem;
   line-height: 1.3;
-  max-width: 16ch;
-  text-align: end;
+  max-width: 24ch;
+  text-align: start;
 }
 
 .quick-actions .overview-section-head {
@@ -1263,6 +1337,18 @@ body:has(.overview-page) {
 
 .feed-col h3 {
   font-size: 0.89rem;
+  margin: 0;
+}
+
+.feed-col--note {
+  align-content: start;
+  background: var(--color-surface-muted);
+}
+
+.feed-col--note p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
   margin: 0;
 }
 
@@ -1391,7 +1477,7 @@ body:has(.overview-page) {
   }
 
   .overview-kpi-card__claim-label {
-    max-width: 10rem;
+    max-width: none;
   }
 
   .overview-nowcast-summary {
@@ -1529,6 +1615,34 @@ body:has(.overview-page) {
   letter-spacing: 0.02em;
   min-width: 0;
   overflow-wrap: anywhere;
+  text-transform: uppercase;
+}
+
+.overview-data-notes__summary .overview-data-notes__summary-main {
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 650;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.overview-data-notes__summary .overview-data-notes__summary-meta {
+  margin-left: auto;
+}
+
+.overview-data-notes__audit-line {
+  align-items: center;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  gap: var(--space-sm) var(--space-lg);
+  justify-content: space-between;
+  letter-spacing: 0.03em;
+  padding: 0.65rem 0.9rem;
   text-transform: uppercase;
 }
 

@@ -103,17 +103,22 @@ export function EconomicStateHeader({
   })
   const summaryText = isArtifactMode && macroPulseTokens.length > 0
     ? (
-      <span className="overview-state-header__pulse">
-        {macroPulseTokens.map((token, index) => (
-          <Fragment key={token.id}>
-            {index > 0 ? <span className="overview-state-header__pulse-separator"> {t('overview.common.middleDot')} </span> : null}
-            <span className="overview-state-header__pulse-token">
-              <span className="overview-state-header__pulse-label">{token.label}</span>{' '}
-              <span className="overview-state-header__pulse-value">{token.value}</span>
-            </span>
-          </Fragment>
-        ))}
-      </span>
+      <>
+        <span className="overview-state-header__brief">
+          {t('overview.header.artifactBrief.summary')}
+        </span>
+        <span className="overview-state-header__pulse">
+          {macroPulseTokens.map((token, index) => (
+            <Fragment key={token.id}>
+              {index > 0 ? <span className="overview-state-header__pulse-separator"> {t('overview.common.middleDot')} </span> : null}
+              <span className="overview-state-header__pulse-token">
+                <span className="overview-state-header__pulse-label">{token.label}</span>{' '}
+                <span className="overview-state-header__pulse-value">{token.value}</span>
+              </span>
+            </Fragment>
+          ))}
+        </span>
+      </>
     )
     : isArtifactMode
       ? artifactStrap

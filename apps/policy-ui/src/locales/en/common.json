@@ -172,6 +172,9 @@
       "artifactStrapPlural": "Snapshot · {{date}} · {{count}} review notes",
       "artifactSummaryMeta": "Snapshot summary · {{count}} metrics",
       "staticFallbackNotice": "Reference summary · current snapshot unavailable",
+      "artifactBrief": {
+        "summary": "Growth is running above the current-quarter nowcast path, inflation remains elevated, and trade/FX indicators keep the external channel on watch. Use the scenario tests below for FX pass-through, inflation persistence, and remittance downside."
+      },
       "summary": {
         "template": "{{items}}.",
         "item": "{{label}} {{value}} {{unit}}{{qualifier}}",
@@ -218,6 +221,13 @@
         "down": "lower",
         "flat": "unchanged"
       }
+    },
+    "supportingTable": {
+      "indicator": "Indicator",
+      "latest": "Latest",
+      "change": "Change",
+      "period": "Period",
+      "source": "Source"
     },
     "comparisonBasis": {
       "real_gdp_growth_annual_yoy": "print",
@@ -276,8 +286,8 @@
     },
     "feeds": {
       "sectionAria": "Overview feed panels",
-      "title": "Evidence trail",
-      "description": "Recent policy actions, data refreshes, and saved work that explain why the snapshot changed.",
+      "title": "Recent context",
+      "description": "Recent policy actions and model data refreshes that help explain the snapshot.",
       "reforms": {
         "title": "Reforms",
         "empty": "No recent policy actions on file.",
@@ -292,6 +302,10 @@
         "title": "Data refreshes",
         "empty": "No fresh model data available.",
         "refreshSuffix": "refresh"
+      },
+      "note": {
+        "title": "How to use this trail",
+        "description": "Use these entries to check what changed since the last snapshot. Saved scenarios stay in Scenario Lab, not in the Overview."
       },
       "savedScenarios": {
         "title": "Your saved scenarios",
@@ -365,6 +379,7 @@
       "warningMetricCountPlural": "{{count}} warning metrics",
       "noteCount": "{{count}} source note",
       "noteCountPlural": "{{count}} source notes",
+      "summaryLine": "Open source notes before citing or comparing the snapshot.",
       "severityCounts": "{{critical}} critical · {{warning}} warning · {{info}} info",
       "exportedAt": "Updated {{date}}"
     },
