@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: overview-artifact-refresh
@@ -131,10 +132,12 @@ jobs:
         run: npm run build
 
       - name: Commit refreshed Overview artifact
+        id: commit_overview_artifact
         if: steps.source_changes.outputs.snapshot_changed == 'true'
         run: |
           if git diff --quiet -- "$SNAPSHOT_PATH" "$DIFF_REPORT_PATH" "$PUBLIC_OVERVIEW_PATH"; then
             echo "No Overview artifact changes to publish." >> "$GITHUB_STEP_SUMMARY"
+            echo "artifact_committed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -143,6 +146,13 @@ jobs:
           git add "$SNAPSHOT_PATH" "$DIFF_REPORT_PATH" "$PUBLIC_OVERVIEW_PATH"
           git commit -m "chore(overview): refresh public artifact"
           git push origin HEAD:main
+          echo "artifact_committed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Dispatch Pages deploy for refreshed artifact
+        if: steps.commit_overview_artifact.outputs.artifact_committed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main
 
       - name: Write workflow summary
         if: always()
