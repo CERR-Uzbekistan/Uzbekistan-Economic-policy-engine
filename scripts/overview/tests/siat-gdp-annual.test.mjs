@@ -345,7 +345,7 @@ test('migrates annual GDP provenance from PDF to SIAT and flips pending review e
 })
 
 test('SIAT annual GDP snapshot update preserves all 17 ids/order and recomputes value_hash', async () => {
-  const snapshot = readJson(snapshotPath)
+  const snapshot = preMigrationSnapshot()
   const originalIds = snapshot.metrics.map((metric) => metric.metric_id)
   const updates = await buildSiatGdpAnnualMetricUpdates({
     snapshot,
@@ -369,7 +369,7 @@ test('Overview exporter refuses automation_pending_owner_review annual GDP snaps
   mkdirSync(tempRoot, { recursive: true })
   const tempSnapshotPath = join(tempRoot, 'overview_source_snapshot.json')
   const tempOutputPath = join(tempRoot, 'overview.json')
-  const snapshot = readJson(snapshotPath)
+  const snapshot = preMigrationSnapshot()
   const updates = await buildSiatGdpAnnualMetricUpdates({
     snapshot,
     extractedAt: '2026-04-29T00:00:00.000Z',
@@ -403,7 +403,7 @@ test('SIAT annual GDP CLI write-snapshot updates source snapshot only and record
   mkdirSync(tempFixtureDir, { recursive: true })
   const tempSnapshotPath = join(tempRoot, 'overview_source_snapshot.json')
   const diffReportPath = join(tempRoot, 'overview_source_snapshot.diff_report.json')
-  writeFileSync(tempSnapshotPath, readFileSync(snapshotPath, 'utf8'), 'utf8')
+  writeFileSync(tempSnapshotPath, `${JSON.stringify(preMigrationSnapshot(), null, 2)}\n`, 'utf8')
   writeFileSync(join(tempFixtureDir, 'sdmx_data_582.json'), readFileSync(fixturePath, 'utf8'), 'utf8')
 
   const publicBefore = readFileSync(publicOverviewPath, 'utf8')

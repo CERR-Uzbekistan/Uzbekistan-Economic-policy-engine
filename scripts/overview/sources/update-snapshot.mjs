@@ -23,18 +23,28 @@ export function applyMetricUpdatesToSnapshot(snapshot, updates, options = {}) {
     const metric = metricById.get(update.metric_id)
     if (!metric) throw new Error(`Cannot update unknown Overview metric ${update.metric_id}.`)
 
+    const pendingDiff = []
+    let hasSubstantiveMetricChange = false
     for (const [field, newValue] of Object.entries(update)) {
       if (field === 'metric_id') continue
       const oldValue = metric[field]
       if (!valuesEqual(oldValue, newValue)) {
-        diff.push({
+        pendingDiff.push({
           metric_id: update.metric_id,
           field,
           old_value: oldValue ?? null,
           new_value: newValue ?? null,
         })
-        metric[field] = newValue
+        if (field !== 'extracted_at') {
+          hasSubstantiveMetricChange = true
+        }
       }
+    }
+
+    for (const entry of pendingDiff) {
+      if (entry.field === 'extracted_at' && !hasSubstantiveMetricChange) continue
+      diff.push(entry)
+      metric[entry.field] = entry.new_value
     }
   }
 

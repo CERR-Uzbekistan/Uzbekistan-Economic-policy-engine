@@ -120,7 +120,7 @@ test('every value_hash field mutation forces pending owner review', () => {
   const targetMetricId = 'usd_uzs_level'
   const targetMetric = snapshot.metrics.find((metric) => metric.metric_id === targetMetricId)
 
-  for (const field of HASHED_METRIC_FIELDS.filter((entry) => entry !== 'metric_id')) {
+  for (const field of HASHED_METRIC_FIELDS.filter((entry) => entry !== 'metric_id' && entry !== 'extracted_at')) {
     const update = { metric_id: targetMetricId }
     const currentValue = targetMetric[field]
     if (typeof currentValue === 'number') update[field] = currentValue + 1

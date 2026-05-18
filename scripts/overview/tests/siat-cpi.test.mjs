@@ -320,7 +320,7 @@ test('returns manual_required when previous month is missing', () => {
 })
 
 test('SIAT CPI snapshot update preserves all 17 ids/order and recomputes value_hash', async () => {
-  const snapshot = readJson(snapshotPath)
+  const snapshot = preMigrationSnapshot()
   const originalIds = snapshot.metrics.map((metric) => metric.metric_id)
   const updates = await buildSiatCpiMetricUpdates({
     snapshot,
@@ -344,7 +344,7 @@ test('Overview exporter refuses automation_pending_owner_review snapshot', async
   mkdirSync(tempRoot, { recursive: true })
   const tempSnapshotPath = join(tempRoot, 'overview_source_snapshot.json')
   const tempOutputPath = join(tempRoot, 'overview.json')
-  const snapshot = readJson(snapshotPath)
+  const snapshot = preMigrationSnapshot()
   const updates = await buildSiatCpiMetricUpdates({
     snapshot,
     extractedAt: '2026-04-29T00:00:00.000Z',
@@ -378,7 +378,7 @@ test('SIAT CPI CLI write-snapshot updates source snapshot only and records diff 
   mkdirSync(tempFixtureDir, { recursive: true })
   const tempSnapshotPath = join(tempRoot, 'overview_source_snapshot.json')
   const diffReportPath = join(tempRoot, 'overview_source_snapshot.diff_report.json')
-  writeFileSync(tempSnapshotPath, readFileSync(snapshotPath, 'utf8'), 'utf8')
+  writeFileSync(tempSnapshotPath, `${JSON.stringify(preMigrationSnapshot(), null, 2)}\n`, 'utf8')
   writeFileSync(join(tempFixtureDir, 'sdmx_data_4585.json'), readFileSync(fixturePath, 'utf8'), 'utf8')
 
   const publicBefore = readFileSync(publicOverviewPath, 'utf8')
@@ -415,7 +415,7 @@ test('SIAT CPI CLI supports source-verified automatic public snapshot status', (
   mkdirSync(tempFixtureDir, { recursive: true })
   const tempSnapshotPath = join(tempRoot, 'overview_source_snapshot.json')
   const diffReportPath = join(tempRoot, 'overview_source_snapshot.diff_report.json')
-  writeFileSync(tempSnapshotPath, readFileSync(snapshotPath, 'utf8'), 'utf8')
+  writeFileSync(tempSnapshotPath, `${JSON.stringify(preMigrationSnapshot(), null, 2)}\n`, 'utf8')
   writeFileSync(join(tempFixtureDir, 'sdmx_data_4585.json'), readFileSync(fixturePath, 'utf8'), 'utf8')
 
   const result = spawnSync(

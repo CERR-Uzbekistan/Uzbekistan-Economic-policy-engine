@@ -30,6 +30,29 @@ function cloneJson(value) {
   return JSON.parse(JSON.stringify(value))
 }
 
+function preMigrationSnapshot() {
+  const snapshot = cloneJson(readJson(snapshotPath))
+  snapshot.status = 'owner_verified_for_public_artifact'
+  snapshot.snapshot_accepted_by = 'project owner'
+  snapshot.snapshot_accepted_at = '2026-04-29T05:43:29Z'
+
+  for (const metricId of ['exports_yoy', 'imports_yoy', 'trade_balance']) {
+    const metric = snapshot.metrics.find((entry) => entry.metric_id === metricId)
+    metric.value = 0
+    metric.source_label = 'Statistics Agency trade release'
+    metric.source_period = 'January 2026'
+    metric.source_reference = 'Pre-SIAT trade source fixture.'
+    metric.observed_at = '2026-03-01T00:00:00Z'
+    metric.validation_status = 'valid'
+    metric.caveats = ['Pre-migration trade source.']
+    metric.warnings = []
+    delete metric.extracted_at
+  }
+
+  snapshot.value_hash = computeOverviewValueHash(snapshot)
+  return snapshot
+}
+
 async function fixtureFetchJson(url) {
   return readJson(join(fixtureDir, basename(new URL(url).pathname)))
 }
@@ -111,7 +134,7 @@ test('builds SIAT trade metric updates with source provenance and no live networ
 })
 
 test('SIAT snapshot update preserves all 17 locked ids in order and forces pending owner review', async () => {
-  const snapshot = readJson(snapshotPath)
+  const snapshot = preMigrationSnapshot()
   const originalIds = snapshot.metrics.map((metric) => metric.metric_id)
   const updates = await buildSiatTradeMetricUpdates({
     snapshot,
@@ -129,7 +152,7 @@ test('SIAT snapshot update preserves all 17 locked ids in order and forces pendi
 })
 
 test('SIAT metric values and provenance recompute value_hash', async () => {
-  const snapshot = readJson(snapshotPath)
+  const snapshot = preMigrationSnapshot()
   const updates = await buildSiatTradeMetricUpdates({
     snapshot,
     extractedAt: '2026-04-29T00:00:00Z',

@@ -50,3 +50,34 @@ test('source-verified mode marks strict automation updates as public-exportable'
   assert.equal('snapshot_accepted_at' in result.snapshot, false)
   assert.equal(result.snapshot.value_hash, computeOverviewValueHash(result.snapshot))
 })
+
+test('ignores extracted_at-only refreshes so automation does not make timestamp-only commits', () => {
+  const snapshot = cloneJson(readJson(snapshotPath))
+  const metric = snapshot.metrics.find((entry) => entry.metric_id === 'usd_uzs_level')
+  assert.ok(metric)
+  const originalHash = snapshot.value_hash
+  const originalExtractedAt = metric.extracted_at
+
+  const result = applyMetricUpdatesToSnapshot(
+    snapshot,
+    [
+      {
+        metric_id: 'usd_uzs_level',
+        value: metric.value,
+        source_period: metric.source_period,
+        extracted_at: '2026-05-18T06:00:00.000Z',
+      },
+    ],
+    {
+      publicStatus: SOURCE_VERIFIED_FOR_PUBLIC_ARTIFACT,
+      sourceVerifiedBy: 'github-actions[bot]',
+      sourceVerifiedAt: '2026-05-18T06:00:00.000Z',
+    },
+  )
+
+  const nextMetric = result.snapshot.metrics.find((entry) => entry.metric_id === 'usd_uzs_level')
+  assert.equal(result.changed, false)
+  assert.deepEqual(result.diff, [])
+  assert.equal(nextMetric.extracted_at, originalExtractedAt)
+  assert.equal(result.snapshot.value_hash, originalHash)
+})
