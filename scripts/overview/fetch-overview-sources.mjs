@@ -5,7 +5,11 @@ import { buildCbuFxMetricUpdates } from './sources/cbu-fx.mjs'
 import { buildSiatCpiMetricUpdates } from './sources/siat-cpi.mjs'
 import { buildSiatGdpAnnualMetricUpdates } from './sources/siat-gdp-annual.mjs'
 import { buildSiatTradeMetricUpdates, isManualRequiredError } from './sources/siat-trade.mjs'
-import { applyMetricUpdatesToSnapshot, formatDiffReport } from './sources/update-snapshot.mjs'
+import {
+  SOURCE_VERIFIED_FOR_PUBLIC_ARTIFACT,
+  applyMetricUpdatesToSnapshot,
+  formatDiffReport,
+} from './sources/update-snapshot.mjs'
 
 const repoRoot = resolve(fileURLToPath(import.meta.url), '..', '..', '..')
 const defaultSnapshotPath = join(repoRoot, 'scripts', 'overview', 'overview_source_snapshot.json')
@@ -46,6 +50,20 @@ function parseArgs(argv) {
       index += 1
     } else if (arg === '--diff-report') {
       options.diffReport = argv[index + 1]
+      index += 1
+    } else if (arg === '--public-status') {
+      const publicStatus = argv[index + 1]
+      if (publicStatus === 'source-verified') {
+        options.publicStatus = SOURCE_VERIFIED_FOR_PUBLIC_ARTIFACT
+      } else {
+        fail(`Unsupported public status: ${publicStatus}`)
+      }
+      index += 1
+    } else if (arg === '--source-verified-by') {
+      options.sourceVerifiedBy = argv[index + 1]
+      index += 1
+    } else if (arg === '--source-verified-at') {
+      options.sourceVerifiedAt = argv[index + 1]
       index += 1
     } else {
       fail(`Unknown argument: ${arg}`)
@@ -133,7 +151,11 @@ async function main() {
         fetchJson: siatFetchJson,
       })
     }
-    result = applyMetricUpdatesToSnapshot(snapshot, updates)
+    result = applyMetricUpdatesToSnapshot(snapshot, updates, {
+      publicStatus: args.publicStatus,
+      sourceVerifiedBy: args.sourceVerifiedBy,
+      sourceVerifiedAt: args.sourceVerifiedAt,
+    })
   } catch (error) {
     if (!isManualRequiredError(error)) throw error
     manualRequired = {

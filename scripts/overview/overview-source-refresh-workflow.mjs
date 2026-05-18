@@ -8,6 +8,10 @@ const snapshotPath = resolve(repoRoot, 'scripts', 'overview', 'overview_source_s
 const diffReportPath = resolve(repoRoot, 'scripts', 'overview', 'overview_source_snapshot.diff_report.json')
 const fetchScriptPath = resolve(repoRoot, 'scripts', 'overview', 'fetch-overview-sources.mjs')
 const families = ['cbu-fx', 'siat-trade', 'siat-cpi', 'siat-gdp-annual']
+const PUBLIC_EXPORT_SOURCE_STATUSES = new Set([
+  'owner_verified_for_public_artifact',
+  'source_verified_for_public_artifact',
+])
 
 function fail(message) {
   console.error(message)
@@ -75,12 +79,23 @@ function runFamily(args) {
   if (!args.results) fail('Missing --results')
 
   console.log(`Running Overview source family: ${family}`)
-  const run = spawnSync(process.execPath, [
+  const fetchArgs = [
     fetchScriptPath,
     '--write-snapshot',
     '--family',
     family,
-  ], {
+  ]
+  if (args['public-status']) {
+    fetchArgs.push('--public-status', args['public-status'])
+  }
+  if (args['source-verified-by']) {
+    fetchArgs.push('--source-verified-by', args['source-verified-by'])
+  }
+  if (args['source-verified-at']) {
+    fetchArgs.push('--source-verified-at', args['source-verified-at'])
+  }
+
+  const run = spawnSync(process.execPath, fetchArgs, {
     cwd: repoRoot,
     encoding: 'utf8',
   })
@@ -294,6 +309,36 @@ function failIfFamilyErrors(args) {
   process.exit(1)
 }
 
+function verifyPublicExportReady(args) {
+  if (!args.results) fail('Missing --results')
+  const results = readJson(args.results, [])
+  const errors = results.filter((result) => result.outcome === 'error')
+  const manualRequired = results.filter((result) => result.manual_required || result.outcome === 'manual_required')
+  if (errors.length > 0) {
+    for (const result of errors) console.error(`${result.family}: ${result.error?.message ?? 'family failed'}`)
+    fail('Overview public export blocked because at least one source family errored.')
+  }
+  if (manualRequired.length > 0) {
+    for (const result of manualRequired) {
+      console.warn(`${result.family}: ${result.manual_required?.reason ?? 'manual review required'}`)
+    }
+    console.warn('Manual-required families were skipped; unchanged metrics remain as previously verified or warned.')
+  }
+
+  const snapshot = readJson(snapshotPath, {})
+  if (!PUBLIC_EXPORT_SOURCE_STATUSES.has(snapshot.status)) {
+    fail(`Overview public export blocked by snapshot status ${snapshot.status ?? '(missing)'}.`)
+  }
+  if (snapshot.status === 'source_verified_for_public_artifact') {
+    if (!snapshot.source_verified_by || !snapshot.source_verified_at) {
+      fail('Overview public export blocked because source_verified_by/source_verified_at are missing.')
+    }
+  }
+
+  console.log(`Overview public export ready: ${snapshot.status}`)
+  console.log(`value_hash: ${snapshot.value_hash ?? ''}`)
+}
+
 const args = parseArgs(process.argv.slice(2))
 const command = args._[0]
 
@@ -301,4 +346,5 @@ if (command === 'run-family') runFamily(args)
 else if (command === 'finalize') finalize(args)
 else if (command === 'append-pr-result') appendPrResult(args)
 else if (command === 'fail-if-family-errors') failIfFamilyErrors(args)
+else if (command === 'verify-public-export-ready') verifyPublicExportReady(args)
 else fail(`Unknown command: ${command ?? '(missing)'}`)

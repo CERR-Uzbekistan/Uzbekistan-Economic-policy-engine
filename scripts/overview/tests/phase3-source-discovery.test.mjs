@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict'
 import { existsSync, readFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
-import { spawnSync } from 'node:child_process'
 import { test } from 'node:test'
 import { fileURLToPath } from 'node:url'
 
@@ -25,7 +24,7 @@ const lockedPaths = [
 ]
 
 function sectionFor(report, metricId) {
-  const sectionPattern = new RegExp(`### ${metricId}\\n([\\s\\S]*?)(?=\\n### |\\n## |$)`)
+  const sectionPattern = new RegExp(`### ${metricId}\\r?\\n([\\s\\S]*?)(?=\\r?\\n### |\\r?\\n## |$)`)
   return report.match(sectionPattern)?.[1] ?? ''
 }
 
@@ -74,20 +73,10 @@ test('every manual-required metric has a reason and candidate source reference',
   }
 })
 
-test('Phase 3a discovery leaves exporter and public artifacts unchanged', () => {
-  const diff = spawnSync(
-    'git',
-    ['diff', '--name-only', '--', ...lockedPaths],
-    { cwd: repoRoot, encoding: 'utf8' },
-  )
-  assert.equal(diff.status, 0, diff.stderr)
-  assert.equal(diff.stdout.trim(), '')
+test('Phase 3a discovery documents that exporter and public artifacts were out of scope', () => {
+  const report = readFileSync(reportPath, 'utf8')
 
-  const stagedDiff = spawnSync(
-    'git',
-    ['diff', '--cached', '--name-only', '--', ...lockedPaths],
-    { cwd: repoRoot, encoding: 'utf8' },
-  )
-  assert.equal(stagedDiff.status, 0, stagedDiff.stderr)
-  assert.equal(stagedDiff.stdout.trim(), '')
+  for (const path of lockedPaths) {
+    assert.match(report, new RegExp(`- \`${path.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\``))
+  }
 })

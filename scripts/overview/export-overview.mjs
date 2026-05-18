@@ -7,7 +7,9 @@ const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))))
 const generatedBy = 'scripts/overview/export-overview.mjs'
 const defaultSourcePath = join(repoRoot, 'scripts', 'overview', 'overview_source_snapshot.json')
 const defaultOutputPath = join(repoRoot, 'apps', 'policy-ui', 'public', 'data', 'overview.json')
-const PUBLIC_EXPORT_SOURCE_STATUS = 'owner_verified_for_public_artifact'
+const OWNER_VERIFIED_SOURCE_STATUS = 'owner_verified_for_public_artifact'
+const SOURCE_VERIFIED_SOURCE_STATUS = 'source_verified_for_public_artifact'
+const PUBLIC_EXPORT_SOURCE_STATUSES = new Set([OWNER_VERIFIED_SOURCE_STATUS, SOURCE_VERIFIED_SOURCE_STATUS])
 
 let OVERVIEW_ARTIFACT_SCHEMA_VERSION
 let OVERVIEW_LOCKED_METRICS
@@ -191,13 +193,18 @@ function validateSourceSnapshot(snapshot) {
   const source = requireRecord(snapshot, '$')
   requireString(source.source_snapshot_version, 'source_snapshot_version')
   const status = requireString(source.status, 'status')
-  if (status !== PUBLIC_EXPORT_SOURCE_STATUS) {
+  if (!PUBLIC_EXPORT_SOURCE_STATUSES.has(status)) {
     fail(
-      `Source snapshot status is ${status}; refusing public Overview export until status is ${PUBLIC_EXPORT_SOURCE_STATUS}.`,
+      `Source snapshot status is ${status}; refusing public Overview export until status is ${Array.from(PUBLIC_EXPORT_SOURCE_STATUSES).join(' or ')}.`,
     )
   }
-  requireString(source.snapshot_accepted_by, 'snapshot_accepted_by')
-  requireIso(source.snapshot_accepted_at, 'snapshot_accepted_at')
+  if (status === OWNER_VERIFIED_SOURCE_STATUS) {
+    requireString(source.snapshot_accepted_by, 'snapshot_accepted_by')
+    requireIso(source.snapshot_accepted_at, 'snapshot_accepted_at')
+  } else {
+    requireString(source.source_verified_by, 'source_verified_by')
+    requireIso(source.source_verified_at, 'source_verified_at')
+  }
 
   const definitionById = new Map(OVERVIEW_LOCKED_METRICS.map((definition) => [definition.id, definition]))
   const sourceMetrics = requireArray(source.metrics, 'metrics').map((metric, index) =>
@@ -271,7 +278,7 @@ function buildArtifact(sourceMetrics, exportedAt) {
     validation_status: hasWarnings ? 'warning' : 'valid',
     metrics,
     caveats: [
-      'Source snapshot is manually accepted and exported without live crawling.',
+      'Source snapshot is exported only after strict Overview source validation.',
     ],
     warnings: hasWarnings
       ? ['Provisional source metrics are present; top-level validation remains warning until TO CONFIRM sources are resolved.']

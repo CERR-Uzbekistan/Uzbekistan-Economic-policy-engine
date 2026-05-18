@@ -1,6 +1,7 @@
 import type {
   Caveat,
   Confidence,
+  DataRefresh,
   Direction,
   HeadlineMetric,
   MacroSnapshot,
@@ -302,6 +303,25 @@ function toArtifactSummaryMetrics(artifact: OverviewArtifact): HeadlineMetric[] 
     .map((metric) => toHeadlineMetric(metric, artifact))
 }
 
+function buildArtifactDataRefreshes(artifact: OverviewArtifact): DataRefresh[] {
+  const warningCount = artifact.metrics.filter(
+    (metric) => metric.validation_status === 'warning' || metric.warnings.length > 0,
+  ).length
+  const summary = warningCount > 0
+    ? `${artifact.metrics.length} Overview source metrics refreshed; ${warningCount} carry source caveats.`
+    : `${artifact.metrics.length} Overview source metrics refreshed from the public artifact.`
+
+  return [
+    {
+      refresh_id: `overview-artifact-${artifact.exported_at}`,
+      data_source: 'Overview source artifact',
+      model_id: 'overview_artifact',
+      refreshed_at: artifact.exported_at,
+      summary,
+    },
+  ]
+}
+
 export function overviewArtifactToMacroSnapshot(artifact: OverviewArtifact): MacroSnapshot {
   const topCards = selectTopCardMetrics(artifact.metrics).map((metric) => toHeadlineMetric(metric, artifact))
   const indicatorGroups = toOverviewIndicatorGroups(artifact)
@@ -339,5 +359,10 @@ export function overviewArtifactToMacroSnapshot(artifact: OverviewArtifact): Mac
     artifact_summary_metrics: artifactSummaryMetrics,
     caveats: [...artifactWarnings, ...artifactCaveats, ...metricCaveats],
     references,
+    activity_feed: {
+      ...overviewV1Data.activity_feed,
+      policy_actions: [],
+      data_refreshes: buildArtifactDataRefreshes(artifact),
+    },
   }
 }
