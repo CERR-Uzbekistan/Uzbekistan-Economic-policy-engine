@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-05-18T09:00:00.000Z",
+  "generated_at": "2026-05-18T10:25:00.000Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -307,7 +307,7 @@
       "candidate_count": 11,
       "excluded_count": 1,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-18T09:00:00.000Z"
+      "fetched_at": "2026-05-18T10:25:00.000Z"
     },
     {
       "id": "president-reform-news",
@@ -319,7 +319,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-18T09:00:00.000Z"
+      "fetched_at": "2026-05-18T10:25:00.000Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-18T09:00:00.000Z"
+      "fetched_at": "2026-05-18T10:25:00.000Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-18T09:00:00.000Z"
+      "fetched_at": "2026-05-18T10:25:00.000Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-18T09:00:00.000Z"
+      "fetched_at": "2026-05-18T10:25:00.000Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-18T09:00:00.000Z"
+      "fetched_at": "2026-05-18T10:25:00.000Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 347,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-18T09:00:00.000Z"
+      "fetched_at": "2026-05-18T10:25:00.000Z"
     },
     {
       "id": "customs-committee-news",
@@ -391,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-18T09:00:00.000Z"
+      "fetched_at": "2026-05-18T10:25:00.000Z"
     },
     {
       "id": "mef-policy-news",
@@ -403,7 +403,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-18T09:00:00.000Z"
+      "fetched_at": "2026-05-18T10:25:00.000Z"
     },
     {
       "id": "tax-committee-news",
@@ -415,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-18T09:00:00.000Z"
+      "fetched_at": "2026-05-18T10:25:00.000Z"
     },
     {
       "id": "energy-ministry-news",
@@ -427,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-18T09:00:00.000Z"
+      "fetched_at": "2026-05-18T10:25:00.000Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -439,7 +439,7 @@
       "candidate_count": 1,
       "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-18T09:00:00.000Z"
+      "fetched_at": "2026-05-18T10:25:00.000Z"
     },
     {
       "id": "justice-ministry-news",
@@ -451,7 +451,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-18T09:00:00.000Z"
+      "fetched_at": "2026-05-18T10:25:00.000Z"
     }
   ],
   "reform_packages": [
@@ -909,7 +909,7 @@
           "event_type": "financing_allocated",
           "summary": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, parameter_change, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
           "source_url_status": "verified",
-          "extracted_at": "2026-05-18T09:00:00.000Z",
+          "extracted_at": "2026-05-18T10:25:00.000Z",
           "localized": {
             "title": {
               "en": "Financing and subsidy plans for the agricultural sector reviewed",
@@ -1338,7 +1338,7 @@
           "event_type": "financing_allocated",
           "summary": "Official detail page did not expose a separate summary in the configured extraction block.",
           "source_url_status": "verified",
-          "extracted_at": "2026-05-18T09:00:00.000Z",
+          "extracted_at": "2026-05-18T10:25:00.000Z",
           "localized": {
             "title": {
               "en": "Uzbekistan Expands Tax Incentives for Investors Financing Infrastructure Projects",
@@ -2424,47 +2424,6 @@
   ],
   "research_updates": [
     {
-      "id": "research-qpm-tonga-2025",
-      "title": "Quarterly projection model customized for small open-economy policy scenarios",
-      "topic": "QPM scenario design for monetary transmission and external shocks",
-      "summary": "The paper adapts a QPM to a small open economy and uses scenario shocks for financial stress, natural disaster, and external-demand risk. The design is useful for deciding how country-specific transmission channels should enter a CERR-style QPM workspace.",
-      "model_ids": [
-        "QPM"
-      ],
-      "methods": [
-        "Quarterly projection model",
-        "calibration",
-        "scenario analysis",
-        "monetary transmission"
-      ],
-      "source_title": "A Quarterly Projection Model for Tonga",
-      "source_institution": "International Monetary Fund",
-      "source_url": "https://www.imf.org/en/Publications/WP/Issues/2025/06/20/A-Quarterly-Projection-Model-for-Tonga-567845",
-      "published_at": "2025-06-20",
-      "geography": "Tonga",
-      "why_relevant": "Shows how a compact QPM can be adapted for policy-relevant shocks when data and institutional structure differ from larger economies."
-    },
-    {
-      "id": "research-dfm-nowcasting-model-comparison-2025",
-      "title": "GDP nowcasting comparison confirms bridge and dynamic-factor models as strong baselines",
-      "topic": "Nowcasting method selection for short GDP series and high-frequency indicators",
-      "summary": "The study compares traditional econometric and machine-learning approaches across simulations and country cases. It finds bridge and dynamic-factor methods among the strongest empirical baselines, especially when data histories are limited.",
-      "model_ids": [
-        "DFM"
-      ],
-      "methods": [
-        "Dynamic factor model",
-        "bridge model",
-        "forecast evaluation",
-        "high-frequency indicators"
-      ],
-      "source_title": "GDP Nowcasting Performance of Traditional Econometric Models vs Machine-Learning Algorithms",
-      "source_institution": "International Monetary Fund",
-      "source_url": "https://www.imf.org/en/Publications/WP/Issues/2025/12/05/GDP-Nowcasting-Performance-of-Traditional-Econometric-Models-vs-Machine-Learning-572360",
-      "published_at": "2025-12-05",
-      "why_relevant": "Supports keeping the platform nowcast lane interpretable and benchmarked before adding heavier machine-learning methods."
-    },
-    {
       "id": "research-dfm-world-trade-nowcast-2026",
       "title": "Multi-region factor model nowcasts world trade with regional spillovers",
       "topic": "Trade nowcasting and regional spillover structure",
@@ -2506,6 +2465,195 @@
       "as_of_date": "2026-01-15",
       "geography": "Global",
       "why_relevant": "Provides a source-linked benchmark for checking sector-linkage assumptions and trade exposure indicators used around the I-O lane."
+    },
+    {
+      "id": "research-imf-working-papers-repec-2026-a-novel-quarterly-macroeconomic-forecasting-framework-illustration-on-the-c",
+      "title": "A Novel Quarterly Macroeconomic Forecasting Framework: Illustration on the Case of Bosnia and Herzegovina",
+      "topic": "QPM scenario design and monetary transmission",
+      "summary": "by Tibor Hlédik & Rilind Kabashi & Maria Arakelyan & Belma Colakovic & Elma",
+      "model_ids": [
+        "QPM"
+      ],
+      "methods": [
+        "Quarterly projection model",
+        "monetary policy model",
+        "scenario analysis"
+      ],
+      "source_title": "A Novel Quarterly Macroeconomic Forecasting Framework: Illustration on the Case of Bosnia and Herzegovina",
+      "source_institution": "International Monetary Fund",
+      "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-036.html",
+      "published_at": "2026",
+      "why_relevant": "Useful for benchmarking semi-structural monetary-policy scenarios before platform model results are cited."
+    },
+    {
+      "id": "research-imf-working-papers-repec-2026-benchmarking-dynamically-stable-public-debt-trajectories-for-low-income-cou",
+      "title": "Benchmarking Dynamically Stable Public Debt Trajectories for Low-Income Countries",
+      "topic": "Fiscal programming and debt-sustainability methods",
+      "summary": "Fiscal programming and debt-sustainability methods. Included as a source-linked methods update for FPP; it is not a platform model result.",
+      "model_ids": [
+        "FPP"
+      ],
+      "methods": [
+        "Fiscal programming",
+        "debt sustainability",
+        "medium-term fiscal framework"
+      ],
+      "source_title": "Benchmarking Dynamically Stable Public Debt Trajectories for Low-Income Countries",
+      "source_institution": "International Monetary Fund",
+      "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-075.html",
+      "published_at": "2026",
+      "why_relevant": "Useful as a literature watch item while FPP remains gated in public outputs."
+    },
+    {
+      "id": "research-imf-working-papers-repec-2026-nowcasting-economic-growth-with-machine-learning-and-satellite-data",
+      "title": "Nowcasting Economic Growth with Machine Learning and Satellite Data",
+      "topic": "Nowcasting and high-frequency monitoring",
+      "summary": "Nowcasting and high-frequency monitoring. Included as a source-linked methods update for DFM; it is not a platform model result.",
+      "model_ids": [
+        "DFM"
+      ],
+      "methods": [
+        "Dynamic factor model",
+        "nowcasting",
+        "forecast evaluation"
+      ],
+      "source_title": "Nowcasting Economic Growth with Machine Learning and Satellite Data",
+      "source_institution": "International Monetary Fund",
+      "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-020.html",
+      "published_at": "2026",
+      "why_relevant": "Useful for comparing nowcast methods and indicator use around the DFM lane."
+    },
+    {
+      "id": "research-imf-working-papers-repec-2026-nowcasting-gdp-growth-for-kenya",
+      "title": "Nowcasting GDP Growth for Kenya",
+      "topic": "Nowcasting and high-frequency monitoring",
+      "summary": "by Nikolay Danov & Domenico Giannone & Alain N. Kabundi & Cedric I Okou & Mr. Antonio",
+      "model_ids": [
+        "DFM"
+      ],
+      "methods": [
+        "Dynamic factor model",
+        "nowcasting",
+        "forecast evaluation"
+      ],
+      "source_title": "Nowcasting GDP Growth for Kenya",
+      "source_institution": "International Monetary Fund",
+      "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-032.html",
+      "published_at": "2026",
+      "why_relevant": "Useful for comparing nowcast methods and indicator use around the DFM lane."
+    },
+    {
+      "id": "research-imf-working-papers-repec-2026-nowcasting-growth-using-the-bayesian-structural-time-series-model-applicati",
+      "title": "Nowcasting Growth Using the Bayesian Structural Time Series Model: Application to Tanzania",
+      "topic": "Nowcasting and high-frequency monitoring",
+      "summary": "Nowcasting and high-frequency monitoring. Included as a source-linked methods update for DFM; it is not a platform model result.",
+      "model_ids": [
+        "DFM"
+      ],
+      "methods": [
+        "Dynamic factor model",
+        "nowcasting",
+        "forecast evaluation"
+      ],
+      "source_title": "Nowcasting Growth Using the Bayesian Structural Time Series Model: Application to Tanzania",
+      "source_institution": "International Monetary Fund",
+      "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-049.html",
+      "published_at": "2026",
+      "why_relevant": "Useful for comparing nowcast methods and indicator use around the DFM lane."
+    },
+    {
+      "id": "research-imf-working-papers-repec-2026-nowcasting-world-trade-with-a-multi-region-factor-model",
+      "title": "Nowcasting World Trade with a Multi-Region Factor Model",
+      "topic": "Nowcasting and high-frequency monitoring",
+      "summary": "Nowcasting and high-frequency monitoring. Included as a source-linked methods update for DFM; it is not a platform model result.",
+      "model_ids": [
+        "DFM"
+      ],
+      "methods": [
+        "Dynamic factor model",
+        "nowcasting",
+        "forecast evaluation"
+      ],
+      "source_title": "Nowcasting World Trade with a Multi-Region Factor Model",
+      "source_institution": "International Monetary Fund",
+      "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-048.html",
+      "published_at": "2026",
+      "why_relevant": "Useful for comparing nowcast methods and indicator use around the DFM lane."
+    },
+    {
+      "id": "research-imf-working-papers-repec-2026-sovereign-debt-sustainability-and-redistribution",
+      "title": "Sovereign Debt Sustainability and Redistribution",
+      "topic": "Fiscal programming and debt-sustainability methods",
+      "summary": "Fiscal programming and debt-sustainability methods. Included as a source-linked methods update for FPP; it is not a platform model result.",
+      "model_ids": [
+        "FPP"
+      ],
+      "methods": [
+        "Fiscal programming",
+        "debt sustainability",
+        "medium-term fiscal framework"
+      ],
+      "source_title": "Sovereign Debt Sustainability and Redistribution",
+      "source_institution": "International Monetary Fund",
+      "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-042.html",
+      "published_at": "2026",
+      "why_relevant": "Useful as a literature watch item while FPP remains gated in public outputs."
+    },
+    {
+      "id": "research-imf-working-papers-repec-2026-still-packing-a-punch-monetary-policy-transmission-in-a-new-cross-country-h",
+      "title": "Still Packing a Punch: Monetary Policy Transmission in a New Cross-Country High-Frequency Dataset",
+      "topic": "High-frequency indicator monitoring",
+      "summary": "by Ece Ozge Emeksiz & Mr. Güneş Kamber & Ms. Julia Otten & Gurnain Kaur",
+      "model_ids": [
+        "HFI"
+      ],
+      "methods": [
+        "High-frequency indicators",
+        "real-time monitoring"
+      ],
+      "source_title": "Still Packing a Punch: Monetary Policy Transmission in a New Cross-Country High-Frequency Dataset",
+      "source_institution": "International Monetary Fund",
+      "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-018.html",
+      "published_at": "2026",
+      "why_relevant": "Useful as a literature watch item while HFI remains gated in public outputs."
+    },
+    {
+      "id": "research-imf-working-papers-repec-2026-the-integration-of-global-value-chain-in-the-eu-stylized-facts-and-drivers",
+      "title": "The Integration of Global Value Chain in the EU: Stylized Facts and Drivers",
+      "topic": "Input-output linkages and value-added trade",
+      "summary": "Input-output linkages and value-added trade. Included as a source-linked methods update for I-O; it is not a platform model result.",
+      "model_ids": [
+        "I-O"
+      ],
+      "methods": [
+        "Input-output tables",
+        "sector linkages",
+        "value-added trade"
+      ],
+      "source_title": "The Integration of Global Value Chain in the EU: Stylized Facts and Drivers",
+      "source_institution": "International Monetary Fund",
+      "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-002.html",
+      "published_at": "2026",
+      "why_relevant": "Useful for benchmarking sector-linkage and trade-exposure assumptions in the I-O lane."
+    },
+    {
+      "id": "research-imf-working-papers-repec-2026-the-macro-fiscal-impacts-of-post-disaster-imf-financing-evidence-from-a-syn",
+      "title": "The Macro-Fiscal Impacts of Post-Disaster IMF Financing: Evidence from a Synthetic Control Approach",
+      "topic": "Fiscal programming and debt-sustainability methods",
+      "summary": "Fiscal programming and debt-sustainability methods. Included as a source-linked methods update for FPP; it is not a platform model result.",
+      "model_ids": [
+        "FPP"
+      ],
+      "methods": [
+        "Fiscal programming",
+        "debt sustainability",
+        "medium-term fiscal framework"
+      ],
+      "source_title": "The Macro-Fiscal Impacts of Post-Disaster IMF Financing: Evidence from a Synthetic Control Approach",
+      "source_institution": "International Monetary Fund",
+      "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-091.html",
+      "published_at": "2026",
+      "why_relevant": "Useful as a literature watch item while FPP remains gated in public outputs."
     }
   ],
   "literature_items": [

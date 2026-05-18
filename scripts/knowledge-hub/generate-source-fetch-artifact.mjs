@@ -70,6 +70,12 @@ function workflowSummary(diagnostics, outputPath, changeSummary) {
       return `| ${source.id} | ${source.institution} | ${source.candidate_count} | ${source.link_invalid_count} | ${status} |`
     })
     .join('\n')
+  const researchRows = (diagnostics.research_source_results ?? [])
+    .map((source) => {
+      const status = source.ok ? 'ok' : `failed: ${source.error}`
+      return `| ${source.id} | ${source.institution} | ${source.update_count} | ${status} |`
+    })
+    .join('\n')
 
   return [
     '# Knowledge Hub source-fetch artifact',
@@ -77,12 +83,19 @@ function workflowSummary(diagnostics, outputPath, changeSummary) {
     `- Output: \`${outputPath}\``,
     `- Extraction mode: \`${diagnostics.artifact.extraction_mode}\``,
     `- Verified source item count: ${diagnostics.candidate_count}`,
+    `- Research updates in artifact: ${diagnostics.research_update_count ?? diagnostics.artifact.research_updates.length}`,
     `- Source failures: ${diagnostics.source_failures.length}`,
+    `- Research source failures: ${(diagnostics.research_source_failures ?? []).length}`,
     `- Carried-forward reform packages: ${diagnostics.retained_package_count ?? 0}`,
+    `- Carried-forward research updates: ${diagnostics.retained_research_update_count ?? 0}`,
     '',
     '| Source | Institution | Verified items | Invalid links blocked | Status |',
     '| --- | --- | ---: | ---: | --- |',
     sourceRows,
+    '',
+    '| Research source | Institution | Verified updates | Status |',
+    '| --- | --- | ---: | --- |',
+    researchRows || '| n/a | n/a | 0 | not configured |',
     '',
     changeSummary ? renderKnowledgeHubChangeSummaryMarkdown(changeSummary) : '## Change summary versus previous public artifact\n\n- Previous public artifact was not available.',
     '',

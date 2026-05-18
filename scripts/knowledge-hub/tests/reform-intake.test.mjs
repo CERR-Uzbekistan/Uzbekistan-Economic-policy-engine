@@ -13,6 +13,7 @@ import {
   KNOWLEDGE_HUB_SCHEMA_VERSION,
   REFORM_INTAKE_RULEBOOK,
   REFORM_SOURCE_DEFINITIONS,
+  RESEARCH_SOURCE_DEFINITIONS,
   assembleReformPackagesFromCandidates,
 } from '../reform-intake.mjs'
 
@@ -1153,6 +1154,144 @@ describe('Knowledge Hub reform intake', () => {
     assert.equal(diagnostics.artifact.reform_packages[0].package_id, previousPackage.package_id)
   })
 
+  it('builds research updates from configured research source pages', async () => {
+    const diagnostics = await buildKnowledgeHubCandidateArtifactWithDiagnostics({
+      fetchSource: true,
+      extractedAt: '2026-05-18T09:00:00.000Z',
+      includeCandidatesInArtifact: false,
+      sources: [],
+      researchSources: [
+        {
+          id: 'imf-research-test',
+          institution: 'International Monetary Fund',
+          url: 'https://www.imf.org/en/research-test',
+          parser: 'research-html-list',
+        },
+      ],
+      fetchImpl: async (url) => {
+        const sourceUrl = String(url)
+        if (sourceUrl.endsWith('/en/research-test')) {
+          return new Response(`
+            <article>
+              <time datetime="2026-05-11">May 11, 2026</time>
+              <h2><a href="/en/Publications/WP/Issues/2026/05/11/Quarterly-Projection-Model-for-a-Small-Open-Economy-580001">Quarterly Projection Model for a Small Open Economy</a></h2>
+              <p class="summary">This working paper uses a quarterly projection model, calibration, and scenario analysis for monetary policy transmission.</p>
+            </article>
+            <article>
+              <time datetime="2026-05-10">May 10, 2026</time>
+              <h2><a href="/en/Publications/WP/Issues/2026/05/10/Dynamic-Factor-Nowcasting-with-High-Frequency-Indicators-580002">Dynamic factor nowcasting with high-frequency indicators</a></h2>
+              <p class="summary">The paper compares dynamic factor model and bridge model nowcasting performance with high-frequency indicators.</p>
+            </article>
+            <article>
+              <time datetime="2026-05-09">May 9, 2026</time>
+              <h2><a href="/en/news/general">General conference announcement</a></h2>
+              <p>Registration is open for a research conference.</p>
+            </article>
+          `)
+        }
+        return new Response('<html>ok</html>')
+      },
+    })
+
+    const fetchedUpdates = diagnostics.artifact.research_updates.filter((update) =>
+      update.id.startsWith('research-imf-research-test-'),
+    )
+
+    assert.equal(diagnostics.research_source_results.length, 1)
+    assert.equal(diagnostics.research_source_results[0].update_count, 2)
+    assert.equal(diagnostics.research_source_failures.length, 0)
+    assert.equal(fetchedUpdates.length, 2)
+    assert.deepEqual(fetchedUpdates[0].model_ids, ['QPM'])
+    assert.deepEqual(fetchedUpdates[1].model_ids, ['DFM', 'HFI'])
+    assert.ok(fetchedUpdates.every((update) => update.source_url.startsWith('https://www.imf.org/en/Publications/WP/Issues/')))
+    assert.ok(!diagnostics.artifact.research_updates.some((update) => update.title === 'General conference announcement'))
+  })
+
+  it('parses RePEc series pages for model-relevant research updates', async () => {
+    const diagnostics = await buildKnowledgeHubCandidateArtifactWithDiagnostics({
+      fetchSource: true,
+      extractedAt: '2026-05-18T09:00:00.000Z',
+      includeCandidatesInArtifact: false,
+      sources: [],
+      researchSources: [
+        {
+          id: 'imf-repec-test',
+          institution: 'International Monetary Fund',
+          url: 'https://ideas.repec.org/s/imf/imfwpa.html',
+          parser: 'research-repec-series',
+        },
+      ],
+      fetchImpl: async (url) => {
+        const sourceUrl = String(url)
+        if (sourceUrl.endsWith('/s/imf/imfwpa.html')) {
+          return new Response(`
+            <LI class="list-group-item downfree"><B>2026/036 <A HREF="/p/imf/imfwpa/2026-036.html">A Novel Quarterly Macroeconomic Forecasting Framework</A></B><BR><I>by</I> Research Team</LI>
+            <LI class="list-group-item downfree"><B>2026/032 <A HREF="/p/imf/imfwpa/2026-032.html">Nowcasting GDP Growth for Kenya</A></B><BR><I>by</I> Research Team</LI>
+            <LI class="list-group-item downfree"><B>2026/001 <A HREF="/p/imf/imfwpa/2026-001.html">Unrelated Household Survey Notes</A></B><BR><I>by</I> Research Team</LI>
+          `)
+        }
+        return new Response('<html>ok</html>')
+      },
+    })
+
+    const fetchedUpdates = diagnostics.artifact.research_updates.filter((update) =>
+      update.id.startsWith('research-imf-repec-test-'),
+    )
+
+    assert.equal(diagnostics.research_source_results[0].update_count, 2)
+    assert.equal(fetchedUpdates.length, 2)
+    assert.deepEqual(fetchedUpdates[0].model_ids, ['QPM'])
+    assert.ok(fetchedUpdates[1].model_ids.includes('DFM'))
+    assert.ok(fetchedUpdates.every((update) => update.source_url.startsWith('https://ideas.repec.org/p/imf/imfwpa/')))
+  })
+
+  it('carries forward previous research updates when configured research sources fail', async () => {
+    const previousArtifact = await buildKnowledgeHubCandidateArtifact({
+      extractedAt: '2026-05-05T08:00:00.000Z',
+    })
+    previousArtifact.extraction_mode = CONFIGURED_SOURCE_FETCH_EXTRACTION_MODE
+    previousArtifact.extraction_mode_label = 'Configured source fetch'
+    previousArtifact.research_updates = [
+      {
+        id: 'research-previous-qpm',
+        title: 'Previous QPM research update',
+        topic: 'QPM scenario design',
+        summary: 'Previous source-linked QPM research update.',
+        model_ids: ['QPM'],
+        methods: ['Quarterly projection model'],
+        source_title: 'Previous QPM research update',
+        source_institution: 'International Monetary Fund',
+        source_url: 'https://www.imf.org/en/Publications/WP/Issues/2026/05/01/Previous-QPM-Research-579900',
+        published_at: '2026-05-01',
+        why_relevant: 'Previous verified item carried forward during source outage.',
+      },
+    ]
+
+    const diagnostics = await buildKnowledgeHubCandidateArtifactWithDiagnostics({
+      fetchSource: true,
+      extractedAt: '2026-05-18T09:00:00.000Z',
+      includeCandidatesInArtifact: false,
+      previousArtifact,
+      sources: [],
+      researchSources: [
+        {
+          id: 'failed-research-source',
+          institution: 'International Monetary Fund',
+          url: 'https://www.imf.org/en/fail-research',
+          parser: 'research-html-list',
+        },
+      ],
+      fetchImpl: async () => {
+        throw new Error('synthetic research outage')
+      },
+    })
+
+    assert.equal(diagnostics.research_source_failures.length, 1)
+    assert.equal(diagnostics.retained_research_update_count, 1)
+    assert.equal(diagnostics.artifact.research_updates[0].id, 'research-previous-qpm')
+    assert.ok(diagnostics.artifact.caveats.some((caveat) => caveat.includes('research sources failed')))
+  })
+
   it('blocks synthetic or unusable source links from configured-source artifacts', async () => {
     const diagnostics = await buildKnowledgeHubCandidateArtifactWithDiagnostics({
       fetchSource: true,
@@ -1205,5 +1344,12 @@ describe('Knowledge Hub reform intake', () => {
     assert.equal(candidateIds.length, new Set(candidateIds).size)
     assert.equal(diagnostics.source_results[0].candidate_count, diagnostics.source_results[1].candidate_count)
     assert.equal(diagnostics.artifact.candidates.length, diagnostics.source_results[0].candidate_count)
+  })
+
+  it('declares configured research sources separately from reform sources', () => {
+    assert.ok(RESEARCH_SOURCE_DEFINITIONS.length >= 3)
+    assert.ok(RESEARCH_SOURCE_DEFINITIONS.every((source) => source.parser === 'research-repec-series'))
+    assert.ok(RESEARCH_SOURCE_DEFINITIONS.some((source) => source.institution === 'International Monetary Fund'))
+    assert.ok(RESEARCH_SOURCE_DEFINITIONS.some((source) => source.institution === 'World Bank'))
   })
 })

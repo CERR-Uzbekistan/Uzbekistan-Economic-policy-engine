@@ -161,14 +161,15 @@ describe('Knowledge Hub page', () => {
       .map((update) => update.published_at ?? update.as_of_date)
       .filter((value): value is string => typeof value === 'string')
 
+    assert.ok(sorted.length >= 4)
     assert.deepEqual(
       sorted.map((update) => update.id),
-      [
-        'research-dfm-world-trade-nowcast-2026',
-        'research-oecd-icio-2025',
-        'research-dfm-nowcasting-model-comparison-2025',
-        'research-qpm-tonga-2025',
-      ],
+      [...sorted].sort((first, second) => {
+        const firstDate = first.published_at ?? first.as_of_date ?? ''
+        const secondDate = second.published_at ?? second.as_of_date ?? ''
+        if (firstDate !== secondDate) return secondDate.localeCompare(firstDate)
+        return first.title.localeCompare(second.title)
+      }).map((update) => update.id),
     )
     assert.equal(datesNewestFirst(sortedDates), true)
     assert.match(contentViewSource, /sortResearchUpdatesNewestFirst\(content\.research_updates \?\? \[\]\)/)

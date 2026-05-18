@@ -136,6 +136,30 @@ export const REFORM_SOURCE_DEFINITIONS = [
   }),
 ]
 
+export const RESEARCH_SOURCE_DEFINITIONS = [
+  {
+    id: 'imf-working-papers-repec',
+    institution: 'International Monetary Fund',
+    url: 'https://ideas.repec.org/s/imf/imfwpa.html',
+    parser: 'research-repec-series',
+    detail_fetch_limit: 12,
+  },
+  {
+    id: 'world-bank-policy-research-working-papers-repec',
+    institution: 'World Bank',
+    url: 'https://ideas.repec.org/s/wbk/wbrwps.html',
+    parser: 'research-repec-series',
+    detail_fetch_limit: 12,
+  },
+  {
+    id: 'adb-economics-working-papers-repec',
+    institution: 'Asian Development Bank',
+    url: 'https://ideas.repec.org/s/ris/adbewp.html',
+    parser: 'research-repec-series',
+    detail_fetch_limit: 12,
+  },
+]
+
 export const REFORM_EVIDENCE_TYPES = [
   'legal_text',
   'official_policy_announcement',
@@ -245,6 +269,93 @@ const MODEL_IMPACT_GATED_LENSES = [
   { id: 'FPP', label: 'Fiscal programming', status: 'planned_gated', caveat: 'Not active in public outputs.' },
   { id: 'HFI', label: 'High-frequency indicators', status: 'planned_gated', caveat: 'Not active in public outputs.' },
   { id: 'Synthesis', label: 'Cross-model synthesis', status: 'planned_gated', caveat: 'Not active in public outputs.' },
+]
+
+const RESEARCH_MODEL_RULES = [
+  {
+    model_ids: ['QPM'],
+    methods: ['Quarterly projection model', 'monetary policy model', 'scenario analysis'],
+    topic: 'QPM scenario design and monetary transmission',
+    why_relevant:
+      'Useful for benchmarking semi-structural monetary-policy scenarios before platform model results are cited.',
+    patterns: [
+      /\bquarterly projection model\b/i,
+      /\bqpm\b/i,
+      /\bforecasting and policy analysis system\b/i,
+      /\bmonetary policy model\b/i,
+      /\bmacro(?:economic)? model\b/i,
+      /\bmacro(?:economic)? forecasting framework\b/i,
+      /\bsemi[-\s]?structural model/i,
+    ],
+  },
+  {
+    model_ids: ['DFM'],
+    methods: ['Dynamic factor model', 'nowcasting', 'forecast evaluation'],
+    topic: 'Nowcasting and high-frequency monitoring',
+    why_relevant:
+      'Useful for comparing nowcast methods and indicator use around the DFM lane.',
+    patterns: [
+      /\bdynamic factor model\b/i,
+      /\bfactor model\b/i,
+      /\bnowcast(?:ing)?\b/i,
+      /\bbridge model\b/i,
+      /\bhigh[-\s]?frequency indicator/i,
+    ],
+  },
+  {
+    model_ids: ['I-O'],
+    methods: ['Input-output tables', 'sector linkages', 'value-added trade'],
+    topic: 'Input-output linkages and value-added trade',
+    why_relevant:
+      'Useful for benchmarking sector-linkage and trade-exposure assumptions in the I-O lane.',
+    patterns: [
+      /\binput[-\s]?output\b/i,
+      /\binter[-\s]?country input[-\s]?output\b/i,
+      /\btiva\b/i,
+      /\bvalue[-\s]?added trade\b/i,
+      /\bglobal value chains?\b/i,
+      /\bsector linkages?\b/i,
+    ],
+  },
+  {
+    model_ids: ['CGE'],
+    methods: ['Computable general equilibrium', 'policy simulation'],
+    topic: 'CGE policy-simulation methods',
+    why_relevant:
+      'Useful as a literature watch item while CGE remains gated in public outputs.',
+    patterns: [/\bcge\b/i, /\bcomputable general equilibrium\b/i],
+  },
+  {
+    model_ids: ['PE'],
+    methods: ['Partial-equilibrium model', 'trade policy simulation'],
+    topic: 'Partial-equilibrium trade policy methods',
+    why_relevant:
+      'Useful as a literature watch item while PE remains gated in public outputs.',
+    patterns: [/\bpartial[-\s]?equilibrium\b/i, /\btrade policy simulation\b/i],
+  },
+  {
+    model_ids: ['FPP'],
+    methods: ['Fiscal programming', 'debt sustainability', 'medium-term fiscal framework'],
+    topic: 'Fiscal programming and debt-sustainability methods',
+    why_relevant:
+      'Useful as a literature watch item while FPP remains gated in public outputs.',
+    patterns: [
+      /\bfiscal programming\b/i,
+      /\bdebt sustainability\b/i,
+      /\bmedium[-\s]?term fiscal framework\b/i,
+      /\bmacro[-\s]?fiscal\b/i,
+      /\bfiscal framework\b/i,
+      /\bpublic debt trajectories\b/i,
+    ],
+  },
+  {
+    model_ids: ['HFI'],
+    methods: ['High-frequency indicators', 'real-time monitoring'],
+    topic: 'High-frequency indicator monitoring',
+    why_relevant:
+      'Useful as a literature watch item while HFI remains gated in public outputs.',
+    patterns: [/\bhigh[-\s]?frequency\b/i, /\breal[-\s]?time monitor/i],
+  },
 ]
 
 export const STATIC_RESEARCH_UPDATES = [
@@ -1348,6 +1459,13 @@ function parseOfficialDate(value) {
   if (!normalized) return ''
   const isoMatch = normalized.match(/\b(\d{4}-[01]\d-[0-3]\d)(?:[T\s]\d{2}:\d{2}(?::\d{2})?)?\b/)
   if (isoMatch) return isoMatch[1]
+  const namedMonthMatch = normalized.match(
+    /\b((?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+[0-3]?\d,\s+\d{4})\b/i,
+  )
+  if (namedMonthMatch) {
+    const parsed = new Date(namedMonthMatch[1])
+    if (Number.isFinite(parsed.getTime())) return parsed.toISOString().slice(0, 10)
+  }
   const dayFirstMatch = normalized.match(/\b([0-3]\d)[.-]([01]\d)[.-](\d{4})\b/)
   if (dayFirstMatch) return `${dayFirstMatch[3]}-${dayFirstMatch[2]}-${dayFirstMatch[1]}`
   return normalized
@@ -2107,6 +2225,269 @@ function sourceItemsFromSourceListing(source, html) {
   }
 
   return sourceItemsFromHtmlArticles(source, html)
+}
+
+function researchUrlIsUsable(source, sourceUrl) {
+  if (!sourceUrl || sourceUrl.endsWith('#')) return false
+  const normalizedSourceUrl = normalizeUrlForComparison(sourceUrl)
+  if (!normalizedSourceUrl || normalizedSourceUrl === normalizeUrlForComparison(source.url)) return false
+
+  try {
+    const parsed = new URL(sourceUrl)
+    if (!/^https?:$/i.test(parsed.protocol)) return false
+    if (/(?:mailto|javascript):/i.test(sourceUrl)) return false
+    if (/(?:share|print|subscribe|newsletter|login|signin|contact|about|privacy|terms|facebook|twitter|linkedin|telegram|youtube)/i.test(sourceUrl)) {
+      return false
+    }
+  } catch {
+    return false
+  }
+
+  return true
+}
+
+function sourceItemsFromRepecSeries(source, html) {
+  return Array.from(
+    html.matchAll(
+      /<LI\b[^>]*class=["'][^"']*list-group-item[^"']*["'][^>]*>\s*<B>\s*(\d{4})(?:\/\d+)?\s*<A\b[^>]*HREF=["']([^"']+)["'][^>]*>([\s\S]*?)<\/A><\/B>([\s\S]*?)(?=<LI\b[^>]*class=["'][^"']*list-group-item|<\/UL>|$)/gi,
+    ),
+    (match) => {
+      const year = match[1]
+      const title = normalizeWhitespace(match[3])
+      const trailingText = normalizeWhitespace(match[4])
+      return {
+        title,
+        summary: trailingText,
+        publishedAt: year,
+        sourceUrl: toAbsoluteUrl(match[2], source.url),
+        text: `${title} ${trailingText}`,
+      }
+    },
+  ).filter((item) => item.title.length >= 18 && researchUrlIsUsable(source, item.sourceUrl))
+}
+
+function sourceItemsFromResearchHtml(source, html) {
+  if (source.parser === 'research-repec-series') return sourceItemsFromRepecSeries(source, html)
+
+  const blockItems = extractArticleBlocks(html)
+    .map((block) => {
+      const href = firstMatch(block, [/<a\b[^>]*href=["']([^"']+)["']/i])
+      const title = normalizeWhitespace(
+        firstMatch(block, [
+          /<h[1-4]\b[^>]*>([\s\S]*?)<\/h[1-4]>/i,
+          /<a\b[^>]*>([\s\S]*?)<\/a>/i,
+        ]),
+      )
+      const summary = normalizeWhitespace(
+        firstMatch(block, [
+          /<p\b[^>]*class=["'][^"']*(?:summary|description|excerpt|abstract|teaser)[^"']*["'][^>]*>([\s\S]*?)<\/p>/i,
+          /<p\b[^>]*>([\s\S]*?)<\/p>/i,
+        ]),
+      )
+      const dateText = firstMatch(block, [
+        /<time\b[^>]*datetime=["']([^"']+)["']/i,
+        /data-date=["']([^"']+)["']/i,
+        /\b(\d{4}-[01]\d-[0-3]\d)\b/i,
+        /\b([0-3]\d[.-][01]\d[.-]\d{4})\b/i,
+        /\b((?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+[0-3]?\d,\s+\d{4})\b/i,
+      ])
+      return {
+        title,
+        summary,
+        publishedAt: parseOfficialDate(dateText),
+        sourceUrl: toAbsoluteUrl(href, source.url),
+        text: `${title} ${summary}`,
+      }
+    })
+    .filter((item) => item.title.length >= 18 && researchUrlIsUsable(source, item.sourceUrl))
+
+  const anchorItems = Array.from(html.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>([\s\S]{0,700})/gi), (match) => {
+    const title = normalizeWhitespace(match[2])
+    const trailingText = normalizeWhitespace(match[3])
+    const dateText =
+      firstMatch(match[3], [
+        /\b(\d{4}-[01]\d-[0-3]\d)\b/i,
+        /\b([0-3]\d[.-][01]\d[.-]\d{4})\b/i,
+        /\b((?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+[0-3]?\d,\s+\d{4})\b/i,
+      ]) || trailingText
+    return {
+      title,
+      summary: trailingText,
+      publishedAt: parseOfficialDate(dateText),
+      sourceUrl: toAbsoluteUrl(match[1], source.url),
+      text: `${title} ${trailingText}`,
+    }
+  }).filter((item) => item.title.length >= 18 && researchUrlIsUsable(source, item.sourceUrl))
+
+  const allItems = [...blockItems, ...anchorItems]
+  return allItems.filter((item, index, items) => {
+    const key = normalizeUrlForComparison(item.sourceUrl) || `${item.title}-${item.publishedAt}`
+    return items.findIndex((other) => (normalizeUrlForComparison(other.sourceUrl) || `${other.title}-${other.publishedAt}`) === key) === index
+  })
+}
+
+function researchRulesForText(text) {
+  return RESEARCH_MODEL_RULES.filter((rule) => rule.patterns.some((pattern) => pattern.test(text)))
+}
+
+function researchUpdateFromItem(source, item, extractedAt) {
+  const rules = researchRulesForText(`${item.title} ${item.summary}`)
+  if (rules.length === 0) return null
+
+  const title = normalizeWhitespace(item.title)
+  if (
+    !title ||
+    /^(?:download|pdf|read more|learn more|view all|working papers|publications|research|search)$/i.test(title) ||
+    title.length < 18
+  ) {
+    return null
+  }
+
+  const modelIds = uniqueStrings(rules.flatMap((rule) => rule.model_ids))
+  const methods = uniqueStrings(rules.flatMap((rule) => rule.methods))
+  const topic = uniqueStrings(rules.map((rule) => rule.topic)).join('; ')
+  const whyRelevant = uniqueStrings(rules.map((rule) => rule.why_relevant)).join(' ')
+  const summary = normalizeWhitespace(item.summary)
+  const compactSummary =
+    summary.length >= 80 && summary.toLowerCase() !== title.toLowerCase()
+      ? summary.slice(0, 360).replace(/\s+\S*$/, '').trim()
+      : `${topic}. Included as a source-linked methods update for ${modelIds.join(', ')}; it is not a platform model result.`
+  const publishedAt = /^\d{4}(?:-[01]\d(?:-[0-3]\d)?)?$/.test(item.publishedAt ?? '') ? item.publishedAt : ''
+
+  return {
+    id: `research-${source.id}-${slugify(`${publishedAt || extractedAt}-${title}`)}`,
+    title,
+    topic,
+    summary: compactSummary,
+    model_ids: modelIds,
+    methods,
+    source_title: title,
+    source_institution: source.institution,
+    source_url: item.sourceUrl,
+    ...(publishedAt ? { published_at: publishedAt } : { as_of_date: extractedAt.slice(0, 10) }),
+    why_relevant: whyRelevant,
+  }
+}
+
+function sortResearchUpdates(updates) {
+  return updates.sort((left, right) => {
+    const leftDate = left.published_at ?? left.as_of_date ?? ''
+    const rightDate = right.published_at ?? right.as_of_date ?? ''
+    return rightDate.localeCompare(leftDate) || left.title.localeCompare(right.title)
+  })
+}
+
+function uniqueResearchUpdates(updates) {
+  const seen = new Set()
+  return updates.filter((update) => {
+    const keys = [
+      normalizeUrlForComparison(update.source_url),
+      slugify(update.title),
+    ].filter(Boolean)
+    if (keys.some((key) => seen.has(key))) return false
+    for (const key of keys) seen.add(key)
+    return true
+  })
+}
+
+function previousResearchUpdates(previousArtifact) {
+  if (!Array.isArray(previousArtifact?.research_updates)) return []
+  return previousArtifact.research_updates.filter((update) => update?.id && update?.source_url)
+}
+
+async function validateResearchUpdateLink(update, fetchImpl) {
+  try {
+    const host = new URL(update.source_url).hostname
+    if (/\.test$/i.test(host) || /^(?:example|localhost|127\.0\.0\.1)(?:\.|$)/i.test(host)) {
+      return false
+    }
+    const response = await fetchImpl(update.source_url, {
+      method: 'GET',
+      headers: SOURCE_LINK_VALIDATION_HEADERS,
+    })
+    return response.ok
+  } catch {
+    return false
+  }
+}
+
+async function validateResearchUpdateLinks(updates, { fetchSource, fetchImpl }) {
+  if (!fetchSource) return updates
+
+  const decisions = await Promise.all(
+    updates.map(async (update) => ({
+      update,
+      ok: await validateResearchUpdateLink(update, fetchImpl),
+    })),
+  )
+  return decisions.filter((decision) => decision.ok).map((decision) => decision.update)
+}
+
+async function buildResearchUpdatesWithDiagnostics({
+  fetchSource,
+  fetchImpl,
+  extractedAt,
+  previousArtifact,
+  researchSources = RESEARCH_SOURCE_DEFINITIONS,
+}) {
+  if (!fetchSource) {
+    return {
+      updates: STATIC_RESEARCH_UPDATES,
+      source_results: [],
+      source_failures: [],
+      retained_update_count: 0,
+    }
+  }
+
+  const sourceResults = await Promise.all(
+    researchSources.map(async (source) => {
+      try {
+        const html = await readSource(source, true, fetchImpl)
+        const parsedUpdates = sourceItemsFromResearchHtml(source, html)
+          .map((item) => researchUpdateFromItem(source, item, extractedAt))
+          .filter((update) => update !== null)
+          .slice(0, source.detail_fetch_limit ?? 12)
+        const verifiedUpdates = await validateResearchUpdateLinks(uniqueResearchUpdates(parsedUpdates), {
+          fetchSource,
+          fetchImpl,
+        })
+        return {
+          ...sourceDefinitionToArtifactSource(source),
+          parser: source.parser ?? 'research-html-list',
+          fetch_url: source.url,
+          ok: true,
+          update_count: verifiedUpdates.length,
+          fetched_at: extractedAt,
+          updates: verifiedUpdates,
+        }
+      } catch (error) {
+        return {
+          ...sourceDefinitionToArtifactSource(source),
+          parser: source.parser ?? 'research-html-list',
+          fetch_url: source.url,
+          ok: false,
+          update_count: 0,
+          fetched_at: extractedAt,
+          updates: [],
+          error: formatError(error),
+        }
+      }
+    }),
+  )
+
+  const fetchedUpdates = uniqueResearchUpdates(sortResearchUpdates(sourceResults.flatMap((result) => result.updates)))
+  const fallbackUpdates = previousResearchUpdates(previousArtifact)
+  const fallback = fallbackUpdates.length > 0 ? fallbackUpdates : STATIC_RESEARCH_UPDATES
+  const updates = uniqueResearchUpdates(sortResearchUpdates([...fetchedUpdates, ...fallback])).slice(0, 12)
+
+  return {
+    updates,
+    source_results: sourceResults.map(({ updates: _updates, ...result }) => result),
+    source_failures: sourceResults
+      .filter((result) => !result.ok)
+      .map(({ id, institution, url, parser, fetch_url, error }) => ({ id, institution, url, parser, fetch_url, error })),
+    retained_update_count: Math.max(0, updates.length - fetchedUpdates.length),
+  }
 }
 
 function shouldFetchDetailItems(source, fetchSource) {
@@ -3399,8 +3780,18 @@ export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options 
       fetchImpl,
     })
   ).map(sanitizePublicReformPackage)
+  const researchDiagnostics = await buildResearchUpdatesWithDiagnostics({
+    fetchSource,
+    fetchImpl,
+    extractedAt,
+    previousArtifact: options.previousArtifact,
+    researchSources:
+      options.researchUpdates || Array.isArray(options.sources)
+        ? (options.researchSources ?? [])
+        : (options.researchSources ?? RESEARCH_SOURCE_DEFINITIONS),
+  })
   const policyBriefs = options.policyBriefs ?? buildInternalPolicyBriefs(publicReformPackages)
-  const researchUpdates = options.researchUpdates ?? STATIC_RESEARCH_UPDATES
+  const researchUpdates = options.researchUpdates ?? researchDiagnostics.updates
   const literatureItems = options.literatureItems ?? STATIC_LITERATURE_ITEMS
   const modelImpactMap = options.modelImpactMap ?? buildModelImpactMap(publicReformPackages)
   const includeCandidatesInArtifact = options.includeCandidatesInArtifact !== false
@@ -3425,6 +3816,9 @@ export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options 
 
   if (sourceFailures.length > 0) {
     caveats.push('One or more configured sources failed during this automatic refresh; previous verified packages were carried forward when needed to avoid deleting reforms during a temporary source outage.')
+  }
+  if (researchDiagnostics.source_failures.length > 0) {
+    caveats.push('One or more configured research sources failed during this automatic refresh; previous or curated research updates were carried forward when needed.')
   }
 
   const artifact = {
@@ -3452,6 +3846,10 @@ export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options 
     source_results: sourceResults.map(({ candidates: _candidates, ...result }) => result),
     source_failures: sourceFailures,
     retained_package_count: carryForward.retainedPackageCount,
+    research_update_count: researchUpdates.length,
+    research_source_results: researchDiagnostics.source_results,
+    research_source_failures: researchDiagnostics.source_failures,
+    retained_research_update_count: researchDiagnostics.retained_update_count,
   }
 }
 
