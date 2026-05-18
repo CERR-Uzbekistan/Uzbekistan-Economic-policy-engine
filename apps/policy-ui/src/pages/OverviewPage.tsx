@@ -170,10 +170,7 @@ export function OverviewPage() {
   const primaryHeadlineMetrics = headline_metrics.slice(0, 3)
   const supportingHeadlineMetrics = headline_metrics.slice(3)
   const macroPulseTokens = buildOverviewMacroPulseTokens(overviewNowcastMetrics, locale, t)
-  const artifactAlignedNowcastChart = buildArtifactAlignedNowcastChart(
-    overviewNowcastMetrics,
-    dfmState.status === 'bridge' ? dfmState.chart : nowcast_forecast,
-  )
+  const artifactAlignedNowcastChart = buildArtifactAlignedNowcastChart(overviewNowcastMetrics)
   const useLiveDfmNowcastChart =
     dfmState.status === 'bridge' && shouldUseDfmNowcastChart(dfmState.chart, overviewNowcastMetrics)
   const displayedNowcastChart =

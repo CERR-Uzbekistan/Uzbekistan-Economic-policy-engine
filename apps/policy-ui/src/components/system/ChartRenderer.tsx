@@ -75,7 +75,7 @@ const NOWCAST_LINE_STYLES: Record<
   string,
   { strokeDasharray?: string; showDots: boolean; connectNulls: boolean; strokeWidth: number; dotRadius: number }
 > = {
-  gdp_history_yoy: { showDots: false, connectNulls: false, strokeWidth: 2, dotRadius: 0 },
+  gdp_history_yoy: { showDots: true, connectNulls: false, strokeWidth: 2, dotRadius: 4 },
   gdp_nowcast_yoy: { strokeDasharray: '6 4', showDots: true, connectNulls: true, strokeWidth: 3, dotRadius: 4.5 },
   gdp_forecast_yoy: { strokeDasharray: '2 4', showDots: false, connectNulls: true, strokeWidth: 2, dotRadius: 0 },
 }
@@ -346,7 +346,7 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
         stroke="var(--color-border-strong)"
         strokeDasharray={item.band.is_illustrative ? '5 3' : undefined}
         strokeWidth={1}
-        type="monotone"
+        type="linear"
       />
     )
   })
@@ -373,7 +373,7 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
             stroke={item.color}
             strokeDasharray={style.strokeDasharray}
             strokeWidth={style.strokeWidth}
-            type="monotone"
+            type="linear"
           />
         )
       })}

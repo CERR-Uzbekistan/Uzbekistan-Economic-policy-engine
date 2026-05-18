@@ -84,35 +84,6 @@ function dfmChart(currentPeriod: string): ChartSpec {
   }
 }
 
-function dfmHistoryChart(): ChartSpec {
-  return {
-    chart_id: 'nowcast_forecast',
-    title: 'Nowcast and forecast',
-    subtitle: 'Real GDP growth',
-    chart_type: 'line',
-    x: { label: 'Quarter', unit: '', values: ['2025Q3', '2025Q4', '2026Q1', '2026Q2'] },
-    y: { label: 'GDP growth', unit: '%', values: [6.6, 7.4, 8.5, 6.1] },
-    series: [
-      {
-        series_id: 'gdp_history_yoy',
-        label: 'GDP growth - history (YoY, %)',
-        semantic_role: 'baseline',
-        values: [6.6, 7.4, 8.5, Number.NaN],
-      },
-      {
-        series_id: 'gdp_nowcast_yoy',
-        label: 'GDP growth - current nowcast (YoY, %)',
-        semantic_role: 'alternative',
-        values: [Number.NaN, Number.NaN, 8.5, 6.1],
-      },
-    ],
-    view_mode: 'level',
-    uncertainty: [],
-    takeaway: 'Current-quarter nowcast.',
-    model_attribution: [attribution],
-  }
-}
-
 describe('nowcast chart selection', () => {
   it('parses compact, spaced, and suffix-bearing quarter labels', () => {
     assert.deepEqual(parseOverviewQuarterLabel('2026Q1'), { year: 2026, quarter: 1 })
@@ -148,25 +119,6 @@ describe('nowcast chart selection', () => {
     assert.equal(nowcast.values[1], 6)
     assert.match(chart.takeaway, /2026 Q2 nowcast/)
     assert.match(chart.takeaway, /2026 Q1/)
-  })
-
-  it('keeps recent DFM history before the accepted actual and artifact nowcast', () => {
-    const chart = buildArtifactAlignedNowcastChart(artifactMetrics(), dfmHistoryChart())
-    assert.ok(chart, 'expected artifact nowcast chart')
-
-    assert.deepEqual(chart.x.values, ['2025Q3', '2025Q4', '2026 Q1', '2026 Q2 nowcast'])
-    assert.deepEqual(chart.y.values, [6.6, 7.4, 8.7, 6])
-
-    const history = chart.series.find((series) => series.series_id === 'gdp_history_yoy')
-    const nowcast = chart.series.find((series) => series.series_id === 'gdp_nowcast_yoy')
-    assert.ok(history, 'expected actual-history series')
-    assert.ok(nowcast, 'expected nowcast series')
-    assert.deepEqual(history.values.slice(0, 3), [6.6, 7.4, 8.7])
-    assert.equal(Number.isNaN(history.values[3]), true)
-    assert.equal(Number.isNaN(nowcast.values[0]), true)
-    assert.equal(Number.isNaN(nowcast.values[1]), true)
-    assert.equal(nowcast.values[2], 8.7)
-    assert.equal(nowcast.values[3], 6)
   })
 
   it('rejects a live DFM chart whose current quarter is not ahead of the accepted actual', () => {
