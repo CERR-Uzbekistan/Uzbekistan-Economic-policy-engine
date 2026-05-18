@@ -24,6 +24,7 @@ type KnowledgeHubContentViewProps = {
 }
 
 type KnowledgeHubSectionId = 'reformTracker' | 'researchUpdates' | 'literatureHub'
+type ReformTrackerViewId = 'latestChanges' | 'register' | 'upcomingDates'
 type LabelNamespace = 'eventType' | 'evidenceType'
 type ModelLensId = KnowledgeHubActiveModelLensId | KnowledgeHubGatedModelLensId
 type DossierFilters = {
@@ -39,6 +40,7 @@ const EXTERNAL_LINK_PROPS = {
 } as const
 
 const HUB_SECTIONS: KnowledgeHubSectionId[] = ['reformTracker', 'researchUpdates', 'literatureHub']
+const REFORM_TRACKER_VIEWS: ReformTrackerViewId[] = ['latestChanges', 'register', 'upcomingDates']
 
 function formatDisplayDate(value: string | undefined): string {
   if (!value) return 'n/a'
@@ -122,6 +124,43 @@ function packageTimeline(reformPackage: ReformPackage): ReformPackageMilestone[]
 function flattenMilestones(packages: ReformPackage[]): ReformPackageMilestone[] {
   return packages
     .flatMap((reformPackage) => reformPackage.implementation_milestones)
+    .sort((left, right) => dateSortKey(left.date).localeCompare(dateSortKey(right.date)))
+}
+
+type UpcomingMilestoneRow = {
+  id: string
+  date: string
+  packageTitle: string
+  action: string
+  status: string
+  sourceTitle?: string
+  sourceUrl?: string
+}
+
+function upcomingMilestoneRows(
+  packages: ReformPackage[],
+  generatedAt: string | undefined,
+  language: KnowledgeHubContentLanguage,
+): UpcomingMilestoneRow[] {
+  const generatedReference = referenceTime(generatedAt)
+  return packages
+    .flatMap((reformPackage) =>
+      packageTimeline(reformPackage)
+        .filter((milestone) => isFutureDate(milestone.date, generatedReference))
+        .map((milestone) => {
+          const sourceEvent = sourceById(reformPackage, milestone.source_event_ids[0] ?? '')
+          const sourceUrl = sourceEventText(sourceEvent, 'source_url', language)
+          return {
+            id: `${reformPackage.package_id}:${milestone.id}`,
+            date: milestone.date,
+            packageTitle: dossierDisplayTitle(reformPackage, packages, language),
+            action: milestoneDisplayLabel(milestone, sourceEvent, language),
+            status: localizedPackageField(reformPackage, 'current_stage', language) ?? reformPackage.current_stage,
+            sourceTitle: sourceEventText(sourceEvent, 'title', language),
+            sourceUrl,
+          }
+        }),
+    )
     .sort((left, right) => dateSortKey(left.date).localeCompare(dateSortKey(right.date)))
 }
 
@@ -445,14 +484,18 @@ function MetricStrip({ content, packages }: { content: KnowledgeHubContent; pack
 function LatestChangesSection({
   packages,
   allPackages,
+  content,
   language,
 }: {
   packages: ReformPackage[]
   allPackages: ReformPackage[]
+  content: KnowledgeHubContent
   language: KnowledgeHubContentLanguage
 }) {
   const { t } = useTranslation()
   const latestPackages = packages.slice(0, 3)
+  const upcomingRows = upcomingMilestoneRows(packages, content.generated_at, language)
+  const sourceSummary = sourceDiagnosticsSummary(content)
 
   return (
     <section className="latest-changes" aria-label={t('knowledgeHub.reformTracker.latestChanges.aria')}>
@@ -462,38 +505,148 @@ function LatestChangesSection({
           <p>{t('knowledgeHub.reformTracker.latestChanges.description')}</p>
         </div>
       </header>
-      <div className="latest-change-list">
-        {latestPackages.map((reformPackage) => {
-          const sourceEvent = packagePrimarySource(reformPackage)
-          const displayTitle = dossierDisplayTitle(reformPackage, allPackages, language)
-          const bullets = changeBullets(reformPackage, t, language, 5)
-          const sourceUrl = sourceEventText(sourceEvent, 'source_url', language)
-          const sourceTitle = sourceEventText(sourceEvent, 'title', language)
-          const digest = packageDigest(reformPackage, language)
+      <div className="latest-change-layout">
+        <div className="latest-change-list">
+          {latestPackages.map((reformPackage) => {
+            const sourceEvent = packagePrimarySource(reformPackage)
+            const displayTitle = dossierDisplayTitle(reformPackage, allPackages, language)
+            const bullets = changeBullets(reformPackage, t, language, 6)
+            const sourceUrl = sourceEventText(sourceEvent, 'source_url', language)
+            const sourceTitle = sourceEventText(sourceEvent, 'title', language)
+            const digest = packageDigest(reformPackage, language)
 
-          return (
-            <article key={reformPackage.package_id} className="latest-change-card">
-              <header>
-                <time dateTime={reformPackage.current_stage_date}>{formatDisplayDate(reformPackage.current_stage_date)}</time>
-                <h3>{displayTitle}</h3>
-              </header>
-              <ul className="change-bullet-list">
-                {bullets.map((bullet) => (
-                  <li key={bullet}>{bullet}</li>
-                ))}
-              </ul>
-              <p className="latest-change-source">
-                {sourceEvent && sourceUrl ? (
-                  <a href={sourceUrl} className="text-source-link" {...EXTERNAL_LINK_PROPS}>
-                    {digest.document ?? sourceTitle ?? hostLabel(sourceUrl)}
-                  </a>
-                ) : (
-                  digest.document ?? localizedPackageField(reformPackage, 'official_basis', language) ?? reformPackage.official_basis
-                )}
-              </p>
-            </article>
-          )
-        })}
+            return (
+              <article key={reformPackage.package_id} className="latest-change-card">
+                <header>
+                  <span className="latest-change-card__meta">
+                    <time dateTime={reformPackage.current_stage_date}>{formatDisplayDate(reformPackage.current_stage_date)}</time>
+                    <span>{hostLabel(sourceUrl ?? sourceEvent?.source_url)}</span>
+                  </span>
+                  <h3>{displayTitle}</h3>
+                </header>
+                <ul className="change-bullet-list">
+                  {bullets.map((bullet) => (
+                    <li key={bullet}>{bullet}</li>
+                  ))}
+                </ul>
+                <p className="latest-change-source">
+                  {sourceEvent && sourceUrl ? (
+                    <a href={sourceUrl} className="text-source-link" {...EXTERNAL_LINK_PROPS}>
+                      {digest.document ?? sourceTitle ?? t('knowledgeHub.reformTracker.archive.openSource')}
+                    </a>
+                  ) : (
+                    digest.document ?? localizedPackageField(reformPackage, 'official_basis', language) ?? reformPackage.official_basis
+                  )}
+                </p>
+              </article>
+            )
+          })}
+        </div>
+        <aside className="latest-change-sidebar" aria-label={t('knowledgeHub.reformTracker.upcoming.previewAria')}>
+          <UpcomingDatesPreview rows={upcomingRows.slice(0, 5)} />
+          <SourceChecksStrip
+            reformCount={packages.length}
+            brokenLinkCount={sourceSummary.brokenLinkCount}
+            sourceCount={sourceSummary.sourceCount}
+          />
+        </aside>
+      </div>
+      <RegisterPreviewTable packages={packages.slice(0, 5)} allPackages={allPackages} language={language} />
+    </section>
+  )
+}
+
+function UpcomingDatesPreview({ rows }: { rows: UpcomingMilestoneRow[] }) {
+  const { t } = useTranslation()
+  return (
+    <section className="upcoming-preview">
+      <h3>{t('knowledgeHub.reformTracker.upcoming.title')}</h3>
+      {rows.length > 0 ? (
+        <ol>
+          {rows.map((row) => (
+            <li key={row.id}>
+              <time dateTime={row.date}>{formatDisplayDate(row.date)}</time>
+              <span>{row.action}</span>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p className="empty-state empty-state--compact">{t('knowledgeHub.reformTracker.upcoming.empty')}</p>
+      )}
+    </section>
+  )
+}
+
+function SourceChecksStrip({
+  reformCount,
+  brokenLinkCount,
+  sourceCount,
+}: {
+  reformCount: number
+  brokenLinkCount: number
+  sourceCount: number
+}) {
+  const { t } = useTranslation()
+  const checks = [
+    { value: reformCount, label: t('knowledgeHub.reformTracker.sourceChecks.reforms') },
+    { value: brokenLinkCount, label: t('knowledgeHub.reformTracker.sourceChecks.brokenLinks') },
+    { value: sourceCount, label: t('knowledgeHub.reformTracker.sourceChecks.sources') },
+  ]
+  return (
+    <section className="source-checks-strip" aria-label={t('knowledgeHub.reformTracker.sourceChecks.aria')}>
+      {checks.map((check) => (
+        <span key={check.label}>
+          <strong>{check.value}</strong>
+          {check.label}
+        </span>
+      ))}
+    </section>
+  )
+}
+
+function RegisterPreviewTable({
+  packages,
+  allPackages,
+  language,
+}: {
+  packages: ReformPackage[]
+  allPackages: ReformPackage[]
+  language: KnowledgeHubContentLanguage
+}) {
+  const { t } = useTranslation()
+  return (
+    <section className="register-preview" aria-label={t('knowledgeHub.reformTracker.registerPreview.aria')}>
+      <header className="section-header section-header--compact">
+        <div>
+          <h2>{t('knowledgeHub.reformTracker.registerPreview.title')}</h2>
+          <p>{t('knowledgeHub.reformTracker.registerPreview.description')}</p>
+        </div>
+      </header>
+      <div className="register-preview__table-wrap">
+        <table className="register-preview__table">
+          <thead>
+            <tr>
+              <th scope="col">{t('knowledgeHub.reformTracker.table.package')}</th>
+              <th scope="col">{t('knowledgeHub.reformTracker.table.policyArea')}</th>
+              <th scope="col">{t('knowledgeHub.reformTracker.table.currentStage')}</th>
+              <th scope="col">{t('knowledgeHub.reformTracker.archive.source')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {packages.map((reformPackage) => {
+              const sourceEvent = packagePrimarySource(reformPackage)
+              const sourceUrl = sourceEventText(sourceEvent, 'source_url', language)
+              return (
+                <tr key={reformPackage.package_id}>
+                  <td>{dossierDisplayTitle(reformPackage, allPackages, language)}</td>
+                  <td>{localizedPackageField(reformPackage, 'policy_area', language) ?? reformPackage.policy_area}</td>
+                  <td>{localizedPackageField(reformPackage, 'current_stage', language) ?? reformPackage.current_stage}</td>
+                  <td>{hostLabel(sourceUrl ?? sourceEvent?.source_url)}</td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
       </div>
     </section>
   )
@@ -795,10 +948,88 @@ function SupportingInfo({ content, packages }: { content: KnowledgeHubContent; p
   )
 }
 
+function ReformTrackerViewTabs({
+  activeView,
+  onChange,
+}: {
+  activeView: ReformTrackerViewId
+  onChange: (viewId: ReformTrackerViewId) => void
+}) {
+  const { t } = useTranslation()
+  return (
+    <div className="reform-view-tabs" role="group" aria-label={t('knowledgeHub.reformTracker.views.aria')}>
+      {REFORM_TRACKER_VIEWS.map((viewId) => (
+        <button
+          key={viewId}
+          type="button"
+          aria-pressed={activeView === viewId}
+          className={activeView === viewId ? 'is-active' : ''}
+          onClick={() => onChange(viewId)}
+        >
+          {t(`knowledgeHub.reformTracker.views.${viewId}`)}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+function UpcomingDatesSection({
+  packages,
+  content,
+  language,
+}: {
+  packages: ReformPackage[]
+  content: KnowledgeHubContent
+  language: KnowledgeHubContentLanguage
+}) {
+  const { t } = useTranslation()
+  const rows = upcomingMilestoneRows(packages, content.generated_at, language)
+
+  return (
+    <section className="upcoming-dates-panel" aria-label={t('knowledgeHub.reformTracker.upcoming.aria')}>
+      <header className="section-header section-header--compact">
+        <div>
+          <h2>{t('knowledgeHub.reformTracker.upcoming.title')}</h2>
+          <p>{t('knowledgeHub.reformTracker.upcoming.description')}</p>
+        </div>
+      </header>
+      {rows.length > 0 ? (
+        <div className="upcoming-date-list">
+          {rows.map((row) => (
+            <article key={row.id} className="upcoming-date-row">
+              <time dateTime={row.date}>{formatDisplayDate(row.date)}</time>
+              <div>
+                <h3>{row.action}</h3>
+                <p>{row.packageTitle}</p>
+              </div>
+              <span className={`ui-chip ui-chip--${stageTone(row.status)}`}>{row.status}</span>
+              {row.sourceUrl ? (
+                <a
+                  href={row.sourceUrl}
+                  className="text-source-link"
+                  aria-label={t('knowledgeHub.reformTracker.dossier.openOfficialSourceAria', {
+                    title: row.sourceTitle ?? row.packageTitle,
+                  })}
+                  {...EXTERNAL_LINK_PROPS}
+                >
+                  {t('knowledgeHub.reformTracker.archive.openSource')}
+                </a>
+              ) : null}
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p className="empty-state empty-state--compact">{t('knowledgeHub.reformTracker.upcoming.empty')}</p>
+      )}
+    </section>
+  )
+}
+
 function ReformTrackerDesk({ content }: { content: KnowledgeHubContent }) {
   const { i18n } = useTranslation()
   const language = normalizeContentLanguage(i18n.resolvedLanguage ?? i18n.language)
   const packages = useMemo(() => content.reform_packages ?? [], [content.reform_packages])
+  const [activeView, setActiveView] = useState<ReformTrackerViewId>('latestChanges')
   const [filters, setFilters] = useState<DossierFilters>({
     search: '',
     policyArea: '',
@@ -814,17 +1045,34 @@ function ReformTrackerDesk({ content }: { content: KnowledgeHubContent }) {
 
   return (
     <>
-      <LatestChangesSection packages={sortedPackages} allPackages={sortedPackages} language={language} />
-      <TrackerControlsPanel filters={filters} onFiltersChange={setFilters} packages={sortedPackages} language={language} />
-      <ReformArchive
-        packages={filteredPackages}
-        allPackages={sortedPackages}
-        content={content}
-        onClearFilters={clearFilters}
-        language={language}
-      />
-      <MetricStrip content={content} packages={packages} />
-      <SupportingInfo content={content} packages={packages} />
+      <ReformTrackerViewTabs activeView={activeView} onChange={setActiveView} />
+      {activeView === 'latestChanges' ? (
+        <LatestChangesSection
+          packages={sortedPackages}
+          allPackages={sortedPackages}
+          content={content}
+          language={language}
+        />
+      ) : null}
+      {activeView === 'register' ? (
+        <>
+          <TrackerControlsPanel filters={filters} onFiltersChange={setFilters} packages={sortedPackages} language={language} />
+          <ReformArchive
+            packages={filteredPackages}
+            allPackages={sortedPackages}
+            content={content}
+            onClearFilters={clearFilters}
+            language={language}
+          />
+          <SupportingInfo content={content} packages={packages} />
+        </>
+      ) : null}
+      {activeView === 'upcomingDates' ? (
+        <>
+          <UpcomingDatesSection packages={sortedPackages} content={content} language={language} />
+          <MetricStrip content={content} packages={packages} />
+        </>
+      ) : null}
     </>
   )
 }

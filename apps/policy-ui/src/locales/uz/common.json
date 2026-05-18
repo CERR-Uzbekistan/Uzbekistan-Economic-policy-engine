@@ -938,6 +938,12 @@
         "packages": "Islohot paketlari",
         "timeline": "Amalga oshirish jadvali"
       },
+      "views": {
+        "aria": "Islohot trekeri ko'rinishlari",
+        "latestChanges": "So'nggi o'zgarishlar",
+        "register": "Reyestr",
+        "upcomingDates": "Yaqin sanalar"
+      },
       "filters": {
         "aria": "Islohot filtrlari",
         "title": "Filtrlar",
@@ -960,6 +966,24 @@
         "aria": "Islohotlar bo'yicha so'nggi o'zgarishlar",
         "title": "So'nggi o'zgarishlar",
         "description": "Rasmiy manbalar asosidagi eng yangi o'zgarishlar xulosasi."
+      },
+      "sourceChecks": {
+        "aria": "Manba tekshiruvi xulosasi",
+        "reforms": "islohot",
+        "brokenLinks": "ishlamaydigan havola",
+        "sources": "manba"
+      },
+      "registerPreview": {
+        "aria": "Islohotlar reyestri qisqa ko'rinishi",
+        "title": "Reyestr qisqa ko'rinishi",
+        "description": "Arxivdagi so'nggi islohotlar."
+      },
+      "upcoming": {
+        "aria": "Yaqin amalga oshirish sanalari",
+        "previewAria": "Yaqin sanalar va manba tekshiruvi",
+        "title": "Yaqin sanalar",
+        "description": "Rasmiy manbalardagi kelgusi kuchga kirish sanalari, muddatlar va amalga oshirish bosqichlari.",
+        "empty": "Yaqin sana e'lon qilinmagan."
       },
       "archive": {
         "aria": "Islohotlar arxivi",

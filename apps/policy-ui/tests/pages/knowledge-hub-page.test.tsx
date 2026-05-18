@@ -108,6 +108,16 @@ describe('Knowledge Hub page', () => {
     assert.doesNotMatch(contentViewSource, /ReformCandidateList/)
   })
 
+  it('splits the Reform Tracker into latest changes, register, and upcoming dates views', () => {
+    const contentViewSource = readFileSync(KNOWLEDGE_HUB_CONTENT_VIEW_SOURCE, 'utf8')
+
+    assert.match(contentViewSource, /ReformTrackerViewId = 'latestChanges' \| 'register' \| 'upcomingDates'/)
+    assert.match(contentViewSource, /const REFORM_TRACKER_VIEWS: ReformTrackerViewId\[\] = \['latestChanges', 'register', 'upcomingDates'\]/)
+    assert.match(contentViewSource, /ReformTrackerViewTabs/)
+    assert.match(contentViewSource, /UpcomingDatesSection/)
+    assert.match(contentViewSource, /upcomingMilestoneRows/)
+  })
+
   it('keeps the public artifact package-only and source-verified', () => {
     const artifact = JSON.parse(readFileSync(PUBLIC_KNOWLEDGE_HUB_ARTIFACT, 'utf8'))
 
@@ -126,9 +136,12 @@ describe('Knowledge Hub page', () => {
 
     assert.match(contentViewSource, /LatestChangesSection/)
     assert.match(contentViewSource, /latestPackages = packages\.slice\(0, 3\)/)
-    assert.match(contentViewSource, /changeBullets\(reformPackage, t, language, 5\)/)
+    assert.match(contentViewSource, /changeBullets\(reformPackage, t, language, 6\)/)
     assert.match(contentViewSource, /className="change-bullet-list"/)
     assert.match(contentViewSource, /className="latest-change-source"/)
+    assert.match(contentViewSource, /UpcomingDatesPreview/)
+    assert.match(contentViewSource, /SourceChecksStrip/)
+    assert.match(contentViewSource, /RegisterPreviewTable/)
     assert.match(contentViewSource, /digestChangeText\(reformPackage, t, language\)/)
     assert.match(contentViewSource, /packageDigest\(reformPackage, language\)/)
     assert.doesNotMatch(contentViewSource, /latest-change-card__summary/)
@@ -144,13 +157,12 @@ describe('Knowledge Hub page', () => {
     assert.ok(sorted.length > 4)
     assert.equal(datesNewestFirst(sortedDates), true)
     assert.match(contentViewSource, /sortReformPackagesNewestFirst\(packages\)/)
-    assert.match(contentViewSource, /<LatestChangesSection packages=\{sortedPackages\}/)
+    assert.match(contentViewSource, /<LatestChangesSection[\s\S]*packages=\{sortedPackages\}/)
     assert.match(contentViewSource, /packages=\{filteredPackages\}/)
-    assert.ok(
-      contentViewSource.indexOf('<LatestChangesSection packages={sortedPackages}') <
-        contentViewSource.indexOf('<ReformArchive'),
-    )
-    assert.ok(contentViewSource.indexOf('<ReformArchive') < contentViewSource.indexOf('<MetricStrip'))
+    assert.match(contentViewSource, /activeView === 'latestChanges'/)
+    assert.match(contentViewSource, /activeView === 'register'/)
+    assert.match(contentViewSource, /activeView === 'upcomingDates'/)
+    assert.match(contentViewSource, /<RegisterPreviewTable packages=\{packages\.slice\(0, 5\)\}/)
   })
 
   it('sorts Research Updates newest to oldest before rendering', () => {
@@ -195,26 +207,19 @@ describe('Knowledge Hub page', () => {
     )
   })
 
-  it('renders the archive as source-style reform change bullets without old dossier labels', async () => {
-    const artifact = JSON.parse(readFileSync(PUBLIC_KNOWLEDGE_HUB_ARTIFACT, 'utf8'))
-    const content = knowledgeHubArtifactToContent(artifact)
-    const i18n = await createKnowledgeHubTestI18n()
-    const html = renderToStaticMarkup(
-      <I18nextProvider i18n={i18n}>
-        <KnowledgeHubContentView content={content} />
-      </I18nextProvider>,
-    )
+  it('keeps the register archive as source-style reform change bullets without old dossier labels', () => {
+    const contentViewSource = readFileSync(KNOWLEDGE_HUB_CONTENT_VIEW_SOURCE, 'utf8')
 
-    assert.match(html, /Reform changes/)
-    assert.match(html, /change-bullet-list--archive/)
-    assert.match(html, /archive-summary__preview/)
-    assert.doesNotMatch(html, /Who is affected/)
-    assert.doesNotMatch(html, /Effective date \/ status/)
-    assert.doesNotMatch(html, /New rule \/ measure/)
-    assert.doesNotMatch(html, /Amounts \/ thresholds \/ deadlines/)
+    assert.match(contentViewSource, /ReformArchive/)
+    assert.match(contentViewSource, /change-bullet-list--archive/)
+    assert.match(contentViewSource, /archive-summary__preview/)
+    assert.doesNotMatch(contentViewSource, /Who is affected/)
+    assert.doesNotMatch(contentViewSource, /Effective date \/ status/)
+    assert.doesNotMatch(contentViewSource, /New rule \/ measure/)
+    assert.doesNotMatch(contentViewSource, /Amounts \/ thresholds \/ deadlines/)
     assert.doesNotMatch(
-      html,
-      /Source event date|Evidence type|No future implementation deadline|Tracks one verified official source event|Official detail page did not expose|Tracks \d+ verified official source events?|source-backed|source verified|without inferring|dossier|measure recorded|source event recorded|Source-reported/i,
+      contentViewSource,
+      /Who is affected|New rule \/ measure|Amounts \/ thresholds \/ deadlines|Effective date \/ status/i,
     )
   })
 
@@ -369,9 +374,15 @@ describe('Knowledge Hub page', () => {
       assert.equal(typeof locale.knowledgeHub.reformTracker.filters.more, 'string')
       assert.equal(typeof locale.knowledgeHub.reformTracker.filters.status, 'string')
       assert.equal(typeof locale.knowledgeHub.reformTracker.filters.source, 'string')
+      assert.equal(typeof locale.knowledgeHub.reformTracker.views.latestChanges, 'string')
+      assert.equal(typeof locale.knowledgeHub.reformTracker.views.register, 'string')
+      assert.equal(typeof locale.knowledgeHub.reformTracker.views.upcomingDates, 'string')
       assert.equal(typeof locale.knowledgeHub.reformTracker.archive.title, 'string')
       assert.equal(typeof locale.knowledgeHub.reformTracker.archive.reformChanges, 'string')
       assert.equal(typeof locale.knowledgeHub.reformTracker.archive.modelLenses, 'string')
+      assert.equal(typeof locale.knowledgeHub.reformTracker.registerPreview.title, 'string')
+      assert.equal(typeof locale.knowledgeHub.reformTracker.upcoming.title, 'string')
+      assert.equal(typeof locale.knowledgeHub.reformTracker.sourceChecks.reforms, 'string')
       assert.equal(typeof locale.knowledgeHub.reformTracker.support.sourcesTitle, 'string')
       assert.equal(typeof locale.knowledgeHub.reformTracker.support.selectionTitle, 'string')
       assert.equal(typeof locale.knowledgeHub.researchUpdates.title, 'string')
@@ -399,7 +410,11 @@ describe('Knowledge Hub page', () => {
       header: locale.knowledgeHub.reformTracker.header,
       metrics: locale.knowledgeHub.reformTracker.metrics,
       filters: locale.knowledgeHub.reformTracker.filters,
+      views: locale.knowledgeHub.reformTracker.views,
       latestChanges: locale.knowledgeHub.reformTracker.latestChanges,
+      registerPreview: locale.knowledgeHub.reformTracker.registerPreview,
+      upcoming: locale.knowledgeHub.reformTracker.upcoming,
+      sourceChecks: locale.knowledgeHub.reformTracker.sourceChecks,
       archive: locale.knowledgeHub.reformTracker.archive,
       support: locale.knowledgeHub.reformTracker.support,
       researchUpdates: locale.knowledgeHub.researchUpdates,

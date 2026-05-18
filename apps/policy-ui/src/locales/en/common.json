@@ -938,6 +938,12 @@
         "packages": "Reform Packages",
         "timeline": "Implementation Timeline"
       },
+      "views": {
+        "aria": "Reform tracker views",
+        "latestChanges": "Latest Changes",
+        "register": "Register",
+        "upcomingDates": "Upcoming Dates"
+      },
       "filters": {
         "aria": "Reform filters",
         "title": "Filters",
@@ -960,6 +966,24 @@
         "aria": "Latest reform changes",
         "title": "Latest changes",
         "description": "Short summary of the newest official changes."
+      },
+      "sourceChecks": {
+        "aria": "Source check summary",
+        "reforms": "reforms",
+        "brokenLinks": "broken links",
+        "sources": "sources"
+      },
+      "registerPreview": {
+        "aria": "Reform register preview",
+        "title": "Register preview",
+        "description": "Recent reforms in the archive."
+      },
+      "upcoming": {
+        "aria": "Upcoming implementation dates",
+        "previewAria": "Upcoming dates and source checks",
+        "title": "Upcoming dates",
+        "description": "Future effective dates, deadlines, and implementation steps found in official sources.",
+        "empty": "No upcoming date has been published."
       },
       "archive": {
         "aria": "Reform archive",
