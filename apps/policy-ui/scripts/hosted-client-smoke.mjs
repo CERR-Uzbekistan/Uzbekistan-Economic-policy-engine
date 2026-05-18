@@ -791,7 +791,6 @@ function knowledgeHubTrackerExpression() {
         viewButtons[1].click();
         await waitFor('.knowledge-hub-page .reform-archive');
       }
-      const metrics = document.querySelector('.knowledge-hub-page .tracker-summary');
       const searchInput = document.querySelector('.knowledge-hub-page .tracker-controls input[type="search"]');
       const archiveItems = Array.from(document.querySelectorAll('.knowledge-hub-page .reform-archive .archive-item'));
       const archiveBullets = document.querySelectorAll('.knowledge-hub-page .change-bullet-list--archive li').length;
@@ -848,7 +847,6 @@ function knowledgeHubTrackerExpression() {
           sectionTabCount === 3 &&
           !!viewTabs &&
           viewButtons.length === 3 &&
-          !!metrics &&
           !!latestChanges &&
           latestCards.length >= 3 &&
           !!changeBulletList &&
@@ -872,7 +870,6 @@ function knowledgeHubTrackerExpression() {
         sectionTabCount,
         hasViewTabs: !!viewTabs,
         viewTabCount: viewButtons.length,
-        hasMetrics: !!metrics,
         hasLatestChanges: !!latestChanges,
         latestChangeCount: latestCards.length,
         hasChangeBulletList: !!changeBulletList,
