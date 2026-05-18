@@ -245,7 +245,7 @@ describe('Knowledge Hub change summary', () => {
 
     assert.match(visibleCopy, /From 2026-07-01, medical licensing procedures change/)
     assert.match(visibleCopy, /Platform screen doors will be tested at Shahriston metro station/)
-    assert.match(visibleCopy, /Cotton and grain producer financial-support rules are amended/)
+    assert.match(visibleCopy, /Agricultural Payments Agency is established to administer subsidies and payments/)
     assert.ok(
       artifact.reform_packages.every(
         (reformPackage) => (reformPackage.short_summary ?? '').split(/(?<=[.!?])\s+/).filter(Boolean).length <= 1,

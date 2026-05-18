@@ -235,7 +235,7 @@ describe('knowledge hub adapter', () => {
     assert.ok(
       content.reform_packages?.some(
         (reformPackage) =>
-          reformPackage.package_id === 'pkg-tax-administration-incentives-2026-05-12' &&
+          reformPackage.package_id === 'pkg-tax-administration-incentives-2026-04-14' &&
           reformPackage.next_milestone === 'No future milestone published in verified source' &&
           reformPackage.financing_or_incentive === 'Tax incentives for investors financing infrastructure projects' &&
           reformPackage.implementation_milestones.some((milestone) => milestone.id === 'tax-administration-incentives-financing_allocated-2026-04-14'),

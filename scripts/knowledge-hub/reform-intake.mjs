@@ -752,7 +752,8 @@ function agricultureSubsidyPackageFromSourceEvent(sourceEvent) {
     ],
     legal_basis: 'Official presidential presentation coverage citing the decree on improving state support for agriculture and the Agricultural Payments Agency.',
     official_basis: `${sourceEvent.source_institution}, ${sourceEvent.source_published_at}.`,
-    financing_or_incentive: '34.2 trillion soums planned for cotton and grain harvest financing; 1.3 trillion soums of 2026 subsidies to be provided proactively; additional 5 trillion soums proposed for agrotechnical measures.',
+    financing_or_incentive:
+      'Agricultural Payments Agency, Agroportal, and Agrosubsidy become the delivery channel for producer support; 2026 subsidies move to proactive delivery.',
     ...AGRICULTURE_SUBSIDY_PACKAGE_DEPTH,
     source_confidence: 'high',
     why_tracked: 'The official source identifies a new agriculture support delivery system, quantified subsidy and financing envelopes, the Agricultural Payments Agency, and digitalized subsidy procedures through Agroportal and Agrosubsidy.',
@@ -778,7 +779,7 @@ function agricultureSubsidyPackageFromSourceEvent(sourceEvent) {
       },
       {
         id: 'agriculture-financing-envelope-2026',
-        label: '34.2 trillion soums cotton and grain harvest financing plan',
+        label: 'cotton and grain financing support moves into the 2026 support plan',
         date: '2026',
         date_precision: 'year',
         event_type: 'financing_allocated',
@@ -1685,7 +1686,7 @@ function sourceSummarySentences(text, title = '') {
   const introNoise =
     /^(?:Президент\s+Шавкат|Шавкат\s+Мирзиёев|Президенту|The President|The Head of State|Давлат раҳбари|Президент).{0,180}(?:ознаком|представ|презентац|briefed|presented|presentation|таниш)/iu
   const measureSignal =
-    /\d{4}|(?:from|by|until|will|planned|approved|adopted|introduced|launched|transferred|created|reduced|increased|будет|утвержд|принят|внедр|переда|созда|сокращ|ошир|режалаштир|тасдиқ|жорий|бошлаб|гача|йил|года|фоиз|сўм|сум|млрд|трлн|percent|soums?)/i
+    /\d{4}|(?:from|by|until|will|planned|approved|adopted|introduced|launched|transferred|created|reduced|increased|будет|утвержд|принят|внедр|переда|созда|сокращ|ошир|режалаштир|тасдиқ|жорий|ташкил|таклиф|соддалаштир|рақамлаштир|механизм|проактив|агросубсид|агропортал|бошлаб|гача|йил|года|фоиз|сўм|сум|млрд|трлн|percent|soums?)/i
 
   return normalizeWhitespace(text)
     .split(/(?<=[.!?])\s+|(?<=[.;])\s+(?=[A-ZА-ЯЁЎҚҒҲ0-9"“«])/u)
@@ -1710,7 +1711,7 @@ function sourceInitiativeScore(sentence) {
   let score = 0
 
   if (
-    /(?:предложено|планируется|будут|будет|будут приняты|намечено|запланировано|предлагается|поставлена задача|создан|создаётся|утвержд|внедр|изменит|изменится|меняется|вносятся|изменени|жорий|taklif|rejalashtir|o[‘'ʻ`]?zgar|joriy et|ташкил этил|белгилан|from|will|planned|proposed|introduced|launched|created|approved|adopted|to be)/iu.test(
+    /(?:предложено|планируется|будут|будет|будут приняты|намечено|запланировано|предлагается|поставлена задача|создан|создаётся|утвержд|внедр|изменит|изменится|меняется|вносятся|изменени|жорий|taklif|таклиф|rejalashtir|режалаштир|o[‘'ʻ`]?zgar|ўзгар|joriy et|жорий эт|ташкил этил|белгилан|соддалаштир|рақамлаштир|from|will|planned|proposed|introduced|launched|created|approved|adopted|to be)/iu.test(
       text,
     )
   ) {
@@ -1718,7 +1719,7 @@ function sourceInitiativeScore(sentence) {
   }
 
   if (
-    /(?:механизм|модель|система|агентств|платформ|единая ис|рейтинг|возмещ|компенсац|льгот|лицензирован|аккредитац|имтиёз|агентлиги|тизим|механизм|модель|кредит|субсид|private sector|single window|agency|platform|mechanism|model|rating|compensation|reimbursement|preferential|subsidy|credit)/iu.test(
+    /(?:механизм|модель|система|агентств|платформ|единая ис|рейтинг|возмещ|компенсац|льгот|лицензирован|аккредитац|имтиёз|агентлиги|тизим|механизм|модель|кредит|субсид|аризач|проактив|агропортал|агросубсид|дала кундалиги|private sector|single window|agency|platform|mechanism|model|rating|compensation|reimbursement|preferential|subsidy|credit)/iu.test(
       text,
     )
   ) {
@@ -1726,7 +1727,7 @@ function sourceInitiativeScore(sentence) {
   }
 
   if (
-    /(?:как отмечалось|кроме того, в сферу направлено|было выделено|было направлено|направлено\s+[\d,.\s]+(?:триллион|миллиард|млрд|трлн)|выделение субсидий.*позволило|благодаря чему|сэкономлено|досрочно погасили|согласно изучениям|каждый доллар.*строительств|унифицировано\s+\d+.*(?:норм|правил)|отменены старые и утверждены|as noted|was allocated|were allocated|has been allocated|thanks to this|saved|enabled them to)/iu.test(
+    /(?:как отмечалось|кроме того, в сферу направлено|было выделено|было направлено|направлено\s+[\d,.\s]+(?:триллион|миллиард|млрд|трлн)|выделение субсидий.*позволило|благодаря чему|сэкономлено|досрочно погасили|согласно изучениям|каждый доллар.*строительств|унифицировано\s+\d+.*(?:норм|правил)|отменены старые и утверждены|тақдимот аввалида|тақдимот билан танишди|тақдимотда|кўриб чиқилди|ҳозирда|ахборот берилди|қайд этилганидек|қайд этилди|ажратилди|йўналтирилди|ажратилиши натижасида|натижасида.*тежалди|муддатидан олдин|мавжудлиги|кўрсатиб ўтилди|талаб қилади|чегаралангани|деди давлатимиз раҳбари|халқаро тажрибага кўра|as noted|was allocated|were allocated|has been allocated|thanks to this|saved|enabled them to)/iu.test(
       text,
     )
   ) {
@@ -1742,7 +1743,7 @@ function sourceInitiativeScore(sentence) {
   }
 
   if (
-    /(?:будет способствовать|будет повышать|способствуют.*(?:доход|увеличен)|улучшение качества регулирования|упрощение взаимодействия|президент.*отметил|глава государства дал.*поручени|глава нашего государства отметил|было отмечено|как отмечено|отмечено, что|указано, что|подчеркивалось, что|в стране созданы широкие возможности|контролирующие органы ограничивались|она охватит задачи|наряду с этим подчеркнуто|подвергнут\w*\s+критик|will contribute to|will increase productivity|increase revenue|the president noted|it was noted)/iu.test(
+    /(?:будет способствовать|будет повышать|способствуют.*(?:доход|увеличен)|улучшение качества регулирования|упрощение взаимодействия|президент.*отметил|глава государства дал.*поручени|глава нашего государства отметил|было отмечено|как отмечено|отмечено, что|указано, что|подчеркивалось, что|в стране созданы широкие возможности|контролирующие органы ограничивались|она охватит задачи|наряду с этим подчеркнуто|подвергнут\w*\s+критик|маълум қилинди|таъкидланди|қайта қайд этилди|деди давлатимиз раҳбари|will contribute to|will increase productivity|increase revenue|the president noted|it was noted)/iu.test(
       text,
     )
   ) {
@@ -1750,8 +1751,8 @@ function sourceInitiativeScore(sentence) {
   }
 
   if (
-    /(?:в общей сложности|общей сложности|totaling|in total|total amount)/iu.test(text) &&
-    !/(?:предложено|предлагается|will|proposed|модель|mechanism|agency|агентств|система)/iu.test(text)
+    /(?:в общей сложности|общей сложности|жами\s+[\d,.\s]+(?:триллион|миллиард|млрд|трлн|сўм|сум)|totaling|in total|total amount)/iu.test(text) &&
+    !/(?:предложено|предлагается|will|proposed|модель|mechanism|agency|агентств|система|таклиф|механизм|агентлиги|тизим)/iu.test(text)
   ) {
     score -= 6
   }
@@ -1789,7 +1790,7 @@ function isSourceBoilerplateSnippet(value) {
 }
 
 function isContextOnlySnippet(value) {
-  return /(?:согласно изучениям|каждый доллар.*строительств|она охватит задачи|наряду с этим подчеркнуто|подвергнут\w*\s+критик|как отмечалось|кроме того, в сферу направлено|было выделено|было направлено|выделение субсидий.*позволило|благодаря чему|сэкономлено|досрочно погасили|в общей сложности|унифицировано\s+\d+.*(?:норм|правил)|отменены старые и утверждены|глава государства дал.*поручени|глава нашего государства отметил|было отмечено|как отмечено|отмечено, что|указано, что|подчеркивалось, что|as noted|was allocated|were allocated|thanks to this|saved|as a result)/iu.test(
+  return /(?:согласно изучениям|каждый доллар.*строительств|она охватит задачи|наряду с этим подчеркнуто|подвергнут\w*\s+критик|как отмечалось|кроме того, в сферу направлено|было выделено|было направлено|выделение субсидий.*позволило|благодаря чему|сэкономлено|досрочно погасили|в общей сложности|унифицировано\s+\d+.*(?:норм|правил)|отменены старые и утверждены|глава государства дал.*поручени|глава нашего государства отметил|было отмечено|как отмечено|отмечено, что|указано, что|подчеркивалось, что|тақдимот аввалида|тақдимот билан танишди|тақдимотда|кўриб чиқилди|ҳозирда|ахборот берилди|қайд этилганидек|қайд этилди|ажратилди|йўналтирилди|ажратилиши натижасида|натижасида.*тежалди|муддатидан олдин|маълум қилинди|таъкидланди|мавжудлиги|кўрсатиб ўтилди|талаб қилади|чегаралангани|деди давлатимиз раҳбари|халқаро тажрибага кўра|as noted|was allocated|were allocated|thanks to this|saved|as a result)/iu.test(
     normalizeWhitespace(value),
   )
 }
@@ -3071,14 +3072,18 @@ function topicPackageEnrichment(topic, sortedCandidates, sourceEvents) {
     },
     'agriculture-subsidy-financing': {
       short_summary:
-        'Cotton and grain producer financing support rules are amended.',
+        'Agriculture support moves toward agency-administered, digital, and proactive subsidy delivery.',
       parameters_or_amounts: [
-        'Cotton and grain producer financial-support rules are amended.',
-        'Agriculture financing and subsidy delivery procedures are updated.',
+        'Agricultural Payments Agency is set up to administer subsidy and payment workflows.',
+        'Agrosubsidy and Agroportal become the main channels for proactive and digital subsidy delivery.',
+        'A “discipline-cheaper credit” model links lower interest rates to producer credit ratings.',
+        'An additional 5 trillion soums is proposed for agrotechnical measures, including film and hose costs.',
       ],
       policy_channels: ['Agricultural producer finance', 'Subsidy delivery', 'Rural liquidity'],
       model_relevance: ['Agricultural output', 'Food prices', 'Rural income'],
-      measure_label: 'Cotton and grain producer financial support rules were amended',
+      financing_or_incentive:
+        'Agricultural Payments Agency, Agroportal, and Agrosubsidy become the delivery channel for producer support.',
+      measure_label: 'Agriculture subsidy delivery moves to agency-administered digital channels',
     },
     'food-safety-veterinary-agrologistics': {
       short_summary:
@@ -3444,8 +3449,7 @@ function packageStageDate(reformPackage) {
 function shouldPreferPreviousPackage(previousPackage, currentPackage) {
   const previousDate = packageStageDate(previousPackage)
   const currentDate = packageStageDate(currentPackage)
-  if (previousDate !== currentDate) return previousDate > currentDate
-  return (previousPackage.official_source_events?.length ?? 0) > (currentPackage.official_source_events?.length ?? 0)
+  return !currentDate && Boolean(previousDate)
 }
 
 function mergePublicPackageRecords(primaryPackage, secondaryPackage) {
@@ -3458,11 +3462,14 @@ function mergePublicPackageRecords(primaryPackage, secondaryPackage) {
     ...(primaryPackage.implementation_milestones ?? []),
   ])
   const latestEvent = officialSourceEvents.at(-1)
-  const latestMilestone = implementationMilestones.at(-1)
+  const latestStageDate = [packageStageDate(primaryPackage), latestEvent?.source_published_at]
+    .filter(Boolean)
+    .sort()
+    .at(-1)
 
   return {
     ...primaryPackage,
-    current_stage_date: packageStageDate(primaryPackage) || latestEvent?.source_published_at || latestMilestone?.date,
+    current_stage_date: latestStageDate,
     official_source_events: officialSourceEvents,
     implementation_milestones: implementationMilestones,
   }
