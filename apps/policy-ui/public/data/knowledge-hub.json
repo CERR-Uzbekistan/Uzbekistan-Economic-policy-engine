@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-05-17T06:01:40.660Z",
+  "generated_at": "2026-05-18T09:00:00.000Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -307,7 +307,7 @@
       "candidate_count": 11,
       "excluded_count": 1,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-17T06:01:40.660Z"
+      "fetched_at": "2026-05-18T09:00:00.000Z"
     },
     {
       "id": "president-reform-news",
@@ -316,10 +316,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 3,
-      "excluded_count": 9,
+      "candidate_count": 0,
+      "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-17T06:01:40.660Z"
+      "fetched_at": "2026-05-18T09:00:00.000Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-17T06:01:40.660Z"
+      "fetched_at": "2026-05-18T09:00:00.000Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-17T06:01:40.660Z"
+      "fetched_at": "2026-05-18T09:00:00.000Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-17T06:01:40.660Z"
+      "fetched_at": "2026-05-18T09:00:00.000Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-17T06:01:40.660Z"
+      "fetched_at": "2026-05-18T09:00:00.000Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 347,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-17T06:01:40.660Z"
+      "fetched_at": "2026-05-18T09:00:00.000Z"
     },
     {
       "id": "customs-committee-news",
@@ -391,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-17T06:01:40.660Z"
+      "fetched_at": "2026-05-18T09:00:00.000Z"
     },
     {
       "id": "mef-policy-news",
@@ -403,7 +403,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-17T06:01:40.660Z"
+      "fetched_at": "2026-05-18T09:00:00.000Z"
     },
     {
       "id": "tax-committee-news",
@@ -415,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-17T06:01:40.660Z"
+      "fetched_at": "2026-05-18T09:00:00.000Z"
     },
     {
       "id": "energy-ministry-news",
@@ -427,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-17T06:01:40.660Z"
+      "fetched_at": "2026-05-18T09:00:00.000Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -439,7 +439,7 @@
       "candidate_count": 1,
       "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-17T06:01:40.660Z"
+      "fetched_at": "2026-05-18T09:00:00.000Z"
     },
     {
       "id": "justice-ministry-news",
@@ -451,7 +451,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-17T06:01:40.660Z"
+      "fetched_at": "2026-05-18T09:00:00.000Z"
     }
   ],
   "reform_packages": [
@@ -551,7 +551,7 @@
           "source_published_at": "2026-05-12",
           "evidence_type": "official_policy_announcement",
           "event_type": "instructions_issued",
-          "summary": "Official web-site of the President of Uzbekistan Official pages in social networks President of the Republic of Uzbekistan Measures to reduce bureaucracy in public service delivery reviewed President Shavkat Mirziyoyev was briefed on measures to reduce bureaucracy in public service delivery. In recent years, the country has carried out extensive work to improve the convenience, speed, and transparency of public services for the population and businesses. The coverage of public services has increased tenfold, exceeding 61 million, with 80 percent of services provided online. In 2023 alone, more than 2,000 mandatory requirements in the field of entrepreneurial activity were abolished. However,",
+          "summary": "Measures to reduce bureaucracy in public service delivery reviewed",
           "source_url_status": "verified",
           "extracted_at": "2026-05-15T09:00:00.000Z",
           "localized": {
@@ -584,7 +584,7 @@
           "source_published_at": "2026-05-14",
           "evidence_type": "official_policy_announcement",
           "event_type": "instructions_issued",
-          "summary": "Official web-site of the President of Uzbekistan Official pages in social networks President of the Republic of Uzbekistan President of Uzbekistan to pay working visit to Kazakhstan At the invitation of President of the Republic of Kazakhstan Kassym-Jomart Tokayev, President of the Republic of Uzbekistan Shavkat Mirziyoyev will pay a working visit to Kazakhstan on May 15. The Head of State will take part in the informal summit of the Organization of Turkic States, to be held in Turkestan under the theme “Artificial Intelligence and Digital Development.” At the summit, the participants will discuss the further expansion of multilateral cooperation, particularly in the trade and economic, inve",
+          "summary": "President of Uzbekistan to pay working visit to Kazakhstan",
           "source_url_status": "verified",
           "extracted_at": "2026-05-17T06:01:40.660Z",
           "localized": {
@@ -718,7 +718,7 @@
           "source_published_at": "2026-05-13",
           "evidence_type": "official_policy_announcement",
           "event_type": "instructions_issued",
-          "summary": "Official web-site of the President of Uzbekistan Official pages in social networks President of the Republic of Uzbekistan Proposals to improve efficiency of Tashkent Metro reviewed President Shavkat Mirziyoyev was briefed on proposals to ensure high-quality and safe passenger services, as well as increase the efficiency of infrastructure use in the Tashkent Metro. The growth in the population and the number of visitors to the capital, the expansion of the city, and increasing demand for public transport require taking metro development to a new level. In this regard, targets have been set to increase daily metro passenger traffic to 1.8 million people, expand the number of stations to 79, a",
+          "summary": "Proposals to improve efficiency of Tashkent Metro reviewed",
           "source_url_status": "verified",
           "extracted_at": "2026-05-15T09:00:00.000Z",
           "localized": {
@@ -767,7 +767,6 @@
             "Планируется передавать частному сектору в аренду через аукцион цифровые рекламные площади в вагонах и на платформах, разместить на станциях вендинговые аппараты и небольшие торговые объекты, а также организовать автостоянки рядом со станциями метро.",
             "Чтобы обеспечить удобную пересадку с автомобильного транспорта на систему метро предложено внедрить систему «Park&Ride».",
             "В связи с этим будет выделен необходимый участок для строительства электродепо для нового подвижного состава.",
-            "Она охватит задачи по двукратному расширению сети метрополитена, увеличению объема пассажирских перевозок в 2,5 раза, созданию экологически устойчивой, энергоэффективной и безопасной транспортной системы, а также дальнейшему повышению качества обслуживания и уровня комфорта для пассажиров.",
             "С учетом международного опыта будут изучены возможности внедрения систем оплаты в зависимости от расстояния, предоставления льгот для отдельных категорий населения, а также дневных, недельных и месячных абонементов."
           ],
           "uz": [
@@ -908,9 +907,9 @@
           "source_published_at": "2025-12-09",
           "evidence_type": "official_policy_announcement",
           "event_type": "financing_allocated",
-          "summary": "2025-12-09 17:05:00 / Presentations President Shavkat Mirziyoyev reviewed a presentation on the effective organization of financing for cotton and grain cultivation, as well as a new subsidy system for the agriculture complex. The presentation began with an overview of the funds allocated to the sector this year and their effectiveness. It was noted that 29 trillion soums were allocated for financing cotton and grain cultivation, purchasing agricultural machinery, and implementing water-saving technologies. Furthermore, 2,35 trillion soums in subsidies were directed to the sector. Allocating subsidies equivalent to 10 percent of the cotton value to 3,430 farms and clusters enabled them to cu",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, parameter_change, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
           "source_url_status": "verified",
-          "extracted_at": "2026-05-17T06:01:40.660Z",
+          "extracted_at": "2026-05-18T09:00:00.000Z",
           "localized": {
             "title": {
               "en": "Financing and subsidy plans for the agricultural sector reviewed",
@@ -941,16 +940,12 @@
           "source_published_at": "2026-05-12",
           "evidence_type": "official_policy_announcement",
           "event_type": "amended",
-          "summary": "Oʻzbekiston Respublikasi Prezidentining Farmoni, 08.05.2026 yildagi PF-82-son Qo‘shimcha axborot Asosiy rekvizitlar Qayta ko‘rib chiqish tarixi Ulashish Telegram Facebook Twitter Instagram",
+          "summary": "PF-82 12.05.2026 Paxta va bug‘doy yetishtiruvchilarni moliyaviy qo‘llab-quvvatlashning qo‘shimcha chora-tadbirlari to‘g‘risida",
           "source_url_status": "verified",
           "extracted_at": "2026-05-15T09:00:00.000Z",
           "localized": {
             "title": {
-              "ru": "PF-82-сон 08.05.2026. Paxta va bugʻdoy yetishtiruvchilarni moliyaviy qoʻllab-quvvatlashning qoʻshimcha chora-tadbirlari toʻgʻrisida",
               "uz": "PF-82 12.05.2026 Paxta va bug‘doy yetishtiruvchilarni moliyaviy qo‘llab-quvvatlashning qo‘shimcha chora-tadbirlari to‘g‘risida"
-            },
-            "summary": {
-              "ru": "MIRZIYOYEV Oʻzbekiston Respublikasi Prezidentining 2026-yil 8-maydagi PF-82-son Farmoniga ILOVA Oʻzbekiston Respublikasi Prezidentining ayrim hujjatlariga kiritilayotgan oʻzgartirishlar 1."
             },
             "source_url": {
               "ru": "https://lex.uz/ru/docs/-8187068",
@@ -1074,16 +1069,12 @@
           "source_published_at": "2026-05-12",
           "evidence_type": "official_policy_announcement",
           "event_type": "implementation_milestone",
-          "summary": "Oʻzbekiston Respublikasi Prezidentining Farmoni, 08.05.2026 yildagi PF-83-son Qo‘shimcha axborot Asosiy rekvizitlar Qayta ko‘rib chiqish tarixi Ulashish Telegram Facebook Twitter Instagram",
+          "summary": "PF-83 12.05.2026 Lalmi va yaylov yer uchastkalarini foydalanishga kiritishni rag‘batlantirishning yangi mexanizmlarini joriy etish chora-tadbirlari to‘g‘risida",
           "source_url_status": "verified",
           "extracted_at": "2026-05-15T09:00:00.000Z",
           "localized": {
             "title": {
-              "ru": "PF-83-сон 08.05.2026. Lalmi va yaylov yer uchastkalarini foydalanishga kiritishni ragʻbatlantirishning yangi mexanizmlarini joriy etish chora-tadbirlari toʻgʻrisida",
               "uz": "PF-83 12.05.2026 Lalmi va yaylov yer uchastkalarini foydalanishga kiritishni rag‘batlantirishning yangi mexanizmlarini joriy etish chora-tadbirlari to‘g‘risida"
-            },
-            "summary": {
-              "ru": "Kosmik tadqiqotlar va texnologiyalar agentligi Oʻzbekiston Respublikasi Prezidentining 2026-yil 8-maydagi PF-83-son Farmoniga 8-ILOVA Oʻzbekiston Respublikasi Prezidentining ayrim farmonlariga kiritilayotgan oʻzgartirish va qoʻshimchalar 1."
             },
             "source_url": {
               "ru": "https://lex.uz/ru/docs/-8187225",
@@ -1105,22 +1096,9 @@
       },
       "localized": {
         "title": {
-          "ru": "PF-83-сон 08.05.2026. Lalmi va yaylov yer uchastkalarini foydalanishga kiritishni ragʻbatlantirishning yangi mexanizmlarini joriy etish chora-tadbirlari toʻgʻrisida",
           "uz": "PF-83 12.05.2026 Lalmi va yaylov yer uchastkalarini foydalanishga kiritishni rag‘batlantirishning yangi mexanizmlarini joriy etish chora-tadbirlari to‘g‘risida"
         },
-        "short_summary": {
-          "ru": "Kosmik tadqiqotlar va texnologiyalar agentligi Oʻzbekiston Respublikasi Prezidentining 2026-yil 8-maydagi PF-83-son Farmoniga 8-ILOVA Oʻzbekiston Respublikasi Prezidentining ayrim farmonlariga kiritilayotgan oʻzgartirish va qoʻshimchalar 1."
-        },
-        "parameters_or_amounts": {
-          "ru": [
-            "Kosmik tadqiqotlar va texnologiyalar agentligi Oʻzbekiston Respublikasi Prezidentining 2026-yil 8-maydagi PF-83-son Farmoniga 8-ILOVA Oʻzbekiston Respublikasi Prezidentining ayrim farmonlariga kiritilayotgan oʻzgartirish va qoʻshimchalar 1."
-          ]
-        },
         "digest": {
-          "ru": {
-            "changed": "Kosmik tadqiqotlar va texnologiyalar agentligi Oʻzbekiston Respublikasi Prezidentining 2026-yil 8-maydagi PF-83-son Farmoniga 8-ILOVA Oʻzbekiston Respublikasi Prezidentining ayrim farmonlariga kiritilayotgan oʻzgartirish va qoʻshimchalar 1.",
-            "document": "PF-83-сон 08.05.2026. Lalmi va yaylov yer uchastkalarini foydalanishga kiritishni ragʻbatlantirishning yangi mexanizmlarini joriy etish chora-tadbirlari toʻgʻrisida"
-          },
           "uz": {
             "document": "PF-83 12.05.2026 Lalmi va yaylov yer uchastkalarini foydalanishga kiritishni rag‘batlantirishning yangi mexanizmlarini joriy etish chora-tadbirlari to‘g‘risida"
           }
@@ -1195,7 +1173,7 @@
           "source_published_at": "2026-05-12",
           "evidence_type": "official_policy_announcement",
           "event_type": "instructions_issued",
-          "summary": "Official web-site of the President of Uzbekistan Official pages in social networks President of the Republic of Uzbekistan Priority tasks identified for food security and livestock development President Shavkat Mirziyoyev chaired a meeting on measures to improve state administration in the areas of food safety and support for livestock farming. Uzbekistan has created broad opportunities for maintaining a stable food supply, as well as for cultivating, storing, processing, and exporting agricultural products. The country&rsquo;s 4 million hectares of cultivated land, storage facilities with a capacity of 1.5 million tons, and processing capacities of 3.5 million tons enable the supply of affo",
+          "summary": "Priority tasks identified for food security and livestock development",
           "source_url_status": "verified",
           "extracted_at": "2026-05-15T09:00:00.000Z",
           "localized": {
@@ -1205,7 +1183,6 @@
               "uz": "Озиқ-овқат хавфсизлиги ва чорвачилик соҳасини ривожлантириш бўйича устувор вазифалар белгиланди"
             },
             "summary": {
-              "en": "Uzbekistan has created broad opportunities for maintaining a stable food supply, as well as for cultivating, storing, processing, and exporting agricultural products.",
               "ru": "Так, будет создан Комитет по безопасности пищевой продукции, который охватит все надзорные процессы на основе принципа «от поля до стола». Он будет сформирован на базе Агентства по карантину и защите растений, Комитета по развитию ветеринарии и ответственного за безопасность пищевой продукции направления Комитета санитарно-эпидемиологического благополучия.",
               "uz": "Ўсимликлар карантини агентлигида 100 та, Ветеринария қўмитасида 115 та, санитария-эпидемиология тизимида 44 та вазифа ва функция мавжудлиги, шу билан бирга, маҳсулотни “етиштиришдан истеъмолчигача” кузатиб бориш тизими тўлиқ йўлга қўйилмагани кўрсатиб ўтилди. Бу халқаро бозорларда рақобатбардошликни ошириш учун маҳсулот хавфсизлигини назорат қилиш тизимини тубдан ўзгартиришни талаб қилади."
             },
@@ -1361,7 +1338,7 @@
           "event_type": "financing_allocated",
           "summary": "Official detail page did not expose a separate summary in the configured extraction block.",
           "source_url_status": "verified",
-          "extracted_at": "2026-05-17T06:01:40.660Z",
+          "extracted_at": "2026-05-18T09:00:00.000Z",
           "localized": {
             "title": {
               "en": "Uzbekistan Expands Tax Incentives for Investors Financing Infrastructure Projects",
@@ -1388,7 +1365,7 @@
           "source_published_at": "2026-05-12",
           "evidence_type": "official_policy_announcement",
           "event_type": "financing_allocated",
-          "summary": "2026-05-12 22:35:00 / News of ministry On the implementation of priority digitalization projects: 4 priority projects aimed at digitalizing the relevant functions and tasks of the Ministry of Economy and Finance were implemented . Specifically: 1) The \"Subsidiya.idm.uz\" information system To ensure the implementation of Resolution No. 49 of the Cabinet of Ministers of the Republic of Uzbekistan, dated February 19, 2026, \"On Additional Measures for the Social Support of Educators with the Highest Qualification Category (Senior Teacher Position),\" a procedure was introduced for allocating subsidies from the State Budget to cover 25 percent of the initial payment for refinanced mortgage loans. ",
+          "summary": "Information on work completed during the 1st quarter of 2026 on the development of information systems and artificial intelligence technologies",
           "source_url_status": "verified",
           "extracted_at": "2026-05-15T09:00:00.000Z",
           "localized": {
@@ -1508,12 +1485,11 @@
           "source_published_at": "2026-05-08",
           "evidence_type": "official_policy_announcement",
           "event_type": "amended",
-          "summary": "Oʻzbekiston Respublikasi Markaziy banki boshqaruvi, Oʻzbekiston Respublikasi bosh prokuraturasi huzuridagi iqtisodiy jinoyatlarga qarshi kurashish departamentining qarori, 08.05.2026 yilda ro‘yxatdan o‘tgan, ro‘yxat raqami 2886-12 Qo‘shimcha axborot Asosiy rekvizitlar Qayta ko‘rib chiqish tarixi Ulashish Telegram Facebook Twitter Instagram",
+          "summary": "2886-12 08.05.2026 Tijorat banklarida jinoiy faoliyatdan olingan daromadlarni legallashtirishga, terrorizmni moliyalashtirishga va ommaviy qirgʻin qurolini tarqatishni moliyalashtirishga qarshi kurashish boʻyicha ichki nazorat qoidalariga qoʻshimcha va oʻzgartirishlar kiritish haqida",
           "source_url_status": "verified",
           "extracted_at": "2026-05-15T09:00:00.000Z",
           "localized": {
             "title": {
-              "ru": "2886-12-сон 08.05.2026. Tijorat banklarida jinoiy faoliyatdan olingan daromadlarni legallashtirishga, terrorizmni moliyalashtirishga va ommaviy qirgʻin qurolini tarqatishni moliyalashtirishga qarshi kurashish boʻyicha ichki nazorat qoidalariga qoʻshimcha va oʻzgartirishlar kiritish haqida",
               "uz": "2886-12 08.05.2026 Tijorat banklarida jinoiy faoliyatdan olingan daromadlarni legallashtirishga, terrorizmni moliyalashtirishga va ommaviy qirgʻin qurolini tarqatishni moliyalashtirishga qarshi kurashish boʻyicha ichki nazorat qoidalariga qoʻshimcha va oʻzgartirishlar kiritish haqida"
             },
             "source_url": {
@@ -1534,12 +1510,11 @@
           "source_published_at": "2026-05-08",
           "evidence_type": "official_policy_announcement",
           "event_type": "amended",
-          "summary": "Oʻzbekiston Respublikasi Markaziy banki boshqaruvi, Oʻzbekiston Respublikasi Bosh prokuraturasi huzuridagi iqtisodiy jinoyatlarga qarshi kurashish departamentining qarori, 08.05.2026 yilda ro‘yxatdan o‘tgan, ro‘yxat raqami 2925-10 Qo‘shimcha axborot Asosiy rekvizitlar Kodifikatsiya Qayta ko‘rib chiqilgan hujjatlar Hujjatni qayta ko‘rib chiqishga asos bo‘lgan hujjatlar Korrespondentlar Respondentlar Ulashish Telegram Facebook Twitter Instagram [ OKOZ: 1. 21.00.00.00 Oʻzgartirish va qoʻshimchalar kiritish boʻyicha kompleks tusdagi hujjatlar / 21.04.00.00 Idoraviy normativ-huquqiy hujjatlar] [ TSZ: 1. Davlat va jamiyat qurilishi / Qonunchilik tashabbusi. Norma ijodkorligi faoliyati] Hujjatga ta",
+          "summary": "2925-10-сон 08.05.2026. Nobank kredit tashkilotlarida jinoiy faoliyatdan olingan daromadlarni legallashtirishga, terrorizmni moliyalashtirishga va ommaviy qirgʻin qurolini tarqatishni moliyalashtirishga qarshi kurashish boʻyicha ichki nazorat qoidalariga qoʻshimcha va oʻzgartirishlar kiritish haqida",
           "source_url_status": "verified",
           "extracted_at": "2026-05-16T09:00:00.000Z",
           "localized": {
             "title": {
-              "ru": "2925-10-сон 08.05.2026. Nobank kredit tashkilotlarida jinoiy faoliyatdan olingan daromadlarni legallashtirishga, terrorizmni moliyalashtirishga va ommaviy qirgʻin qurolini tarqatishni moliyalashtirishga qarshi kurashish boʻyicha ichki nazorat qoidalariga qoʻshimcha va oʻzgartirishlar kiritish haqida",
               "uz": "2925-10-сон 08.05.2026. Nobank kredit tashkilotlarida jinoiy faoliyatdan olingan daromadlarni legallashtirishga, terrorizmni moliyalashtirishga va ommaviy qirgʻin qurolini tarqatishni moliyalashtirishga qarshi kurashish boʻyicha ichki nazorat qoidalariga qoʻshimcha va oʻzgartirishlar kiritish haqida"
             },
             "source_url": {
@@ -1560,12 +1535,11 @@
           "source_published_at": "2026-05-08",
           "evidence_type": "official_policy_announcement",
           "event_type": "amended",
-          "summary": "Oʻzbekiston Respublikasi Markaziy banki boshqaruvining, Oʻzbekiston Respublikasi Bosh prokuraturasi huzuridagi iqtisodiy jinoyatlarga qarshi kurashish departamentining qarori, 08.05.2026 yilda ro‘yxatdan o‘tgan, ro‘yxat raqami 3266-5 Qo‘shimcha axborot Asosiy rekvizitlar Qayta ko‘rib chiqish tarixi Ulashish Telegram Facebook Twitter Instagram",
+          "summary": "3266-5 08.05.2026 Toʻlov tizimlari operatorlari, elektron pullar tizimlari operatorlari va toʻlov tashkilotlarida jinoiy faoliyatdan olingan daromadlarni legallashtirishga, terrorizmni moliyalashtirishga va ommaviy qirgʻin qurolini tarqatishni moliyalashtirishga qarshi kurashish boʻyicha ichki nazorat qoidalariga oʻzgartirish va qoʻshimchalar kiritish haqida",
           "source_url_status": "verified",
           "extracted_at": "2026-05-15T09:00:00.000Z",
           "localized": {
             "title": {
-              "ru": "3266-5-сон 08.05.2026. Toʻlov tizimlari operatorlari, elektron pullar tizimlari operatorlari va toʻlov tashkilotlarida jinoiy faoliyatdan olingan daromadlarni legallashtirishga, terrorizmni moliyalashtirishga va ommaviy qirgʻin qurolini tarqatishni moliyalashtirishga qarshi kurashish boʻyicha ichki nazorat qoidalariga oʻzgartirish va qoʻshimchalar kiritish haqida",
               "uz": "3266-5 08.05.2026 Toʻlov tizimlari operatorlari, elektron pullar tizimlari operatorlari va toʻlov tashkilotlarida jinoiy faoliyatdan olingan daromadlarni legallashtirishga, terrorizmni moliyalashtirishga va ommaviy qirgʻin qurolini tarqatishni moliyalashtirishga qarshi kurashish boʻyicha ichki nazorat qoidalariga oʻzgartirish va qoʻshimchalar kiritish haqida"
             },
             "source_url": {
@@ -1588,22 +1562,9 @@
       },
       "localized": {
         "title": {
-          "ru": "2886-12-сон 08.05.2026. Tijorat banklarida jinoiy faoliyatdan olingan daromadlarni legallashtirishga, terrorizmni moliyalashtirishga va ommaviy qirgʻin qurolini tarqatishni moliyalashtirishga qarshi kurashish boʻyicha ichki nazorat qoidalariga qoʻshimcha va oʻzgartirishlar kiritish haqida",
           "uz": "2886-12 08.05.2026 Tijorat banklarida jinoiy faoliyatdan olingan daromadlarni legallashtirishga, terrorizmni moliyalashtirishga va ommaviy qirgʻin qurolini tarqatishni moliyalashtirishga qarshi kurashish boʻyicha ichki nazorat qoidalariga qoʻshimcha va oʻzgartirishlar kiritish haqida"
         },
-        "short_summary": {
-          "ru": "(Qonunchilik maʼlumotlari milliy bazasi, 08.05.2026 y., 10/26/2925-10/0474-son)"
-        },
-        "parameters_or_amounts": {
-          "ru": [
-            "(Qonunchilik maʼlumotlari milliy bazasi, 08.05.2026 y., 10/26/2925-10/0474-son)"
-          ]
-        },
         "digest": {
-          "ru": {
-            "changed": "(Qonunchilik maʼlumotlari milliy bazasi, 08.05.2026 y., 10/26/2925-10/0474-son)",
-            "document": "2886-12-сон 08.05.2026. Tijorat banklarida jinoiy faoliyatdan olingan daromadlarni legallashtirishga, terrorizmni moliyalashtirishga va ommaviy qirgʻin qurolini tarqatishni moliyalashtirishga qarshi kurashish boʻyicha ichki nazorat qoidalariga qoʻshimcha va oʻzgartirishlar kiritish haqida"
-          },
           "uz": {
             "document": "2886-12 08.05.2026 Tijorat banklarida jinoiy faoliyatdan olingan daromadlarni legallashtirishga, terrorizmni moliyalashtirishga va ommaviy qirgʻin qurolini tarqatishni moliyalashtirishga qarshi kurashish boʻyicha ichki nazorat qoidalariga qoʻshimcha va oʻzgartirishlar kiritish haqida"
           }
@@ -1674,12 +1635,11 @@
           "source_published_at": "2026-05-08",
           "evidence_type": "official_policy_announcement",
           "event_type": "approved",
-          "summary": "Oʻzbekiston Respublikasi Korrupsiyaga qarshi kurashish agentligi, Oʻzbekiston Respublikasi Raqobatni rivojlantirish va isteʼmolchilar huquqlarini himoya qilish qoʻmitasining qarori, 08.05.2026 yilda ro‘yxatdan o‘tgan, ro‘yxat raqami 3833 Qo‘shimcha axborot Asosiy rekvizitlar Qayta ko‘rib chiqish tarixi Ulashish Telegram Facebook Twitter Instagram",
+          "summary": "3833 08.05.2026 Yirik investitsiya loyihalarini korrupsiyaga qarshi ekspertizadan o‘tkazish va ularning raqobat muhitiga ta’sirini baholash tartibi to‘g‘risidagi yo‘riqnomani tasdiqlash haqida",
           "source_url_status": "verified",
           "extracted_at": "2026-05-15T09:00:00.000Z",
           "localized": {
             "title": {
-              "ru": "3833-сон 08.05.2026. Yirik investitsiya loyihalarini korrupsiyaga qarshi ekspertizadan oʻtkazish va ularning raqobat muhitiga taʼsirini baholash tartibi toʻgʻrisidagi yoʻriqnomani tasdiqlash haqida",
               "uz": "3833 08.05.2026 Yirik investitsiya loyihalarini korrupsiyaga qarshi ekspertizadan o‘tkazish va ularning raqobat muhitiga ta’sirini baholash tartibi to‘g‘risidagi yo‘riqnomani tasdiqlash haqida"
             },
             "source_url": {
@@ -1702,13 +1662,9 @@
       },
       "localized": {
         "title": {
-          "ru": "3833-сон 08.05.2026. Yirik investitsiya loyihalarini korrupsiyaga qarshi ekspertizadan oʻtkazish va ularning raqobat muhitiga taʼsirini baholash tartibi toʻgʻrisidagi yoʻriqnomani tasdiqlash haqida",
           "uz": "3833 08.05.2026 Yirik investitsiya loyihalarini korrupsiyaga qarshi ekspertizadan o‘tkazish va ularning raqobat muhitiga ta’sirini baholash tartibi to‘g‘risidagi yo‘riqnomani tasdiqlash haqida"
         },
         "digest": {
-          "ru": {
-            "document": "3833-сон 08.05.2026. Yirik investitsiya loyihalarini korrupsiyaga qarshi ekspertizadan oʻtkazish va ularning raqobat muhitiga taʼsirini baholash tartibi toʻgʻrisidagi yoʻriqnomani tasdiqlash haqida"
-          },
           "uz": {
             "document": "3833 08.05.2026 Yirik investitsiya loyihalarini korrupsiyaga qarshi ekspertizadan o‘tkazish va ularning raqobat muhitiga ta’sirini baholash tartibi to‘g‘risidagi yo‘riqnomani tasdiqlash haqida"
           }
@@ -1779,12 +1735,11 @@
           "source_published_at": "2026-05-08",
           "evidence_type": "official_policy_announcement",
           "event_type": "amended",
-          "summary": "Oʻzbekiston Respublikasi Iqtisodiyot va moliya vazirligi, Oʻzbekiston Respublikasi Soliq qoʻmitasining qarori, 08.05.2026 yilda ro‘yxatdan o‘tgan, ro‘yxat raqami 2185-3 Qo‘shimcha axborot Asosiy rekvizitlar Kodifikatsiya Qayta ko‘rib chiqilgan hujjatlar Hujjatni qayta ko‘rib chiqishga asos bo‘lgan hujjatlar Korrespondentlar Respondentlar Ulashish Telegram Facebook Twitter Instagram [ OKOZ: 1. 07.00.00.00 Moliya va kredit toʻgʻrisidagi qonunchilik. Bank faoliyati / 07.09.00.00 Soliq qonunchiligi / 07.09.03.00 Soliqlar va yigʻimlar; 2. 09.00.00.00 Tadbirkorlik va xoʻjalik faoliyati / 09.17.00.00 Savdo / 09.17.02.00 Savdo sohasini boshqarish; 3. 21.00.00.00 Oʻzgartirish va qoʻshimchalar kiritis",
+          "summary": "2185-3-сон 08.05.2026. Bozorlar, savdo komplekslari va ularning filiallarida bir martalik yigʻimlar, ijara toʻlovlari hamda koʻrsatilgan xizmatlar uchun toʻlovlarni oʻz vaqtida va toʻliq undirilishini tashkil etish va nazorat qilish tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida",
           "source_url_status": "verified",
           "extracted_at": "2026-05-15T09:00:00.000Z",
           "localized": {
             "title": {
-              "ru": "2185-3-сон 08.05.2026. Bozorlar, savdo komplekslari va ularning filiallarida bir martalik yigʻimlar, ijara toʻlovlari hamda koʻrsatilgan xizmatlar uchun toʻlovlarni oʻz vaqtida va toʻliq undirilishini tashkil etish va nazorat qilish tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida",
               "uz": "2185-3-сон 08.05.2026. Bozorlar, savdo komplekslari va ularning filiallarida bir martalik yigʻimlar, ijara toʻlovlari hamda koʻrsatilgan xizmatlar uchun toʻlovlarni oʻz vaqtida va toʻliq undirilishini tashkil etish va nazorat qilish tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
             },
             "source_url": {
@@ -1807,22 +1762,9 @@
       },
       "localized": {
         "title": {
-          "ru": "2185-3-сон 08.05.2026. Bozorlar, savdo komplekslari va ularning filiallarida bir martalik yigʻimlar, ijara toʻlovlari hamda koʻrsatilgan xizmatlar uchun toʻlovlarni oʻz vaqtida va toʻliq undirilishini tashkil etish va nazorat qilish tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida",
           "uz": "2185-3-сон 08.05.2026. Bozorlar, savdo komplekslari va ularning filiallarida bir martalik yigʻimlar, ijara toʻlovlari hamda koʻrsatilgan xizmatlar uchun toʻlovlarni oʻz vaqtida va toʻliq undirilishini tashkil etish va nazorat qilish tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
         },
-        "short_summary": {
-          "ru": "(Qonunchilik maʼlumotlari milliy bazasi, 08.05.2026 y., 10/26/2185-3/0476-son)"
-        },
-        "parameters_or_amounts": {
-          "ru": [
-            "(Qonunchilik maʼlumotlari milliy bazasi, 08.05.2026 y., 10/26/2185-3/0476-son)"
-          ]
-        },
         "digest": {
-          "ru": {
-            "changed": "(Qonunchilik maʼlumotlari milliy bazasi, 08.05.2026 y., 10/26/2185-3/0476-son)",
-            "document": "2185-3-сон 08.05.2026. Bozorlar, savdo komplekslari va ularning filiallarida bir martalik yigʻimlar, ijara toʻlovlari hamda koʻrsatilgan xizmatlar uchun toʻlovlarni oʻz vaqtida va toʻliq undirilishini tashkil etish va nazorat qilish tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
-          },
           "uz": {
             "document": "2185-3-сон 08.05.2026. Bozorlar, savdo komplekslari va ularning filiallarida bir martalik yigʻimlar, ijara toʻlovlari hamda koʻrsatilgan xizmatlar uchun toʻlovlarni oʻz vaqtida va toʻliq undirilishini tashkil etish va nazorat qilish tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
           }
@@ -1894,16 +1836,12 @@
           "source_published_at": "2026-05-07",
           "evidence_type": "official_policy_announcement",
           "event_type": "approved",
-          "summary": "Oʻzbekiston Respublikasi kambagʻallikni qisqartirish va bandlik vazirining buyrugʻi, 07.05.2026 yilda ro‘yxatdan o‘tgan, ro‘yxat raqami 3832 Qo‘shimcha axborot Asosiy rekvizitlar Kodifikatsiya Qayta ko‘rib chiqilgan hujjatlar Hujjatni qayta ko‘rib chiqishga asos bo‘lgan hujjatlar Korrespondentlar Respondentlar Ulashish Telegram Facebook Twitter Instagram [ OKOZ: 1. 05.00.00.00 Mehnat va aholining bandligi toʻgʻrisidagi qonunchilik / 05.01.00.00 Ishga joylash va aholi bandligi / 05.01.08.00 Bandlikka koʻmaklashuvchi Davlat jamgʻarmasi (shuningdek, 06.03.03.00, 07.07.02.01larga qarang)] [ TSZ: 1. Ijtimoiy-madaniy masalalar / Mehnat. Aholining bandligi] Hujjatga taklif yuborish Audioni tinglash",
+          "summary": "3832-сон 07.05.2026. Oʻzbekiston Respublikasi Bandlikka koʻmaklashish davlat jamgʻarmasi mablagʻlari hisobidan subsidiyalar va ssuda ajratish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida",
           "source_url_status": "verified",
           "extracted_at": "2026-05-15T09:00:00.000Z",
           "localized": {
             "title": {
-              "ru": "3832-сон 07.05.2026. Oʻzbekiston Respublikasi Bandlikka koʻmaklashish davlat jamgʻarmasi mablagʻlari hisobidan subsidiyalar va ssuda ajratish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida",
               "uz": "3832-сон 07.05.2026. Oʻzbekiston Respublikasi Bandlikka koʻmaklashish davlat jamgʻarmasi mablagʻlari hisobidan subsidiyalar va ssuda ajratish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida"
-            },
-            "summary": {
-              "ru": "Masʼul xodim vazirlik tomonidan kelishilgan subsidiya ajratish boʻyicha ijobiy xulosani “Bandlik xizmati” axborot tizimi orqali “subsidy.mf.uz” dasturiy taʼminotiga yoʻnaltiradi hamda bu haqda shu kunning oʻzida tadbirkorlik subyektini xabardor qiladi."
             },
             "source_url": {
               "ru": "https://lex.uz/ru/docs/-8184101",
@@ -1925,22 +1863,9 @@
       },
       "localized": {
         "title": {
-          "ru": "3832-сон 07.05.2026. Oʻzbekiston Respublikasi Bandlikka koʻmaklashish davlat jamgʻarmasi mablagʻlari hisobidan subsidiyalar va ssuda ajratish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida",
           "uz": "3832-сон 07.05.2026. Oʻzbekiston Respublikasi Bandlikka koʻmaklashish davlat jamgʻarmasi mablagʻlari hisobidan subsidiyalar va ssuda ajratish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida"
         },
-        "short_summary": {
-          "ru": "Masʼul xodim vazirlik tomonidan kelishilgan subsidiya ajratish boʻyicha ijobiy xulosani “Bandlik xizmati” axborot tizimi orqali “subsidy.mf.uz” dasturiy taʼminotiga yoʻnaltiradi hamda bu haqda shu kunning oʻzida tadbirkorlik subyektini xabardor qiladi."
-        },
-        "parameters_or_amounts": {
-          "ru": [
-            "Masʼul xodim vazirlik tomonidan kelishilgan subsidiya ajratish boʻyicha ijobiy xulosani “Bandlik xizmati” axborot tizimi orqali “subsidy.mf.uz” dasturiy taʼminotiga yoʻnaltiradi hamda bu haqda shu kunning oʻzida tadbirkorlik subyektini xabardor qiladi."
-          ]
-        },
         "digest": {
-          "ru": {
-            "changed": "Masʼul xodim vazirlik tomonidan kelishilgan subsidiya ajratish boʻyicha ijobiy xulosani “Bandlik xizmati” axborot tizimi orqali “subsidy.mf.uz” dasturiy taʼminotiga yoʻnaltiradi hamda bu haqda shu kunning oʻzida tadbirkorlik subyektini xabardor qiladi.",
-            "document": "3832-сон 07.05.2026. Oʻzbekiston Respublikasi Bandlikka koʻmaklashish davlat jamgʻarmasi mablagʻlari hisobidan subsidiyalar va ssuda ajratish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida"
-          },
           "uz": {
             "document": "3832-сон 07.05.2026. Oʻzbekiston Respublikasi Bandlikka koʻmaklashish davlat jamgʻarmasi mablagʻlari hisobidan subsidiyalar va ssuda ajratish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida"
           }
@@ -2095,7 +2020,7 @@
           "source_published_at": "2026-05-01",
           "evidence_type": "official_policy_announcement",
           "event_type": "instructions_issued",
-          "summary": "Official web-site of the President of Uzbekistan Official pages in social networks President of the Republic of Uzbekistan Healthcare system development issues discussed President Shavkat Mirziyoyev reviewed measures for the further development of the healthcare system, enhancement of the quality of medical services, and expansion of private sector participation. Consistent efforts are underway nationwide to provide the population with high-quality, modern medical care, improve management efficiency in the sector, make broader use of private sector potential, and elevate regional healthcare infrastructure to a new level. The role of the private sector in advancing the industry, along with th",
+          "summary": "Healthcare system development issues discussed",
           "source_url_status": "verified",
           "extracted_at": "2026-05-15T09:00:00.000Z",
           "localized": {
@@ -2330,7 +2255,7 @@
           "source_published_at": "2026-04-15",
           "evidence_type": "official_policy_announcement",
           "event_type": "instructions_issued",
-          "summary": "2026-04-15 09:10:00 / Meetings On April 14, President Shavkat Mirziyoyev chaired a meeting to review progress, address existing challenges, and outline priority tasks in housing construction and urbanization. More than 500 industry representatives, including entrepreneurs, construction professionals, designers, architects, and urban plannersparticipated via regional studios. The Head of State emphasized that the construction sector plays a special role in achieving the ambitious goals set to ensure high economic growth across all sectors and regions. According to studies, each dollar invested in construction can generate an additional two to three dollars for the economy, while each job crea",
+          "summary": "Progress and priorities in housing construction and urbanization reviewed",
           "source_url_status": "verified",
           "extracted_at": "2026-05-15T09:00:00.000Z",
           "localized": {
@@ -2340,7 +2265,7 @@
               "uz": "Уй-жой қурилиши ва урбанизация соҳасидаги ишлар ҳамда устувор вазифалар муҳокама қилинди"
             },
             "summary": {
-              "ru": "Согласно изучениям, каждый доллар, вложенный в строительство, способен генерировать для экономики дополнительно 2-3 доллара, а одно рабочее место, созданное в этом секторе, приводит к появлению до 5 новых рабочих мест в других отраслях. Унифицировано 420 норм и правил градостроительства, отменены старые и утверждены 140 новых.",
+              "ru": "В связи с этим поставлена ​​задача перейти в течение трех месяцев к системе, которая будет отвечать на заявки по приватизации земли в режиме онлайн в течение 5-10 минут без участия человека. В этой связи хокиму каждой области поручено в течение двух месяцев разработать комплексные программы реализации утвержденных генеральных планов областных и районных центров.",
               "uz": "Лекин ер ва кредит каби асосий масалалар ҳал этилган бўлса-да, тадбиркорлар қурилишни бошлаш босқичида ҳалигача турли тўсиқларга дуч келмоқда, бу жараёнлар ойлаб-йиллаб чўзилмоқда. Шу муносабат билан уч ой ичида ерларни хусусийлаштириш бўйича аризаларга инсон омилисиз, 5-10 дақиқа ичида онлайн жавоб берадиган тизимга ўтиш вазифаси қўйилди."
             },
             "source_url": {
@@ -2369,19 +2294,19 @@
           "uz": "Уй-жой қурилиши ва урбанизация соҳасидаги ишлар ҳамда устувор вазифалар муҳокама қилинди"
         },
         "short_summary": {
-          "ru": "Согласно изучениям, каждый доллар, вложенный в строительство, способен генерировать для экономики дополнительно 2-3 доллара, а одно рабочее место, созданное в этом секторе, приводит к появлению до 5 новых рабочих мест в других отраслях.",
+          "ru": "В связи с этим поставлена ​​задача перейти в течение трех месяцев к системе, которая будет отвечать на заявки по приватизации земли в режиме онлайн в течение 5-10 минут без участия человека.",
           "uz": "Лекин ер ва кредит каби асосий масалалар ҳал этилган бўлса-да, тадбиркорлар қурилишни бошлаш босқичида ҳалигача турли тўсиқларга дуч келмоқда, бу жараёнлар ойлаб-йиллаб чўзилмоқда."
         },
         "parameters_or_amounts": {
           "ru": [
-            "Согласно изучениям, каждый доллар, вложенный в строительство, способен генерировать для экономики дополнительно 2-3 доллара, а одно рабочее место, созданное в этом секторе, приводит к появлению до 5 новых рабочих мест в других отраслях.",
-            "Унифицировано 420 норм и правил градостроительства, отменены старые и утверждены 140 новых.",
             "В связи с этим поставлена ​​задача перейти в течение трех месяцев к системе, которая будет отвечать на заявки по приватизации земли в режиме онлайн в течение 5-10 минут без участия человека.",
-            "Наряду с этим подчеркнуто, что нельзя ограничиваться одним лишь утверждением генеральных планов.",
-            "Подвергнут критике тот факт, что в них не указывается четко, когда, в какой очередности и из каких источников будет осуществляться строительство водопроводных, канализационных, тепловых, газовых, электросетей и дорог.",
-            "Отмечено, что по реализации каждого утвержденного генерального плана необходимо разработать комплексные программы по годам, которые должны быть доведены до сведения населения, предпринимателей и ответственных лиц.",
             "В этой связи хокиму каждой области поручено в течение двух месяцев разработать комплексные программы реализации утвержденных генеральных планов областных и районных центров.",
-            "Указано, что необходимо четко определить, какая часть предусмотренных в них мероприятий будет финансироваться из республиканского и местного бюджетов, а какая – за счет средств международных финансовых организаций."
+            "Кроме того, будет отменена практика начисления 14 процентов на остаток по объектам, проданным с условием рассрочки платежа.",
+            "Поручено внедрить этот опыт во всех регионах с 1 июля.",
+            "С 1 июля будет внедрена возможность получения технических условий по сетям электро-, газо-, водоснабжения и канализации на основе одной заявки и одного платежа.",
+            "В этой связи принято решение, что теперь градостроительный совет будут возглавлять сами хокимы города Ташкента и областей, а также будет внедрена система, обеспечивающая окончательное решение вопросам предпринимателей.",
+            "В этой связи с 1 июня текущего года деятельность государственных заказчиков будет полностью оцениваться на основе KPI, а заработную плату сотрудников увеличат в три раза.",
+            "За разработку проектной документации будут платить в размере до 5 процентов от стоимости объекта, а авторский надзор будет оплачиваться на основании отдельного договора."
           ],
           "uz": [
             "Лекин ер ва кредит каби асосий масалалар ҳал этилган бўлса-да, тадбиркорлар қурилишни бошлаш босқичида ҳалигача турли тўсиқларга дуч келмоқда, бу жараёнлар ойлаб-йиллаб чўзилмоқда.",
@@ -2396,7 +2321,7 @@
         },
         "digest": {
           "ru": {
-            "changed": "Согласно изучениям, каждый доллар, вложенный в строительство, способен генерировать для экономики дополнительно 2-3 доллара, а одно рабочее место, созданное в этом секторе, приводит к появлению до 5 новых рабочих мест в других отраслях.",
+            "changed": "В связи с этим поставлена ​​задача перейти в течение трех месяцев к системе, которая будет отвечать на заявки по приватизации земли в режиме онлайн в течение 5-10 минут без участия человека.",
             "document": "Обсуждены проводимая работа и приоритетные задачи в сфере жилищного строительства и урбанизации"
           },
           "uz": {

@@ -1023,7 +1023,7 @@ function decodeHtml(value) {
 }
 
 function normalizeWhitespace(value) {
-  return decodeHtml(value.replace(/<[^>]+>/g, ' '))
+  return decodeHtml(String(value ?? '').replace(/<[^>]+>/g, ' '))
     .replace(/\s+/g, ' ')
     .trim()
 }
@@ -1592,7 +1592,7 @@ function sourceInitiativeScore(sentence) {
   let score = 0
 
   if (
-    /(?:предложено|планируется|будут|будет|будут приняты|намечено|запланировано|предлагается|поставлена задача|создан|создаётся|утвержд|внедр|жорий|taklif|rejalashtir|o[‘'ʻ`]?zgar|joriy et|ташкил этил|белгилан|from|will|planned|proposed|introduced|launched|created|approved|adopted|to be)/iu.test(
+    /(?:предложено|планируется|будут|будет|будут приняты|намечено|запланировано|предлагается|поставлена задача|создан|создаётся|утвержд|внедр|изменит|изменится|меняется|вносятся|изменени|жорий|taklif|rejalashtir|o[‘'ʻ`]?zgar|joriy et|ташкил этил|белгилан|from|will|planned|proposed|introduced|launched|created|approved|adopted|to be)/iu.test(
       text,
     )
   ) {
@@ -1600,7 +1600,7 @@ function sourceInitiativeScore(sentence) {
   }
 
   if (
-    /(?:механизм|модель|система|агентств|платформ|единая ис|рейтинг|возмещ|компенсац|льгот|имтиёз|агентлиги|тизим|механизм|модель|кредит|субсид|private sector|single window|agency|platform|mechanism|model|rating|compensation|reimbursement|preferential|subsidy|credit)/iu.test(
+    /(?:механизм|модель|система|агентств|платформ|единая ис|рейтинг|возмещ|компенсац|льгот|лицензирован|аккредитац|имтиёз|агентлиги|тизим|механизм|модель|кредит|субсид|private sector|single window|agency|platform|mechanism|model|rating|compensation|reimbursement|preferential|subsidy|credit)/iu.test(
       text,
     )
   ) {
@@ -1608,7 +1608,7 @@ function sourceInitiativeScore(sentence) {
   }
 
   if (
-    /(?:как отмечалось|кроме того, в сферу направлено|было выделено|было направлено|направлено\s+[\d,.\s]+(?:триллион|миллиард|млрд|трлн)|выделение субсидий.*позволило|благодаря чему|сэкономлено|досрочно погасили|as noted|was allocated|were allocated|has been allocated|thanks to this|saved|enabled them to)/iu.test(
+    /(?:как отмечалось|кроме того, в сферу направлено|было выделено|было направлено|направлено\s+[\d,.\s]+(?:триллион|миллиард|млрд|трлн)|выделение субсидий.*позволило|благодаря чему|сэкономлено|досрочно погасили|согласно изучениям|каждый доллар.*строительств|унифицировано\s+\d+.*(?:норм|правил)|отменены старые и утверждены|as noted|was allocated|were allocated|has been allocated|thanks to this|saved|enabled them to)/iu.test(
       text,
     )
   ) {
@@ -1624,7 +1624,7 @@ function sourceInitiativeScore(sentence) {
   }
 
   if (
-    /(?:будет способствовать|будет повышать|способствуют.*(?:доход|увеличен)|улучшение качества регулирования|упрощение взаимодействия|президент.*отметил|глава государства дал.*поручени|было отмечено|как отмечено|в стране созданы широкие возможности|контролирующие органы ограничивались|will contribute to|will increase productivity|increase revenue|the president noted|it was noted)/iu.test(
+    /(?:будет способствовать|будет повышать|способствуют.*(?:доход|увеличен)|улучшение качества регулирования|упрощение взаимодействия|президент.*отметил|глава государства дал.*поручени|глава нашего государства отметил|было отмечено|как отмечено|отмечено, что|указано, что|подчеркивалось, что|в стране созданы широкие возможности|контролирующие органы ограничивались|она охватит задачи|наряду с этим подчеркнуто|подвергнут\w*\s+критик|will contribute to|will increase productivity|increase revenue|the president noted|it was noted)/iu.test(
       text,
     )
   ) {
@@ -1641,9 +1641,165 @@ function sourceInitiativeScore(sentence) {
   return score
 }
 
-function localizedPackageSnippetsFromItem(item) {
+function scriptProfile(value) {
+  const text = normalizeWhitespace(value).toLowerCase()
+  const cyrillic = (text.match(/[а-яёўқғҳ]/giu) ?? []).length
+  const latin = (text.match(/[a-z]/giu) ?? []).length
+  return { cyrillic, latin }
+}
+
+function looksLikeLanguage(value, language) {
+  const { cyrillic, latin } = scriptProfile(value)
+  if (language === 'ru') {
+    return cyrillic >= 8 && cyrillic / Math.max(cyrillic + latin, 1) >= 0.45
+  }
+  if (language === 'en') {
+    return cyrillic <= 2
+  }
+  return true
+}
+
+function isSourceBoilerplateSnippet(value) {
+  const text = normalizeWhitespace(value)
+  if (!text) return true
+  return (
+    /^\([^)]*(?:qonunchilik ma[ʼ'’ʻ`]?lumotlari milliy bazasi|10\/\d{2}\/)[^)]*\)$/iu.test(text) ||
+    /(?:qonunchilik ma[ʼ'’ʻ`]?lumotlari milliy bazasi|qo[‘'ʻ`]?shimcha axborot|asosiy rekvizitlar|qayta ko[‘'ʻ`]?rib chiqish|qayta ko[‘'ʻ`]?rib chiqilgan hujjatlar|hujjatni qayta ko[‘'ʻ`]?rib chiqishga asos|kodifikatsiya|korrespondentlar|respondentlar|ulashish\s+telegram|rasmiy hujjatlar|farmoniga\s+\d+-?ilova|prezidentining ayrim (?:hujjat|farmon)|kosmik tadqiqotlar va texnologiyalar agentligi|oko[zз]|tsz|hujjatga taklif|audioni tinglash)/iu.test(
+      text,
+    )
+  )
+}
+
+function isContextOnlySnippet(value) {
+  return /(?:согласно изучениям|каждый доллар.*строительств|она охватит задачи|наряду с этим подчеркнуто|подвергнут\w*\s+критик|как отмечалось|кроме того, в сферу направлено|было выделено|было направлено|выделение субсидий.*позволило|благодаря чему|сэкономлено|досрочно погасили|в общей сложности|унифицировано\s+\d+.*(?:норм|правил)|отменены старые и утверждены|глава государства дал.*поручени|глава нашего государства отметил|было отмечено|как отмечено|отмечено, что|указано, что|подчеркивалось, что|as noted|was allocated|were allocated|thanks to this|saved|as a result)/iu.test(
+    normalizeWhitespace(value),
+  )
+}
+
+function isPublishableLocalizedSnippet(value, language) {
+  const text = normalizeWhitespace(value)
+  return (
+    text.length > 0 &&
+    looksLikeLanguage(text, language) &&
+    !isSourceBoilerplateSnippet(text) &&
+    !isContextOnlySnippet(text) &&
+    sourceInitiativeScore(text) >= 2
+  )
+}
+
+function isPublishableLocalizedFreeText(value, language) {
+  const text = normalizeWhitespace(value)
+  return (
+    text.length > 0 &&
+    looksLikeLanguage(text, language) &&
+    !isSourceBoilerplateSnippet(text) &&
+    !isContextOnlySnippet(text)
+  )
+}
+
+function isPublishableLocalizedTitle(value, language) {
+  const text = normalizeWhitespace(value)
+  return text.length > 0 && looksLikeLanguage(text, language) && !isSourceBoilerplateSnippet(text)
+}
+
+function publicSourceEventSummary(summary, fallback) {
+  const text = normalizeWhitespace(summary ?? '')
+  if (!text || text.length > 420 || isSourceBoilerplateSnippet(text) || isContextOnlySnippet(text)) return fallback
+  return text
+}
+
+function sanitizeLocalizedTextMapForPublication(value, validator) {
+  const clean = {}
+  for (const language of OFFICIAL_CONTENT_LANGUAGES) {
+    const entry = value?.[language]
+    if (typeof entry === 'string' && validator(entry, language)) {
+      clean[language] = entry
+    }
+  }
+  return clean
+}
+
+function sanitizeLocalizedListMapForPublication(value) {
+  const clean = {}
+  for (const language of OFFICIAL_CONTENT_LANGUAGES) {
+    const entry = value?.[language]
+    if (!Array.isArray(entry)) continue
+    const values = uniqueStrings(entry.filter((item) => isPublishableLocalizedFreeText(item, language)))
+    if (values.length > 0) clean[language] = values
+  }
+  return clean
+}
+
+function sanitizeLocalizedDigestMapForPublication(value) {
+  const clean = {}
+  for (const language of OFFICIAL_CONTENT_LANGUAGES) {
+    const entry = value?.[language]
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)) continue
+    const digest = {
+      ...(isPublishableLocalizedFreeText(entry.changed, language) ? { changed: entry.changed } : {}),
+      ...(isPublishableLocalizedFreeText(entry.applies_to, language) ? { applies_to: entry.applies_to } : {}),
+      ...(isPublishableLocalizedFreeText(entry.effective_status, language)
+        ? { effective_status: entry.effective_status }
+        : {}),
+      ...(isPublishableLocalizedTitle(entry.document, language) ? { document: entry.document } : {}),
+    }
+    if (Object.keys(digest).length > 0) clean[language] = digest
+  }
+  return clean
+}
+
+function sanitizeLocalizedPackageForPublication(localized) {
+  if (!localized) return undefined
+  const clean = compactRecord({
+    title: sanitizeLocalizedTextMapForPublication(localized.title, isPublishableLocalizedTitle),
+    short_summary: sanitizeLocalizedTextMapForPublication(localized.short_summary, isPublishableLocalizedFreeText),
+    policy_area: sanitizeLocalizedTextMapForPublication(localized.policy_area, isPublishableLocalizedFreeText),
+    current_stage: sanitizeLocalizedTextMapForPublication(localized.current_stage, isPublishableLocalizedFreeText),
+    next_milestone: sanitizeLocalizedTextMapForPublication(localized.next_milestone, isPublishableLocalizedFreeText),
+    legal_basis: sanitizeLocalizedTextMapForPublication(localized.legal_basis, isPublishableLocalizedFreeText),
+    official_basis: sanitizeLocalizedTextMapForPublication(localized.official_basis, isPublishableLocalizedFreeText),
+    financing_or_incentive: sanitizeLocalizedTextMapForPublication(
+      localized.financing_or_incentive,
+      isPublishableLocalizedFreeText,
+    ),
+    why_tracked: sanitizeLocalizedTextMapForPublication(localized.why_tracked, isPublishableLocalizedFreeText),
+    parameters_or_amounts: sanitizeLocalizedListMapForPublication(localized.parameters_or_amounts),
+    digest: sanitizeLocalizedDigestMapForPublication(localized.digest),
+  })
+  return Object.keys(clean).length > 0 ? clean : undefined
+}
+
+function sanitizeSourceEventForPublication(event) {
+  const localized = event.localized
+    ? compactRecord({
+        title: sanitizeLocalizedTextMapForPublication(event.localized.title, isPublishableLocalizedTitle),
+        summary: sanitizeLocalizedTextMapForPublication(event.localized.summary, isPublishableLocalizedFreeText),
+        source_url: cleanLocalizedTextMap(event.localized.source_url),
+        source_url_status: cleanLocalizedStatusMap(event.localized.source_url_status),
+      })
+    : undefined
+
+  return {
+    ...event,
+    summary: publicSourceEventSummary(event.summary, event.title),
+    ...(localized && Object.keys(localized).length > 0 ? { localized } : { localized: undefined }),
+  }
+}
+
+function sanitizePublicReformPackage(reformPackage) {
+  const localized = sanitizeLocalizedPackageForPublication(reformPackage.localized)
+  return {
+    ...reformPackage,
+    official_source_events: (reformPackage.official_source_events ?? []).map(sanitizeSourceEventForPublication),
+    ...(localized ? { localized } : { localized: undefined }),
+  }
+}
+
+function localizedPackageSnippetsFromItem(item, language) {
   const sentences = sourceSummarySentences(item.summary, item.title)
-  return uniqueStrings(sentences).slice(0, 8)
+  return uniqueStrings(sentences)
+    .filter((sentence) => isPublishableLocalizedSnippet(sentence, language))
+    .slice(0, 8)
 }
 
 async function fetchOfficialLanguageItem(event, language, sourceUrl, fetchImpl) {
@@ -1697,8 +1853,8 @@ async function enrichSourceEventWithOfficialLanguages(event, { fetchSource, fetc
     try {
       const item = await fetchOfficialLanguageItem(event, language, sourceUrl, fetchImpl)
       if (!item?.title) continue
-      const itemSnippets = localizedPackageSnippetsFromItem(item)
-      localized.title[language] = item.title
+      const itemSnippets = localizedPackageSnippetsFromItem(item, language)
+      if (isPublishableLocalizedTitle(item.title, language)) localized.title[language] = item.title
       if (itemSnippets.length > 0) localized.summary[language] = itemSnippets.slice(0, 2).join(' ')
       localized.source_url[language] = sourceUrl
       localized.source_url_status[language] = event.source_url_status
@@ -2131,7 +2287,7 @@ function candidateToSourceEvent(candidate) {
       ? 'official_policy_announcement'
       : candidate.evidence_types[0],
     event_type: eventType,
-    summary: candidate.summary || candidate.inclusion_reason,
+    summary: publicSourceEventSummary(candidate.summary, candidate.inclusion_reason),
     source_url_status: candidate.source_url_status,
     extracted_at: candidate.extracted_at,
   }
@@ -2857,7 +3013,9 @@ function sortPublicReformPackages(reformPackages) {
 function configuredPreviousPackages(previousArtifact) {
   if (previousArtifact?.extraction_mode !== CONFIGURED_SOURCE_FETCH_EXTRACTION_MODE) return []
   if (!Array.isArray(previousArtifact.reform_packages)) return []
-  return previousArtifact.reform_packages.filter((reformPackage) => reformPackage?.package_id)
+  return previousArtifact.reform_packages
+    .filter((reformPackage) => reformPackage?.package_id)
+    .map(sanitizePublicReformPackage)
 }
 
 function publicPackageIdentityKey(reformPackage) {
@@ -2913,7 +3071,7 @@ function mergePublicPackageRecords(primaryPackage, secondaryPackage) {
   const officialSourceEvents = sortSourceEvents([
     ...(secondaryPackage.official_source_events ?? []),
     ...(primaryPackage.official_source_events ?? []),
-  ])
+  ].map(sanitizeSourceEventForPublication))
   const implementationMilestones = sortMilestones([
     ...(secondaryPackage.implementation_milestones ?? []),
     ...(primaryPackage.implementation_milestones ?? []),
@@ -2931,7 +3089,11 @@ function mergePublicPackageRecords(primaryPackage, secondaryPackage) {
 
 function mergeWithPreviousPublicPackages(currentPackages, previousArtifact) {
   const previousPackages = configuredPreviousPackages(previousArtifact)
-  const packagesByKey = new Map(currentPackages.map((reformPackage) => [publicPackageIdentityKey(reformPackage), reformPackage]))
+  const packagesByKey = new Map(
+    currentPackages
+      .map(sanitizePublicReformPackage)
+      .map((reformPackage) => [publicPackageIdentityKey(reformPackage), reformPackage]),
+  )
   let retainedPackageCount = 0
 
   for (const previousPackage of previousPackages) {
@@ -2939,7 +3101,7 @@ function mergeWithPreviousPublicPackages(currentPackages, previousArtifact) {
     const currentPackage = packagesByKey.get(key)
 
     if (!currentPackage) {
-      packagesByKey.set(key, previousPackage)
+      packagesByKey.set(key, sanitizePublicReformPackage(previousPackage))
       retainedPackageCount += 1
       continue
     }
@@ -2953,7 +3115,7 @@ function mergeWithPreviousPublicPackages(currentPackages, previousArtifact) {
   }
 
   return {
-    packages: sortPublicReformPackages([...packagesByKey.values()].map(addPublicDigest)),
+    packages: sortPublicReformPackages([...packagesByKey.values()].map(sanitizePublicReformPackage).map(addPublicDigest)),
     retainedPackageCount,
   }
 }
@@ -3231,10 +3393,12 @@ export async function buildKnowledgeHubCandidateArtifactWithDiagnostics(options 
   const carryForward = fetchSource
     ? mergeWithPreviousPublicPackages(generatedPublicReformPackages, options.previousArtifact)
     : { packages: generatedPublicReformPackages, retainedPackageCount: 0 }
-  const publicReformPackages = await enrichReformPackagesWithOfficialLanguages(carryForward.packages, {
-    fetchSource,
-    fetchImpl,
-  })
+  const publicReformPackages = (
+    await enrichReformPackagesWithOfficialLanguages(carryForward.packages, {
+      fetchSource,
+      fetchImpl,
+    })
+  ).map(sanitizePublicReformPackage)
   const policyBriefs = options.policyBriefs ?? buildInternalPolicyBriefs(publicReformPackages)
   const researchUpdates = options.researchUpdates ?? STATIC_RESEARCH_UPDATES
   const literatureItems = options.literatureItems ?? STATIC_LITERATURE_ITEMS

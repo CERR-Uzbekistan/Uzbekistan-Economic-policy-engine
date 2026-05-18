@@ -466,6 +466,10 @@ describe('Knowledge Hub reform intake', () => {
               <p>Выделение субсидий в размере 10 процентов от стоимости хлопка позволило им вырастить хлопок за счет собственных средств, благодаря чему сэкономлено 1,9 триллиона сумов ресурсов.</p>
               <p>На урожай хлопка и зерновых, субсидии и другие расходы в следующем году запланировано выделение в общей сложности 34,2 триллиона сумов.</p>
               <p>Улучшение качества регулирования будет способствовать привлечению дополнительных 800 миллионов долларов иностранных инвестиций.</p>
+              <p>Согласно изучениям, каждый доллар, вложенный в строительство, способен генерировать для экономики дополнительно 2-3 доллара.</p>
+              <p>Она охватит задачи по двукратному расширению сети и дальнейшему повышению качества обслуживания.</p>
+              <p>Унифицировано 420 норм и правил градостроительства, отменены старые и утверждены 140 новых.</p>
+              <p>Отмечено, что по реализации каждого утвержденного генерального плана необходимо разработать комплексные программы по годам.</p>
               <p>Глава государства дал конкретные поручения по дальнейшему совершенствованию механизмов финансирования, обеспечению адресности и оперативности субсидирования.</p>
               <p>В частности, предложено в 2026 году выделить дополнительно 5 триллионов сумов на агротехнические мероприятия, включая расходы на плёнку и шланги.</p>
               <p>В связи с этим для внедрения модели “дисциплинированность – дешевле кредит” хозяйствам с кредитным рейтингом “A” предлагается предоставлять кредиты со снижением ставки на 2 процента.</p>
@@ -485,8 +489,65 @@ describe('Knowledge Hub reform intake', () => {
     assert.ok(ruMeasures.some((value) => /Агентство по платежам в аграрной сфере/.test(value)))
     assert.doesNotMatch(
       joined,
-      /2,35 триллиона|29 триллионов|34,2 триллиона|благодаря чему|сэкономлено|привлечению дополнительных|Глава государства дал/,
+      /2,35 триллиона|29 триллионов|34,2 триллиона|благодаря чему|сэкономлено|привлечению дополнительных|Согласно изучениям|Она охватит задачи|Унифицировано 420|Отмечено, что|Глава государства дал/,
     )
+  })
+
+  it('rejects localized Lex.uz boilerplate and keeps curated package measures', async () => {
+    const basePackage = JSON.parse(JSON.stringify(FIXTURE_DEMO_REFORM_PACKAGES[0]))
+    basePackage.title = 'Financial-sector AML/CFT internal control rules reform'
+    basePackage.short_summary = 'AML/CFT internal-control rules change across financial institutions.'
+    basePackage.parameters_or_amounts = [
+      'Commercial-bank AML/CFT internal-control rules are amended.',
+      'Nonbank credit-organization AML/CFT internal-control rules are amended.',
+    ]
+    basePackage.official_source_events[0] = {
+      id: 'source-event-aml-lex',
+      title: 'Nonbank credit organization AML/CFT internal-control rules amended',
+      source_institution: 'National Database of Legislation of the Republic of Uzbekistan (Lex.uz)',
+      source_url: 'https://lex.uz/uz/docs/8184204',
+      source_published_at: '2026-05-08',
+      evidence_type: 'official_policy_announcement',
+      event_type: 'amended',
+      summary: 'Nonbank credit-organization AML/CFT internal-control rules are amended.',
+      source_url_status: 'verified',
+      extracted_at: '2026-05-16T09:00:00.000Z',
+    }
+
+    const diagnostics = await buildKnowledgeHubCandidateArtifactWithDiagnostics({
+      fetchSource: true,
+      extractedAt: '2026-05-16T09:00:00.000Z',
+      sources: [],
+      reformPackages: [basePackage],
+      fetchImpl: async (url) => {
+        const sourceUrl = String(url)
+        if (sourceUrl.includes('/ru/')) {
+          return new Response(`
+            <html><body>
+              <h1>2925-10-сон 08.05.2026. Nobank kredit tashkilotlarida jinoiy faoliyatdan olingan daromadlarni legallashtirishga qarshi kurashish qoidalariga qoʻshimcha va oʻzgartirishlar kiritish haqida</h1>
+              <p>(Qonunchilik maʼlumotlari milliy bazasi, 08.05.2026 y., 10/26/2925-10/0474-son)</p>
+              <p>Qo‘shimcha axborot Asosiy rekvizitlar Kodifikatsiya Qayta ko‘rib chiqilgan hujjatlar Ulashish Telegram Facebook Twitter Instagram</p>
+            </body></html>
+          `)
+        }
+        return new Response(`
+          <html><body>
+            <h1>2925-10-сон 08.05.2026. Nobank kredit tashkilotlarida jinoiy faoliyatdan olingan daromadlarni legallashtirishga qarshi kurashish qoidalariga qoʻshimcha va oʻzgartirishlar kiritish haqida</h1>
+            <p>Qo‘shimcha axborot Asosiy rekvizitlar Qayta ko‘rib chiqish tarixi Ulashish Telegram Facebook Twitter Instagram</p>
+          </body></html>
+        `)
+      },
+    })
+
+    const reformPackage = diagnostics.artifact.reform_packages[0]
+    const localized = reformPackage.localized ?? {}
+    const serializedLocalized = JSON.stringify(localized)
+
+    assert.equal(localized.short_summary?.ru, undefined)
+    assert.equal(localized.parameters_or_amounts?.ru, undefined)
+    assert.equal(localized.digest?.ru?.changed, undefined)
+    assert.ok(reformPackage.parameters_or_amounts.includes('Commercial-bank AML/CFT internal-control rules are amended.'))
+    assert.doesNotMatch(serializedLocalized, /Qonunchilik|Qo.?shimcha axborot|Asosiy rekvizitlar|Ulashish Telegram/)
   })
 
   it('assembles configured-source housing and agriculture packages from verified official detail pages', () => {
