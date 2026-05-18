@@ -1,10 +1,8 @@
 import { Fragment } from 'react'
-import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import type {
   HeadlineMetric,
   NarrativeSegment,
-  OverviewOutputAction,
   StateProvenance,
 } from '../../contracts/data-contract.js'
 import type { OverviewMacroPulseToken } from '../../data/overview/macro-pulse.js'
@@ -15,7 +13,6 @@ type EconomicStateHeaderProps = {
   summary: string | NarrativeSegment[]
   updatedAt: string
   modelIds: string[]
-  outputAction: OverviewOutputAction
   provenance?: StateProvenance
   artifactSummaryMetrics?: HeadlineMetric[]
   artifactProvisionalCount?: number
@@ -80,7 +77,6 @@ export function EconomicStateHeader({
   summary,
   updatedAt,
   modelIds,
-  outputAction,
   provenance,
   artifactSummaryMetrics = [],
   artifactProvisionalCount,
@@ -99,9 +95,6 @@ export function EconomicStateHeader({
   const reviewerName = provenance?.reviewer_name ?? ''
   const reviewerIsSentinel = reviewerName === SME_CONTENT_PENDING
   const hasReviewerName = reviewerName.length > 0 && !reviewerIsSentinel
-  const provenanceAssistedLabel = provenance?.ai_assisted
-    ? t('overview.header.provenance.aiAssisted')
-    : t('overview.header.provenance.humanAuthored')
   const provisionalCount = artifactProvisionalCount
     ?? artifactSummaryMetrics.filter((metric) => metric.validation_status === 'warning').length
   const artifactStrap = t(provisionalCount === 1 ? 'overview.header.artifactStrap' : 'overview.header.artifactStrapPlural', {
@@ -133,9 +126,6 @@ export function EconomicStateHeader({
       </p>
       <div className="state-header__body overview-state-header__body">
         <p className="overview-state-header__summary">{summaryText}</p>
-        <Link className="ui-secondary-action" to={outputAction.target_href}>
-          {outputAction.title}
-        </Link>
       </div>
       {isArtifactMode ? (
         <div className="state-header__provenance overview-state-header__provenance">
@@ -145,18 +135,11 @@ export function EconomicStateHeader({
           {provenance ? (
             <>
               <p className="overview-state-header__provenance-line">
-                {t('overview.header.provenance.draftedFromLabel')}{' '}
+                {t('overview.header.provenance.baselineLabel')}{' '}
                 {t('overview.common.middleDot')} {draftedFrom}
               </p>
               <p className="overview-state-header__provenance-line">
-                {provenanceAssistedLabel}
-                {reviewDate ? (
-                  <>
-                    {' '}
-                    {t('overview.common.middleDot')}{' '}
-                    {t('overview.header.provenance.reviewedAt', { date: reviewDate })}
-                  </>
-                ) : null}{' '}
+                {reviewDate ? t('overview.header.provenance.reviewedAt', { date: reviewDate }) : t('overview.header.updatedAt', { date: formattedUpdatedAt })}{' '}
                 {t('overview.common.middleDot')}{' '}
                 {hasReviewerName ? (
                   reviewerName
@@ -176,18 +159,11 @@ export function EconomicStateHeader({
       ) : provenance ? (
         <div className="state-header__provenance overview-state-header__provenance">
           <p className="overview-state-header__provenance-line">
-            {t('overview.header.provenance.draftedFromLabel')}{' '}
+            {t('overview.header.provenance.baselineLabel')}{' '}
             {t('overview.common.middleDot')} {draftedFrom}
           </p>
           <p className="overview-state-header__provenance-line">
-            {provenanceAssistedLabel}
-            {reviewDate ? (
-              <>
-                {' '}
-                {t('overview.common.middleDot')}{' '}
-                {t('overview.header.provenance.reviewedAt', { date: reviewDate })}
-              </>
-            ) : null}{' '}
+            {reviewDate ? t('overview.header.provenance.reviewedAt', { date: reviewDate }) : t('overview.header.updatedAt', { date: formattedUpdatedAt })}{' '}
             {t('overview.common.middleDot')}{' '}
             {hasReviewerName ? (
               reviewerName

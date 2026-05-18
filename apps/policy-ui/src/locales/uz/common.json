@@ -58,7 +58,7 @@
   "pages": {
     "overview": {
       "title": "Umumiy ko'rinish",
-      "description": "Analitik foydalanish uchun makroiqtisodiy holat: nima o'zgardi, nega muhim va keyin qayerda sinash kerak."
+      "description": "Joriy makro holat, yaqin muddatli xatarlar va keyingi stsenariy testlari."
     },
     "scenarioLab": {
       "title": "Stsenariy simulyatori",
@@ -145,11 +145,11 @@
       "mom": "m/m"
     },
     "briefing": {
-      "kicker": "Makro brif",
-      "title": "Dashboarddan oldingi qaror signallari",
-      "description": "Avval joriy holatni o'qing, keyin bazaviy stsenariyni tekshirish uchun kuzatuv ro'yxati va stsenariy testlaridan foydalaning.",
-      "primarySignalsTitle": "Asosiy signallar",
-      "primarySignalsAria": "Overview asosiy signallari",
+      "kicker": "Joriy baho",
+      "title": "Makro holat va keyingi testlar",
+      "description": "Avval joriy holatni ko'ring, keyin quyidagi xatarlar va stsenariy testlarini tekshiring.",
+      "primarySignalsTitle": "Asosiy ko'rsatkichlar",
+      "primarySignalsAria": "Umumiy ko'rinishning asosiy ko'rsatkichlari",
       "supportingSignalsTitle": "Qo'shimcha ko'rsatkichlar",
       "supportingSignalsDescription": "Ikkinchi darajali metrikalar kontekst uchun ko'rinadi, lekin birinchi qaror o'qishiga raqobat qilmaydi."
     },
@@ -164,7 +164,7 @@
       "lastRefreshLabel": "Yangilangan"
     },
     "header": {
-      "kicker": "Iqtisodiy holat",
+      "kicker": "Joriy holat",
       "modelListFallback": "MODELLAR TO'PLAMI",
       "draftedFrom": "Holat narrativi · {{models}} bazasidan tuzilgan",
       "updatedAt": "Holat narrativi tekshirildi: {{date}}",
@@ -188,6 +188,7 @@
       },
       "provenance": {
         "draftedFromLabel": "HOLAT NARRATIVI · bazasidan tuzilgan",
+        "baselineLabel": "Bazaviy stsenariy",
         "aiAssisted": "AI yordamida",
         "humanAuthored": "Mutaxassis tomonidan",
         "reviewedAt": "taqriz {{date}}",
@@ -259,19 +260,19 @@
       }
     },
     "risks": {
-      "title": "Kuzatish uchun asosiy risklar",
-      "description": "Bazaviy talqinga eng ko'p ta'sir qiladigan 3 ta yaqin muddatli risk.",
+      "title": "Kuzatuv ro'yxati",
+      "description": "Bazaviy holatni o'zgartirishi mumkin bo'lgan yaqin muddatli xatarlar.",
       "empty": "Bu snapshot uchun faol risklar belgilanmagan.",
       "hitsPrefix": "Ta'sir kanali · ",
-      "testAction": "Risk testini ishga tushirish",
+      "testAction": "Stsenariyni tekshirish",
       "testActionAria": "{{title}} uchun stsenariy testini ishga tushirish"
     },
     "quickActions": {
-      "title": "Tezkor amallar",
-      "description": "Monitoringdan stsenariy tahliliga to'g'ridan-to'g'ri o'tish nuqtalari.",
+      "title": "Keyingi stsenariy testlari",
+      "description": "Ushbu holat uchun eng foydali testlarni oching.",
       "empty": "Bu snapshot uchun tezkor amallar sozlanmagan.",
-      "kindAnalysis": "Tahlil",
-      "openAction": "Tahlilni ochish"
+      "kindAnalysis": "Stsenariy",
+      "openAction": "Stsenariyni ochish"
     },
     "feeds": {
       "sectionAria": "Umumiy ko'rinish lentasi panellari",

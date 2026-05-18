@@ -58,7 +58,7 @@
   "pages": {
     "overview": {
       "title": "Overview",
-      "description": "Macro snapshot for analytical use, designed to show what changed, why it matters, and where to test next."
+      "description": "Current macro state, near-term risks, and the scenario tests to run next."
     },
     "scenarioLab": {
       "title": "Scenario Lab",
@@ -145,11 +145,11 @@
       "mom": "MoM"
     },
     "briefing": {
-      "kicker": "Macro brief",
-      "title": "Decision signals before the dashboard",
-      "description": "Read the current state first, then use the watch list and scenario tests to pressure-check the baseline.",
-      "primarySignalsTitle": "Primary signals",
-      "primarySignalsAria": "Primary overview signals",
+      "kicker": "Current read",
+      "title": "Macro position and next tests",
+      "description": "Start with the current state, then check the risks and scenario tests below.",
+      "primarySignalsTitle": "Key indicators",
+      "primarySignalsAria": "Key overview indicators",
       "supportingSignalsTitle": "Supporting indicators",
       "supportingSignalsDescription": "Secondary metrics kept visible for context without competing with the first decision read."
     },
@@ -164,7 +164,7 @@
       "lastRefreshLabel": "Last updated"
     },
     "header": {
-      "kicker": "Economic State",
+      "kicker": "Current state",
       "modelListFallback": "MODEL SET",
       "draftedFrom": "State narrative · drafted from {{models}} baseline",
       "updatedAt": "State narrative reviewed {{date}}",
@@ -188,6 +188,7 @@
       },
       "provenance": {
         "draftedFromLabel": "STATE NARRATIVE · drafted from",
+        "baselineLabel": "Baseline",
         "aiAssisted": "AI-assisted",
         "humanAuthored": "Human-authored",
         "reviewedAt": "reviewed {{date}}",
@@ -259,19 +260,19 @@
       }
     },
     "risks": {
-      "title": "Top Risks to Monitor",
-      "description": "Three near-term risks that most affect baseline interpretation.",
+      "title": "Watch list",
+      "description": "Near-term risks that can change the baseline.",
       "empty": "No active risks are flagged for this snapshot.",
       "hitsPrefix": "Hits · ",
-      "testAction": "Run risk test",
+      "testAction": "Test scenario",
       "testActionAria": "Run scenario test for {{title}}"
     },
     "quickActions": {
-      "title": "Quick actions",
-      "description": "Direct entry points from monitoring to scenario analysis.",
+      "title": "Next scenario tests",
+      "description": "Open the most useful tests from this snapshot.",
       "empty": "No quick actions are configured for this snapshot.",
-      "kindAnalysis": "Analysis",
-      "openAction": "Open analysis"
+      "kindAnalysis": "Scenario",
+      "openAction": "Open scenario"
     },
     "feeds": {
       "sectionAria": "Overview feed panels",

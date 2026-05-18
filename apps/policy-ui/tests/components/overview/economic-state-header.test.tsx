@@ -71,12 +71,6 @@ describe('EconomicStateHeader', () => {
               summary="Growth remains resilient while inflation moderates."
               updatedAt="2026-04-17T09:05:00+05:00"
               modelIds={['dfm_nowcast', 'qpm_uzbekistan']}
-              outputAction={{
-                action_id: 'export-brief',
-                title: 'Prepare snapshot brief',
-                summary: 'Generate a concise note.',
-                target_href: '/scenario-lab?preset=snapshot-brief',
-              }}
             />
           </MemoryRouter>
         </LanguageContext.Provider>
@@ -86,7 +80,7 @@ describe('EconomicStateHeader', () => {
     assert.match(markup, /class="state-header__meta/)
     assert.match(markup, /Reference summary · current snapshot unavailable/)
     assert.match(markup, /Updated/)
-    assert.match(markup, /Prepare snapshot brief/)
+    assert.doesNotMatch(markup, /Prepare snapshot brief/)
   })
 
   it('renders neutral artifact strap from metadata/counts without stale attribution labels', async () => {
@@ -99,12 +93,6 @@ describe('EconomicStateHeader', () => {
               summary="Legacy static prose should not be used."
               updatedAt="2026-04-17T09:05:00+05:00"
               modelIds={['dfm_nowcast', 'qpm_uzbekistan']}
-              outputAction={{
-                action_id: 'export-brief',
-                title: 'Prepare snapshot brief',
-                summary: 'Generate a concise note.',
-                target_href: '/scenario-lab?preset=snapshot-brief',
-              }}
               isArtifactMode
               artifactProvisionalCount={5}
               macroPulseTokens={[
@@ -173,12 +161,6 @@ describe('EconomicStateHeader', () => {
               summary="Legacy static prose should not be used."
               updatedAt="2026-04-17T09:05:00+05:00"
               modelIds={['overview_artifact']}
-              outputAction={{
-                action_id: 'export-brief',
-                title: 'Prepare snapshot brief',
-                summary: 'Generate a concise note.',
-                target_href: '/scenario-lab?preset=snapshot-brief',
-              }}
               isArtifactMode
               macroPulseTokens={[
                 { id: 'gdp', label: 'GDP', value: '8.7 %' },

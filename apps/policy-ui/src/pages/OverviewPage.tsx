@@ -151,7 +151,6 @@ export function OverviewPage() {
     nowcast_forecast,
     top_risks,
     analysis_actions,
-    output_action,
     caveats,
     references,
     activity_feed,
@@ -217,7 +216,6 @@ export function OverviewPage() {
               summary={summary}
               updatedAt={generated_at}
               modelIds={model_ids}
-              outputAction={output_action}
               provenance={provenance}
               artifactSummaryMetrics={artifact_summary_metrics}
               artifactProvisionalCount={artifactProvisionalCount}
@@ -238,9 +236,12 @@ export function OverviewPage() {
 
         <div className="overview-briefing__workbench">
           <RiskPanel risks={top_risks} />
-          <QuickActions actions={analysis_actions} />
         </div>
       </section>
+
+      <div className="overview-next-tests">
+        <QuickActions actions={analysis_actions} />
+      </div>
 
       {supportingHeadlineMetrics.length > 0 ? (
         <section className="overview-supporting-signals" aria-labelledby="overview-supporting-signals-title">
