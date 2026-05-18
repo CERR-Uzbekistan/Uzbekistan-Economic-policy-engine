@@ -26,6 +26,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
+import { toYAxisDomain } from './chart-domain-utils.js'
 
 type ChartRendererProps = {
   spec: ChartSpec
@@ -134,25 +135,6 @@ function buildChartData(spec: ChartSpec, seriesMeta: SeriesMeta[], bandMeta: Ban
 
     return row
   })
-}
-
-function toYAxisDomain(spec: ChartSpec): ['auto', 'auto'] | [number, number] {
-  const seriesValues = spec.series.flatMap((series) => series.values.filter(isFiniteNumber))
-  const uncertaintyBounds = spec.uncertainty.flatMap((band) => [
-    ...band.lower.filter(isFiniteNumber),
-    ...band.upper.filter(isFiniteNumber),
-  ])
-  const values = [...seriesValues, ...uncertaintyBounds]
-
-  if (values.length === 0) {
-    return ['auto', 'auto']
-  }
-
-  const minValue = Math.min(...values)
-  const maxValue = Math.max(...values)
-  const range = maxValue - minValue
-  const padding = Math.max(range * 0.15, 0.5)
-  return [minValue - padding, maxValue + padding]
 }
 
 function getFreshness(spec: ChartSpec): string | null {

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { ChartRenderer } from '../../../src/components/system/ChartRenderer.js'
+import { toYAxisDomain } from '../../../src/components/system/chart-domain-utils.js'
 import { toBandMeta } from '../../../src/components/system/chart-meta-utils.js'
 import type { ChartSpec } from '../../../src/contracts/data-contract.js'
 
@@ -51,6 +52,11 @@ const chartSpecWithIllustrativeBand: ChartSpec = {
   ],
   takeaway: 'Growth edges higher through mid-year.',
   model_attribution: [modelAttribution],
+}
+
+function assertNumericDomain(domain: ['auto', 'auto'] | [number, number]): asserts domain is [number, number] {
+  assert.notEqual(domain[0], 'auto')
+  assert.notEqual(domain[1], 'auto')
 }
 
 describe('ChartRenderer', () => {
@@ -110,5 +116,52 @@ describe('ChartRenderer', () => {
 
     const markup = renderToStaticMarkup(<ChartRenderer spec={emptySpec} />)
     assert.match(markup, /No data available for this chart\./)
+  })
+
+  it('uses a zero baseline for the Overview GDP actual/nowcast bridge', () => {
+    const domain = toYAxisDomain({
+      ...chartSpecWithIllustrativeBand,
+      chart_id: 'artifact_nowcast_bridge',
+      uncertainty: [],
+      series: [
+        {
+          series_id: 'gdp_history_yoy',
+          label: 'Actual',
+          semantic_role: 'baseline',
+          values: [8.7, Number.NaN],
+        },
+        {
+          series_id: 'gdp_nowcast_yoy',
+          label: 'Nowcast',
+          semantic_role: 'alternative',
+          values: [8.7, 6],
+        },
+      ],
+    })
+
+    assertNumericDomain(domain)
+    assert.equal(domain[0], 0)
+    assert.ok(domain[1] > 9)
+  })
+
+  it('keeps ordinary positive line charts on a local domain instead of forcing zero', () => {
+    const domain = toYAxisDomain(chartSpecWithIllustrativeBand)
+    assertNumericDomain(domain)
+    assert.ok(domain[0] > 0)
+    assert.ok(domain[0] < 5)
+    assert.ok(domain[1] > 6)
+  })
+
+  it('uses a zero baseline for positive bar charts', () => {
+    const domain = toYAxisDomain({
+      ...chartSpecWithIllustrativeBand,
+      chart_id: 'bar-chart',
+      chart_type: 'bar',
+      uncertainty: [],
+    })
+
+    assertNumericDomain(domain)
+    assert.equal(domain[0], 0)
+    assert.ok(domain[1] > 5.8)
   })
 })
