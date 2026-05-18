@@ -762,10 +762,11 @@ function languageSwitchExpression(language, expectedTitle) {
 
 function knowledgeHubTrackerExpression() {
   return `
-    (() => {
+    (async () => {
       const sectionTabs = document.querySelector('.knowledge-hub-page .hub-section-tabs');
       const sectionTabCount = sectionTabs ? sectionTabs.querySelectorAll('button').length : 0;
-      const metrics = document.querySelector('.knowledge-hub-page .tracker-summary');
+      const viewTabs = document.querySelector('.knowledge-hub-page .reform-view-tabs');
+      const viewButtons = viewTabs ? Array.from(viewTabs.querySelectorAll('button')) : [];
       const latestChanges = document.querySelector('.knowledge-hub-page .latest-changes');
       const latestCards = Array.from(document.querySelectorAll('.knowledge-hub-page .latest-change-card'));
       const changeBulletList = document.querySelector('.knowledge-hub-page .change-bullet-list');
@@ -773,6 +774,24 @@ function knowledgeHubTrackerExpression() {
         (count, card) => count + card.querySelectorAll('.change-bullet-list li').length,
         0,
       );
+      const latestRegisterPreview = document.querySelector('.knowledge-hub-page .register-preview');
+      const latestUpcomingPreview = document.querySelector('.knowledge-hub-page .upcoming-preview');
+      const latestSourceChecks = document.querySelector('.knowledge-hub-page .source-checks-strip');
+      const waitFor = async (selector) => {
+        const deadline = Date.now() + 5000;
+        while (Date.now() < deadline) {
+          const element = document.querySelector(selector);
+          if (element) return element;
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+        return null;
+      };
+
+      if (viewButtons[1]) {
+        viewButtons[1].click();
+        await waitFor('.knowledge-hub-page .reform-archive');
+      }
+      const metrics = document.querySelector('.knowledge-hub-page .tracker-summary');
       const searchInput = document.querySelector('.knowledge-hub-page .tracker-controls input[type="search"]');
       const archiveItems = Array.from(document.querySelectorAll('.knowledge-hub-page .reform-archive .archive-item'));
       const archiveBullets = document.querySelectorAll('.knowledge-hub-page .change-bullet-list--archive li').length;
@@ -780,6 +799,13 @@ function knowledgeHubTrackerExpression() {
       const modelActive = document.querySelector('.knowledge-hub-page .model-chip--active');
       const modelPlanned = document.querySelector('.knowledge-hub-page .model-chip--planned');
       const supportPanel = document.querySelector('.knowledge-hub-page .tracker-support');
+
+      if (viewButtons[2]) {
+        viewButtons[2].click();
+        await waitFor('.knowledge-hub-page .upcoming-dates-panel');
+      }
+      const upcomingDatesPanel = document.querySelector('.knowledge-hub-page .upcoming-dates-panel');
+      const upcomingDateRows = document.querySelectorAll('.knowledge-hub-page .upcoming-date-row').length;
       const forbiddenSelectors = [
         '.pending-surface',
         '.knowledge-hub-static-banner',
@@ -820,11 +846,16 @@ function knowledgeHubTrackerExpression() {
         ok:
           !!sectionTabs &&
           sectionTabCount === 3 &&
+          !!viewTabs &&
+          viewButtons.length === 3 &&
           !!metrics &&
           !!latestChanges &&
           latestCards.length >= 3 &&
           !!changeBulletList &&
           bulletCount >= 12 &&
+          !!latestRegisterPreview &&
+          !!latestUpcomingPreview &&
+          !!latestSourceChecks &&
           !!searchInput &&
           archiveItems.length > 0 &&
           archiveBullets >= 4 &&
@@ -832,16 +863,23 @@ function knowledgeHubTrackerExpression() {
           !!modelActive &&
           !!modelPlanned &&
           !!supportPanel &&
+          !!upcomingDatesPanel &&
+          upcomingDateRows > 0 &&
           hasSourceMetadata &&
           !forbiddenSelector &&
           !forbiddenText,
         hasSectionTabs: !!sectionTabs,
         sectionTabCount,
+        hasViewTabs: !!viewTabs,
+        viewTabCount: viewButtons.length,
         hasMetrics: !!metrics,
         hasLatestChanges: !!latestChanges,
         latestChangeCount: latestCards.length,
         hasChangeBulletList: !!changeBulletList,
         bulletCount,
+        hasRegisterPreview: !!latestRegisterPreview,
+        hasUpcomingPreview: !!latestUpcomingPreview,
+        hasSourceChecks: !!latestSourceChecks,
         hasSearchInput: !!searchInput,
         archiveItemCount: archiveItems.length,
         archiveBullets,
@@ -849,6 +887,8 @@ function knowledgeHubTrackerExpression() {
         hasActiveModelLens: !!modelActive,
         hasPlannedModelLens: !!modelPlanned,
         hasSupportPanel: !!supportPanel,
+        hasUpcomingDatesPanel: !!upcomingDatesPanel,
+        upcomingDateRows,
         hasSourceMetadata,
         forbiddenSelector: forbiddenSelector ?? null,
         forbiddenText: forbiddenText ?? null,
