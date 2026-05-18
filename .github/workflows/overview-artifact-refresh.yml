@@ -33,6 +33,17 @@ jobs:
           cache: npm
           cache-dependency-path: apps/policy-ui/package-lock.json
 
+      - name: Install policy-ui
+        working-directory: apps/policy-ui
+        run: npm ci
+
+      - name: Compile policy-ui modules for exporter
+        working-directory: apps/policy-ui
+        run: npm exec tsc -- -p tsconfig.test.json
+
+      - name: Run Overview source tests
+        run: node --test scripts/overview/tests/*.test.mjs
+
       - name: Initialize run metadata
         id: meta
         run: |
@@ -97,20 +108,6 @@ jobs:
           else
             echo "snapshot_changed=true" >> "$GITHUB_OUTPUT"
           fi
-
-      - name: Install policy-ui
-        if: steps.source_changes.outputs.snapshot_changed == 'true'
-        working-directory: apps/policy-ui
-        run: npm ci
-
-      - name: Compile policy-ui modules for exporter
-        if: steps.source_changes.outputs.snapshot_changed == 'true'
-        working-directory: apps/policy-ui
-        run: npm exec tsc -- -p tsconfig.test.json
-
-      - name: Run Overview source tests
-        if: steps.source_changes.outputs.snapshot_changed == 'true'
-        run: node --test scripts/overview/tests/*.test.mjs
 
       - name: Export public Overview artifact
         if: steps.source_changes.outputs.snapshot_changed == 'true'
