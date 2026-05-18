@@ -31,8 +31,21 @@ async function createTestI18n() {
               artifactStrapPlural: 'Snapshot · {{date}} · {{count}} review notes',
               artifactSummaryMeta: 'Snapshot summary · {{count}} metrics',
               staticFallbackNotice: 'Reference summary · current snapshot unavailable',
+              dataNoteReviewed: 'Data note: reviewed {{date}}',
+              dataNoteUpdated: 'Data note: updated {{date}}',
+              sourceNotesBelow: '{{count}} metric sources listed below',
+              modelSource: 'model source: {{models}}',
               artifactBrief: {
                 summary: 'Growth is above the current nowcast path; inflation and external indicators remain on watch.',
+              },
+              takeaways: {
+                aria: 'Overview briefing takeaways',
+                changedLabel: 'What changed: ',
+                changed: 'Q1 GDP is above the Q2 nowcast path; CPI remains high despite gradual decline.',
+                mattersLabel: 'Why it matters: ',
+                matters: 'FX pass-through, food prices, and remittances can still shift the baseline.',
+                testLabel: 'Test next: ',
+                test: 'Start with exchange-rate, inflation persistence, and remittance downside scenarios.',
               },
               summary: {
                 template: '{{items}}.',
@@ -147,7 +160,10 @@ describe('EconomicStateHeader', () => {
     assert.match(markup, /CPI[\s\S]*8\.1 % YoY \/ 0\.7 % MoM/)
     assert.match(markup, /Trade balance[\s\S]*USD 1\.20bn deficit/)
     assert.match(markup, /USD\/UZS[\s\S]*12,680 UZS\/USD · UZS weaker 1\.4%/)
-    assert.match(markup, /Snapshot summary · 2 metrics/)
+    assert.match(markup, /Data note: updated/)
+    assert.match(markup, /2 metric sources listed below/)
+    assert.match(markup, /What changed:/)
+    assert.match(markup, /Test next:/)
     assert.doesNotMatch(markup, /Snapshot · Apr 2026 · 5 review notes/)
     assert.doesNotMatch(markup, /AI-assisted/)
     assert.doesNotMatch(markup, /DFM \+ QPM/)

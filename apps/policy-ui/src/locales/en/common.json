@@ -145,13 +145,11 @@
       "mom": "MoM"
     },
     "briefing": {
-      "kicker": "Current read",
-      "title": "Macro position and next tests",
-      "description": "Start with the current state, then check the risks and scenario tests below.",
+      "kicker": "Briefing",
+      "title": "Current read",
+      "description": "What changed, why it matters, and which scenario tests are most relevant now.",
       "primarySignalsTitle": "Key indicators",
-      "primarySignalsAria": "Key overview indicators",
-      "supportingSignalsTitle": "Supporting indicators",
-      "supportingSignalsDescription": "Secondary metrics kept visible for context without competing with the first decision read."
+      "primarySignalsAria": "Key overview indicators"
     },
     "topbar": {
       "freshness": "Data · {{days}}d ago"
@@ -170,10 +168,22 @@
       "updatedAt": "State narrative reviewed {{date}}",
       "artifactStrap": "Snapshot · {{date}} · {{count}} review note",
       "artifactStrapPlural": "Snapshot · {{date}} · {{count}} review notes",
-      "artifactSummaryMeta": "Snapshot summary · {{count}} metrics",
       "staticFallbackNotice": "Reference summary · current snapshot unavailable",
+      "dataNoteReviewed": "Data note: reviewed {{date}}",
+      "dataNoteUpdated": "Data note: updated {{date}}",
+      "sourceNotesBelow": "{{count}} metric sources listed below",
+      "modelSource": "model source: {{models}}",
       "artifactBrief": {
-        "summary": "Growth is running above the current-quarter nowcast path, inflation remains elevated, and trade/FX indicators keep the external channel on watch. Use the scenario tests below for FX pass-through, inflation persistence, and remittance downside."
+        "summary": "Growth is above the current-quarter nowcast path, while inflation and the external channel remain the main watch points."
+      },
+      "takeaways": {
+        "aria": "Overview briefing takeaways",
+        "changedLabel": "What changed: ",
+        "changed": "Q1 GDP is above the Q2 nowcast path; CPI remains high despite gradual decline.",
+        "mattersLabel": "Why it matters: ",
+        "matters": "FX pass-through, food prices, and remittances can still shift the baseline.",
+        "testLabel": "Test next: ",
+        "test": "Start with exchange-rate, inflation persistence, and remittance downside scenarios."
       },
       "summary": {
         "template": "{{items}}.",
@@ -188,15 +198,6 @@
           "policyRate": "policy rate",
           "gold": "gold"
         }
-      },
-      "provenance": {
-        "draftedFromLabel": "STATE NARRATIVE · drafted from",
-        "baselineLabel": "Baseline",
-        "aiAssisted": "AI-assisted",
-        "humanAuthored": "Human-authored",
-        "reviewedAt": "reviewed {{date}}",
-        "reviewerPendingChip": "Review needed",
-        "reviewerPendingAria": "Reviewer name not yet recorded"
       }
     },
     "kpi": {
@@ -221,13 +222,6 @@
         "down": "lower",
         "flat": "unchanged"
       }
-    },
-    "supportingTable": {
-      "indicator": "Indicator",
-      "latest": "Latest",
-      "change": "Change",
-      "period": "Period",
-      "source": "Source"
     },
     "comparisonBasis": {
       "real_gdp_growth_annual_yoy": "print",
@@ -270,16 +264,16 @@
       }
     },
     "risks": {
-      "title": "Watch list",
-      "description": "Near-term risks that can change the baseline.",
+      "title": "Risks and tests",
+      "description": "Near-term risks paired with scenario tests.",
       "empty": "No active risks are flagged for this snapshot.",
-      "hitsPrefix": "Hits · ",
+      "hitsPrefix": "Channel: ",
       "testAction": "Test scenario",
       "testActionAria": "Run scenario test for {{title}}"
     },
     "quickActions": {
-      "title": "Next scenario tests",
-      "description": "Open the most useful tests from this snapshot.",
+      "title": "Recommended tests",
+      "description": "Open the most useful scenario checks from this snapshot.",
       "empty": "No quick actions are configured for this snapshot.",
       "kindAnalysis": "Scenario",
       "openAction": "Open scenario"

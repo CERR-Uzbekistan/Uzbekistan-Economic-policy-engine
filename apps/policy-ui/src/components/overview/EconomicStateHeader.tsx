@@ -26,8 +26,6 @@ const LOCALE_BY_LANGUAGE: Record<LanguageCode, string> = {
   uz: 'uz-UZ',
 }
 
-const SME_CONTENT_PENDING = '[SME content pending]'
-
 function formatDateTime(value: string, locale: string) {
   const date = new Date(value)
   return new Intl.DateTimeFormat(locale, {
@@ -92,20 +90,34 @@ export function EconomicStateHeader({
 
   const draftedFrom = provenance?.drafted_from ?? modelList
   const reviewDate = provenance?.reviewed_at ?? ''
-  const reviewerName = provenance?.reviewer_name ?? ''
-  const reviewerIsSentinel = reviewerName === SME_CONTENT_PENDING
-  const hasReviewerName = reviewerName.length > 0 && !reviewerIsSentinel
   const provisionalCount = artifactProvisionalCount
     ?? artifactSummaryMetrics.filter((metric) => metric.validation_status === 'warning').length
   const artifactStrap = t(provisionalCount === 1 ? 'overview.header.artifactStrap' : 'overview.header.artifactStrapPlural', {
     date: formatMonthYear(updatedAt, locale),
     count: provisionalCount,
   })
+  const dataNote = reviewDate
+    ? t('overview.header.dataNoteReviewed', { date: reviewDate })
+    : t('overview.header.dataNoteUpdated', { date: formattedUpdatedAt })
   const summaryText = isArtifactMode && macroPulseTokens.length > 0
     ? (
       <>
         <span className="overview-state-header__brief">
           {t('overview.header.artifactBrief.summary')}
+        </span>
+        <span className="overview-state-header__takeaways" aria-label={t('overview.header.takeaways.aria')}>
+          <span>
+            <span className="overview-state-header__takeaway-label">{t('overview.header.takeaways.changedLabel')}</span>
+            {t('overview.header.takeaways.changed')}
+          </span>
+          <span>
+            <span className="overview-state-header__takeaway-label">{t('overview.header.takeaways.mattersLabel')}</span>
+            {t('overview.header.takeaways.matters')}
+          </span>
+          <span>
+            <span className="overview-state-header__takeaway-label">{t('overview.header.takeaways.testLabel')}</span>
+            {t('overview.header.takeaways.test')}
+          </span>
         </span>
         <span className="overview-state-header__pulse">
           {macroPulseTokens.map((token, index) => (
@@ -135,48 +147,17 @@ export function EconomicStateHeader({
       {isArtifactMode ? (
         <div className="state-header__provenance overview-state-header__provenance">
           <p className="overview-state-header__provenance-line">
-            <span>{t('overview.header.artifactSummaryMeta', { count: artifactSummaryMetrics.length })}</span>
+            <span>{dataNote}</span>
+            <span>{t('overview.common.middleDot')}</span>
+            <span>{t('overview.header.sourceNotesBelow', { count: artifactSummaryMetrics.length })}</span>
           </p>
-          {provenance ? (
-            <>
-              <p className="overview-state-header__provenance-line">
-                {t('overview.header.provenance.baselineLabel')}{' '}
-                {t('overview.common.middleDot')} {draftedFrom}
-              </p>
-              <p className="overview-state-header__provenance-line">
-                {reviewDate ? t('overview.header.provenance.reviewedAt', { date: reviewDate }) : t('overview.header.updatedAt', { date: formattedUpdatedAt })}{' '}
-                {t('overview.common.middleDot')}{' '}
-                {hasReviewerName ? (
-                  reviewerName
-                ) : (
-                  <span className="ui-chip ui-chip--warn" aria-label={t('overview.header.provenance.reviewerPendingAria')}>
-                    {t('overview.header.provenance.reviewerPendingChip')}
-                  </span>
-                )}
-              </p>
-            </>
-          ) : (
-            <p className="overview-state-header__provenance-line">
-              {t('overview.header.updatedAt', { date: formattedUpdatedAt })}
-            </p>
-          )}
         </div>
       ) : provenance ? (
         <div className="state-header__provenance overview-state-header__provenance">
           <p className="overview-state-header__provenance-line">
-            {t('overview.header.provenance.baselineLabel')}{' '}
-            {t('overview.common.middleDot')} {draftedFrom}
-          </p>
-          <p className="overview-state-header__provenance-line">
-            {reviewDate ? t('overview.header.provenance.reviewedAt', { date: reviewDate }) : t('overview.header.updatedAt', { date: formattedUpdatedAt })}{' '}
-            {t('overview.common.middleDot')}{' '}
-            {hasReviewerName ? (
-              reviewerName
-            ) : (
-              <span className="ui-chip ui-chip--warn" aria-label={t('overview.header.provenance.reviewerPendingAria')}>
-                {t('overview.header.provenance.reviewerPendingChip')}
-              </span>
-            )}
+            <span>{dataNote}</span>
+            <span>{t('overview.common.middleDot')}</span>
+            <span>{t('overview.header.modelSource', { models: draftedFrom })}</span>
           </p>
         </div>
       ) : (

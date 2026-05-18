@@ -12,9 +12,9 @@ body:has(.overview-page) {
   color: var(--color-text-muted);
   font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.01em;
   margin: 0;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .overview-page .page-header,
@@ -90,6 +90,27 @@ body:has(.overview-page) {
   max-width: 70ch;
 }
 
+.overview-state-header__takeaways {
+  border-top: 1px solid var(--color-border);
+  display: grid;
+  gap: 0.35rem;
+  margin: var(--space-md) 0;
+  padding-top: var(--space-md);
+}
+
+.overview-state-header__takeaways span {
+  color: var(--color-text);
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.overview-state-header__takeaway-label {
+  color: var(--color-text-muted);
+  font-weight: 650;
+}
+
 .overview-state-header__pulse-token {
   display: inline;
 }
@@ -108,11 +129,9 @@ body:has(.overview-page) {
   color: var(--color-text-muted);
   display: flex;
   flex-wrap: wrap;
-  font-family: var(--font-mono);
   font-size: 0.76rem;
   gap: var(--space-sm);
   margin: 0;
-  text-transform: uppercase;
 }
 
 .state-header__meta > span + span::before {
@@ -121,17 +140,19 @@ body:has(.overview-page) {
 }
 
 .overview-state-header__provenance {
-  display: grid;
-  gap: 0.15rem;
-  margin-top: var(--space-lg);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: var(--space-md);
+  font-size: 0.78rem;
   color: var(--color-text-muted);
-  text-transform: uppercase;
 }
 
 .overview-state-header__provenance-line {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
   margin: 0;
   overflow-wrap: anywhere;
 }
@@ -151,10 +172,8 @@ body:has(.overview-page) {
 
 .overview-kpi-card__period {
   color: color-mix(in srgb, var(--color-text-muted) 88%, var(--color-surface));
-  font-family: var(--font-mono);
   font-size: 0.72rem;
   line-height: 1.2;
-  text-transform: uppercase;
 }
 
 .overview-kpi-card__sme-chip {
@@ -256,92 +275,12 @@ body:has(.overview-page) {
   min-width: 0;
 }
 
-.overview-briefing__workbench .overview-panel,
-.overview-briefing__workbench .overview-actions-section {
+.overview-briefing__workbench .overview-panel {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 0;
   min-width: 0;
   padding: var(--space-md);
-}
-
-.overview-next-tests .overview-actions-section {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 0;
-  min-width: 0;
-  padding: var(--space-md);
-}
-
-.overview-supporting-signals {
-  border-bottom: 1px solid var(--color-border);
-  display: grid;
-  gap: var(--space-md);
-  padding-bottom: var(--space-lg);
-}
-
-.overview-supporting-table-wrap {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  overflow-x: auto;
-}
-
-.overview-supporting-table {
-  border-collapse: collapse;
-  font-size: 0.83rem;
-  min-width: 54rem;
-  width: 100%;
-}
-
-.overview-supporting-table th,
-.overview-supporting-table td {
-  border-bottom: 1px solid var(--color-border);
-  padding: 0.72rem 0.85rem;
-  text-align: left;
-  vertical-align: top;
-}
-
-.overview-supporting-table thead th {
-  color: var(--color-text-muted);
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 650;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.overview-supporting-table tbody tr:last-child th,
-.overview-supporting-table tbody tr:last-child td {
-  border-bottom: 0;
-}
-
-.overview-supporting-table__label {
-  color: var(--color-text);
-  display: block;
-  font-weight: 650;
-  line-height: 1.35;
-}
-
-.overview-supporting-table__claim {
-  color: var(--color-text-muted);
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.03em;
-  margin-top: 0.2rem;
-  text-transform: uppercase;
-}
-
-.overview-supporting-table__value,
-.overview-supporting-table__change,
-.overview-supporting-table__period {
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.overview-supporting-table__source {
-  color: var(--color-text-muted);
-  max-width: 18rem;
 }
 
 .kpi-strip {
@@ -407,7 +346,6 @@ body:has(.overview-page) {
   min-width: 1.35rem;
   padding: 0.18rem 0.28rem;
   text-align: center;
-  text-transform: uppercase;
   white-space: nowrap;
 }
 
@@ -584,12 +522,10 @@ body:has(.overview-page) {
   background: var(--color-surface-muted);
   border-top: 1px solid var(--color-border);
   color: var(--color-text-muted);
-  font-family: var(--font-mono);
   font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.01em;
   padding: 0.45rem 0.9rem;
-  text-transform: uppercase;
 }
 
 .overview-indicator-subhead + .overview-indicator-row {
@@ -623,16 +559,11 @@ body:has(.overview-page) {
   overflow-wrap: anywhere;
 }
 
-.overview-indicator-row__source-period {
-  font-family: var(--font-mono);
-}
-
 .overview-indicator-row__kind {
   color: color-mix(in srgb, var(--color-text-muted) 82%, var(--color-surface));
   font-size: 0.68rem;
   font-weight: 650;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
 }
 
 .overview-indicator-row--forecast {
@@ -676,7 +607,6 @@ body:has(.overview-page) {
 
 .overview-indicator-row__delta {
   color: var(--color-text-muted);
-  font-family: var(--font-mono);
   font-size: 0.74rem;
   max-width: 28ch;
   overflow-wrap: anywhere;
@@ -689,7 +619,6 @@ body:has(.overview-page) {
   font-weight: 700;
   line-height: 1;
   padding: 0.22rem 0.32rem;
-  text-transform: uppercase;
 }
 
 .overview-indicator-row__status {
@@ -1251,66 +1180,63 @@ body:has(.overview-page) {
   text-align: start;
 }
 
-.quick-actions .overview-section-head {
-  margin-bottom: var(--space-sm);
-}
-
-.overview-actions-grid {
+.overview-risk-tests {
+  border-top: 1px solid var(--color-border);
   display: grid;
   gap: var(--space-sm);
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
 }
 
-.qa-tile,
-.overview-action-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  color: inherit;
+.overview-risk-tests__head {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.overview-risk-tests__head h3 {
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+.overview-risk-tests__head p {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.overview-risk-tests__list {
   display: grid;
   gap: var(--space-xs);
-  min-height: 7rem;
-  padding: 0.78rem 0.85rem;
+}
+
+.overview-risk-test-link {
+  border: 1px solid var(--color-border);
+  color: inherit;
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.62rem 0.68rem;
   text-decoration: none;
 }
 
-.qa-kind {
-  color: var(--color-text-muted);
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.overview-action-card__title {
-  font-size: 0.89rem;
-  font-weight: 620;
+.overview-risk-test-link span {
+  color: var(--color-brand);
+  font-size: 0.84rem;
+  font-weight: 650;
   line-height: 1.3;
-  margin: 0;
 }
 
-.overview-action-card__summary {
+.overview-risk-test-link small {
   color: var(--color-text-muted);
   display: -webkit-box;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   line-height: 1.35;
-  margin: 0;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
 }
 
-.overview-action-card__cta {
-  align-self: end;
-  color: var(--color-brand);
-  font-size: 0.78rem;
-  font-weight: 650;
-  margin-top: var(--space-xs);
-}
-
-.qa-tile:hover,
-.overview-action-card:hover {
+.overview-risk-test-link:hover {
   background: var(--color-brand-soft);
   border-color: var(--color-border-strong);
 }
@@ -1371,11 +1297,9 @@ body:has(.overview-page) {
 
 .feed-item__date {
   color: var(--color-text-muted);
-  font-family: var(--font-mono);
   font-size: 0.68rem;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.01em;
   margin: 0;
-  text-transform: uppercase;
 }
 
 .feed-item__title {
@@ -1392,7 +1316,6 @@ body:has(.overview-page) {
 
 .feed-tag {
   color: var(--color-text-muted);
-  font-family: var(--font-mono);
   font-size: 0.72rem;
 }
 
@@ -1413,10 +1336,6 @@ body:has(.overview-page) {
 
   .overview-briefing__workbench {
     grid-template-columns: 1fr;
-  }
-
-  .overview-actions-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .kpi-strip--primary .overview-kpi-grid {
@@ -1445,10 +1364,6 @@ body:has(.overview-page) {
   .overview-briefing {
     padding: var(--space-md);
     width: calc(100vw - 1.5rem);
-  }
-
-  .overview-actions-grid {
-    grid-template-columns: 1fr;
   }
 
   .overview-briefing__header h2 {
@@ -1610,12 +1525,10 @@ body:has(.overview-page) {
 
 .overview-data-notes__summary span {
   color: var(--color-text-muted);
-  font-family: var(--font-mono);
   font-size: 0.74rem;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   min-width: 0;
   overflow-wrap: anywhere;
-  text-transform: uppercase;
 }
 
 .overview-data-notes__summary .overview-data-notes__summary-main {
@@ -1637,13 +1550,11 @@ body:has(.overview-page) {
   color: var(--color-text-muted);
   display: flex;
   flex-wrap: wrap;
-  font-family: var(--font-mono);
   font-size: 0.72rem;
   gap: var(--space-sm) var(--space-lg);
   justify-content: space-between;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.01em;
   padding: 0.65rem 0.9rem;
-  text-transform: uppercase;
 }
 
 .overview-caveats__list {
@@ -1678,8 +1589,7 @@ body:has(.overview-page) {
 .overview-caveat__severity {
   font-size: 0.75rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.01em;
 }
 
 .overview-caveat__severity--critical { color: var(--severity-crit-fg); }
@@ -1687,7 +1597,6 @@ body:has(.overview-page) {
 .overview-caveat__severity--info     { color: var(--severity-info-fg); }
 
 .overview-caveat__models {
-  font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--color-text-muted);
   overflow-wrap: anywhere;
@@ -1718,8 +1627,7 @@ body:has(.overview-page) {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.01em;
   margin: 0 0 var(--space-sm) 0;
 }
 
@@ -1740,12 +1648,10 @@ body:has(.overview-page) {
 .overview-references__summary {
   color: var(--color-text-muted);
   cursor: pointer;
-  font-family: var(--font-mono);
   font-size: 0.74rem;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.01em;
   min-height: 2.75rem;
   padding: 0.75rem 0.9rem;
-  text-transform: uppercase;
 }
 
 .overview-references__details[open] .overview-references__summary {

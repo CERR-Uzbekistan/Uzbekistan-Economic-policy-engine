@@ -145,13 +145,11 @@
       "mom": "m/m"
     },
     "briefing": {
-      "kicker": "Joriy baho",
-      "title": "Makro holat va keyingi testlar",
-      "description": "Avval joriy holatni ko'ring, keyin quyidagi xatarlar va stsenariy testlarini tekshiring.",
+      "kicker": "Qisqa sharh",
+      "title": "Joriy baho",
+      "description": "Nima o'zgardi, nima uchun muhim va hozir qaysi stsenariylarni tekshirish kerak.",
       "primarySignalsTitle": "Asosiy ko'rsatkichlar",
-      "primarySignalsAria": "Umumiy ko'rinishning asosiy ko'rsatkichlari",
-      "supportingSignalsTitle": "Qo'shimcha ko'rsatkichlar",
-      "supportingSignalsDescription": "Ikkinchi darajali metrikalar kontekst uchun ko'rinadi, lekin birinchi qaror o'qishiga raqobat qilmaydi."
+      "primarySignalsAria": "Umumiy ko'rinishning asosiy ko'rsatkichlari"
     },
     "topbar": {
       "freshness": "Ma'lumotlar · {{days}} kun oldin"
@@ -170,10 +168,22 @@
       "updatedAt": "Holat narrativi tekshirildi: {{date}}",
       "artifactStrap": "Kesim · {{date}} · {{count}} ko'rib chiqish eslatmasi",
       "artifactStrapPlural": "Kesim · {{date}} · {{count}} ko'rib chiqish eslatmasi",
-      "artifactSummaryMeta": "Kesim xulosasi · {{count}} ko'rsatkich",
       "staticFallbackNotice": "Namuna xulosa · joriy kesim mavjud emas",
+      "dataNoteReviewed": "Ma'lumot eslatmasi: {{date}} kuni tekshirilgan",
+      "dataNoteUpdated": "Ma'lumot eslatmasi: {{date}} kuni yangilangan",
+      "sourceNotesBelow": "{{count}} ko'rsatkich manbasi quyida",
+      "modelSource": "model manbasi: {{models}}",
       "artifactBrief": {
-        "summary": "O'sish joriy chorak nowcast trayektoriyasidan yuqorida, inflyatsiya hali baland, savdo va valyuta ko'rsatkichlari esa tashqi kanalni kuzatuvda qoldiradi. Quyida FX pass-through, inflyatsiya inertligi va pul o'tkazmalari pasayishi stsenariylarini tekshiring."
+        "summary": "O'sish joriy chorak nowcast trayektoriyasidan yuqorida; inflyatsiya va tashqi kanal asosiy kuzatuv nuqtalari bo'lib qolmoqda."
+      },
+      "takeaways": {
+        "aria": "Umumiy ko'rinish bo'yicha asosiy xulosalar",
+        "changedLabel": "Nima o'zgardi: ",
+        "changed": "I chorak YaIM II chorak nowcast trayektoriyasidan yuqori; CPI faqat sekin pasaymoqda.",
+        "mattersLabel": "Nima uchun muhim: ",
+        "matters": "FX pass-through, oziq-ovqat narxlari va pul o'tkazmalari bazaviy holatni o'zgartirishi mumkin.",
+        "testLabel": "Tekshirish: ",
+        "test": "Avval valyuta kursi, inflyatsiya inertligi va pul o'tkazmalari pasayishi stsenariylarini sinang."
       },
       "summary": {
         "template": "{{items}}.",
@@ -188,15 +198,6 @@
           "policyRate": "siyosat stavkasi",
           "gold": "oltin"
         }
-      },
-      "provenance": {
-        "draftedFromLabel": "HOLAT NARRATIVI · bazasidan tuzilgan",
-        "baselineLabel": "Bazaviy stsenariy",
-        "aiAssisted": "AI yordamida",
-        "humanAuthored": "Mutaxassis tomonidan",
-        "reviewedAt": "taqriz {{date}}",
-        "reviewerPendingChip": "Ko'rib chiqish kerak",
-        "reviewerPendingAria": "Ko'rib chiquvchi nomi hali kiritilmagan"
       }
     },
     "kpi": {
@@ -221,13 +222,6 @@
         "down": "pastroq",
         "flat": "o'zgarmagan"
       }
-    },
-    "supportingTable": {
-      "indicator": "Ko'rsatkich",
-      "latest": "So'nggi",
-      "change": "O'zgarish",
-      "period": "Davr",
-      "source": "Manba"
     },
     "comparisonBasis": {
       "real_gdp_growth_annual_yoy": "reliz",
@@ -270,16 +264,16 @@
       }
     },
     "risks": {
-      "title": "Kuzatuv ro'yxati",
-      "description": "Bazaviy holatni o'zgartirishi mumkin bo'lgan yaqin muddatli xatarlar.",
+      "title": "Xatarlar va testlar",
+      "description": "Yaqin muddatli xatarlar va ularga mos stsenariy testlari.",
       "empty": "Bu snapshot uchun faol risklar belgilanmagan.",
-      "hitsPrefix": "Ta'sir kanali · ",
+      "hitsPrefix": "Kanal: ",
       "testAction": "Stsenariyni tekshirish",
       "testActionAria": "{{title}} uchun stsenariy testini ishga tushirish"
     },
     "quickActions": {
-      "title": "Keyingi stsenariy testlari",
-      "description": "Ushbu holat uchun eng foydali testlarni oching.",
+      "title": "Tavsiya etilgan testlar",
+      "description": "Ushbu kesim uchun eng foydali stsenariy tekshiruvlarini oching.",
       "empty": "Bu snapshot uchun tezkor amallar sozlanmagan.",
       "kindAnalysis": "Stsenariy",
       "openAction": "Stsenariyni ochish"

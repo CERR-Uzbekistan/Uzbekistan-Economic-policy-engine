@@ -6,10 +6,8 @@ import { IndicatorPanelGrid } from '../components/overview/IndicatorPanelGrid'
 import { KpiStrip } from '../components/overview/KpiStrip'
 import { NowcastForecastBlock } from '../components/overview/NowcastForecastBlock'
 import { OverviewFeeds } from '../components/overview/OverviewFeeds'
-import { QuickActions } from '../components/overview/QuickActions'
 import { ReferencesFooter } from '../components/overview/ReferencesFooter'
 import { RiskPanel } from '../components/overview/RiskPanel'
-import { SupportingMetricTable } from '../components/overview/SupportingMetricTable'
 import { PageContainer } from '../components/layout/PageContainer'
 import { PageHeader } from '../components/layout/PageHeader'
 import { TrustStateLabel } from '../components/system/TrustStateLabel'
@@ -168,7 +166,6 @@ export function OverviewPage() {
   ).size
   const overviewNowcastMetrics = [...(artifact_summary_metrics ?? []), ...headline_metrics]
   const primaryHeadlineMetrics = headline_metrics.slice(0, 3)
-  const supportingHeadlineMetrics = headline_metrics.slice(3)
   const macroPulseTokens = buildOverviewMacroPulseTokens(overviewNowcastMetrics, locale, t)
   const artifactAlignedNowcastChart = buildArtifactAlignedNowcastChart(overviewNowcastMetrics)
   const useLiveDfmNowcastChart =
@@ -236,23 +233,9 @@ export function OverviewPage() {
         </div>
 
         <div className="overview-briefing__workbench">
-          <RiskPanel risks={top_risks} />
+          <RiskPanel risks={top_risks} actions={analysis_actions} />
         </div>
       </section>
-
-      <div className="overview-next-tests">
-        <QuickActions actions={analysis_actions} />
-      </div>
-
-      {supportingHeadlineMetrics.length > 0 ? (
-        <section className="overview-supporting-signals" aria-labelledby="overview-supporting-signals-title">
-          <div className="overview-section-head">
-            <h2 id="overview-supporting-signals-title">{t('overview.briefing.supportingSignalsTitle')}</h2>
-            <p>{t('overview.briefing.supportingSignalsDescription')}</p>
-          </div>
-          <SupportingMetricTable metrics={supportingHeadlineMetrics} />
-        </section>
-      ) : null}
 
       {nowcast_forecast ? (
         <div className="overview-nowcast-column">

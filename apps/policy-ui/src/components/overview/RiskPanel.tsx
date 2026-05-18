@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import type { OverviewRisk } from '../../contracts/data-contract'
+import type { OverviewAnalysisAction, OverviewRisk } from '../../contracts/data-contract'
 
 type RiskPanelProps = {
   risks: OverviewRisk[]
+  actions: OverviewAnalysisAction[]
 }
 
-export function RiskPanel({ risks }: RiskPanelProps) {
+export function RiskPanel({ risks, actions }: RiskPanelProps) {
   const { t } = useTranslation()
 
   return (
@@ -45,6 +46,29 @@ export function RiskPanel({ risks }: RiskPanelProps) {
             </article>
           ))
         )}
+      </div>
+
+      <div className="overview-risk-tests" aria-labelledby="overview-risk-tests-title">
+        <div className="overview-risk-tests__head">
+          <h3 id="overview-risk-tests-title">{t('overview.quickActions.title')}</h3>
+          <p>{t('overview.quickActions.description')}</p>
+        </div>
+        <div className="overview-risk-tests__list">
+          {actions.length === 0 ? (
+            <p className="empty-state">{t('overview.quickActions.empty')}</p>
+          ) : (
+            actions.map((action) => (
+              <Link
+                key={action.action_id}
+                className="overview-risk-test-link"
+                to={`/scenario-lab?${action.scenario_query}`}
+              >
+                <span>{action.title}</span>
+                <small>{action.summary}</small>
+              </Link>
+            ))
+          )}
+        </div>
       </div>
     </section>
   )
