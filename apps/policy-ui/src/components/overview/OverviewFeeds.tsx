@@ -15,7 +15,7 @@ type OverviewFeedsProps = {
   activityFeed: OverviewActivityFeed
 }
 
-const ACTIVE_OVERVIEW_REFRESH_MODELS = new Set(['dfm_nowcast', 'qpm_uzbekistan', 'io_model'])
+const ACTIVE_OVERVIEW_REFRESH_MODELS = new Set(['overview_artifact', 'dfm_nowcast', 'qpm_uzbekistan', 'io_model'])
 
 function toEpoch(isoTimestamp: string): number {
   const parsed = Date.parse(isoTimestamp)

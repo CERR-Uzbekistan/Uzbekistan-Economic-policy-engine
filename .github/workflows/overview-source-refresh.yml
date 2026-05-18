@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      BASE_BRANCH: epic/replatform-execution
+      BASE_BRANCH: main
       AUTOMATION_BRANCH: automation/overview-source-refresh
       SNAPSHOT_PATH: scripts/overview/overview_source_snapshot.json
       DIFF_REPORT_PATH: scripts/overview/overview_source_snapshot.diff_report.json
@@ -21,7 +21,7 @@ jobs:
       - name: Check out base branch
         uses: actions/checkout@v4
         with:
-          ref: epic/replatform-execution
+          ref: main
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -111,7 +111,7 @@ jobs:
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1
         with:
           branch: automation/overview-source-refresh
-          base: epic/replatform-execution
+          base: main
           commit-message: "chore(overview): refresh source snapshot"
           committer: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
           author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"

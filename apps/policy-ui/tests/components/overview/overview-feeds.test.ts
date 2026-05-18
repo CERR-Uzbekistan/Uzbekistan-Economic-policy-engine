@@ -22,6 +22,7 @@ describe('OverviewFeeds Knowledge Hub reform preview', () => {
     assert.match(source, /loadKnowledgeHubSourceState/)
     assert.match(source, /buildKnowledgeHubReformPreview\(knowledgeHubState\.content/)
     assert.doesNotMatch(source, /activityFeed\.policy_actions/)
+    assert.match(source, /overview_artifact/)
   })
 
   it('builds the latest reform preview from Knowledge Hub packages newest first', () => {

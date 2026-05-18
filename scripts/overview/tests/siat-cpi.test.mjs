@@ -408,3 +408,44 @@ test('SIAT CPI CLI write-snapshot updates source snapshot only and records diff 
   assert.equal(report.changed, true)
   assert.equal(readFileSync(publicOverviewPath, 'utf8'), publicBefore)
 })
+
+test('SIAT CPI CLI supports source-verified automatic public snapshot status', () => {
+  const tempRoot = join(tmpdir(), `siat-cpi-source-verified-${process.pid}-${Date.now()}`)
+  const tempFixtureDir = join(tempRoot, 'fixtures')
+  mkdirSync(tempFixtureDir, { recursive: true })
+  const tempSnapshotPath = join(tempRoot, 'overview_source_snapshot.json')
+  const diffReportPath = join(tempRoot, 'overview_source_snapshot.diff_report.json')
+  writeFileSync(tempSnapshotPath, readFileSync(snapshotPath, 'utf8'), 'utf8')
+  writeFileSync(join(tempFixtureDir, 'sdmx_data_4585.json'), readFileSync(fixturePath, 'utf8'), 'utf8')
+
+  const result = spawnSync(
+    process.execPath,
+    [
+      fetchScriptPath,
+      '--write-snapshot',
+      '--family',
+      'siat-cpi',
+      '--snapshot',
+      tempSnapshotPath,
+      '--fixture-dir',
+      tempFixtureDir,
+      '--diff-report',
+      diffReportPath,
+      '--public-status',
+      'source-verified',
+      '--source-verified-by',
+      'test-bot',
+      '--source-verified-at',
+      '2026-05-18T05:00:00.000Z',
+    ],
+    { cwd: repoRoot, encoding: 'utf8' },
+  )
+
+  assert.equal(result.status, 0, result.stderr)
+  const written = readJson(tempSnapshotPath)
+  assert.equal(written.status, 'source_verified_for_public_artifact')
+  assert.equal(written.source_verified_by, 'test-bot')
+  assert.equal(written.source_verified_at, '2026-05-18T05:00:00.000Z')
+  assert.equal('snapshot_accepted_by' in written, false)
+  assert.equal('snapshot_accepted_at' in written, false)
+})

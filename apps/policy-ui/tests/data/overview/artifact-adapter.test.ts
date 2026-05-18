@@ -140,4 +140,21 @@ describe('overview artifact adapter', () => {
     assert.equal(metrics.get('usd_uzs_mom_change')?.claim_label_key, 'overview.claimLabels.calculated')
     assert.equal(metrics.get('gold_price_forecast')?.claim_label_key, 'overview.claimLabels.forecast')
   })
+
+  it('replaces stale mock refresh feed entries with Overview artifact metadata', () => {
+    const artifact = buildValidOverviewArtifact()
+    artifact.exported_at = '2026-05-18T05:00:00.000Z'
+
+    const snapshot = overviewArtifactToMacroSnapshot(artifact)
+
+    assert.deepEqual(snapshot.activity_feed.policy_actions, [])
+    assert.equal(snapshot.activity_feed.data_refreshes.length, 1)
+    assert.equal(snapshot.activity_feed.data_refreshes[0].model_id, 'overview_artifact')
+    assert.equal(snapshot.activity_feed.data_refreshes[0].refreshed_at, '2026-05-18T05:00:00.000Z')
+    assert.match(snapshot.activity_feed.data_refreshes[0].summary ?? '', /Overview source metrics refreshed/)
+    assert.equal(
+      snapshot.activity_feed.data_refreshes.some((refresh) => refresh.refresh_id === 'dfm-refresh-2026-04'),
+      false,
+    )
+  })
 })

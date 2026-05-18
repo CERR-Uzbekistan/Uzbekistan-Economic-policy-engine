@@ -59,6 +59,21 @@ function buildDraftFixturePath(): string {
   return fixturePath
 }
 
+function buildSourceVerifiedFixturePath(): string {
+  const source = readJson(sourceSnapshotPath) as Record<string, unknown>
+  const fixture: Record<string, unknown> = {
+    ...source,
+    status: 'source_verified_for_public_artifact',
+    source_verified_by: 'github-actions[bot]',
+    source_verified_at: '2026-04-27T00:00:00Z',
+  }
+  delete fixture.snapshot_accepted_by
+  delete fixture.snapshot_accepted_at
+  const fixturePath = tempPath('source-verified-overview-source.json')
+  writeFileSync(fixturePath, `${JSON.stringify(fixture, null, 2)}\n`, 'utf8')
+  return fixturePath
+}
+
 function buildAutomationPendingFixturePath(): string {
   const source = readJson(sourceSnapshotPath) as Record<string, unknown>
   const fixture: Record<string, unknown> = {
@@ -118,6 +133,15 @@ describe('overview exporter', () => {
     assert.notEqual(result.status, 0)
     assert.match(result.stderr, /automation_pending_owner_review/)
     assert.equal(existsSync(result.outputPath), false)
+  })
+
+  it('allows source-verified official snapshots for automatic public export', () => {
+    const result = runExporter({ sourcePath: buildSourceVerifiedFixturePath() })
+
+    assert.equal(result.status, 0, result.stderr)
+    assert.equal(existsSync(result.outputPath), true)
+    const artifact = readJson(result.outputPath) as OverviewArtifact
+    assert.equal(validateOverviewArtifact(artifact).ok, true)
   })
 
   it('refuses owner-verified snapshots when value_hash no longer matches values or provenance', () => {

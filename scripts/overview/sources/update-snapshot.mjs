@@ -1,6 +1,7 @@
 import { computeOverviewValueHash, HASHED_METRIC_FIELDS } from './snapshot-hash.mjs'
 
 export const AUTOMATION_PENDING_OWNER_REVIEW = 'automation_pending_owner_review'
+export const SOURCE_VERIFIED_FOR_PUBLIC_ARTIFACT = 'source_verified_for_public_artifact'
 
 const SAFETY_FIELDS = new Set(HASHED_METRIC_FIELDS)
 
@@ -39,9 +40,19 @@ export function applyMetricUpdatesToSnapshot(snapshot, updates, options = {}) {
 
   const safetyMutation = diff.some((entry) => SAFETY_FIELDS.has(entry.field))
   if (safetyMutation || options.forcePending) {
-    next.status = AUTOMATION_PENDING_OWNER_REVIEW
-    delete next.snapshot_accepted_by
-    delete next.snapshot_accepted_at
+    if (options.publicStatus === SOURCE_VERIFIED_FOR_PUBLIC_ARTIFACT) {
+      next.status = SOURCE_VERIFIED_FOR_PUBLIC_ARTIFACT
+      next.source_verified_by = options.sourceVerifiedBy ?? 'github-actions[bot]'
+      next.source_verified_at = options.sourceVerifiedAt ?? options.extractedAt ?? new Date().toISOString()
+      delete next.snapshot_accepted_by
+      delete next.snapshot_accepted_at
+    } else {
+      next.status = AUTOMATION_PENDING_OWNER_REVIEW
+      delete next.snapshot_accepted_by
+      delete next.snapshot_accepted_at
+      delete next.source_verified_by
+      delete next.source_verified_at
+    }
   }
   next.value_hash = computeOverviewValueHash(next)
 

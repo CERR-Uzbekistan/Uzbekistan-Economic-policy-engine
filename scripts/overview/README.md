@@ -1,7 +1,17 @@
 # Overview Exporter
 
-`overview_source_snapshot.json` is a non-public draft scaffold. Do not generate or commit
-`apps/policy-ui/public/data/overview.json` from it until every metric has:
+`overview_source_snapshot.json` is the provenance source for the public
+`apps/policy-ui/public/data/overview.json` artifact. Do not generate or commit the
+public artifact unless the snapshot status is one of:
+
+- `owner_verified_for_public_artifact`
+- `source_verified_for_public_artifact`
+
+Owner verification is still required for ambiguous metrics. Source verification is
+reserved for strict official-source families that pass parser, unit, period, and
+manual-required checks in automation.
+
+Before a metric can enter either public-export status, it must have:
 
 - owner-accepted value,
 - exact `source_reference` or release URL,
@@ -59,9 +69,28 @@ provenance. If a snapshot says `owner_verified_for_public_artifact` but its stor
 `value_hash` no longer matches the metrics, the exporter refuses to write public
 `overview.json`.
 
-Source fetching is manual-script only. The React app and build do not import or run
-CBU/stat.uz/SIAT source fetch code, and public artifact generation remains behind the
-existing owner-verified exporter gate.
+The React app and build do not import or run CBU/stat.uz/SIAT source fetch code. Source
+fetching runs only in scripts and GitHub Actions.
+
+## Automatic Public Refresh
+
+`.github/workflows/overview-artifact-refresh.yml` runs on weekdays at 04:30 UTC and can
+also be dispatched manually. It:
+
+1. checks out `main`;
+2. runs the strict Overview source families;
+3. blocks on hard family errors;
+4. skips `manual_required` families while leaving their existing public metrics unchanged;
+5. marks changed strict-source snapshots as `source_verified_for_public_artifact`;
+6. exports `apps/policy-ui/public/data/overview.json`;
+7. runs the policy-ui quality gates; and
+8. commits the refreshed snapshot, diff report, and public artifact back to `main` only
+   when those files changed.
+
+The older `.github/workflows/overview-source-refresh.yml` remains available as a manual
+PR workflow for owner-review cases. It writes only
+`overview_source_snapshot.json` and `overview_source_snapshot.diff_report.json`, and
+still refuses to publish `apps/policy-ui/public/data/overview.json`.
 
 ## Phase 2 SIAT Trade Automation
 

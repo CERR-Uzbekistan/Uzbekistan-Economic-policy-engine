@@ -1,0 +1,155 @@
+name: Overview Artifact Refresh
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 4 * * 1-5"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: overview-artifact-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh-overview-artifact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      SNAPSHOT_PATH: scripts/overview/overview_source_snapshot.json
+      DIFF_REPORT_PATH: scripts/overview/overview_source_snapshot.diff_report.json
+      PUBLIC_OVERVIEW_PATH: apps/policy-ui/public/data/overview.json
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: apps/policy-ui/package-lock.json
+
+      - name: Initialize run metadata
+        id: meta
+        run: |
+          mkdir -p "$RUNNER_TEMP/overview-artifact-refresh"
+          printf '[]\n' > "$RUNNER_TEMP/overview-artifact-refresh/family-results.json"
+          cp "$DIFF_REPORT_PATH" "$RUNNER_TEMP/overview-artifact-refresh/original-diff-report.json"
+          echo "run_started_at=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_OUTPUT"
+
+      - name: Refresh cbu-fx source family
+        run: |
+          node scripts/overview/overview-source-refresh-workflow.mjs run-family \
+            --family cbu-fx \
+            --results "$RUNNER_TEMP/overview-artifact-refresh/family-results.json" \
+            --public-status source-verified \
+            --source-verified-by "github-actions[bot]" \
+            --source-verified-at "${{ steps.meta.outputs.run_started_at }}"
+
+      - name: Refresh siat-trade source family
+        run: |
+          node scripts/overview/overview-source-refresh-workflow.mjs run-family \
+            --family siat-trade \
+            --results "$RUNNER_TEMP/overview-artifact-refresh/family-results.json" \
+            --public-status source-verified \
+            --source-verified-by "github-actions[bot]" \
+            --source-verified-at "${{ steps.meta.outputs.run_started_at }}"
+
+      - name: Refresh siat-cpi source family
+        run: |
+          node scripts/overview/overview-source-refresh-workflow.mjs run-family \
+            --family siat-cpi \
+            --results "$RUNNER_TEMP/overview-artifact-refresh/family-results.json" \
+            --public-status source-verified \
+            --source-verified-by "github-actions[bot]" \
+            --source-verified-at "${{ steps.meta.outputs.run_started_at }}"
+
+      - name: Refresh siat-gdp-annual source family
+        run: |
+          node scripts/overview/overview-source-refresh-workflow.mjs run-family \
+            --family siat-gdp-annual \
+            --results "$RUNNER_TEMP/overview-artifact-refresh/family-results.json" \
+            --public-status source-verified \
+            --source-verified-by "github-actions[bot]" \
+            --source-verified-at "${{ steps.meta.outputs.run_started_at }}"
+
+      - name: Generate workflow summary
+        run: |
+          node scripts/overview/overview-source-refresh-workflow.mjs finalize \
+            --results "$RUNNER_TEMP/overview-artifact-refresh/family-results.json" \
+            --original-diff-report "$RUNNER_TEMP/overview-artifact-refresh/original-diff-report.json" \
+            --body "$RUNNER_TEMP/overview-artifact-refresh/body.md" \
+            --summary "$RUNNER_TEMP/overview-artifact-refresh/summary.md"
+
+      - name: Verify automatic public export gate
+        run: node scripts/overview/overview-source-refresh-workflow.mjs verify-public-export-ready --results "$RUNNER_TEMP/overview-artifact-refresh/family-results.json"
+
+      - name: Check whether source snapshot changed
+        id: source_changes
+        run: |
+          if git diff --quiet -- "$SNAPSHOT_PATH"; then
+            echo "snapshot_changed=false" >> "$GITHUB_OUTPUT"
+            echo "No source snapshot changes to publish." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "snapshot_changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install policy-ui
+        if: steps.source_changes.outputs.snapshot_changed == 'true'
+        working-directory: apps/policy-ui
+        run: npm ci
+
+      - name: Compile policy-ui modules for exporter
+        if: steps.source_changes.outputs.snapshot_changed == 'true'
+        working-directory: apps/policy-ui
+        run: npm exec tsc -- -p tsconfig.test.json
+
+      - name: Run Overview source tests
+        if: steps.source_changes.outputs.snapshot_changed == 'true'
+        run: node --test scripts/overview/tests/*.test.mjs
+
+      - name: Export public Overview artifact
+        if: steps.source_changes.outputs.snapshot_changed == 'true'
+        env:
+          OVERVIEW_EXPORTER_FORCE_COMPILED: "1"
+        run: node scripts/overview/export-overview.mjs --exported-at "${{ steps.meta.outputs.run_started_at }}"
+
+      - name: Lint policy-ui
+        if: steps.source_changes.outputs.snapshot_changed == 'true'
+        working-directory: apps/policy-ui
+        run: npm run lint
+
+      - name: Test policy-ui
+        if: steps.source_changes.outputs.snapshot_changed == 'true'
+        working-directory: apps/policy-ui
+        run: npm run test
+
+      - name: Build policy-ui
+        if: steps.source_changes.outputs.snapshot_changed == 'true'
+        working-directory: apps/policy-ui
+        run: npm run build
+
+      - name: Commit refreshed Overview artifact
+        if: steps.source_changes.outputs.snapshot_changed == 'true'
+        run: |
+          if git diff --quiet -- "$SNAPSHOT_PATH" "$DIFF_REPORT_PATH" "$PUBLIC_OVERVIEW_PATH"; then
+            echo "No Overview artifact changes to publish." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$SNAPSHOT_PATH" "$DIFF_REPORT_PATH" "$PUBLIC_OVERVIEW_PATH"
+          git commit -m "chore(overview): refresh public artifact"
+          git push origin HEAD:main
+
+      - name: Write workflow summary
+        if: always()
+        run: |
+          if [ -f "$RUNNER_TEMP/overview-artifact-refresh/summary.md" ]; then
+            cat "$RUNNER_TEMP/overview-artifact-refresh/summary.md" >> "$GITHUB_STEP_SUMMARY"
+          fi
