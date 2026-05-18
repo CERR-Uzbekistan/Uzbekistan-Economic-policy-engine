@@ -145,11 +145,12 @@
       "mom": "m/m"
     },
     "briefing": {
-      "kicker": "Qisqa sharh",
-      "title": "Joriy baho",
-      "description": "Nima o'zgardi, nima uchun muhim va hozir qaysi stsenariylarni tekshirish kerak.",
+      "kicker": "Kesim",
+      "title": "Makro kesim",
+      "description": "Asosiy qiymatlar, joriy nowcast va keyingi tekshiriladigan stsenariylar.",
       "primarySignalsTitle": "Asosiy ko'rsatkichlar",
-      "primarySignalsAria": "Umumiy ko'rinishning asosiy ko'rsatkichlari"
+      "primarySignalsAria": "Umumiy ko'rinishning asosiy ko'rsatkichlari",
+      "analysisAria": "Nowcast va stsenariy testlari"
     },
     "topbar": {
       "freshness": "Ma'lumotlar · {{days}} kun oldin"
@@ -232,8 +233,8 @@
       "gold_price_forecast": "prognoz vintaji"
     },
     "indicators": {
-      "title": "Ko'rsatkich panellari",
-      "description": "Barcha qulflangan Overview metrikalari manba bloki bo'yicha guruhlangan.",
+      "title": "Monitoring signallari",
+      "description": "Mavzular bo'yicha so'nggi qiymatlar. Iqtibos uchun manba eslatmalari quyida qoladi.",
       "inflationPair": "CPI va oziq-ovqat inflyatsiyasi juftligi",
       "tradeFlowPair": "Eksport / import",
       "usdUzsPair": "USD/UZS",
@@ -253,8 +254,8 @@
       }
     },
     "risks": {
-      "title": "Xatarlar va testlar",
-      "description": "Yaqin muddatli xatarlar va ularga mos stsenariy testlari.",
+      "title": "Keyin nimani tekshirish kerak",
+      "description": "Yaqin muddatli xatarlar Scenario Lab tekshiruvlari bilan bog'langan.",
       "empty": "Bu snapshot uchun faol risklar belgilanmagan.",
       "hitsPrefix": "Kanal: ",
       "testAction": "Stsenariyni tekshirish",
@@ -269,8 +270,8 @@
     },
     "feeds": {
       "sectionAria": "Umumiy ko'rinish lentasi panellari",
-      "title": "So'nggi kontekst",
-      "description": "Kesimni tushuntirishga yordam beradigan so'nggi siyosiy harakatlar va model ma'lumotlari yangilanishlari.",
+      "title": "So'nggi yangilanishlar",
+      "description": "So'nggi siyosiy va ma'lumot yangilanishlari yordamchi kontekst sifatida.",
       "reforms": {
         "title": "Islohotlar",
         "empty": "So'nggi siyosiy qarorlar yo'q.",

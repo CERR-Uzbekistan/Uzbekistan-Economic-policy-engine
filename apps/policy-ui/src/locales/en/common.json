@@ -145,11 +145,12 @@
       "mom": "MoM"
     },
     "briefing": {
-      "kicker": "Briefing",
-      "title": "Current read",
-      "description": "What changed, why it matters, and which scenario tests are most relevant now.",
+      "kicker": "Snapshot",
+      "title": "Macro snapshot",
+      "description": "Headline values, the current nowcast, and the scenario checks to run next.",
       "primarySignalsTitle": "Key indicators",
-      "primarySignalsAria": "Key overview indicators"
+      "primarySignalsAria": "Key overview indicators",
+      "analysisAria": "Nowcast and scenario tests"
     },
     "topbar": {
       "freshness": "Data · {{days}}d ago"
@@ -232,8 +233,8 @@
       "gold_price_forecast": "forecast vintage"
     },
     "indicators": {
-      "title": "Indicator panels",
-      "description": "All locked Overview metrics grouped by source block.",
+      "title": "Monitoring signals",
+      "description": "Latest values grouped by theme. Source notes stay below for citation checks.",
       "inflationPair": "CPI and food inflation pair",
       "tradeFlowPair": "Exports / Imports",
       "usdUzsPair": "USD/UZS",
@@ -253,8 +254,8 @@
       }
     },
     "risks": {
-      "title": "Risks and tests",
-      "description": "Near-term risks paired with scenario tests.",
+      "title": "What to test next",
+      "description": "Near-term risks linked to Scenario Lab checks.",
       "empty": "No active risks are flagged for this snapshot.",
       "hitsPrefix": "Channel: ",
       "testAction": "Test scenario",
@@ -269,8 +270,8 @@
     },
     "feeds": {
       "sectionAria": "Overview feed panels",
-      "title": "Recent context",
-      "description": "Recent policy actions and model data refreshes that help explain the snapshot.",
+      "title": "Latest updates",
+      "description": "Recent policy and data updates kept as supporting context.",
       "reforms": {
         "title": "Reforms",
         "empty": "No recent policy actions on file.",

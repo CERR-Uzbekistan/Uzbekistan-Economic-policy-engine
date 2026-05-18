@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import { describe, it } from 'node:test'
 
 describe('OverviewPage render order', () => {
-  it('keeps operations before nowcast, then grouped indicators', () => {
+  it('keeps snapshot before nowcast, then scenario tests and monitoring', () => {
     const source = readFileSync(join(process.cwd(), 'src', 'pages', 'OverviewPage.tsx'), 'utf8')
     const pageHeader = source.indexOf('<PageHeader')
     const stateHeader = source.indexOf('<EconomicStateHeader')
@@ -18,10 +18,11 @@ describe('OverviewPage render order', () => {
 
     assert.ok(pageHeader < stateHeader)
     assert.ok(stateHeader < kpis)
-    assert.ok(kpis < risks)
+    assert.ok(kpis < nowcast)
     assert.equal(source.indexOf('<QuickActions'), -1)
     assert.equal(source.indexOf('<SupportingMetricTable'), -1)
-    assert.ok(risks < nowcast)
+    assert.ok(nowcast < risks)
+    assert.ok(risks < indicators)
     assert.ok(nowcast < indicators)
     assert.ok(nowcast < notes)
     assert.ok(indicators < notes)

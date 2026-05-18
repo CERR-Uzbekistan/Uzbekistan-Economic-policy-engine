@@ -158,7 +158,7 @@ export function OverviewPage() {
   } = overviewData
 
   const overviewNowcastMetrics = [...(artifact_summary_metrics ?? []), ...headline_metrics]
-  const primaryHeadlineMetrics = headline_metrics.slice(0, 3)
+  const primaryHeadlineMetrics = headline_metrics.slice(0, 4)
   const artifactAlignedNowcastChart = buildArtifactAlignedNowcastChart(overviewNowcastMetrics)
   const useLiveDfmNowcastChart =
     dfmState.status === 'bridge' && shouldUseDfmNowcastChart(dfmState.chart, overviewNowcastMetrics)
@@ -193,72 +193,66 @@ export function OverviewPage() {
     <PageContainer className="overview-page">
       <PageHeader title={t('pages.overview.title')} description={t('pages.overview.description')} meta={pageHeaderMeta} />
 
-      <section className="overview-briefing" aria-labelledby="overview-briefing-title">
-        <div className="overview-briefing__main">
-          <div className="overview-briefing__header">
-            <p className="overview-section-kicker">{t('overview.briefing.kicker')}</p>
-            <h2 id="overview-briefing-title">{t('overview.briefing.title')}</h2>
-            <p>{t('overview.briefing.description')}</p>
-          </div>
-
-          <div className="overview-briefing__state">
-            <EconomicStateHeader
-              summary={summary}
-              updatedAt={generated_at}
-              modelIds={model_ids}
-              provenance={provenance}
-              artifactSummaryMetrics={artifact_summary_metrics}
-              isArtifactMode={sourceState.sourceKind === 'overview-artifact'}
-            />
-          </div>
-
-          <div className="overview-briefing__signals" aria-label={t('overview.briefing.primarySignalsAria')}>
-            <KpiStrip
-              metrics={primaryHeadlineMetrics}
-              headingId="overview-primary-kpi-title"
-              title={t('overview.briefing.primarySignalsTitle')}
-              variant="primary"
-            />
-          </div>
+      <section className="overview-snapshot" aria-labelledby="overview-snapshot-title">
+        <div className="overview-snapshot__state">
+          <EconomicStateHeader
+            summary={summary}
+            updatedAt={generated_at}
+            modelIds={model_ids}
+            provenance={provenance}
+            artifactSummaryMetrics={artifact_summary_metrics}
+            isArtifactMode={sourceState.sourceKind === 'overview-artifact'}
+          />
         </div>
 
-        <div className="overview-briefing__workbench">
-          <RiskPanel risks={top_risks} actions={analysis_actions} />
+        <div className="overview-snapshot__signals" aria-label={t('overview.briefing.primarySignalsAria')}>
+          <KpiStrip
+            metrics={primaryHeadlineMetrics}
+            headingId="overview-snapshot-title"
+            title={t('overview.briefing.primarySignalsTitle')}
+            variant="primary"
+          />
         </div>
       </section>
 
-      {nowcast_forecast ? (
-        <div className="overview-nowcast-column">
-          {dfmState.status === 'degraded' ? (
-            <NowcastBanner
-              errorKind={dfmErrorKind(dfmState.error)}
-              errorDetail={dfmErrorDetail(dfmState.error)}
-              onRetry={refetchDfm}
-            />
-          ) : null}
-          <NowcastForecastBlock
-            chart={displayedNowcastChart}
-            contributionDetails={
-              useLiveDfmNowcastChart && dfmState.status === 'bridge'
-                ? dfmState.contributionDetails
-                : undefined
-            }
-            headerSlot={
-              <TrustStateLabel
-                id={displayedNowcastTrustId}
-                tone={useLiveDfmNowcastChart ? 'success' : 'warn'}
+      <section className="overview-analysis-grid" aria-label={t('overview.briefing.analysisAria')}>
+        {nowcast_forecast ? (
+          <div className="overview-analysis-grid__chart overview-nowcast-column">
+            {dfmState.status === 'degraded' ? (
+              <NowcastBanner
+                errorKind={dfmErrorKind(dfmState.error)}
+                errorDetail={dfmErrorDetail(dfmState.error)}
+                onRetry={refetchDfm}
               />
-            }
-            statusSlot={
-              dfmState.status === 'loading' ? (
-                <p className="overview-nowcast-refreshing" role="status" aria-live="polite">
-                  {t('overview.nowcast.refreshing')}
-                </p>
-              ) : null
-            }
-          />
+            ) : null}
+            <NowcastForecastBlock
+              chart={displayedNowcastChart}
+              contributionDetails={
+                useLiveDfmNowcastChart && dfmState.status === 'bridge'
+                  ? dfmState.contributionDetails
+                  : undefined
+              }
+              headerSlot={
+                <TrustStateLabel
+                  id={displayedNowcastTrustId}
+                  tone={useLiveDfmNowcastChart ? 'success' : 'warn'}
+                />
+              }
+              statusSlot={
+                dfmState.status === 'loading' ? (
+                  <p className="overview-nowcast-refreshing" role="status" aria-live="polite">
+                    {t('overview.nowcast.refreshing')}
+                  </p>
+                ) : null
+              }
+            />
+          </div>
+        ) : null}
+
+        <div className="overview-analysis-grid__tests">
+          <RiskPanel risks={top_risks} actions={analysis_actions} />
         </div>
-      ) : null}
+      </section>
 
       <IndicatorPanelGrid groups={indicator_groups} />
 

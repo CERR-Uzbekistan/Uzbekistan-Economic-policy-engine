@@ -25,7 +25,6 @@ export function RiskPanel({ risks, actions }: RiskPanelProps) {
             <article key={risk.risk_id} className="risk-item overview-risk-card">
               <div className="risk-item__body">
                 <h3>{risk.title}</h3>
-                <p>{risk.why_it_matters}</p>
                 <p className="channel">
                   {t('overview.risks.hitsPrefix')}
                   {risk.impact_channel}
@@ -41,7 +40,6 @@ export function RiskPanel({ risks, actions }: RiskPanelProps) {
                     {t('overview.risks.testAction')}
                   </Link>
                 ) : null}
-                <span className="risk-item__label">{risk.suggested_scenario}</span>
               </div>
             </article>
           ))

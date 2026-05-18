@@ -166,75 +166,50 @@ body:has(.overview-page) {
   margin-bottom: var(--space-md);
 }
 
-.overview-briefing {
-  align-items: start;
-  background: color-mix(in srgb, var(--color-surface) 92%, var(--color-surface-muted));
+.overview-snapshot {
+  background: color-mix(in srgb, var(--color-surface) 94%, var(--color-surface-muted));
   border: 1px solid var(--color-border-strong);
   display: grid;
   gap: var(--space-lg);
-  grid-template-columns: minmax(0, 1.28fr) minmax(18rem, 0.72fr);
   max-width: 100%;
   min-width: 0;
   overflow: hidden;
-  padding: clamp(1rem, 2vw, 1.5rem);
+  padding: clamp(1rem, 2vw, 1.35rem);
 }
 
-.overview-briefing__main {
-  display: grid;
-  gap: var(--space-lg);
+.overview-snapshot__state {
   min-width: 0;
 }
 
-.overview-briefing__header {
-  border-bottom: 1px solid var(--color-border);
-  display: grid;
-  gap: var(--space-xs);
-  padding-bottom: var(--space-md);
-}
-
-.overview-briefing__header h2 {
-  font-size: 1.18rem;
-  line-height: 1.25;
-  margin: 0;
-  overflow-wrap: anywhere;
-}
-
-.overview-briefing__header p:not(.overview-section-kicker) {
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-  line-height: 1.45;
-  margin: 0;
-  max-width: 70ch;
-  overflow-wrap: anywhere;
-}
-
-.overview-briefing__state {
-  min-width: 0;
-}
-
-.overview-briefing__state .overview-state-header {
+.overview-snapshot__state .overview-state-header {
   background: transparent;
   border: 0;
   padding: 0;
 }
 
-.overview-briefing__state .overview-state-header__provenance {
+.overview-snapshot__state .overview-state-header__provenance {
   border-top: 1px solid var(--color-border);
   padding-top: var(--space-sm);
 }
 
-.overview-briefing__signals {
+.overview-snapshot__signals {
   min-width: 0;
 }
 
-.overview-briefing__workbench {
-  align-content: start;
+.overview-analysis-grid {
+  align-items: start;
   display: grid;
-  gap: var(--space-md);
+  gap: var(--space-lg);
+  grid-template-columns: minmax(0, 1.42fr) minmax(17rem, 0.58fr);
   min-width: 0;
 }
 
-.overview-briefing__workbench .overview-panel {
+.overview-analysis-grid__chart,
+.overview-analysis-grid__tests {
+  min-width: 0;
+}
+
+.overview-analysis-grid__tests .overview-panel {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 0;
@@ -254,7 +229,7 @@ body:has(.overview-page) {
 }
 
 .kpi-strip--primary .overview-kpi-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .kpi-strip--supporting .overview-kpi-grid {
@@ -402,9 +377,9 @@ body:has(.overview-page) {
 
 .overview-indicator-grid {
   display: grid;
-  gap: var(--space-lg);
+  gap: var(--space-md);
   grid-auto-flow: dense;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
 }
 
 .overview-indicator-panel {
@@ -445,7 +420,7 @@ body:has(.overview-page) {
   border-bottom: 1px solid var(--color-border);
   display: grid;
   gap: 0.18rem;
-  padding: 0.72rem 0.9rem 0.64rem;
+  padding: 0.62rem 0.78rem 0.55rem;
 }
 
 .overview-indicator-panel h3 {
@@ -468,9 +443,9 @@ body:has(.overview-page) {
 .overview-indicator-row {
   align-items: center;
   display: grid;
-  gap: var(--space-md);
-  grid-template-columns: minmax(0, 1fr) minmax(8rem, auto);
-  padding: 0.72rem 0.9rem;
+  gap: var(--space-sm);
+  grid-template-columns: minmax(0, 1fr) minmax(7.25rem, auto);
+  padding: 0.58rem 0.78rem;
 }
 
 .overview-indicator-row + .overview-indicator-row {
@@ -484,7 +459,7 @@ body:has(.overview-page) {
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.01em;
-  padding: 0.45rem 0.9rem;
+  padding: 0.4rem 0.78rem;
 }
 
 .overview-indicator-subhead + .overview-indicator-row {
@@ -1100,6 +1075,42 @@ body:has(.overview-page) {
   padding: var(--space-md);
 }
 
+.overview-analysis-grid__tests .overview-risk-list {
+  gap: var(--space-xs);
+}
+
+.overview-analysis-grid__tests .risk-item,
+.overview-analysis-grid__tests .overview-risk-card {
+  gap: var(--space-xs);
+  padding: 0.72rem;
+}
+
+.overview-analysis-grid__tests .risk-item__body {
+  gap: 0.32rem;
+}
+
+.overview-analysis-grid__tests .risk-item__body h3 {
+  font-size: 0.86rem;
+}
+
+.overview-analysis-grid__tests .risk-item__body p {
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.overview-analysis-grid__tests .risk-item__label {
+  max-width: none;
+}
+
+.overview-analysis-grid__tests .overview-risk-tests {
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+}
+
+.overview-analysis-grid__tests .overview-risk-test-link {
+  padding: 0.5rem 0.58rem;
+}
+
 .risk-item__body {
   display: grid;
   gap: var(--space-sm);
@@ -1289,16 +1300,12 @@ body:has(.overview-page) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .overview-briefing {
-    grid-template-columns: 1fr;
-  }
-
-  .overview-briefing__workbench {
+  .overview-analysis-grid {
     grid-template-columns: 1fr;
   }
 
   .kpi-strip--primary .overview-kpi-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .overview-two-column {
@@ -1320,13 +1327,9 @@ body:has(.overview-page) {
     padding-inline: 0.75rem;
   }
 
-  .overview-briefing {
+  .overview-snapshot {
     padding: var(--space-md);
     width: calc(100vw - 1.5rem);
-  }
-
-  .overview-briefing__header h2 {
-    font-size: 1rem;
   }
 
   .overview-state-header__summary {
@@ -1446,7 +1449,6 @@ body:has(.overview-page) {
 
 @media (max-width: 640px) {
   .overview-page .page-header p,
-  .overview-briefing__header p:not(.overview-section-kicker),
   .overview-state-header__summary,
   .overview-state-header__provenance {
     max-width: 20rem;
