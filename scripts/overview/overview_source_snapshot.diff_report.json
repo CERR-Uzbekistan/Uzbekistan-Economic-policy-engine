@@ -1,54 +1,297 @@
 {
-  "generated_at": "2026-04-29T10:55:55.032Z",
-  "family": "siat-gdp-annual",
-  "snapshot": "C:\\Users\\n.ortiqov\\Desktop\\Uzbekistan-Economic-policy-engine\\scripts\\overview\\overview_source_snapshot.json",
+  "generated_at": "2026-05-18T15:43:34.776Z",
+  "family": "overview-source-refresh",
+  "families": [
+    {
+      "family": "cbu-fx",
+      "outcome": "changed",
+      "changed": true,
+      "status": "source_verified_for_public_artifact",
+      "value_hash": "ec145f7b061d4b00c8cfa6510c4c6dbe380d8adf547c6a127a0afabba6a5e9cd",
+      "manual_required": null,
+      "error": null,
+      "changed_fields": [
+        "usd_uzs_level.value",
+        "usd_uzs_level.previous_value",
+        "usd_uzs_level.source_period",
+        "usd_uzs_level.source_url",
+        "usd_uzs_level.observed_at",
+        "usd_uzs_level.caveats",
+        "usd_uzs_level.warnings",
+        "usd_uzs_mom_change.value",
+        "usd_uzs_mom_change.source_period",
+        "usd_uzs_mom_change.source_reference",
+        "usd_uzs_mom_change.extracted_at",
+        "usd_uzs_mom_change.caveats",
+        "usd_uzs_mom_change.warnings",
+        "usd_uzs_yoy_change.value",
+        "usd_uzs_yoy_change.source_period",
+        "usd_uzs_yoy_change.source_reference",
+        "usd_uzs_yoy_change.extracted_at",
+        "usd_uzs_yoy_change.caveats",
+        "usd_uzs_yoy_change.warnings"
+      ]
+    },
+    {
+      "family": "siat-trade",
+      "outcome": "manual_required",
+      "changed": false,
+      "status": "source_verified_for_public_artifact",
+      "value_hash": "ec145f7b061d4b00c8cfa6510c4c6dbe380d8adf547c6a127a0afabba6a5e9cd",
+      "manual_required": {
+        "reason": "siat_trade_missing_machine_readable_metadata",
+        "details": {
+          "sourceUrl": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json"
+        }
+      },
+      "error": null,
+      "changed_fields": []
+    },
+    {
+      "family": "siat-cpi",
+      "outcome": "changed",
+      "changed": true,
+      "status": "source_verified_for_public_artifact",
+      "value_hash": "64a6ce804b7791f8464768bcd8de8f0f621e4204df2cb1228e88d83fdf749ac7",
+      "manual_required": null,
+      "error": null,
+      "changed_fields": [
+        "cpi_mom.source_period",
+        "cpi_mom.source_reference",
+        "cpi_mom.observed_at",
+        "cpi_mom.extracted_at",
+        "cpi_mom.caveats"
+      ]
+    },
+    {
+      "family": "siat-gdp-annual",
+      "outcome": "changed",
+      "changed": true,
+      "status": "source_verified_for_public_artifact",
+      "value_hash": "2b5ff06ab84d8dffa84fdf592d374ace482e598240c4470393890203f43c398c",
+      "manual_required": null,
+      "error": null,
+      "changed_fields": [
+        "real_gdp_growth_annual_yoy.extracted_at"
+      ]
+    }
+  ],
+  "snapshot": "/home/runner/work/Uzbekistan-Economic-policy-engine/Uzbekistan-Economic-policy-engine/scripts/overview/overview_source_snapshot.json",
   "changed": true,
-  "status": "automation_pending_owner_review",
-  "value_hash": "cb7897b1fb2b0655587e03c8e4dad1980755dc29fdcbd606ecdd94e1ecbca56d",
-  "manual_required": null,
+  "status": "source_verified_for_public_artifact",
+  "value_hash": "2b5ff06ab84d8dffa84fdf592d374ace482e598240c4470393890203f43c398c",
+  "manual_required": [
+    {
+      "family": "siat-trade",
+      "reason": "siat_trade_missing_machine_readable_metadata",
+      "details": {
+        "sourceUrl": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json"
+      }
+    }
+  ],
+  "family_errors": null,
   "diff": [
     {
-      "metric_id": "real_gdp_growth_annual_yoy",
-      "field": "source_label",
-      "old_value": "Statistics Agency national accounts",
-      "new_value": "Statistics Agency SIAT annual GDP data, calculated YoY"
+      "metric_id": "usd_uzs_level",
+      "field": "value",
+      "old_value": 12072.96,
+      "new_value": 11986.3
     },
     {
-      "metric_id": "real_gdp_growth_annual_yoy",
+      "metric_id": "usd_uzs_level",
+      "field": "previous_value",
+      "old_value": 12179.87,
+      "new_value": 12165.24
+    },
+    {
+      "metric_id": "usd_uzs_level",
+      "field": "source_period",
+      "old_value": "2026-04-28",
+      "new_value": "2026-05-18"
+    },
+    {
+      "metric_id": "usd_uzs_level",
       "field": "source_url",
-      "old_value": "https://stat.uz/img/news/analitika-vvp_eng_p32560.pdf",
-      "new_value": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_582.json"
+      "old_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-04-28/",
+      "new_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-05-18/"
     },
     {
-      "metric_id": "real_gdp_growth_annual_yoy",
-      "field": "source_reference",
-      "old_value": null,
-      "new_value": "Calculated from SIAT sdmx_data_582 national aggregate Code 1700 annual GDP prior-year index for 2025: 107.7 minus 100. Previous value uses 2024 index 106.7 minus 100. Methodology: https://lib.stat.uz/ru/features-3/natsionalnye-scheta/622-yalpi-ichki-mahsulotni-ishlab-chiqarish-usulida-hisoblash-bo-yicha-uslubiy-nizom-3."
-    },
-    {
-      "metric_id": "real_gdp_growth_annual_yoy",
+      "metric_id": "usd_uzs_level",
       "field": "observed_at",
-      "old_value": "2026-01-26T00:00:00Z",
-      "new_value": "2026-01-27T00:00:00Z"
+      "old_value": "2026-04-28T00:00:00Z",
+      "new_value": "2026-05-18T00:00:00Z"
+    },
+    {
+      "metric_id": "usd_uzs_level",
+      "field": "caveats",
+      "old_value": [
+        "Official/reference rate, not transaction-weighted market average.",
+        "Latest observation: requested 2026-04-28; actual CBU date/rate 2026-04-28, 12072.96 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-03-28; actual CBU date/rate 2026-03-27 returned for requested 2026-03-28, 12179.87 UZS per USD."
+      ],
+      "new_value": [
+        "Official/reference rate, not transaction-weighted market average.",
+        "Latest observation: requested 2026-05-18; actual CBU date/rate 2026-05-18, 11986.3 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-04-18; actual CBU date/rate 2026-04-17 returned for requested 2026-04-18, 12165.24 UZS per USD."
+      ]
+    },
+    {
+      "metric_id": "usd_uzs_level",
+      "field": "warnings",
+      "old_value": [
+        "Prior-month requested date 2026-03-28 differed from actual CBU date 2026-03-27; nearest available CBU observation was used."
+      ],
+      "new_value": [
+        "Prior-month requested date 2026-04-18 differed from actual CBU date 2026-04-17; nearest available CBU observation was used."
+      ]
+    },
+    {
+      "metric_id": "usd_uzs_mom_change",
+      "field": "value",
+      "old_value": -0.88,
+      "new_value": -1.47
+    },
+    {
+      "metric_id": "usd_uzs_mom_change",
+      "field": "source_period",
+      "old_value": "2026-04-28 vs 2026-03-27",
+      "new_value": "2026-05-18 vs 2026-04-17"
+    },
+    {
+      "metric_id": "usd_uzs_mom_change",
+      "field": "source_reference",
+      "old_value": "Calculated from CBU official USD rates: 12072.96 on 2026-04-28 and 12179.87 on 2026-03-27. Requested dates: latest 2026-04-28, prior-month 2026-03-28.",
+      "new_value": "Calculated from CBU official USD rates: 11986.3 on 2026-05-18 and 12165.24 on 2026-04-17. Requested dates: latest 2026-05-18, prior-month 2026-04-18."
+    },
+    {
+      "metric_id": "usd_uzs_mom_change",
+      "field": "extracted_at",
+      "old_value": "2026-04-28T17:40:34.291Z",
+      "new_value": "2026-05-18T15:43:09.937Z"
+    },
+    {
+      "metric_id": "usd_uzs_mom_change",
+      "field": "caveats",
+      "old_value": [
+        "Latest observation: requested 2026-04-28; actual CBU date/rate 2026-04-28, 12072.96 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-03-28; actual CBU date/rate 2026-03-27 returned for requested 2026-03-28, 12179.87 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-04-28; actual CBU date/rate 2025-04-28, 12957.14 UZS per USD.",
+        "Formula: ((latest - comparison) / comparison) * 100.",
+        "Rounded to 2 decimal places.",
+        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
+      ],
+      "new_value": [
+        "Latest observation: requested 2026-05-18; actual CBU date/rate 2026-05-18, 11986.3 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-04-18; actual CBU date/rate 2026-04-17 returned for requested 2026-04-18, 12165.24 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-05-18; actual CBU date/rate 2025-05-16 returned for requested 2025-05-18, 12965.34 UZS per USD.",
+        "Formula: ((latest - comparison) / comparison) * 100.",
+        "Rounded to 2 decimal places.",
+        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
+      ]
+    },
+    {
+      "metric_id": "usd_uzs_mom_change",
+      "field": "warnings",
+      "old_value": [
+        "Prior-month requested date 2026-03-28 differed from actual CBU date 2026-03-27; nearest available CBU observation was used."
+      ],
+      "new_value": [
+        "Prior-month requested date 2026-04-18 differed from actual CBU date 2026-04-17; nearest available CBU observation was used."
+      ]
+    },
+    {
+      "metric_id": "usd_uzs_yoy_change",
+      "field": "value",
+      "old_value": -6.82,
+      "new_value": -7.55
+    },
+    {
+      "metric_id": "usd_uzs_yoy_change",
+      "field": "source_period",
+      "old_value": "2026-04-28 vs 2025-04-28",
+      "new_value": "2026-05-18 vs 2025-05-16"
+    },
+    {
+      "metric_id": "usd_uzs_yoy_change",
+      "field": "source_reference",
+      "old_value": "Calculated from CBU official USD rates: 12072.96 on 2026-04-28 and 12957.14 on 2025-04-28. Requested dates: latest 2026-04-28, prior-year 2025-04-28.",
+      "new_value": "Calculated from CBU official USD rates: 11986.3 on 2026-05-18 and 12965.34 on 2025-05-16. Requested dates: latest 2026-05-18, prior-year 2025-05-18."
+    },
+    {
+      "metric_id": "usd_uzs_yoy_change",
+      "field": "extracted_at",
+      "old_value": "2026-04-28T17:40:34.291Z",
+      "new_value": "2026-05-18T15:43:09.937Z"
+    },
+    {
+      "metric_id": "usd_uzs_yoy_change",
+      "field": "caveats",
+      "old_value": [
+        "Latest observation: requested 2026-04-28; actual CBU date/rate 2026-04-28, 12072.96 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-03-28; actual CBU date/rate 2026-03-27 returned for requested 2026-03-28, 12179.87 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-04-28; actual CBU date/rate 2025-04-28, 12957.14 UZS per USD.",
+        "Formula: ((latest - comparison) / comparison) * 100.",
+        "Rounded to 2 decimal places.",
+        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
+      ],
+      "new_value": [
+        "Latest observation: requested 2026-05-18; actual CBU date/rate 2026-05-18, 11986.3 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-04-18; actual CBU date/rate 2026-04-17 returned for requested 2026-04-18, 12165.24 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-05-18; actual CBU date/rate 2025-05-16 returned for requested 2025-05-18, 12965.34 UZS per USD.",
+        "Formula: ((latest - comparison) / comparison) * 100.",
+        "Rounded to 2 decimal places.",
+        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
+      ]
+    },
+    {
+      "metric_id": "usd_uzs_yoy_change",
+      "field": "warnings",
+      "old_value": [],
+      "new_value": [
+        "Prior-year requested date 2025-05-18 differed from actual CBU date 2025-05-16; nearest available CBU observation was used."
+      ]
+    },
+    {
+      "metric_id": "cpi_mom",
+      "field": "source_period",
+      "old_value": "March 2026",
+      "new_value": "April 2026"
+    },
+    {
+      "metric_id": "cpi_mom",
+      "field": "source_reference",
+      "old_value": "Calculated from SIAT sdmx_data_4585 aggregate CPI previous-month index for March 2026: 100.6 minus 100. Previous value uses February 2026 aggregate index 100.6 minus 100.",
+      "new_value": "Calculated from SIAT sdmx_data_4585 aggregate CPI previous-month index for April 2026: 100.6 minus 100. Previous value uses March 2026 aggregate index 100.6 minus 100."
+    },
+    {
+      "metric_id": "cpi_mom",
+      "field": "observed_at",
+      "old_value": "2026-04-05T00:00:00Z",
+      "new_value": "2026-05-05T00:00:00Z"
+    },
+    {
+      "metric_id": "cpi_mom",
+      "field": "extracted_at",
+      "old_value": "2026-04-29T09:52:00.206Z",
+      "new_value": "2026-05-18T15:43:20.610Z"
+    },
+    {
+      "metric_id": "cpi_mom",
+      "field": "caveats",
+      "old_value": [
+        "Monthly inflation can be volatile; do not present as trend alone.",
+        "previous_value 0.6 is February 2026 SIAT 4585 aggregate index 100.6 minus 100."
+      ],
+      "new_value": [
+        "Monthly inflation can be volatile; do not present as trend alone.",
+        "previous_value 0.6 is March 2026 SIAT 4585 aggregate index 100.6 minus 100."
+      ]
     },
     {
       "metric_id": "real_gdp_growth_annual_yoy",
       "field": "extracted_at",
-      "old_value": null,
-      "new_value": "2026-04-29T10:55:55.021Z"
-    },
-    {
-      "metric_id": "real_gdp_growth_annual_yoy",
-      "field": "caveats",
-      "old_value": [
-        "Preliminary annual national accounts release; owner verification is still required before public export.",
-        "previous_value 6.7 is the 2024 annual real GDP growth rate shown in the same Statistics Agency annual GDP release."
-      ],
-      "new_value": [
-        "SIAT 582 reports annual GDP growth rates as prior-year=100 index values; Overview stores index minus 100.",
-        "previous_value 6.7 is 2024 SIAT 582 index 106.7 minus 100.",
-        "SIAT 582 metadata note: for 2024 preliminary data."
-      ]
+      "old_value": "2026-04-29T10:55:55.021Z",
+      "new_value": "2026-05-18T15:43:29.008Z"
     }
   ]
 }

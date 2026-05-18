@@ -1,10 +1,8 @@
 {
   "source_snapshot_version": "overview-source.v1",
-  "status": "owner_verified_for_public_artifact",
-  "snapshot_accepted_by": "project owner",
-  "snapshot_accepted_at": "2026-04-29T11:18:20Z",
+  "status": "source_verified_for_public_artifact",
   "snapshot_note": "Owner-accepted Overview V1 source snapshot. REER remains warning-status with CERR owner-supplied value and source URL pending; replace with automated HFI-backed source when accepted.",
-  "value_hash": "cb7897b1fb2b0655587e03c8e4dad1980755dc29fdcbd606ecdd94e1ecbca56d",
+  "value_hash": "2b5ff06ab84d8dffa84fdf592d374ace482e598240c4470393890203f43c398c",
   "metrics": [
     {
       "metric_id": "real_gdp_growth_annual_yoy",
@@ -25,7 +23,7 @@
       ],
       "warnings": [],
       "source_reference": "Calculated from SIAT sdmx_data_582 national aggregate Code 1700 annual GDP prior-year index for 2025: 107.7 minus 100. Previous value uses 2024 index 106.7 minus 100. Methodology: https://lib.stat.uz/ru/features-3/natsionalnye-scheta/622-yalpi-ichki-mahsulotni-ishlab-chiqarish-usulida-hisoblash-bo-yicha-uslubiy-nizom-3.",
-      "extracted_at": "2026-04-29T10:55:55.021Z"
+      "extracted_at": "2026-05-18T15:43:29.008Z"
     },
     {
       "metric_id": "real_gdp_growth_quarter_yoy",
@@ -88,20 +86,20 @@
       "value": 0.6,
       "previous_value": 0.6,
       "source_label": "Statistics Agency SIAT CPI data, calculated MoM",
-      "source_period": "March 2026",
+      "source_period": "April 2026",
       "source_url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json",
-      "observed_at": "2026-04-05T00:00:00Z",
+      "observed_at": "2026-05-05T00:00:00Z",
       "claim_type": "observed",
       "unit": "percent MoM",
       "frequency": "monthly",
       "validation_status": "valid",
       "caveats": [
         "Monthly inflation can be volatile; do not present as trend alone.",
-        "previous_value 0.6 is February 2026 SIAT 4585 aggregate index 100.6 minus 100."
+        "previous_value 0.6 is March 2026 SIAT 4585 aggregate index 100.6 minus 100."
       ],
       "warnings": [],
-      "source_reference": "Calculated from SIAT sdmx_data_4585 aggregate CPI previous-month index for March 2026: 100.6 minus 100. Previous value uses February 2026 aggregate index 100.6 minus 100.",
-      "extracted_at": "2026-04-29T09:52:00.206Z"
+      "source_reference": "Calculated from SIAT sdmx_data_4585 aggregate CPI previous-month index for April 2026: 100.6 minus 100. Previous value uses March 2026 aggregate index 100.6 minus 100.",
+      "extracted_at": "2026-05-18T15:43:20.610Z"
     },
     {
       "metric_id": "food_cpi_yoy",
@@ -204,70 +202,72 @@
     },
     {
       "metric_id": "usd_uzs_level",
-      "value": 12072.96,
-      "previous_value": 12179.87,
+      "value": 11986.3,
+      "previous_value": 12165.24,
       "source_label": "Central Bank of Uzbekistan exchange rate",
-      "source_period": "2026-04-28",
-      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-04-28/",
-      "observed_at": "2026-04-28T00:00:00Z",
+      "source_period": "2026-05-18",
+      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-05-18/",
+      "observed_at": "2026-05-18T00:00:00Z",
       "claim_type": "observed",
       "unit": "UZS per USD",
       "frequency": "daily",
       "validation_status": "valid",
       "caveats": [
         "Official/reference rate, not transaction-weighted market average.",
-        "Latest observation: requested 2026-04-28; actual CBU date/rate 2026-04-28, 12072.96 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-03-28; actual CBU date/rate 2026-03-27 returned for requested 2026-03-28, 12179.87 UZS per USD."
+        "Latest observation: requested 2026-05-18; actual CBU date/rate 2026-05-18, 11986.3 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-04-18; actual CBU date/rate 2026-04-17 returned for requested 2026-04-18, 12165.24 UZS per USD."
       ],
       "warnings": [
-        "Prior-month requested date 2026-03-28 differed from actual CBU date 2026-03-27; nearest available CBU observation was used."
+        "Prior-month requested date 2026-04-18 differed from actual CBU date 2026-04-17; nearest available CBU observation was used."
       ]
     },
     {
       "metric_id": "usd_uzs_mom_change",
-      "value": -0.88,
+      "value": -1.47,
       "previous_value": null,
       "source_label": "CBU exchange rate, calculated",
-      "source_period": "2026-04-28 vs 2026-03-27",
-      "source_reference": "Calculated from CBU official USD rates: 12072.96 on 2026-04-28 and 12179.87 on 2026-03-27. Requested dates: latest 2026-04-28, prior-month 2026-03-28.",
-      "extracted_at": "2026-04-28T17:40:34.291Z",
+      "source_period": "2026-05-18 vs 2026-04-17",
+      "source_reference": "Calculated from CBU official USD rates: 11986.3 on 2026-05-18 and 12165.24 on 2026-04-17. Requested dates: latest 2026-05-18, prior-month 2026-04-18.",
+      "extracted_at": "2026-05-18T15:43:09.937Z",
       "claim_type": "calculated_identity",
       "unit": "percent MoM",
       "frequency": "monthly from daily observations",
       "validation_status": "valid",
       "caveats": [
-        "Latest observation: requested 2026-04-28; actual CBU date/rate 2026-04-28, 12072.96 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-03-28; actual CBU date/rate 2026-03-27 returned for requested 2026-03-28, 12179.87 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-04-28; actual CBU date/rate 2025-04-28, 12957.14 UZS per USD.",
+        "Latest observation: requested 2026-05-18; actual CBU date/rate 2026-05-18, 11986.3 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-04-18; actual CBU date/rate 2026-04-17 returned for requested 2026-04-18, 12165.24 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-05-18; actual CBU date/rate 2025-05-16 returned for requested 2025-05-18, 12965.34 UZS per USD.",
         "Formula: ((latest - comparison) / comparison) * 100.",
         "Rounded to 2 decimal places.",
         "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
       ],
       "warnings": [
-        "Prior-month requested date 2026-03-28 differed from actual CBU date 2026-03-27; nearest available CBU observation was used."
+        "Prior-month requested date 2026-04-18 differed from actual CBU date 2026-04-17; nearest available CBU observation was used."
       ]
     },
     {
       "metric_id": "usd_uzs_yoy_change",
-      "value": -6.82,
+      "value": -7.55,
       "previous_value": null,
       "source_label": "CBU exchange rate, calculated",
-      "source_period": "2026-04-28 vs 2025-04-28",
-      "source_reference": "Calculated from CBU official USD rates: 12072.96 on 2026-04-28 and 12957.14 on 2025-04-28. Requested dates: latest 2026-04-28, prior-year 2025-04-28.",
-      "extracted_at": "2026-04-28T17:40:34.291Z",
+      "source_period": "2026-05-18 vs 2025-05-16",
+      "source_reference": "Calculated from CBU official USD rates: 11986.3 on 2026-05-18 and 12965.34 on 2025-05-16. Requested dates: latest 2026-05-18, prior-year 2025-05-18.",
+      "extracted_at": "2026-05-18T15:43:09.937Z",
       "claim_type": "calculated_identity",
       "unit": "percent YoY",
       "frequency": "monthly from daily observations",
       "validation_status": "valid",
       "caveats": [
-        "Latest observation: requested 2026-04-28; actual CBU date/rate 2026-04-28, 12072.96 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-03-28; actual CBU date/rate 2026-03-27 returned for requested 2026-03-28, 12179.87 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-04-28; actual CBU date/rate 2025-04-28, 12957.14 UZS per USD.",
+        "Latest observation: requested 2026-05-18; actual CBU date/rate 2026-05-18, 11986.3 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-04-18; actual CBU date/rate 2026-04-17 returned for requested 2026-04-18, 12165.24 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-05-18; actual CBU date/rate 2025-05-16 returned for requested 2025-05-18, 12965.34 UZS per USD.",
         "Formula: ((latest - comparison) / comparison) * 100.",
         "Rounded to 2 decimal places.",
         "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
       ],
-      "warnings": []
+      "warnings": [
+        "Prior-year requested date 2025-05-18 differed from actual CBU date 2025-05-16; nearest available CBU observation was used."
+      ]
     },
     {
       "metric_id": "reer_level",
@@ -341,5 +341,7 @@
       ],
       "warnings": []
     }
-  ]
+  ],
+  "source_verified_by": "github-actions[bot]",
+  "source_verified_at": "2026-05-18T15:43:09Z"
 }
