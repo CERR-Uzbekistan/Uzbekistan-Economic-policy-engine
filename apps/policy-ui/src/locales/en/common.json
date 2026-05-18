@@ -273,8 +273,11 @@
       "title": "Latest updates",
       "description": "Recent policy and data updates kept as supporting context.",
       "reforms": {
-        "title": "Reforms",
-        "empty": "No recent policy actions on file.",
+        "title": "Reform changes",
+        "empty": "No reform changes are available from Knowledge Hub.",
+        "loading": "Loading reform changes from Knowledge Hub...",
+        "unavailable": "Knowledge Hub reform changes are unavailable.",
+        "viewAll": "View all in Knowledge Hub",
         "actionType": {
           "rate_decision": "Rate decision",
           "regulation": "Regulation",
@@ -289,7 +292,7 @@
       },
       "note": {
         "title": "How to use this trail",
-        "description": "Use these entries to check what changed since the last snapshot. Saved scenarios stay in Scenario Lab, not in the Overview."
+        "description": "Reform changes come from Knowledge Hub. Data refreshes show which model inputs were updated since the last snapshot."
       },
       "savedScenarios": {
         "title": "Your saved scenarios",

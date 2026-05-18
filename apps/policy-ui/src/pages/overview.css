@@ -1277,6 +1277,13 @@ body:has(.overview-page) {
   margin: 0;
 }
 
+.feed-item__summary {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
 .feed-item__tags {
   align-items: center;
   display: flex;
@@ -1287,6 +1294,21 @@ body:has(.overview-page) {
 .feed-tag {
   color: var(--color-text-muted);
   font-size: 0.72rem;
+}
+
+.feed-link {
+  border-top: 1px solid var(--color-border);
+  color: var(--color-brand);
+  display: inline-flex;
+  font-size: 0.82rem;
+  font-weight: 650;
+  margin-top: var(--space-xs);
+  padding-top: var(--space-sm);
+  text-decoration: none;
+}
+
+.feed-link:hover {
+  text-decoration: underline;
 }
 
 @media (max-width: 1280px) {

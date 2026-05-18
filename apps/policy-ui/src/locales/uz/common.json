@@ -273,8 +273,11 @@
       "title": "So'nggi yangilanishlar",
       "description": "So'nggi siyosiy va ma'lumot yangilanishlari yordamchi kontekst sifatida.",
       "reforms": {
-        "title": "Islohotlar",
-        "empty": "So'nggi siyosiy qarorlar yo'q.",
+        "title": "Islohot o'zgarishlari",
+        "empty": "Knowledge Hubdan islohot o'zgarishlari mavjud emas.",
+        "loading": "Knowledge Hubdan islohot o'zgarishlari yuklanmoqda...",
+        "unavailable": "Knowledge Hub islohot o'zgarishlari hozir mavjud emas.",
+        "viewAll": "Barchasini Knowledge Hubda ko'rish",
         "actionType": {
           "rate_decision": "Stavka qarori",
           "regulation": "Qoida",
@@ -289,7 +292,7 @@
       },
       "note": {
         "title": "Bu izni qanday o'qish kerak",
-        "description": "Bu yozuvlar kesim oldingisidan nimalar bilan farq qilganini ko'rsatadi. Saqlangan stsenariylar Overviewda emas, Stsenariy laboratoriyasida qoladi."
+        "description": "Islohot o'zgarishlari Knowledge Hubdan olinadi. Ma'lumot yangilanishlari oxirgi kesimdan beri qaysi model kirishlari yangilanganini ko'rsatadi."
       },
       "savedScenarios": {
         "title": "Saqlangan stsenariylaringiz",
