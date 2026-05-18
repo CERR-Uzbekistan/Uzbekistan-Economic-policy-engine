@@ -15,7 +15,6 @@ import {
   getInitialOverviewSourceState,
   loadOverviewSourceState,
 } from '../data/overview/source'
-import { buildOverviewMacroPulseTokens } from '../data/overview/macro-pulse'
 import {
   buildArtifactAlignedNowcastChart,
   shouldUseDfmNowcastChart,
@@ -158,15 +157,8 @@ export function OverviewPage() {
     artifact_summary_metrics,
   } = overviewData
 
-  const artifactProvisionalCount = new Set(
-    indicator_groups
-      ?.flatMap((group) => group.metrics)
-      .filter((metric) => metric.validation_status === 'warning')
-      .map((metric) => metric.metric_id) ?? [],
-  ).size
   const overviewNowcastMetrics = [...(artifact_summary_metrics ?? []), ...headline_metrics]
   const primaryHeadlineMetrics = headline_metrics.slice(0, 3)
-  const macroPulseTokens = buildOverviewMacroPulseTokens(overviewNowcastMetrics, locale, t)
   const artifactAlignedNowcastChart = buildArtifactAlignedNowcastChart(overviewNowcastMetrics)
   const useLiveDfmNowcastChart =
     dfmState.status === 'bridge' && shouldUseDfmNowcastChart(dfmState.chart, overviewNowcastMetrics)
@@ -216,9 +208,7 @@ export function OverviewPage() {
               modelIds={model_ids}
               provenance={provenance}
               artifactSummaryMetrics={artifact_summary_metrics}
-              artifactProvisionalCount={artifactProvisionalCount}
               isArtifactMode={sourceState.sourceKind === 'overview-artifact'}
-              macroPulseTokens={macroPulseTokens}
             />
           </div>
 

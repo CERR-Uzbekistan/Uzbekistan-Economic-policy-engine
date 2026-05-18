@@ -5,7 +5,6 @@ import type {
   NarrativeSegment,
   StateProvenance,
 } from '../../contracts/data-contract.js'
-import type { OverviewMacroPulseToken } from '../../data/overview/macro-pulse.js'
 import type { LanguageCode } from '../../state/language-context.js'
 import { useLanguage } from '../../state/useLanguage.js'
 
@@ -15,9 +14,7 @@ type EconomicStateHeaderProps = {
   modelIds: string[]
   provenance?: StateProvenance
   artifactSummaryMetrics?: HeadlineMetric[]
-  artifactProvisionalCount?: number
   isArtifactMode?: boolean
-  macroPulseTokens?: OverviewMacroPulseToken[]
 }
 
 const LOCALE_BY_LANGUAGE: Record<LanguageCode, string> = {
@@ -63,23 +60,13 @@ function renderSummary(summary: string | NarrativeSegment[]) {
   )
 }
 
-function formatMonthYear(value: string, locale: string) {
-  const date = new Date(value)
-  return new Intl.DateTimeFormat(locale, {
-    month: 'short',
-    year: 'numeric',
-  }).format(date)
-}
-
 export function EconomicStateHeader({
   summary,
   updatedAt,
   modelIds,
   provenance,
   artifactSummaryMetrics = [],
-  artifactProvisionalCount,
   isArtifactMode = false,
-  macroPulseTokens = [],
 }: EconomicStateHeaderProps) {
   const { t } = useTranslation()
   const { language } = useLanguage()
@@ -90,51 +77,12 @@ export function EconomicStateHeader({
 
   const draftedFrom = provenance?.drafted_from ?? modelList
   const reviewDate = provenance?.reviewed_at ?? ''
-  const provisionalCount = artifactProvisionalCount
-    ?? artifactSummaryMetrics.filter((metric) => metric.validation_status === 'warning').length
-  const artifactStrap = t(provisionalCount === 1 ? 'overview.header.artifactStrap' : 'overview.header.artifactStrapPlural', {
-    date: formatMonthYear(updatedAt, locale),
-    count: provisionalCount,
-  })
   const dataNote = reviewDate
     ? t('overview.header.dataNoteReviewed', { date: reviewDate })
     : t('overview.header.dataNoteUpdated', { date: formattedUpdatedAt })
-  const summaryText = isArtifactMode && macroPulseTokens.length > 0
-    ? (
-      <>
-        <span className="overview-state-header__brief">
-          {t('overview.header.artifactBrief.summary')}
-        </span>
-        <span className="overview-state-header__takeaways" aria-label={t('overview.header.takeaways.aria')}>
-          <span>
-            <span className="overview-state-header__takeaway-label">{t('overview.header.takeaways.changedLabel')}</span>
-            {t('overview.header.takeaways.changed')}
-          </span>
-          <span>
-            <span className="overview-state-header__takeaway-label">{t('overview.header.takeaways.mattersLabel')}</span>
-            {t('overview.header.takeaways.matters')}
-          </span>
-          <span>
-            <span className="overview-state-header__takeaway-label">{t('overview.header.takeaways.testLabel')}</span>
-            {t('overview.header.takeaways.test')}
-          </span>
-        </span>
-        <span className="overview-state-header__pulse">
-          {macroPulseTokens.map((token, index) => (
-            <Fragment key={token.id}>
-              {index > 0 ? <span className="overview-state-header__pulse-separator"> {t('overview.common.middleDot')} </span> : null}
-              <span className="overview-state-header__pulse-token">
-                <span className="overview-state-header__pulse-label">{token.label}</span>{' '}
-                <span className="overview-state-header__pulse-value">{token.value}</span>
-              </span>
-            </Fragment>
-          ))}
-        </span>
-      </>
-    )
-    : isArtifactMode
-      ? artifactStrap
-      : renderSummary(summary)
+  const summaryText = isArtifactMode
+    ? t('overview.header.artifactBrief.summary')
+    : renderSummary(summary)
 
   return (
     <section className="state-header overview-state-header" aria-labelledby="overview-state-header-title">

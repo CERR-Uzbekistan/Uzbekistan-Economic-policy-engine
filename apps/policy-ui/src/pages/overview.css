@@ -75,53 +75,12 @@ body:has(.overview-page) {
   font-weight: 600;
 }
 
-.overview-state-header__pulse {
-  display: block;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-}
-
 .overview-state-header__brief {
   display: block;
   font-size: clamp(1rem, 1.25vw, 1.08rem);
   font-weight: 650;
   line-height: 1.45;
-  margin-bottom: var(--space-sm);
   max-width: 70ch;
-}
-
-.overview-state-header__takeaways {
-  border-top: 1px solid var(--color-border);
-  display: grid;
-  gap: 0.35rem;
-  margin: var(--space-md) 0;
-  padding-top: var(--space-md);
-}
-
-.overview-state-header__takeaways span {
-  color: var(--color-text);
-  display: block;
-  font-size: 0.92rem;
-  font-weight: 500;
-  line-height: 1.4;
-}
-
-.overview-state-header__takeaway-label {
-  color: var(--color-text-muted);
-  font-weight: 650;
-}
-
-.overview-state-header__pulse-token {
-  display: inline;
-}
-
-.overview-state-header__pulse-label {
-  color: var(--color-text-muted);
-  font-weight: 700;
-}
-
-.overview-state-header__pulse-value {
-  font-variant-numeric: tabular-nums;
 }
 
 .state-header__meta,

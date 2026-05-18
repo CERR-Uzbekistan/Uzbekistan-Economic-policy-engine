@@ -43,7 +43,8 @@ describe('Overview CSS contracts', () => {
   it('keeps first-screen overview rows wrap-safe at narrow widths', () => {
     const requiredRules = [
       /\.overview-page \.page-header__meta\s*\{[^}]*overflow-wrap:\s*anywhere/s,
-      /\.overview-state-header__pulse\s*\{[^}]*overflow-wrap:\s*anywhere/s,
+      /\.overview-state-header__summary\s*\{[^}]*overflow-wrap:\s*anywhere/s,
+      /\.overview-state-header__provenance-line\s*\{[^}]*overflow-wrap:\s*anywhere/s,
       /\.overview-kpi-card__label\s*\{[^}]*overflow-wrap:\s*anywhere/s,
       /\.overview-kpi-card__context-note\s*\{[^}]*-webkit-line-clamp:\s*2/s,
       /\.overview-data-notes__summary\s*\{[^}]*overflow-wrap:\s*anywhere/s,

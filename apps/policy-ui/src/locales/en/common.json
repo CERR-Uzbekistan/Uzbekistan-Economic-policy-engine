@@ -166,8 +166,6 @@
       "modelListFallback": "MODEL SET",
       "draftedFrom": "State narrative · drafted from {{models}} baseline",
       "updatedAt": "State narrative reviewed {{date}}",
-      "artifactStrap": "Snapshot · {{date}} · {{count}} review note",
-      "artifactStrapPlural": "Snapshot · {{date}} · {{count}} review notes",
       "staticFallbackNotice": "Reference summary · current snapshot unavailable",
       "dataNoteReviewed": "Data note: reviewed {{date}}",
       "dataNoteUpdated": "Data note: updated {{date}}",
@@ -175,15 +173,6 @@
       "modelSource": "model source: {{models}}",
       "artifactBrief": {
         "summary": "Growth is above the current-quarter nowcast path, while inflation and the external channel remain the main watch points."
-      },
-      "takeaways": {
-        "aria": "Overview briefing takeaways",
-        "changedLabel": "What changed: ",
-        "changed": "Q1 GDP is above the Q2 nowcast path; CPI remains high despite gradual decline.",
-        "mattersLabel": "Why it matters: ",
-        "matters": "FX pass-through, food prices, and remittances can still shift the baseline.",
-        "testLabel": "Test next: ",
-        "test": "Start with exchange-rate, inflation persistence, and remittance downside scenarios."
       },
       "summary": {
         "template": "{{items}}.",

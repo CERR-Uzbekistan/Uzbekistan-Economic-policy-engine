@@ -166,8 +166,6 @@
       "modelListFallback": "MODELLAR TO'PLAMI",
       "draftedFrom": "Holat narrativi · {{models}} bazasidan tuzilgan",
       "updatedAt": "Holat narrativi tekshirildi: {{date}}",
-      "artifactStrap": "Kesim · {{date}} · {{count}} ko'rib chiqish eslatmasi",
-      "artifactStrapPlural": "Kesim · {{date}} · {{count}} ko'rib chiqish eslatmasi",
       "staticFallbackNotice": "Namuna xulosa · joriy kesim mavjud emas",
       "dataNoteReviewed": "Ma'lumot eslatmasi: {{date}} kuni tekshirilgan",
       "dataNoteUpdated": "Ma'lumot eslatmasi: {{date}} kuni yangilangan",
@@ -175,15 +173,6 @@
       "modelSource": "model manbasi: {{models}}",
       "artifactBrief": {
         "summary": "O'sish joriy chorak nowcast trayektoriyasidan yuqorida; inflyatsiya va tashqi kanal asosiy kuzatuv nuqtalari bo'lib qolmoqda."
-      },
-      "takeaways": {
-        "aria": "Umumiy ko'rinish bo'yicha asosiy xulosalar",
-        "changedLabel": "Nima o'zgardi: ",
-        "changed": "I chorak YaIM II chorak nowcast trayektoriyasidan yuqori; CPI faqat sekin pasaymoqda.",
-        "mattersLabel": "Nima uchun muhim: ",
-        "matters": "FX pass-through, oziq-ovqat narxlari va pul o'tkazmalari bazaviy holatni o'zgartirishi mumkin.",
-        "testLabel": "Tekshirish: ",
-        "test": "Avval valyuta kursi, inflyatsiya inertligi va pul o'tkazmalari pasayishi stsenariylarini sinang."
       },
       "summary": {
         "template": "{{items}}.",

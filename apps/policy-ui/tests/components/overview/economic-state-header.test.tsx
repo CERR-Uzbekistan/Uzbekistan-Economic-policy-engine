@@ -27,9 +27,6 @@ async function createTestI18n() {
               modelListFallback: 'MODEL SET',
               draftedFrom: 'State narrative · drafted from {{models}} baseline',
               updatedAt: 'Updated {{date}}',
-              artifactStrap: 'Snapshot · {{date}} · {{count}} review note',
-              artifactStrapPlural: 'Snapshot · {{date}} · {{count}} review notes',
-              artifactSummaryMeta: 'Snapshot summary · {{count}} metrics',
               staticFallbackNotice: 'Reference summary · current snapshot unavailable',
               dataNoteReviewed: 'Data note: reviewed {{date}}',
               dataNoteUpdated: 'Data note: updated {{date}}',
@@ -37,15 +34,6 @@ async function createTestI18n() {
               modelSource: 'model source: {{models}}',
               artifactBrief: {
                 summary: 'Growth is above the current nowcast path; inflation and external indicators remain on watch.',
-              },
-              takeaways: {
-                aria: 'Overview briefing takeaways',
-                changedLabel: 'What changed: ',
-                changed: 'Q1 GDP is above the Q2 nowcast path; CPI remains high despite gradual decline.',
-                mattersLabel: 'Why it matters: ',
-                matters: 'FX pass-through, food prices, and remittances can still shift the baseline.',
-                testLabel: 'Test next: ',
-                test: 'Start with exchange-rate, inflation persistence, and remittance downside scenarios.',
               },
               summary: {
                 template: '{{items}}.',
@@ -110,13 +98,6 @@ describe('EconomicStateHeader', () => {
               updatedAt="2026-04-17T09:05:00+05:00"
               modelIds={['dfm_nowcast', 'qpm_uzbekistan']}
               isArtifactMode
-              artifactProvisionalCount={5}
-              macroPulseTokens={[
-                { id: 'gdp', label: 'GDP', value: '5.7 %' },
-                { id: 'cpi', label: 'CPI', value: '8.1 % YoY / 0.7 % MoM' },
-                { id: 'trade_balance', label: 'Trade balance', value: 'USD 1.20bn deficit' },
-                { id: 'usd_uzs', label: 'USD/UZS', value: '12,680 UZS/USD · UZS weaker 1.4%' },
-              ]}
               artifactSummaryMetrics={[
                 {
                   metric_id: 'real_gdp_growth_quarter_yoy',
@@ -156,14 +137,12 @@ describe('EconomicStateHeader', () => {
     )
 
     assert.match(markup, /Growth is above the current nowcast path/)
-    assert.match(markup, /GDP[\s\S]*5\.7 %/)
-    assert.match(markup, /CPI[\s\S]*8\.1 % YoY \/ 0\.7 % MoM/)
-    assert.match(markup, /Trade balance[\s\S]*USD 1\.20bn deficit/)
-    assert.match(markup, /USD\/UZS[\s\S]*12,680 UZS\/USD · UZS weaker 1\.4%/)
     assert.match(markup, /Data note: updated/)
     assert.match(markup, /2 metric sources listed below/)
-    assert.match(markup, /What changed:/)
-    assert.match(markup, /Test next:/)
+    assert.doesNotMatch(markup, /What changed:/)
+    assert.doesNotMatch(markup, /Test next:/)
+    assert.doesNotMatch(markup, /Trade balance/)
+    assert.doesNotMatch(markup, /USD\/UZS/)
     assert.doesNotMatch(markup, /Snapshot · Apr 2026 · 5 review notes/)
     assert.doesNotMatch(markup, /AI-assisted/)
     assert.doesNotMatch(markup, /DFM \+ QPM/)
@@ -171,7 +150,7 @@ describe('EconomicStateHeader', () => {
     assert.doesNotMatch(markup, /Legacy static prose/)
   })
 
-  it('renders numeric macro pulse tokens without qualitative state adjectives', async () => {
+  it('keeps artifact header concise without duplicating macro pulse values', async () => {
     const i18n = await createTestI18n()
     const markup = renderToStaticMarkup(
       <I18nextProvider i18n={i18n}>
@@ -182,12 +161,6 @@ describe('EconomicStateHeader', () => {
               updatedAt="2026-04-17T09:05:00+05:00"
               modelIds={['overview_artifact']}
               isArtifactMode
-              macroPulseTokens={[
-                { id: 'gdp', label: 'GDP', value: '8.7 %' },
-                { id: 'cpi', label: 'CPI', value: '7.1 % YoY / 0.6 % MoM' },
-                { id: 'trade_balance', label: 'Trade balance', value: 'USD 4.51bn deficit' },
-                { id: 'usd_uzs', label: 'USD/UZS', value: '12,073 UZS/USD' },
-              ]}
               artifactSummaryMetrics={[]}
             />
           </MemoryRouter>
@@ -196,10 +169,10 @@ describe('EconomicStateHeader', () => {
     )
 
     assert.match(markup, /Growth is above the current nowcast path/)
-    assert.match(markup, /GDP[\s\S]*8\.7 %/)
-    assert.match(markup, /CPI[\s\S]*7\.1 % YoY \/ 0\.6 % MoM/)
-    assert.match(markup, /Trade balance[\s\S]*USD 4\.51bn deficit/)
-    assert.match(markup, /USD\/UZS[\s\S]*12,073 UZS\/USD/)
+    assert.doesNotMatch(markup, /GDP[\s\S]*8\.7 %/)
+    assert.doesNotMatch(markup, /CPI[\s\S]*7\.1 % YoY \/ 0\.6 % MoM/)
+    assert.doesNotMatch(markup, /Trade balance[\s\S]*USD 4\.51bn deficit/)
+    assert.doesNotMatch(markup, /USD\/UZS[\s\S]*12,073 UZS\/USD/)
     assert.doesNotMatch(markup, /\b(?:firm|easing|stable|strong|weak)\b/i)
   })
 })
