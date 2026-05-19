@@ -19,6 +19,8 @@ describe('OverviewPage render order', () => {
     assert.ok(pageHeader < stateHeader)
     assert.ok(stateHeader < kpis)
     assert.ok(kpis < nowcast)
+    assert.equal(source.includes('headline_metrics.slice(0, 4)'), false)
+    assert.match(source, /headline_metrics\.slice\(0, 8\)/)
     assert.equal(source.indexOf('<QuickActions'), -1)
     assert.equal(source.indexOf('<SupportingMetricTable'), -1)
     assert.ok(nowcast < risks)

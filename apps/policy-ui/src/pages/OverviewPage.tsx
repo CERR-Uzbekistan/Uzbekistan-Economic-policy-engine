@@ -158,7 +158,7 @@ export function OverviewPage() {
   } = overviewData
 
   const overviewNowcastMetrics = [...(artifact_summary_metrics ?? []), ...headline_metrics]
-  const primaryHeadlineMetrics = headline_metrics.slice(0, 4)
+  const primaryHeadlineMetrics = headline_metrics.slice(0, 8)
   const artifactAlignedNowcastChart = buildArtifactAlignedNowcastChart(overviewNowcastMetrics)
   const useLiveDfmNowcastChart =
     dfmState.status === 'bridge' && shouldUseDfmNowcastChart(dfmState.chart, overviewNowcastMetrics)

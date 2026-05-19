@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import type { OverviewActivityFeed } from '../../contracts/data-contract.js'
@@ -10,6 +10,7 @@ import {
 import { AttributionBadge } from '../system/AttributionBadge.js'
 import { toDateEyebrow } from './overview-feed-utils.js'
 import { buildKnowledgeHubReformPreview } from './overview-reform-preview.js'
+import { listScenarios, subscribeScenarioStore } from '../../state/scenarioStore.js'
 
 type OverviewFeedsProps = {
   activityFeed: OverviewActivityFeed
@@ -33,6 +34,7 @@ export function OverviewFeeds({ activityFeed }: OverviewFeedsProps) {
   const locale = i18n.resolvedLanguage ?? 'en'
   const contentLanguage = normalizeContentLanguage(locale)
   const [knowledgeHubState, setKnowledgeHubState] = useState(getInitialKnowledgeHubSourceState)
+  const savedScenarios = useSyncExternalStore(subscribeScenarioStore, listScenarios, () => [])
 
   useEffect(() => {
     let cancelled = false
@@ -55,6 +57,7 @@ export function OverviewFeeds({ activityFeed }: OverviewFeedsProps) {
     .filter((refresh) => ACTIVE_OVERVIEW_REFRESH_MODELS.has(refresh.model_id))
     .sort((a, b) => toEpoch(b.refreshed_at) - toEpoch(a.refreshed_at))
     .slice(0, 3)
+  const latestSavedScenarios = savedScenarios.slice(0, 3)
 
   return (
     <section className="feed" aria-labelledby="overview-feeds-title">
@@ -114,10 +117,35 @@ export function OverviewFeeds({ activityFeed }: OverviewFeedsProps) {
         )}
       </article>
 
-      <aside className="feed-col feed-col--note">
-        <h3>{t('overview.feeds.note.title')}</h3>
-        <p>{t('overview.feeds.note.description')}</p>
-      </aside>
+      <article className="feed-col">
+        <h3>{t('overview.feeds.savedScenarios.title')}</h3>
+        {latestSavedScenarios.length === 0 ? (
+          <p className="empty-state">{t('overview.feeds.savedScenarios.empty')}</p>
+        ) : (
+          <div className="feed-list">
+            {latestSavedScenarios.map((scenario) => (
+              <article key={scenario.scenario_id} className="feed-item">
+                <p className="feed-item__date">
+                  {toDateEyebrow(scenario.updated_at, locale)} {t('overview.common.middleDot')}{' '}
+                  {t(`overview.feeds.savedScenarios.type.${scenario.scenario_type}`)}
+                </p>
+                <p className="feed-item__title">{scenario.scenario_name}</p>
+                {scenario.description ? (
+                  <p className="feed-item__summary">{scenario.description}</p>
+                ) : null}
+                <div className="feed-item__tags">
+                  {scenario.model_ids.slice(0, 3).map((modelId) => (
+                    <AttributionBadge key={modelId} modelId={modelId} />
+                  ))}
+                </div>
+              </article>
+            ))}
+            <Link className="feed-link" to="/scenario-lab">
+              {t('overview.feeds.savedScenarios.openLab')}
+            </Link>
+          </div>
+        )}
+      </article>
     </section>
   )
 }

@@ -290,13 +290,15 @@
         "empty": "Yangi model ma'lumotlari mavjud emas.",
         "refreshSuffix": "yangilanishi"
       },
-      "note": {
-        "title": "Bu izni qanday o'qish kerak",
-        "description": "Islohot o'zgarishlari Knowledge Hubdan olinadi. Ma'lumot yangilanishlari oxirgi kesimdan beri qaysi model kirishlari yangilanganini ko'rsatadi."
-      },
       "savedScenarios": {
         "title": "Saqlangan stsenariylaringiz",
-        "empty": "Stsenariy simulyatorida qoralama saqlaganingizdan keyin stsenariylar shu yerda ko'rinadi."
+        "empty": "Stsenariy simulyatorida qoralama saqlaganingizdan keyin stsenariylar shu yerda ko'rinadi.",
+        "openLab": "Scenario Labni ochish",
+        "type": {
+          "baseline": "Bazaviy",
+          "alternative": "Muqobil",
+          "stress": "Stress"
+        }
       }
     },
     "nowcast": {

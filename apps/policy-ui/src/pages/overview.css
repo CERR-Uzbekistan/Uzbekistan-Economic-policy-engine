@@ -245,10 +245,10 @@ body:has(.overview-page) {
   display: grid;
   gap: var(--space-sm);
   grid-template-rows: auto 1fr auto;
-  min-height: 7.5rem;
+  min-height: 6.7rem;
   min-width: 0;
   overflow: hidden;
-  padding: 1rem 1rem 0.95rem;
+  padding: 0.82rem 0.9rem 0.78rem;
 }
 
 .kpi__head,
@@ -302,7 +302,7 @@ body:has(.overview-page) {
 
 .kpi__value,
 .overview-kpi-card__value {
-  font-size: clamp(1.5rem, 2.2vw, 1.75rem);
+  font-size: clamp(1.32rem, 1.85vw, 1.62rem);
   font-variant-numeric: tabular-nums;
   font-weight: 700;
   line-height: 1.05;
@@ -1154,8 +1154,8 @@ body:has(.overview-page) {
   border-top: 1px solid var(--color-border);
   display: grid;
   gap: var(--space-sm);
-  margin-top: var(--space-md);
-  padding-top: var(--space-md);
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
 }
 
 .overview-risk-tests__head {
@@ -1178,14 +1178,16 @@ body:has(.overview-page) {
 .overview-risk-tests__list {
   display: grid;
   gap: var(--space-xs);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .overview-risk-test-link {
   border: 1px solid var(--color-border);
   color: inherit;
   display: grid;
-  gap: 0.2rem;
-  padding: 0.62rem 0.68rem;
+  gap: 0.16rem;
+  min-width: 0;
+  padding: 0.55rem 0.58rem;
   text-decoration: none;
 }
 
@@ -1204,6 +1206,17 @@ body:has(.overview-page) {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
+}
+
+.overview-risk-test-link__kind {
+  color: var(--color-text-muted);
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  text-transform: uppercase;
 }
 
 .overview-risk-test-link:hover {
@@ -1233,18 +1246,6 @@ body:has(.overview-page) {
 
 .feed-col h3 {
   font-size: 0.89rem;
-  margin: 0;
-}
-
-.feed-col--note {
-  align-content: start;
-  background: var(--color-surface-muted);
-}
-
-.feed-col--note p {
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-  line-height: 1.55;
   margin: 0;
 }
 
@@ -1312,7 +1313,7 @@ body:has(.overview-page) {
 }
 
 @media (max-width: 1280px) {
-  .overview-kpi-grid {
+  .kpi-strip--supporting .overview-kpi-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
@@ -1328,6 +1329,10 @@ body:has(.overview-page) {
 
   .kpi-strip--primary .overview-kpi-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .overview-risk-tests__list {
+    grid-template-columns: 1fr;
   }
 
   .overview-two-column {

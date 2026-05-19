@@ -21,8 +21,15 @@ describe('OverviewFeeds Knowledge Hub reform preview', () => {
 
     assert.match(source, /loadKnowledgeHubSourceState/)
     assert.match(source, /buildKnowledgeHubReformPreview\(knowledgeHubState\.content/)
+    assert.match(source, /useSyncExternalStore/)
+    assert.match(source, /listScenarios/)
+    assert.match(source, /subscribeScenarioStore/)
     assert.doesNotMatch(source, /activityFeed\.policy_actions/)
     assert.match(source, /overview_artifact/)
+    assert.match(source, /overview\.feeds\.savedScenarios\.title/)
+    assert.match(source, /overview\.feeds\.savedScenarios\.type/)
+    assert.doesNotMatch(source, /feed-col--note/)
+    assert.doesNotMatch(source, /overview\.feeds\.note/)
   })
 
   it('builds the latest reform preview from Knowledge Hub packages newest first', () => {
