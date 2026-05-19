@@ -5,15 +5,24 @@ import { fileURLToPath } from 'node:url'
 import { loadModelExplorerSourceState } from '../../../src/data/model-explorer/source.js'
 import { validateIoBridgePayload } from '../../../src/data/bridge/io-guard.js'
 import type { IoBridgePayload } from '../../../src/data/bridge/io-types.js'
+import { validateQpmBridgePayload } from '../../../src/data/bridge/qpm-guard.js'
+import type { QpmBridgePayload } from '../../../src/data/bridge/qpm-types.js'
 import { modelCatalogEntries } from '../../../src/data/mock/model-catalog.js'
 import { modelExplorerLiveRawMock } from '../../../src/data/raw/model-explorer-live.js'
 
 const originalFetch = globalThis.fetch
 const originalMode = process.env.VITE_MODEL_EXPLORER_DATA_MODE
 const IO_PUBLIC_ARTIFACT_PATH = fileURLToPath(new URL('../../../../public/data/io.json', import.meta.url))
+const QPM_PUBLIC_ARTIFACT_PATH = fileURLToPath(new URL('../../../../public/data/qpm.json', import.meta.url))
 
 function loadValidIoPayload(): IoBridgePayload {
   const validation = validateIoBridgePayload(JSON.parse(readFileSync(IO_PUBLIC_ARTIFACT_PATH, 'utf8')))
+  assert.ok(validation.value)
+  return validation.value
+}
+
+function loadValidQpmPayload(): QpmBridgePayload {
+  const validation = validateQpmBridgePayload(JSON.parse(readFileSync(QPM_PUBLIC_ARTIFACT_PATH, 'utf8')))
   assert.ok(validation.value)
   return validation.value
 }
@@ -47,7 +56,16 @@ describe('model explorer source live integration flow', () => {
   it('enriches the I-O entry with bridge evidence when the IO artifact is valid', async () => {
     process.env.VITE_MODEL_EXPLORER_DATA_MODE = 'mock'
     const ioPayload = loadValidIoPayload()
+    const qpmPayload = loadValidQpmPayload()
     globalThis.fetch = ((input: RequestInfo | URL) => {
+      if (String(input) === '/data/qpm.json') {
+        return Promise.resolve(
+          new Response(JSON.stringify(qpmPayload), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          }),
+        )
+      }
       assert.equal(String(input), '/data/io.json')
       return Promise.resolve(
         new Response(JSON.stringify(ioPayload), {
@@ -59,8 +77,10 @@ describe('model explorer source live integration flow', () => {
 
     const readyState = await loadModelExplorerSourceState()
     const ioEntry = readyState.workspace?.catalog_entries_by_model_id?.['io-model']
+    const qpmEntry = readyState.workspace?.catalog_entries_by_model_id?.['qpm-uzbekistan']
 
     assert.equal(readyState.status, 'ready')
+    assert.equal(qpmEntry?.bridge_evidence?.source_artifact, 'apps/policy-ui/public/data/qpm.json')
     assert.equal(
       ioEntry?.bridge_evidence?.source_artifact,
       'io_model/io_data.json + mcp_server/data/io_data.json',
@@ -106,6 +126,9 @@ describe('model explorer source live integration flow', () => {
 
     globalThis.fetch = ((input: RequestInfo | URL) => {
       calls.push(String(input))
+      if (String(input) === '/data/qpm.json') {
+        return Promise.resolve(new Response('', { status: 404 }))
+      }
       if (String(input) === '/data/io.json') {
         return Promise.resolve(new Response('', { status: 404 }))
       }
@@ -138,6 +161,6 @@ describe('model explorer source live integration flow', () => {
     assert.equal(timeoutState.status, 'error')
     assert.equal(timeoutState.error, 'Model Explorer API request timed out. Please retry.')
 
-    assert.equal(calls.length, 5)
+    assert.equal(calls.length, 6)
   })
 })

@@ -21,10 +21,14 @@ export function BridgeEvidencePanel({ evidence }: BridgeEvidencePanelProps) {
     [t('modelExplorer.bridgeEvidence.dataVintage'), evidence.data_version],
     [t('modelExplorer.bridgeEvidence.exportedAt'), evidence.exported_at],
     [t('modelExplorer.bridgeEvidence.solverVersion'), evidence.solver_version],
-    [t('modelExplorer.bridgeEvidence.sectorCount'), String(evidence.sector_count)],
-    [t('modelExplorer.bridgeEvidence.framework'), evidence.framework],
-    [t('modelExplorer.bridgeEvidence.units'), evidence.units],
+    ...(typeof evidence.sector_count === 'number'
+      ? [[t('modelExplorer.bridgeEvidence.sectorCount'), String(evidence.sector_count)]]
+      : []),
+    ...(evidence.framework ? [[t('modelExplorer.bridgeEvidence.framework'), evidence.framework]] : []),
+    ...(evidence.units ? [[t('modelExplorer.bridgeEvidence.units'), evidence.units]] : []),
+    ...(evidence.evidence_metrics ?? []).map((metric) => [metric.label, metric.value]),
   ]
+  const linkageCounts = evidence.linkage_counts ?? []
 
   return (
     <section className="bridge-evidence" aria-label={t('modelExplorer.bridgeEvidence.title')}>
@@ -40,15 +44,19 @@ export function BridgeEvidencePanel({ evidence }: BridgeEvidencePanelProps) {
           </div>
         ))}
       </dl>
-      <h5>{t('modelExplorer.bridgeEvidence.linkageCounts')}</h5>
-      <div className="bridge-evidence__linkages">
-        {evidence.linkage_counts.map((item) => (
-          <span key={item.label}>
-            <b>{item.value}</b>
-            {item.label}
-          </span>
-        ))}
-      </div>
+      {linkageCounts.length > 0 ? (
+        <>
+          <h5>{t('modelExplorer.bridgeEvidence.linkageCounts')}</h5>
+          <div className="bridge-evidence__linkages">
+            {linkageCounts.map((item) => (
+              <span key={item.label}>
+                <b>{item.value}</b>
+                {item.label}
+              </span>
+            ))}
+          </div>
+        </>
+      ) : null}
       {caveats.length > 0 ? (
         <>
           <h5>{t('modelExplorer.bridgeEvidence.caveats')}</h5>

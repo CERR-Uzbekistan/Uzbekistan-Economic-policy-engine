@@ -10,7 +10,7 @@ describe('ScenarioLabPage preset hydration', () => {
     assert.equal(result.selectedPresetId, 'remittance-downside')
     assert.equal(result.scenarioName, 'External slowdown')
     assert.equal(result.assumptionValues.remittance_change, 0)
-    assert.equal(result.assumptionValues.export_demand_change, -5)
+    assert.equal(result.assumptionValues.export_demand_change, -0.5)
     assert.equal(result.warningMessage, null)
   })
 

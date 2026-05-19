@@ -26,7 +26,17 @@ describe('scenario lab mock result semantics', () => {
     const externalSlowdown = applyPresetToState('remittance-downside')
 
     assert.equal(externalSlowdown.remittance_change, 0)
-    assert.equal(externalSlowdown.export_demand_change, -5)
+    assert.equal(externalSlowdown.export_demand_change, -0.5)
+    assert.equal(
+      scenarioLabWorkspaceMock.assumptions.find((assumption) => assumption.key === 'export_demand_change')
+        ?.unit,
+      'pp',
+    )
+    assert.equal(
+      scenarioLabWorkspaceMock.assumptions.find((assumption) => assumption.key === 'export_demand_change')
+        ?.technical_variable,
+      'qpm.external_demand_shock',
+    )
   })
 
   it('maps remittance and tariff controls to sensible headline effects', () => {

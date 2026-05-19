@@ -21,7 +21,7 @@ function loadValidIoPayload(): IoBridgePayload {
 describe('model explorer IO bridge enrichment', () => {
   it('maps the validated IO public artifact into Model Explorer bridge evidence', () => {
     const evidence = toModelExplorerIoBridgeEvidence(loadValidIoPayload())
-    const linkageCountSum = evidence.linkage_counts.reduce((sum, item) => sum + Number(item.value), 0)
+    const linkageCountSum = (evidence.linkage_counts ?? []).reduce((sum, item) => sum + Number(item.value), 0)
 
     assert.equal(evidence.status_label, 'Validated')
     assert.equal(evidence.source_artifact, 'io_model/io_data.json + mcp_server/data/io_data.json')

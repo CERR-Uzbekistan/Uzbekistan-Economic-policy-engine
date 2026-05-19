@@ -265,7 +265,7 @@ describe('Scenario Lab saved-run restore integration', () => {
 
     const restoredAssumptions = toAssumptionValues(loaded.assumptions)
     assert.equal(restoredAssumptions.remittance_change, 0)
-    assert.equal(restoredAssumptions.export_demand_change, -5)
+    assert.equal(restoredAssumptions.export_demand_change, -0.5)
     assert.equal(restoredAssumptions.policy_rate_change, 0)
 
     const restoredBundle: ScenarioLabResultsBundle = {
@@ -309,7 +309,7 @@ describe('Scenario Lab saved-run restore integration', () => {
       /class="preset-chip active" aria-pressed="true">External slowdown<\/button>/,
     )
     assert.match(assumptionsMarkup, /value="Restored external slowdown"/)
-    assert.match(assumptionsMarkup, /value="-5"/)
+    assert.match(assumptionsMarkup, /value="-0.5"/)
     assert.match(assumptionsMarkup, /aria-pressed="true">External<\/button>/)
     assert.match(assumptionsMarkup, /aria-pressed="true">Trade<\/button>/)
 

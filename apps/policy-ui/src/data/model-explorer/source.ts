@@ -9,11 +9,13 @@ import {
 } from '../source-state.js'
 import { toModelExplorerWorkspace } from '../adapters/model-explorer.js'
 import { enrichModelExplorerWorkspaceWithIoBridge } from '../adapters/model-explorer-io-enrichment.js'
+import { enrichModelExplorerWorkspaceWithQpmBridge } from '../adapters/model-explorer-qpm-enrichment.js'
 import {
   validateRawModelExplorerPayload,
   type ModelExplorerValidationIssue,
 } from '../adapters/model-explorer-guard.js'
 import { fetchIoBridgePayload } from '../bridge/io-client.js'
+import { fetchQpmBridgePayload } from '../bridge/qpm-client.js'
 import { modelExplorerWorkspaceMock } from '../mock/model-explorer.js'
 import {
   fetchModelExplorerLiveRawPayload,
@@ -59,14 +61,23 @@ function buildErrorState(
   }
 }
 
-async function enrichWithOptionalIoBridge(
+async function enrichWithOptionalBridgeArtifacts(
   workspace: ModelExplorerWorkspace,
 ): Promise<ModelExplorerWorkspace> {
+  let enrichedWorkspace = workspace
+  try {
+    const qpmPayload = await fetchQpmBridgePayload()
+    enrichedWorkspace = enrichModelExplorerWorkspaceWithQpmBridge(enrichedWorkspace, qpmPayload)
+  } catch {
+    // QPM bridge enrichment is opportunistic. The static methodology catalog remains usable
+    // if the public artifact is temporarily unavailable or fails validation.
+  }
+
   try {
     const ioPayload = await fetchIoBridgePayload()
-    return enrichModelExplorerWorkspaceWithIoBridge(workspace, ioPayload)
+    return enrichModelExplorerWorkspaceWithIoBridge(enrichedWorkspace, ioPayload)
   } catch {
-    return workspace
+    return enrichedWorkspace
   }
 }
 
@@ -81,7 +92,7 @@ export function getInitialModelExplorerSourceState(): ModelExplorerSourceState {
 export async function loadModelExplorerSourceState(): Promise<ModelExplorerSourceState> {
   const mode = resolveModelExplorerDataMode()
   if (mode === 'mock') {
-    return buildReadyState(mode, await enrichWithOptionalIoBridge(modelExplorerWorkspaceMock))
+    return buildReadyState(mode, await enrichWithOptionalBridgeArtifacts(modelExplorerWorkspaceMock))
   }
 
   try {
@@ -97,7 +108,7 @@ export async function loadModelExplorerSourceState(): Promise<ModelExplorerSourc
       )
     }
 
-    const workspace = await enrichWithOptionalIoBridge(toModelExplorerWorkspace(validation.value))
+    const workspace = await enrichWithOptionalBridgeArtifacts(toModelExplorerWorkspace(validation.value))
     return buildReadyState(mode, workspace, validation.issues)
   } catch (error) {
     if (error instanceof ModelExplorerTransportError) {

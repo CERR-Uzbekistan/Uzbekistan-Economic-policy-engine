@@ -459,10 +459,11 @@ export type ModelBridgeEvidence = {
   data_version: string
   exported_at: string
   solver_version: string
-  sector_count: number
-  framework: string
-  units: string
-  linkage_counts: ModelBridgeEvidenceMetric[]
+  sector_count?: number
+  framework?: string
+  units?: string
+  linkage_counts?: ModelBridgeEvidenceMetric[]
+  evidence_metrics?: ModelBridgeEvidenceMetric[]
   caveats: string[]
 }
 

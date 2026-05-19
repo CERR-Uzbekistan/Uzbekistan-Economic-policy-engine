@@ -59,9 +59,10 @@ const PRESETS: ScenarioLabPreset[] = [
   {
     preset_id: 'remittance-downside',
     title: 'External slowdown',
-    summary: 'Foreign demand weakens relative to baseline; expect softer activity through the active QPM external-demand channel.',
+    summary:
+      'Foreign output gap weakens relative to baseline; expect softer activity through the active QPM external-demand channel.',
     assumption_overrides: {
-      export_demand_change: -5,
+      export_demand_change: -0.5,
     },
   },
 ]
@@ -160,14 +161,14 @@ const SCENARIO_ASSUMPTIONS = [
   },
   {
     key: 'export_demand_change',
-    label: 'External demand shift',
-    description: 'Foreign demand shock to exports.',
+    label: 'Foreign output gap shock',
+    description: 'Foreign output-gap shock entering the QPM IS curve through b3 * gap*_t.',
     category: 'trade',
-    unit: '%',
+    unit: 'pp',
     technical_variable: 'qpm.external_demand_shock',
-    min: -20,
-    max: 20,
-    step: 1,
+    min: -5,
+    max: 5,
+    step: 0.25,
     default_value: 0,
   },
   {
@@ -239,7 +240,7 @@ function getMetricCore(values: ScenarioLabAssumptionState) {
         0.16 * govSpending -
         0.12 * policyRate -
         0.05 * fx +
-        0.04 * externalDemand +
+        0.3 * externalDemand +
         0.03 * remittance -
         0.03 * riskPremium,
     ),
@@ -559,7 +560,7 @@ function buildImpulseResponseChart(values: ScenarioLabAssumptionState): ChartSpe
   const gdpInitialGap =
     -0.015 * policyRateShockPp +
     0.03 * remittanceShock +
-    0.04 * externalDemandShock +
+    0.3 * externalDemandShock +
     0.12 * governmentSpendingShock -
     0.03 * riskPremiumShock
   const inflationInitial =

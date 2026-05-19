@@ -9,9 +9,9 @@ export const qpmEquations: Record<string, ReactNode> = {
       <sub>t</sub> = <em>b</em>
       <sub>1</sub>·<em>y</em>
       <sub>t−1</sub> − <em>b</em>
-      <sub>2</sub>·(<em>r</em>
-      <sub>t</sub> − <em>r̄</em>) + <em>b</em>
-      <sub>3</sub>·<em>y</em>
+      <sub>2</sub>·<em>mci</em>
+      <sub>t</sub> + <em>b</em>
+      <sub>3</sub>·<em>gap</em>
       <sub>t</sub>* + ε<sub>t</sub>
       <sup>y</sup>
     </>
