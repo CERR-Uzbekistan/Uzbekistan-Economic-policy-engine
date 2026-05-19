@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import { afterEach, describe, it } from 'node:test'
+import { withOverviewArtifactCacheKey } from '../../../src/data/overview/artifact-client.js'
 import { loadOverviewSourceState } from '../../../src/data/overview/source.js'
 import { overviewLiveRawMock } from '../../../src/data/raw/overview-live.js'
 import { overviewV1Data } from '../../../src/data/mock/overview.js'
@@ -45,6 +46,28 @@ describe('overview source artifact flow', () => {
     assert.equal(state.fallbackReason, null)
     assert.equal(state.snapshot?.snapshot_id, 'overview-artifact')
     assert.equal(state.snapshot?.headline_metrics[0].metric_id, 'real_gdp_growth_quarter_yoy')
+  })
+
+  it('uses a schema cache key and no-cache mode when fetching the public artifact', async () => {
+    delete process.env.VITE_OVERVIEW_DATA_MODE
+    let requestUrl = ''
+    let requestCacheMode: RequestCache | undefined
+
+    globalThis.fetch = (async (input, init) => {
+      requestUrl = String(input)
+      requestCacheMode = init?.cache
+      return jsonResponse(buildValidOverviewArtifact())
+    }) as typeof fetch
+
+    const state = await loadOverviewSourceState()
+
+    assert.equal(state.status, 'ready')
+    assert.match(requestUrl, /data\/overview\.json\?schema=overview\.v1$/)
+    assert.equal(requestCacheMode, 'no-cache')
+    assert.equal(
+      withOverviewArtifactCacheKey('/policy-ui/data/overview.json?x=1#frag'),
+      '/policy-ui/data/overview.json?x=1&schema=overview.v1#frag',
+    )
   })
 
   it('falls back cleanly when the overview artifact is missing', async () => {

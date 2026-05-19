@@ -5,7 +5,10 @@ import {
   type FetchLike,
 } from '../bridge/bridge-fetch.js'
 import { validateOverviewArtifact, type OverviewArtifactValidationIssue } from './artifact-guard.js'
-import type { OverviewArtifact } from './artifact-types.js'
+import {
+  OVERVIEW_ARTIFACT_SCHEMA_VERSION,
+  type OverviewArtifact,
+} from './artifact-types.js'
 
 const DEFAULT_OVERVIEW_ARTIFACT_TIMEOUT_MS = 8_000
 const DEFAULT_OVERVIEW_ARTIFACT_PATH = 'data/overview.json'
@@ -73,6 +76,13 @@ export function resolveOverviewArtifactDataUrl(): string {
   return metaEnv.dataUrl ?? processEnv.dataUrl ?? resolveOverviewArtifactDefaultDataUrl(metaEnv.baseUrl)
 }
 
+export function withOverviewArtifactCacheKey(dataUrl: string): string {
+  const [baseAndQuery, hash] = dataUrl.split('#', 2)
+  const separator = baseAndQuery.includes('?') ? '&' : '?'
+  const schemaParam = `schema=${encodeURIComponent(OVERVIEW_ARTIFACT_SCHEMA_VERSION)}`
+  return `${baseAndQuery}${separator}${schemaParam}${hash ? `#${hash}` : ''}`
+}
+
 export function resolveOverviewArtifactTimeoutMs(): number {
   const metaEnv = readImportMetaEnv()
   const processEnv = readProcessEnv()
@@ -93,8 +103,9 @@ async function fetchOverviewArtifactJson(fetchImpl: FetchLike): Promise<unknown>
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
 
   try {
-    const response = await fetchImpl(resolveOverviewArtifactDataUrl(), {
+    const response = await fetchImpl(withOverviewArtifactCacheKey(resolveOverviewArtifactDataUrl()), {
       method: 'GET',
+      cache: 'no-cache',
       headers: { Accept: 'application/json' },
       signal: controller.signal,
     })
