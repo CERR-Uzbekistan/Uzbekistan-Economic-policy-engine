@@ -89,6 +89,15 @@ jobs:
             --source-verified-by "github-actions[bot]" \
             --source-verified-at "${{ steps.meta.outputs.run_started_at }}"
 
+      - name: Refresh world-bank-gold source family
+        run: |
+          node scripts/overview/overview-source-refresh-workflow.mjs run-family \
+            --family world-bank-gold \
+            --results "$RUNNER_TEMP/overview-artifact-refresh/family-results.json" \
+            --public-status source-verified \
+            --source-verified-by "github-actions[bot]" \
+            --source-verified-at "${{ steps.meta.outputs.run_started_at }}"
+
       - name: Generate workflow summary
         run: |
           node scripts/overview/overview-source-refresh-workflow.mjs finalize \

@@ -252,3 +252,33 @@ from the Statistics Agency PDF release to SIAT JSON 582. Because source URL/refe
 `extracted_at`, caveats, and `observed_at` are hashed provenance fields, the snapshot
 still moves to `automation_pending_owner_review` when the migration is written. Public
 export remains blocked until the owner accepts the updated source snapshot hash.
+
+## Phase 4 World Bank Gold Price Automation
+
+Phase 4 automation is intentionally limited to monthly observed gold price metrics:
+
+- `gold_price_level`
+- `gold_price_change`
+
+`gold_price_forecast` remains a separate manual/reference metric because it is sourced
+from the Commodity Markets Outlook forecast PDF, not the monthly Pink Sheet workbook.
+
+It uses the official World Bank Commodity Price Data monthly workbook:
+
+```bash
+https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Monthly.xlsx
+```
+
+The parser is deliberately narrow:
+
+- The workbook must contain a `Monthly Prices` sheet.
+- The sheet must have a single `GOLD` code column.
+- The parser uses monthly period keys such as `2026M04` and rejects ambiguous or
+  non-numeric gold values.
+- `observed_at` is derived from the workbook header line `Updated on ...`.
+- `gold_price_level` is the latest monthly average in nominal USD per troy ounce.
+- `gold_price_change` is the month-on-month percentage change from the prior monthly
+  average, rounded to two decimals.
+
+The weekday public refresh runs this family in `source_verified_for_public_artifact`
+mode and exports the public Overview artifact only after the same frontend gates pass.

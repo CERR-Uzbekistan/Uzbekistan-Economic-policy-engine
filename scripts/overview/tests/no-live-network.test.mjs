@@ -15,13 +15,19 @@ test('script tests use fixtures and do not contain live source fetches', () => {
     join(repoRoot, 'scripts', 'overview', 'tests', 'siat-gdp-annual.test.mjs'),
     'utf8',
   )
+  const worldBankGoldTestSource = readFileSync(
+    join(repoRoot, 'scripts', 'overview', 'tests', 'world-bank-gold.test.mjs'),
+    'utf8',
+  )
 
   assert.equal(cbuTestSource.includes('fetch('), false)
   assert.equal(siatTestSource.includes('fetch('), false)
   assert.equal(siatCpiTestSource.includes('fetch('), false)
   assert.equal(siatGdpAnnualTestSource.includes('fetch('), false)
+  assert.equal(worldBankGoldTestSource.includes('fetch('), false)
   assert.ok(cbuTestSource.includes('fixtureFetchJson'))
   assert.ok(siatTestSource.includes('fixtureFetchJson'))
   assert.ok(siatCpiTestSource.includes('fixtureFetchJson'))
   assert.ok(siatGdpAnnualTestSource.includes('fixtureFetchJson'))
+  assert.ok(worldBankGoldTestSource.includes('fetchArrayBuffer'))
 })

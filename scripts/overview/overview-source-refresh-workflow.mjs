@@ -7,7 +7,7 @@ const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..')
 const snapshotPath = resolve(repoRoot, 'scripts', 'overview', 'overview_source_snapshot.json')
 const diffReportPath = resolve(repoRoot, 'scripts', 'overview', 'overview_source_snapshot.diff_report.json')
 const fetchScriptPath = resolve(repoRoot, 'scripts', 'overview', 'fetch-overview-sources.mjs')
-const families = ['cbu-fx', 'siat-trade', 'siat-cpi', 'siat-gdp-annual']
+const families = ['cbu-fx', 'siat-trade', 'siat-cpi', 'siat-gdp-annual', 'world-bank-gold']
 const PUBLIC_EXPORT_SOURCE_STATUSES = new Set([
   'owner_verified_for_public_artifact',
   'source_verified_for_public_artifact',

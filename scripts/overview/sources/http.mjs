@@ -1,6 +1,7 @@
 const DEFAULT_USER_AGENT = 'Uzbekistan-Economic-Policy-Engine/overview-source-automation (+manual-review)'
 const CBU_USD_PATH_PATTERN = /^\/en\/arkhiv-kursov-valyut\/json\/USD\/\d{4}-\d{2}-\d{2}\/$/
 const SIAT_SDMX_DATA_PATH_PATTERN = /^\/media\/uploads\/sdmx\/sdmx_data_\d+\.json$/
+const WORLD_BANK_CMO_MONTHLY_XLSX_PATTERN = /^\/en\/doc\/[a-f0-9-]+\/related\/CMO-Historical-Data-Monthly\.xlsx$/i
 const hostQueues = new Map()
 
 function sleep(ms) {
@@ -31,12 +32,14 @@ export function assertAllowedOverviewSourceUrl(url) {
   const parsed = new URL(url)
   const allowedCbuUrl = parsed.host === 'cbu.uz' && CBU_USD_PATH_PATTERN.test(parsed.pathname)
   const allowedSiatUrl = parsed.host === 'api.siat.stat.uz' && SIAT_SDMX_DATA_PATH_PATTERN.test(parsed.pathname)
-  if (!allowedCbuUrl && !allowedSiatUrl) {
+  const allowedWorldBankCmoUrl =
+    parsed.host === 'thedocs.worldbank.org' && WORLD_BANK_CMO_MONTHLY_XLSX_PATTERN.test(parsed.pathname)
+  if (!allowedCbuUrl && !allowedSiatUrl && !allowedWorldBankCmoUrl) {
     throw new Error(`Refusing to request unsupported Overview source URL: ${url}`)
   }
 }
 
-export async function fetchJsonWithRetry(url, options = {}) {
+async function fetchWithRetry(url, options = {}) {
   assertAllowedOverviewSourceUrl(url)
   const {
     fetchImpl = globalThis.fetch,
@@ -56,13 +59,13 @@ export async function fetchJsonWithRetry(url, options = {}) {
       try {
         const response = await fetchImpl(url, {
           headers: {
-            Accept: 'application/json',
+            Accept: options.accept ?? 'application/json',
             'User-Agent': userAgent,
           },
           signal: controller.signal,
         })
         if (!response.ok) throw new Error(`HTTP ${response.status} ${response.statusText}`.trim())
-        return await response.json()
+        return response
       } catch (error) {
         lastError = error
         if (attempt === retries) break
@@ -74,4 +77,17 @@ export async function fetchJsonWithRetry(url, options = {}) {
 
     throw new Error(`Failed to fetch ${url}: ${lastError instanceof Error ? lastError.message : String(lastError)}`)
   })
+}
+
+export async function fetchJsonWithRetry(url, options = {}) {
+  const response = await fetchWithRetry(url, options)
+  return response.json()
+}
+
+export async function fetchArrayBufferWithRetry(url, options = {}) {
+  const response = await fetchWithRetry(url, {
+    ...options,
+    accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/octet-stream',
+  })
+  return response.arrayBuffer()
 }

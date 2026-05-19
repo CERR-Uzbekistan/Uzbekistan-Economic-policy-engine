@@ -5,6 +5,7 @@ import { buildCbuFxMetricUpdates } from './sources/cbu-fx.mjs'
 import { buildSiatCpiMetricUpdates } from './sources/siat-cpi.mjs'
 import { buildSiatGdpAnnualMetricUpdates } from './sources/siat-gdp-annual.mjs'
 import { buildSiatTradeMetricUpdates, isManualRequiredError } from './sources/siat-trade.mjs'
+import { buildWorldBankGoldMetricUpdates } from './sources/world-bank-gold.mjs'
 import {
   SOURCE_VERIFIED_FOR_PUBLIC_ARTIFACT,
   applyMetricUpdatesToSnapshot,
@@ -70,7 +71,7 @@ function parseArgs(argv) {
     }
   }
 
-  if (!['cbu-fx', 'siat-trade', 'siat-cpi', 'siat-gdp-annual'].includes(options.family)) {
+  if (!['cbu-fx', 'siat-trade', 'siat-cpi', 'siat-gdp-annual', 'world-bank-gold'].includes(options.family)) {
     fail(`Unsupported Overview source family: ${options.family}`)
   }
   if (options.dryRun && options.writeSnapshot) fail('Use either --dry-run or --write-snapshot, not both.')
@@ -102,6 +103,13 @@ function siatFixtureFetchJson(fixtureDir) {
     }
 
     return readJson(primaryPath)
+  }
+}
+
+function fixtureFetchArrayBuffer(fixtureDir) {
+  return async (url) => {
+    const urlBasename = basename(new URL(url).pathname)
+    return readFileSync(join(fixtureDir, urlBasename))
   }
 }
 
@@ -145,10 +153,15 @@ async function main() {
         snapshot,
         fetchJson: siatFetchJson,
       })
-    } else {
+    } else if (args.family === 'siat-gdp-annual') {
       updates = await buildSiatGdpAnnualMetricUpdates({
         snapshot,
         fetchJson: siatFetchJson,
+      })
+    } else {
+      updates = await buildWorldBankGoldMetricUpdates({
+        snapshot,
+        fetchArrayBuffer: args.fixtureDir ? fixtureFetchArrayBuffer(resolve(args.fixtureDir)) : undefined,
       })
     }
     result = applyMetricUpdatesToSnapshot(snapshot, updates, {

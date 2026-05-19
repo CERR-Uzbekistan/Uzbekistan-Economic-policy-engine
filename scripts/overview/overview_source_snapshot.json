@@ -2,9 +2,9 @@
   "source_snapshot_version": "overview-source.v1",
   "status": "source_verified_for_public_artifact",
   "snapshot_note": "Owner-accepted Overview V1 source snapshot. REER remains warning-status with CERR owner-supplied value and source URL pending; replace with automated HFI-backed source when accepted.",
-  "value_hash": "d7e68ab1e8389670dd13476f1f03d63343e398a2dd96c99d0ec9d8af3a9c51a2",
+  "value_hash": "ad33c5f55461edefeedce5c6a4d4a87794b76c67135cab908afbb48243cd8355",
   "source_verified_by": "codex",
-  "source_verified_at": "2026-05-19T05:58:48.234Z",
+  "source_verified_at": "2026-05-19T06:30:00Z",
   "metrics": [
     {
       "metric_id": "real_gdp_growth_annual_yoy",
@@ -291,12 +291,12 @@
     },
     {
       "metric_id": "gold_price_level",
-      "value": 4855.54,
-      "previous_value": 5019.97,
+      "value": 4721.42,
+      "previous_value": 4855.54,
       "source_label": "World Bank Pink Sheet gold price",
-      "source_period": "March 2026 monthly average",
+      "source_period": "April 2026 monthly average",
       "source_url": "https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Monthly.xlsx",
-      "observed_at": "2026-04-02T00:00:00Z",
+      "observed_at": "2026-05-04T00:00:00Z",
       "claim_type": "observed_market_price",
       "unit": "USD per troy ounce",
       "frequency": "daily or monthly",
@@ -304,16 +304,17 @@
       "caveats": [
         "External monthly average market price; not a CERR forecast."
       ],
-      "warnings": []
+      "warnings": [],
+      "extracted_at": "2026-05-19T07:32:14.825Z"
     },
     {
       "metric_id": "gold_price_change",
-      "value": -3.28,
+      "value": -2.76,
       "previous_value": null,
       "source_label": "World Bank Pink Sheet gold price, calculated",
-      "source_period": "March 2026 vs February 2026",
-      "source_reference": "Calculated from World Bank Pink Sheet monthly gold prices: 4855.54 for March 2026 and 5019.97 for February 2026",
-      "extracted_at": "2026-04-27T00:00:00Z",
+      "source_period": "April 2026 vs March 2026",
+      "source_reference": "Calculated from World Bank Pink Sheet monthly gold prices: 4721.42 for April 2026 and 4855.54 for March 2026",
+      "extracted_at": "2026-05-19T07:32:14.825Z",
       "claim_type": "calculated_identity",
       "unit": "percent MoM or YoY",
       "frequency": "monthly",
@@ -321,7 +322,8 @@
       "caveats": [
         "Comparison basis is MoM."
       ],
-      "warnings": []
+      "warnings": [],
+      "observed_at": "2026-05-04T00:00:00Z"
     },
     {
       "metric_id": "gold_price_forecast",
