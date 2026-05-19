@@ -276,7 +276,7 @@ export function AssumptionsPanel({
             {t('buttons.saveDraft')}
           </button>
           {saveDisabledReason ? (
-            <span id="scenario-save-disabled-reason" className="sr-only">
+            <span id="scenario-save-disabled-reason" className="scenario-session-controls__save-reason">
               {saveDisabledReason}
             </span>
           ) : null}

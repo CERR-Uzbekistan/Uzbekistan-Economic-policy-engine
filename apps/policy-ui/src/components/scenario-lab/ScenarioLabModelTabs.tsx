@@ -71,6 +71,8 @@ type ScenarioLabModelTabsProps = {
 
 export function ScenarioLabModelTabs({ activeTab, onTabChange }: ScenarioLabModelTabsProps) {
   const { t } = useTranslation()
+  const plannedTitle = t('scenarioLab.modelTabs.plannedTitle')
+  const plannedDescription = t('scenarioLab.modelTabs.plannedDescription')
 
   return (
     <section className="scenario-model-tabs" aria-labelledby="scenario-model-tabs-title">
@@ -104,9 +106,11 @@ export function ScenarioLabModelTabs({ activeTab, onTabChange }: ScenarioLabMode
           )
         })}
       </div>
-      <div className="scenario-model-tabs__planned" aria-labelledby="scenario-model-tabs-planned-title">
-        <h3 id="scenario-model-tabs-planned-title">{t('scenarioLab.modelTabs.plannedTitle')}</h3>
-        <p>{t('scenarioLab.modelTabs.plannedDescription')}</p>
+      <details className="scenario-model-tabs__planned">
+        <summary id="scenario-model-tabs-planned-title" aria-label={`${plannedTitle}. ${plannedDescription}`}>
+          <span>{plannedTitle}</span>
+          <small>{plannedDescription}</small>
+        </summary>
         <ul>
           {PLANNED_SCENARIO_LAB_MODEL_LANES.map((tab) => (
             <li key={tab.id}>
@@ -116,7 +120,7 @@ export function ScenarioLabModelTabs({ activeTab, onTabChange }: ScenarioLabMode
             </li>
           ))}
         </ul>
-      </div>
+      </details>
     </section>
   )
 }

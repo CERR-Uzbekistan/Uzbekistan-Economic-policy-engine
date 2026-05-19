@@ -92,7 +92,13 @@ async function createTestI18n() {
   return instance
 }
 
-function renderPanelMarkup(selectedPresetId: string) {
+function renderPanelMarkup(
+  selectedPresetId: string,
+  saveState: { canSaveScenario: boolean; saveDisabledReason: string | null } = {
+    canSaveScenario: true,
+    saveDisabledReason: null,
+  },
+) {
   return createTestI18n().then((i18n) =>
     renderToStaticMarkup(
       <I18nextProvider i18n={i18n}>
@@ -128,8 +134,8 @@ function renderPanelMarkup(selectedPresetId: string) {
           onRunScenario={() => {}}
           isRunPending={false}
           onSaveScenario={() => {}}
-          canSaveScenario={true}
-          saveDisabledReason={null}
+          canSaveScenario={saveState.canSaveScenario}
+          saveDisabledReason={saveState.saveDisabledReason}
           savedScenarios={[]}
           onLoadScenario={() => {}}
           onDeleteScenario={() => {}}
@@ -170,5 +176,16 @@ describe('preset chips', () => {
 
     assert.deepEqual(calls, ['remittance-downside', 'remittance-downside'])
     assert.equal(presentation.ariaPressed, false)
+  })
+
+  it('renders a visible disabled-save reason instead of hiding it in title text only', async () => {
+    const markup = await renderPanelMarkup('baseline', {
+      canSaveScenario: false,
+      saveDisabledReason: 'Run scenario to save results',
+    })
+
+    assert.match(markup, /class="scenario-session-controls__save-reason"/)
+    assert.match(markup, /Run scenario to save results/)
+    assert.match(markup, /aria-describedby="scenario-save-disabled-reason"/)
   })
 })

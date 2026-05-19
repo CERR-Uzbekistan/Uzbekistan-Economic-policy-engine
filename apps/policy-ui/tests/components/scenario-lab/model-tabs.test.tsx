@@ -128,6 +128,7 @@ describe('ScenarioLabModelTabs', () => {
     assert.match(markup, /I-O Sector Shock/)
     assert.match(markup, /Saved Runs/)
     assert.match(markup, /Inactive model lanes/)
+    assert.match(markup, /<details class="scenario-model-tabs__planned">/)
     assert.match(markup, /PE Trade Shock/)
     assert.match(markup, /CGE Reform Shock/)
     assert.match(markup, /FPP Fiscal Path/)
