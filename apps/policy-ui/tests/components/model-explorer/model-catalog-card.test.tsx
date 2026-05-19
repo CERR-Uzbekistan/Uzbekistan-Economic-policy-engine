@@ -32,6 +32,7 @@ async function createTestI18n() {
               referenceTitle: 'Reference only',
               referenceBody:
                 'This model is documented for methodology context. It is not connected to Scenario Lab runs or public model artifacts in the current preview.',
+              activationTitle: 'Required before activation',
             },
             tabs: {
               aria: 'Model detail tabs',
@@ -130,5 +131,7 @@ describe('Model Explorer catalog cards', () => {
 
     assert.match(markup, /Reference only/)
     assert.match(markup, /not connected to Scenario Lab runs/)
+    assert.match(markup, /Required before activation/)
+    assert.match(markup, /Economist-approved SAM/)
   })
 })

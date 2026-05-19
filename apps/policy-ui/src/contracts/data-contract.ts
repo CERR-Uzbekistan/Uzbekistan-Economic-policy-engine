@@ -485,6 +485,7 @@ export type ModelCatalogEntry = {
   data_sources: ModelDataSource[]
   validation_summary: string[]
   bridge_evidence?: ModelBridgeEvidence
+  activation_requirements?: string[]
 }
 
 export type ModelExplorerMeta = {

@@ -1296,7 +1296,7 @@
         "plannedLimitedLabel": "Faol emas",
         "plannedLimitedModels": "PE, CGE, FPP",
         "lastAuditLabel": "Oxirgi kalibrlash auditi",
-        "openIssuesLabel": "Ochiq metodologik masalalar"
+        "openIssuesLabel": "Ochiq ishlab chiqarish shartlari"
       }
     },
     "catalog": {
@@ -1316,7 +1316,8 @@
     },
     "statusNotice": {
       "referenceTitle": "Faqat ma'lumot uchun",
-      "referenceBody": "Bu model metodologik kontekst uchun ko'rsatilgan. Joriy previewda u Stsenariy simulyatori ishga tushirishlari yoki ommaviy model artefaktlariga ulanmagan."
+      "referenceBody": "Bu model metodologik kontekst uchun ko'rsatilgan. Joriy previewda u Stsenariy simulyatori ishga tushirishlari yoki ommaviy model artefaktlariga ulanmagan.",
+      "activationTitle": "Faollashtirishdan oldin kerak"
     },
     "tabs": {
       "aria": "Model tafsilotlari yorliqlari",

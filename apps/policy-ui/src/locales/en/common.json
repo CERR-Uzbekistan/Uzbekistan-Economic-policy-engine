@@ -1296,7 +1296,7 @@
         "plannedLimitedLabel": "Not active",
         "plannedLimitedModels": "PE, CGE, FPP",
         "lastAuditLabel": "Last calibration audit",
-        "openIssuesLabel": "Open methodology issues"
+        "openIssuesLabel": "Open production gates"
       }
     },
     "catalog": {
@@ -1316,7 +1316,8 @@
     },
     "statusNotice": {
       "referenceTitle": "Reference only",
-      "referenceBody": "This model is documented for methodology context. It is not connected to Scenario Lab runs or public model artifacts in the current preview."
+      "referenceBody": "This model is documented for methodology context. It is not connected to Scenario Lab runs or public model artifacts in the current preview.",
+      "activationTitle": "Required before activation"
     },
     "tabs": {
       "aria": "Model detail tabs",

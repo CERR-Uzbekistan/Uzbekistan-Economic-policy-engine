@@ -158,14 +158,14 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
     frequency: 'Annual',
     methodology_signature: 'Partial Equilibrium · WITS-SMART',
     description:
-      'WTO accession analysis · HS 28–40; trade creation, diversion, and welfare effects.',
+      'Planned WTO/tariff analysis lane. Not connected to public artifacts or Scenario Lab runs yet.',
     stats: [
-      { value: '1.27', label: 'ε (uniform)' },
-      { value: '8', label: 'HS chapters' },
-      { value: 'Y', label: 'Freq.' },
+      { value: 'Missing', label: 'Artifact' },
+      { value: 'Needed', label: 'Elasticities' },
+      { value: 'Gated', label: 'Scenario UI' },
     ],
     purpose:
-      'WITS-SMART partial-equilibrium model covering HS 28–40 chapters for WTO tariff-schedule simulation. Outputs trade creation, diversion, tariff revenue, and consumer welfare estimates.',
+      'Planned WITS-SMART partial-equilibrium lane for tariff-schedule simulation. It should not be read as a production model until the public artifact, tariff concordance, and elasticity source are accepted.',
     equations: [{ id: 'pe_smart', label: 'Trade creation · SMART elasticity form' }],
     parameters: [
       { symbol: 'ε', name: 'Import demand elasticity (uniform)', value: '1.27', range: '0.8 – 2.2' },
@@ -175,7 +175,15 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
         id: 'pe-cav-01',
         number: '01',
         severity: 'critical',
-        title: 'Uniform ε masks sectoral heterogeneity',
+        title: 'No accepted public artifact',
+        body:
+          'The current app has methodology notes only. There is no checked-in PE artifact, guard, adapter, or Scenario Lab result contract.',
+      },
+      {
+        id: 'pe-cav-02',
+        number: '02',
+        severity: 'critical',
+        title: 'Elasticity source not production-approved',
         body:
           'The uniform elasticity produces materially different welfare conclusions than WITS sector-specific elasticities. Switch to differentiated ε is tracked.',
       },
@@ -190,6 +198,11 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
     validation_summary: [
       'Validation is limited to WITS/UN Comtrade tariff-flow reconciliation and WITS-SMART mechanics checks.',
       'No differentiated-elasticity validation is claimed while the uniform-elasticity caveat remains open.',
+    ],
+    activation_requirements: [
+      'Accepted public PE artifact with tariff schedule, baseline imports, elasticities, and welfare/revenue outputs.',
+      'Guard and adapter tests that reject missing concordance, stale tariff vintages, and uniform-elasticity fallbacks.',
+      'Scenario Lab contract showing PE outputs separately from QPM/DFM/I-O evidence.',
     ],
   },
   {
@@ -245,14 +258,14 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
     frequency: 'Annual',
     methodology_signature: 'CGE · 1-2-3 structure',
     description:
-      'Computable General Equilibrium with CET/Armington; sectoral shocks, 2021 calibration.',
+      'Planned economy-wide simulation lane. Requires model-owner review before production use.',
     stats: [
-      { value: '12', label: 'Sliders' },
-      { value: '—', label: 'Labor' },
-      { value: 'Y', label: 'Freq.' },
+      { value: 'Needs review', label: 'SAM' },
+      { value: 'Gated', label: 'Labor' },
+      { value: 'Needed', label: 'Closure' },
     ],
     purpose:
-      '1-2-3 CGE framework with CET output transformation and Armington import aggregation; used for sectoral policy shocks and welfare deltas.',
+      'Planned CGE lane for economy-wide tariff, sector, and welfare analysis. It remains reference-only until calibration, closure, and labor-market treatment are reviewed by the model owner.',
     equations: [
       { id: 'cge_armington', label: 'Armington · Import aggregation' },
       { id: 'cge_cet', label: 'CET · Output transformation' },
@@ -265,7 +278,15 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
       {
         id: 'cge-cav-01',
         number: '01',
-        severity: 'warning',
+        severity: 'critical',
+        title: 'No accepted production calibration',
+        body:
+          'The active app has no reviewed CGE artifact, guard, adapter, or scenario result contract.',
+      },
+      {
+        id: 'cge-cav-02',
+        number: '02',
+        severity: 'critical',
         title: 'No labor market block',
         body: 'Employment deltas are not computed; treat welfare deltas as partial.',
       },
@@ -281,6 +302,11 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
       'Calibration is documented for the 1-2-3 Armington/CET structure and 2021 SAM inputs.',
       'Welfare outputs remain caveated, and employment effects are not validated until a labor block exists.',
     ],
+    activation_requirements: [
+      'Economist-approved SAM, closure rules, Armington/CET elasticities, and labor-market decision.',
+      'Checked-in CGE public artifact plus guard/adapter tests for balances, units, and scenario outputs.',
+      'Scenario Lab output lane that labels CGE results as economy-wide model outputs, not QPM or I-O evidence.',
+    ],
   },
   {
     id: 'fpp-fiscal',
@@ -291,14 +317,14 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
     model_type: 'Financial programming',
     frequency: 'Annual',
     methodology_signature: 'Financial Programming · IMF CAEM',
-    description: 'Four-sector consistency framework; base 2024, projection 2025–2027.',
+    description: 'Planned four-sector consistency lane. Not connected to public artifacts or runs yet.',
     stats: [
-      { value: '4', label: 'Sectors' },
-      { value: 'IMF', label: 'Framework' },
-      { value: 'Y', label: 'Freq.' },
+      { value: 'Missing', label: 'Artifact' },
+      { value: 'Needed', label: 'Identity tests' },
+      { value: 'Gated', label: 'Scenario UI' },
     ],
     purpose:
-      'IMF CAEM 4-sector consistency framework (real, fiscal, monetary, external). Enforces balance-sheet identities across sectors; projects 2025–2027 from a 2024 base.',
+      'Planned financial-programming lane for real, fiscal, monetary, and external consistency checks. It remains reference-only until public inputs, identities, and projection outputs are accepted.',
     equations: [{ id: 'fpp_ca_identity', label: 'Current account · Identity' }],
     parameters: [
       { symbol: 'λ_1', name: 'Inflation persistence (annual)', value: '0.05', range: '—' },
@@ -308,6 +334,14 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
       {
         id: 'fpp-cav-01',
         number: '01',
+        severity: 'critical',
+        title: 'No accepted public artifact',
+        body:
+          'The current app has methodology notes only. There is no checked-in FPP artifact, guard, adapter, or Scenario Lab result contract.',
+      },
+      {
+        id: 'fpp-cav-02',
+        number: '02',
         severity: 'warning',
         title: 'Current account exogenous',
         body:
@@ -330,6 +364,11 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
       'Consistency checks focus on four-sector accounting identities and IMF CAEM projection templates.',
       'Current-account behavior remains exogenous, so external adjustment should not be read as jointly solved.',
     ],
+    activation_requirements: [
+      'Accepted public FPP artifact with sector accounts, projection assumptions, and balance identities.',
+      'Guard and adapter tests proving accounting identities hold across real, fiscal, monetary, and external blocks.',
+      'Scenario Lab output lane that keeps FPP consistency checks separate from QPM forecasts and I-O multipliers.',
+    ],
   },
 ]
 
@@ -337,5 +376,5 @@ export const modelCatalogMeta: ModelExplorerMeta = {
   models_total: modelCatalogEntries.length,
   models_live: 3,
   last_calibration_audit_label: 'Apr 2026',
-  open_methodology_issues: 5,
+  open_methodology_issues: 9,
 }

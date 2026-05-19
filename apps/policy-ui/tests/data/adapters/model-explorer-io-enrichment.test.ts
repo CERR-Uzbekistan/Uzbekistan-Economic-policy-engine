@@ -40,9 +40,18 @@ describe('model explorer IO bridge enrichment', () => {
   it('adds bridge evidence only to the existing I-O catalog entry', () => {
     const enriched = enrichModelExplorerWorkspaceWithIoBridge(modelExplorerWorkspaceMock, loadValidIoPayload())
     const entries = Object.values(enriched.catalog_entries_by_model_id ?? {})
+    const ioEntry = enriched.catalog_entries_by_model_id?.['io-model']
 
     assert.equal(entries.length, 6)
-    assert.ok(enriched.catalog_entries_by_model_id?.['io-model']?.bridge_evidence)
+    assert.ok(ioEntry?.bridge_evidence)
+    assert.equal(ioEntry?.stats[0].value, '136')
+    assert.equal(ioEntry?.stats[1].value, '2022')
+    assert.equal(
+      ioEntry?.parameters.some((parameter) => parameter.symbol === 'classes' && parameter.value.includes('Key 18')),
+      true,
+    )
+    assert.equal(ioEntry?.caveats.some((caveat) => caveat.id === 'io-type-i-only-json-source'), true)
+    assert.match(ioEntry?.validation_summary.join(' ') ?? '', /does not claim price, substitution/)
     assert.equal(enriched.catalog_entries_by_model_id?.['qpm-uzbekistan']?.bridge_evidence, undefined)
   })
 })

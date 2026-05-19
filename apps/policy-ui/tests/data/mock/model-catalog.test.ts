@@ -53,6 +53,24 @@ describe('model catalog mock', () => {
     assert.equal(modelCatalogMeta.models_total, 6)
     assert.equal(modelCatalogMeta.models_live, 3)
     assert.equal(modelCatalogMeta.last_calibration_audit_label, 'Apr 2026')
-    assert.equal(modelCatalogMeta.open_methodology_issues, 5)
+    assert.equal(modelCatalogMeta.open_methodology_issues, 9)
+  })
+
+  it('keeps planned PE, CGE, and FPP models behind production activation requirements', () => {
+    const planned = modelCatalogEntries.filter((entry) => entry.status.severity !== 'ok')
+
+    assert.deepEqual(
+      planned.map((entry) => entry.title),
+      ['PE', 'CGE', 'FPP'],
+    )
+    for (const entry of planned) {
+      assert.equal(entry.activation_requirements?.length, 3, `${entry.title} should list activation gates`)
+      assert.match(entry.description, /Planned|Requires/)
+      assert.equal(
+        entry.stats.some((stat) => /Missing|Needed|Gated|review/i.test(stat.value)),
+        true,
+        `${entry.title} should not present production-style stats`,
+      )
+    }
   })
 })

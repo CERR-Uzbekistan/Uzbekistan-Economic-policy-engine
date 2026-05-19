@@ -131,6 +131,16 @@ export function ModelDetail({ entry, activeTab, onTabChange }: ModelDetailProps)
           <div className="model-detail__notice" role="note">
             <strong>{t('modelExplorer.statusNotice.referenceTitle')}</strong>
             <span>{t('modelExplorer.statusNotice.referenceBody')}</span>
+            {entry.activation_requirements && entry.activation_requirements.length > 0 ? (
+              <div className="model-detail__activation">
+                <strong>{t('modelExplorer.statusNotice.activationTitle')}</strong>
+                <ul>
+                  {entry.activation_requirements.map((requirement) => (
+                    <li key={requirement}>{requirement}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
           </div>
         ) : null}
         {/* Overview tab shows the full 2-col body; other tabs filter to one section. */}
