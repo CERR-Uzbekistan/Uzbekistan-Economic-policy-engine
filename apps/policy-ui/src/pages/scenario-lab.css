@@ -749,7 +749,7 @@
   font: inherit;
   font-size: 0.84rem;
   font-weight: 600;
-  min-height: 2.05rem;
+  min-height: 2.4rem;
   padding: 0 var(--space-md);
 }
 
@@ -1383,6 +1383,19 @@
 
   .scenario-model-tabs__planned summary {
     grid-template-columns: 1fr;
+  }
+
+  .preset-chip,
+  .scenario-tag-chip,
+  .scenario-session-controls__actions button,
+  .lab-session__load-link {
+    min-height: 2.75rem;
+  }
+
+  .scenario-session-controls input,
+  .scenario-session-controls select,
+  .scenario-assumption-field__control input {
+    min-height: 2.5rem;
   }
 }
 

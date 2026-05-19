@@ -67,4 +67,25 @@ describe('scenario lab mock result semantics', () => {
       }
     }
   })
+
+  it('does not claim inactive shock channels in the baseline interpretation', () => {
+    const interpretation = buildScenarioLabResults({}).interpretation
+    const whatChanged = interpretation.what_changed.join(' ')
+
+    assert.match(whatChanged, /no additional price shock channel is selected/i)
+    assert.match(whatChanged, /External and fiscal balances stay near baseline/i)
+    assert.doesNotMatch(whatChanged, /channels active/i)
+  })
+
+  it('names only selected channels in interpretation text', () => {
+    const interpretation = buildScenarioLabResults({
+      exchange_rate_change: 10,
+      tariff_change: 5,
+    }).interpretation
+    const whatChanged = interpretation.what_changed.join(' ')
+
+    assert.match(whatChanged, /exchange-rate path/)
+    assert.match(whatChanged, /import tariff setting/)
+    assert.doesNotMatch(whatChanged, /remittance inflows/)
+  })
 })

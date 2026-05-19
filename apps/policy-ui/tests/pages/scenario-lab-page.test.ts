@@ -8,7 +8,7 @@ describe('ScenarioLabPage preset hydration', () => {
     const result = resolvePresetHydration(scenarioLabWorkspaceMock, 'remittance-downside')
 
     assert.equal(result.selectedPresetId, 'remittance-downside')
-    assert.equal(result.scenarioName, 'Remittance downside (proxy)')
+    assert.equal(result.scenarioName, 'Remittance downside')
     assert.equal(result.assumptionValues.remittance_change, -8)
     assert.equal(result.assumptionValues.export_demand_change, 0)
     assert.equal(result.warningMessage, null)

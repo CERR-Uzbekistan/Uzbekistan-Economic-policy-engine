@@ -393,7 +393,7 @@
     "header": {
       "eyebrow": "Конструирование сценария",
       "meta": {
-        "activeModelsLabel": "Активные модели",
+        "activeModelsLabel": "Текущая модель",
         "runLifecycleLabel": "Жизненный цикл запуска",
         "dataVintageLabel": "Дата данных",
         "runLifecycleStatus": {
@@ -451,7 +451,7 @@
         "active": "Активно",
         "next": "Следующее",
         "bridgePilot": "Активные данные",
-        "shell": "Контур",
+        "shell": "Локально",
         "planned": "Не активно"
       }
     },

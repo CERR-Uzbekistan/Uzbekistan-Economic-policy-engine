@@ -605,14 +605,6 @@ export function ScenarioLabPage() {
       : hasPendingEdits
         ? t('states.error.scenarioSaveStaleEdits')
         : null
-  const modelIdsForHeader =
-    currentAttribution.length > 0
-      ? currentAttribution.map((entry) => entry.model_id)
-      : scenarioLabPresetModelIds[selectedPresetId] ?? []
-  const activeModelCount = Math.max(
-    1,
-    new Set(modelIdsForHeader.filter((modelId) => modelId.length > 0)).size,
-  )
   const latestAttribution = pickLatestAttribution(currentAttribution)
   const dataVintage = latestAttribution?.data_version ?? scenarioLabBaseDataVersion
   const dataDateLabel = formatScenarioDataDate(dataVintage, t('scenarioLab.context.referenceDataset'))
@@ -691,7 +683,7 @@ export function ScenarioLabPage() {
       <span className="page-header__eyebrow">{t('scenarioLab.header.eyebrow')}</span>
       <span>
         <strong>{t('scenarioLab.header.meta.activeModelsLabel')}</strong>{' '}
-        {t('overview.common.middleDot')} {activeModelCount}
+        {t('overview.common.middleDot')} {activeContext.model}
       </span>
       <span>
         <strong>{t('scenarioLab.header.meta.runLifecycleLabel')}</strong>{' '}

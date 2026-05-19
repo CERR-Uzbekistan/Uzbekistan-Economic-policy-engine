@@ -393,7 +393,7 @@
     "header": {
       "eyebrow": "Stsenariy konstruksiyasi",
       "meta": {
-        "activeModelsLabel": "Faol modellar",
+        "activeModelsLabel": "Joriy model",
         "runLifecycleLabel": "Ishga tushirish sikli",
         "dataVintageLabel": "Ma'lumot sanasi",
         "runLifecycleStatus": {
@@ -451,7 +451,7 @@
         "active": "Faol",
         "next": "Keyingi",
         "bridgePilot": "Joriy ma'lumot",
-        "shell": "Kontur",
+        "shell": "Lokal",
         "planned": "Faol emas"
       }
     },

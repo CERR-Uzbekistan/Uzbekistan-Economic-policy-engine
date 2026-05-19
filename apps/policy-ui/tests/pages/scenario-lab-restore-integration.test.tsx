@@ -306,7 +306,7 @@ describe('Scenario Lab saved-run restore integration', () => {
     )
     assert.match(
       assumptionsMarkup,
-      /class="preset-chip active" aria-pressed="true">Remittance downside \(proxy\)<\/button>/,
+      /class="preset-chip active" aria-pressed="true">Remittance downside<\/button>/,
     )
     assert.match(assumptionsMarkup, /value="Restored remittance downside"/)
     assert.match(assumptionsMarkup, /value="-8"/)

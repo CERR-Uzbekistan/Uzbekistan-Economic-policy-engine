@@ -393,7 +393,7 @@
     "header": {
       "eyebrow": "Scenario construction",
       "meta": {
-        "activeModelsLabel": "Active models",
+        "activeModelsLabel": "Current model",
         "runLifecycleLabel": "Run lifecycle",
         "dataVintageLabel": "Data date",
         "runLifecycleStatus": {
@@ -451,7 +451,7 @@
         "active": "Active",
         "next": "Next",
         "bridgePilot": "Active data",
-        "shell": "Outline",
+        "shell": "Local",
         "planned": "Not active"
       }
     },

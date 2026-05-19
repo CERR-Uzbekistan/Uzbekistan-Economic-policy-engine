@@ -44,7 +44,7 @@ async function createTestI18n() {
                 active: 'Active',
                 next: 'Next',
                 bridgePilot: 'Active data',
-                shell: 'Outline',
+                shell: 'Local',
                 planned: 'Not active',
               },
             },

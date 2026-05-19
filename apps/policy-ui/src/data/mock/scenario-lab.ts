@@ -58,8 +58,8 @@ const PRESETS: ScenarioLabPreset[] = [
   },
   {
     preset_id: 'remittance-downside',
-    title: 'Remittance downside (proxy)',
-    summary: 'Proxy for a remittance inflow decline; expect softer demand and a weaker external-income balance.',
+    title: 'Remittance downside',
+    summary: 'Remittance inflows decline relative to baseline; expect softer demand and a weaker external-income balance.',
     assumption_overrides: {
       remittance_change: -8,
     },
@@ -440,6 +440,20 @@ function formatDriverLabel(key: string): string {
   return ASSUMPTION_INTERPRETATION_LABELS[key] ?? key.replace(/_/g, ' ')
 }
 
+function joinDriverLabels(labels: string[]): string {
+  if (labels.length <= 1) {
+    return labels[0] ?? ''
+  }
+  if (labels.length === 2) {
+    return `${labels[0]} and ${labels[1]}`
+  }
+  return `${labels.slice(0, -1).join(', ')}, and ${labels[labels.length - 1]}`
+}
+
+function activeDriverLabels(values: ScenarioLabAssumptionState, keys: string[]): string[] {
+  return keys.filter((key) => Math.abs(values[key] ?? 0) > 0.01).map(formatDriverLabel)
+}
+
 function buildInterpretationCore(values: ScenarioLabAssumptionState): ScenarioLabInterpretation {
   const base = getMetricCore(getDefaultAssumptionState())
   const core = getMetricCore(values)
@@ -451,14 +465,38 @@ function buildInterpretationCore(values: ScenarioLabAssumptionState): ScenarioLa
 
   const driverSummary =
     majorDrivers.length > 0
-      ? `Main drivers are ${majorDrivers.join(' and ')}.`
+      ? `Main drivers are ${joinDriverLabels(majorDrivers)}.`
       : 'No major shocks selected; results stay close to baseline.'
+  const priceDrivers = activeDriverLabels(values, [
+    'exchange_rate_change',
+    'commodity_price_change',
+    'tariff_change',
+    'pass_through_adjustment',
+    'policy_rate_change',
+    'gov_spending_change',
+  ])
+  const balanceDrivers = activeDriverLabels(values, [
+    'remittance_change',
+    'export_demand_change',
+    'tariff_change',
+    'gov_spending_change',
+    'tax_revenue_change',
+    'commodity_price_change',
+  ])
+  const inflationChannelText =
+    priceDrivers.length > 0
+      ? `active price channels: ${joinDriverLabels(priceDrivers)}.`
+      : 'no additional price shock channel is selected.'
+  const balanceChannelText =
+    balanceDrivers.length > 0
+      ? `External and fiscal balances move through ${joinDriverLabels(balanceDrivers)}.`
+      : 'External and fiscal balances stay near baseline because remittance, trade, spending, and revenue settings are unchanged.'
 
   return {
     what_changed: [
       `GDP growth is ${roundTo(core.gdpGrowth - base.gdpGrowth).toFixed(1)} pp versus baseline by 2026 Q4.`,
-      `Inflation is ${roundTo(core.inflation - base.inflation).toFixed(1)} pp versus baseline, with exchange-rate, commodity, tariff, and pass-through channels active.`,
-      `External and fiscal balances move with remittance, trade, spending, and revenue settings.`,
+      `Inflation is ${roundTo(core.inflation - base.inflation).toFixed(1)} pp versus baseline; ${inflationChannelText}`,
+      balanceChannelText,
     ],
     why_it_changed: [
       driverSummary,
