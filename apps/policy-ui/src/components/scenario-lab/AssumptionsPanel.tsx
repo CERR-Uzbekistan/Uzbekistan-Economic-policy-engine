@@ -8,6 +8,7 @@ import type {
   ScenarioLabPreset,
 } from '../../contracts/data-contract'
 import type { SavedScenarioRecord } from '../../state/scenarioStore'
+import { normalizeAssumptionValue } from './assumption-value.js'
 import { buildPresetChipPresentation } from './preset-chip.js'
 import { SavedScenarioModal } from './SavedScenarioModal.js'
 
@@ -87,7 +88,7 @@ function AssumptionField({
         max={item.max}
         step={item.step}
         value={displayValue}
-        onChange={(event) => onChange(Number(event.target.value))}
+        onChange={(event) => onChange(normalizeAssumptionValue(item, Number(event.target.value)))}
         aria-label={item.label}
       />
       <span className="scenario-assumption-field__description assumption-field__help">
@@ -100,7 +101,7 @@ function AssumptionField({
           max={item.max}
           step={item.step}
           value={displayValue}
-          onChange={(event) => onChange(Number(event.target.value))}
+          onChange={(event) => onChange(normalizeAssumptionValue(item, Number(event.target.value)))}
           aria-label={`${item.label} numeric value`}
         />
         <span className="scenario-assumption-field__unit">{item.unit}</span>

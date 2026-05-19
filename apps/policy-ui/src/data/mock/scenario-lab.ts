@@ -34,7 +34,7 @@ const PRESETS: ScenarioLabPreset[] = [
   {
     preset_id: 'rate-cut-100bp',
     title: 'Policy rate cut (−100 bp)',
-    summary: 'CBU cuts the policy rate by 100 bp below the Taylor-rule path; expect higher output gap and temporarily faster disinflation response.',
+    summary: 'CBU cuts the policy rate by 100 bp below the baseline path; expect stronger demand and weaker disinflation pressure.',
     assumption_overrides: {
       policy_rate_change: -1.0,
     },
@@ -59,9 +59,9 @@ const PRESETS: ScenarioLabPreset[] = [
   {
     preset_id: 'remittance-downside',
     title: 'Remittance downside (proxy)',
-    summary: 'Proxy for Russia-slowdown remittance decline using a −0.5 pp aggregate demand shock; implemented via gap_shock while the b3 external-demand channel remains inactive (ROADMAP Phase 1B, QPM item 1).',
+    summary: 'Proxy for a remittance inflow decline; expect softer demand and a weaker external-income balance.',
     assumption_overrides: {
-      export_demand_change: -8,
+      remittance_change: -8,
     },
   },
 ]
@@ -253,7 +253,7 @@ function getMetricCore(values: ScenarioLabAssumptionState) {
         0.24 * fx +
         0.11 * commodity +
         0.2 * passThrough -
-        0.16 * policyRate -
+        0.16 * policyRate +
         0.04 * tariff +
         0.03 * govSpending,
     ),
@@ -267,7 +267,7 @@ function getMetricCore(values: ScenarioLabAssumptionState) {
         0.09 * fx +
         0.08 * externalDemand +
         0.06 * tariff -
-        0.06 * govSpending -
+        0.06 * govSpending +
         0.04 * remittance -
         0.03 * commodity,
     ),
@@ -423,24 +423,42 @@ function buildInterpretation(values: ScenarioLabAssumptionState): ScenarioLabInt
   return interpretation
 }
 
+const ASSUMPTION_INTERPRETATION_LABELS: Record<string, string> = {
+  policy_rate_change: 'policy-rate setting',
+  exchange_rate_change: 'exchange-rate path',
+  remittance_change: 'remittance inflows',
+  commodity_price_change: 'commodity-price pressure',
+  gov_spending_change: 'government spending',
+  tax_revenue_change: 'tax-revenue effort',
+  tariff_change: 'import tariff setting',
+  export_demand_change: 'external demand',
+  pass_through_adjustment: 'exchange-rate pass-through',
+  risk_premium_shock: 'risk premium',
+}
+
+function formatDriverLabel(key: string): string {
+  return ASSUMPTION_INTERPRETATION_LABELS[key] ?? key.replace(/_/g, ' ')
+}
+
 function buildInterpretationCore(values: ScenarioLabAssumptionState): ScenarioLabInterpretation {
+  const base = getMetricCore(getDefaultAssumptionState())
   const core = getMetricCore(values)
   const majorDrivers = Object.entries(values)
     .filter(([, value]) => Math.abs(value) > 0.01)
     .sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
     .slice(0, 2)
-    .map(([key]) => key)
+    .map(([key]) => formatDriverLabel(key))
 
   const driverSummary =
     majorDrivers.length > 0
-      ? `Main drivers are ${majorDrivers.join(' and ').replace(/_/g, ' ')}.`
+      ? `Main drivers are ${majorDrivers.join(' and ')}.`
       : 'No major shocks selected; results stay close to baseline.'
 
   return {
     what_changed: [
-      `GDP moves to ${core.gdpGrowth.toFixed(1)}% by 2026 Q4.`,
-      `Inflation settles at ${core.inflation.toFixed(1)}%, with exchange-rate and commodity sensitivity.`,
-      `External and fiscal balances move with trade and spending settings.`,
+      `GDP growth is ${roundTo(core.gdpGrowth - base.gdpGrowth).toFixed(1)} pp versus baseline by 2026 Q4.`,
+      `Inflation is ${roundTo(core.inflation - base.inflation).toFixed(1)} pp versus baseline, with exchange-rate, commodity, tariff, and pass-through channels active.`,
+      `External and fiscal balances move with remittance, trade, spending, and revenue settings.`,
     ],
     why_it_changed: [
       driverSummary,
@@ -467,12 +485,12 @@ const SCENARIO_LAB_SUGGESTED_NEXT: SuggestedNextScenario[] = [
   {
     label: 'Pair with a remittance shock',
     target_route: '/scenario-lab',
-    target_preset: 'russia_slowdown',
+    target_preset: 'remittance-downside',
   },
   {
-    label: 'Add energy tariff adjustment',
+    label: 'Add exchange-rate pass-through stress',
     target_route: '/scenario-lab',
-    target_preset: 'energy_reform',
+    target_preset: 'exchange-rate-shock',
   },
   {
     label: 'Compare with baseline and tight-money',
@@ -492,15 +510,27 @@ function buildImpulseResponseChart(values: ScenarioLabAssumptionState): ChartSpe
   const horizons = Array.from({ length: 12 }, (_, index) => `Q${index + 1}`)
   const policyRateShockPp = (values.policy_rate_change ?? 0) * 0.01 * 100
   const exchangeRateShock = values.exchange_rate_change ?? 0
+  const remittanceShock = values.remittance_change ?? 0
+  const commodityShock = values.commodity_price_change ?? 0
   const externalDemandShock = values.export_demand_change ?? 0
-  const governmentSpendingShock = values.government_spending_change ?? 0
+  const governmentSpendingShock = values.gov_spending_change ?? 0
+  const tariffShock = values.tariff_change ?? 0
+  const passThroughShock = values.pass_through_adjustment ?? 0
+  const riskPremiumShock = values.risk_premium_shock ?? 0
 
   const gdpInitialGap =
     -0.015 * policyRateShockPp +
+    0.03 * remittanceShock +
     0.04 * externalDemandShock +
-    0.12 * governmentSpendingShock
-  const inflationInitial = 0.18 * exchangeRateShock + -0.02 * policyRateShockPp
-  const policyRateInitial = policyRateShockPp + 0.04 * inflationInitial
+    0.12 * governmentSpendingShock -
+    0.03 * riskPremiumShock
+  const inflationInitial =
+    0.18 * exchangeRateShock +
+    0.08 * commodityShock +
+    0.04 * tariffShock +
+    0.2 * passThroughShock -
+    0.02 * policyRateShockPp
+  const policyRateInitial = policyRateShockPp + 0.04 * inflationInitial + 0.2 * riskPremiumShock
 
   const gdpDecay = 0.8
   const inflationDecay = 0.72

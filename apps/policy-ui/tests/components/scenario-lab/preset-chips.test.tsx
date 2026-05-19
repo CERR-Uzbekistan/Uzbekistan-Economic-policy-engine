@@ -4,6 +4,7 @@ import i18next from 'i18next'
 import { initReactI18next, I18nextProvider } from 'react-i18next'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { AssumptionsPanel } from '../../../src/components/scenario-lab/AssumptionsPanel.js'
+import { normalizeAssumptionValue } from '../../../src/components/scenario-lab/assumption-value.js'
 import { buildPresetChipPresentation } from '../../../src/components/scenario-lab/preset-chip.js'
 import type { ScenarioLabPreset } from '../../../src/contracts/data-contract.js'
 
@@ -187,5 +188,19 @@ describe('preset chips', () => {
     assert.match(markup, /class="scenario-session-controls__save-reason"/)
     assert.match(markup, /Run scenario to save results/)
     assert.match(markup, /aria-describedby="scenario-save-disabled-reason"/)
+  })
+
+  it('normalizes numeric assumption edits to the configured range and precision', () => {
+    const item = {
+      default_value: 0,
+      min: -3,
+      max: 4,
+      step: 0.25,
+    }
+
+    assert.equal(normalizeAssumptionValue(item, Number.NaN), 0)
+    assert.equal(normalizeAssumptionValue(item, 9.75), 4)
+    assert.equal(normalizeAssumptionValue(item, -7.5), -3)
+    assert.equal(normalizeAssumptionValue(item, 1.23456), 1.25)
   })
 })

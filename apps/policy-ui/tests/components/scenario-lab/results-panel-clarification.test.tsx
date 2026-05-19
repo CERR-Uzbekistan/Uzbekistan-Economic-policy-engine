@@ -71,6 +71,7 @@ describe('ResultsPanel clarification copy', () => {
     assert.match(markup, /Deviation from baseline in percentage points/)
     assert.match(markup, /reference Scenario Lab calculation, not a live forecast/)
     assert.match(markup, /deviates from the baseline across 12 quarters/)
+    assert.match(markup, /0\.0 pp vs baseline/)
   })
 
   it('adds claim labels and explanations to table-like macro result tabs', async () => {

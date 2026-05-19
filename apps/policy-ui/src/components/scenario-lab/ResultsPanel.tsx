@@ -10,6 +10,7 @@ import {
   formatNumber,
   formatQuarterLabel,
   formatSignedNumber,
+  formatUnitLabel,
   formatUnavailable,
   formatValueWithUnit,
   getDefaultFractionDigitsForUnit,
@@ -62,6 +63,18 @@ function formatSignedDelta(value: number | null, unit: string, locale: string | 
     maximumFractionDigits: precision,
     minimumFractionDigits: precision,
   })
+}
+
+function formatDeltaWithUnit(value: number | null, unit: string, locale: string | undefined) {
+  const signed = formatSignedDelta(value, unit, locale)
+  if (value === null) {
+    return signed
+  }
+  if (unit === '%' || unit === '% GDP') {
+    return `${signed} ${formatUnitLabel('percentagePoint', locale)}`
+  }
+  const unitLabel = formatAxisUnitLabel(unit, locale)
+  return unitLabel ? `${signed} ${unitLabel}` : signed
 }
 
 // Non-headline tabs retain the existing table-view — they're out of scope for
@@ -177,7 +190,7 @@ export function ResultsPanel({ activeTab, onTabChange, results }: ResultsPanelPr
 
       <div className="scenario-headline-grid hmetric-strip headline-metrics">
         {headlineMetrics.map((metric) => {
-          const deltaText = formatSignedDelta(metric.delta_abs, metric.unit, locale)
+          const deltaText = formatDeltaWithUnit(metric.delta_abs, metric.unit, locale)
           const glyph = DIRECTION_GLYPH[metric.direction]
           return (
             <article key={metric.metric_id} className="scenario-headline-card hmetric">

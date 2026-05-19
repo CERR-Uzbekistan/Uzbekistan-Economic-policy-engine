@@ -264,7 +264,8 @@ describe('Scenario Lab saved-run restore integration', () => {
     assert.equal(loaded.run_interpretation.metadata?.reviewer_name, 'M. Usmanov')
 
     const restoredAssumptions = toAssumptionValues(loaded.assumptions)
-    assert.equal(restoredAssumptions.export_demand_change, -8)
+    assert.equal(restoredAssumptions.remittance_change, -8)
+    assert.equal(restoredAssumptions.export_demand_change, 0)
     assert.equal(restoredAssumptions.policy_rate_change, 0)
 
     const restoredBundle: ScenarioLabResultsBundle = {
