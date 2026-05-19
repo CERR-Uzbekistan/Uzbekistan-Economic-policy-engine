@@ -57,6 +57,53 @@ async function fixtureFetchJson(url) {
   return readJson(join(fixtureDir, basename(new URL(url).pathname)))
 }
 
+function liveSiatTradeJson({ flow, code, currentValue, priorValue }) {
+  const indicatorName = flow === 'exports' ? 'Export volume (monthly)' : 'Import volume (monthly)'
+  return [
+    {
+      metadata: [
+        {
+          name_en: 'Last modified date',
+          value_en: '2026-05-04',
+        },
+        {
+          name_en: 'Indicator identification number (code)',
+          value_en: code,
+        },
+        {
+          name_en: 'Indicator name',
+          value_en: indicatorName,
+          value_uz: flow === 'exports' ? 'Eksport hajmi (oylik)' : 'Import hajmi (oylik)',
+        },
+        {
+          name_en: 'Periodicity',
+          value_en: 'monthly',
+        },
+        {
+          name_en: 'Unit of measurement',
+          value_en: 'million USD',
+        },
+        {
+          name_en: 'Official statistics preparer',
+          value_en: 'National Statistics Committee of the Republic of Uzbekistan',
+        },
+      ],
+      data: [
+        {
+          Code: '1700',
+          Klassifikator_en: 'Republic of Uzbekistan',
+          '2025-M01': flow === 'exports' ? 1309.8 : 3195.4,
+          '2025-M02': flow === 'exports' ? 4643 : 6202.6,
+          '2025-M03': priorValue,
+          '2026-M01': flow === 'exports' ? 1693.1 : 4155.6,
+          '2026-M02': '',
+          '2026-M03': currentValue,
+        },
+      ],
+    },
+  ]
+}
+
 test('parses fixed SIAT export and import fixtures for current and prior-year periods', () => {
   const exportsDataset = parseSiatTradeDataset(readJson(join(fixtureDir, 'sdmx_data_2407.json')), {
     expectedFlow: 'exports',
@@ -89,6 +136,42 @@ test('computes SIAT exports YoY, imports YoY, and goods trade balance sign conve
     exportsYoy: -23.61,
     importsYoy: 29.92,
     tradeBalance: -4.51,
+  })
+})
+
+test('parses live SIAT metadata-array and data-table shape for current trade values', () => {
+  const exportsDataset = parseSiatTradeDataset(
+    liveSiatTradeJson({
+      flow: 'exports',
+      code: '1.08.02.0003',
+      currentValue: 5809.2,
+      priorValue: 8106.8,
+    }),
+    {
+      expectedFlow: 'exports',
+      sourceUrl: exportsUrl,
+    },
+  )
+  const importsDataset = parseSiatTradeDataset(
+    liveSiatTradeJson({
+      flow: 'imports',
+      code: '1.08.03.0006',
+      currentValue: 12213.8,
+      priorValue: 9194.8,
+    }),
+    {
+      expectedFlow: 'imports',
+      sourceUrl: importsUrl,
+    },
+  )
+
+  assert.equal(exportsDataset.current.periodLabel, 'January-March 2026')
+  assert.equal(importsDataset.current.periodLabel, 'January-March 2026')
+  assert.equal(exportsDataset.current.observedAt, '2026-05-04T00:00:00Z')
+  assert.deepEqual(calculateSiatTradeMetrics(exportsDataset, importsDataset), {
+    exportsYoy: -28.34,
+    importsYoy: 32.83,
+    tradeBalance: -6.4,
   })
 })
 

@@ -100,12 +100,13 @@ Phase 2 automation is intentionally limited to these SIAT trade metrics:
 - `imports_yoy`
 - `trade_balance`
 
-It uses official SIAT / Statistics Agency machine-readable SDMX JSON endpoints already
-present in the source snapshot as seeds. The script validates that each payload is the
-expected foreign-trade family, flow (`exports` or `imports`), USD million unit, monthly
-cumulative-window series, and comparable current/prior-year window before applying any
-value. If metadata or window validation fails, the script reports `manual_required`,
-leaves metric values unchanged, and writes that reason to the diff report on write runs.
+It uses official SIAT / Statistics Agency machine-readable JSON endpoints already
+present in the source snapshot as seeds. The script validates the live SIAT
+metadata-array/data-table payload, including indicator identity, flow (`exports` or
+`imports`), USD million unit, monthly frequency, national aggregate row, cumulative
+monthly behavior, and comparable current/prior-year window before applying any value.
+If metadata or window validation fails, the script reports `manual_required`, leaves
+metric values unchanged, and writes that reason to the diff report on write runs.
 
 Dry run with fixtures:
 
@@ -126,10 +127,11 @@ Calculated values:
 - `trade_balance = round2((exports_current - imports_current) / 1000)` when SIAT levels are USD million and the displayed balance is USD billion.
 
 The automated SIAT update preserves the existing warning posture for trade metrics until
-the lock cleanup is handled separately. Any changed trade value or provenance moves the
-snapshot to `automation_pending_owner_review`, clears prior acceptance fields, recomputes
-`value_hash`, and updates `overview_source_snapshot.diff_report.json`. It must never
-write `apps/policy-ui/public/data/overview.json`.
+the lock cleanup is handled separately. Manual source-review runs still move changed
+trade values to `automation_pending_owner_review`; the weekday public refresh runs the
+same strict parser in `source_verified_for_public_artifact` mode, exports
+`apps/policy-ui/public/data/overview.json`, and commits only after the frontend gates
+pass.
 
 ## Phase 3b-1 SIAT CPI Automation
 

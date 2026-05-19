@@ -1,240 +1,119 @@
 {
-  "generated_at": "2026-05-19T05:28:21.464Z",
-  "family": "overview-source-refresh",
-  "families": [
-    {
-      "family": "cbu-fx",
-      "outcome": "changed",
-      "changed": true,
-      "status": "source_verified_for_public_artifact",
-      "value_hash": "cdf3456668e8e024790a07d67bc4b77ab646fc4418b4d58368f06b6686ec5303",
-      "manual_required": null,
-      "error": null,
-      "changed_fields": [
-        "usd_uzs_level.value",
-        "usd_uzs_level.source_period",
-        "usd_uzs_level.source_url",
-        "usd_uzs_level.observed_at",
-        "usd_uzs_level.caveats",
-        "usd_uzs_level.warnings",
-        "usd_uzs_mom_change.value",
-        "usd_uzs_mom_change.source_period",
-        "usd_uzs_mom_change.source_reference",
-        "usd_uzs_mom_change.extracted_at",
-        "usd_uzs_mom_change.caveats",
-        "usd_uzs_mom_change.warnings",
-        "usd_uzs_yoy_change.value",
-        "usd_uzs_yoy_change.source_period",
-        "usd_uzs_yoy_change.source_reference",
-        "usd_uzs_yoy_change.extracted_at",
-        "usd_uzs_yoy_change.caveats",
-        "usd_uzs_yoy_change.warnings"
-      ]
-    },
-    {
-      "family": "siat-trade",
-      "outcome": "manual_required",
-      "changed": false,
-      "status": "source_verified_for_public_artifact",
-      "value_hash": "cdf3456668e8e024790a07d67bc4b77ab646fc4418b4d58368f06b6686ec5303",
-      "manual_required": {
-        "reason": "siat_trade_missing_machine_readable_metadata",
-        "details": {
-          "sourceUrl": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json"
-        }
-      },
-      "error": null,
-      "changed_fields": []
-    },
-    {
-      "family": "siat-cpi",
-      "outcome": "no_change",
-      "changed": false,
-      "status": "source_verified_for_public_artifact",
-      "value_hash": "cdf3456668e8e024790a07d67bc4b77ab646fc4418b4d58368f06b6686ec5303",
-      "manual_required": null,
-      "error": null,
-      "changed_fields": []
-    },
-    {
-      "family": "siat-gdp-annual",
-      "outcome": "no_change",
-      "changed": false,
-      "status": "source_verified_for_public_artifact",
-      "value_hash": "cdf3456668e8e024790a07d67bc4b77ab646fc4418b4d58368f06b6686ec5303",
-      "manual_required": null,
-      "error": null,
-      "changed_fields": []
-    }
-  ],
-  "snapshot": "/home/runner/work/Uzbekistan-Economic-policy-engine/Uzbekistan-Economic-policy-engine/scripts/overview/overview_source_snapshot.json",
+  "generated_at": "2026-05-19T05:58:48.234Z",
+  "family": "siat-trade",
+  "snapshot": "C:\\Users\\n.ortiqov\\Desktop\\Uzbekistan-Economic-policy-engine\\scripts\\overview\\overview_source_snapshot.json",
   "changed": true,
   "status": "source_verified_for_public_artifact",
-  "value_hash": "cdf3456668e8e024790a07d67bc4b77ab646fc4418b4d58368f06b6686ec5303",
-  "manual_required": [
-    {
-      "family": "siat-trade",
-      "reason": "siat_trade_missing_machine_readable_metadata",
-      "details": {
-        "sourceUrl": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json"
-      }
-    }
-  ],
-  "family_errors": null,
+  "value_hash": "d7e68ab1e8389670dd13476f1f03d63343e398a2dd96c99d0ec9d8af3a9c51a2",
+  "manual_required": null,
   "diff": [
     {
-      "metric_id": "usd_uzs_level",
+      "metric_id": "exports_yoy",
       "field": "value",
-      "old_value": 11986.3,
-      "new_value": 12019.27
+      "old_value": -23.61,
+      "new_value": -28.34
     },
     {
-      "metric_id": "usd_uzs_level",
+      "metric_id": "exports_yoy",
       "field": "source_period",
-      "old_value": "2026-05-18",
-      "new_value": "2026-05-19"
+      "old_value": "January-February 2026",
+      "new_value": "January-March 2026"
     },
     {
-      "metric_id": "usd_uzs_level",
-      "field": "source_url",
-      "old_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-05-18/",
-      "new_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-05-19/"
+      "metric_id": "exports_yoy",
+      "field": "source_reference",
+      "old_value": "Calculated from SIAT sdmx_data_2407 cumulative monthly export levels for January-February 2026: USD 3,546.808 million versus USD 4,643 million for January-February 2025.",
+      "new_value": "Calculated from SIAT sdmx_data_2407 cumulative monthly export levels for January-March 2026: USD 5,809.2 million versus USD 8,106.8 million for January-March 2025."
     },
     {
-      "metric_id": "usd_uzs_level",
+      "metric_id": "exports_yoy",
       "field": "observed_at",
-      "old_value": "2026-05-18T00:00:00Z",
-      "new_value": "2026-05-19T00:00:00Z"
+      "old_value": "2026-03-30T00:00:00Z",
+      "new_value": "2026-05-04T00:00:00Z"
     },
     {
-      "metric_id": "usd_uzs_level",
-      "field": "caveats",
-      "old_value": [
-        "Official/reference rate, not transaction-weighted market average.",
-        "Latest observation: requested 2026-05-18; actual CBU date/rate 2026-05-18, 11986.3 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-04-18; actual CBU date/rate 2026-04-17 returned for requested 2026-04-18, 12165.24 UZS per USD."
-      ],
-      "new_value": [
-        "Official/reference rate, not transaction-weighted market average.",
-        "Latest observation: requested 2026-05-19; actual CBU date/rate 2026-05-19, 12019.27 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-04-19; actual CBU date/rate 2026-04-17 returned for requested 2026-04-19, 12165.24 UZS per USD."
-      ]
-    },
-    {
-      "metric_id": "usd_uzs_level",
-      "field": "warnings",
-      "old_value": [
-        "Prior-month requested date 2026-04-18 differed from actual CBU date 2026-04-17; nearest available CBU observation was used."
-      ],
-      "new_value": [
-        "Prior-month requested date 2026-04-19 differed from actual CBU date 2026-04-17; nearest available CBU observation was used."
-      ]
-    },
-    {
-      "metric_id": "usd_uzs_mom_change",
-      "field": "value",
-      "old_value": -1.47,
-      "new_value": -1.2
-    },
-    {
-      "metric_id": "usd_uzs_mom_change",
-      "field": "source_period",
-      "old_value": "2026-05-18 vs 2026-04-17",
-      "new_value": "2026-05-19 vs 2026-04-17"
-    },
-    {
-      "metric_id": "usd_uzs_mom_change",
-      "field": "source_reference",
-      "old_value": "Calculated from CBU official USD rates: 11986.3 on 2026-05-18 and 12165.24 on 2026-04-17. Requested dates: latest 2026-05-18, prior-month 2026-04-18.",
-      "new_value": "Calculated from CBU official USD rates: 12019.27 on 2026-05-19 and 12165.24 on 2026-04-17. Requested dates: latest 2026-05-19, prior-month 2026-04-19."
-    },
-    {
-      "metric_id": "usd_uzs_mom_change",
+      "metric_id": "exports_yoy",
       "field": "extracted_at",
-      "old_value": "2026-05-18T15:43:09.937Z",
-      "new_value": "2026-05-19T05:28:02.374Z"
+      "old_value": "2026-04-29T05:00:31.416Z",
+      "new_value": "2026-05-19T05:58:45.628Z"
     },
     {
-      "metric_id": "usd_uzs_mom_change",
+      "metric_id": "exports_yoy",
       "field": "caveats",
       "old_value": [
-        "Latest observation: requested 2026-05-18; actual CBU date/rate 2026-05-18, 11986.3 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-04-18; actual CBU date/rate 2026-04-17 returned for requested 2026-04-18, 12165.24 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-05-18; actual CBU date/rate 2025-05-16 returned for requested 2025-05-18, 12965.34 UZS per USD.",
-        "Formula: ((latest - comparison) / comparison) * 100.",
-        "Rounded to 2 decimal places.",
-        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
+        "Trade values can be revised; show latest-vintage status.",
+        "YoY rate calculated from official SIAT cumulative monthly export levels: USD 3,546.808 million for January-February 2026 versus USD 4,643 million for January-February 2025."
       ],
       "new_value": [
-        "Latest observation: requested 2026-05-19; actual CBU date/rate 2026-05-19, 12019.27 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-04-19; actual CBU date/rate 2026-04-17 returned for requested 2026-04-19, 12165.24 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-05-19; actual CBU date/rate 2025-05-19, 12917.1 UZS per USD.",
-        "Formula: ((latest - comparison) / comparison) * 100.",
-        "Rounded to 2 decimal places.",
-        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
+        "Trade values can be revised; show latest-vintage status.",
+        "YoY rate calculated from official SIAT cumulative monthly export levels: USD 5,809.2 million for January-March 2026 versus USD 8,106.8 million for January-March 2025."
       ]
     },
     {
-      "metric_id": "usd_uzs_mom_change",
-      "field": "warnings",
-      "old_value": [
-        "Prior-month requested date 2026-04-18 differed from actual CBU date 2026-04-17; nearest available CBU observation was used."
-      ],
-      "new_value": [
-        "Prior-month requested date 2026-04-19 differed from actual CBU date 2026-04-17; nearest available CBU observation was used."
-      ]
-    },
-    {
-      "metric_id": "usd_uzs_yoy_change",
+      "metric_id": "imports_yoy",
       "field": "value",
-      "old_value": -7.55,
-      "new_value": -6.95
+      "old_value": 29.92,
+      "new_value": 32.83
     },
     {
-      "metric_id": "usd_uzs_yoy_change",
+      "metric_id": "imports_yoy",
       "field": "source_period",
-      "old_value": "2026-05-18 vs 2025-05-16",
-      "new_value": "2026-05-19 vs 2025-05-19"
+      "old_value": "January-February 2026",
+      "new_value": "January-March 2026"
     },
     {
-      "metric_id": "usd_uzs_yoy_change",
+      "metric_id": "imports_yoy",
       "field": "source_reference",
-      "old_value": "Calculated from CBU official USD rates: 11986.3 on 2026-05-18 and 12965.34 on 2025-05-16. Requested dates: latest 2026-05-18, prior-year 2025-05-18.",
-      "new_value": "Calculated from CBU official USD rates: 12019.27 on 2026-05-19 and 12917.1 on 2025-05-19. Requested dates: latest 2026-05-19, prior-year 2025-05-19."
+      "old_value": "Calculated from SIAT sdmx_data_2414 cumulative monthly import levels for January-February 2026: USD 8,058.287 million versus USD 6,202.6 million for January-February 2025.",
+      "new_value": "Calculated from SIAT sdmx_data_2414 cumulative monthly import levels for January-March 2026: USD 12,213.8 million versus USD 9,194.8 million for January-March 2025."
     },
     {
-      "metric_id": "usd_uzs_yoy_change",
+      "metric_id": "imports_yoy",
+      "field": "observed_at",
+      "old_value": "2026-03-30T00:00:00Z",
+      "new_value": "2026-05-04T00:00:00Z"
+    },
+    {
+      "metric_id": "imports_yoy",
       "field": "extracted_at",
-      "old_value": "2026-05-18T15:43:09.937Z",
-      "new_value": "2026-05-19T05:28:02.374Z"
+      "old_value": "2026-04-29T05:00:31.416Z",
+      "new_value": "2026-05-19T05:58:45.628Z"
     },
     {
-      "metric_id": "usd_uzs_yoy_change",
+      "metric_id": "imports_yoy",
       "field": "caveats",
       "old_value": [
-        "Latest observation: requested 2026-05-18; actual CBU date/rate 2026-05-18, 11986.3 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-04-18; actual CBU date/rate 2026-04-17 returned for requested 2026-04-18, 12165.24 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-05-18; actual CBU date/rate 2025-05-16 returned for requested 2025-05-18, 12965.34 UZS per USD.",
-        "Formula: ((latest - comparison) / comparison) * 100.",
-        "Rounded to 2 decimal places.",
-        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
+        "Trade values can be revised; show latest-vintage status.",
+        "YoY rate calculated from official SIAT cumulative monthly import levels: USD 8,058.287 million for January-February 2026 versus USD 6,202.6 million for January-February 2025."
       ],
       "new_value": [
-        "Latest observation: requested 2026-05-19; actual CBU date/rate 2026-05-19, 12019.27 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-04-19; actual CBU date/rate 2026-04-17 returned for requested 2026-04-19, 12165.24 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-05-19; actual CBU date/rate 2025-05-19, 12917.1 UZS per USD.",
-        "Formula: ((latest - comparison) / comparison) * 100.",
-        "Rounded to 2 decimal places.",
-        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
+        "Trade values can be revised; show latest-vintage status.",
+        "YoY rate calculated from official SIAT cumulative monthly import levels: USD 12,213.8 million for January-March 2026 versus USD 9,194.8 million for January-March 2025."
       ]
     },
     {
-      "metric_id": "usd_uzs_yoy_change",
-      "field": "warnings",
-      "old_value": [
-        "Prior-year requested date 2025-05-18 differed from actual CBU date 2025-05-16; nearest available CBU observation was used."
-      ],
-      "new_value": []
+      "metric_id": "trade_balance",
+      "field": "value",
+      "old_value": -4.51,
+      "new_value": -6.4
+    },
+    {
+      "metric_id": "trade_balance",
+      "field": "source_period",
+      "old_value": "January-February 2026",
+      "new_value": "January-March 2026"
+    },
+    {
+      "metric_id": "trade_balance",
+      "field": "source_reference",
+      "old_value": "Calculated from SIAT cumulative monthly goods trade levels for January-February 2026: exports USD 3,546.808 million from sdmx_data_2407, imports USD 8,058.287 million from sdmx_data_2414. Source URLs: https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json; https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2414.json.",
+      "new_value": "Calculated from SIAT cumulative monthly goods trade levels for January-March 2026: exports USD 5,809.2 million from sdmx_data_2407, imports USD 12,213.8 million from sdmx_data_2414. Source URLs: https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json; https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2414.json."
+    },
+    {
+      "metric_id": "trade_balance",
+      "field": "extracted_at",
+      "old_value": "2026-04-29T05:00:31.416Z",
+      "new_value": "2026-05-19T05:58:45.628Z"
     }
   ]
 }
