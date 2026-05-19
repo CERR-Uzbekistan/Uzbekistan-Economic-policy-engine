@@ -8,12 +8,14 @@ import {
   type IntegrationSourceCore,
 } from '../source-state.js'
 import { toModelExplorerWorkspace } from '../adapters/model-explorer.js'
+import { enrichModelExplorerWorkspaceWithDfmBridge } from '../adapters/model-explorer-dfm-enrichment.js'
 import { enrichModelExplorerWorkspaceWithIoBridge } from '../adapters/model-explorer-io-enrichment.js'
 import { enrichModelExplorerWorkspaceWithQpmBridge } from '../adapters/model-explorer-qpm-enrichment.js'
 import {
   validateRawModelExplorerPayload,
   type ModelExplorerValidationIssue,
 } from '../adapters/model-explorer-guard.js'
+import { fetchDfmBridgePayload } from '../bridge/dfm-client.js'
 import { fetchIoBridgePayload } from '../bridge/io-client.js'
 import { fetchQpmBridgePayload } from '../bridge/qpm-client.js'
 import { modelExplorerWorkspaceMock } from '../mock/model-explorer.js'
@@ -71,6 +73,14 @@ async function enrichWithOptionalBridgeArtifacts(
   } catch {
     // QPM bridge enrichment is opportunistic. The static methodology catalog remains usable
     // if the public artifact is temporarily unavailable or fails validation.
+  }
+
+  try {
+    const dfmPayload = await fetchDfmBridgePayload()
+    enrichedWorkspace = enrichModelExplorerWorkspaceWithDfmBridge(enrichedWorkspace, dfmPayload)
+  } catch {
+    // DFM bridge enrichment is opportunistic for the same reason: Model Explorer
+    // should still render the methodology catalog if /data/dfm.json is unavailable.
   }
 
   try {

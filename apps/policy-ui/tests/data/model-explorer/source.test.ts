@@ -3,6 +3,8 @@ import { readFileSync } from 'node:fs'
 import { afterEach, describe, it } from 'node:test'
 import { fileURLToPath } from 'node:url'
 import { loadModelExplorerSourceState } from '../../../src/data/model-explorer/source.js'
+import { validateDfmBridgePayload } from '../../../src/data/bridge/dfm-guard.js'
+import type { DfmBridgePayload } from '../../../src/data/bridge/dfm-types.js'
 import { validateIoBridgePayload } from '../../../src/data/bridge/io-guard.js'
 import type { IoBridgePayload } from '../../../src/data/bridge/io-types.js'
 import { validateQpmBridgePayload } from '../../../src/data/bridge/qpm-guard.js'
@@ -12,8 +14,15 @@ import { modelExplorerLiveRawMock } from '../../../src/data/raw/model-explorer-l
 
 const originalFetch = globalThis.fetch
 const originalMode = process.env.VITE_MODEL_EXPLORER_DATA_MODE
+const DFM_PUBLIC_ARTIFACT_PATH = fileURLToPath(new URL('../../../../public/data/dfm.json', import.meta.url))
 const IO_PUBLIC_ARTIFACT_PATH = fileURLToPath(new URL('../../../../public/data/io.json', import.meta.url))
 const QPM_PUBLIC_ARTIFACT_PATH = fileURLToPath(new URL('../../../../public/data/qpm.json', import.meta.url))
+
+function loadValidDfmPayload(): DfmBridgePayload {
+  const validation = validateDfmBridgePayload(JSON.parse(readFileSync(DFM_PUBLIC_ARTIFACT_PATH, 'utf8')))
+  assert.ok(validation.value)
+  return validation.value
+}
 
 function loadValidIoPayload(): IoBridgePayload {
   const validation = validateIoBridgePayload(JSON.parse(readFileSync(IO_PUBLIC_ARTIFACT_PATH, 'utf8')))
@@ -55,12 +64,21 @@ describe('model explorer source live integration flow', () => {
 
   it('enriches the I-O entry with bridge evidence when the IO artifact is valid', async () => {
     process.env.VITE_MODEL_EXPLORER_DATA_MODE = 'mock'
+    const dfmPayload = loadValidDfmPayload()
     const ioPayload = loadValidIoPayload()
     const qpmPayload = loadValidQpmPayload()
     globalThis.fetch = ((input: RequestInfo | URL) => {
       if (String(input) === '/data/qpm.json') {
         return Promise.resolve(
           new Response(JSON.stringify(qpmPayload), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          }),
+        )
+      }
+      if (String(input) === '/data/dfm.json') {
+        return Promise.resolve(
+          new Response(JSON.stringify(dfmPayload), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
           }),
@@ -76,11 +94,13 @@ describe('model explorer source live integration flow', () => {
     }) as typeof fetch
 
     const readyState = await loadModelExplorerSourceState()
+    const dfmEntry = readyState.workspace?.catalog_entries_by_model_id?.['dfm-nowcast']
     const ioEntry = readyState.workspace?.catalog_entries_by_model_id?.['io-model']
     const qpmEntry = readyState.workspace?.catalog_entries_by_model_id?.['qpm-uzbekistan']
 
     assert.equal(readyState.status, 'ready')
     assert.equal(qpmEntry?.bridge_evidence?.source_artifact, 'apps/policy-ui/public/data/qpm.json')
+    assert.equal(dfmEntry?.bridge_evidence?.source_artifact, 'apps/policy-ui/public/data/dfm.json')
     assert.equal(
       ioEntry?.bridge_evidence?.source_artifact,
       'io_model/io_data.json + mcp_server/data/io_data.json',
@@ -129,6 +149,9 @@ describe('model explorer source live integration flow', () => {
       if (String(input) === '/data/qpm.json') {
         return Promise.resolve(new Response('', { status: 404 }))
       }
+      if (String(input) === '/data/dfm.json') {
+        return Promise.resolve(new Response('', { status: 404 }))
+      }
       if (String(input) === '/data/io.json') {
         return Promise.resolve(new Response('', { status: 404 }))
       }
@@ -161,6 +184,6 @@ describe('model explorer source live integration flow', () => {
     assert.equal(timeoutState.status, 'error')
     assert.equal(timeoutState.error, 'Model Explorer API request timed out. Please retry.')
 
-    assert.equal(calls.length, 6)
+    assert.equal(calls.length, 7)
   })
 })
