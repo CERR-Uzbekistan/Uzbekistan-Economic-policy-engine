@@ -1299,6 +1299,25 @@
         "openIssuesLabel": "Open methodology issues"
       }
     },
+    "catalog": {
+      "activeTitle": "Active models",
+      "activeDescription": "Available in the current workspace through public data artifacts or scenario tools.",
+      "referenceTitle": "Reference models",
+      "referenceDescription": "Documented for methodology context, but not connected to active runs in this preview."
+    },
+    "card": {
+      "currentUse": "Current app use",
+      "methodologyOnly": "Methodology only",
+      "selectAria": "Inspect {{model}} model"
+    },
+    "status": {
+      "active": "Active",
+      "notActive": "Not active"
+    },
+    "statusNotice": {
+      "referenceTitle": "Reference only",
+      "referenceBody": "This model is documented for methodology context. It is not connected to Scenario Lab runs or public model artifacts in the current preview."
+    },
     "tabs": {
       "aria": "Model detail tabs",
       "overview": "Overview",

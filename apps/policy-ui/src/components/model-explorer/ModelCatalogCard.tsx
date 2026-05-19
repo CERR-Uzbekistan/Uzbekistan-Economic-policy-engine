@@ -1,5 +1,5 @@
 import type { ModelCatalogEntry } from '../../contracts/data-contract'
-import { TrustStateLabel } from '../system/TrustStateLabel.js'
+import { useTranslation } from 'react-i18next'
 
 type ModelCatalogCardProps = {
   entry: ModelCatalogEntry
@@ -8,27 +8,30 @@ type ModelCatalogCardProps = {
 }
 
 export function ModelCatalogCard({ entry, isActive, onSelect }: ModelCatalogCardProps) {
-  const isBridgeBacked = entry.id === 'qpm-uzbekistan' || entry.id === 'dfm-nowcast' || entry.id === 'io-model'
+  const { t } = useTranslation()
+  const isActiveModel = entry.status.severity === 'ok'
+  const statusLabel = isActiveModel
+    ? t('modelExplorer.status.active')
+    : t('modelExplorer.status.notActive')
+  const availabilityLabel = isActiveModel
+    ? t('modelExplorer.card.currentUse')
+    : t('modelExplorer.card.methodologyOnly')
 
   return (
     <button
       type="button"
       className={`model-card${isActive ? ' active' : ''}`}
       aria-pressed={isActive}
+      aria-label={t('modelExplorer.card.selectAria', { model: entry.title })}
       onClick={onSelect}
     >
       <div className="model-card__head">
         <h3 className="model-card__title">{entry.title}</h3>
-        <span className="model-card__labels">
-          <TrustStateLabel
-            id={isBridgeBacked ? 'liveBridgeJson' : 'planned'}
-            tone={isBridgeBacked ? 'success' : 'warn'}
-          />
-          <span className={`status-badge status-badge--${entry.status.severity}`}>
-            {entry.status.label}
-          </span>
+        <span className={`status-badge status-badge--${entry.status.severity}`}>
+          {statusLabel}
         </span>
       </div>
+      <p className="model-card__availability">{availabilityLabel}</p>
       <p className="model-card__meta">{entry.methodology_signature}</p>
       <p className="model-card__desc">{entry.description}</p>
       <div className="model-card__stats">

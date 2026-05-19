@@ -1,3 +1,4 @@
+import type { KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { ModelCatalogEntry } from '../../contracts/data-contract'
 import { BridgeEvidencePanel } from './BridgeEvidencePanel.js'
@@ -29,6 +30,14 @@ type ModelDetailProps = {
   onTabChange: (tab: ModelExplorerTab) => void
 }
 
+const MODEL_EXPLORER_TABS: ModelExplorerTab[] = [
+  'overview',
+  'equations',
+  'parameters',
+  'data_sources',
+  'caveats',
+]
+
 function Equations({ entry }: { entry: ModelCatalogEntry }) {
   const jsxMap = equationRegistry[entry.id] ?? {}
   return (
@@ -42,7 +51,37 @@ function Equations({ entry }: { entry: ModelCatalogEntry }) {
 
 export function ModelDetail({ entry, activeTab, onTabChange }: ModelDetailProps) {
   const { t } = useTranslation()
-  const tabs: ModelExplorerTab[] = ['overview', 'equations', 'parameters', 'data_sources', 'caveats']
+  const isActiveModel = entry.status.severity === 'ok'
+
+  function focusTab(tab: ModelExplorerTab) {
+    window.requestAnimationFrame(() => {
+      document.getElementById(`model-detail-tab-${tab}`)?.focus()
+    })
+  }
+
+  function handleTabKeyDown(event: KeyboardEvent<HTMLButtonElement>, tab: ModelExplorerTab) {
+    const currentIndex = MODEL_EXPLORER_TABS.indexOf(tab)
+    let nextTab: ModelExplorerTab | null = null
+
+    if (event.key === 'ArrowRight') {
+      nextTab = MODEL_EXPLORER_TABS[(currentIndex + 1) % MODEL_EXPLORER_TABS.length]
+    } else if (event.key === 'ArrowLeft') {
+      nextTab =
+        MODEL_EXPLORER_TABS[
+          (currentIndex - 1 + MODEL_EXPLORER_TABS.length) % MODEL_EXPLORER_TABS.length
+        ]
+    } else if (event.key === 'Home') {
+      nextTab = MODEL_EXPLORER_TABS[0]
+    } else if (event.key === 'End') {
+      nextTab = MODEL_EXPLORER_TABS[MODEL_EXPLORER_TABS.length - 1]
+    }
+
+    if (nextTab) {
+      event.preventDefault()
+      onTabChange(nextTab)
+      focusTab(nextTab)
+    }
+  }
 
   return (
     <div className="model-detail" aria-labelledby="model-detail-title">
@@ -61,7 +100,7 @@ export function ModelDetail({ entry, activeTab, onTabChange }: ModelDetailProps)
         role="tablist"
         aria-label={t('modelExplorer.tabs.aria')}
       >
-        {tabs.map((tab) => {
+        {MODEL_EXPLORER_TABS.map((tab) => {
           const isActive = tab === activeTab
           return (
             <button
@@ -74,6 +113,7 @@ export function ModelDetail({ entry, activeTab, onTabChange }: ModelDetailProps)
               tabIndex={isActive ? 0 : -1}
               className={isActive ? 'active' : ''}
               onClick={() => onTabChange(tab)}
+              onKeyDown={(event) => handleTabKeyDown(event, tab)}
             >
               {t(TAB_LABEL_KEYS[tab])}
             </button>
@@ -87,6 +127,12 @@ export function ModelDetail({ entry, activeTab, onTabChange }: ModelDetailProps)
         id={`model-detail-panel-${activeTab}`}
         aria-labelledby={`model-detail-tab-${activeTab}`}
       >
+        {!isActiveModel ? (
+          <div className="model-detail__notice" role="note">
+            <strong>{t('modelExplorer.statusNotice.referenceTitle')}</strong>
+            <span>{t('modelExplorer.statusNotice.referenceBody')}</span>
+          </div>
+        ) : null}
         {/* Overview tab shows the full 2-col body; other tabs filter to one section. */}
         {activeTab === 'overview' ? (
           <>

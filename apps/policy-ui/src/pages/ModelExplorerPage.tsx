@@ -17,6 +17,10 @@ function getCatalogEntries(workspace: ModelExplorerWorkspace): ModelCatalogEntry
   return Object.values(workspace.catalog_entries_by_model_id ?? {})
 }
 
+function isActiveModel(entry: ModelCatalogEntry): boolean {
+  return entry.status.severity === 'ok'
+}
+
 export function ModelExplorerPage() {
   const { t } = useTranslation()
   const [sourceState, setSourceState] = useState(getInitialModelExplorerSourceState)
@@ -54,6 +58,8 @@ export function ModelExplorerPage() {
   const selectedEntry =
     modelCatalogEntries.find((entry) => entry.id === effectiveSelectedModelId) ??
     modelCatalogEntries[0]
+  const activeCatalogEntries = modelCatalogEntries.filter(isActiveModel)
+  const referenceCatalogEntries = modelCatalogEntries.filter((entry) => !isActiveModel(entry))
   const modelCatalogMeta = workspace?.meta ?? {
     models_total: modelCatalogEntries.length,
     models_live: modelCatalogEntries.length,
@@ -128,19 +134,45 @@ export function ModelExplorerPage() {
         meta={pageHeaderMeta}
       />
 
-      <div className="model-catalog">
-        {modelCatalogEntries.map((entry) => (
-          <ModelCatalogCard
-            key={entry.id}
-            entry={entry}
-            isActive={entry.id === (selectedEntry?.id ?? '')}
-            onSelect={() => {
-              setSelectedModelId(entry.id)
-              setActiveTab('overview')
-            }}
-          />
-        ))}
-      </div>
+      <section className="model-catalog-section" aria-labelledby="active-models-title">
+        <div className="model-catalog-section__head">
+          <h2 id="active-models-title">{t('modelExplorer.catalog.activeTitle')}</h2>
+          <p>{t('modelExplorer.catalog.activeDescription')}</p>
+        </div>
+        <div className="model-catalog">
+          {activeCatalogEntries.map((entry) => (
+            <ModelCatalogCard
+              key={entry.id}
+              entry={entry}
+              isActive={entry.id === (selectedEntry?.id ?? '')}
+              onSelect={() => {
+                setSelectedModelId(entry.id)
+                setActiveTab('overview')
+              }}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className="model-catalog-section" aria-labelledby="reference-models-title">
+        <div className="model-catalog-section__head">
+          <h2 id="reference-models-title">{t('modelExplorer.catalog.referenceTitle')}</h2>
+          <p>{t('modelExplorer.catalog.referenceDescription')}</p>
+        </div>
+        <div className="model-catalog model-catalog--reference">
+          {referenceCatalogEntries.map((entry) => (
+            <ModelCatalogCard
+              key={entry.id}
+              entry={entry}
+              isActive={entry.id === (selectedEntry?.id ?? '')}
+              onSelect={() => {
+                setSelectedModelId(entry.id)
+                setActiveTab('overview')
+              }}
+            />
+          ))}
+        </div>
+      </section>
 
       {selectedEntry ? (
         <ModelDetail entry={selectedEntry} activeTab={activeTab} onTabChange={setActiveTab} />

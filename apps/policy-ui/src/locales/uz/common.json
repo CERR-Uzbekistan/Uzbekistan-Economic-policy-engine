@@ -1299,6 +1299,25 @@
         "openIssuesLabel": "Ochiq metodologik masalalar"
       }
     },
+    "catalog": {
+      "activeTitle": "Faol modellar",
+      "activeDescription": "Joriy ish maydonida ommaviy ma'lumot fayllari yoki stsenariy vositalari orqali mavjud.",
+      "referenceTitle": "Ma'lumotnoma modellari",
+      "referenceDescription": "Metodologik kontekst uchun ko'rsatilgan, lekin bu previewda faol ishga tushirishlarga ulanmagan."
+    },
+    "card": {
+      "currentUse": "Joriy foydalanishda",
+      "methodologyOnly": "Faqat metodologiya",
+      "selectAria": "{{model}} modelini ko'rish"
+    },
+    "status": {
+      "active": "Faol",
+      "notActive": "Faol emas"
+    },
+    "statusNotice": {
+      "referenceTitle": "Faqat ma'lumot uchun",
+      "referenceBody": "Bu model metodologik kontekst uchun ko'rsatilgan. Joriy previewda u Stsenariy simulyatori ishga tushirishlari yoki ommaviy model artefaktlariga ulanmagan."
+    },
     "tabs": {
       "aria": "Model tafsilotlari yorliqlari",
       "overview": "Umumiy",

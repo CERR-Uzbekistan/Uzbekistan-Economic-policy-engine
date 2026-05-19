@@ -12,27 +12,29 @@ export function ParameterTable({ parameters }: ParameterTableProps) {
     return <p className="empty-state">{t('modelExplorer.parameters.empty')}</p>
   }
   return (
-    <table className="param-table">
-      <thead>
-        <tr>
-          <th>{t('modelExplorer.parameters.symbol')}</th>
-          <th>{t('modelExplorer.parameters.name')}</th>
-          <th>{t('modelExplorer.parameters.value')}</th>
-          <th>{t('modelExplorer.parameters.range')}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {parameters.map((parameter) => (
-          <tr key={`${parameter.symbol}-${parameter.name}`}>
-            <td className="sym">
-              <SymbolText text={parameter.symbol} />
-            </td>
-            <td>{parameter.name}</td>
-            <td className={`val${parameter.inactive ? ' issue' : ''}`}>{parameter.value}</td>
-            <td className="val">{parameter.range}</td>
+    <div className="param-table-wrap">
+      <table className="param-table">
+        <thead>
+          <tr>
+            <th>{t('modelExplorer.parameters.symbol')}</th>
+            <th>{t('modelExplorer.parameters.name')}</th>
+            <th>{t('modelExplorer.parameters.value')}</th>
+            <th>{t('modelExplorer.parameters.range')}</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {parameters.map((parameter) => (
+            <tr key={`${parameter.symbol}-${parameter.name}`}>
+              <td className="sym">
+                <SymbolText text={parameter.symbol} />
+              </td>
+              <td>{parameter.name}</td>
+              <td className={`val${parameter.inactive ? ' issue' : ''}`}>{parameter.value}</td>
+              <td className="val">{parameter.range}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
