@@ -106,7 +106,7 @@ describe('Model Explorer catalog cards', () => {
   })
 
   it('labels inactive model cards as methodology-only reference lanes', async () => {
-    const peEntry = modelCatalogEntries.find((entry) => entry.id === 'pe-model')!
+    const peEntry = modelCatalogEntries.find((entry) => entry.id === 'cge-model')!
     const i18n = await createTestI18n()
 
     const markup = renderToStaticMarkup(

@@ -261,10 +261,15 @@ const MODEL_IMPACT_ACTIVE_LENSES = [
     status: 'possible_lens',
     caveat: 'Use for sector linkage and final-demand shock propagation only.',
   },
+  {
+    id: 'PE',
+    label: 'Partial-equilibrium trade',
+    status: 'possible_lens',
+    caveat: 'Use for direct tariff-incidence and trade-flow framing only.',
+  },
 ]
 
 const MODEL_IMPACT_GATED_LENSES = [
-  { id: 'PE', label: 'Partial-equilibrium trade', status: 'planned_gated', caveat: 'Not active in public outputs.' },
   { id: 'CGE', label: 'Computable general equilibrium', status: 'planned_gated', caveat: 'Not active in public outputs.' },
   { id: 'FPP', label: 'Fiscal programming', status: 'planned_gated', caveat: 'Not active in public outputs.' },
   { id: 'HFI', label: 'High-frequency indicators', status: 'planned_gated', caveat: 'Not active in public outputs.' },
@@ -3524,6 +3529,9 @@ function buildModelImpactMap(reformPackages) {
         ...(text.match(/\b(trade|customs|construction|agriculture|transport|infrastructure|sector|investment)\b/)
           ? [{ model_id: 'I-O', channel: 'Sector-linkage and final-demand propagation context.', caveat: 'Possible lens only.' }]
           : []),
+        ...(text.match(/\b(trade|customs|tariff|import|export|investment)\b/)
+          ? [{ model_id: 'PE', channel: 'Direct tariff-incidence and trade-flow context.', caveat: 'Possible lens only.' }]
+          : []),
       ]
 
       return {
@@ -3561,7 +3569,7 @@ function buildInternalPolicyBriefs(reformPackages) {
       summary: 'Internal package-routing note retained for non-public workflow compatibility.',
       package_ids: packageIds.slice(0, 3),
       policy_channels: ['Macro monitoring', 'Sector linkages', 'Trade exposure'],
-      possible_lenses: ['QPM', 'DFM', 'I-O'],
+      possible_lenses: ['QPM', 'DFM', 'I-O', 'PE'],
       source_event_ids: packageIds.slice(0, 3).map((id) => sourceEventsByPackage.get(id)).filter(Boolean),
       as_of_date: '2026-05-13',
       publication_state: 'internal_preview',
@@ -3575,7 +3583,7 @@ function buildInternalPolicyBriefs(reformPackages) {
       summary: 'Internal package-routing note retained for non-public workflow compatibility.',
       package_ids: [infrastructurePackage, agriculturePackage].filter(Boolean),
       policy_channels: ['Infrastructure delivery', 'Agriculture financing', 'Regional access'],
-      possible_lenses: ['DFM', 'I-O'],
+      possible_lenses: ['DFM', 'I-O', 'PE'],
       source_event_ids: [infrastructurePackage, agriculturePackage].map((id) => id && sourceEventsByPackage.get(id)).filter(Boolean),
       as_of_date: '2026-05-13',
       publication_state: 'internal_preview',

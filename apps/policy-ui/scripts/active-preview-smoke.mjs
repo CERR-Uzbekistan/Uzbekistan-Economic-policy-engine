@@ -18,15 +18,16 @@ const PUBLIC_DATA_ARTIFACTS = [
   { path: 'data/qpm.json', label: 'QPM bridge artifact' },
   { path: 'data/dfm.json', label: 'DFM bridge artifact' },
   { path: 'data/io.json', label: 'I-O bridge artifact' },
+  { path: 'data/pe.json', label: 'PE bridge artifact' },
 ];
 const DATA_REGISTRY_SMOKE_CONTRACT = {
-  implemented: ['QPM', 'DFM', 'I-O'],
-  plannedGated: ['HFI', 'PE', 'CGE', 'FPP'],
+  implemented: ['QPM', 'DFM', 'I-O', 'PE'],
+  plannedGated: ['HFI', 'CGE', 'FPP'],
   excluded: ['Synthesis'],
   exclusionReason: 'Synthesis is excluded because it is not in the current Data Registry contract.',
 };
-const EXPECTED_DATA_REGISTRY_IMPLEMENTED = ['QPM', 'DFM', 'I-O'];
-const EXPECTED_DATA_REGISTRY_PLANNED_GATED = ['HFI', 'PE', 'CGE', 'FPP'];
+const EXPECTED_DATA_REGISTRY_IMPLEMENTED = ['QPM', 'DFM', 'I-O', 'PE'];
+const EXPECTED_DATA_REGISTRY_PLANNED_GATED = ['HFI', 'CGE', 'FPP'];
 const EXPECTED_DATA_REGISTRY_EXCLUDED = ['Synthesis'];
 const HTTP_ONLY_LIMITATIONS = [
   'console errors',
@@ -153,11 +154,11 @@ function validateDataRegistrySmokeContract(details) {
   const excludedModels = modelNames(DATA_REGISTRY_SMOKE_CONTRACT.excluded);
 
   if (!sameMembers(implementedModels, EXPECTED_DATA_REGISTRY_IMPLEMENTED)) {
-    return failure('Data Registry smoke contract drift', 'Implemented model expectation must stay limited to QPM, DFM, and I-O.', details);
+    return failure('Data Registry smoke contract drift', 'Implemented model expectation must stay limited to QPM, DFM, I-O, and PE.', details);
   }
 
   if (!sameMembers(plannedGatedModels, EXPECTED_DATA_REGISTRY_PLANNED_GATED)) {
-    return failure('Data Registry smoke contract drift', 'Planned/gated model expectation must stay limited to HFI, PE, CGE, and FPP.', details);
+    return failure('Data Registry smoke contract drift', 'Planned/gated model expectation must stay limited to HFI, CGE, and FPP.', details);
   }
 
   if (!sameMembers(excludedModels, EXPECTED_DATA_REGISTRY_EXCLUDED)) {

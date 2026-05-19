@@ -8,12 +8,14 @@ import { I18nextProvider, initReactI18next } from 'react-i18next'
 import { MemoryRouter } from 'react-router-dom'
 import { PRIMARY_NAV_ITEMS } from '../../src/app/shell/nav.js'
 import { DataRegistryContent } from '../../src/components/data-registry/DataRegistryContent.js'
+import type { PeBridgePayload } from '../../src/data/bridge/pe-types.js'
 import { buildDataRegistry } from '../../src/data/data-registry/source.js'
 import { buildValidDfmPayload } from '../data/bridge/dfm-fixture.js'
 import { buildValidQpmPayload } from '../data/bridge/qpm-fixture.js'
 import type { IoBridgePayload } from '../../src/data/bridge/io-types.js'
 
 const ROUTER_SOURCE_PATH = fileURLToPath(new URL('../../../src/app/router.tsx', import.meta.url))
+const PE_PUBLIC_ARTIFACT_PATH = fileURLToPath(new URL('../../../public/data/pe.json', import.meta.url))
 
 function minimalIoPayload(): IoBridgePayload {
   return {
@@ -75,6 +77,10 @@ function minimalIoPayload(): IoBridgePayload {
       n_sectors: 1,
     },
   }
+}
+
+function loadPublicPePayload(): PeBridgePayload {
+  return JSON.parse(readFileSync(PE_PUBLIC_ARTIFACT_PATH, 'utf8')) as PeBridgePayload
 }
 
 async function createTestI18n() {
@@ -222,6 +228,7 @@ describe('Data Registry page', () => {
       qpm: { status: 'loaded', payload: buildValidQpmPayload() },
       dfm: { status: 'loaded', payload: buildValidDfmPayload() },
       io: { status: 'loaded', payload: minimalIoPayload() },
+      pe: { status: 'loaded', payload: loadPublicPePayload() },
       now: new Date('2026-04-25T12:00:00Z'),
     })
 
@@ -256,6 +263,7 @@ describe('Data Registry page', () => {
     assert.match(markup, /\/data\/qpm\.json/)
     assert.match(markup, /\/data\/dfm\.json/)
     assert.match(markup, /\/data\/io\.json/)
+    assert.match(markup, /\/data\/pe\.json/)
     assert.match(markup, /High-frequency indicators/)
     assert.match(markup, /PE Trade Shock/)
     assert.match(markup, /CGE Reform Shock/)

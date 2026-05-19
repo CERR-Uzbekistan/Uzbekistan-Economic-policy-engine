@@ -5,6 +5,36 @@ Simulates tariff cut impacts on trade creation, trade diversion,
 consumer welfare, and government revenue.
 """
 
+BASE_ELASTICITY = 1.27
+SECTION_ELASTICITIES = {
+    "I": 0.38,
+    "II": 0.50,
+    "III": 0.55,
+    "IV": 0.70,
+    "V": 0.45,
+    "VI": 1.10,
+    "VII": 1.30,
+    "VIII": 1.40,
+    "IX": 1.20,
+    "X": 1.15,
+    "XI": 1.60,
+    "XII": 1.80,
+    "XIII": 1.25,
+    "XIV": 0.80,
+    "XV": 1.35,
+    "XVI": 2.50,
+    "XVII": 2.80,
+    "XVIII": 2.20,
+    "XIX": 0.60,
+    "XX": 1.70,
+    "XXI": 0.50,
+}
+
+
+def _elasticity_factor(section_id: str) -> float:
+    """Scale the legacy uniform-elasticity baseline to the documented section elasticity."""
+    return SECTION_ELASTICITIES.get(section_id, BASE_ELASTICITY) / BASE_ELASTICITY
+
 
 def run_trade_simulation(
     data: dict,
@@ -41,6 +71,9 @@ def run_trade_simulation(
         tax_chg = 0
         mfn_w = 0
 
+        elasticity = SECTION_ELASTICITIES.get(s["id"], BASE_ELASTICITY)
+        ef = _elasticity_factor(s["id"])
+
         for ch in s.get("chapters", []):
             ch_key = str(ch)
             cd = chapters.get(ch_key)
@@ -48,10 +81,10 @@ def run_trade_simulation(
                 continue
 
             imp += cd["imp"] * rf
-            tc += cd["tc"] * scale * rf
-            td += cd["td"] * scale * rf
-            welfare += cd["welfare"] * scale * rf
-            tax_chg += cd["taxChg"] * scale * rf
+            tc += cd["tc"] * ef * scale * rf
+            td += cd["td"] * ef * scale * rf
+            welfare += cd["welfare"] * ef * scale * rf
+            tax_chg += cd["taxChg"] * ef * scale * rf
             mfn_w += cd["avgMfn"] * cd["imp"] * rf
 
         if imp > 0:
@@ -64,6 +97,7 @@ def run_trade_simulation(
                 "welfare_usd": welfare,
                 "revenue_change_usd": tax_chg,
                 "avg_mfn_rate": mfn_w / imp,
+                "elasticity": elasticity,
             })
 
     # Country filter
@@ -99,6 +133,7 @@ def run_trade_simulation(
                    "welfare_usd", "revenue_change_usd"]:
             r[k] = round(r[k], 2)
         r["avg_mfn_rate"] = round(r["avg_mfn_rate"], 2)
+        r["elasticity"] = round(r["elasticity"], 2)
         r["trade_effect_usd"] = round(r["trade_creation_usd"] + r["trade_diversion_usd"], 2)
 
     return {

@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs'
 import { afterEach, describe, it } from 'node:test'
 import { fileURLToPath } from 'node:url'
 import type { IoBridgePayload } from '../../../src/data/bridge/io-types.js'
+import type { PeBridgePayload } from '../../../src/data/bridge/pe-types.js'
 import {
   buildDataRegistry,
   getFilteredRegistry,
@@ -13,6 +14,7 @@ import { buildValidQpmPayload } from '../bridge/qpm-fixture.js'
 import { buildValidOverviewArtifact } from '../overview/overview-artifact-fixture.js'
 
 const IO_PUBLIC_ARTIFACT_PATH = fileURLToPath(new URL('../../../../public/data/io.json', import.meta.url))
+const PE_PUBLIC_ARTIFACT_PATH = fileURLToPath(new URL('../../../../public/data/pe.json', import.meta.url))
 const NOW = new Date('2026-04-25T12:00:00Z')
 const ORIGINAL_REGISTRY_API_URL = process.env.VITE_REGISTRY_API_URL
 
@@ -28,6 +30,10 @@ function loadPublicIoPayload(): IoBridgePayload {
   return JSON.parse(readFileSync(IO_PUBLIC_ARTIFACT_PATH, 'utf8')) as IoBridgePayload
 }
 
+function loadPublicPePayload(): PeBridgePayload {
+  return JSON.parse(readFileSync(PE_PUBLIC_ARTIFACT_PATH, 'utf8')) as PeBridgePayload
+}
+
 function jsonResponse(payload: unknown, status = 200): Response {
   return new Response(JSON.stringify(payload), {
     status,
@@ -41,10 +47,11 @@ function bridgeFetch(payloads: {
   qpm?: unknown | Response
   dfm?: unknown | Response
   io?: unknown | Response
+  pe?: unknown | Response
 }) {
   return (input: RequestInfo | URL) => {
     const url = String(input)
-    let value = payloads.io
+    let value: unknown | Response | undefined
     if (url.includes('/api/v1/registry/artifacts') || url.includes('registry.test/artifacts')) {
       value = payloads.api
     } else if (url.includes('overview.json')) {
@@ -56,6 +63,10 @@ function bridgeFetch(payloads: {
       value = payloads.qpm
     } else if (url.includes('dfm.json')) {
       value = payloads.dfm
+    } else if (url.includes('io.json')) {
+      value = payloads.io
+    } else if (url.includes('pe.json')) {
+      value = payloads.pe
     }
     if (value instanceof Response) {
       return Promise.resolve(value)
@@ -119,11 +130,27 @@ describe('data registry source', () => {
               caveats: [],
               warnings: [],
             },
+            {
+              id: 'pe',
+              model_family: 'PE',
+              artifact_path: '/data/pe.json',
+              source_artifact: 'pe_model/wits_smart_export.csv',
+              source_vintage: 'Base-year vintage 2025',
+              data_vintage: '2025',
+              exported_at: '2026-04-22T08:00:00Z',
+              generated_at: '2026-04-22',
+              checksum: 'sha256:pe-test',
+              guard_status: 'valid',
+              guard_checks: ['json_parse', 'metadata_extract'],
+              caveats: [],
+              warnings: [],
+            },
           ],
         },
         qpm: buildValidQpmPayload(),
         dfm: buildValidDfmPayload(),
         io: loadPublicIoPayload(),
+        pe: loadPublicPePayload(),
       }),
       NOW,
     )
@@ -148,6 +175,7 @@ describe('data registry source', () => {
         qpm: buildValidQpmPayload(),
         dfm: buildValidDfmPayload(),
         io: loadPublicIoPayload(),
+        pe: loadPublicPePayload(),
       })(input)
     }) as typeof fetch
 
@@ -155,7 +183,7 @@ describe('data registry source', () => {
 
     assert.equal(registry.metadataSource, 'static-fallback')
     assert.deepEqual(registryApiCalls, [])
-    assert.ok(registry.dataSources.some((row) => row.label === 'PE Trade Shock' && row.status === 'planned'))
+    assert.ok(registry.dataSources.some((row) => row.id === 'pe' && (row.status === 'valid' || row.status === 'warning')))
     assert.ok(registry.dataSources.some((row) => row.label === 'CGE Reform Shock' && row.status === 'planned'))
     assert.ok(registry.dataSources.some((row) => row.label === 'FPP Fiscal Path' && row.status === 'planned'))
     assert.ok(registry.dataSources.some((row) => row.label === 'High-frequency indicators' && row.status === 'planned'))
@@ -170,6 +198,7 @@ describe('data registry source', () => {
         qpm: buildValidQpmPayload(),
         dfm: buildValidDfmPayload(),
         io: loadPublicIoPayload(),
+        pe: loadPublicPePayload(),
       }),
       NOW,
     )
@@ -193,6 +222,7 @@ describe('data registry source', () => {
         qpm: buildValidQpmPayload(),
         dfm: buildValidDfmPayload(),
         io: loadPublicIoPayload(),
+        pe: loadPublicPePayload(),
       }),
       NOW,
     )
@@ -203,24 +233,26 @@ describe('data registry source', () => {
     assert.equal(qpmArtifact?.dataVintage, '2026Q1')
   })
 
-  it('renders QPM, DFM, and I-O rows from current metadata and keeps planned rows honest', async () => {
+  it('renders QPM, DFM, I-O, and PE rows from current metadata and keeps planned rows honest', async () => {
     const registry = await loadDataRegistry(
       bridgeFetch({
         qpm: buildValidQpmPayload(),
         dfm: buildValidDfmPayload(),
         io: loadPublicIoPayload(),
+        pe: loadPublicPePayload(),
       }),
       NOW,
     )
 
-    assert.equal(registry.artifacts.length, 4)
+    assert.equal(registry.artifacts.length, 5)
     assert.ok(registry.artifacts.some((artifact) => artifact.artifactPath === '/data/overview.json'))
     assert.ok(registry.artifacts.some((artifact) => artifact.artifactPath === '/data/qpm.json'))
     assert.ok(registry.artifacts.some((artifact) => artifact.artifactPath === '/data/dfm.json'))
     assert.ok(registry.artifacts.some((artifact) => artifact.artifactPath === '/data/io.json'))
+    assert.ok(registry.artifacts.some((artifact) => artifact.artifactPath === '/data/pe.json'))
     assert.ok(registry.plannedArtifacts.some((row) => row.label === 'High-frequency indicators'))
     assert.ok(registry.dataSources.some((row) => row.label === 'High-frequency indicators' && row.status === 'planned'))
-    assert.ok(registry.dataSources.some((row) => row.label === 'PE Trade Shock' && row.status === 'planned'))
+    assert.ok(registry.dataSources.some((row) => row.id === 'pe' && (row.status === 'valid' || row.status === 'warning')))
     assert.ok(registry.dataSources.some((row) => row.label === 'CGE Reform Shock' && row.status === 'planned'))
     assert.ok(registry.dataSources.some((row) => row.label === 'FPP Fiscal Path' && row.status === 'planned'))
     assert.equal(registry.dataSources.some((row) => row.id === 'pe' && row.status === 'missing'), false)
@@ -234,6 +266,7 @@ describe('data registry source', () => {
         qpm: buildValidQpmPayload(),
         dfm: buildValidDfmPayload(),
         io: loadPublicIoPayload(),
+        pe: loadPublicPePayload(),
       }),
       NOW,
     )
@@ -252,6 +285,7 @@ describe('data registry source', () => {
         qpm: buildValidQpmPayload(),
         dfm: buildValidDfmPayload(),
         io: loadPublicIoPayload(),
+        pe: loadPublicPePayload(),
       }),
       NOW,
     )
@@ -268,6 +302,7 @@ describe('data registry source', () => {
         qpm: new Response('', { status: 404 }),
         dfm: buildValidDfmPayload(),
         io: loadPublicIoPayload(),
+        pe: loadPublicPePayload(),
       }),
       NOW,
     )
@@ -280,9 +315,9 @@ describe('data registry source', () => {
     assert.ok(active.artifacts.every((artifact) => artifact.status === 'valid' || artifact.status === 'warning'))
     assert.ok(warnings.artifacts.every((artifact) => artifact.status === 'warning'))
     assert.ok(planned.plannedArtifacts.some((row) => row.id === 'hfi'))
-    assert.ok(planned.plannedArtifacts.some((row) => row.id === 'pe'))
     assert.ok(planned.plannedArtifacts.some((row) => row.id === 'cge'))
     assert.ok(planned.plannedArtifacts.some((row) => row.id === 'fpp'))
+    assert.equal(planned.plannedArtifacts.some((row) => row.id === 'pe'), false)
     assert.ok(missingUnavailable.artifacts.some((artifact) => artifact.id === 'qpm' && artifact.status === 'missing'))
   })
 
@@ -293,6 +328,7 @@ describe('data registry source', () => {
       qpm: { status: 'loaded', payload: buildValidQpmPayload() },
       dfm: { status: 'loaded', payload: dfm },
       io: { status: 'loaded', payload: loadPublicIoPayload() },
+      pe: { status: 'loaded', payload: loadPublicPePayload() },
       now: NOW,
     })
 
@@ -305,6 +341,7 @@ describe('data registry source', () => {
       qpm: { status: 'loaded', payload: buildValidQpmPayload() },
       dfm: { status: 'loaded', payload: dfm },
       io: { status: 'loaded', payload: loadPublicIoPayload() },
+      pe: { status: 'loaded', payload: loadPublicPePayload() },
       now: NOW,
     })
     const staleDfmArtifact = staleRegistry.artifacts.find((artifact) => artifact.id === 'dfm')
@@ -317,6 +354,7 @@ describe('data registry source', () => {
         qpm: buildValidQpmPayload(),
         dfm: { attribution: { model_id: 'DFM' } },
         io: loadPublicIoPayload(),
+        pe: loadPublicPePayload(),
       }),
       NOW,
     )
@@ -333,6 +371,7 @@ describe('data registry source', () => {
         qpm: new Response('', { status: 404 }),
         dfm: buildValidDfmPayload(),
         io: loadPublicIoPayload(),
+        pe: loadPublicPePayload(),
       }),
       NOW,
     )
@@ -351,6 +390,7 @@ describe('data registry source', () => {
         qpm: buildValidQpmPayload(),
         dfm: buildValidDfmPayload(),
         io: loadPublicIoPayload(),
+        pe: loadPublicPePayload(),
       }),
       NOW,
     )

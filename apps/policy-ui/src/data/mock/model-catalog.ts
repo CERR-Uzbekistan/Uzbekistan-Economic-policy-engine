@@ -3,8 +3,8 @@ import type {
   ModelExplorerMeta,
 } from '../../contracts/data-contract.js'
 
-// Six-model methodology catalog. QPM, DFM, and I-O are active bridge-backed
-// lanes; PE, CGE, and FPP remain visible as not-active methodology lanes.
+// Six-model methodology catalog. QPM, DFM, PE, and I-O are active bridge-backed
+// lanes; CGE and FPP remain visible as not-active methodology lanes.
 
 export const modelCatalogEntries: ModelCatalogEntry[] = [
   {
@@ -152,57 +152,53 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
     id: 'pe-model',
     title: 'PE',
     full_title: 'PE — Partial Equilibrium, WITS-SMART',
-    lifecycle_label: 'Partial Equilibrium · Not active',
-    status: { label: 'Not active', severity: 'warn' },
+    lifecycle_label: 'Partial Equilibrium · Active',
+    status: { label: 'Active', severity: 'ok' },
     model_type: 'Partial equilibrium',
     frequency: 'Annual',
     methodology_signature: 'Partial Equilibrium · WITS-SMART',
     description:
-      'Planned WTO/tariff analysis lane. Not connected to public artifacts or Scenario Lab runs yet.',
+      'Direct tariff-incidence lane using the public PE trade-flow artifact and section-specific elasticities.',
     stats: [
-      { value: 'Missing', label: 'Artifact' },
-      { value: 'Needed', label: 'Elasticities' },
-      { value: 'Gated', label: 'Scenario UI' },
+      { value: '19', label: 'HS sections' },
+      { value: '2025', label: 'Base year' },
+      { value: '60', label: 'Partners' },
     ],
     purpose:
-      'Planned WITS-SMART partial-equilibrium lane for tariff-schedule simulation. It should not be read as a production model until the public artifact, tariff concordance, and elasticity source are accepted.',
+      'WITS-SMART-style partial-equilibrium lane for direct tariff-cut incidence. It estimates trade creation, trade diversion, welfare, and tariff-revenue changes by HS section; it does not model macro feedback, I-O propagation, or general-equilibrium reallocation.',
     equations: [{ id: 'pe_smart', label: 'Trade creation · SMART elasticity form' }],
     parameters: [
-      { symbol: 'ε', name: 'Import demand elasticity (uniform)', value: '1.27', range: '0.8 – 2.2' },
+      { symbol: 'Δt', name: 'Tariff reduction', value: '20%', range: '0-100%' },
+      { symbol: 'ε_s', name: 'Section-specific elasticity', value: 'Differentiated', range: '0.38-2.8' },
     ],
     caveats: [
       {
         id: 'pe-cav-01',
         number: '01',
-        severity: 'critical',
-        title: 'No accepted public artifact',
+        severity: 'warning',
+        title: 'Direct channel only',
         body:
-          'The current app has methodology notes only. There is no checked-in PE artifact, guard, adapter, or Scenario Lab result contract.',
+          'PE outputs are direct tariff-incidence estimates. They are not macro forecasts, I-O propagation, or general-equilibrium results.',
       },
       {
         id: 'pe-cav-02',
         number: '02',
-        severity: 'critical',
-        title: 'Elasticity source not production-approved',
+        severity: 'warning',
+        title: 'Partner filters are share-scaled',
         body:
-          'The uniform elasticity produces materially different welfare conclusions than WITS sector-specific elasticities. Switch to differentiated ε is tracked.',
+          'Partner and regime filters scale baseline effects by import shares; they do not rerun a partner-specific tariff schedule.',
       },
     ],
     data_sources: [
       {
         institution: 'WITS / UN Comtrade',
         description: 'Bilateral trade flows, applied tariffs',
-        vintage_label: '2024',
+        vintage_label: '2025',
       },
     ],
     validation_summary: [
-      'Validation is limited to WITS/UN Comtrade tariff-flow reconciliation and WITS-SMART mechanics checks.',
-      'No differentiated-elasticity validation is claimed while the uniform-elasticity caveat remains open.',
-    ],
-    activation_requirements: [
-      'Accepted public PE artifact with tariff schedule, baseline imports, elasticities, and welfare/revenue outputs.',
-      'Guard and adapter tests that reject missing concordance, stale tariff vintages, and uniform-elasticity fallbacks.',
-      'Scenario Lab contract showing PE outputs separately from QPM/DFM/I-O evidence.',
+      'Public pe.json validates against the PE bridge schema and exposes sections, chapters, partners, elasticities, and caveats.',
+      'Scenario Lab keeps PE direct tariff-incidence results separate from QPM, DFM, I-O, and future CGE outputs.',
     ],
   },
   {
@@ -374,7 +370,7 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
 
 export const modelCatalogMeta: ModelExplorerMeta = {
   models_total: modelCatalogEntries.length,
-  models_live: 3,
+  models_live: 4,
   last_calibration_audit_label: 'Apr 2026',
-  open_methodology_issues: 9,
+  open_methodology_issues: 6,
 }

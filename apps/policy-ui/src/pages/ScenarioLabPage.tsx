@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom'
 import { AssumptionsPanel } from '../components/scenario-lab/AssumptionsPanel'
 import { IoSectorShockPanel } from '../components/scenario-lab/IoSectorShockPanel'
 import { InterpretationPanel } from '../components/scenario-lab/InterpretationPanel'
+import { PeTradeShockPanel } from '../components/scenario-lab/PeTradeShockPanel'
 import { ResultsPanel } from '../components/scenario-lab/ResultsPanel'
 import { ScenarioLabSavedRunsPanel } from '../components/scenario-lab/ScenarioLabSavedRunsPanel'
 import {
@@ -22,6 +23,8 @@ import type {
   ScenarioLabAssumptionState,
   ScenarioLabIoAnalyticsWorkspace,
   ScenarioLabIoShockResult,
+  ScenarioLabPeAnalyticsWorkspace,
+  ScenarioLabPeShockResult,
   ScenarioLabResultTab,
   ScenarioLabResultsBundle,
   ScenarioLabWorkspace,
@@ -41,6 +44,10 @@ import {
   getInitialScenarioLabIoAnalyticsState,
   loadScenarioLabIoAnalyticsState,
 } from '../data/scenario-lab/io-analytics-source'
+import {
+  getInitialScenarioLabPeAnalyticsState,
+  loadScenarioLabPeAnalyticsState,
+} from '../data/scenario-lab/pe-analytics-source'
 import { beginRetry } from '../data/source-state'
 import {
   deleteScenario,
@@ -49,6 +56,7 @@ import {
   saveScenario,
   subscribeScenarioStore,
   type PersistedIoSectorShockRun,
+  type PersistedPeTradeShockRun,
   type PersistedRunResults,
   type PersistedScenarioInterpretation,
 } from '../state/scenarioStore'
@@ -149,6 +157,7 @@ export function ScenarioLabPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [sourceState, setSourceState] = useState(getInitialScenarioLabSourceState)
   const [ioAnalyticsState, setIoAnalyticsState] = useState(getInitialScenarioLabIoAnalyticsState)
+  const [peAnalyticsState, setPeAnalyticsState] = useState(getInitialScenarioLabPeAnalyticsState)
   const initialPresetId = resolveDefaultPresetId(scenarioLabWorkspaceMock)
   const initialPreset = findPreset(scenarioLabWorkspaceMock, initialPresetId)
   const [selectedPresetId, setSelectedPresetId] = useState(initialPresetId)
@@ -164,6 +173,7 @@ export function ScenarioLabPage() {
   const [activeModelTab, setActiveModelTab] = useState<ScenarioLabModelTab>('macro_qpm')
   const [saveStatus, setSaveStatus] = useState<string | null>(null)
   const [ioSaveStatus, setIoSaveStatus] = useState<string | null>(null)
+  const [peSaveStatus, setPeSaveStatus] = useState<string | null>(null)
   const [lastRunAssumptions, setLastRunAssumptions] = useState<ScenarioLabAssumptionState>(assumptionValues)
   const latestRunParamsRef = useRef<ScenarioRunParams>({
     assumptions: assumptionValues,
@@ -222,6 +232,18 @@ export function ScenarioLabPage() {
     loadScenarioLabIoAnalyticsState().then((state) => {
       if (!cancelled) {
         setIoAnalyticsState(state)
+      }
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    loadScenarioLabPeAnalyticsState().then((state) => {
+      if (!cancelled) {
+        setPeAnalyticsState(state)
       }
     })
     return () => {
@@ -488,6 +510,85 @@ export function ScenarioLabPage() {
     }
   }
 
+  function handleSavePeTradeShock(
+    result: ScenarioLabPeShockResult,
+    peWorkspace: ScenarioLabPeAnalyticsWorkspace,
+  ) {
+    const nowIso = new Date().toISOString()
+    const scenarioId = globalThis.crypto.randomUUID()
+    const title = t('scenarioLab.peShock.savedTitle', {
+      cut: result.request.tariff_cut_pct,
+      section:
+        result.request.section_id === 'all'
+          ? t('scenarioLab.peShock.allSections')
+          : result.request.section_id,
+    })
+    const peRun: PersistedPeTradeShockRun = {
+      ...result,
+      model_type: 'pe_trade_shock',
+      title,
+      data_vintage: peWorkspace.data_vintage,
+      source_artifact: peWorkspace.source_artifact,
+      saved_at: nowIso,
+    }
+
+    try {
+      const record = saveScenario({
+        scenario_id: scenarioId,
+        scenario_name: title,
+        scenario_type: 'alternative',
+        description: t('scenarioLab.peShock.savedDescription'),
+        tags: ['pe', 'trade'],
+        assumptions: [
+          {
+            key: 'pe_tariff_cut_pct',
+            label: t('scenarioLab.peShock.tariffCut'),
+            value: result.request.tariff_cut_pct,
+            unit: 'percent',
+            category: 'trade',
+            technical_variable: null,
+          },
+          {
+            key: 'pe_section',
+            label: t('scenarioLab.peShock.section'),
+            value: result.request.section_id,
+            unit: 'HS section',
+            category: 'trade',
+            technical_variable: null,
+          },
+          {
+            key: 'pe_partner_scope',
+            label: t('scenarioLab.peShock.partnerScope'),
+            value:
+              result.request.partner_name !== 'all'
+                ? result.request.partner_name
+                : result.request.regime,
+            unit: 'scope',
+            category: 'trade',
+            technical_variable: null,
+          },
+        ],
+        model_ids: ['pe-trade-shock'],
+        data_version: peWorkspace.data_vintage,
+        created_at: '',
+        updated_at: '',
+        created_by: '',
+        run_id: `pe-trade-shock:${scenarioId}:${nowIso}`,
+        run_saved_at: nowIso,
+        pe_trade_shock: peRun,
+      })
+      const timestamp = new Intl.DateTimeFormat(i18n.resolvedLanguage ?? 'en', {
+        hour: '2-digit',
+        minute: '2-digit',
+        day: '2-digit',
+        month: 'short',
+      }).format(new Date(record.stored_at))
+      setPeSaveStatus(t('states.success.savedToLocalSessionAt', { timestamp }))
+    } catch {
+      setPeSaveStatus(t('states.error.scenarioSaveFailed'))
+    }
+  }
+
   function handleLoadSavedScenario(scenarioId: string) {
     const record = loadScenario(scenarioId)
     if (!record) {
@@ -582,6 +683,12 @@ export function ScenarioLabPage() {
     setIoAnalyticsState(nextState)
   }
 
+  async function handleRetryPeAnalytics() {
+    setPeAnalyticsState(getInitialScenarioLabPeAnalyticsState())
+    const nextState = await loadScenarioLabPeAnalyticsState()
+    setPeAnalyticsState(nextState)
+  }
+
   const hasReadyRun = sourceState.status === 'ready' || sourceState.results !== null
   const hasPendingEdits =
     hasReadyRun &&
@@ -638,6 +745,17 @@ export function ScenarioLabPage() {
             : t('scenarioLab.context.saveState.unsaved'),
           stateLabels: ['liveBridgeJson', 'sourceVintage'] satisfies TrustStateLabelId[],
         }
+      : activeModelTab === 'pe_trade_shock'
+        ? {
+            lane: t('scenarioLab.context.lane.tradeIncidence'),
+            model: t('scenarioLab.context.model.pe'),
+            runName: t('scenarioLab.peShock.title'),
+            dataVintage: peAnalyticsState.workspace?.data_vintage ?? dataDateLabel,
+            saveState: peSaveStatus
+              ? t('scenarioLab.context.saveState.saved')
+              : t('scenarioLab.context.saveState.unsaved'),
+            stateLabels: ['liveBridgeJson', 'sourceVintage'] satisfies TrustStateLabelId[],
+          }
       : activeModelTab === 'macro_qpm'
         ? {
             lane: t('scenarioLab.context.lane.macroScenario'),
@@ -803,6 +921,15 @@ export function ScenarioLabPage() {
           }}
           onSaveRun={handleSaveIoSectorShock}
           saveStatus={ioSaveStatus}
+        />
+      ) : activeModelTab === 'pe_trade_shock' ? (
+        <PeTradeShockPanel
+          state={peAnalyticsState}
+          onRetry={() => {
+            void handleRetryPeAnalytics()
+          }}
+          onSaveRun={handleSavePeTradeShock}
+          saveStatus={peSaveStatus}
         />
       ) : activeModelTab === 'saved_runs' ? (
         <ScenarioLabSavedRunsPanel

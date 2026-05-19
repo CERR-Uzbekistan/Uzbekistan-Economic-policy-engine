@@ -8,6 +8,7 @@ import type {
   ScenarioLabInterpretation,
   ScenarioLabInterpretationMetadata,
   ScenarioLabIoShockResult,
+  ScenarioLabPeShockResult,
   ScenarioLabResultTab,
   SuggestedNextScenario,
   ScenarioType,
@@ -45,6 +46,14 @@ export type PersistedIoSectorShockRun = ScenarioLabIoShockResult & {
   saved_at: string
 }
 
+export type PersistedPeTradeShockRun = ScenarioLabPeShockResult & {
+  model_type: 'pe_trade_shock'
+  title: string
+  data_vintage: string
+  source_artifact: string
+  saved_at: string
+}
+
 export type SavedScenarioRecord = ScenarioWithDataVersion & {
   stored_at: string
   // Optional output snapshot fields (run artifact). Absent on records that predate the snapshot
@@ -55,6 +64,7 @@ export type SavedScenarioRecord = ScenarioWithDataVersion & {
   run_interpretation?: PersistedScenarioInterpretation
   run_attribution?: ModelAttribution[]
   io_sector_shock?: PersistedIoSectorShockRun
+  pe_trade_shock?: PersistedPeTradeShockRun
 }
 
 export type { ScenarioWithDataVersion }
@@ -214,6 +224,10 @@ function isIoLinkageClass(value: unknown): boolean {
   return value === 'key' || value === 'backward' || value === 'forward' || value === 'weak'
 }
 
+function isPeFilterValue(value: unknown): boolean {
+  return typeof value === 'string' && value.length > 0
+}
+
 function isPersistedIoSectorShockRun(value: unknown): value is PersistedIoSectorShockRun {
   if (typeof value !== 'object' || value === null) {
     return false
@@ -285,6 +299,76 @@ function isPersistedIoSectorShockRun(value: unknown): value is PersistedIoSector
   })
 
   return topSectorsValid && isStringArray(candidate.caveats)
+}
+
+function isPersistedPeTradeShockRun(value: unknown): value is PersistedPeTradeShockRun {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Partial<PersistedPeTradeShockRun>
+  const request = candidate.request
+  const totals = candidate.totals
+  if (
+    candidate.model_type !== 'pe_trade_shock' ||
+    typeof candidate.title !== 'string' ||
+    typeof candidate.data_vintage !== 'string' ||
+    typeof candidate.source_artifact !== 'string' ||
+    typeof candidate.saved_at !== 'string' ||
+    typeof request !== 'object' ||
+    request === null ||
+    typeof totals !== 'object' ||
+    totals === null
+  ) {
+    return false
+  }
+
+  const requestCandidate = request as Partial<PersistedPeTradeShockRun['request']>
+  const totalsCandidate = totals as Partial<PersistedPeTradeShockRun['totals']>
+  if (
+    !isFiniteNumber(requestCandidate.tariff_cut_pct) ||
+    !isPeFilterValue(requestCandidate.section_id) ||
+    !isPeFilterValue(requestCandidate.regime) ||
+    !isPeFilterValue(requestCandidate.partner_name)
+  ) {
+    return false
+  }
+
+  if (
+    !isFiniteNumber(totalsCandidate.import_base_usd) ||
+    !isFiniteNumber(totalsCandidate.trade_creation_usd) ||
+    !isFiniteNumber(totalsCandidate.trade_diversion_usd) ||
+    !isFiniteNumber(totalsCandidate.trade_effect_usd) ||
+    !isFiniteNumber(totalsCandidate.welfare_usd) ||
+    !isFiniteNumber(totalsCandidate.revenue_change_usd) ||
+    !isFiniteNumber(totalsCandidate.impact_pct) ||
+    !isFiniteNumber(totalsCandidate.partner_import_share)
+  ) {
+    return false
+  }
+
+  if (!Array.isArray(candidate.top_sections)) {
+    return false
+  }
+  const topSectionsValid = candidate.top_sections.every((section) => {
+    if (typeof section !== 'object' || section === null) {
+      return false
+    }
+    const sectionCandidate = section as Partial<PersistedPeTradeShockRun['top_sections'][number]>
+    return (
+      typeof sectionCandidate.section_id === 'string' &&
+      typeof sectionCandidate.section_name === 'string' &&
+      isFiniteNumber(sectionCandidate.import_usd) &&
+      isFiniteNumber(sectionCandidate.avg_mfn_rate) &&
+      isFiniteNumber(sectionCandidate.elasticity) &&
+      isFiniteNumber(sectionCandidate.trade_creation_usd) &&
+      isFiniteNumber(sectionCandidate.trade_diversion_usd) &&
+      isFiniteNumber(sectionCandidate.trade_effect_usd) &&
+      isFiniteNumber(sectionCandidate.welfare_usd) &&
+      isFiniteNumber(sectionCandidate.revenue_change_usd)
+    )
+  })
+
+  return topSectionsValid && isStringArray(candidate.caveats)
 }
 
 function isScenarioLabInterpretationMetadata(
@@ -418,6 +502,9 @@ function isSavedScenarioRecord(value: unknown): value is SavedScenarioRecord {
   if (candidate.io_sector_shock !== undefined && !isPersistedIoSectorShockRun(candidate.io_sector_shock)) {
     return false
   }
+  if (candidate.pe_trade_shock !== undefined && !isPersistedPeTradeShockRun(candidate.pe_trade_shock)) {
+    return false
+  }
   return true
 }
 
@@ -425,6 +512,12 @@ export function isIoSectorShockRecord(
   record: SavedScenarioRecord,
 ): record is SavedScenarioRecord & { io_sector_shock: PersistedIoSectorShockRun } {
   return record.io_sector_shock?.model_type === 'io_sector_shock'
+}
+
+export function isPeTradeShockRecord(
+  record: SavedScenarioRecord,
+): record is SavedScenarioRecord & { pe_trade_shock: PersistedPeTradeShockRun } {
+  return record.pe_trade_shock?.model_type === 'pe_trade_shock'
 }
 
 function buildScenarioKey(scenarioId: string): string {
@@ -485,6 +578,7 @@ export type SaveScenarioInput = ScenarioWithDataVersion & {
   run_interpretation?: PersistedScenarioInterpretation
   run_attribution?: ModelAttribution[]
   io_sector_shock?: PersistedIoSectorShockRun
+  pe_trade_shock?: PersistedPeTradeShockRun
 }
 
 export function saveScenario(scenario: SaveScenarioInput): SavedScenarioRecord {
@@ -542,6 +636,12 @@ export function saveScenario(scenario: SaveScenarioInput): SavedScenarioRecord {
       throw new Error('I-O sector shock run does not match the supported persisted shape.')
     }
     normalizedRecord.io_sector_shock = scenario.io_sector_shock
+  }
+  if (scenario.pe_trade_shock !== undefined) {
+    if (!isPersistedPeTradeShockRun(scenario.pe_trade_shock)) {
+      throw new Error('PE trade shock run does not match the supported persisted shape.')
+    }
+    normalizedRecord.pe_trade_shock = scenario.pe_trade_shock
   }
 
   storage.setItem(buildScenarioKey(normalizedRecord.scenario_id), JSON.stringify(normalizedRecord))

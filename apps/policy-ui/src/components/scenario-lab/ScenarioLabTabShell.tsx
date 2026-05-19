@@ -58,7 +58,6 @@ const DESCRIPTION_KEYS: Record<ScenarioLabTabShellProps['tab'], string> = {
 }
 
 const PLANNED_TABS = new Set<ScenarioLabTabShellProps['tab']>([
-  'pe_trade_shock',
   'cge_reform_shock',
   'fpp_fiscal_path',
   'synthesis_preview',

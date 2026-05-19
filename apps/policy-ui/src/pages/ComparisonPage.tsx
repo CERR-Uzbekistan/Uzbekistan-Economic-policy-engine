@@ -5,6 +5,7 @@ import { AddSavedScenarioModal } from '../components/comparison/AddSavedScenario
 import { ComparisonSelector } from '../components/comparison/ComparisonSelector'
 import { DeltaTable } from '../components/comparison/DeltaTable'
 import { SavedIoSectorRunsPanel } from '../components/comparison/SavedIoSectorRunsPanel'
+import { SavedPeTradeRunsPanel } from '../components/comparison/SavedPeTradeRunsPanel'
 import { ScenarioSummaryCards } from '../components/comparison/ScenarioSummaryCards'
 import { SectorEvidencePanel } from '../components/comparison/SectorEvidencePanel'
 import { TradeoffSummaryPanel } from '../components/comparison/TradeoffSummaryPanel'
@@ -24,7 +25,12 @@ import {
   COMPARISON_SLOT_LIMIT,
   mergeSavedScenariosIntoWorkspace,
 } from '../state/comparisonSavedScenarios'
-import { isIoSectorShockRecord, listScenarios, subscribeScenarioStore } from '../state/scenarioStore'
+import {
+  isIoSectorShockRecord,
+  isPeTradeShockRecord,
+  listScenarios,
+  subscribeScenarioStore,
+} from '../state/scenarioStore'
 import './comparison.css'
 
 const EMPTY_SAVED_SCENARIOS: [] = []
@@ -86,7 +92,8 @@ export function ComparisonPage() {
             .filter(
               (scenario) =>
                 linkedSavedScenarioIds.includes(scenario.scenario_id) &&
-                !isIoSectorShockRecord(scenario),
+                !isIoSectorShockRecord(scenario) &&
+                !isPeTradeShockRecord(scenario),
             )
             .map((scenario) => scenario.scenario_id)
         : []
@@ -122,8 +129,16 @@ export function ComparisonPage() {
     const addedIds = new Set(addedSavedScenarioIds)
     return savedScenarios.filter((scenario) => addedIds.has(scenario.scenario_id) && isIoSectorShockRecord(scenario))
   }, [addedSavedScenarioIds, savedScenarios])
+  const selectedSavedPeRecords = useMemo(() => {
+    const addedIds = new Set(addedSavedScenarioIds)
+    return savedScenarios.filter((scenario) => addedIds.has(scenario.scenario_id) && isPeTradeShockRecord(scenario))
+  }, [addedSavedScenarioIds, savedScenarios])
   const savedIoRunCount = useMemo(
     () => savedScenarios.filter(isIoSectorShockRecord).length,
+    [savedScenarios],
+  )
+  const savedPeRunCount = useMemo(
+    () => savedScenarios.filter(isPeTradeShockRecord).length,
     [savedScenarios],
   )
 
@@ -184,7 +199,12 @@ export function ComparisonPage() {
       return
     }
     const macroScenarioIds = savedScenarios
-      .filter((scenario) => scenarioIds.includes(scenario.scenario_id) && !isIoSectorShockRecord(scenario))
+      .filter(
+        (scenario) =>
+          scenarioIds.includes(scenario.scenario_id) &&
+          !isIoSectorShockRecord(scenario) &&
+          !isPeTradeShockRecord(scenario),
+      )
       .map((scenario) => scenario.scenario_id)
     setAddedSavedScenarioIds((current) => Array.from(new Set([...current, ...scenarioIds])))
     if (macroScenarioIds.length > 0) {
@@ -305,6 +325,12 @@ export function ComparisonPage() {
       <SavedIoSectorRunsPanel
         records={selectedSavedIoRecords}
         availableCount={savedIoRunCount}
+        onAddSavedRun={handleAddSavedScenario}
+      />
+
+      <SavedPeTradeRunsPanel
+        records={selectedSavedPeRecords}
+        availableCount={savedPeRunCount}
         onAddSavedRun={handleAddSavedScenario}
       />
 

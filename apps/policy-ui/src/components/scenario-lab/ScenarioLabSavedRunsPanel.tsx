@@ -1,7 +1,11 @@
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { isIoSectorShockRecord, type SavedScenarioRecord } from '../../state/scenarioStore.js'
+import {
+  isIoSectorShockRecord,
+  isPeTradeShockRecord,
+  type SavedScenarioRecord,
+} from '../../state/scenarioStore.js'
 import { filterSavedScenarios, type SavedRunsFilter } from './savedRunsFilters.js'
 
 type ScenarioLabSavedRunsPanelProps = {
@@ -43,7 +47,13 @@ function formatMetricValue(value: number, unit: string): string {
 }
 
 function getSavedTimestamp(scenario: SavedScenarioRecord): string {
-  return scenario.io_sector_shock?.saved_at ?? scenario.run_saved_at ?? scenario.stored_at ?? scenario.updated_at
+  return (
+    scenario.io_sector_shock?.saved_at ??
+    scenario.pe_trade_shock?.saved_at ??
+    scenario.run_saved_at ??
+    scenario.stored_at ??
+    scenario.updated_at
+  )
 }
 
 function getMacroKeyOutputs(scenario: SavedScenarioRecord): Array<{ label: string; value: string }> {
@@ -91,6 +101,7 @@ export function ScenarioLabSavedRunsPanel({
       all: savedScenarios.length,
       macro_qpm: filterSavedScenarios(savedScenarios, 'macro_qpm').length,
       io: filterSavedScenarios(savedScenarios, 'io').length,
+      pe: filterSavedScenarios(savedScenarios, 'pe').length,
     }),
     [savedScenarios],
   )
@@ -112,7 +123,7 @@ export function ScenarioLabSavedRunsPanel({
     )
   }
 
-  const filters: SavedRunsFilter[] = ['all', 'macro_qpm', 'io']
+  const filters: SavedRunsFilter[] = ['all', 'macro_qpm', 'io', 'pe']
 
   return (
     <section
@@ -200,6 +211,75 @@ export function ScenarioLabSavedRunsPanel({
                   <div>
                     <dt>{t('scenarioLab.ioShock.kpis.employment')}</dt>
                     <dd>{formatOptionalNumber(run.totals.employment_effect_persons)}</dd>
+                  </div>
+                </dl>
+              </article>
+            )
+          }
+
+          if (isPeTradeShockRecord(scenario)) {
+            const run = scenario.pe_trade_shock
+            return (
+              <article className="saved-runs-panel__item saved-runs-panel__item--io" key={scenario.scenario_id}>
+                <div>
+                  <span className="saved-runs-panel__type">{t('scenarioLab.savedRuns.type.pe')}</span>
+                  <h3>{run.title}</h3>
+                  <p>{t('scenarioLab.peShock.boundary')}</p>
+                  <div className="saved-runs-panel__actions">
+                    <Link
+                      className="ui-secondary-action"
+                      to="/comparison"
+                      state={{ addSavedScenarioIds: [scenario.scenario_id] }}
+                    >
+                      {t('scenarioLab.savedRuns.openInComparison')}
+                    </Link>
+                    {onDeleteScenario ? (
+                      <button
+                        type="button"
+                        className="btn-ghost"
+                        onClick={() => onDeleteScenario(scenario.scenario_id)}
+                      >
+                        {t('buttons.delete')}
+                      </button>
+                    ) : null}
+                  </div>
+                </div>
+                <dl>
+                  <div>
+                    <dt>{t('scenarioLab.savedRuns.fields.saved')}</dt>
+                    <dd>{formatSavedAt(getSavedTimestamp(scenario), locale)}</dd>
+                  </div>
+                  <div>
+                    <dt>{t('scenarioLab.savedRuns.fields.data')}</dt>
+                    <dd>{run.data_vintage}</dd>
+                  </div>
+                  <div>
+                    <dt>{t('scenarioLab.savedRuns.fields.sourceArtifact')}</dt>
+                    <dd>{run.source_artifact}</dd>
+                  </div>
+                  <div>
+                    <dt>{t('scenarioLab.peShock.fields.tariffCut')}</dt>
+                    <dd>{formatNumber(run.request.tariff_cut_pct, 1)}%</dd>
+                  </div>
+                  <div>
+                    <dt>{t('scenarioLab.peShock.fields.section')}</dt>
+                    <dd>{run.request.section_id}</dd>
+                  </div>
+                  <div>
+                    <dt>{t('scenarioLab.peShock.fields.partnerScope')}</dt>
+                    <dd>{run.request.partner_name === 'all' ? run.request.regime : run.request.partner_name}</dd>
+                  </div>
+                  <div>
+                    <dt>{t('scenarioLab.peShock.kpis.tradeEffect')}</dt>
+                    <dd>{formatNumber(run.totals.trade_effect_usd, 0)} {t('scenarioLab.peShock.units.usdThousand')}</dd>
+                  </div>
+                  <div>
+                    <dt>{t('scenarioLab.peShock.kpis.welfare')}</dt>
+                    <dd>{formatNumber(run.totals.welfare_usd, 0)} {t('scenarioLab.peShock.units.usdThousand')}</dd>
+                  </div>
+                  <div>
+                    <dt>{t('scenarioLab.peShock.kpis.revenue')}</dt>
+                    <dd>{formatNumber(run.totals.revenue_change_usd, 0)} {t('scenarioLab.peShock.units.usdThousand')}</dd>
                   </div>
                 </dl>
               </article>

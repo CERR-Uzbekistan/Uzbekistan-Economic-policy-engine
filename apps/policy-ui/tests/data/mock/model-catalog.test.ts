@@ -13,7 +13,7 @@ describe('model catalog mock', () => {
     const byTitle = new Map(modelCatalogEntries.map((entry) => [entry.title, entry.status]))
     assert.deepEqual(byTitle.get('QPM'), { label: 'Active', severity: 'ok' })
     assert.deepEqual(byTitle.get('DFM'), { label: 'Active', severity: 'ok' })
-    assert.deepEqual(byTitle.get('PE'), { label: 'Not active', severity: 'warn' })
+    assert.deepEqual(byTitle.get('PE'), { label: 'Active', severity: 'ok' })
     assert.deepEqual(byTitle.get('I-O'), { label: 'Active', severity: 'ok' })
     assert.deepEqual(byTitle.get('CGE'), { label: 'Not active', severity: 'warn' })
     assert.deepEqual(byTitle.get('FPP'), { label: 'Not active', severity: 'warn' })
@@ -51,17 +51,17 @@ describe('model catalog mock', () => {
 
   it('page-header meta separates active bridge-backed models from planned model lanes', () => {
     assert.equal(modelCatalogMeta.models_total, 6)
-    assert.equal(modelCatalogMeta.models_live, 3)
+    assert.equal(modelCatalogMeta.models_live, 4)
     assert.equal(modelCatalogMeta.last_calibration_audit_label, 'Apr 2026')
-    assert.equal(modelCatalogMeta.open_methodology_issues, 9)
+    assert.equal(modelCatalogMeta.open_methodology_issues, 6)
   })
 
-  it('keeps planned PE, CGE, and FPP models behind production activation requirements', () => {
+  it('keeps planned CGE and FPP models behind production activation requirements', () => {
     const planned = modelCatalogEntries.filter((entry) => entry.status.severity !== 'ok')
 
     assert.deepEqual(
       planned.map((entry) => entry.title),
-      ['PE', 'CGE', 'FPP'],
+      ['CGE', 'FPP'],
     )
     for (const entry of planned) {
       assert.equal(entry.activation_requirements?.length, 3, `${entry.title} should list activation gates`)

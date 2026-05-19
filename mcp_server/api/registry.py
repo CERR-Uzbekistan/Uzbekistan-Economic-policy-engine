@@ -35,6 +35,7 @@ ARTIFACT_SOURCES: tuple[ArtifactSource, ...] = (
     ArtifactSource("qpm", "QPM", "/data/qpm.json", PUBLIC_DATA_DIR / "qpm.json"),
     ArtifactSource("dfm", "DFM", "/data/dfm.json", PUBLIC_DATA_DIR / "dfm.json"),
     ArtifactSource("io", "I-O", "/data/io.json", PUBLIC_DATA_DIR / "io.json"),
+    ArtifactSource("pe", "PE", "/data/pe.json", PUBLIC_DATA_DIR / "pe.json"),
 )
 
 
@@ -146,7 +147,7 @@ def _source_vintage(
         return _string_or_none(metadata.get("source_artifact_exported_at")) or _string_or_none(
             attribution.get("data_version")
         )
-    if artifact_id == "io" and "base_year" in metadata:
+    if artifact_id in {"io", "pe"} and "base_year" in metadata:
         return f"Base-year vintage {metadata['base_year']}"
     return _string_or_none(attribution.get("data_version"))
 

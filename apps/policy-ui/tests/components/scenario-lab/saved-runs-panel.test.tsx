@@ -31,10 +31,26 @@ async function createTestI18n() {
                 employment: 'Employment effect',
               },
             },
+            peShock: {
+              kpis: {
+                tradeEffect: 'Trade effect',
+                welfare: 'Welfare effect',
+                revenue: 'Revenue change',
+              },
+              fields: {
+                tariffCut: 'Tariff cut',
+                section: 'HS section',
+                partnerScope: 'Partner scope',
+                importShare: 'Import share',
+              },
+              units: {
+                usdThousand: 'USD thousand',
+              },
+            },
             savedRuns: {
               title: 'Saved Runs',
               description: '{{count}} saved run(s).',
-              empty: 'Saved macro and I-O runs will appear here after you save them.',
+              empty: 'Saved macro, I-O, and PE runs will appear here after you save them.',
               filtersAria: 'Saved run filters',
               openInComparison: 'Open in Comparison',
               ioBoundary: 'Sector transmission evidence only.',
@@ -43,14 +59,17 @@ async function createTestI18n() {
                 all: 'All',
                 macro_qpm: 'Macro/QPM',
                 io: 'I-O',
+                pe: 'PE',
               },
               filteredEmpty: {
                 all: 'No saved runs match this filter.',
                 macro_qpm: 'No saved Macro/QPM runs yet.',
                 io: 'No saved I-O runs yet.',
+                pe: 'No saved PE runs yet.',
               },
               type: {
                 io: 'I-O sector shock',
+                pe: 'PE trade shock',
                 macro: 'Macro/QPM',
               },
               fields: {
@@ -145,13 +164,49 @@ const ioRecord: SavedScenarioRecord = {
   },
 }
 
+const peRecord: SavedScenarioRecord = {
+  ...macroRecord,
+  scenario_id: 'pe-1',
+  scenario_name: 'PE tariff shock',
+  tags: ['pe'],
+  description: 'Saved PE run.',
+  model_ids: ['pe-trade-shock'],
+  data_version: '2025',
+  pe_trade_shock: {
+    model_type: 'pe_trade_shock',
+    title: 'PE tariff shock',
+    data_vintage: '2025',
+    source_artifact: 'mcp_server/data/pe_data.json',
+    saved_at: '2026-05-19T10:20:00Z',
+    request: {
+      tariff_cut_pct: 20,
+      section_id: 'XVII',
+      regime: 'all',
+      partner_name: 'all',
+    },
+    totals: {
+      import_base_usd: 1000,
+      trade_creation_usd: 120,
+      trade_diversion_usd: 30,
+      trade_effect_usd: 150,
+      welfare_usd: 20,
+      revenue_change_usd: -40,
+      impact_pct: 15,
+      partner_import_share: 1,
+    },
+    top_sections: [],
+    caveats: ['Direct tariff-incidence only.'],
+  },
+}
+
 describe('ScenarioLabSavedRunsPanel', () => {
-  it('filters saved runs by All, Macro/QPM, and I-O', () => {
-    const records = [macroRecord, ioRecord]
+  it('filters saved runs by All, Macro/QPM, I-O, and PE', () => {
+    const records = [macroRecord, ioRecord, peRecord]
 
     assert.deepEqual(filterSavedScenarios(records, 'all'), records)
     assert.deepEqual(filterSavedScenarios(records, 'macro_qpm'), [macroRecord])
     assert.deepEqual(filterSavedScenarios(records, 'io'), [ioRecord])
+    assert.deepEqual(filterSavedScenarios(records, 'pe'), [peRecord])
   })
 
   it('renders model type, timestamp, vintage, key outputs, and comparison actions', async () => {
@@ -179,5 +234,26 @@ describe('ScenarioLabSavedRunsPanel', () => {
     assert.match(markup, /Open in Comparison/)
     assert.match(markup, /Load/)
     assert.match(markup, /Delete/)
+  })
+
+  it('renders saved PE trade-shock outputs separately from macro runs', async () => {
+    const i18n = await createTestI18n()
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <MemoryRouter>
+          <ScenarioLabSavedRunsPanel
+            savedScenarios={[peRecord]}
+            onLoadScenario={() => {}}
+            onDeleteScenario={() => {}}
+          />
+        </MemoryRouter>
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /PE trade shock/)
+    assert.match(markup, /Trade effect/)
+    assert.match(markup, /Revenue change/)
+    assert.match(markup, /Tariff cut/)
+    assert.match(markup, /mcp_server\/data\/pe_data\.json/)
   })
 })

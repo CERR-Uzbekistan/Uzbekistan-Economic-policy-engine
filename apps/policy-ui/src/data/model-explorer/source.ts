@@ -10,6 +10,7 @@ import {
 import { toModelExplorerWorkspace } from '../adapters/model-explorer.js'
 import { enrichModelExplorerWorkspaceWithDfmBridge } from '../adapters/model-explorer-dfm-enrichment.js'
 import { enrichModelExplorerWorkspaceWithIoBridge } from '../adapters/model-explorer-io-enrichment.js'
+import { enrichModelExplorerWorkspaceWithPeBridge } from '../adapters/model-explorer-pe-enrichment.js'
 import { enrichModelExplorerWorkspaceWithQpmBridge } from '../adapters/model-explorer-qpm-enrichment.js'
 import {
   validateRawModelExplorerPayload,
@@ -17,6 +18,7 @@ import {
 } from '../adapters/model-explorer-guard.js'
 import { fetchDfmBridgePayload } from '../bridge/dfm-client.js'
 import { fetchIoBridgePayload } from '../bridge/io-client.js'
+import { fetchPeBridgePayload } from '../bridge/pe-client.js'
 import { fetchQpmBridgePayload } from '../bridge/qpm-client.js'
 import { modelExplorerWorkspaceMock } from '../mock/model-explorer.js'
 import {
@@ -85,7 +87,14 @@ async function enrichWithOptionalBridgeArtifacts(
 
   try {
     const ioPayload = await fetchIoBridgePayload()
-    return enrichModelExplorerWorkspaceWithIoBridge(enrichedWorkspace, ioPayload)
+    enrichedWorkspace = enrichModelExplorerWorkspaceWithIoBridge(enrichedWorkspace, ioPayload)
+  } catch {
+    // I-O bridge enrichment is opportunistic for the same reason as the macro artifacts.
+  }
+
+  try {
+    const pePayload = await fetchPeBridgePayload()
+    return enrichModelExplorerWorkspaceWithPeBridge(enrichedWorkspace, pePayload)
   } catch {
     return enrichedWorkspace
   }

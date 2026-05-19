@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "test": "tsc -p tsconfig.test.json && node --experimental-specifier-resolution=node scripts/run-compiled-tests.mjs",
+    "pe:export": "node ../../scripts/export_pe.mjs",
     "knowledge-hub:intake:fixture": "node ../../scripts/knowledge-hub/generate-fixture-artifact.mjs",
     "knowledge-hub:intake:fetch": "node ../../scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
     "smoke:active-preview": "node scripts/active-preview-smoke.mjs",

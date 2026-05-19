@@ -31,7 +31,7 @@ class RegistryApiTests(unittest.TestCase):
         second = load_registry_artifacts()
 
         self.assertEqual(first, second)
-        self.assertEqual([artifact.id for artifact in first], ["qpm", "dfm", "io"])
+        self.assertEqual([artifact.id for artifact in first], ["qpm", "dfm", "io", "pe"])
 
     def test_checksum_generation_uses_artifact_bytes(self) -> None:
         path = PUBLIC_DATA_DIR / "qpm.json"
@@ -48,7 +48,7 @@ class RegistryApiTests(unittest.TestCase):
         self.assertEqual(payload["api_version"], "v1")
         self.assertEqual(payload["source"], "frontend_public_artifacts")
         self.assertEqual(payload, build_registry_response().model_dump(mode="json"))
-        self.assertEqual(len(payload["artifacts"]), 3)
+        self.assertEqual(len(payload["artifacts"]), 4)
 
         artifact = payload["artifacts"][0]
         self.assertEqual(
@@ -77,7 +77,7 @@ class RegistryApiTests(unittest.TestCase):
         self.assertIsInstance(response_model, RegistryArtifactsResponse)
         self.assertEqual(response_model.api_version, "v1")
         self.assertEqual(response_model.source, "frontend_public_artifacts")
-        self.assertEqual([artifact.id for artifact in response_model.artifacts], ["qpm", "dfm", "io"])
+        self.assertEqual([artifact.id for artifact in response_model.artifacts], ["qpm", "dfm", "io", "pe"])
         self.assertEqual(response_model.model_dump(mode="json")["artifacts"][0]["id"], "qpm")
 
     def test_missing_artifact_file_returns_service_unavailable(self) -> None:

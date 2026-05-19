@@ -5,6 +5,7 @@ import {
   clearAllScenarios,
   deleteScenario,
   isIoSectorShockRecord,
+  isPeTradeShockRecord,
   listScenarios,
   loadScenario,
   saveScenario,
@@ -256,6 +257,57 @@ describe('scenarioStore', () => {
     assert.equal(isIoSectorShockRecord(loaded), true)
     assert.equal(loaded.run_results, undefined)
     assert.equal(loaded.io_sector_shock?.totals.gdp_accounting_contribution_bln_uzs, 650)
+  })
+
+  it('round-trips a persisted PE trade shock run without macro run results', () => {
+    const saved = saveScenario({
+      ...buildScenarioInput('scenario-pe-trade', 'PE tariff cut'),
+      model_ids: ['pe-trade-shock'],
+      pe_trade_shock: {
+        model_type: 'pe_trade_shock',
+        title: 'PE tariff cut',
+        data_vintage: '2025',
+        source_artifact: 'mcp_server/data/pe_data.json',
+        saved_at: '2026-05-19T10:15:00Z',
+        request: {
+          tariff_cut_pct: 20,
+          section_id: 'XVII',
+          regime: 'all',
+          partner_name: 'all',
+        },
+        totals: {
+          import_base_usd: 1000,
+          trade_creation_usd: 120,
+          trade_diversion_usd: 30,
+          trade_effect_usd: 150,
+          welfare_usd: 20,
+          revenue_change_usd: -40,
+          impact_pct: 15,
+          partner_import_share: 1,
+        },
+        top_sections: [
+          {
+            section_id: 'XVII',
+            section_name: 'Vehicles, aircraft, vessels and transport equipment',
+            import_usd: 1000,
+            avg_mfn_rate: 14,
+            elasticity: 2.8,
+            trade_creation_usd: 120,
+            trade_diversion_usd: 30,
+            trade_effect_usd: 150,
+            welfare_usd: 20,
+            revenue_change_usd: -40,
+          },
+        ],
+        caveats: ['Direct tariff-incidence only.'],
+      },
+    })
+    const loaded = loadScenario(saved.scenario_id)
+
+    assert.ok(loaded)
+    assert.equal(isPeTradeShockRecord(loaded), true)
+    assert.equal(loaded.run_results, undefined)
+    assert.equal(loaded.pe_trade_shock?.totals.trade_effect_usd, 150)
   })
 
   it('strips inert legacy top-level governance fields when saving current metadata shape', () => {

@@ -2379,7 +2379,8 @@
       "possible_lenses": [
         "QPM",
         "DFM",
-        "I-O"
+        "I-O",
+        "PE"
       ],
       "source_event_ids": [
         "source-event-2026-05-13-proposals-to-improve-efficiency-of-tashkent-metro-reviewed",
@@ -2409,7 +2410,8 @@
       ],
       "possible_lenses": [
         "DFM",
-        "I-O"
+        "I-O",
+        "PE"
       ],
       "source_event_ids": [
         "source-event-2026-05-13-proposals-to-improve-efficiency-of-tashkent-metro-reviewed",
@@ -2757,15 +2759,15 @@
         "label": "Input-output model",
         "status": "possible_lens",
         "caveat": "Use for sector linkage and final-demand shock propagation only."
-      }
-    ],
-    "gated_lenses": [
+      },
       {
         "id": "PE",
         "label": "Partial-equilibrium trade",
-        "status": "planned_gated",
-        "caveat": "Not active in public outputs."
-      },
+        "status": "possible_lens",
+        "caveat": "Use for direct tariff-incidence and trade-flow framing only."
+      }
+    ],
+    "gated_lenses": [
       {
         "id": "CGE",
         "label": "Computable general equilibrium",
@@ -2803,11 +2805,6 @@
         ],
         "gated_lenses": [
           {
-            "model_id": "PE",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
             "model_id": "CGE",
             "status": "planned_gated",
             "caveat": "Not active in public outputs."
@@ -2841,14 +2838,14 @@
             "model_id": "I-O",
             "channel": "Sector-linkage and final-demand propagation context.",
             "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "PE",
+            "channel": "Direct tariff-incidence and trade-flow context.",
+            "caveat": "Possible lens only."
           }
         ],
         "gated_lenses": [
-          {
-            "model_id": "PE",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
           {
             "model_id": "CGE",
             "status": "planned_gated",
@@ -2887,11 +2884,6 @@
         ],
         "gated_lenses": [
           {
-            "model_id": "PE",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
             "model_id": "CGE",
             "status": "planned_gated",
             "caveat": "Not active in public outputs."
@@ -2925,14 +2917,14 @@
             "model_id": "I-O",
             "channel": "Sector-linkage and final-demand propagation context.",
             "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "PE",
+            "channel": "Direct tariff-incidence and trade-flow context.",
+            "caveat": "Possible lens only."
           }
         ],
         "gated_lenses": [
-          {
-            "model_id": "PE",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
           {
             "model_id": "CGE",
             "status": "planned_gated",
@@ -2967,14 +2959,14 @@
             "model_id": "I-O",
             "channel": "Sector-linkage and final-demand propagation context.",
             "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "PE",
+            "channel": "Direct tariff-incidence and trade-flow context.",
+            "caveat": "Possible lens only."
           }
         ],
         "gated_lenses": [
-          {
-            "model_id": "PE",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
           {
             "model_id": "CGE",
             "status": "planned_gated",
@@ -3009,14 +3001,14 @@
             "model_id": "I-O",
             "channel": "Sector-linkage and final-demand propagation context.",
             "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "PE",
+            "channel": "Direct tariff-incidence and trade-flow context.",
+            "caveat": "Possible lens only."
           }
         ],
         "gated_lenses": [
-          {
-            "model_id": "PE",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
           {
             "model_id": "CGE",
             "status": "planned_gated",
@@ -3049,11 +3041,6 @@
           }
         ],
         "gated_lenses": [
-          {
-            "model_id": "PE",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
           {
             "model_id": "CGE",
             "status": "planned_gated",
@@ -3088,14 +3075,14 @@
             "model_id": "I-O",
             "channel": "Sector-linkage and final-demand propagation context.",
             "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "PE",
+            "channel": "Direct tariff-incidence and trade-flow context.",
+            "caveat": "Possible lens only."
           }
         ],
         "gated_lenses": [
-          {
-            "model_id": "PE",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
           {
             "model_id": "CGE",
             "status": "planned_gated",
@@ -3129,11 +3116,6 @@
         ],
         "gated_lenses": [
           {
-            "model_id": "PE",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
             "model_id": "CGE",
             "status": "planned_gated",
             "caveat": "Not active in public outputs."
@@ -3165,11 +3147,6 @@
           }
         ],
         "gated_lenses": [
-          {
-            "model_id": "PE",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
           {
             "model_id": "CGE",
             "status": "planned_gated",
@@ -3204,14 +3181,14 @@
             "model_id": "I-O",
             "channel": "Sector-linkage and final-demand propagation context.",
             "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "PE",
+            "channel": "Direct tariff-incidence and trade-flow context.",
+            "caveat": "Possible lens only."
           }
         ],
         "gated_lenses": [
-          {
-            "model_id": "PE",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
           {
             "model_id": "CGE",
             "status": "planned_gated",
@@ -3246,14 +3223,14 @@
             "model_id": "I-O",
             "channel": "Sector-linkage and final-demand propagation context.",
             "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "PE",
+            "channel": "Direct tariff-incidence and trade-flow context.",
+            "caveat": "Possible lens only."
           }
         ],
         "gated_lenses": [
-          {
-            "model_id": "PE",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
           {
             "model_id": "CGE",
             "status": "planned_gated",

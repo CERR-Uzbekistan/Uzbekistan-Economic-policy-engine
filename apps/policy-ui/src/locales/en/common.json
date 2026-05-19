@@ -408,7 +408,8 @@
       "dataVintage": "data date",
       "lane": {
         "macroScenario": "Macro scenario",
-        "sectorLinkage": "Sector linkage"
+        "sectorLinkage": "Sector linkage",
+        "tradeIncidence": "Trade incidence"
       },
       "model": {
         "qpm": "QPM",
@@ -441,7 +442,7 @@
       "subtitle": {
         "macroQpm": "Macro scenario simulation",
         "ioSectorShock": "Sector linkage analysis",
-        "peTradeShock": "Trade incidence, not active",
+        "peTradeShock": "Direct tariff incidence",
         "cgeReformShock": "General equilibrium reform analysis, not active",
         "fppFiscalPath": "Fiscal consistency, not active",
         "savedRuns": "Saved analytical runs",
@@ -469,10 +470,10 @@
       },
       "pe": {
         "title": "PE Trade Shock",
-        "description": "Trade incidence analysis is not active yet.",
+        "description": "Direct tariff-incidence analysis from the PE public data file.",
         "items": {
-          "inputs": "Expected inputs: tariff or import-price shock, HS/product group, partner, elasticity set, and scenario label.",
-          "outputs": "Expected outputs: direct import/export quantity effects, price effects, affected product groups, and elasticity sensitivity.",
+          "inputs": "Inputs: tariff cut, HS section, partner or regime scope, and section elasticity set.",
+          "outputs": "Outputs: direct trade creation, trade diversion, welfare, revenue, and affected HS sections.",
           "boundary": "Boundary: direct trade-channel evidence only until linked with I-O, CGE, or synthesis analysis."
         }
       },
@@ -590,10 +591,72 @@
         "linkage": "Linkage"
       }
     },
+    "peShock": {
+      "title": "PE Trade Shock",
+      "description": "Run a tariff-cut scenario through the PE trade-flow data file and inspect direct HS-section effects.",
+      "loading": "Loading PE trade data...",
+      "unavailable": "PE trade data is unavailable. Existing Scenario Lab behavior is unchanged.",
+      "controlsAria": "PE trade shock controls",
+      "tariffCut": "Tariff cut",
+      "section": "HS section",
+      "regime": "Trade regime",
+      "partner": "Partner",
+      "partnerScope": "Partner scope",
+      "allSections": "All sections",
+      "allRegimes": "All regimes",
+      "allPartners": "All partners",
+      "boundary": "Direct tariff-incidence only. These values are not GDP, inflation, I-O, CGE, or fiscal-path effects.",
+      "partnerBoundary": "Partner and regime filters use import-share scaling because product-partner tariff matrices are not in the public data file.",
+      "topSections": "Top affected HS sections",
+      "caveats": "Source caveats",
+      "saveRun": "Save PE run",
+      "savedTitle": "PE {{cut}}% tariff cut · {{section}}",
+      "savedDescription": "Saved PE trade-shock run for direct tariff-incidence analysis.",
+      "sourceLabelNote": "HS section labels use the original source names and are not translated here. Source: {{source}}.",
+      "units": {
+        "usdThousand": "USD th."
+      },
+      "claimLabels": {
+        "direct": "Direct partial-equilibrium trade effect",
+        "welfare": "Direct consumer-welfare estimate",
+        "revenue": "Tariff-revenue accounting estimate"
+      },
+      "whatThisMeans": {
+        "title": "What this means",
+        "body": "This tariff cut produces {{tradeEffect}} of direct trade effect, {{welfare}} of welfare effect, and {{revenue}} of tariff-revenue change before macro or sector-propagation effects."
+      },
+      "summary": {
+        "title": "Run summary",
+        "cut": "Tariff cut",
+        "section": "Section",
+        "partnerScope": "Partner scope",
+        "dataVintage": "Data date"
+      },
+      "kpis": {
+        "tradeEffect": "Trade effect",
+        "tradeCreation": "Trade creation",
+        "welfare": "Welfare",
+        "revenue": "Revenue change",
+        "impactPct": "Import-base effect"
+      },
+      "meta": {
+        "sections": "{{count}} HS sections",
+        "partners": "{{count}} partners"
+      },
+      "table": {
+        "rank": "Rank",
+        "section": "Section",
+        "importBase": "Import base",
+        "tradeEffect": "Trade effect",
+        "welfare": "Welfare",
+        "revenue": "Revenue",
+        "elasticity": "Elasticity"
+      }
+    },
     "savedRuns": {
       "title": "Saved Runs",
       "description": "{{count}} saved run(s) are available in this browser session.",
-      "empty": "Saved macro and I-O runs will appear here after you save them.",
+      "empty": "Saved macro, I-O, and PE runs will appear here after you save them.",
       "filtersAria": "Saved run filters",
       "openInComparison": "Open in Comparison",
       "ioBoundary": "Sector transmission evidence only; this is not a macro forecast or general-equilibrium result.",
@@ -601,15 +664,18 @@
       "filters": {
         "all": "All",
         "macro_qpm": "Macro/QPM",
-        "io": "I-O"
+        "io": "I-O",
+        "pe": "PE"
       },
       "filteredEmpty": {
         "all": "No saved runs match this filter.",
         "macro_qpm": "No saved Macro/QPM runs yet.",
-        "io": "No saved I-O runs yet."
+        "io": "No saved I-O runs yet.",
+        "pe": "No saved PE runs yet."
       },
       "type": {
         "io": "I-O sector shock",
+        "pe": "PE trade shock",
         "macro": "Macro/QPM"
       },
       "fields": {
@@ -827,6 +893,35 @@
         "valueAdded": "Value added",
         "gdpAccounting": "GDP accounting",
         "employment": "Employment"
+      }
+    },
+    "savedPe": {
+      "title": "Trade evidence from saved PE runs",
+      "separationNote": "Not part of the macro scenario delta table.",
+      "description": "{{count}} saved run(s) are shown as direct tariff-incidence evidence in a separate section.",
+      "description_one": "{{count}} saved run is shown as direct tariff-incidence evidence in a separate section.",
+      "description_few": "{{count}} saved runs are shown as direct tariff-incidence evidence in a separate section.",
+      "description_many": "{{count}} saved runs are shown as direct tariff-incidence evidence in a separate section.",
+      "description_other": "{{count}} saved runs are shown as direct tariff-incidence evidence in a separate section.",
+      "emptyWithAvailable": "{{count}} saved PE run(s) are available. Add them to show trade-incidence blocks below the macro table.",
+      "emptyWithAvailable_one": "{{count}} saved PE run is available. Add it to show trade-incidence blocks below the macro table.",
+      "emptyWithAvailable_few": "{{count}} saved PE runs are available. Add them to show trade-incidence blocks below the macro table.",
+      "emptyWithAvailable_many": "{{count}} saved PE runs are available. Add them to show trade-incidence blocks below the macro table.",
+      "emptyWithAvailable_other": "{{count}} saved PE runs are available. Add them to show trade-incidence blocks below the macro table.",
+      "addAction": "Add saved run",
+      "type": "PE run",
+      "topSections": "Top HS sections",
+      "boundary": "Boundary: PE results are direct tariff-incidence estimates, not macro, I-O, or CGE effects.",
+      "claimLabels": {
+        "direct": "Direct partial-equilibrium trade effect",
+        "welfare": "Direct consumer-welfare estimate",
+        "revenue": "Tariff-revenue accounting estimate"
+      },
+      "metrics": {
+        "tradeEffect": "Trade effect",
+        "welfare": "Welfare",
+        "revenue": "Revenue",
+        "importShare": "Import share"
       }
     },
     "chart": {
@@ -1292,9 +1387,9 @@
         "modelsLabel": "Models",
         "modelsLive": "{{count}} live",
         "bridgeBackedLabel": "Live data models",
-        "bridgeBackedModels": "QPM, DFM, I-O",
+        "bridgeBackedModels": "QPM, DFM, PE, I-O",
         "plannedLimitedLabel": "Not active",
-        "plannedLimitedModels": "PE, CGE, FPP",
+        "plannedLimitedModels": "CGE, FPP",
         "lastAuditLabel": "Last calibration audit",
         "openIssuesLabel": "Open production gates"
       }

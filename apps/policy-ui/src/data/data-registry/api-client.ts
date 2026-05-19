@@ -126,7 +126,7 @@ export function validateRegistryApiResponse(payload: unknown): RegistryApiRespon
 
   const artifacts = payload.artifacts.map(validateArtifact)
   const ids = new Set(artifacts.map((artifact) => artifact.id))
-  for (const requiredId of ['qpm', 'dfm', 'io'] as const) {
+  for (const requiredId of ['qpm', 'dfm', 'io', 'pe'] as const) {
     if (!ids.has(requiredId)) {
       throw new RegistryApiError(`Registry API response is missing ${requiredId} metadata.`)
     }
@@ -145,7 +145,7 @@ function validateArtifact(value: unknown): RegistryApiArtifact {
   }
 
   const id = value.id
-  if (id !== 'qpm' && id !== 'dfm' && id !== 'io') {
+  if (id !== 'qpm' && id !== 'dfm' && id !== 'io' && id !== 'pe') {
     throw new RegistryApiError('Registry API artifact has an unsupported id.')
   }
 

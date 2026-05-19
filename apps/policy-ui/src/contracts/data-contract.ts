@@ -627,6 +627,72 @@ export type ScenarioLabIoShockResult = {
   caveats: string[]
 }
 
+export type ScenarioLabPeSectionOption = {
+  id: string
+  name: string
+  avg_mfn_rate: number
+  elasticity: number
+}
+
+export type ScenarioLabPePartnerOption = {
+  name: string
+  regime: string
+  import_share: number
+}
+
+export type ScenarioLabPeAnalyticsWorkspace = {
+  source_artifact: string
+  data_vintage: string
+  exported_at: string
+  framework: string
+  units: string
+  base_year: number
+  default_tariff_cut_pct: number
+  section_count: number
+  chapter_count: number
+  partner_count: number
+  sections: ScenarioLabPeSectionOption[]
+  partners: ScenarioLabPePartnerOption[]
+  regimes: string[]
+  caveats: string[]
+}
+
+export type ScenarioLabPeShockRequest = {
+  tariff_cut_pct: number
+  section_id: string
+  regime: string
+  partner_name: string
+}
+
+export type ScenarioLabPeSectionEffect = {
+  section_id: string
+  section_name: string
+  import_usd: number
+  avg_mfn_rate: number
+  elasticity: number
+  trade_creation_usd: number
+  trade_diversion_usd: number
+  trade_effect_usd: number
+  welfare_usd: number
+  revenue_change_usd: number
+}
+
+export type ScenarioLabPeShockResult = {
+  request: ScenarioLabPeShockRequest
+  totals: {
+    import_base_usd: number
+    trade_creation_usd: number
+    trade_diversion_usd: number
+    trade_effect_usd: number
+    welfare_usd: number
+    revenue_change_usd: number
+    impact_pct: number
+    partner_import_share: number
+  }
+  top_sections: ScenarioLabPeSectionEffect[]
+  caveats: string[]
+}
+
 export type ScenarioResult = {
   scenario: Scenario
   headline_metrics: HeadlineMetric[]
@@ -701,8 +767,8 @@ export type ResearchBrief = {
 
 export type KnowledgeHubPreviewCitationPermission = 'internal_only'
 export type KnowledgeHubPolicyBriefState = 'internal_preview'
-export type KnowledgeHubActiveModelLensId = 'QPM' | 'DFM' | 'I-O'
-export type KnowledgeHubGatedModelLensId = 'PE' | 'CGE' | 'FPP' | 'HFI' | 'Synthesis'
+export type KnowledgeHubActiveModelLensId = 'QPM' | 'DFM' | 'I-O' | 'PE'
+export type KnowledgeHubGatedModelLensId = 'CGE' | 'FPP' | 'HFI' | 'Synthesis'
 export type KnowledgeHubContentLanguage = 'en' | 'ru' | 'uz'
 export type KnowledgeHubLocalizedText = Partial<Record<KnowledgeHubContentLanguage, string>>
 export type KnowledgeHubLocalizedList = Partial<Record<KnowledgeHubContentLanguage, string[]>>

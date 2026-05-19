@@ -1,6 +1,10 @@
 import type { ComparisonWorkspace } from '../contracts/data-contract.js'
 import { toComparisonScenario } from './scenarioComparisonAdapter.js'
-import { isIoSectorShockRecord, type SavedScenarioRecord } from './scenarioStore.js'
+import {
+  isIoSectorShockRecord,
+  isPeTradeShockRecord,
+  type SavedScenarioRecord,
+} from './scenarioStore.js'
 
 export const COMPARISON_SLOT_LIMIT = 3
 
@@ -19,7 +23,11 @@ export function mergeSavedScenariosIntoWorkspace(
   )
 
   for (const savedScenario of savedScenarios) {
-    if (addedIds.has(savedScenario.scenario_id) && !isIoSectorShockRecord(savedScenario)) {
+    if (
+      addedIds.has(savedScenario.scenario_id) &&
+      !isIoSectorShockRecord(savedScenario) &&
+      !isPeTradeShockRecord(savedScenario)
+    ) {
       const mappedScenario = toComparisonScenario(savedScenario)
       scenariosById.set(mappedScenario.scenario_id, mappedScenario)
     }

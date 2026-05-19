@@ -13,6 +13,12 @@ import {
 } from '../bridge/io-client.js'
 import type { IoBridgePayload } from '../bridge/io-types.js'
 import {
+  PeTransportError,
+  PeValidationError,
+  fetchPeBridgePayload,
+} from '../bridge/pe-client.js'
+import type { PeBridgePayload } from '../bridge/pe-types.js'
+import {
   QpmTransportError,
   QpmValidationError,
   fetchQpmBridgePayload,
@@ -34,8 +40,8 @@ import {
 export type RegistryStatus = 'valid' | 'warning' | 'failed' | 'missing' | 'unavailable' | 'planned'
 export type RegistryRecordKind = 'source_series' | 'model_input' | 'bridge_output' | 'planned_artifact'
 export type RegistryFilter = 'all' | 'active' | 'warnings' | 'planned' | 'missingUnavailable'
-export type ImplementedModelId = 'overview' | 'qpm' | 'dfm' | 'io'
-export type PlannedModelId = 'hfi' | 'pe' | 'cge' | 'fpp'
+export type ImplementedModelId = 'overview' | 'qpm' | 'dfm' | 'io' | 'pe'
+export type PlannedModelId = 'hfi' | 'cge' | 'fpp'
 export type RegistryModelId = ImplementedModelId | PlannedModelId
 
 export type RegistryIssue = {
@@ -121,7 +127,7 @@ export const REGISTRY_FILTERS: RegistryFilter[] = [
 ]
 
 type LoadedArtifact =
-  | { status: 'loaded'; payload: QpmBridgePayload | DfmBridgePayload | IoBridgePayload | OverviewArtifact }
+  | { status: 'loaded'; payload: QpmBridgePayload | DfmBridgePayload | IoBridgePayload | PeBridgePayload | OverviewArtifact }
   | { status: 'failed' | 'missing' | 'unavailable'; detail: string; issues: RegistryIssue[] }
 
 const DASH = 'Not carried in public artifact'
@@ -143,18 +149,20 @@ export function getInitialDataRegistry(): DataRegistry {
     qpm: { status: 'unavailable', detail: 'Loading /data/qpm.json.', issues: [] },
     dfm: { status: 'unavailable', detail: 'Loading /data/dfm.json.', issues: [] },
     io: { status: 'unavailable', detail: 'Loading /data/io.json.', issues: [] },
+    pe: { status: 'unavailable', detail: 'Loading /data/pe.json.', issues: [] },
     now: new Date(),
     metadataSource: 'static-fallback',
   })
 }
 
 export async function loadDataRegistry(fetchImpl: FetchLike = fetch, now = new Date()): Promise<DataRegistry> {
-  const [apiMetadata, overview, qpm, dfm, io] = await Promise.all([
+  const [apiMetadata, overview, qpm, dfm, io, pe] = await Promise.all([
     loadRegistryApiMetadata(fetchImpl),
     loadOverviewArtifact(fetchImpl),
     loadQpmArtifact(fetchImpl),
     loadDfmArtifact(fetchImpl),
     loadIoArtifact(fetchImpl),
+    loadPeArtifact(fetchImpl),
   ])
 
   return buildDataRegistry({
@@ -162,6 +170,7 @@ export async function loadDataRegistry(fetchImpl: FetchLike = fetch, now = new D
     qpm,
     dfm,
     io,
+    pe,
     now,
     apiMetadata,
     metadataSource: apiMetadata ? 'api' : 'static-fallback',
@@ -173,6 +182,7 @@ export function buildDataRegistry(options: {
   qpm: LoadedArtifact
   dfm: LoadedArtifact
   io: LoadedArtifact
+  pe: LoadedArtifact
   now: Date
   apiMetadata?: RegistryApiArtifact[] | null
   metadataSource?: DataRegistry['metadataSource']
@@ -186,6 +196,7 @@ export function buildDataRegistry(options: {
     buildQpmArtifact(options.qpm),
     buildDfmArtifact(options.dfm, options.now),
     buildIoArtifact(options.io),
+    buildPeArtifact(options.pe),
   ], options.apiMetadata ?? null)
 
   return assembleDataRegistry({
@@ -382,11 +393,20 @@ async function loadIoArtifact(fetchImpl: FetchLike): Promise<LoadedArtifact> {
   }
 }
 
+async function loadPeArtifact(fetchImpl: FetchLike): Promise<LoadedArtifact> {
+  try {
+    return { status: 'loaded', payload: await fetchPeBridgePayload(fetchImpl) }
+  } catch (error) {
+    return mapBridgeError(error, 'PE')
+  }
+}
+
 function mapBridgeError(error: unknown, label: string): LoadedArtifact {
   if (
     error instanceof QpmValidationError ||
     error instanceof DfmValidationError ||
-    error instanceof IoValidationError
+    error instanceof IoValidationError ||
+    error instanceof PeValidationError
   ) {
     return {
       status: 'failed',
@@ -402,7 +422,8 @@ function mapBridgeError(error: unknown, label: string): LoadedArtifact {
   if (
     error instanceof QpmTransportError ||
     error instanceof DfmTransportError ||
-    error instanceof IoTransportError
+    error instanceof IoTransportError ||
+    error instanceof PeTransportError
   ) {
     const isMissing = error.kind === 'http' && error.status === 404
     return {
@@ -620,6 +641,49 @@ function buildIoArtifact(result: LoadedArtifact): RegistryArtifact {
   }
 }
 
+function buildPeArtifact(result: LoadedArtifact): RegistryArtifact {
+  const base = createArtifactBase('pe', '/data/pe.json', 'PE trade shock')
+  if (result.status !== 'loaded') return artifactFromFailure(base, result)
+  const payload = result.payload as PeBridgePayload
+  const highestSeverity = getHighestCaveatSeverity(payload.caveats)
+
+  return {
+    ...base,
+    status: highestSeverity === 'critical' || highestSeverity === 'warning' ? 'warning' : 'valid',
+    statusDetail: 'File loaded and passed format checks; this is not economic or model validation.',
+    owner: 'CERR trade policy team',
+    sourceSystem: payload.metadata.source,
+    dataVintage: payload.attribution.data_version,
+    exportTimestamp: payload.metadata.exported_at,
+    sourceArtifact: payload.metadata.source_artifact,
+    sourceVintage: `Base-year vintage ${payload.metadata.base_year}`,
+    solverVersion: payload.metadata.solver_version,
+    caveatCount: payload.caveats.length,
+    highestCaveatSeverity: highestSeverity,
+    validationScope:
+      'Frontend guard checks PE attribution, metadata counts, HS sections, chapters, partners, section elasticities, baseline effects, and caveats.',
+    freshnessRule:
+      'PE 2025 WITS-SMART extract is treated as a structural tariff-flow vintage, not automatically stale because the source table is vintage-specific.',
+    caveatsSummary: summarizeCaveats(payload.caveats),
+    sourceExportExplanation:
+      'Source vintage is the trade-flow/tariff base year; artifact export is the deterministic public JSON build used by the app.',
+    facts: [
+      { label: 'HS sections', value: String(payload.metadata.hs_sections) },
+      { label: 'HS chapters', value: String(payload.metadata.hs_chapters) },
+      { label: 'Partners', value: String(payload.metadata.partners) },
+      { label: 'Default tariff cut', value: `${payload.metadata.default_tariff_cut_pct}%` },
+      { label: 'Elasticity source', value: payload.metadata.elasticity_source },
+    ],
+    consumers: [
+      CONSUMER_LINKS.scenarioLab,
+      CONSUMER_LINKS.comparison,
+      CONSUMER_LINKS.modelExplorer,
+      CONSUMER_LINKS.dataRegistry,
+    ],
+    issues: caveatsToIssues(payload.caveats),
+  }
+}
+
 function createArtifactBase(
   id: ImplementedModelId,
   artifactPath: string,
@@ -682,24 +746,6 @@ function buildPlannedRows(): RegistryRow[] {
       modelExplorerHref: '/model-explorer',
     },
     {
-      id: 'pe',
-      registryType: 'planned_artifact',
-      label: 'PE Trade Shock',
-      domain: 'PE trade flows',
-      status: 'planned',
-      dataVintage: 'Planned',
-      exportTimestamp: 'No Sprint 4 foundation artifact by design',
-      source: 'No public PE input contract yet',
-      owner: 'Owner to be assigned during PE contract work',
-      sourceSystem: 'Planned trade-flow source inventory',
-      notes: 'Planned/disabled model family; absence is not a missing implemented artifact.',
-      validationScope: 'No PE guard scope exists because no trade-flow artifact contract is active.',
-      freshnessRule: 'Freshness unavailable until a PE source contract exists.',
-      caveats: 'Planned/disabled; no PE computation or data contract is active.',
-      sourceExportExplanation: 'No source vintage or artifact export exists for PE in this frontend foundation.',
-      modelExplorerHref: '/model-explorer',
-    },
-    {
       id: 'cge',
       registryType: 'planned_artifact',
       label: 'CGE Reform Shock',
@@ -755,6 +801,8 @@ function toDataSourceRow(artifact: RegistryArtifact): RegistryRow {
         ? 'Planned operational source artifact for Overview headline metrics; static fallback remains active when missing or invalid.'
         : artifact.id === 'io'
         ? 'Structural base-year source table; not automatically stale because the official table is vintage-specific.'
+        : artifact.id === 'pe'
+        ? 'Trade-flow and tariff base-year source table; direct tariff-incidence outputs are kept separate from macro and I-O effects.'
         : artifact.statusDetail,
     validationScope: artifact.validationScope,
     freshnessRule: artifact.freshnessRule,
@@ -783,6 +831,8 @@ function toModelInputRow(artifact: RegistryArtifact): RegistryRow {
         ? 'Source vintage, artifact export, and frontend validation check are separate; no live scheduler status is claimed.'
         : artifact.id === 'io'
           ? 'Consumed as sector transmission analytics; guard checks validate artifact shape, not model economics.'
+          : artifact.id === 'pe'
+            ? 'Consumed as direct tariff-incidence analytics; guard checks validate artifact shape and section elasticities, not trade-policy economics.'
           : 'Public bridge exists; guard checks validate artifact shape, not macro-model calibration.',
     validationScope: artifact.validationScope,
     freshnessRule: artifact.freshnessRule,
@@ -805,14 +855,16 @@ function getArtifactSourceDomain(id: ImplementedModelId): string {
   if (id === 'overview') return 'Operational overview metrics'
   if (id === 'qpm') return 'Macro/QPM inputs'
   if (id === 'dfm') return 'DFM indicators'
-  return 'I-O table'
+  if (id === 'io') return 'I-O table'
+  return 'PE trade flows'
 }
 
 function getArtifactInputLabel(id: ImplementedModelId): string {
   if (id === 'overview') return 'Overview operational figures'
   if (id === 'qpm') return 'QPM / Macro Scenario'
   if (id === 'dfm') return 'DFM Nowcast'
-  return 'I-O Sector Shock'
+  if (id === 'io') return 'I-O Sector Shock'
+  return 'PE Trade Shock'
 }
 
 function toBridgeOutputRow(artifact: RegistryArtifact): RegistryRow {
@@ -862,6 +914,8 @@ function toVintageRow(artifact: RegistryArtifact): RegistryRow {
         ? 'Shows JSON export timestamp and upstream source-artifact refit timestamp separately.'
         : artifact.id === 'io'
           ? 'Source vintage is the base-year table; export timestamp is the deterministic public JSON build.'
+        : artifact.id === 'pe'
+          ? 'Source vintage is the trade-flow/tariff base year; export timestamp is the deterministic public JSON build.'
         : 'Uses ModelAttribution.data_version and artifact export timestamp.',
     validationScope: artifact.validationScope,
     freshnessRule: artifact.freshnessRule,

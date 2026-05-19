@@ -347,14 +347,14 @@ describe('Knowledge Hub page', () => {
     const activeIds = artifact.model_impact_map.active_lenses.map((lens: { id: string; status: string }) => `${lens.id}:${lens.status}`)
     const gatedIds = artifact.model_impact_map.gated_lenses.map((lens: { id: string; status: string }) => `${lens.id}:${lens.status}`)
 
-    assert.deepEqual(activeIds.sort(), ['DFM:possible_lens', 'I-O:possible_lens', 'QPM:possible_lens'].sort())
+    assert.deepEqual(activeIds.sort(), ['DFM:possible_lens', 'I-O:possible_lens', 'PE:possible_lens', 'QPM:possible_lens'].sort())
     assert.deepEqual(
       gatedIds.sort(),
-      ['CGE:planned_gated', 'FPP:planned_gated', 'HFI:planned_gated', 'PE:planned_gated', 'Synthesis:planned_gated'].sort(),
+      ['CGE:planned_gated', 'FPP:planned_gated', 'HFI:planned_gated', 'Synthesis:planned_gated'].sort(),
     )
     assert.ok(
       artifact.model_impact_map.package_links.every((link: { active_lenses: { model_id: string }[] }) =>
-        link.active_lenses.every((lens) => ['QPM', 'DFM', 'I-O'].includes(lens.model_id)),
+        link.active_lenses.every((lens) => ['QPM', 'DFM', 'I-O', 'PE'].includes(lens.model_id)),
       ),
     )
     assert.match(contentViewSource, /model-chip--active/)

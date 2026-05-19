@@ -30,6 +30,12 @@ const ACTIVE_SCENARIO_LAB_MODEL_TABS: ScenarioLabModelTabDefinition[] = [
     statusKey: 'scenarioLab.modelTabs.status.bridgePilot',
   },
   {
+    id: 'pe_trade_shock',
+    labelKey: 'scenarioLab.modelTabs.peTradeShock',
+    subtitleKey: 'scenarioLab.modelTabs.subtitle.peTradeShock',
+    statusKey: 'scenarioLab.modelTabs.status.bridgePilot',
+  },
+  {
     id: 'saved_runs',
     labelKey: 'scenarioLab.modelTabs.savedRuns',
     subtitleKey: 'scenarioLab.modelTabs.subtitle.savedRuns',
@@ -38,12 +44,6 @@ const ACTIVE_SCENARIO_LAB_MODEL_TABS: ScenarioLabModelTabDefinition[] = [
 ]
 
 const PLANNED_SCENARIO_LAB_MODEL_LANES: ScenarioLabModelTabDefinition[] = [
-  {
-    id: 'pe_trade_shock',
-    labelKey: 'scenarioLab.modelTabs.peTradeShock',
-    subtitleKey: 'scenarioLab.modelTabs.subtitle.peTradeShock',
-    statusKey: 'scenarioLab.modelTabs.status.planned',
-  },
   {
     id: 'cge_reform_shock',
     labelKey: 'scenarioLab.modelTabs.cgeReformShock',

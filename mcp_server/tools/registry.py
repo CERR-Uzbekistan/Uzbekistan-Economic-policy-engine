@@ -438,7 +438,11 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
         """Simulate WTO tariff cut trade impact on Uzbekistan using WITS-SMART model.
 
         Calculates trade creation, trade diversion, consumer welfare, and
-        government revenue effects of tariff reductions.
+        government revenue effects of tariff reductions. The legacy PE source
+        stores 20% tariff-cut effects at uniform elasticity 1.27; this tool
+        applies documented HS-section elasticity correction factors before
+        scaling by tariff_cut_pct. Partner/regime filters use import-share
+        scaling and should not be read as a product-partner tariff schedule rerun.
 
         Args:
             tariff_cut_pct: Percentage reduction in tariffs (5 to 100).

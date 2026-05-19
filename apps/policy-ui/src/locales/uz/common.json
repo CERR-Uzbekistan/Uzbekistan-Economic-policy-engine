@@ -408,7 +408,8 @@
       "dataVintage": "ma'lumot sanasi",
       "lane": {
         "macroScenario": "Makro stsenariy",
-        "sectorLinkage": "Sektor bog'lanishi"
+        "sectorLinkage": "Sektor bog'lanishi",
+        "tradeIncidence": "Savdo ta'siri"
       },
       "model": {
         "qpm": "QPM",
@@ -441,7 +442,7 @@
       "subtitle": {
         "macroQpm": "Makro stsenariy simulyatsiyasi",
         "ioSectorShock": "Sektor bog'lanishi tahlili",
-        "peTradeShock": "Savdo ta'siri, faol emas",
+        "peTradeShock": "Bevosita tarif ta'siri",
         "cgeReformShock": "Umumiy muvozanat islohot tahlili, faol emas",
         "fppFiscalPath": "Fiskal moslik, faol emas",
         "savedRuns": "Saqlangan analitik ishlar",
@@ -469,10 +470,10 @@
       },
       "pe": {
         "title": "PE savdo shoki",
-        "description": "Savdo ta'siri tahlili hozircha faol emas.",
+        "description": "Ochiq PE faylidan bevosita tarif ta'siri tahlili.",
         "items": {
-          "inputs": "Kutiladigan kirishlar: tarif yoki import narxi shoki, HS/mahsulot guruhi, hamkor, elastiklik to'plami va stsenariy yorlig'i.",
-          "outputs": "Kutiladigan chiqishlar: bevosita import/eksport miqdor ta'sirlari, narxlar, ta'sirlangan mahsulot guruhlari va elastiklik sezgirligi.",
+          "inputs": "Kirishlar: tarif pasayishi, HS bo'limi, hamkor yoki rejim va sektor elastikliklari.",
+          "outputs": "Chiqishlar: savdo yaratilishi, savdo og'ishi, farovonlik, tushum va ta'sirlangan HS bo'limlari.",
           "boundary": "Chegara: I-O, CGE yoki sintez bilan bog'lanmaguncha faqat bevosita savdo kanali dalillari."
         }
       },
@@ -590,10 +591,72 @@
         "linkage": "Bog'lanish"
       }
     },
+    "peShock": {
+      "title": "PE savdo shoki",
+      "description": "Tarif pasayishi stsenariysini PE savdo oqimlari fayli orqali ishga tushiring va HS bo'limlari bo'yicha bevosita ta'sirlarni ko'ring.",
+      "loading": "PE savdo ma'lumotlari yuklanmoqda...",
+      "unavailable": "PE savdo ma'lumotlari mavjud emas. Scenario Lab'ning mavjud ishlashi o'zgarmaydi.",
+      "controlsAria": "PE savdo shoki boshqaruvlari",
+      "tariffCut": "Tarif pasayishi",
+      "section": "HS bo'limi",
+      "regime": "Savdo rejimi",
+      "partner": "Hamkor",
+      "partnerScope": "Hamkor doirasi",
+      "allSections": "Barcha bo'limlar",
+      "allRegimes": "Barcha rejimlar",
+      "allPartners": "Barcha hamkorlar",
+      "boundary": "Faqat bevosita tarif ta'siri. Bu YaIM, inflyatsiya, I-O, CGE yoki fiskal trayektoriya effekti emas.",
+      "partnerBoundary": "Hamkor va rejim filtrlari import ulushi bo'yicha masshtablanadi, chunki mahsulot-hamkor tarif matritsalari ochiq faylda yo'q.",
+      "topSections": "Eng ko'p ta'sirlangan HS bo'limlari",
+      "caveats": "Manba cheklovlari",
+      "saveRun": "PE ishini saqlash",
+      "savedTitle": "PE {{cut}}% tarif pasayishi · {{section}}",
+      "savedDescription": "Bevosita tarif ta'siri tahlili uchun saqlangan PE ishi.",
+      "sourceLabelNote": "HS bo'lim nomlari asl manba nomlarida ko'rsatiladi va bu yerda tarjima qilinmaydi. Manba: {{source}}.",
+      "units": {
+        "usdThousand": "ming USD"
+      },
+      "claimLabels": {
+        "direct": "Bevosita qisman muvozanat savdo effekti",
+        "welfare": "Iste'molchi farovonligi bo'yicha bevosita baho",
+        "revenue": "Tarif tushumi hisob-kitob bahosi"
+      },
+      "whatThisMeans": {
+        "title": "Bu nimani anglatadi",
+        "body": "Bu tarif pasayishi makro yoki sektor uzatishdan oldin {{tradeEffect}} bevosita savdo effekti, {{welfare}} farovonlik effekti va {{revenue}} tarif tushumi o'zgarishini beradi."
+      },
+      "summary": {
+        "title": "Ish qisqacha xulosasi",
+        "cut": "Tarif pasayishi",
+        "section": "Bo'lim",
+        "partnerScope": "Hamkor doirasi",
+        "dataVintage": "Ma'lumot sanasi"
+      },
+      "kpis": {
+        "tradeEffect": "Savdo effekti",
+        "tradeCreation": "Savdo yaratilishi",
+        "welfare": "Farovonlik",
+        "revenue": "Tushum o'zgarishi",
+        "impactPct": "Import bazasiga ta'sir"
+      },
+      "meta": {
+        "sections": "{{count}} HS bo'limi",
+        "partners": "{{count}} hamkor"
+      },
+      "table": {
+        "rank": "Rang",
+        "section": "Bo'lim",
+        "importBase": "Import bazasi",
+        "tradeEffect": "Savdo effekti",
+        "welfare": "Farovonlik",
+        "revenue": "Tushum",
+        "elasticity": "Elastiklik"
+      }
+    },
     "savedRuns": {
       "title": "Saqlangan ishlar",
       "description": "Ushbu brauzer sessiyasida {{count}} ta saqlangan ish mavjud.",
-      "empty": "Saqlangan makro va I-O ishlari saqlagandan keyin shu yerda ko'rinadi.",
+      "empty": "Saqlangan makro, I-O va PE ishlari saqlagandan keyin shu yerda ko'rinadi.",
       "filtersAria": "Saqlangan ish filtrlari",
       "openInComparison": "Comparison'da ochish",
       "ioBoundary": "Faqat sektor uzatish dalili; bu makroprognoz yoki umumiy muvozanat natijasi emas.",
@@ -601,15 +664,18 @@
       "filters": {
         "all": "Hammasi",
         "macro_qpm": "Makro/QPM",
-        "io": "I-O"
+        "io": "I-O",
+        "pe": "PE"
       },
       "filteredEmpty": {
         "all": "Bu filtr bo'yicha saqlangan ish yo'q.",
         "macro_qpm": "Hali saqlangan Macro/QPM ishi yo'q.",
-        "io": "Hali saqlangan I-O ishi yo'q."
+        "io": "Hali saqlangan I-O ishi yo'q.",
+        "pe": "Hali saqlangan PE ishi yo'q."
       },
       "type": {
         "io": "I-O sektor shoki",
+        "pe": "PE savdo shoki",
         "macro": "Makro/QPM"
       },
       "fields": {
@@ -827,6 +893,35 @@
         "valueAdded": "Qo'shilgan qiymat",
         "gdpAccounting": "YaIM hisobi",
         "employment": "Bandlik"
+      }
+    },
+    "savedPe": {
+      "title": "Saqlangan PE ishlaridan savdo dalillari",
+      "separationNote": "Makro stsenariy delta jadvalining bir qismi emas.",
+      "description": "{{count}} ta saqlangan ish alohida bo'limda bevosita tarif ta'siri dalili sifatida ko'rsatiladi.",
+      "description_one": "{{count}} ta saqlangan ish alohida bo'limda bevosita tarif ta'siri dalili sifatida ko'rsatiladi.",
+      "description_few": "{{count}} ta saqlangan ish alohida bo'limda bevosita tarif ta'siri dalili sifatida ko'rsatiladi.",
+      "description_many": "{{count}} ta saqlangan ish alohida bo'limda bevosita tarif ta'siri dalili sifatida ko'rsatiladi.",
+      "description_other": "{{count}} ta saqlangan ish alohida bo'limda bevosita tarif ta'siri dalili sifatida ko'rsatiladi.",
+      "emptyWithAvailable": "{{count}} ta saqlangan PE ishi mavjud. Ularni qo'shsangiz, makro jadval ostida savdo bloklari ko'rinadi.",
+      "emptyWithAvailable_one": "{{count}} ta saqlangan PE ishi mavjud. Uni qo'shsangiz, makro jadval ostida savdo bloki ko'rinadi.",
+      "emptyWithAvailable_few": "{{count}} ta saqlangan PE ishi mavjud. Ularni qo'shsangiz, makro jadval ostida savdo bloklari ko'rinadi.",
+      "emptyWithAvailable_many": "{{count}} ta saqlangan PE ishi mavjud. Ularni qo'shsangiz, makro jadval ostida savdo bloklari ko'rinadi.",
+      "emptyWithAvailable_other": "{{count}} ta saqlangan PE ishi mavjud. Ularni qo'shsangiz, makro jadval ostida savdo bloklari ko'rinadi.",
+      "addAction": "Saqlangan ishni qo'shish",
+      "type": "PE ishi",
+      "topSections": "Top HS bo'limlari",
+      "boundary": "Chegara: PE natijalari bevosita tarif ta'siri baholari, makro, I-O yoki CGE effekti emas.",
+      "claimLabels": {
+        "direct": "Bevosita qisman muvozanat savdo effekti",
+        "welfare": "Iste'molchi farovonligi bo'yicha bevosita baho",
+        "revenue": "Tarif tushumi hisob-kitob bahosi"
+      },
+      "metrics": {
+        "tradeEffect": "Savdo effekti",
+        "welfare": "Farovonlik",
+        "revenue": "Tushum",
+        "importShare": "Import ulushi"
       }
     },
     "chart": {
@@ -1292,9 +1387,9 @@
         "modelsLabel": "Modellar",
         "modelsLive": "{{count}} faol",
         "bridgeBackedLabel": "Joriy ma'lumotli modellar",
-        "bridgeBackedModels": "QPM, DFM, I-O",
+        "bridgeBackedModels": "QPM, DFM, PE, I-O",
         "plannedLimitedLabel": "Faol emas",
-        "plannedLimitedModels": "PE, CGE, FPP",
+        "plannedLimitedModels": "CGE, FPP",
         "lastAuditLabel": "Oxirgi kalibrlash auditi",
         "openIssuesLabel": "Ochiq ishlab chiqarish shartlari"
       }

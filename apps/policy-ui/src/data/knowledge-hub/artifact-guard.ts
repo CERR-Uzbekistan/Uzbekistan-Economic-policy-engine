@@ -236,9 +236,8 @@ const REFORM_MILESTONE_EVENT_TYPE_VALUES: ReformMilestoneEventType[] = [
 
 const REFORM_SOURCE_CONFIDENCE_VALUES: ReformSourceConfidence[] = ['high', 'medium', 'low']
 
-const KNOWLEDGE_HUB_ACTIVE_MODEL_LENS_VALUES: KnowledgeHubActiveModelLensId[] = ['QPM', 'DFM', 'I-O']
+const KNOWLEDGE_HUB_ACTIVE_MODEL_LENS_VALUES: KnowledgeHubActiveModelLensId[] = ['QPM', 'DFM', 'I-O', 'PE']
 const KNOWLEDGE_HUB_GATED_MODEL_LENS_VALUES: KnowledgeHubGatedModelLensId[] = [
-  'PE',
   'CGE',
   'FPP',
   'HFI',
@@ -1088,7 +1087,7 @@ function validateModelImpactMap(
   const activeIds = activeLenses.map((lens) => lens.id)
   const gatedIds = gatedLenses.map((lens) => lens.id)
   if (activeIds.length !== KNOWLEDGE_HUB_ACTIVE_MODEL_LENS_VALUES.length) {
-    issues.push({ path: `${path}.active_lenses`, message: 'Expected QPM, DFM, and I-O as the only active analytical lenses.', severity: 'error' })
+    issues.push({ path: `${path}.active_lenses`, message: 'Expected QPM, DFM, PE, and I-O as the only active analytical lenses.', severity: 'error' })
   }
   for (const expected of KNOWLEDGE_HUB_ACTIVE_MODEL_LENS_VALUES) {
     if (!activeIds.includes(expected)) {

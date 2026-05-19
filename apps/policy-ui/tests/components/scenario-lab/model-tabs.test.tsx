@@ -32,9 +32,9 @@ async function createTestI18n() {
               savedRuns: 'Saved Runs',
               synthesisPreview: 'Synthesis',
               subtitle: {
-                macroQpm: 'Macro scenario simulation',
-                ioSectorShock: 'Sector linkage analysis',
-                peTradeShock: 'Trade incidence, not active',
+              macroQpm: 'Macro scenario simulation',
+              ioSectorShock: 'Sector linkage analysis',
+                peTradeShock: 'Direct tariff incidence',
                 cgeReformShock: 'General equilibrium reform analysis, not active',
                 fppFiscalPath: 'Fiscal consistency, not active',
                 savedRuns: 'Saved analytical runs',
@@ -62,10 +62,10 @@ async function createTestI18n() {
               },
               pe: {
                 title: 'PE Trade Shock',
-                description: 'Trade incidence analysis is not active yet.',
+                description: 'Direct tariff-incidence analysis from the PE public data file.',
                 items: {
-                  inputs: 'Expected inputs: tariff and product group.',
-                  outputs: 'Expected outputs: import and export effects.',
+                  inputs: 'Inputs: tariff cut, HS section, partner or regime scope, and section elasticity set.',
+                  outputs: 'Outputs: trade creation, diversion, welfare, revenue, and import-base effects.',
                   boundary: 'Boundary: direct trade-channel evidence only.',
                 },
               },
@@ -136,13 +136,13 @@ describe('ScenarioLabModelTabs', () => {
     assert.match(markup, /Sector linkage analysis/)
     assert.match(markup, /Active data/)
     assert.doesNotMatch(markup, /scenario-model-tabs__status">Next/)
-    assert.match(markup, /Trade incidence, not active/)
+    assert.match(markup, /Direct tariff incidence/)
     assert.match(markup, /General equilibrium reform analysis, not active/)
     assert.match(markup, /Fiscal consistency, not active/)
     assert.match(markup, /aria-selected="true"[^>]*><span>Macro \/ QPM<\/span>/)
     assert.match(markup, /Synthesis/)
-    assert.equal(markup.match(/role="tab"/g)?.length, 3)
-    assert.doesNotMatch(markup, /id="scenario-model-tab-pe_trade_shock"/)
+    assert.equal(markup.match(/role="tab"/g)?.length, 4)
+    assert.match(markup, /id="scenario-model-tab-pe_trade_shock"/)
     assert.doesNotMatch(markup, /id="scenario-model-tab-synthesis_preview"/)
   })
 
@@ -159,7 +159,7 @@ describe('ScenarioLabModelTabs', () => {
     assert.match(markup, /not a macro forecast/)
   })
 
-  it('renders planned PE/CGE/FPP placeholders without implying active computation', async () => {
+  it('renders active PE shell and planned CGE/FPP placeholders without implying active computation', async () => {
     const i18n = await createTestI18n()
     const peMarkup = renderToStaticMarkup(
       <I18nextProvider i18n={i18n}>
@@ -177,8 +177,8 @@ describe('ScenarioLabModelTabs', () => {
       </I18nextProvider>,
     )
 
-    assert.match(peMarkup, /Not active/)
-    assert.match(peMarkup, /Expected inputs: tariff/)
+    assert.doesNotMatch(peMarkup, /Not active/)
+    assert.match(peMarkup, /Inputs: tariff cut/)
     assert.match(peMarkup, /direct trade-channel evidence only/)
     assert.match(cgeMarkup, /Not active/)
     assert.match(cgeMarkup, /model-owner approval required before activation/)

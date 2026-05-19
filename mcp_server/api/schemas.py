@@ -19,7 +19,7 @@ class RegistryCaveatResponse(BaseModel):
 class RegistryArtifactResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    id: Literal["qpm", "dfm", "io"]
+    id: Literal["qpm", "dfm", "io", "pe"]
     model_family: str
     artifact_path: str
     source_artifact: str | None
