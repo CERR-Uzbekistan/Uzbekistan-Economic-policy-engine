@@ -24,13 +24,22 @@ export const modelExplorerLiveRawMock: RawModelExplorerPayload = {
         'Dynamic-factor nowcast that combines high-frequency indicators to update current-quarter growth.',
     },
     {
+      id: 'io-model',
+      name: 'I-O Linkages',
+      type: 'Input-output accounting',
+      frequency: 'Annual',
+      status: 'active',
+      summary:
+        'Leontief input-output lane used for sector linkage and demand-shock accounting diagnostics.',
+    },
+    {
       id: 'fpp-fiscal',
       name: 'FPP Fiscal Block',
       type: 'Fiscal projection block',
       frequency: 'Quarterly',
-      status: 'staging',
+      status: 'paused',
       summary:
-        'Accounting-style fiscal projection block linking spending, revenue effort, and deficit dynamics.',
+        'Planned fiscal consistency lane; not active in the current public preview.',
     },
   ],
   metadataByModelId: {
@@ -112,10 +121,50 @@ export const modelExplorerLiveRawMock: RawModelExplorerPayload = {
         },
       ],
     },
+    'io-model': {
+      modelId: 'io-model',
+      overview:
+        'I-O Linkages supports sector-level accounting diagnostics from the 2022 SAM and Leontief total-requirements framework.',
+      assumptions: [
+        {
+          id: 'io-a1',
+          label: 'Base-year SAM',
+          value: '2022',
+          rationale: 'Keeps linkage diagnostics anchored to the accepted static input-output artifact.',
+        },
+      ],
+      equations: [
+        {
+          id: 'io-e1',
+          title: 'Leontief requirements',
+          expression: 'x = (I - A)^-1 * y',
+          explanation:
+            'Total output requirements follow from the technical-coefficient matrix and final demand vector.',
+        },
+      ],
+      caveats: [
+        {
+          id: 'io-c1',
+          severity: 'info',
+          message: 'No price or behavioral response block.',
+          implication: 'Outputs are accounting diagnostics, not macro or general-equilibrium forecasts.',
+        },
+      ],
+      dataSources: [
+        {
+          id: 'io-d1',
+          name: '2022 SAM and input-output artifact',
+          provider: 'Statistics Agency / project bridge',
+          frequency: 'Annual',
+          vintage: '2022',
+          note: 'Used for sector linkage, multiplier, and demand-shock accounting checks.',
+        },
+      ],
+    },
     'fpp-fiscal': {
       modelId: 'fpp-fiscal',
       overview:
-        'FPP Fiscal Block projects deficit and financing pressure under alternative spending and revenue assumptions.',
+        'FPP Fiscal Block is a planned fiscal consistency lane and is not active in the current public preview.',
       assumptions: [
         {
           id: 'fpp-a1',

@@ -31,6 +31,7 @@ export type QpmShocks = {
   s_shock: number
   gap_shock: number
   pie_shock: number
+  external_demand_shock: number
 }
 
 export type QpmPaths = {

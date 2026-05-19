@@ -14,6 +14,7 @@ type ScenarioSeed = {
     s_shock: number
     gap_shock: number
     pie_shock: number
+    external_demand_shock: number
   }
 }
 
@@ -25,7 +26,7 @@ const SCENARIO_SEEDS: ScenarioSeed[] = [
     inflation: [9.8, 8.5, 6.9, 5.1, 3.8, 3.2, 3.1, 3.4],
     policy_rate: [12.0, 10.4, 8.8, 7.6, 6.9, 6.7, 6.8, 7.2],
     exchange_rate: [12650, 12788, 12910, 13033, 13239, 13501, 13791, 14082],
-    shocks_applied: { rs_shock: 0, s_shock: 0, gap_shock: 0, pie_shock: 0 },
+    shocks_applied: { rs_shock: 0, s_shock: 0, gap_shock: 0, pie_shock: 0, external_demand_shock: 0 },
   },
   {
     scenario_id: 'rate-cut-100bp',
@@ -34,7 +35,7 @@ const SCENARIO_SEEDS: ScenarioSeed[] = [
     inflation: [9.9, 8.7, 7.2, 5.4, 4.2, 3.6, 3.4, 3.6],
     policy_rate: [11.3, 10.0, 8.7, 7.7, 7.1, 6.8, 6.9, 7.3],
     exchange_rate: [12692, 12849, 12973, 13087, 13282, 13535, 13819, 14111],
-    shocks_applied: { rs_shock: -1, s_shock: 0, gap_shock: 0, pie_shock: 0 },
+    shocks_applied: { rs_shock: -1, s_shock: 0, gap_shock: 0, pie_shock: 0, external_demand_shock: 0 },
   },
   {
     scenario_id: 'rate-hike-100bp',
@@ -43,7 +44,7 @@ const SCENARIO_SEEDS: ScenarioSeed[] = [
     inflation: [9.7, 8.4, 6.6, 4.7, 3.4, 2.8, 2.8, 3.2],
     policy_rate: [12.8, 10.8, 8.9, 7.6, 6.8, 6.5, 6.7, 7.1],
     exchange_rate: [12607, 12727, 12848, 12979, 13195, 13467, 13762, 14054],
-    shocks_applied: { rs_shock: 1, s_shock: 0, gap_shock: 0, pie_shock: 0 },
+    shocks_applied: { rs_shock: 1, s_shock: 0, gap_shock: 0, pie_shock: 0, external_demand_shock: 0 },
   },
   {
     scenario_id: 'exchange-rate-shock',
@@ -52,16 +53,16 @@ const SCENARIO_SEEDS: ScenarioSeed[] = [
     inflation: [10.9, 10.9, 10.4, 9.4, 7.6, 6.0, 4.7, 3.9],
     policy_rate: [14.3, 14.1, 13.1, 11.8, 10.3, 9.1, 8.1, 7.5],
     exchange_rate: [14328, 14143, 13930, 13758, 13746, 13874, 14109, 14412],
-    shocks_applied: { rs_shock: 0, s_shock: 10, gap_shock: 0, pie_shock: 0 },
+    shocks_applied: { rs_shock: 0, s_shock: 10, gap_shock: 0, pie_shock: 0, external_demand_shock: 0 },
   },
   {
     scenario_id: 'remittance-downside',
-    scenario_name: 'Remittance downside (proxy)',
+    scenario_name: 'External demand slowdown (-0.5 pp)',
     gdp_growth: [3.7, 3.6, 3.7, 4.0, 4.4, 4.9, 5.4, 5.8],
     inflation: [9.8, 8.5, 6.8, 5.0, 3.8, 3.2, 3.1, 3.5],
     policy_rate: [12.0, 10.2, 8.7, 7.6, 6.9, 6.7, 6.8, 7.3],
     exchange_rate: [12657, 12804, 12933, 13060, 13266, 13526, 13811, 14097],
-    shocks_applied: { rs_shock: 0, s_shock: 0, gap_shock: -0.5, pie_shock: 0 },
+    shocks_applied: { rs_shock: 0, s_shock: 0, gap_shock: 0, pie_shock: 0, external_demand_shock: -0.5 },
   },
 ]
 

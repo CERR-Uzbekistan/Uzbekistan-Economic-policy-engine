@@ -23,10 +23,10 @@ function seriesValue(seriesId: string, values: Record<string, number>) {
 
 describe('scenario lab mock result semantics', () => {
   it('keeps preset overrides aligned with their plain-language labels', () => {
-    const remittanceDownside = applyPresetToState('remittance-downside')
+    const externalSlowdown = applyPresetToState('remittance-downside')
 
-    assert.equal(remittanceDownside.remittance_change, -8)
-    assert.equal(remittanceDownside.export_demand_change, 0)
+    assert.equal(externalSlowdown.remittance_change, 0)
+    assert.equal(externalSlowdown.export_demand_change, -5)
   })
 
   it('maps remittance and tariff controls to sensible headline effects', () => {
@@ -50,7 +50,7 @@ describe('scenario lab mock result semantics', () => {
 
   it('feeds all major shock channels into the impulse-response view', () => {
     assert.ok(seriesValue('gdp_gap', { gov_spending_change: 2 }) > 0)
-    assert.ok(seriesValue('gdp_gap', { remittance_change: -8 }) < 0)
+    assert.ok(seriesValue('gdp_gap', { export_demand_change: -5 }) < 0)
     assert.ok(seriesValue('inflation', { commodity_price_change: 10 }) > 0)
     assert.ok(seriesValue('inflation', { tariff_change: 5 }) > 0)
     assert.ok(seriesValue('policy_rate', { risk_premium_shock: 2 }) > 0)

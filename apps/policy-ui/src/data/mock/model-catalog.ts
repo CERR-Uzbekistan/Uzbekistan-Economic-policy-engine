@@ -3,10 +3,8 @@ import type {
   ModelExplorerMeta,
 } from '../../contracts/data-contract.js'
 
-// Prompt §4.2: 6-model catalog mapped against the prototype status taxonomy.
-// QPM content is seeded verbatim from spec_prototype.html:2058–2303.
-// Other 5 models carry structural seed (card + minimal detail). Shot 2 adds
-// concise English/source validation prose without claiming unsupported results.
+// Six-model methodology catalog. QPM, DFM, and I-O are active bridge-backed
+// lanes; PE, CGE, and FPP remain visible as not-active methodology lanes.
 
 export const modelCatalogEntries: ModelCatalogEntry[] = [
   {
@@ -14,7 +12,7 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
     title: 'QPM',
     full_title: 'QPM — New-Keynesian Small Open Economy',
     lifecycle_label: 'Quarterly Projection Model · Active',
-    status: { label: '2 Fixes', severity: 'warn' },
+    status: { label: 'Active', severity: 'ok' },
     model_type: 'DSGE',
     frequency: 'Quarterly',
     methodology_signature: 'DSGE · Quarterly · New-Keynesian SOE',
@@ -39,9 +37,8 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
       {
         symbol: 'b_3',
         name: 'External demand channel',
-        value: '0.00 (inactive)',
-        range: '0.00 – 0.45',
-        inactive: true,
+        value: '0.30',
+        range: '0.05 – 0.60',
       },
       { symbol: 'a_1', name: 'Inflation persistence', value: '0.60', range: '0.40 – 0.85' },
       { symbol: 'γ_π', name: 'Inflation response weight', value: '1.50', range: '1.20 – 2.00' },
@@ -50,40 +47,22 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
       {
         id: 'qpm-cav-01',
         number: '01',
-        severity: 'critical',
-        title: 'b₃ external-demand shock is inactive in UI',
-        body:
-          'The equation term exists; no button routes to it. Russia/China slowdown cannot currently be simulated via QPM.',
-        issue_refs: ['#23'],
-        target_version: 'v1.1',
-      },
-      {
-        id: 'qpm-cav-02',
-        number: '02',
-        severity: 'warning',
-        title: 'No direct import-price pass-through in Phillips curve',
-        body:
-          'Pass-through currently only via the RER gap. For an import-dependent economy this underestimates the response to exchange-rate moves.',
-      },
-      {
-        id: 'qpm-cav-03',
-        number: '03',
         severity: 'warning',
         title: 'Phillips parameters diverge from FPP',
         body:
           'QPM uses (a₁=0.60, a₂=0.20). FPP uses (λ₁=0.05, λ₂=0.70). These reflect different horizons (quarterly vs annual); reconciliation is documented not reconciled.',
       },
       {
-        id: 'qpm-cav-04',
-        number: '04',
+        id: 'qpm-cav-02',
+        number: '02',
         severity: 'info',
         title: 'No country-risk premium in UIP',
         body:
           'Capital-flight and sovereign-risk scenarios cannot be tested via UIP as specified. Workaround: apply εˢ shock directly.',
       },
       {
-        id: 'qpm-cav-05',
-        number: '05',
+        id: 'qpm-cav-03',
+        number: '03',
         severity: 'info',
         title: 'Adaptive expectations',
         body:
@@ -126,14 +105,14 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
     model_type: 'Dynamic factor',
     frequency: 'Monthly',
     methodology_signature: 'Dynamic Factor · Mixed-frequency',
-    description: 'GDP nowcasting via Kalman filter; 34 indicators, 3-month forecast horizon.',
+    description: 'Current-quarter GDP nowcasting via Kalman filter; 34 indicators.',
     stats: [
       { value: '34', label: 'Indicators' },
       { value: '1', label: 'Factor' },
       { value: 'M', label: 'Freq.' },
     ],
     purpose:
-      'Single-factor mixed-frequency DFM with a Kalman smoother. Produces a real-time GDP nowcast and a 3-month-ahead forecast from 34 monthly indicators.',
+      'Single-factor mixed-frequency DFM with a Kalman smoother. Produces the current-quarter GDP nowcast from 34 monthly indicators; the checked-in bridge artifact does not publish a forward forecast horizon.',
     equations: [
       { id: 'dfm_factor', label: 'Factor · Latent state transition' },
       { id: 'dfm_obs', label: 'Observation · Loadings' },
@@ -173,8 +152,8 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
     id: 'pe-model',
     title: 'PE',
     full_title: 'PE — Partial Equilibrium, WITS-SMART',
-    lifecycle_label: 'Partial Equilibrium · Action required',
-    status: { label: 'Fix', severity: 'crit' },
+    lifecycle_label: 'Partial Equilibrium · Not active',
+    status: { label: 'Not active', severity: 'warn' },
     model_type: 'Partial equilibrium',
     frequency: 'Annual',
     methodology_signature: 'Partial Equilibrium · WITS-SMART',
@@ -260,8 +239,8 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
     id: 'cge-model',
     title: 'CGE',
     full_title: 'CGE — 1-2-3 Model',
-    lifecycle_label: 'Computable General Equilibrium · Gap',
-    status: { label: 'Gap', severity: 'warn' },
+    lifecycle_label: 'Computable General Equilibrium · Not active',
+    status: { label: 'Not active', severity: 'warn' },
     model_type: 'CGE',
     frequency: 'Annual',
     methodology_signature: 'CGE · 1-2-3 structure',
@@ -307,8 +286,8 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
     id: 'fpp-fiscal',
     title: 'FPP',
     full_title: 'FPP — Financial Programming & Policies',
-    lifecycle_label: 'Financial Programming · IMF CAEM',
-    status: { label: 'CA exog.', severity: 'warn' },
+    lifecycle_label: 'Financial Programming · Not active',
+    status: { label: 'Not active', severity: 'warn' },
     model_type: 'Financial programming',
     frequency: 'Annual',
     methodology_signature: 'Financial Programming · IMF CAEM',
@@ -356,7 +335,7 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
 
 export const modelCatalogMeta: ModelExplorerMeta = {
   models_total: modelCatalogEntries.length,
-  models_live: modelCatalogEntries.length,
+  models_live: 3,
   last_calibration_audit_label: 'Apr 2026',
-  open_methodology_issues: 8,
+  open_methodology_issues: 5,
 }

@@ -28,7 +28,7 @@ function toSummary(scenario: QpmScenario): string {
   if (scenario.scenario_id === 'exchange-rate-shock') {
     return 'Depreciation shock pushes inflation and policy-rate response upward.'
   }
-  return 'External-demand downside proxy weakens activity and raises vulnerability.'
+  return 'External-demand slowdown weakens activity through the active b3 spillover channel.'
 }
 
 function toScenarioType(scenario: QpmScenario): ComparisonScenario['scenario_type'] {
@@ -63,7 +63,8 @@ function toRiskIndex(scenario: QpmScenario): number {
     Math.abs(shocks.rs_shock) * 8 +
     Math.abs(shocks.s_shock) * 2 +
     Math.abs(shocks.gap_shock) * 20 +
-    Math.abs(shocks.pie_shock) * 12
+    Math.abs(shocks.pie_shock) * 12 +
+    Math.abs(shocks.external_demand_shock) * 20
   return Math.round(clamp(25 + weightedMagnitude, 5, 95))
 }
 

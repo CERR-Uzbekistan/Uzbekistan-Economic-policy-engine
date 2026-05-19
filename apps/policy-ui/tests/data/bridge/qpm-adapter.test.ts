@@ -17,16 +17,16 @@ describe('qpm adapter', () => {
 
     const baseline = scenarios.find((scenario) => scenario.scenario_id === 'baseline')
     const rateCut = scenarios.find((scenario) => scenario.scenario_id === 'rate-cut-100bp')
-    const remittance = scenarios.find((scenario) => scenario.scenario_id === 'remittance-downside')
+    const externalDemand = scenarios.find((scenario) => scenario.scenario_id === 'remittance-downside')
 
     assert.ok(baseline)
     assert.ok(rateCut)
-    assert.ok(remittance)
+    assert.ok(externalDemand)
 
     assert.equal(baseline.values.gdp_growth, payload.scenarios[0].paths.gdp_growth[3])
     assert.equal(baseline.values.inflation, payload.scenarios[0].paths.inflation[3])
     assert.equal(rateCut.values.policy_rate, payload.scenarios[1].paths.policy_rate[3])
-    assert.equal(remittance.values.exchange_rate, payload.scenarios[4].paths.exchange_rate[3])
+    assert.equal(externalDemand.values.exchange_rate, payload.scenarios[4].paths.exchange_rate[3])
   })
 
   it('builds workspace defaults with baseline + symmetric policy alternatives in three slots', () => {

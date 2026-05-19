@@ -329,10 +329,10 @@ export const overviewV1Data: MacroSnapshot = {
   },
   caveats: [
     {
-      caveat_id: 'qpm-b3-inactive',
-      severity: 'warning',
+      caveat_id: 'qpm-external-demand-ar1',
+      severity: 'info',
       message:
-        'External demand channel (b3) is inactive in the QPM scenario builder; Russia/China slowdown effects are approximated via remittance proxies.',
+        'External demand shocks use the active QPM b3 channel; the foreign output gap follows AR(1) decay before entering aggregate demand.',
       affected_metrics: ['gdp_growth'],
       affected_models: ['qpm_uzbekistan'],
     },
@@ -415,7 +415,7 @@ export const overviewV1Data: MacroSnapshot = {
       },
       {
         activity_id: 'scen-2026-04-17-remittance',
-        scenario_name: 'Remittance downside 2026',
+        scenario_name: 'External slowdown 2026',
         scenario_id: 'scenario-uuid-2',
         author: 'External Sector Team',
         saved_at: '2026-04-17T11:05:00+05:00',

@@ -11,19 +11,31 @@ describe('model catalog mock', () => {
 
   it('carries severity-coded status labels matching the prototype spec', () => {
     const byTitle = new Map(modelCatalogEntries.map((entry) => [entry.title, entry.status]))
-    assert.deepEqual(byTitle.get('QPM'), { label: '2 Fixes', severity: 'warn' })
+    assert.deepEqual(byTitle.get('QPM'), { label: 'Active', severity: 'ok' })
     assert.deepEqual(byTitle.get('DFM'), { label: 'Active', severity: 'ok' })
-    assert.deepEqual(byTitle.get('PE'), { label: 'Fix', severity: 'crit' })
+    assert.deepEqual(byTitle.get('PE'), { label: 'Not active', severity: 'warn' })
     assert.deepEqual(byTitle.get('I-O'), { label: 'Active', severity: 'ok' })
-    assert.deepEqual(byTitle.get('CGE'), { label: 'Gap', severity: 'warn' })
-    assert.deepEqual(byTitle.get('FPP'), { label: 'CA exog.', severity: 'warn' })
+    assert.deepEqual(byTitle.get('CGE'), { label: 'Not active', severity: 'warn' })
+    assert.deepEqual(byTitle.get('FPP'), { label: 'Not active', severity: 'warn' })
   })
 
-  it('flags QPM b3 as inactive to trigger the red val.issue styling', () => {
+  it('documents QPM b3 as active after external-demand channel activation', () => {
     const qpm = modelCatalogEntries.find((entry) => entry.id === 'qpm-uzbekistan')!
     const b3 = qpm.parameters.find((parameter) => parameter.symbol === 'b_3')
     assert.ok(b3, 'QPM must carry b_3 parameter')
-    assert.equal(b3?.inactive, true)
+    assert.equal(b3?.value, '0.30')
+    assert.equal(b3?.inactive, undefined)
+    assert.equal(
+      qpm.caveats.some((caveat) => /inactive/i.test(`${caveat.title} ${caveat.body}`)),
+      false,
+    )
+  })
+
+  it('keeps DFM description aligned with the current bridge artifact scope', () => {
+    const dfm = modelCatalogEntries.find((entry) => entry.id === 'dfm-nowcast')!
+
+    assert.match(dfm.description, /Current-quarter GDP nowcasting/)
+    assert.doesNotMatch(`${dfm.description} ${dfm.purpose}`, /3-month|3 month|ahead forecast/i)
   })
 
   it('renders source validation summaries on non-QPM models without SME sentinels', () => {
@@ -37,10 +49,10 @@ describe('model catalog mock', () => {
     }
   })
 
-  it('page-header meta reflects 6 live models + Apr 2026 audit + 8 open issues', () => {
+  it('page-header meta separates active bridge-backed models from planned model lanes', () => {
     assert.equal(modelCatalogMeta.models_total, 6)
-    assert.equal(modelCatalogMeta.models_live, 6)
+    assert.equal(modelCatalogMeta.models_live, 3)
     assert.equal(modelCatalogMeta.last_calibration_audit_label, 'Apr 2026')
-    assert.equal(modelCatalogMeta.open_methodology_issues, 8)
+    assert.equal(modelCatalogMeta.open_methodology_issues, 5)
   })
 })

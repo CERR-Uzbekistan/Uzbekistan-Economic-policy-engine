@@ -58,10 +58,10 @@ const PRESETS: ScenarioLabPreset[] = [
   },
   {
     preset_id: 'remittance-downside',
-    title: 'Remittance downside',
-    summary: 'Remittance inflows decline relative to baseline; expect softer demand and a weaker external-income balance.',
+    title: 'External slowdown',
+    summary: 'Foreign demand weakens relative to baseline; expect softer activity through the active QPM external-demand channel.',
     assumption_overrides: {
-      remittance_change: -8,
+      export_demand_change: -5,
     },
   },
 ]
@@ -164,7 +164,7 @@ const SCENARIO_ASSUMPTIONS = [
     description: 'Foreign demand shock to exports.',
     category: 'trade',
     unit: '%',
-    technical_variable: 'pe.external_demand_shock',
+    technical_variable: 'qpm.external_demand_shock',
     min: -20,
     max: 20,
     step: 1,

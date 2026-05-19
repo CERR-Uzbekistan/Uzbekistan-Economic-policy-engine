@@ -270,6 +270,7 @@ function parseScenario(value: unknown, index: number, issues: QpmValidationIssue
   const sShock = rawShocks.s_shock
   const gapShock = rawShocks.gap_shock
   const pieShock = rawShocks.pie_shock
+  const externalDemandShock = rawShocks.external_demand_shock
 
   if (!isFiniteNumber(rsShock)) {
     pushError(issues, `${path}.shocks_applied.rs_shock`, 'Expected a finite number.')
@@ -282,6 +283,9 @@ function parseScenario(value: unknown, index: number, issues: QpmValidationIssue
   }
   if (!isFiniteNumber(pieShock)) {
     pushError(issues, `${path}.shocks_applied.pie_shock`, 'Expected a finite number.')
+  }
+  if (!isFiniteNumber(externalDemandShock)) {
+    pushError(issues, `${path}.shocks_applied.external_demand_shock`, 'Expected a finite number.')
   }
 
   const solverIterations = value.solver_iterations
@@ -303,6 +307,7 @@ function parseScenario(value: unknown, index: number, issues: QpmValidationIssue
     !isFiniteNumber(sShock) ||
     !isFiniteNumber(gapShock) ||
     !isFiniteNumber(pieShock) ||
+    !isFiniteNumber(externalDemandShock) ||
     !Number.isInteger(solverIterations)
   ) {
     return null
@@ -371,6 +376,7 @@ function parseScenario(value: unknown, index: number, issues: QpmValidationIssue
       s_shock: sShock,
       gap_shock: gapShock,
       pie_shock: pieShock,
+      external_demand_shock: externalDemandShock,
     },
     solver_iterations: solverIterations as number,
   }

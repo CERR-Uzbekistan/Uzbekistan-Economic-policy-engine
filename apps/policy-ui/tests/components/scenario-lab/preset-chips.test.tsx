@@ -19,7 +19,7 @@ const presets: ScenarioLabPreset[] = [
     preset_id: 'remittance-downside',
     title: 'External slowdown',
     summary: 'Slowdown',
-    assumption_overrides: { export_demand_change: -8 },
+    assumption_overrides: { export_demand_change: -5 },
   },
 ]
 

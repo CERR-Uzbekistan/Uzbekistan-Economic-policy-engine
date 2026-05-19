@@ -4,13 +4,13 @@ import { scenarioLabWorkspaceMock } from '../../src/data/mock/scenario-lab.js'
 import { resolvePresetHydration } from '../../src/pages/scenario-lab-preset.js'
 
 describe('ScenarioLabPage preset hydration', () => {
-  it('hydrates remittance-downside preset from URL query', () => {
+  it('hydrates external-demand slowdown preset from URL query', () => {
     const result = resolvePresetHydration(scenarioLabWorkspaceMock, 'remittance-downside')
 
     assert.equal(result.selectedPresetId, 'remittance-downside')
-    assert.equal(result.scenarioName, 'Remittance downside')
-    assert.equal(result.assumptionValues.remittance_change, -8)
-    assert.equal(result.assumptionValues.export_demand_change, 0)
+    assert.equal(result.scenarioName, 'External slowdown')
+    assert.equal(result.assumptionValues.remittance_change, 0)
+    assert.equal(result.assumptionValues.export_demand_change, -5)
     assert.equal(result.warningMessage, null)
   })
 

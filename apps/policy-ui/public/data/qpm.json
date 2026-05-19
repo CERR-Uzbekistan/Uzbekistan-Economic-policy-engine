@@ -97,7 +97,8 @@
         "rs_shock": 0,
         "s_shock": 0,
         "gap_shock": 0,
-        "pie_shock": 0
+        "pie_shock": 0,
+        "external_demand_shock": 0
       },
       "solver_iterations": 369
     },
@@ -117,7 +118,8 @@
         "rs_shock": -1,
         "s_shock": 0,
         "gap_shock": 0,
-        "pie_shock": 0
+        "pie_shock": 0,
+        "external_demand_shock": 0
       },
       "solver_iterations": 376
     },
@@ -137,7 +139,8 @@
         "rs_shock": 1,
         "s_shock": 0,
         "gap_shock": 0,
-        "pie_shock": 0
+        "pie_shock": 0,
+        "external_demand_shock": 0
       },
       "solver_iterations": 368
     },
@@ -157,39 +160,41 @@
         "rs_shock": 0,
         "s_shock": 10,
         "gap_shock": 0,
-        "pie_shock": 0
+        "pie_shock": 0,
+        "external_demand_shock": 0
       },
       "solver_iterations": 387
     },
     {
       "scenario_id": "remittance-downside",
-      "scenario_name": "Remittance downside (proxy)",
-      "description": "Proxy for Russia-slowdown remittance decline using a -0.5 pp aggregate demand shock; implemented via gap_shock while b3 external-demand channel remains inactive in the UI (ROADMAP Phase 1B, QPM item 1).",
+      "scenario_name": "External demand slowdown (-0.5 pp)",
+      "description": "Foreign output-gap downside shock using the active b3 external-demand channel. The foreign gap follows AR(1) decay with rho=0.75 and enters the IS curve as b3 * gap*_t.",
       "horizon_quarters": 8,
       "periods": ["2026 Q1", "2026 Q2", "2026 Q3", "2026 Q4", "2027 Q1", "2027 Q2", "2027 Q3", "2027 Q4"],
       "paths": {
-        "gdp_growth": [3.6981, 3.6163, 3.6898, 3.9586, 4.3846, 4.8916, 5.3967, 5.8317],
-        "inflation": [9.7885, 8.5102, 6.8441, 4.9722, 3.7632, 3.1889, 3.1387, 3.4555],
-        "policy_rate": [11.9761, 10.2663, 8.7261, 7.577, 6.9093, 6.7043, 6.8693, 7.2731],
-        "exchange_rate": [12657.6, 12804.7, 12933.8, 13060.3, 13266.7, 13526.6, 13811.9, 14097.8]
+        "gdp_growth": [4.0508, 3.7384, 3.6784, 3.8787, 4.2787, 4.7862, 5.3065, 5.7628],
+        "inflation": [9.8041, 8.5389, 6.8772, 5.0006, 3.7655, 3.1654, 3.1, 3.4146],
+        "policy_rate": [12.0226, 10.3122, 8.7463, 7.5645, 6.8689, 6.6476, 6.8095, 7.2215],
+        "exchange_rate": [12654.6, 12799.6, 12928.6, 13057.3, 13267.5, 13531.9, 13821.8, 14111.4]
       },
       "shocks_applied": {
         "rs_shock": 0,
         "s_shock": 0,
-        "gap_shock": -0.5,
-        "pie_shock": 0
+        "gap_shock": 0,
+        "pie_shock": 0,
+        "external_demand_shock": -0.5
       },
       "solver_iterations": 369
     }
   ],
   "caveats": [
     {
-      "caveat_id": "qpm-b3-inactive",
-      "severity": "warning",
-      "message": "External demand shock parameter b3 is inactive in the UI scenario builder; the Russia/China slowdown channel cannot be simulated directly. The remittance-downside scenario uses a gap_shock proxy until this is activated.",
+      "caveat_id": "qpm-external-demand-ar1",
+      "severity": "info",
+      "message": "External-demand shocks use the active b3 channel. The foreign output gap gap*_t follows AR(1) decay with rho=0.75 and enters the IS curve as b3 * gap*_t.",
       "affected_metrics": ["gdp_growth"],
       "affected_models": ["QPM"],
-      "source": "ROADMAP.md Phase 1B QPM item 1"
+      "source": "mcp_server/models/qpm.py and qpm export solver"
     },
     {
       "caveat_id": "qpm-baseline-irf-reconciliation",

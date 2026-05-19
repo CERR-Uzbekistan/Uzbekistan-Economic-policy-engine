@@ -170,7 +170,7 @@ solve_irf <- function(p, shock_type, shock_size, T,
   }
 
   shk_gap <- numeric(N); shk_pi  <- numeric(N); shk_s <- numeric(N)
-  shk_rs  <- numeric(N); shk_rho <- numeric(N)
+  shk_rs  <- numeric(N); shk_rho <- numeric(N); gap_star <- numeric(N)
 
   shock_idx <- ST + 1L  # shock lands at the first forecast period
   if (!is.null(shock_type)) {
@@ -180,8 +180,14 @@ solve_irf <- function(p, shock_type, shock_size, T,
       "exchange"  = { shk_s[shock_idx]   <- shock_size },
       "monetary"  = { shk_rs[shock_idx]  <- shock_size },
       "risk"      = { shk_rho[shock_idx] <- shock_size },
+      "external_demand" = { gap_star[shock_idx] <- shock_size },
       stop("Unknown shock_type: ", shock_type)
     )
+  }
+  if (shock_idx < N) {
+    for (t in (shock_idx + 1L):N) {
+      gap_star[t] <- 0.75 * gap_star[t - 1L]
+    }
   }
 
   b1 <- p$b1; b2 <- p$b2; b3 <- p$b3; b4 <- p$b4
@@ -249,7 +255,7 @@ solve_irf <- function(p, shock_type, shock_size, T,
       mci[t]     <- b4 * rr_gap[t] - (1 - b4) * l_z_gap[t]
 
       # IS curve
-      gap[t]     <- b1 * safe_get(gap, t - 1) - b2 * mci[t] + shk_gap[t]
+      gap[t]     <- b1 * safe_get(gap, t - 1) - b2 * mci[t] + b3 * gap_star[t] + shk_gap[t]
 
       # Refresh Phillips with realised gap
       rmc[t]     <- a3 * gap[t] + (1 - a3) * l_z_gap[t]
@@ -400,7 +406,7 @@ build_scenario <- function(scenario_id, scenario_name, description,
 }
 
 build_scenarios <- function(calib = CALIBRATION, horizon = 8L) {
-  zero_shocks <- list(rs_shock = 0, s_shock = 0, gap_shock = 0, pie_shock = 0)
+  zero_shocks <- list(rs_shock = 0, s_shock = 0, gap_shock = 0, pie_shock = 0, external_demand_shock = 0)
   init_dev    <- init_conds_from_levels(BASELINE_INIT_LEVELS, calib)
 
   # Compute the baseline solver run once; use it to anchor ER levels for all
@@ -442,10 +448,10 @@ build_scenarios <- function(calib = CALIBRATION, horizon = 8L) {
     ),
     list(
       scenario_id    = "remittance-downside",
-      scenario_name  = "Remittance downside (proxy)",
-      description    = "Proxy for Russia-slowdown remittance decline using a -0.5 pp aggregate demand shock; implemented via gap_shock while b3 external-demand channel remains inactive in the UI (ROADMAP Phase 1B, QPM item 1).",
-      shock_type     = "demand", shock_size = -0.5,
-      shocks_applied = modifyList(zero_shocks, list(gap_shock = -0.5))
+      scenario_name  = "External demand slowdown (-0.5 pp)",
+      description    = "Foreign output-gap downside shock using the active b3 external-demand channel. The foreign gap follows AR(1) decay with rho=0.75 and enters the IS curve as b3 * gap*_t.",
+      shock_type     = "external_demand", shock_size = -0.5,
+      shocks_applied = modifyList(zero_shocks, list(external_demand_shock = -0.5))
     )
   )
 
@@ -474,12 +480,12 @@ build_scenarios <- function(calib = CALIBRATION, horizon = 8L) {
 build_caveats <- function() {
   list(
     list(
-      caveat_id        = "qpm-b3-inactive",
-      severity         = "warning",
-      message          = "External demand shock parameter b3 is inactive in the UI scenario builder; the Russia/China slowdown channel cannot be simulated directly. The remittance-downside scenario uses a gap_shock proxy until this is activated.",
+      caveat_id        = "qpm-external-demand-ar1",
+      severity         = "info",
+      message          = "External-demand shocks use the active b3 channel. The foreign output gap gap*_t follows AR(1) decay with rho=0.75 and enters the IS curve as b3 * gap*_t.",
       affected_metrics = I(c("gdp_growth")),
       affected_models  = I(c("QPM")),
-      source           = "ROADMAP.md Phase 1B QPM item 1"
+      source           = "mcp_server/models/qpm.py and qpm export solver"
     ),
     list(
       caveat_id        = "qpm-baseline-irf-reconciliation",
