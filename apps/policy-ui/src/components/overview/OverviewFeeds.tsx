@@ -120,7 +120,12 @@ export function OverviewFeeds({ activityFeed }: OverviewFeedsProps) {
       <article className="feed-col">
         <h3>{t('overview.feeds.savedScenarios.title')}</h3>
         {latestSavedScenarios.length === 0 ? (
-          <p className="empty-state">{t('overview.feeds.savedScenarios.empty')}</p>
+          <>
+            <p className="empty-state">{t('overview.feeds.savedScenarios.empty')}</p>
+            <Link className="feed-link" to="/scenario-lab">
+              {t('overview.feeds.savedScenarios.openLab')}
+            </Link>
+          </>
         ) : (
           <div className="feed-list">
             {latestSavedScenarios.map((scenario) => (

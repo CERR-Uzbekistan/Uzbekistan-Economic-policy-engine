@@ -232,6 +232,58 @@ body:has(.overview-page) {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.kpi-strip--primary .overview-kpi-card {
+  gap: 0.38rem;
+  grid-template-rows: auto auto auto;
+  min-height: 5.45rem;
+  padding: 0.66rem 0.72rem;
+}
+
+.kpi-strip--primary .overview-kpi-card__label,
+.kpi-strip--primary .overview-kpi-trend,
+.kpi-strip--primary .overview-kpi-card__context-note {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+}
+
+.kpi-strip--primary .overview-kpi-card__label {
+  font-size: 0.78rem;
+  line-height: 1.18;
+  -webkit-line-clamp: 2;
+}
+
+.kpi-strip--primary .overview-kpi-card__claim-label {
+  font-size: 0.62rem;
+  padding: 0.13rem 0.22rem;
+}
+
+.kpi-strip--primary .overview-kpi-card__value {
+  font-size: clamp(1.12rem, 1.55vw, 1.38rem);
+}
+
+.kpi-strip--primary .overview-kpi-trend {
+  font-size: 0.76rem;
+  line-height: 1.2;
+  min-height: 0;
+  -webkit-line-clamp: 2;
+}
+
+.kpi-strip--primary .overview-kpi-card__meta {
+  gap: 0.1rem;
+}
+
+.kpi-strip--primary .overview-kpi-card__period,
+.kpi-strip--primary .overview-kpi-card__context-note {
+  font-size: 0.7rem;
+  line-height: 1.18;
+}
+
+.kpi-strip--primary .overview-kpi-card__context-note {
+  -webkit-line-clamp: 1;
+}
+
 .kpi-strip--supporting .overview-kpi-grid {
   gap: var(--space-sm);
   grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));

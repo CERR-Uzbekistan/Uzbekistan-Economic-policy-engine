@@ -27,6 +27,7 @@ describe('OverviewFeeds Knowledge Hub reform preview', () => {
     assert.doesNotMatch(source, /activityFeed\.policy_actions/)
     assert.match(source, /overview_artifact/)
     assert.match(source, /overview\.feeds\.savedScenarios\.title/)
+    assert.match(source, /overview\.feeds\.savedScenarios\.openLab/)
     assert.match(source, /overview\.feeds\.savedScenarios\.type/)
     assert.doesNotMatch(source, /feed-col--note/)
     assert.doesNotMatch(source, /overview\.feeds\.note/)
