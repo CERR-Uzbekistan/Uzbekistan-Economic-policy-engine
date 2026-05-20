@@ -613,6 +613,14 @@
       "allSections": "Barcha bo'limlar",
       "allRegimes": "Barcha rejimlar",
       "allPartners": "Barcha hamkorlar",
+      "productSearch": "Mahsulot doirasini qidirish",
+      "partnerSearch": "Hamkorlarni qidirish",
+      "noMatches": "Mos natija yo'q",
+      "regimeLabels": {
+        "mfn": "MFN hamkorlar",
+        "fta": "Erkin savdo hamkorlari",
+        "full": "Bojsiz hamkorlar"
+      },
       "boundary": "Faqat bevosita tarif ta'siri. Bu YaIM, inflyatsiya, I-O, CGE yoki fiskal trayektoriya effekti emas.",
       "partnerBoundary": "Hamkor va rejim filtrlari import ulushi bo'yicha masshtablanadi, chunki mahsulot-hamkor tarif matritsalari ochiq faylda yo'q.",
       "topSections": "HS bo'limlari bo'yicha eng katta bevosita ta'sirlar",
@@ -621,7 +629,7 @@
       "saveRunHint": "Saqlangan PE ishlari Comparison sahifasida alohida tarif ta'siri dalili sifatida ko'rinadi.",
       "savedTitle": "PE {{cut}}% tarif pasayishi · {{section}}",
       "savedDescription": "Bevosita tarif ta'siri tahlili uchun saqlangan PE ishi.",
-      "sourceLabelNote": "HS bo'lim nomlari asl manba nomlarida ko'rsatiladi va bu yerda tarjima qilinmaydi. Manba: {{source}}.",
+      "sourceLabelNote": "Mahsulot yorliqlari manbadagi HS bo'lim nomlariga mos. Manba: {{source}}.",
       "setup": {
         "step": "Ssenariy kirishlari",
         "title": "Siyosat sozlamasi",
@@ -635,7 +643,7 @@
         "sourceScope": "Manba qamrovi"
       },
       "scope": {
-        "regime": "{{regime}} rejimi"
+        "regime": "{{regime}}"
       },
       "units": {
         "usdThousand": "ming USD",

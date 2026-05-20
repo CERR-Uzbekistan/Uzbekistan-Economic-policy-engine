@@ -738,7 +738,8 @@
 }
 
 .pe-shock__setup-card legend,
-.pe-shock__field span,
+.pe-shock__field-label,
+.pe-shock__field > span,
 .pe-shock__pct-input span {
   color: var(--color-text-muted);
   font-size: 0.78rem;
@@ -763,6 +764,7 @@
 
 .pe-shock__direction button,
 .pe-shock__pct-input input,
+.pe-shock__filter-input,
 .pe-shock__field select {
   border-radius: calc(var(--radius-sm) - 2px);
   color: var(--color-text);
@@ -797,11 +799,28 @@
 }
 
 .pe-shock__pct-input input,
+.pe-shock__filter-input,
 .pe-shock__field select {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   padding: 0 var(--space-sm);
   width: 100%;
+}
+
+.pe-shock__filter-input {
+  min-width: 0;
+}
+
+.pe-shock__filter-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.pe-shock__filter-input:focus-visible,
+.pe-shock__field select:focus-visible,
+.pe-shock__pct-input input:focus-visible {
+  border-color: var(--color-brand);
+  outline: 2px solid color-mix(in srgb, var(--color-brand) 18%, transparent);
+  outline-offset: 1px;
 }
 
 .pe-shock__pct-input input {

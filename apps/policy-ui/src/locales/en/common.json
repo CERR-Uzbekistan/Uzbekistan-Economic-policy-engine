@@ -613,6 +613,14 @@
       "allSections": "All sections",
       "allRegimes": "All regimes",
       "allPartners": "All partners",
+      "productSearch": "Search product scope",
+      "partnerSearch": "Search partners",
+      "noMatches": "No matches",
+      "regimeLabels": {
+        "mfn": "MFN partners",
+        "fta": "Free-trade partners",
+        "full": "Duty-free partners"
+      },
       "boundary": "Direct tariff-incidence only. These values are not GDP, inflation, I-O, CGE, or fiscal-path effects.",
       "partnerBoundary": "Partner and regime filters use import-share scaling because product-partner tariff matrices are not in the public data file.",
       "topSections": "Largest direct effects by HS section",
@@ -621,7 +629,7 @@
       "saveRunHint": "Saved PE runs appear as separate trade-incidence evidence in Comparison.",
       "savedTitle": "PE {{cut}}% tariff cut · {{section}}",
       "savedDescription": "Saved PE trade-shock run for direct tariff-incidence analysis.",
-      "sourceLabelNote": "HS section labels use the original source names and are not translated here. Source: {{source}}.",
+      "sourceLabelNote": "Product labels follow the source HS section names. Source: {{source}}.",
       "setup": {
         "step": "Scenario inputs",
         "title": "Policy setup",
@@ -635,7 +643,7 @@
         "sourceScope": "Source scope"
       },
       "scope": {
-        "regime": "{{regime}} regime"
+        "regime": "{{regime}}"
       },
       "units": {
         "usdThousand": "USD th.",

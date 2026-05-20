@@ -21,6 +21,74 @@ const ALL_VALUE = 'all'
 const DEFAULT_TARIFF_CUT_PCT = 20
 const CONCENTRATION_ROWS = 5
 
+const PARTNER_DISPLAY_NAMES: Record<string, { en: string; uz: string }> = {
+  Китай: { en: 'China', uz: 'Xitoy' },
+  'Российская Федерация': { en: 'Russian Federation', uz: 'Rossiya Federatsiyasi' },
+  Казахстан: { en: 'Kazakhstan', uz: 'Qozogiston' },
+  Турция: { en: 'Turkiye', uz: 'Turkiya' },
+  'Республика Корея': { en: 'Republic of Korea', uz: 'Koreya Respublikasi' },
+  Германия: { en: 'Germany', uz: 'Germaniya' },
+  Индия: { en: 'India', uz: 'Hindiston' },
+  Туркменистан: { en: 'Turkmenistan', uz: 'Turkmaniston' },
+  Беларусь: { en: 'Belarus', uz: 'Belarus' },
+  'Соединенные Штаты Америки': { en: 'United States', uz: 'AQSh' },
+  Швейцария: { en: 'Switzerland', uz: 'Shveytsariya' },
+  Франция: { en: 'France', uz: 'Fransiya' },
+  Кыргызстан: { en: 'Kyrgyzstan', uz: 'Qirgiziston' },
+  'Иран (Исламская Республика)': { en: 'Iran', uz: 'Eron' },
+  Италия: { en: 'Italy', uz: 'Italiya' },
+  Япония: { en: 'Japan', uz: 'Yaponiya' },
+  'Объединенные Арабские Эмираты': { en: 'United Arab Emirates', uz: 'Birlashgan Arab Amirliklari' },
+  Австрия: { en: 'Austria', uz: 'Avstriya' },
+  Вьетнам: { en: 'Viet Nam', uz: 'Vetnam' },
+  Бразилия: { en: 'Brazil', uz: 'Braziliya' },
+  Польша: { en: 'Poland', uz: 'Polsha' },
+  Литва: { en: 'Lithuania', uz: 'Litva' },
+  Украина: { en: 'Ukraine', uz: 'Ukraina' },
+  Таджикистан: { en: 'Tajikistan', uz: 'Tojikiston' },
+  Нидерланды: { en: 'Netherlands', uz: 'Niderlandiya' },
+  Словения: { en: 'Slovenia', uz: 'Sloveniya' },
+  'Соединенное Королевство Великобритании и Северной Ирландии': {
+    en: 'United Kingdom',
+    uz: 'Buyuk Britaniya',
+  },
+  Грузия: { en: 'Georgia', uz: 'Gruziya' },
+  Афганистан: { en: 'Afghanistan', uz: 'Afgoniston' },
+  Индонезия: { en: 'Indonesia', uz: 'Indoneziya' },
+  Чехия: { en: 'Czechia', uz: 'Chexiya' },
+  Мексика: { en: 'Mexico', uz: 'Meksika' },
+  Латвия: { en: 'Latvia', uz: 'Latviya' },
+  Таиланд: { en: 'Thailand', uz: 'Tailand' },
+  Пакистан: { en: 'Pakistan', uz: 'Pokiston' },
+  Малайзия: { en: 'Malaysia', uz: 'Malayziya' },
+  Венгрия: { en: 'Hungary', uz: 'Vengriya' },
+  'Гонконг, Специальный административный район Китая': { en: 'Hong Kong SAR, China', uz: 'Gonkong SAR, Xitoy' },
+  Бельгия: { en: 'Belgium', uz: 'Belgiya' },
+  Испания: { en: 'Spain', uz: 'Ispaniya' },
+  Сингапур: { en: 'Singapore', uz: 'Singapur' },
+  Ирландия: { en: 'Ireland', uz: 'Irlandiya' },
+  Финляндия: { en: 'Finland', uz: 'Finlyandiya' },
+  Азербайджан: { en: 'Azerbaijan', uz: 'Ozarbayjon' },
+  Словакия: { en: 'Slovakia', uz: 'Slovakiya' },
+  Бангладеш: { en: 'Bangladesh', uz: 'Bangladesh' },
+  Румыния: { en: 'Romania', uz: 'Ruminiya' },
+  Греция: { en: 'Greece', uz: 'Gretsiya' },
+  Дания: { en: 'Denmark', uz: 'Daniya' },
+  Эквадор: { en: 'Ecuador', uz: 'Ekvador' },
+  Швеция: { en: 'Sweden', uz: 'Shvetsiya' },
+  Монголия: { en: 'Mongolia', uz: 'Mongoliya' },
+  Эстония: { en: 'Estonia', uz: 'Estoniya' },
+  Болгария: { en: 'Bulgaria', uz: 'Bolgariya' },
+  Аргентина: { en: 'Argentina', uz: 'Argentina' },
+  Канада: { en: 'Canada', uz: 'Kanada' },
+  'Тайвань (провинция Китая)': { en: 'Taiwan, China', uz: 'Tayvan, Xitoy' },
+  Египет: { en: 'Egypt', uz: 'Misr' },
+  Норвегия: { en: 'Norway', uz: 'Norvegiya' },
+  Ирак: { en: 'Iraq', uz: 'Iroq' },
+}
+
+type Translate = (key: string, options?: Record<string, unknown>) => string
+
 function formatUsdMillion(
   value: number | null | undefined,
   locale: string | undefined,
@@ -57,6 +125,26 @@ function getShortSectionName(section: ScenarioLabPeSectionEffect): string {
   return section.section_name.replace(/\s+and\s+/gi, ' & ')
 }
 
+function normalizeSearchText(value: string): string {
+  return value.trim().toLocaleLowerCase()
+}
+
+function getPartnerDisplayName(partnerName: string, locale: string | undefined): string {
+  const display = PARTNER_DISPLAY_NAMES[partnerName]
+  if (!display) return partnerName
+  if (locale?.startsWith('ru')) return partnerName
+  if (locale?.startsWith('uz')) return display.uz
+  return display.en
+}
+
+function getRegimeLabel(regime: string, t: Translate): string {
+  const normalized = regime.toLocaleLowerCase()
+  if (normalized === ALL_VALUE) return t('scenarioLab.peShock.allRegimes')
+  const key = `scenarioLab.peShock.regimeLabels.${normalized}`
+  const label = t(key)
+  return label === key ? regime.toUpperCase() : label
+}
+
 export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeTradeShockPanelProps) {
   const { i18n, t } = useTranslation()
   const locale = i18n.resolvedLanguage ?? i18n.language
@@ -65,6 +153,8 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
   const [sectionId, setSectionId] = useState(ALL_VALUE)
   const [regime, setRegime] = useState(ALL_VALUE)
   const [partnerName, setPartnerName] = useState(ALL_VALUE)
+  const [productQuery, setProductQuery] = useState('')
+  const [partnerQuery, setPartnerQuery] = useState('')
   const [copyStatus, setCopyStatus] = useState<string | null>(null)
 
   const selectedSectionId =
@@ -75,6 +165,34 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
   const selectedRegime = selectedOptionExists(regimeOptions, regime) ? regime : ALL_VALUE
   const partnerOptions = state.workspace?.partners.map((partner) => partner.name) ?? []
   const selectedPartnerName = selectedOptionExists(partnerOptions, partnerName) ? partnerName : ALL_VALUE
+  const sectionById = state.workspace?.sections.find((section) => section.id === selectedSectionId)
+  const selectedPartner = state.workspace?.partners.find((partner) => partner.name === selectedPartnerName)
+  const filteredSections = useMemo(() => {
+    const query = normalizeSearchText(productQuery)
+    const sections = state.workspace?.sections ?? []
+    const matches = query
+      ? sections.filter((section) => normalizeSearchText(`${section.id} ${section.name}`).includes(query))
+      : sections
+    if (sectionById && !matches.some((section) => section.id === sectionById.id)) {
+      return [sectionById, ...matches]
+    }
+    return matches
+  }, [productQuery, sectionById, state.workspace?.sections])
+  const filteredPartners = useMemo(() => {
+    const query = normalizeSearchText(partnerQuery)
+    const partners = state.workspace?.partners ?? []
+    const matches = query
+      ? partners.filter((partner) =>
+          normalizeSearchText(
+            `${getPartnerDisplayName(partner.name, locale)} ${partner.name} ${getRegimeLabel(partner.regime, t)}`,
+          ).includes(query),
+        )
+      : partners
+    if (selectedPartner && !matches.some((partner) => partner.name === selectedPartner.name)) {
+      return [selectedPartner, ...matches]
+    }
+    return matches
+  }, [locale, partnerQuery, selectedPartner, state.workspace?.partners, t])
 
   const request: ScenarioLabPeShockRequest = useMemo(
     () => ({
@@ -98,12 +216,12 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
   const selectedSectionName =
     request.section_id === ALL_VALUE
       ? t('scenarioLab.peShock.allSections')
-      : state.workspace?.sections.find((section) => section.id === request.section_id)?.name ?? request.section_id
+      : sectionById?.name ?? request.section_id
   const selectedScopeLabel =
     request.partner_name !== ALL_VALUE
-      ? request.partner_name
+      ? getPartnerDisplayName(request.partner_name, locale)
       : request.regime !== ALL_VALUE
-        ? t('scenarioLab.peShock.scope.regime', { regime: request.regime.toUpperCase() })
+        ? t('scenarioLab.peShock.scope.regime', { regime: getRegimeLabel(request.regime, t) })
         : t('scenarioLab.peShock.allPartners')
   const leadingSection = concentrationRows[0]
   const resultNote = result
@@ -210,36 +328,70 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
             </div>
           </fieldset>
 
-          <label className="pe-shock__field">
-            <span>{t('scenarioLab.peShock.productScope')}</span>
-            <select value={selectedSectionId} onChange={(event) => setSectionId(event.target.value)}>
+          <div className="pe-shock__field">
+            <span id="pe-product-scope-label" className="pe-shock__field-label">
+              {t('scenarioLab.peShock.productScope')}
+            </span>
+            <input
+              id="pe-product-scope-search"
+              className="pe-shock__filter-input"
+              type="search"
+              value={productQuery}
+              placeholder={t('scenarioLab.peShock.productSearch')}
+              aria-label={t('scenarioLab.peShock.productSearch')}
+              onChange={(event) => setProductQuery(event.target.value)}
+            />
+            <select
+              className="pe-shock__select"
+              aria-labelledby="pe-product-scope-label"
+              value={selectedSectionId}
+              onChange={(event) => setSectionId(event.target.value)}
+            >
               <option value={ALL_VALUE}>{t('scenarioLab.peShock.allSections')}</option>
-              {state.workspace.sections.map((section) => (
+              {filteredSections.map((section) => (
                 <option key={section.id} value={section.id}>
                   {section.id} · {section.name}
                 </option>
               ))}
+              {filteredSections.length === 0 ? <option disabled>{t('scenarioLab.peShock.noMatches')}</option> : null}
             </select>
-          </label>
+          </div>
 
-          <label className="pe-shock__field">
-            <span>{t('scenarioLab.peShock.partnerScope')}</span>
-            <select value={selectedPartnerName} onChange={(event) => setPartnerName(event.target.value)}>
+          <div className="pe-shock__field">
+            <span id="pe-partner-scope-label" className="pe-shock__field-label">
+              {t('scenarioLab.peShock.partnerScope')}
+            </span>
+            <input
+              id="pe-partner-scope-search"
+              className="pe-shock__filter-input"
+              type="search"
+              value={partnerQuery}
+              placeholder={t('scenarioLab.peShock.partnerSearch')}
+              aria-label={t('scenarioLab.peShock.partnerSearch')}
+              onChange={(event) => setPartnerQuery(event.target.value)}
+            />
+            <select
+              className="pe-shock__select"
+              aria-labelledby="pe-partner-scope-label"
+              value={selectedPartnerName}
+              onChange={(event) => setPartnerName(event.target.value)}
+            >
               <option value={ALL_VALUE}>{t('scenarioLab.peShock.allPartners')}</option>
-              {state.workspace.partners.map((partner) => (
+              {filteredPartners.map((partner) => (
                 <option key={partner.name} value={partner.name}>
-                  {partner.name} · {formatPercent(partner.import_share * 100, locale, 1)}
+                  {getPartnerDisplayName(partner.name, locale)} · {formatPercent(partner.import_share * 100, locale, 1)}
                 </option>
               ))}
+              {filteredPartners.length === 0 ? <option disabled>{t('scenarioLab.peShock.noMatches')}</option> : null}
             </select>
-          </label>
+          </div>
 
           <label className="pe-shock__field">
             <span>{t('scenarioLab.peShock.regime')}</span>
-            <select value={selectedRegime} onChange={(event) => setRegime(event.target.value)}>
+            <select className="pe-shock__select" value={selectedRegime} onChange={(event) => setRegime(event.target.value)}>
               {regimeOptions.map((option) => (
                 <option key={option} value={option}>
-                  {option === ALL_VALUE ? t('scenarioLab.peShock.allRegimes') : option.toUpperCase()}
+                  {getRegimeLabel(option, t)}
                 </option>
               ))}
             </select>
