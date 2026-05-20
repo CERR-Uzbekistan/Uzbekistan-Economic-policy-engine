@@ -597,8 +597,16 @@
       "loading": "PE savdo ma'lumotlari yuklanmoqda...",
       "unavailable": "PE savdo ma'lumotlari mavjud emas. Scenario Lab'ning mavjud ishlashi o'zgarmaydi.",
       "controlsAria": "Tarif ta'siri boshqaruvlari",
+      "tariffChange": "Tarif o'zgarishi",
+      "directionLabel": "Tarif o'zgarishi yo'nalishi",
+      "direction": {
+        "cut": "Pasaytirish",
+        "increase": "Oshirish",
+        "increaseDisabled": "Tarif oshirish joriy PE ma'lumotlari kesimida faol emas."
+      },
       "tariffCut": "Tarif pasayishi",
       "section": "HS bo'limi",
+      "productScope": "Mahsulot doirasi",
       "regime": "Savdo rejimi",
       "partner": "Hamkor",
       "partnerScope": "Hamkor doirasi",
@@ -609,18 +617,18 @@
       "partnerBoundary": "Hamkor va rejim filtrlari import ulushi bo'yicha masshtablanadi, chunki mahsulot-hamkor tarif matritsalari ochiq faylda yo'q.",
       "topSections": "HS bo'limlari bo'yicha eng katta bevosita ta'sirlar",
       "caveats": "Manba cheklovlari",
-      "saveRun": "Taqqoslash uchun saqlash",
+      "saveRun": "Comparison'ga saqlash",
       "saveRunHint": "Saqlangan PE ishlari Comparison sahifasida alohida tarif ta'siri dalili sifatida ko'rinadi.",
       "savedTitle": "PE {{cut}}% tarif pasayishi · {{section}}",
       "savedDescription": "Bevosita tarif ta'siri tahlili uchun saqlangan PE ishi.",
       "sourceLabelNote": "HS bo'lim nomlari asl manba nomlarida ko'rsatiladi va bu yerda tarjima qilinmaydi. Manba: {{source}}.",
       "setup": {
-        "step": "1-qadam",
-        "title": "Chorani belgilang",
+        "step": "Ssenariy kirishlari",
+        "title": "Siyosat sozlamasi",
         "description": "Tarif pasayishini kiriting va mahsulot, hamkor yoki rejim doirasini tanlang."
       },
       "baseline": {
-        "title": "Bazaviy ekspozitsiya",
+        "title": "Ma'lumot qamrovi",
         "importBase": "Import bazasi",
         "importCoverage": "Import qamrovi",
         "baseYear": "Bazaviy yil",
@@ -630,7 +638,8 @@
         "regime": "{{regime}} rejimi"
       },
       "units": {
-        "usdThousand": "ming USD"
+        "usdThousand": "ming USD",
+        "usdMillion": "mln USD"
       },
       "claimLabels": {
         "direct": "Bevosita PE natijasi",
@@ -638,7 +647,9 @@
         "revenue": "Tarif tushumi hisob-kitob bahosi"
       },
       "decision": {
-        "title": "Siyosiy trade-off",
+        "eyebrow": "Qaror ko'rinishi",
+        "title": "Bevosita tarif ta'siri",
+        "lead": "Agar {{scope}} ({{partnerScope}}) uchun tarif {{cut}} pasaytirilsa, bevosita PE natijasi:",
         "body": "{{scope}} ({{partnerScope}}) uchun tarifni {{cut}} pasaytirish {{tradeEffect}} bevosita savdo kengayishi, {{welfare}} farovonlik yutug'i va {{revenue}} tarif tushumi o'zgarishini beradi."
       },
       "tradeoff": {
@@ -661,8 +672,8 @@
       "kpis": {
         "tradeEffect": "Savdo kengayishi",
         "tradeCreation": "Savdo yaratilishi",
-        "welfare": "Farovonlik yutug'i",
-        "revenue": "Tushum o'zgarishi",
+        "welfare": "Iste'molchi yutug'i",
+        "revenue": "Tarif tushumi o'zgarishi",
         "impactPct": "Import bazasiga ta'sir"
       },
       "meta": {
@@ -677,7 +688,17 @@
         "welfare": "Farovonlik",
         "revenue": "Tushum",
         "elasticity": "Elastiklik"
-      }
+      },
+      "interpretation": {
+        "title": "Talqin",
+        "exposure": "Eng katta bevosita ta'sir {{section}} bo'limida jamlangan.",
+        "fiscal": "Tarif tushumi {{revenue}} ga o'zgaradi; bu fiskal muvozanat nuqtasi.",
+        "next": "Ishni saqlang, keyin makro xulosadan oldin I-O yoki CGE bilan bog'lang."
+      },
+      "copyResultNote": "Natija eslatmasini nusxalash",
+      "copyStatus": "Natija eslatmasi nusxalandi.",
+      "copyUnavailable": "Bu brauzerda nusxalash mavjud emas.",
+      "copyNote": "PE tarif ta'siri: {{scope}} ({{partnerScope}}) uchun {{cut}} pasaytirish. Bevosita savdo kengayishi {{tradeEffect}}; iste'molchi yutug'i {{welfare}}; tarif tushumi {{revenue}}. Faqat bevosita PE natijasi."
     },
     "savedRuns": {
       "title": "Saqlangan ishlar",
