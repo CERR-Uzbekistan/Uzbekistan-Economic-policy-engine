@@ -1,71 +1,231 @@
 {
-  "generated_at": "2026-05-19T07:32:15.669Z",
-  "family": "world-bank-gold",
-  "snapshot": "C:\\Users\\n.ortiqov\\Desktop\\Uzbekistan-Economic-policy-engine\\scripts\\overview\\overview_source_snapshot.json",
+  "generated_at": "2026-05-20T08:02:38.580Z",
+  "family": "overview-source-refresh",
+  "families": [
+    {
+      "family": "cbu-fx",
+      "outcome": "changed",
+      "changed": true,
+      "status": "source_verified_for_public_artifact",
+      "value_hash": "6cd6fba471fde7f2658b6e32326ea019385a037098b49b0fabd9b584e9526ade",
+      "manual_required": null,
+      "error": null,
+      "changed_fields": [
+        "usd_uzs_level.value",
+        "usd_uzs_level.previous_value",
+        "usd_uzs_level.source_period",
+        "usd_uzs_level.source_url",
+        "usd_uzs_level.observed_at",
+        "usd_uzs_level.caveats",
+        "usd_uzs_level.warnings",
+        "usd_uzs_mom_change.value",
+        "usd_uzs_mom_change.source_period",
+        "usd_uzs_mom_change.source_reference",
+        "usd_uzs_mom_change.extracted_at",
+        "usd_uzs_mom_change.caveats",
+        "usd_uzs_mom_change.warnings",
+        "usd_uzs_yoy_change.value",
+        "usd_uzs_yoy_change.source_period",
+        "usd_uzs_yoy_change.source_reference",
+        "usd_uzs_yoy_change.extracted_at",
+        "usd_uzs_yoy_change.caveats"
+      ]
+    },
+    {
+      "family": "siat-trade",
+      "outcome": "no_change",
+      "changed": false,
+      "status": "source_verified_for_public_artifact",
+      "value_hash": "6cd6fba471fde7f2658b6e32326ea019385a037098b49b0fabd9b584e9526ade",
+      "manual_required": null,
+      "error": null,
+      "changed_fields": []
+    },
+    {
+      "family": "siat-cpi",
+      "outcome": "no_change",
+      "changed": false,
+      "status": "source_verified_for_public_artifact",
+      "value_hash": "6cd6fba471fde7f2658b6e32326ea019385a037098b49b0fabd9b584e9526ade",
+      "manual_required": null,
+      "error": null,
+      "changed_fields": []
+    },
+    {
+      "family": "siat-gdp-annual",
+      "outcome": "no_change",
+      "changed": false,
+      "status": "source_verified_for_public_artifact",
+      "value_hash": "6cd6fba471fde7f2658b6e32326ea019385a037098b49b0fabd9b584e9526ade",
+      "manual_required": null,
+      "error": null,
+      "changed_fields": []
+    },
+    {
+      "family": "world-bank-gold",
+      "outcome": "no_change",
+      "changed": false,
+      "status": "source_verified_for_public_artifact",
+      "value_hash": "6cd6fba471fde7f2658b6e32326ea019385a037098b49b0fabd9b584e9526ade",
+      "manual_required": null,
+      "error": null,
+      "changed_fields": []
+    }
+  ],
+  "snapshot": "/home/runner/work/Uzbekistan-Economic-policy-engine/Uzbekistan-Economic-policy-engine/scripts/overview/overview_source_snapshot.json",
   "changed": true,
   "status": "source_verified_for_public_artifact",
-  "value_hash": "ad33c5f55461edefeedce5c6a4d4a87794b76c67135cab908afbb48243cd8355",
+  "value_hash": "6cd6fba471fde7f2658b6e32326ea019385a037098b49b0fabd9b584e9526ade",
   "manual_required": null,
+  "family_errors": null,
   "diff": [
     {
-      "metric_id": "gold_price_level",
+      "metric_id": "usd_uzs_level",
       "field": "value",
-      "old_value": 4855.54,
-      "new_value": 4721.42
+      "old_value": 12019.27,
+      "new_value": 12055.81
     },
     {
-      "metric_id": "gold_price_level",
+      "metric_id": "usd_uzs_level",
       "field": "previous_value",
-      "old_value": 5019.97,
-      "new_value": 4855.54
+      "old_value": 12165.24,
+      "new_value": 12128.46
     },
     {
-      "metric_id": "gold_price_level",
+      "metric_id": "usd_uzs_level",
       "field": "source_period",
-      "old_value": "March 2026 monthly average",
-      "new_value": "April 2026 monthly average"
+      "old_value": "2026-05-19",
+      "new_value": "2026-05-20"
     },
     {
-      "metric_id": "gold_price_level",
+      "metric_id": "usd_uzs_level",
+      "field": "source_url",
+      "old_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-05-19/",
+      "new_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-05-20/"
+    },
+    {
+      "metric_id": "usd_uzs_level",
       "field": "observed_at",
-      "old_value": "2026-04-02T00:00:00Z",
-      "new_value": "2026-05-04T00:00:00Z"
+      "old_value": "2026-05-19T00:00:00Z",
+      "new_value": "2026-05-20T00:00:00Z"
     },
     {
-      "metric_id": "gold_price_level",
-      "field": "extracted_at",
-      "old_value": null,
-      "new_value": "2026-05-19T07:32:14.825Z"
+      "metric_id": "usd_uzs_level",
+      "field": "caveats",
+      "old_value": [
+        "Official/reference rate, not transaction-weighted market average.",
+        "Latest observation: requested 2026-05-19; actual CBU date/rate 2026-05-19, 12019.27 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-04-19; actual CBU date/rate 2026-04-17 returned for requested 2026-04-19, 12165.24 UZS per USD."
+      ],
+      "new_value": [
+        "Official/reference rate, not transaction-weighted market average.",
+        "Latest observation: requested 2026-05-20; actual CBU date/rate 2026-05-20, 12055.81 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-04-20; actual CBU date/rate 2026-04-20, 12128.46 UZS per USD."
+      ]
     },
     {
-      "metric_id": "gold_price_change",
+      "metric_id": "usd_uzs_level",
+      "field": "warnings",
+      "old_value": [
+        "Prior-month requested date 2026-04-19 differed from actual CBU date 2026-04-17; nearest available CBU observation was used."
+      ],
+      "new_value": []
+    },
+    {
+      "metric_id": "usd_uzs_mom_change",
       "field": "value",
-      "old_value": -3.28,
-      "new_value": -2.76
+      "old_value": -1.2,
+      "new_value": -0.6
     },
     {
-      "metric_id": "gold_price_change",
+      "metric_id": "usd_uzs_mom_change",
       "field": "source_period",
-      "old_value": "March 2026 vs February 2026",
-      "new_value": "April 2026 vs March 2026"
+      "old_value": "2026-05-19 vs 2026-04-17",
+      "new_value": "2026-05-20 vs 2026-04-20"
     },
     {
-      "metric_id": "gold_price_change",
+      "metric_id": "usd_uzs_mom_change",
       "field": "source_reference",
-      "old_value": "Calculated from World Bank Pink Sheet monthly gold prices: 4855.54 for March 2026 and 5019.97 for February 2026",
-      "new_value": "Calculated from World Bank Pink Sheet monthly gold prices: 4721.42 for April 2026 and 4855.54 for March 2026"
+      "old_value": "Calculated from CBU official USD rates: 12019.27 on 2026-05-19 and 12165.24 on 2026-04-17. Requested dates: latest 2026-05-19, prior-month 2026-04-19.",
+      "new_value": "Calculated from CBU official USD rates: 12055.81 on 2026-05-20 and 12128.46 on 2026-04-20. Requested dates: latest 2026-05-20, prior-month 2026-04-20."
     },
     {
-      "metric_id": "gold_price_change",
-      "field": "observed_at",
-      "old_value": null,
-      "new_value": "2026-05-04T00:00:00Z"
-    },
-    {
-      "metric_id": "gold_price_change",
+      "metric_id": "usd_uzs_mom_change",
       "field": "extracted_at",
-      "old_value": "2026-04-27T00:00:00Z",
-      "new_value": "2026-05-19T07:32:14.825Z"
+      "old_value": "2026-05-19T05:28:02.374Z",
+      "new_value": "2026-05-20T08:02:13.087Z"
+    },
+    {
+      "metric_id": "usd_uzs_mom_change",
+      "field": "caveats",
+      "old_value": [
+        "Latest observation: requested 2026-05-19; actual CBU date/rate 2026-05-19, 12019.27 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-04-19; actual CBU date/rate 2026-04-17 returned for requested 2026-04-19, 12165.24 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-05-19; actual CBU date/rate 2025-05-19, 12917.1 UZS per USD.",
+        "Formula: ((latest - comparison) / comparison) * 100.",
+        "Rounded to 2 decimal places.",
+        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
+      ],
+      "new_value": [
+        "Latest observation: requested 2026-05-20; actual CBU date/rate 2026-05-20, 12055.81 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-04-20; actual CBU date/rate 2026-04-20, 12128.46 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-05-20; actual CBU date/rate 2025-05-20, 12858.15 UZS per USD.",
+        "Formula: ((latest - comparison) / comparison) * 100.",
+        "Rounded to 2 decimal places.",
+        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
+      ]
+    },
+    {
+      "metric_id": "usd_uzs_mom_change",
+      "field": "warnings",
+      "old_value": [
+        "Prior-month requested date 2026-04-19 differed from actual CBU date 2026-04-17; nearest available CBU observation was used."
+      ],
+      "new_value": []
+    },
+    {
+      "metric_id": "usd_uzs_yoy_change",
+      "field": "value",
+      "old_value": -6.95,
+      "new_value": -6.24
+    },
+    {
+      "metric_id": "usd_uzs_yoy_change",
+      "field": "source_period",
+      "old_value": "2026-05-19 vs 2025-05-19",
+      "new_value": "2026-05-20 vs 2025-05-20"
+    },
+    {
+      "metric_id": "usd_uzs_yoy_change",
+      "field": "source_reference",
+      "old_value": "Calculated from CBU official USD rates: 12019.27 on 2026-05-19 and 12917.1 on 2025-05-19. Requested dates: latest 2026-05-19, prior-year 2025-05-19.",
+      "new_value": "Calculated from CBU official USD rates: 12055.81 on 2026-05-20 and 12858.15 on 2025-05-20. Requested dates: latest 2026-05-20, prior-year 2025-05-20."
+    },
+    {
+      "metric_id": "usd_uzs_yoy_change",
+      "field": "extracted_at",
+      "old_value": "2026-05-19T05:28:02.374Z",
+      "new_value": "2026-05-20T08:02:13.087Z"
+    },
+    {
+      "metric_id": "usd_uzs_yoy_change",
+      "field": "caveats",
+      "old_value": [
+        "Latest observation: requested 2026-05-19; actual CBU date/rate 2026-05-19, 12019.27 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-04-19; actual CBU date/rate 2026-04-17 returned for requested 2026-04-19, 12165.24 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-05-19; actual CBU date/rate 2025-05-19, 12917.1 UZS per USD.",
+        "Formula: ((latest - comparison) / comparison) * 100.",
+        "Rounded to 2 decimal places.",
+        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
+      ],
+      "new_value": [
+        "Latest observation: requested 2026-05-20; actual CBU date/rate 2026-05-20, 12055.81 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-04-20; actual CBU date/rate 2026-04-20, 12128.46 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-05-20; actual CBU date/rate 2025-05-20, 12858.15 UZS per USD.",
+        "Formula: ((latest - comparison) / comparison) * 100.",
+        "Rounded to 2 decimal places.",
+        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
+      ]
     }
   ]
 }
