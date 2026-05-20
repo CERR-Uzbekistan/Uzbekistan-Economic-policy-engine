@@ -716,6 +716,31 @@
         "direct": "Direct, linear PE incidence estimate only.",
         "filters": "Partner and regime filters are import-share approximations; the public data file has no product-partner tariff matrix."
       },
+      "sensitivity": {
+        "title": "Elasticity sensitivity",
+        "description": "Shows how the direct trade and welfare effects move if import-demand elasticities are lower or higher than the baseline.",
+        "multiplier": "{{value}}x elasticity",
+        "cases": {
+          "low": "Low",
+          "base": "Base",
+          "high": "High"
+        }
+      },
+      "readiness": {
+        "title": "Data readiness",
+        "available": {
+          "label": "Available",
+          "value": "HS-section imports, section elasticities, partner import shares."
+        },
+        "approximate": {
+          "label": "Approximate",
+          "value": "Partner and regime results are import-share scaled."
+        },
+        "missing": {
+          "label": "Needed for PE v2",
+          "value": "Product-partner tariff matrix, HS drill-down, household/firm incidence."
+        }
+      },
       "copyResultNote": "Copy result note",
       "copyStatus": "Result note copied.",
       "copyUnavailable": "Copy is unavailable in this browser.",

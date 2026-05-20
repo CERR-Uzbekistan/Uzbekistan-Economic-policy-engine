@@ -1,12 +1,18 @@
 import type {
   ScenarioLabPeAnalyticsWorkspace,
   ScenarioLabPeSectionEffect,
+  ScenarioLabPeSensitivityCase,
   ScenarioLabPeShockRequest,
   ScenarioLabPeShockResult,
 } from '../../contracts/data-contract.js'
 import type { PeBridgePayload, PeSection } from './pe-types.js'
 
 const TOP_SECTION_COUNT = 10
+const ELASTICITY_SENSITIVITY_CASES: Array<Pick<ScenarioLabPeSensitivityCase, 'id' | 'elasticity_multiplier'>> = [
+  { id: 'low', elasticity_multiplier: 0.75 },
+  { id: 'base', elasticity_multiplier: 1 },
+  { id: 'high', elasticity_multiplier: 1.25 },
+]
 
 function round(value: number, digits = 3): number {
   const factor = 10 ** digits
@@ -57,6 +63,17 @@ function toSectionEffect(section: PeSection, tariffScale: number, importShare: n
     welfare_usd: round(welfare, 2),
     revenue_change_usd: round(revenueChange, 2),
   }
+}
+
+function toSensitivityCases(totals: {
+  trade_effect_usd: number
+  welfare_usd: number
+}): ScenarioLabPeSensitivityCase[] {
+  return ELASTICITY_SENSITIVITY_CASES.map((sensitivityCase) => ({
+    ...sensitivityCase,
+    trade_effect_usd: round(totals.trade_effect_usd * sensitivityCase.elasticity_multiplier, 2),
+    welfare_usd: round(totals.welfare_usd * sensitivityCase.elasticity_multiplier, 2),
+  }))
 }
 
 export function toScenarioLabPeAnalyticsWorkspace(
@@ -137,6 +154,7 @@ export function runScenarioLabPeTradeShock(
       partner_import_share: round(importShare, 6),
     },
     top_sections: topSections,
+    sensitivity: toSensitivityCases(totals),
     caveats: toScenarioLabPeAnalyticsWorkspace(payload).caveats,
   }
 }

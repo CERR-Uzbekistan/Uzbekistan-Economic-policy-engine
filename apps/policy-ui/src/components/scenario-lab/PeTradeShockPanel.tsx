@@ -225,6 +225,10 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
     () => Math.max(1, Math.abs(result?.totals.trade_effect_usd ?? 0)),
     [result?.totals.trade_effect_usd],
   )
+  const maxSensitivityEffect = useMemo(
+    () => Math.max(1, ...(result?.sensitivity.map((item) => Math.abs(item.trade_effect_usd)) ?? [])),
+    [result?.sensitivity],
+  )
   const selectedSectionName =
     request.section_id === ALL_VALUE
       ? t('scenarioLab.peShock.allSections')
@@ -496,6 +500,43 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
                   <span>{t(`scenarioLab.peShock.tradeoff.${isIncrease ? 'fiscalGain' : 'fiscalCost'}`)}</span>
                 </div>
               </dl>
+
+              <div className="pe-shock__sensitivity" aria-label={t('scenarioLab.peShock.sensitivity.title')}>
+                <div className="pe-shock__sensitivity-head">
+                  <h4>{t('scenarioLab.peShock.sensitivity.title')}</h4>
+                  <p>{t('scenarioLab.peShock.sensitivity.description')}</p>
+                </div>
+                <div className="pe-shock__sensitivity-grid">
+                  {result.sensitivity.map((item) => (
+                    <div key={item.id} className="pe-shock__sensitivity-row">
+                      <div>
+                        <strong>{t(`scenarioLab.peShock.sensitivity.cases.${item.id}`)}</strong>
+                        <span>
+                          {t('scenarioLab.peShock.sensitivity.multiplier', {
+                            value: formatNumber(item.elasticity_multiplier, locale, {
+                              maximumFractionDigits: 2,
+                              minimumFractionDigits: 2,
+                            }),
+                          })}
+                        </span>
+                      </div>
+                      <div className="pe-shock__sensitivity-bar" aria-hidden="true">
+                        <span style={barStyle(item.trade_effect_usd, maxSensitivityEffect)} />
+                      </div>
+                      <dl>
+                        <div>
+                          <dt>{t('scenarioLab.peShock.kpis.tradeEffect')}</dt>
+                          <dd>{formatSignedUsdMillion(item.trade_effect_usd, locale, usdMillionUnit)}</dd>
+                        </div>
+                        <div>
+                          <dt>{t('scenarioLab.peShock.kpis.welfare')}</dt>
+                          <dd>{formatSignedUsdMillion(item.welfare_usd, locale, usdMillionUnit)}</dd>
+                        </div>
+                      </dl>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </section>
 
             <div className="pe-shock__evidence-grid">
@@ -577,6 +618,23 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
                   <strong>{t('scenarioLab.peShock.methodNote.title')}</strong>
                   <p>{t('scenarioLab.peShock.methodNote.direct')}</p>
                   <p>{t('scenarioLab.peShock.methodNote.filters')}</p>
+                </div>
+                <div className="pe-shock__readiness">
+                  <strong>{t('scenarioLab.peShock.readiness.title')}</strong>
+                  <dl>
+                    <div>
+                      <dt>{t('scenarioLab.peShock.readiness.available.label')}</dt>
+                      <dd>{t('scenarioLab.peShock.readiness.available.value')}</dd>
+                    </div>
+                    <div>
+                      <dt>{t('scenarioLab.peShock.readiness.approximate.label')}</dt>
+                      <dd>{t('scenarioLab.peShock.readiness.approximate.value')}</dd>
+                    </div>
+                    <div>
+                      <dt>{t('scenarioLab.peShock.readiness.missing.label')}</dt>
+                      <dd>{t('scenarioLab.peShock.readiness.missing.value')}</dd>
+                    </div>
+                  </dl>
                 </div>
                 <div className="pe-shock__actions">
                   {onSaveRun ? (

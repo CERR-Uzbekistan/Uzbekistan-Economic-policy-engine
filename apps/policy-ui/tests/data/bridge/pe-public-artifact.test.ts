@@ -82,6 +82,16 @@ describe('pe bridge public artifact', () => {
     assert.equal(workspace.section_count, 19)
     assert.equal(allTransport.top_sections[0].section_id, 'XVII')
     assert.equal(doubleCut.totals.trade_effect_usd, allTransport.totals.trade_effect_usd * 2)
+    assert.deepEqual(
+      allTransport.sensitivity.map((item) => item.id),
+      ['low', 'base', 'high'],
+    )
+    assert.equal(allTransport.sensitivity[0]?.elasticity_multiplier, 0.75)
+    assert.equal(allTransport.sensitivity[1]?.trade_effect_usd, allTransport.totals.trade_effect_usd)
+    assert.equal(
+      allTransport.sensitivity[2]?.trade_effect_usd,
+      Number((allTransport.totals.trade_effect_usd * 1.25).toFixed(2)),
+    )
     assert.equal(partnerRun.totals.partner_import_share, Number(firstPartner.import_share.toFixed(6)))
     assert.ok(partnerRun.totals.trade_effect_usd < allTransport.totals.trade_effect_usd)
   })

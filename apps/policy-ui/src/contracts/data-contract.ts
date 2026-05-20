@@ -677,6 +677,13 @@ export type ScenarioLabPeSectionEffect = {
   revenue_change_usd: number
 }
 
+export type ScenarioLabPeSensitivityCase = {
+  id: 'low' | 'base' | 'high'
+  elasticity_multiplier: number
+  trade_effect_usd: number
+  welfare_usd: number
+}
+
 export type ScenarioLabPeShockResult = {
   request: ScenarioLabPeShockRequest
   totals: {
@@ -690,6 +697,7 @@ export type ScenarioLabPeShockResult = {
     partner_import_share: number
   }
   top_sections: ScenarioLabPeSectionEffect[]
+  sensitivity: ScenarioLabPeSensitivityCase[]
   caveats: string[]
 }
 

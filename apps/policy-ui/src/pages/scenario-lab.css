@@ -993,6 +993,99 @@
   border-color: color-mix(in srgb, var(--color-success, #3e6b45) 24%, var(--color-border));
 }
 
+.pe-shock__sensitivity {
+  border-top: 1px solid var(--color-border);
+  display: grid;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+}
+
+.pe-shock__sensitivity-head {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.pe-shock__sensitivity-head h4 {
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+.pe-shock__sensitivity-head p {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.pe-shock__sensitivity-grid {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.pe-shock__sensitivity-row {
+  align-items: center;
+  border-top: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
+  display: grid;
+  gap: var(--space-sm);
+  grid-template-columns: minmax(7rem, 0.7fr) minmax(8rem, 1fr) minmax(12rem, 1.1fr);
+  padding-top: var(--space-xs);
+}
+
+.pe-shock__sensitivity-row > div:first-child,
+.pe-shock__sensitivity-row dl {
+  min-width: 0;
+}
+
+.pe-shock__sensitivity-row > div:first-child {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.pe-shock__sensitivity-row strong {
+  font-size: 0.84rem;
+}
+
+.pe-shock__sensitivity-row span,
+.pe-shock__sensitivity-row dt {
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+}
+
+.pe-shock__sensitivity-bar {
+  background: color-mix(in srgb, var(--color-border) 46%, transparent);
+  border-radius: 999px;
+  height: 0.4rem;
+  overflow: hidden;
+}
+
+.pe-shock__sensitivity-bar span {
+  background: var(--color-accent);
+  display: block;
+  height: 100%;
+  width: var(--io-bar-width);
+}
+
+.pe-shock__sensitivity-row dl {
+  display: grid;
+  gap: var(--space-xs);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+}
+
+.pe-shock__sensitivity-row dl div {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.pe-shock__sensitivity-row dd {
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  font-weight: 800;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
 .pe-shock__evidence-grid {
   align-items: start;
   display: grid;
@@ -1169,7 +1262,8 @@
   padding-left: 1rem;
 }
 
-.pe-shock__method-note {
+.pe-shock__method-note,
+.pe-shock__readiness {
   border-top: 1px solid var(--color-border);
   color: var(--color-text-muted);
   display: grid;
@@ -1179,7 +1273,8 @@
   padding-top: var(--space-sm);
 }
 
-.pe-shock__method-note strong {
+.pe-shock__method-note strong,
+.pe-shock__readiness strong {
   color: var(--color-text);
   font-size: 0.75rem;
   letter-spacing: 0.04em;
@@ -1187,6 +1282,26 @@
 }
 
 .pe-shock__method-note p {
+  margin: 0;
+}
+
+.pe-shock__readiness dl {
+  display: grid;
+  gap: var(--space-xs);
+  margin: 0;
+}
+
+.pe-shock__readiness dl div {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.pe-shock__readiness dt {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.pe-shock__readiness dd {
   margin: 0;
 }
 
@@ -1985,6 +2100,8 @@
   .io-shock__layout,
   .io-shock__kpis,
   .pe-shock__metric-strip,
+  .pe-shock__sensitivity-row,
+  .pe-shock__sensitivity-row dl,
   .pe-shock__tariff-control {
     grid-template-columns: 1fr;
   }

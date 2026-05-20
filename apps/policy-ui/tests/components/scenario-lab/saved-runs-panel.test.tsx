@@ -203,6 +203,14 @@ const peRecord: SavedScenarioRecord = {
       partner_import_share: 1,
     },
     top_sections: [],
+    sensitivity: [
+      {
+        id: 'base',
+        elasticity_multiplier: 1,
+        trade_effect_usd: 150,
+        welfare_usd: 20,
+      },
+    ],
     caveats: ['Direct tariff-incidence only.'],
   },
 }

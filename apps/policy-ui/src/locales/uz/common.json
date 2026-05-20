@@ -716,6 +716,31 @@
         "direct": "Faqat bevosita chiziqli PE tarif ta'siri bahosi.",
         "filters": "Hamkor va rejim filtrlari import ulushi bo'yicha taxminiy; ochiq faylda mahsulot-hamkor tarif matritsasi yo'q."
       },
+      "sensitivity": {
+        "title": "Elastiklik sezgirligi",
+        "description": "Import talabi elastikliklari bazaviy qiymatdan pastroq yoki yuqoriroq bo'lsa, bevosita savdo va farovonlik ta'sirlari qanday o'zgarishini ko'rsatadi.",
+        "multiplier": "{{value}}x elastiklik",
+        "cases": {
+          "low": "Past",
+          "base": "Bazaviy",
+          "high": "Yuqori"
+        }
+      },
+      "readiness": {
+        "title": "Ma'lumot tayyorligi",
+        "available": {
+          "label": "Mavjud",
+          "value": "HS bo'limlari importi, bo'lim elastikliklari, hamkorlar import ulushlari."
+        },
+        "approximate": {
+          "label": "Taxminiy",
+          "value": "Hamkor va rejim natijalari import ulushi bo'yicha masshtablanadi."
+        },
+        "missing": {
+          "label": "PE v2 uchun kerak",
+          "value": "Mahsulot-hamkor-tarif matritsasi, HS drill-down, uy xo'jaligi/firma kesimidagi ta'sirlar."
+        }
+      },
       "copyResultNote": "Natija eslatmasini nusxalash",
       "copyStatus": "Natija eslatmasi nusxalandi.",
       "copyUnavailable": "Bu brauzerda nusxalash mavjud emas.",
