@@ -663,7 +663,10 @@
       },
       "tradeoff": {
         "benefit": "Iste'molchi uchun bevosita yutuq",
+        "consumerCost": "Iste'molchi uchun bevosita xarajat",
         "fiscalCost": "Fiskal hisob-kitob effekti",
+        "fiscalGain": "Fiskal hisob-kitob yutug'i",
+        "tradeContraction": "Makro bog'lanishdan oldingi import qisqarishi",
         "tradeExpansion": "Makro bog'lanishdan oldingi import reaksiyasi",
         "importBase": "Tanlangan import bazasiga nisbatan ta'sir"
       },
@@ -702,9 +705,16 @@
       },
       "interpretation": {
         "title": "Talqin",
+        "cutEffect": "Tarif pasayishi import talabini va iste'molchi farovonligini bevosita oshiradi, ammo tarif tushumini kamaytiradi.",
+        "increaseEffect": "Tarif oshishi import talabini va iste'molchi farovonligini bevosita kamaytiradi, ammo tarif tushumini oshiradi.",
         "exposure": "Eng katta bevosita ta'sir {{section}} bo'limida jamlangan.",
-        "fiscal": "Tarif tushumi {{revenue}} ga o'zgaradi; bu fiskal muvozanat nuqtasi.",
+        "fiscal": "Tarif tushumi {{revenue}} ga o'zgaradi; bu hisob-kitob effekti, fiskal trayektoriya emas.",
         "next": "Ishni saqlang, keyin makro xulosadan oldin I-O yoki CGE bilan bog'lang."
+      },
+      "methodNote": {
+        "title": "Foydalanish",
+        "direct": "Faqat bevosita chiziqli PE tarif ta'siri bahosi.",
+        "filters": "Hamkor va rejim filtrlari import ulushi bo'yicha taxminiy; ochiq faylda mahsulot-hamkor tarif matritsasi yo'q."
       },
       "copyResultNote": "Natija eslatmasini nusxalash",
       "copyStatus": "Natija eslatmasi nusxalandi.",

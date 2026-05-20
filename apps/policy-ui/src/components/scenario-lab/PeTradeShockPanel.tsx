@@ -235,11 +235,12 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
       : request.regime !== ALL_VALUE
         ? t('scenarioLab.peShock.scope.regime', { regime: getRegimeLabel(request.regime, t) })
         : t('scenarioLab.peShock.allPartners')
+  const isIncrease = request.tariff_cut_pct < 0
   const leadingSection = concentrationRows[0]
   const resultNote = result
     ? t('scenarioLab.peShock.copyNote', {
         change: formatPercent(Math.abs(request.tariff_cut_pct), locale, 1),
-        direction: t(`scenarioLab.peShock.direction.${request.tariff_cut_pct < 0 ? 'increaseAction' : 'cutAction'}`),
+        direction: t(`scenarioLab.peShock.direction.${isIncrease ? 'increaseAction' : 'cutAction'}`),
         scope: selectedSectionName,
         partnerScope: selectedScopeLabel,
         tradeEffect: formatSignedUsdMillion(result.totals.trade_effect_usd, locale, usdMillionUnit),
@@ -458,7 +459,7 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
                   {t('scenarioLab.peShock.decision.lead', {
                     change: formatPercent(Math.abs(request.tariff_cut_pct), locale, 1),
                     direction: t(
-                      `scenarioLab.peShock.direction.${request.tariff_cut_pct < 0 ? 'increaseAction' : 'cutAction'}`,
+                      `scenarioLab.peShock.direction.${isIncrease ? 'increaseAction' : 'cutAction'}`,
                     ),
                     scope: selectedSectionName,
                     partnerScope: selectedScopeLabel,
@@ -474,7 +475,7 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
                 >
                   <dt>{t('scenarioLab.peShock.kpis.tradeEffect')}</dt>
                   <dd>{formatSignedUsdMillion(result.totals.trade_effect_usd, locale, usdMillionUnit)}</dd>
-                  <span>{t('scenarioLab.peShock.tradeoff.tradeExpansion')}</span>
+                  <span>{t(`scenarioLab.peShock.tradeoff.${isIncrease ? 'tradeContraction' : 'tradeExpansion'}`)}</span>
                 </div>
                 <div
                   className={`pe-shock__metric-card pe-shock__metric-card--benefit ${
@@ -483,7 +484,7 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
                 >
                   <dt>{t('scenarioLab.peShock.kpis.welfare')}</dt>
                   <dd>{formatSignedUsdMillion(result.totals.welfare_usd, locale, usdMillionUnit)}</dd>
-                  <span>{t('scenarioLab.peShock.tradeoff.benefit')}</span>
+                  <span>{t(`scenarioLab.peShock.tradeoff.${isIncrease ? 'consumerCost' : 'benefit'}`)}</span>
                 </div>
                 <div
                   className={`pe-shock__metric-card pe-shock__metric-card--cost ${
@@ -492,7 +493,7 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
                 >
                   <dt>{t('scenarioLab.peShock.kpis.revenue')}</dt>
                   <dd>{formatSignedUsdMillion(result.totals.revenue_change_usd, locale, usdMillionUnit)}</dd>
-                  <span>{t('scenarioLab.peShock.tradeoff.fiscalCost')}</span>
+                  <span>{t(`scenarioLab.peShock.tradeoff.${isIncrease ? 'fiscalGain' : 'fiscalCost'}`)}</span>
                 </div>
               </dl>
             </section>
@@ -559,6 +560,7 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
               <aside className="pe-shock__insight-rail" aria-label={t('scenarioLab.peShock.interpretation.title')}>
                 <h3>{t('scenarioLab.peShock.interpretation.title')}</h3>
                 <ul>
+                  <li>{t(`scenarioLab.peShock.interpretation.${isIncrease ? 'increaseEffect' : 'cutEffect'}`)}</li>
                   <li>
                     {t('scenarioLab.peShock.interpretation.exposure', {
                       section: leadingSection ? getShortSectionName(leadingSection) : formatUnavailable(locale),
@@ -571,6 +573,11 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
                   </li>
                   <li>{t('scenarioLab.peShock.interpretation.next')}</li>
                 </ul>
+                <div className="pe-shock__method-note">
+                  <strong>{t('scenarioLab.peShock.methodNote.title')}</strong>
+                  <p>{t('scenarioLab.peShock.methodNote.direct')}</p>
+                  <p>{t('scenarioLab.peShock.methodNote.filters')}</p>
+                </div>
                 <div className="pe-shock__actions">
                   {onSaveRun ? (
                     <button type="button" className="btn-primary" onClick={() => onSaveRun(result, state.workspace)}>

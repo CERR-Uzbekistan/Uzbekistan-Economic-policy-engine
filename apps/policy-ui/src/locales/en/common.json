@@ -663,7 +663,10 @@
       },
       "tradeoff": {
         "benefit": "Direct consumer gain",
+        "consumerCost": "Direct consumer cost",
         "fiscalCost": "Fiscal accounting effect",
+        "fiscalGain": "Fiscal accounting gain",
+        "tradeContraction": "Import contraction before macro linkage",
         "tradeExpansion": "Import response before macro linkage",
         "importBase": "Effect relative to selected import base"
       },
@@ -702,9 +705,16 @@
       },
       "interpretation": {
         "title": "Interpretation",
+        "cutEffect": "A tariff cut raises direct import demand and consumer welfare, but lowers tariff revenue.",
+        "increaseEffect": "A tariff increase lowers direct import demand and consumer welfare, but raises tariff revenue.",
         "exposure": "Largest direct effect is concentrated in {{section}}.",
-        "fiscal": "Tariff revenue changes by {{revenue}}; treat it as the fiscal trade-off.",
+        "fiscal": "Tariff revenue changes by {{revenue}}; this is an accounting effect, not a fiscal path.",
         "next": "Save this run, then link it with I-O or CGE before making macro claims."
+      },
+      "methodNote": {
+        "title": "Use as",
+        "direct": "Direct, linear PE incidence estimate only.",
+        "filters": "Partner and regime filters are import-share approximations; the public data file has no product-partner tariff matrix."
       },
       "copyResultNote": "Copy result note",
       "copyStatus": "Result note copied.",
