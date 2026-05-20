@@ -278,6 +278,10 @@
   grid-template-columns: 18rem minmax(0, 1fr);
 }
 
+.pe-shock__layout {
+  grid-template-columns: minmax(18rem, 22rem) minmax(0, 1fr);
+}
+
 .io-shock__controls {
   align-content: start;
   align-self: start;
@@ -287,6 +291,38 @@
   display: grid;
   gap: var(--space-md);
   padding: var(--space-md);
+}
+
+.pe-shock__setup {
+  gap: var(--space-sm);
+}
+
+.pe-shock__section-head {
+  border-bottom: 1px solid var(--color-border);
+  display: grid;
+  gap: 0.25rem;
+  padding-bottom: var(--space-sm);
+}
+
+.pe-shock__section-head span {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pe-shock__section-head h3 {
+  font-size: 0.98rem;
+  margin: 0;
+}
+
+.pe-shock__section-head p {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin: 0;
 }
 
 .io-shock__controls fieldset,
@@ -400,6 +436,71 @@
   display: grid;
   gap: var(--space-md);
   min-width: 0;
+}
+
+.pe-shock__decision {
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  display: grid;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+}
+
+.pe-shock__decision h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.pe-shock__decision p {
+  color: var(--color-text);
+  font-size: 0.96rem;
+  line-height: 1.55;
+  margin: 0;
+  max-width: 78ch;
+}
+
+.pe-shock__tradeoff {
+  display: grid;
+  gap: var(--space-sm);
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  margin: 0;
+}
+
+.pe-shock__tradeoff-item {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  display: grid;
+  gap: 0.35rem;
+  padding: var(--space-sm) var(--space-md);
+}
+
+.pe-shock__tradeoff-item dt {
+  color: var(--color-text-muted);
+  font-size: 0.76rem;
+  font-weight: 650;
+}
+
+.pe-shock__tradeoff-item dd {
+  font-size: 1.12rem;
+  font-weight: 750;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.pe-shock__tradeoff-item span {
+  color: var(--color-text-muted);
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.pe-shock__tradeoff-item--benefit {
+  border-color: color-mix(in srgb, var(--color-success, #3e6b45) 28%, var(--color-border));
+}
+
+.pe-shock__tradeoff-item--cost {
+  border-color: color-mix(in srgb, #a66b1f 34%, var(--color-border));
 }
 
 .io-shock__kpis {
@@ -576,6 +677,10 @@
   height: 100%;
   opacity: 0.68;
   width: var(--io-bar-width, 0%);
+}
+
+.pe-shock__bar-cell--revenue .io-shock__bar-cell-fill {
+  background: #a66b1f;
 }
 
 .io-shock__caveats {
@@ -1580,6 +1685,12 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-sm);
+}
+
+.pe-shock__actions span {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  line-height: 1.35;
 }
 
 .io-shock__save-status {

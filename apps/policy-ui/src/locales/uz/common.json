@@ -434,7 +434,7 @@
       "plannedDescription": "Bu tahlil yo'nalishlari faqat orientir uchun ko'rsatilgan va hozircha ishga tushmaydi.",
       "macroQpm": "Makro / QPM",
       "ioSectorShock": "I-O sektor shoki",
-      "peTradeShock": "PE savdo shoki",
+      "peTradeShock": "Tarif ta'siri",
       "cgeReformShock": "CGE islohot shoki",
       "fppFiscalPath": "FPP fiskal trayektoriya",
       "savedRuns": "Saqlangan ishlar",
@@ -469,7 +469,7 @@
         }
       },
       "pe": {
-        "title": "PE savdo shoki",
+        "title": "Tarif ta'siri",
         "description": "Ochiq PE faylidan bevosita tarif ta'siri tahlili.",
         "items": {
           "inputs": "Kirishlar: tarif pasayishi, HS bo'limi, hamkor yoki rejim va sektor elastikliklari.",
@@ -508,7 +508,7 @@
         "title": "Sintez",
         "description": "Kross-model muvofiqlashtirish hozircha faol emas.",
         "items": {
-          "chain": "Maqsadli zanjir: PE savdo shoki -> I-O sektor uzatishi -> CGE qayta taqsimlash -> FPP fiskal trayektoriya.",
+          "chain": "Maqsadli zanjir: PE tarif ta'siri -> I-O sektor uzatishi -> CGE qayta taqsimlash -> FPP fiskal trayektoriya.",
           "layers": "QPM va DFM makro moslik va nowcast qatlamlari sifatida ulanadi.",
           "reconciliation": "Sintez farqlar, ishonch flaglari va yechilmagan taxminlarni ko'rsatadi."
         }
@@ -592,11 +592,11 @@
       }
     },
     "peShock": {
-      "title": "PE savdo shoki",
-      "description": "Tarif pasayishi stsenariysini PE savdo oqimlari fayli orqali ishga tushiring va HS bo'limlari bo'yicha bevosita ta'sirlarni ko'ring.",
+      "title": "Tarif ta'siri",
+      "description": "Tarif pasayishini mahsulot, hamkor yoki savdo rejimi bo'yicha sinab ko'ring va makro yoki sektor bog'lanishidan oldingi bevosita PE ta'sirlarini ko'ring.",
       "loading": "PE savdo ma'lumotlari yuklanmoqda...",
       "unavailable": "PE savdo ma'lumotlari mavjud emas. Scenario Lab'ning mavjud ishlashi o'zgarmaydi.",
-      "controlsAria": "PE savdo shoki boshqaruvlari",
+      "controlsAria": "Tarif ta'siri boshqaruvlari",
       "tariffCut": "Tarif pasayishi",
       "section": "HS bo'limi",
       "regime": "Savdo rejimi",
@@ -607,19 +607,45 @@
       "allPartners": "Barcha hamkorlar",
       "boundary": "Faqat bevosita tarif ta'siri. Bu YaIM, inflyatsiya, I-O, CGE yoki fiskal trayektoriya effekti emas.",
       "partnerBoundary": "Hamkor va rejim filtrlari import ulushi bo'yicha masshtablanadi, chunki mahsulot-hamkor tarif matritsalari ochiq faylda yo'q.",
-      "topSections": "Eng ko'p ta'sirlangan HS bo'limlari",
+      "topSections": "HS bo'limlari bo'yicha eng katta bevosita ta'sirlar",
       "caveats": "Manba cheklovlari",
-      "saveRun": "PE ishini saqlash",
+      "saveRun": "Taqqoslash uchun saqlash",
+      "saveRunHint": "Saqlangan PE ishlari Comparison sahifasida alohida tarif ta'siri dalili sifatida ko'rinadi.",
       "savedTitle": "PE {{cut}}% tarif pasayishi · {{section}}",
       "savedDescription": "Bevosita tarif ta'siri tahlili uchun saqlangan PE ishi.",
       "sourceLabelNote": "HS bo'lim nomlari asl manba nomlarida ko'rsatiladi va bu yerda tarjima qilinmaydi. Manba: {{source}}.",
+      "setup": {
+        "step": "1-qadam",
+        "title": "Chorani belgilang",
+        "description": "Tarif pasayishini kiriting va mahsulot, hamkor yoki rejim doirasini tanlang."
+      },
+      "baseline": {
+        "title": "Bazaviy ekspozitsiya",
+        "importBase": "Import bazasi",
+        "importCoverage": "Import qamrovi",
+        "baseYear": "Bazaviy yil",
+        "sourceScope": "Manba qamrovi"
+      },
+      "scope": {
+        "regime": "{{regime}} rejimi"
+      },
       "units": {
         "usdThousand": "ming USD"
       },
       "claimLabels": {
-        "direct": "Bevosita qisman muvozanat savdo effekti",
+        "direct": "Bevosita PE natijasi",
         "welfare": "Iste'molchi farovonligi bo'yicha bevosita baho",
         "revenue": "Tarif tushumi hisob-kitob bahosi"
+      },
+      "decision": {
+        "title": "Siyosiy trade-off",
+        "body": "{{scope}} ({{partnerScope}}) uchun tarifni {{cut}} pasaytirish {{tradeEffect}} bevosita savdo kengayishi, {{welfare}} farovonlik yutug'i va {{revenue}} tarif tushumi o'zgarishini beradi."
+      },
+      "tradeoff": {
+        "benefit": "Iste'molchi uchun bevosita yutuq",
+        "fiscalCost": "Fiskal hisob-kitob effekti",
+        "tradeExpansion": "Makro bog'lanishdan oldingi import reaksiyasi",
+        "importBase": "Tanlangan import bazasiga nisbatan ta'sir"
       },
       "whatThisMeans": {
         "title": "Bu nimani anglatadi",
@@ -633,9 +659,9 @@
         "dataVintage": "Ma'lumot sanasi"
       },
       "kpis": {
-        "tradeEffect": "Savdo effekti",
+        "tradeEffect": "Savdo kengayishi",
         "tradeCreation": "Savdo yaratilishi",
-        "welfare": "Farovonlik",
+        "welfare": "Farovonlik yutug'i",
         "revenue": "Tushum o'zgarishi",
         "impactPct": "Import bazasiga ta'sir"
       },
@@ -675,7 +701,7 @@
       },
       "type": {
         "io": "I-O sektor shoki",
-        "pe": "PE savdo shoki",
+        "pe": "Tarif ta'siri",
         "macro": "Makro/QPM"
       },
       "fields": {

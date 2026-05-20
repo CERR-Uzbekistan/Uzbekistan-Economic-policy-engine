@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import type {
   ScenarioLabPeAnalyticsWorkspace,
@@ -30,8 +30,25 @@ function formatUsdThousand(
   return `${formatNumber(value, locale, { maximumFractionDigits: 0 })} ${unitLabel}`
 }
 
+function formatSignedUsdThousand(
+  value: number | null | undefined,
+  locale: string | undefined,
+  unitLabel: string,
+): string {
+  if (typeof value !== 'number' || !Number.isFinite(value)) {
+    return formatUnavailable(locale)
+  }
+  const sign = value > 0 ? '+' : value < 0 ? '-' : ''
+  return `${sign}${formatNumber(Math.abs(value), locale, { maximumFractionDigits: 0 })} ${unitLabel}`
+}
+
 function selectedOptionExists(options: string[], selected: string): boolean {
   return selected === ALL_VALUE || options.includes(selected)
+}
+
+function barStyle(value: number, maxAbsValue: number): CSSProperties {
+  const width = maxAbsValue > 0 ? Math.max(4, (Math.abs(value) / maxAbsValue) * 100) : 0
+  return { '--io-bar-width': `${width}%` } as CSSProperties
 }
 
 export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeTradeShockPanelProps) {
@@ -66,6 +83,24 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
     if (state.status !== 'ready') return null
     return runScenarioLabPeTradeShock(state.payload, request)
   }, [request, state])
+  const maxTradeEffect = useMemo(
+    () => Math.max(1, ...(result?.top_sections.map((section) => Math.abs(section.trade_effect_usd)) ?? [])),
+    [result],
+  )
+  const maxRevenueEffect = useMemo(
+    () => Math.max(1, ...(result?.top_sections.map((section) => Math.abs(section.revenue_change_usd)) ?? [])),
+    [result],
+  )
+  const selectedSectionName =
+    request.section_id === ALL_VALUE
+      ? t('scenarioLab.peShock.allSections')
+      : state.workspace?.sections.find((section) => section.id === request.section_id)?.name ?? request.section_id
+  const selectedScopeLabel =
+    request.partner_name !== ALL_VALUE
+      ? request.partner_name
+      : request.regime !== ALL_VALUE
+        ? t('scenarioLab.peShock.scope.regime', { regime: request.regime.toUpperCase() })
+        : t('scenarioLab.peShock.allPartners')
 
   if (state.status === 'loading') {
     return (
@@ -113,8 +148,14 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
         <p>{t('scenarioLab.peShock.description')}</p>
       </div>
 
-      <div className="io-shock__layout">
-        <div className="io-shock__controls" aria-label={t('scenarioLab.peShock.controlsAria')}>
+      <div className="io-shock__layout pe-shock__layout">
+        <div className="io-shock__controls pe-shock__setup" aria-label={t('scenarioLab.peShock.controlsAria')}>
+          <div className="pe-shock__section-head">
+            <span>{t('scenarioLab.peShock.setup.step')}</span>
+            <h3>{t('scenarioLab.peShock.setup.title')}</h3>
+            <p>{t('scenarioLab.peShock.setup.description')}</p>
+          </div>
+
           <label>
             <span>{t('scenarioLab.peShock.tariffCut')}</span>
             <input
@@ -162,7 +203,29 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
             </select>
           </label>
 
-          <div className="io-shock__summary" aria-label={t('scenarioLab.peShock.summary.title')}>
+          <div className="io-shock__summary pe-shock__baseline" aria-label={t('scenarioLab.peShock.baseline.title')}>
+            <h3>{t('scenarioLab.peShock.baseline.title')}</h3>
+            <dl>
+              <div>
+                <dt>{t('scenarioLab.peShock.baseline.importBase')}</dt>
+                <dd>{formatUsdThousand(result?.totals.import_base_usd, locale, usdThousandUnit)}</dd>
+              </div>
+              <div>
+                <dt>{t('scenarioLab.peShock.baseline.importCoverage')}</dt>
+                <dd>{formatPercent((result?.totals.partner_import_share ?? 0) * 100, locale, 1)}</dd>
+              </div>
+              <div>
+                <dt>{t('scenarioLab.peShock.baseline.baseYear')}</dt>
+                <dd>{state.workspace.data_vintage}</dd>
+              </div>
+              <div>
+                <dt>{t('scenarioLab.peShock.baseline.sourceScope')}</dt>
+                <dd>{t('scenarioLab.peShock.meta.sections', { count: state.workspace.section_count })}</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div className="io-shock__summary pe-shock__summary" aria-label={t('scenarioLab.peShock.summary.title')}>
             <h3>{t('scenarioLab.peShock.summary.title')}</h3>
             <dl>
               <div>
@@ -171,17 +234,11 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
               </div>
               <div>
                 <dt>{t('scenarioLab.peShock.summary.section')}</dt>
-                <dd>{request.section_id === ALL_VALUE ? t('scenarioLab.peShock.allSections') : request.section_id}</dd>
+                <dd>{selectedSectionName}</dd>
               </div>
               <div>
                 <dt>{t('scenarioLab.peShock.summary.partnerScope')}</dt>
-                <dd>
-                  {request.partner_name !== ALL_VALUE
-                    ? request.partner_name
-                    : request.regime !== ALL_VALUE
-                      ? request.regime
-                      : t('scenarioLab.peShock.allPartners')}
-                </dd>
+                <dd>{selectedScopeLabel}</dd>
               </div>
               <div>
                 <dt>{t('scenarioLab.peShock.summary.dataVintage')}</dt>
@@ -198,31 +255,41 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
 
         {result ? (
           <div className="io-shock__results">
-            <dl className="io-shock__kpis">
-              <div>
-                <span className="claim-label">{t('scenarioLab.peShock.claimLabels.direct')}</span>
-                <dt>{t('scenarioLab.peShock.kpis.tradeEffect')}</dt>
-                <dd>{formatUsdThousand(result.totals.trade_effect_usd, locale, usdThousandUnit)}</dd>
-              </div>
-              <div>
-                <span className="claim-label">{t('scenarioLab.peShock.claimLabels.direct')}</span>
-                <dt>{t('scenarioLab.peShock.kpis.tradeCreation')}</dt>
-                <dd>{formatUsdThousand(result.totals.trade_creation_usd, locale, usdThousandUnit)}</dd>
-              </div>
-              <div>
-                <span className="claim-label">{t('scenarioLab.peShock.claimLabels.welfare')}</span>
+            <section className="pe-shock__decision" aria-labelledby="pe-shock-decision-title">
+              <span className="claim-label">{t('scenarioLab.peShock.claimLabels.direct')}</span>
+              <h3 id="pe-shock-decision-title">{t('scenarioLab.peShock.decision.title')}</h3>
+              <p>
+                {t('scenarioLab.peShock.decision.body', {
+                  cut: formatPercent(request.tariff_cut_pct, locale, 1),
+                  scope: selectedSectionName,
+                  partnerScope: selectedScopeLabel,
+                  tradeEffect: formatUsdThousand(result.totals.trade_effect_usd, locale, usdThousandUnit),
+                  welfare: formatUsdThousand(result.totals.welfare_usd, locale, usdThousandUnit),
+                  revenue: formatSignedUsdThousand(result.totals.revenue_change_usd, locale, usdThousandUnit),
+                })}
+              </p>
+            </section>
+
+            <dl className="pe-shock__tradeoff">
+              <div className="pe-shock__tradeoff-item pe-shock__tradeoff-item--benefit">
                 <dt>{t('scenarioLab.peShock.kpis.welfare')}</dt>
                 <dd>{formatUsdThousand(result.totals.welfare_usd, locale, usdThousandUnit)}</dd>
+                <span>{t('scenarioLab.peShock.tradeoff.benefit')}</span>
               </div>
-              <div>
-                <span className="claim-label">{t('scenarioLab.peShock.claimLabels.revenue')}</span>
+              <div className="pe-shock__tradeoff-item pe-shock__tradeoff-item--cost">
                 <dt>{t('scenarioLab.peShock.kpis.revenue')}</dt>
-                <dd>{formatUsdThousand(result.totals.revenue_change_usd, locale, usdThousandUnit)}</dd>
+                <dd>{formatSignedUsdThousand(result.totals.revenue_change_usd, locale, usdThousandUnit)}</dd>
+                <span>{t('scenarioLab.peShock.tradeoff.fiscalCost')}</span>
               </div>
-              <div>
-                <span className="claim-label">{t('scenarioLab.peShock.claimLabels.direct')}</span>
+              <div className="pe-shock__tradeoff-item">
+                <dt>{t('scenarioLab.peShock.kpis.tradeEffect')}</dt>
+                <dd>{formatUsdThousand(result.totals.trade_effect_usd, locale, usdThousandUnit)}</dd>
+                <span>{t('scenarioLab.peShock.tradeoff.tradeExpansion')}</span>
+              </div>
+              <div className="pe-shock__tradeoff-item">
                 <dt>{t('scenarioLab.peShock.kpis.impactPct')}</dt>
                 <dd>{formatPercent(result.totals.impact_pct, locale, 2)}</dd>
+                <span>{t('scenarioLab.peShock.tradeoff.importBase')}</span>
               </div>
             </dl>
 
@@ -234,10 +301,11 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
             </div>
 
             {onSaveRun ? (
-              <div className="io-shock__actions">
+              <div className="io-shock__actions pe-shock__actions">
                 <button type="button" className="ui-secondary-action" onClick={() => onSaveRun(result, state.workspace)}>
                   {t('scenarioLab.peShock.saveRun')}
                 </button>
+                <span>{t('scenarioLab.peShock.saveRunHint')}</span>
                 {saveStatus ? (
                   <p className="io-shock__save-status" role="status" aria-live="polite">
                     {saveStatus}
@@ -248,16 +316,6 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
 
             <div className="io-shock__table-wrap">
               <h3>{t('scenarioLab.peShock.topSections')}</h3>
-              <div className="io-shock__meaning">
-                <h4>{t('scenarioLab.peShock.whatThisMeans.title')}</h4>
-                <p>
-                  {t('scenarioLab.peShock.whatThisMeans.body', {
-                    tradeEffect: formatUsdThousand(result.totals.trade_effect_usd, locale, usdThousandUnit),
-                    welfare: formatUsdThousand(result.totals.welfare_usd, locale, usdThousandUnit),
-                    revenue: formatUsdThousand(result.totals.revenue_change_usd, locale, usdThousandUnit),
-                  })}
-                </p>
-              </div>
               <p className="io-shock__source-note">
                 {t('scenarioLab.peShock.sourceLabelNote', {
                   source: state.workspace.source_artifact,
@@ -284,9 +342,29 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
                         <strong>{section.section_name}</strong>
                       </th>
                       <td>{formatUsdThousand(section.import_usd, locale, usdThousandUnit)}</td>
-                      <td>{formatUsdThousand(section.trade_effect_usd, locale, usdThousandUnit)}</td>
+                      <td>
+                        <span className="io-shock__bar-cell">
+                          <span className="io-shock__bar-cell-track">
+                            <span
+                              className="io-shock__bar-cell-fill"
+                              style={barStyle(section.trade_effect_usd, maxTradeEffect)}
+                            />
+                          </span>
+                          <span>{formatUsdThousand(section.trade_effect_usd, locale, usdThousandUnit)}</span>
+                        </span>
+                      </td>
                       <td>{formatUsdThousand(section.welfare_usd, locale, usdThousandUnit)}</td>
-                      <td>{formatUsdThousand(section.revenue_change_usd, locale, usdThousandUnit)}</td>
+                      <td>
+                        <span className="io-shock__bar-cell pe-shock__bar-cell--revenue">
+                          <span className="io-shock__bar-cell-track">
+                            <span
+                              className="io-shock__bar-cell-fill"
+                              style={barStyle(section.revenue_change_usd, maxRevenueEffect)}
+                            />
+                          </span>
+                          <span>{formatSignedUsdThousand(section.revenue_change_usd, locale, usdThousandUnit)}</span>
+                        </span>
+                      </td>
                       <td>{formatNumber(section.elasticity, locale, { maximumFractionDigits: 2 })}</td>
                     </tr>
                   ))}

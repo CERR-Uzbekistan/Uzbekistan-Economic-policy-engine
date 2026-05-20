@@ -69,7 +69,7 @@ async function createTestI18n() {
               },
               type: {
                 io: 'I-O sector shock',
-                pe: 'PE trade shock',
+                pe: 'Tariff incidence',
                 macro: 'Macro/QPM',
               },
               fields: {
@@ -250,7 +250,7 @@ describe('ScenarioLabSavedRunsPanel', () => {
       </I18nextProvider>,
     )
 
-    assert.match(markup, /PE trade shock/)
+    assert.match(markup, /Tariff incidence/)
     assert.match(markup, /Trade effect/)
     assert.match(markup, /Revenue change/)
     assert.match(markup, /Tariff cut/)

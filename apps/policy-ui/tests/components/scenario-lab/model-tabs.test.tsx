@@ -26,7 +26,7 @@ async function createTestI18n() {
               plannedDescription: 'These analysis lanes are shown for orientation only and do not run yet.',
               macroQpm: 'Macro / QPM',
               ioSectorShock: 'I-O Sector Shock',
-              peTradeShock: 'PE Trade Shock',
+              peTradeShock: 'Tariff Incidence',
               cgeReformShock: 'CGE Reform Shock',
               fppFiscalPath: 'FPP Fiscal Path',
               savedRuns: 'Saved Runs',
@@ -61,7 +61,7 @@ async function createTestI18n() {
                 },
               },
               pe: {
-                title: 'PE Trade Shock',
+                title: 'Tariff Incidence',
                 description: 'Direct tariff-incidence analysis from the PE public data file.',
                 items: {
                   inputs: 'Inputs: tariff cut, HS section, partner or regime scope, and section elasticity set.',
@@ -129,7 +129,7 @@ describe('ScenarioLabModelTabs', () => {
     assert.match(markup, /Saved Runs/)
     assert.match(markup, /Inactive model lanes/)
     assert.match(markup, /<details class="scenario-model-tabs__planned">/)
-    assert.match(markup, /PE Trade Shock/)
+    assert.match(markup, /Tariff Incidence/)
     assert.match(markup, /CGE Reform Shock/)
     assert.match(markup, /FPP Fiscal Path/)
     assert.match(markup, /Macro scenario simulation/)
