@@ -93,8 +93,8 @@ export function runScenarioLabPeTradeShock(
   payload: PeBridgePayload,
   request: ScenarioLabPeShockRequest,
 ): ScenarioLabPeShockResult {
-  const tariffCutPct = clamp(request.tariff_cut_pct, 0, 100)
-  const tariffScale = tariffCutPct / payload.metadata.default_tariff_cut_pct
+  const tariffChangePct = clamp(request.tariff_cut_pct, -100, 100)
+  const tariffScale = tariffChangePct / payload.metadata.default_tariff_cut_pct
   const importShare = importShareForFilter(payload, request)
   const effects = selectedSections(payload, request.section_id)
     .map((section) => toSectionEffect(section, tariffScale, importShare))
@@ -124,7 +124,7 @@ export function runScenarioLabPeTradeShock(
   return {
     request: {
       ...request,
-      tariff_cut_pct: tariffCutPct,
+      tariff_cut_pct: tariffChangePct,
     },
     totals: {
       import_base_usd: round(totals.import_base_usd, 2),

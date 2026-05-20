@@ -593,7 +593,7 @@
     },
     "peShock": {
       "title": "Tariff Incidence",
-      "description": "Test a tariff cut by product scope, partner, or trade regime, then inspect direct PE effects before any macro or sector linkage.",
+      "description": "Test a tariff change by product scope, partner, or trade regime, then inspect direct PE effects before any macro or sector linkage.",
       "loading": "Loading PE trade data...",
       "unavailable": "PE trade data is unavailable. Existing Scenario Lab behavior is unchanged.",
       "controlsAria": "Tariff incidence controls",
@@ -602,9 +602,10 @@
       "direction": {
         "cut": "Cut",
         "increase": "Increase",
-        "increaseDisabled": "Tariff increases are not active in the current PE data slice."
+        "cutAction": "cut",
+        "increaseAction": "increased"
       },
-      "tariffCut": "Tariff cut",
+      "tariffCut": "Change size",
       "section": "HS section",
       "productScope": "Product scope",
       "regime": "Trade regime",
@@ -627,13 +628,13 @@
       "caveats": "Source caveats",
       "saveRun": "Save to Comparison",
       "saveRunHint": "Saved PE runs appear as separate trade-incidence evidence in Comparison.",
-      "savedTitle": "PE {{cut}}% tariff cut · {{section}}",
+      "savedTitle": "PE {{change}} {{direction}} · {{section}}",
       "savedDescription": "Saved PE trade-shock run for direct tariff-incidence analysis.",
       "sourceLabelNote": "Product labels follow the source HS section names. Source: {{source}}.",
       "setup": {
         "step": "Scenario inputs",
         "title": "Policy setup",
-        "description": "Set the tariff cut and choose product, partner, or regime scope."
+        "description": "Set the tariff direction and choose product, partner, or regime scope."
       },
       "baseline": {
         "title": "Data coverage",
@@ -657,8 +658,8 @@
       "decision": {
         "eyebrow": "Decision view",
         "title": "Direct tariff effect",
-        "lead": "If tariffs are cut by {{cut}} for {{scope}} ({{partnerScope}}), the direct PE result is:",
-        "body": "A {{cut}} tariff cut for {{scope}} ({{partnerScope}}) gives {{tradeEffect}} of direct trade expansion, {{welfare}} of welfare gain, and {{revenue}} of tariff-revenue change."
+        "lead": "If tariffs are {{direction}} by {{change}} for {{scope}} ({{partnerScope}}), the direct PE result is:",
+        "body": "A {{change}} tariff change for {{scope}} ({{partnerScope}}) gives {{tradeEffect}} of direct trade effect, {{welfare}} of welfare change, and {{revenue}} of tariff-revenue change."
       },
       "tradeoff": {
         "benefit": "Direct consumer gain",
@@ -678,9 +679,9 @@
         "dataVintage": "Data date"
       },
       "kpis": {
-        "tradeEffect": "Trade expansion",
+        "tradeEffect": "Trade effect",
         "tradeCreation": "Trade creation",
-        "welfare": "Consumer welfare gain",
+        "welfare": "Consumer welfare",
         "revenue": "Tariff revenue change",
         "impactPct": "Import-base effect"
       },
@@ -692,6 +693,8 @@
         "rank": "Rank",
         "section": "Section",
         "importBase": "Import base",
+        "effectShare": "Effect share",
+        "importShare": "Import share",
         "tradeEffect": "Trade effect",
         "welfare": "Welfare",
         "revenue": "Revenue",
@@ -706,7 +709,7 @@
       "copyResultNote": "Copy result note",
       "copyStatus": "Result note copied.",
       "copyUnavailable": "Copy is unavailable in this browser.",
-      "copyNote": "PE tariff incidence: {{cut}} cut for {{scope}} ({{partnerScope}}). Direct trade expansion {{tradeEffect}}; consumer welfare {{welfare}}; tariff revenue {{revenue}}. Direct PE result only."
+      "copyNote": "PE tariff incidence: {{change}} {{direction}} for {{scope}} ({{partnerScope}}). Direct trade effect {{tradeEffect}}; consumer welfare {{welfare}}; tariff revenue {{revenue}}. Direct PE result only."
     },
     "savedRuns": {
       "title": "Saved Runs",

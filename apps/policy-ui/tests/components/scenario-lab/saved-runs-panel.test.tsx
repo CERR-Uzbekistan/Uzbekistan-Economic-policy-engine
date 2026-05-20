@@ -32,6 +32,14 @@ async function createTestI18n() {
               },
             },
             peShock: {
+              boundary: 'Direct tariff-incidence only.',
+              tariffCut: 'Change size',
+              section: 'HS section',
+              partnerScope: 'Partner scope',
+              direction: {
+                cut: 'Cut',
+                increase: 'Increase',
+              },
               kpis: {
                 tradeEffect: 'Trade effect',
                 welfare: 'Welfare effect',
@@ -253,7 +261,8 @@ describe('ScenarioLabSavedRunsPanel', () => {
     assert.match(markup, /Tariff incidence/)
     assert.match(markup, /Trade effect/)
     assert.match(markup, /Revenue change/)
-    assert.match(markup, /Tariff cut/)
+    assert.match(markup, /Change size/)
+    assert.match(markup, /Cut 20.0%/)
     assert.match(markup, /mcp_server\/data\/pe_data\.json/)
   })
 })

@@ -85,6 +85,29 @@ describe('pe bridge public artifact', () => {
     assert.equal(partnerRun.totals.partner_import_share, Number(firstPartner.import_share.toFixed(6)))
     assert.ok(partnerRun.totals.trade_effect_usd < allTransport.totals.trade_effect_usd)
   })
+
+  it('supports tariff increases by reversing the direct PE effect signs', () => {
+    const validation = validatePeBridgePayload(loadPublicPePayload())
+    assert.ok(validation.value)
+
+    const tariffCut = runScenarioLabPeTradeShock(validation.value, {
+      tariff_cut_pct: 20,
+      section_id: 'XVII',
+      regime: 'all',
+      partner_name: 'all',
+    })
+    const tariffIncrease = runScenarioLabPeTradeShock(validation.value, {
+      tariff_cut_pct: -20,
+      section_id: 'XVII',
+      regime: 'all',
+      partner_name: 'all',
+    })
+
+    assert.equal(tariffIncrease.request.tariff_cut_pct, -20)
+    assert.equal(tariffIncrease.totals.trade_effect_usd, -tariffCut.totals.trade_effect_usd)
+    assert.equal(tariffIncrease.totals.welfare_usd, -tariffCut.totals.welfare_usd)
+    assert.equal(tariffIncrease.totals.revenue_change_usd, -tariffCut.totals.revenue_change_usd)
+  })
 })
 
 describe('pe bridge client', () => {

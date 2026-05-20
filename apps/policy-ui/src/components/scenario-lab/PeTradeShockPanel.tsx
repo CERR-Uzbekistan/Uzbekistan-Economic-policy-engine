@@ -20,6 +20,7 @@ type PeTradeShockPanelProps = {
 const ALL_VALUE = 'all'
 const DEFAULT_TARIFF_CUT_PCT = 20
 const CONCENTRATION_ROWS = 5
+type TariffDirection = 'cut' | 'increase'
 
 const PARTNER_DISPLAY_NAMES: Record<string, { en: string; uz: string }> = {
   Китай: { en: 'China', uz: 'Xitoy' },
@@ -121,6 +122,10 @@ function barStyle(value: number, maxAbsValue: number): CSSProperties {
   return { '--io-bar-width': `${width}%` } as CSSProperties
 }
 
+function shareStyle(value: number): CSSProperties {
+  return { '--pe-share-width': `${Math.min(100, Math.max(0, value))}%` } as CSSProperties
+}
+
 function getShortSectionName(section: ScenarioLabPeSectionEffect): string {
   return section.section_name.replace(/\s+and\s+/gi, ' & ')
 }
@@ -149,7 +154,8 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
   const { i18n, t } = useTranslation()
   const locale = i18n.resolvedLanguage ?? i18n.language
   const usdMillionUnit = t('scenarioLab.peShock.units.usdMillion')
-  const [tariffCutPct, setTariffCutPct] = useState(DEFAULT_TARIFF_CUT_PCT)
+  const [tariffDirection, setTariffDirection] = useState<TariffDirection>('cut')
+  const [tariffChangePct, setTariffChangePct] = useState(DEFAULT_TARIFF_CUT_PCT)
   const [sectionId, setSectionId] = useState(ALL_VALUE)
   const [regime, setRegime] = useState(ALL_VALUE)
   const [partnerName, setPartnerName] = useState(ALL_VALUE)
@@ -196,12 +202,14 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
 
   const request: ScenarioLabPeShockRequest = useMemo(
     () => ({
-      tariff_cut_pct: Number.isFinite(tariffCutPct) ? tariffCutPct : DEFAULT_TARIFF_CUT_PCT,
+      tariff_cut_pct:
+        (tariffDirection === 'increase' ? -1 : 1) *
+        Math.abs(Number.isFinite(tariffChangePct) ? tariffChangePct : DEFAULT_TARIFF_CUT_PCT),
       section_id: selectedSectionId,
       regime: selectedRegime,
       partner_name: selectedPartnerName,
     }),
-    [selectedPartnerName, selectedRegime, selectedSectionId, tariffCutPct],
+    [selectedPartnerName, selectedRegime, selectedSectionId, tariffChangePct, tariffDirection],
   )
 
   const result = useMemo(() => {
@@ -212,6 +220,10 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
   const maxTradeEffect = useMemo(
     () => Math.max(1, ...concentrationRows.map((section) => Math.abs(section.trade_effect_usd))),
     [concentrationRows],
+  )
+  const totalAbsTradeEffect = useMemo(
+    () => Math.max(1, Math.abs(result?.totals.trade_effect_usd ?? 0)),
+    [result?.totals.trade_effect_usd],
   )
   const selectedSectionName =
     request.section_id === ALL_VALUE
@@ -226,7 +238,8 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
   const leadingSection = concentrationRows[0]
   const resultNote = result
     ? t('scenarioLab.peShock.copyNote', {
-        cut: formatPercent(request.tariff_cut_pct, locale, 1),
+        change: formatPercent(Math.abs(request.tariff_cut_pct), locale, 1),
+        direction: t(`scenarioLab.peShock.direction.${request.tariff_cut_pct < 0 ? 'increaseAction' : 'cutAction'}`),
         scope: selectedSectionName,
         partnerScope: selectedScopeLabel,
         tradeEffect: formatSignedUsdMillion(result.totals.trade_effect_usd, locale, usdMillionUnit),
@@ -306,10 +319,20 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
             <legend>{t('scenarioLab.peShock.tariffChange')}</legend>
             <div className="pe-shock__tariff-control">
               <div className="pe-shock__direction" aria-label={t('scenarioLab.peShock.directionLabel')}>
-                <button type="button" className="active" aria-pressed="true">
+                <button
+                  type="button"
+                  className={tariffDirection === 'cut' ? 'active' : undefined}
+                  aria-pressed={tariffDirection === 'cut'}
+                  onClick={() => setTariffDirection('cut')}
+                >
                   {t('scenarioLab.peShock.direction.cut')}
                 </button>
-                <button type="button" disabled title={t('scenarioLab.peShock.direction.increaseDisabled')}>
+                <button
+                  type="button"
+                  className={tariffDirection === 'increase' ? 'active' : undefined}
+                  aria-pressed={tariffDirection === 'increase'}
+                  onClick={() => setTariffDirection('increase')}
+                >
                   {t('scenarioLab.peShock.direction.increase')}
                 </button>
               </div>
@@ -320,8 +343,8 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
                   min={0}
                   max={100}
                   step={5}
-                  value={tariffCutPct}
-                  onChange={(event) => setTariffCutPct(Number(event.target.value))}
+                  value={tariffChangePct}
+                  onChange={(event) => setTariffChangePct(Number(event.target.value))}
                 />
                 <b aria-hidden="true">%</b>
               </label>
@@ -433,7 +456,10 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
                 <h3 id="pe-shock-decision-title">{t('scenarioLab.peShock.decision.title')}</h3>
                 <p>
                   {t('scenarioLab.peShock.decision.lead', {
-                    cut: formatPercent(request.tariff_cut_pct, locale, 1),
+                    change: formatPercent(Math.abs(request.tariff_cut_pct), locale, 1),
+                    direction: t(
+                      `scenarioLab.peShock.direction.${request.tariff_cut_pct < 0 ? 'increaseAction' : 'cutAction'}`,
+                    ),
                     scope: selectedSectionName,
                     partnerScope: selectedScopeLabel,
                   })}
@@ -441,17 +467,29 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
               </div>
 
               <dl className="pe-shock__metric-strip">
-                <div className="pe-shock__metric-card pe-shock__metric-card--trade">
+                <div
+                  className={`pe-shock__metric-card pe-shock__metric-card--trade ${
+                    result.totals.trade_effect_usd < 0 ? 'is-negative' : 'is-positive'
+                  }`}
+                >
                   <dt>{t('scenarioLab.peShock.kpis.tradeEffect')}</dt>
                   <dd>{formatSignedUsdMillion(result.totals.trade_effect_usd, locale, usdMillionUnit)}</dd>
                   <span>{t('scenarioLab.peShock.tradeoff.tradeExpansion')}</span>
                 </div>
-                <div className="pe-shock__metric-card pe-shock__metric-card--benefit">
+                <div
+                  className={`pe-shock__metric-card pe-shock__metric-card--benefit ${
+                    result.totals.welfare_usd < 0 ? 'is-negative' : 'is-positive'
+                  }`}
+                >
                   <dt>{t('scenarioLab.peShock.kpis.welfare')}</dt>
                   <dd>{formatSignedUsdMillion(result.totals.welfare_usd, locale, usdMillionUnit)}</dd>
                   <span>{t('scenarioLab.peShock.tradeoff.benefit')}</span>
                 </div>
-                <div className="pe-shock__metric-card pe-shock__metric-card--cost">
+                <div
+                  className={`pe-shock__metric-card pe-shock__metric-card--cost ${
+                    result.totals.revenue_change_usd < 0 ? 'is-negative' : 'is-positive'
+                  }`}
+                >
                   <dt>{t('scenarioLab.peShock.kpis.revenue')}</dt>
                   <dd>{formatSignedUsdMillion(result.totals.revenue_change_usd, locale, usdMillionUnit)}</dd>
                   <span>{t('scenarioLab.peShock.tradeoff.fiscalCost')}</span>
@@ -470,8 +508,15 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
                   </p>
                 </div>
                 <ol className="pe-shock__ranked-bars">
-                  {concentrationRows.map((section, index) => (
-                    <li key={section.section_id}>
+                  {concentrationRows.map((section, index) => {
+                    const effectShare = (Math.abs(section.trade_effect_usd) / totalAbsTradeEffect) * 100
+                    const importShare =
+                      result.totals.import_base_usd > 0 ? (section.import_usd / result.totals.import_base_usd) * 100 : 0
+                    return (
+                    <li
+                      key={section.section_id}
+                      className={section.trade_effect_usd < 0 ? 'is-negative' : 'is-positive'}
+                    >
                       <div className="pe-shock__rank">
                         <span>{index + 1}</span>
                       </div>
@@ -480,22 +525,34 @@ export function PeTradeShockPanel({ state, onRetry, onSaveRun, saveStatus }: PeT
                           <strong>{getShortSectionName(section)}</strong>
                           <span>{section.section_id}</span>
                         </div>
-                        <div className="pe-shock__bar-track">
-                          <span className="pe-shock__bar-fill" style={barStyle(section.trade_effect_usd, maxTradeEffect)} />
+                        <div className="pe-shock__impact-stack">
+                          <div className="pe-shock__impact-row">
+                            <span>{t('scenarioLab.peShock.table.effectShare')}</span>
+                            <div className="pe-shock__bar-track">
+                              <span
+                                className="pe-shock__bar-fill"
+                                style={barStyle(section.trade_effect_usd, maxTradeEffect)}
+                              />
+                            </div>
+                            <strong>
+                              {formatSignedUsdMillion(section.trade_effect_usd, locale, usdMillionUnit)} ·{' '}
+                              {formatPercent(effectShare, locale, 1)}
+                            </strong>
+                          </div>
+                          <div className="pe-shock__impact-row pe-shock__impact-row--base">
+                            <span>{t('scenarioLab.peShock.table.importShare')}</span>
+                            <div className="pe-shock__bar-track">
+                              <span className="pe-shock__bar-fill" style={shareStyle(importShare)} />
+                            </div>
+                            <strong>
+                              {formatUsdMillion(section.import_usd, locale, usdMillionUnit)} ·{' '}
+                              {formatPercent(importShare, locale, 1)}
+                            </strong>
+                          </div>
                         </div>
                       </div>
-                      <dl className="pe-shock__bar-values">
-                        <div>
-                          <dt>{t('scenarioLab.peShock.table.importBase')}</dt>
-                          <dd>{formatUsdMillion(section.import_usd, locale, usdMillionUnit)}</dd>
-                        </div>
-                        <div>
-                          <dt>{t('scenarioLab.peShock.table.tradeEffect')}</dt>
-                          <dd>{formatSignedUsdMillion(section.trade_effect_usd, locale, usdMillionUnit)}</dd>
-                        </div>
-                      </dl>
                     </li>
-                  ))}
+                  )})}
                 </ol>
               </section>
 

@@ -593,7 +593,7 @@
     },
     "peShock": {
       "title": "Tarif ta'siri",
-      "description": "Tarif pasayishini mahsulot, hamkor yoki savdo rejimi bo'yicha sinab ko'ring va makro yoki sektor bog'lanishidan oldingi bevosita PE ta'sirlarini ko'ring.",
+      "description": "Tarif o'zgarishini mahsulot, hamkor yoki savdo rejimi bo'yicha sinab ko'ring va makro yoki sektor bog'lanishidan oldingi bevosita PE ta'sirlarini ko'ring.",
       "loading": "PE savdo ma'lumotlari yuklanmoqda...",
       "unavailable": "PE savdo ma'lumotlari mavjud emas. Scenario Lab'ning mavjud ishlashi o'zgarmaydi.",
       "controlsAria": "Tarif ta'siri boshqaruvlari",
@@ -602,9 +602,10 @@
       "direction": {
         "cut": "Pasaytirish",
         "increase": "Oshirish",
-        "increaseDisabled": "Tarif oshirish joriy PE ma'lumotlari kesimida faol emas."
+        "cutAction": "pasaytirilsa",
+        "increaseAction": "oshirilsa"
       },
-      "tariffCut": "Tarif pasayishi",
+      "tariffCut": "O'zgarish hajmi",
       "section": "HS bo'limi",
       "productScope": "Mahsulot doirasi",
       "regime": "Savdo rejimi",
@@ -627,13 +628,13 @@
       "caveats": "Manba cheklovlari",
       "saveRun": "Comparison'ga saqlash",
       "saveRunHint": "Saqlangan PE ishlari Comparison sahifasida alohida tarif ta'siri dalili sifatida ko'rinadi.",
-      "savedTitle": "PE {{cut}}% tarif pasayishi · {{section}}",
+      "savedTitle": "PE {{change}} {{direction}} · {{section}}",
       "savedDescription": "Bevosita tarif ta'siri tahlili uchun saqlangan PE ishi.",
       "sourceLabelNote": "Mahsulot yorliqlari manbadagi HS bo'lim nomlariga mos. Manba: {{source}}.",
       "setup": {
         "step": "Ssenariy kirishlari",
         "title": "Siyosat sozlamasi",
-        "description": "Tarif pasayishini kiriting va mahsulot, hamkor yoki rejim doirasini tanlang."
+        "description": "Tarif yo'nalishini kiriting va mahsulot, hamkor yoki rejim doirasini tanlang."
       },
       "baseline": {
         "title": "Ma'lumot qamrovi",
@@ -657,8 +658,8 @@
       "decision": {
         "eyebrow": "Qaror ko'rinishi",
         "title": "Bevosita tarif ta'siri",
-        "lead": "Agar {{scope}} ({{partnerScope}}) uchun tarif {{cut}} pasaytirilsa, bevosita PE natijasi:",
-        "body": "{{scope}} ({{partnerScope}}) uchun tarifni {{cut}} pasaytirish {{tradeEffect}} bevosita savdo kengayishi, {{welfare}} farovonlik yutug'i va {{revenue}} tarif tushumi o'zgarishini beradi."
+        "lead": "Agar {{scope}} ({{partnerScope}}) uchun tarif {{change}} {{direction}}, bevosita PE natijasi:",
+        "body": "{{scope}} ({{partnerScope}}) uchun {{change}} tarif o'zgarishi {{tradeEffect}} bevosita savdo effekti, {{welfare}} farovonlik o'zgarishi va {{revenue}} tarif tushumi o'zgarishini beradi."
       },
       "tradeoff": {
         "benefit": "Iste'molchi uchun bevosita yutuq",
@@ -678,9 +679,9 @@
         "dataVintage": "Ma'lumot sanasi"
       },
       "kpis": {
-        "tradeEffect": "Savdo kengayishi",
+        "tradeEffect": "Savdo effekti",
         "tradeCreation": "Savdo yaratilishi",
-        "welfare": "Iste'molchi yutug'i",
+        "welfare": "Iste'molchi farovonligi",
         "revenue": "Tarif tushumi o'zgarishi",
         "impactPct": "Import bazasiga ta'sir"
       },
@@ -692,6 +693,8 @@
         "rank": "Rang",
         "section": "Bo'lim",
         "importBase": "Import bazasi",
+        "effectShare": "Effekt ulushi",
+        "importShare": "Import ulushi",
         "tradeEffect": "Savdo effekti",
         "welfare": "Farovonlik",
         "revenue": "Tushum",
@@ -706,7 +709,7 @@
       "copyResultNote": "Natija eslatmasini nusxalash",
       "copyStatus": "Natija eslatmasi nusxalandi.",
       "copyUnavailable": "Bu brauzerda nusxalash mavjud emas.",
-      "copyNote": "PE tarif ta'siri: {{scope}} ({{partnerScope}}) uchun {{cut}} pasaytirish. Bevosita savdo kengayishi {{tradeEffect}}; iste'molchi yutug'i {{welfare}}; tarif tushumi {{revenue}}. Faqat bevosita PE natijasi."
+      "copyNote": "PE tarif ta'siri: {{scope}} ({{partnerScope}}) uchun {{change}} {{direction}}. Bevosita savdo effekti {{tradeEffect}}; iste'molchi farovonligi {{welfare}}; tarif tushumi {{revenue}}. Faqat bevosita PE natijasi."
     },
     "savedRuns": {
       "title": "Saqlangan ishlar",

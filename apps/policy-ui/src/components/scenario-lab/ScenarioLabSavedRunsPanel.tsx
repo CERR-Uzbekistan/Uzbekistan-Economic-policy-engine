@@ -258,15 +258,20 @@ export function ScenarioLabSavedRunsPanel({
                     <dd>{run.source_artifact}</dd>
                   </div>
                   <div>
-                    <dt>{t('scenarioLab.peShock.fields.tariffCut')}</dt>
-                    <dd>{formatNumber(run.request.tariff_cut_pct, 1)}%</dd>
+                    <dt>{t('scenarioLab.peShock.tariffCut')}</dt>
+                    <dd>
+                      {run.request.tariff_cut_pct < 0
+                        ? t('scenarioLab.peShock.direction.increase')
+                        : t('scenarioLab.peShock.direction.cut')}{' '}
+                      {formatNumber(Math.abs(run.request.tariff_cut_pct), 1)}%
+                    </dd>
                   </div>
                   <div>
-                    <dt>{t('scenarioLab.peShock.fields.section')}</dt>
+                    <dt>{t('scenarioLab.peShock.section')}</dt>
                     <dd>{run.request.section_id}</dd>
                   </div>
                   <div>
-                    <dt>{t('scenarioLab.peShock.fields.partnerScope')}</dt>
+                    <dt>{t('scenarioLab.peShock.partnerScope')}</dt>
                     <dd>{run.request.partner_name === 'all' ? run.request.regime : run.request.partner_name}</dd>
                   </div>
                   <div>

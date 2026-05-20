@@ -516,8 +516,11 @@ export function ScenarioLabPage() {
   ) {
     const nowIso = new Date().toISOString()
     const scenarioId = globalThis.crypto.randomUUID()
+    const tariffDirectionKey = result.request.tariff_cut_pct < 0 ? 'increaseAction' : 'cutAction'
+    const tariffChangeLabel = `${Math.abs(result.request.tariff_cut_pct)}%`
     const title = t('scenarioLab.peShock.savedTitle', {
-      cut: result.request.tariff_cut_pct,
+      change: tariffChangeLabel,
+      direction: t(`scenarioLab.peShock.direction.${tariffDirectionKey}`),
       section:
         result.request.section_id === 'all'
           ? t('scenarioLab.peShock.allSections')
@@ -543,7 +546,7 @@ export function ScenarioLabPage() {
           {
             key: 'pe_tariff_cut_pct',
             label: t('scenarioLab.peShock.tariffCut'),
-            value: result.request.tariff_cut_pct,
+            value: `${result.request.tariff_cut_pct < 0 ? '+' : '-'}${tariffChangeLabel}`,
             unit: 'percent',
             category: 'trade',
             technical_variable: null,
