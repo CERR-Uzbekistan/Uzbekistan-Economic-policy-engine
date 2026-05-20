@@ -16,7 +16,7 @@ const presets: ScenarioLabPreset[] = [
     assumption_overrides: {},
   },
   {
-    preset_id: 'remittance-downside',
+    preset_id: 'external-slowdown',
     title: 'External slowdown',
     summary: 'Slowdown',
     assumption_overrides: { export_demand_change: -5 },
@@ -40,6 +40,10 @@ async function createTestI18n() {
               description: 'desc',
               showTechnical: 'Show technical variable names',
               technicalPrefix: 'Technical: {{variable}}',
+              qpmCoreTitle: 'QPM core',
+              qpmCoreDescription: 'Main QPM controls.',
+              linkedTitle: 'Linked assumptions',
+              linkedDescription: 'Supporting inputs.',
               categories: {
                 macro: 'Macro assumptions',
                 external: 'External assumptions',
@@ -156,7 +160,7 @@ describe('preset chips', () => {
     )
     assert.match(baselineMarkup, /Saved runs are stored only in this browser/)
 
-    const slowdownMarkup = await renderPanelMarkup('remittance-downside')
+    const slowdownMarkup = await renderPanelMarkup('external-slowdown')
     assert.match(
       slowdownMarkup,
       /<button type="button" class="preset-chip active" aria-pressed="true">External slowdown<\/button>/,
@@ -165,7 +169,7 @@ describe('preset chips', () => {
 
   it('invokes preset handler on click and keyboard activation', () => {
     const calls: string[] = []
-    const presentation = buildPresetChipPresentation('baseline', 'remittance-downside', (presetId) =>
+    const presentation = buildPresetChipPresentation('baseline', 'external-slowdown', (presetId) =>
       calls.push(presetId),
     )
 
@@ -175,7 +179,7 @@ describe('preset chips', () => {
       preventDefault: () => {},
     } as unknown as Parameters<typeof presentation.onKeyDown>[0])
 
-    assert.deepEqual(calls, ['remittance-downside', 'remittance-downside'])
+    assert.deepEqual(calls, ['external-slowdown', 'external-slowdown'])
     assert.equal(presentation.ariaPressed, false)
   })
 

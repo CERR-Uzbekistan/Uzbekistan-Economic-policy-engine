@@ -808,6 +808,10 @@
       "description": "Define policy and shock assumptions in plain language.",
       "showTechnical": "Show technical variable names",
       "technicalPrefix": "Technical: {{variable}}",
+      "qpmCoreTitle": "QPM core",
+      "qpmCoreDescription": "Main QPM controls shown first: policy stance, exchange rate, and foreign output gap.",
+      "linkedTitle": "Linked assumptions",
+      "linkedDescription": "Supporting external, fiscal, and trade inputs used in this reference calculation. They are not a live handoff to PE, I-O, DFM, or FPP.",
       "categories": {
         "macro": "Monetary",
         "external": "External",
@@ -829,7 +833,16 @@
         "fiscalEffects": "Fiscal effects"
       },
       "impulseResponseEyebrow": "IMPULSE RESPONSE",
-      "impulseResponseCaption": "Reference Scenario Lab calculation: deviations from baseline over 12 quarters, in percentage points. It should not be cited as a live forecast.",
+      "impulseResponseCaption": "QPM reference calculation: deviations from baseline over 12 quarters, in percentage points. It should not be cited as a live forecast.",
+      "qpmReferenceBadge": "QPM reference",
+      "headlineMetricsAria": "Headline macro indicators",
+      "decision": {
+        "eyebrow": "Decision view",
+        "title": "QPM reference result",
+        "currentScenario": "current scenario",
+        "lead": "If “{{scenarioName}}” is applied, the reference calculation shows:",
+        "note": "Custom sliders are approximation mode until the live QPM solver is connected to this tab."
+      },
       "explanations": {
         "headlineImpact": "Shows how the selected scenario deviates from the baseline across 12 quarters; values are percentage-point deviations from the reference calculation.",
         "macroPath": "Shows the scenario path next to the baseline path so the table can be read as a comparison, not a raw dump.",

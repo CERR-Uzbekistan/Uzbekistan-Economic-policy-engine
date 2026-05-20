@@ -49,6 +49,10 @@ async function createTestI18n() {
               description: 'Adjust scenario inputs.',
               showTechnical: 'Show technical variable names',
               technicalPrefix: 'Technical: {{variable}}',
+              qpmCoreTitle: 'QPM core',
+              qpmCoreDescription: 'Main QPM controls.',
+              linkedTitle: 'Linked assumptions',
+              linkedDescription: 'Supporting inputs.',
               categories: {
                 macro: 'Macro assumptions',
                 external: 'External assumptions',
@@ -97,6 +101,29 @@ async function createTestI18n() {
                 macroPath: 'Macro path',
                 externalBalance: 'External balance',
                 fiscalEffects: 'Fiscal effects',
+              },
+              impulseResponseEyebrow: 'Impulse response',
+              impulseResponseCaption: 'QPM reference calculation.',
+              qpmReferenceBadge: 'QPM reference',
+              headlineMetricsAria: 'Headline macro indicators',
+              decision: {
+                eyebrow: 'Decision view',
+                title: 'QPM reference result',
+                currentScenario: 'current scenario',
+                lead: 'If “{{scenarioName}}” is applied, the reference calculation shows:',
+                note: 'Custom sliders are approximation mode.',
+              },
+              explanations: {
+                headlineImpact: 'Headline path.',
+                macroPath: 'Macro path explanation.',
+                externalBalance: 'External balance explanation.',
+                fiscalEffects: 'Fiscal explanation.',
+              },
+              claimLabels: {
+                headlineImpact: 'Scenario impulse response',
+                macroPath: 'Scenario path vs baseline',
+                externalBalance: 'External-balance scenario path',
+                fiscalEffects: 'Fiscal scenario accounting',
               },
               deltaVsBaseline: '{{delta}} vs baseline',
             },
@@ -157,7 +184,7 @@ function toAssumptionValues(assumptions: Assumption[]): ScenarioLabAssumptionSta
 
 function buildPersistedRunResults(values: ScenarioLabAssumptionState): PersistedRunResults {
   const generatedResults = buildScenarioLabResults(values, {
-    selectedPresetId: 'remittance-downside',
+    selectedPresetId: 'external-slowdown',
   })
   const persistedMacroPath: ChartSpec = {
     ...generatedResults.charts_by_tab.macro_path,
@@ -199,7 +226,7 @@ describe('Scenario Lab saved-run restore integration', () => {
 
   it('restores current saved-run shape through Scenario Lab assumptions, results, and interpretation panels', async () => {
     const i18n = await createTestI18n()
-    const selectedPresetId = 'remittance-downside'
+    const selectedPresetId = 'external-slowdown'
     const presetValues = getPresetValuesFromWorkspace(scenarioLabWorkspaceMock, selectedPresetId)
     const runResults = buildPersistedRunResults(presetValues)
     const saved = saveScenario({
@@ -232,7 +259,7 @@ describe('Scenario Lab saved-run restore integration', () => {
       run_attribution: [
         {
           model_id: 'scenario-lab-mock-engine',
-          model_name: 'Scenario Lab Mock Engine',
+          model_name: 'QPM reference calculator',
           module: 'scenario-lab',
           version: '0.1.0',
           run_id: 'run-restored-current-shape',

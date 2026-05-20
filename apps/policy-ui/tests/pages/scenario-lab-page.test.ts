@@ -5,11 +5,20 @@ import { resolvePresetHydration } from '../../src/pages/scenario-lab-preset.js'
 
 describe('ScenarioLabPage preset hydration', () => {
   it('hydrates external-demand slowdown preset from URL query', () => {
-    const result = resolvePresetHydration(scenarioLabWorkspaceMock, 'remittance-downside')
+    const result = resolvePresetHydration(scenarioLabWorkspaceMock, 'external-slowdown')
 
-    assert.equal(result.selectedPresetId, 'remittance-downside')
+    assert.equal(result.selectedPresetId, 'external-slowdown')
     assert.equal(result.scenarioName, 'External slowdown')
     assert.equal(result.assumptionValues.remittance_change, 0)
+    assert.equal(result.assumptionValues.export_demand_change, -0.5)
+    assert.equal(result.warningMessage, null)
+  })
+
+  it('keeps the old remittance-downside URL as an alias for external slowdown', () => {
+    const result = resolvePresetHydration(scenarioLabWorkspaceMock, 'remittance-downside')
+
+    assert.equal(result.selectedPresetId, 'external-slowdown')
+    assert.equal(result.scenarioName, 'External slowdown')
     assert.equal(result.assumptionValues.export_demand_change, -0.5)
     assert.equal(result.warningMessage, null)
   })

@@ -277,7 +277,7 @@ export const overviewV1Data: MacroSnapshot = {
       why_it_matters: 'Lower regional demand and remittance inflows would pressure household spending.',
       impact_channel: 'Consumption demand, FX inflows, and near-term growth.',
       suggested_scenario: 'External slowdown stress',
-      scenario_query: 'preset=remittance-downside',
+      scenario_query: 'preset=external-slowdown',
     },
     {
       risk_id: 'risk-inflation-persistence',

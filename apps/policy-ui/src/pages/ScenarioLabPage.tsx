@@ -331,14 +331,21 @@ export function ScenarioLabPage() {
   }, [isPresetHydrationComplete])
 
   function handlePresetChange(nextPresetId: string) {
-    const selectedPreset = workspace.presets.find((preset) => preset.preset_id === nextPresetId)
+    const selectedPreset = findPreset(workspace, nextPresetId)
+    const nextAssumptionValues = getPresetValuesFromWorkspace(workspace, nextPresetId)
+    const nextScenarioName = selectedPreset?.title ?? scenarioName
     setSelectedPresetId(nextPresetId)
-    setAssumptionValues(getPresetValuesFromWorkspace(workspace, nextPresetId))
+    setAssumptionValues(nextAssumptionValues)
     if (selectedPreset) {
-      setScenarioName(selectedPreset.title)
+      setScenarioName(nextScenarioName)
     }
     setSearchParams({ preset: nextPresetId })
     setSaveStatus(null)
+    void runScenario({
+      assumptions: nextAssumptionValues,
+      selectedPresetId: nextPresetId,
+      scenarioName: nextScenarioName,
+    })
   }
 
   function handleScenarioNameChange(nextScenarioName: string) {
@@ -900,7 +907,12 @@ export function ScenarioLabPage() {
             ) : null}
 
             {hasReadyRun ? (
-              <ResultsPanel activeTab={activeTab} onTabChange={setActiveTab} results={currentResults} />
+              <ResultsPanel
+                activeTab={activeTab}
+                onTabChange={setActiveTab}
+                results={currentResults}
+                scenarioName={scenarioName}
+              />
             ) : (
               <section className="scenario-panel scenario-panel--results">
                 <p className="empty-state">{t('states.empty.scenarioRunToView')}</p>

@@ -23,7 +23,7 @@ function seriesValue(seriesId: string, values: Record<string, number>) {
 
 describe('scenario lab mock result semantics', () => {
   it('keeps preset overrides aligned with their plain-language labels', () => {
-    const externalSlowdown = applyPresetToState('remittance-downside')
+    const externalSlowdown = applyPresetToState('external-slowdown')
 
     assert.equal(externalSlowdown.remittance_change, 0)
     assert.equal(externalSlowdown.export_demand_change, -0.5)

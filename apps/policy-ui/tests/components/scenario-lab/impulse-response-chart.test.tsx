@@ -72,6 +72,7 @@ async function createTestI18n() {
             results: {
               impulseResponseEyebrow: 'Impulse response',
               impulseResponseCaption: 'Generated from the active scenario assumptions.',
+              qpmReferenceBadge: 'QPM reference',
               claimLabels: {
                 headlineImpact: 'Baseline deviation',
               },
@@ -102,6 +103,7 @@ describe('ImpulseResponseChart', () => {
     assert.match(markup, /aria-label="Impulse response"/)
     assert.match(markup, /Quarter · Deviation \(pp\)/)
     assert.match(markup, /Generated from the active scenario assumptions\./)
-    assert.match(markup, />QPM · FPP</)
+    assert.match(markup, />QPM REFERENCE</)
+    assert.doesNotMatch(markup, />QPM · FPP</)
   })
 })

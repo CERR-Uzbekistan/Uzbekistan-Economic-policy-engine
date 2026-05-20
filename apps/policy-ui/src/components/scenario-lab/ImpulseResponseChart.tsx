@@ -7,9 +7,8 @@ type ImpulseResponseChartProps = {
   chart: ChartSpec
 }
 
-// Prompt §4.4: IMPULSE RESPONSE card — 3 series × 12 quarters, "QPM · FPP"
-// attribution badge, legend/caption. Wraps ChartRenderer with the eyebrow /
-// head / attribution chrome.
+// QPM reference-response card: 3 series over 12 quarters with explicit
+// reference-calculation attribution.
 export function ImpulseResponseChart({ chart }: ImpulseResponseChartProps) {
   const { t } = useTranslation()
 
@@ -23,7 +22,7 @@ export function ImpulseResponseChart({ chart }: ImpulseResponseChartProps) {
           <h4 id="scenario-impulse-card-title">{chart.title}</h4>
           <p>{chart.subtitle}</p>
         </div>
-        <AttributionBadge modelId="QPM · FPP" active />
+        <AttributionBadge modelId={t('scenarioLab.results.qpmReferenceBadge')} active />
       </div>
       <div className="scenario-output-context">
         <span className="claim-label">{t('scenarioLab.results.claimLabels.headlineImpact')}</span>

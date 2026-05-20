@@ -30,7 +30,17 @@ async function createTestI18n() {
               },
               impulseResponseEyebrow: 'IMPULSE RESPONSE',
               impulseResponseCaption:
-                'Mock Scenario Lab engine output: deviations from baseline over 12 quarters, in percentage points. It should not be cited as a live forecast.',
+                'QPM reference calculation: deviations from baseline over 12 quarters, in percentage points. It should not be cited as a live forecast.',
+              qpmReferenceBadge: 'QPM reference',
+              headlineMetricsAria: 'Headline macro indicators',
+              decision: {
+                eyebrow: 'Decision view',
+                title: 'QPM reference result',
+                currentScenario: 'current scenario',
+                lead: 'If “{{scenarioName}}” is applied, the reference calculation shows:',
+                note:
+                  'Custom sliders are approximation mode until the live QPM solver is connected to this tab.',
+              },
               explanations: {
                 headlineImpact:
                   'Shows how the selected scenario deviates from the baseline across 12 quarters; values are percentage-point deviations from the reference calculation.',
@@ -68,10 +78,14 @@ describe('ResultsPanel clarification copy', () => {
     )
 
     assert.match(markup, /Scenario impulse response/)
+    assert.match(markup, /QPM reference result/)
+    assert.match(markup, /QPM REFERENCE/)
     assert.match(markup, /Deviation from baseline in percentage points/)
     assert.match(markup, /reference Scenario Lab calculation, not a live forecast/)
     assert.match(markup, /deviates from the baseline across 12 quarters/)
     assert.match(markup, /0\.0 pp vs baseline/)
+    assert.doesNotMatch(markup, /QPM · FPP/)
+    assert.doesNotMatch(markup, /Mock Scenario Lab/)
   })
 
   it('adds claim labels and explanations to table-like macro result tabs', async () => {

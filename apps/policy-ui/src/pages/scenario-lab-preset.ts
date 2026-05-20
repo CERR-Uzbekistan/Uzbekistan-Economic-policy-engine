@@ -2,6 +2,14 @@ import type { ScenarioLabAssumptionState, ScenarioLabWorkspace } from '../contra
 
 export const DEFAULT_PRESET_ID = 'baseline'
 
+const PRESET_ID_ALIASES: Record<string, string> = {
+  'remittance-downside': 'external-slowdown',
+}
+
+export function canonicalizePresetId(presetId: string): string {
+  return PRESET_ID_ALIASES[presetId] ?? presetId
+}
+
 export function getDefaultValuesFromWorkspace(
   workspace: ScenarioLabWorkspace,
 ): ScenarioLabAssumptionState {
@@ -16,7 +24,7 @@ export function getPresetValuesFromWorkspace(
   presetId: string,
 ): ScenarioLabAssumptionState {
   const baseState = getDefaultValuesFromWorkspace(workspace)
-  const preset = workspace.presets.find((entry) => entry.preset_id === presetId)
+  const preset = findPreset(workspace, presetId)
   if (!preset) {
     return baseState
   }
@@ -31,7 +39,8 @@ export function resolveDefaultPresetId(workspace: ScenarioLabWorkspace): string 
 }
 
 export function findPreset(workspace: ScenarioLabWorkspace, presetId: string) {
-  return workspace.presets.find((preset) => preset.preset_id === presetId)
+  const canonicalPresetId = canonicalizePresetId(presetId)
+  return workspace.presets.find((preset) => preset.preset_id === canonicalPresetId)
 }
 
 export type PresetHydrationResult = {

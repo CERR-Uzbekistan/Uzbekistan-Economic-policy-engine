@@ -808,6 +808,10 @@
       "description": "Siyosat va shok taxminlarini sodda tilda belgilang.",
       "showTechnical": "Texnik o'zgaruvchi nomlarini ko'rsatish",
       "technicalPrefix": "Texnik o'zgaruvchi: {{variable}}",
+      "qpmCoreTitle": "QPM yadrosi",
+      "qpmCoreDescription": "Avval asosiy QPM boshqaruvlari ko'rsatiladi: siyosat stavkasi, almashuv kursi va xorijiy ishlab chiqarish uzilishi.",
+      "linkedTitle": "Bog'langan taxminlar",
+      "linkedDescription": "Ushbu ma'lumot hisobida ishlatiladigan qo'shimcha tashqi, fiskal va savdo kirishlari. Bu PE, I-O, DFM yoki FPP bilan jonli almashinuv emas.",
       "categories": {
         "macro": "Makro taxminlar",
         "external": "Tashqi taxminlar",
@@ -829,7 +833,16 @@
         "fiscalEffects": "Fiskal ta'sirlar"
       },
       "impulseResponseEyebrow": "IMPULS RESPONSI",
-      "impulseResponseCaption": "Scenario Lab namunaviy hisobi: 12 chorak davomida bazaviydan og'ishlar, foiz punktlarida. Jonli prognoz sifatida keltirilmasin.",
+      "impulseResponseCaption": "QPM ma'lumot hisobi: 12 chorak davomida bazaviydan og'ishlar, foiz punktlarida. Jonli prognoz sifatida keltirilmasin.",
+      "qpmReferenceBadge": "QPM ma'lumot",
+      "headlineMetricsAria": "Asosiy makro ko'rsatkichlar",
+      "decision": {
+        "eyebrow": "Qaror ko'rinishi",
+        "title": "QPM ma'lumot natijasi",
+        "currentScenario": "joriy stsenariy",
+        "lead": "“{{scenarioName}}” qo'llansa, ma'lumot hisobi quyidagini ko'rsatadi:",
+        "note": "Jonli QPM yechgichi ushbu tabga ulanmaguncha maxsus slayderlar taxminiy rejimda qoladi."
+      },
       "explanations": {
         "headlineImpact": "Tanlangan stsenariy 12 chorak davomida bazaviydan qanday og'ishini ko'rsatadi; qiymatlar namunaviy hisobdan foiz punktlaridagi og'ishlardir.",
         "macroPath": "Jadval xom chiqish emas, taqqoslash sifatida o'qilishi uchun stsenariy trayektoriyasini bazaviy trayektoriya yonida ko'rsatadi.",

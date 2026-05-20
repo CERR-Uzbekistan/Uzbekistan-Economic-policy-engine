@@ -47,8 +47,11 @@ const CATEGORY_TITLES: Record<AssumptionCategory, string> = {
   advanced: 'Advanced',
 }
 
-const MAIN_CATEGORIES: AssumptionCategory[] = ['macro', 'external', 'fiscal', 'trade']
 const SCENARIO_TYPE_OPTIONS: ScenarioType[] = ['baseline', 'alternative', 'stress']
+
+function isQpmCoreAssumption(assumption: ScenarioLabAssumptionInput): boolean {
+  return assumption.category !== 'advanced' && assumption.technical_variable?.startsWith('qpm.') === true
+}
 
 function formatAssumptionValue(value: number, step: number): string {
   const stepDecimals = Math.max(0, (step.toString().split('.')[1] ?? '').length)
@@ -146,21 +149,34 @@ export function AssumptionsPanel({
   const [isSavedModalOpen, setIsSavedModalOpen] = useState(false)
   const technicalPrefix = t('scenarioLab.assumptions.technicalPrefix')
 
-  const grouped = useMemo(() => {
-    return assumptions.reduce<Record<AssumptionCategory, ScenarioLabAssumptionInput[]>>(
-      (acc, assumption) => {
-        acc[assumption.category].push(assumption)
-        return acc
-      },
-      {
-        macro: [],
-        external: [],
-        fiscal: [],
-        trade: [],
-        advanced: [],
-      },
-    )
-  }, [assumptions])
+  const grouped = useMemo(
+    () =>
+      assumptions.reduce<Record<AssumptionCategory, ScenarioLabAssumptionInput[]>>(
+        (acc, assumption) => {
+          acc[assumption.category].push(assumption)
+          return acc
+        },
+        {
+          macro: [],
+          external: [],
+          fiscal: [],
+          trade: [],
+          advanced: [],
+        },
+      ),
+    [assumptions],
+  )
+  const qpmCoreAssumptions = useMemo(
+    () => assumptions.filter(isQpmCoreAssumption),
+    [assumptions],
+  )
+  const linkedAssumptions = useMemo(
+    () =>
+      assumptions.filter(
+        (assumption) => assumption.category !== 'advanced' && !isQpmCoreAssumption(assumption),
+      ),
+    [assumptions],
+  )
 
   return (
     <section
@@ -309,31 +325,45 @@ export function AssumptionsPanel({
         <span>{t('scenarioLab.assumptions.showTechnical')}</span>
       </label>
 
-      {MAIN_CATEGORIES.map((category) => (
-        <section key={category} className="scenario-assumption-group assumption-group">
-          <h4>
-            {t(`scenarioLab.assumptions.categories.${category}`, {
-              defaultValue: CATEGORY_TITLES[category],
-            })}
-          </h4>
-          {grouped[category].length === 0 ? (
-            <p className="empty-state">{t('scenarioLab.assumptions.emptyCategory')}</p>
-          ) : (
-            <div className="scenario-assumption-list">
-              {grouped[category].map((item) => (
-                <AssumptionField
-                  key={item.key}
-                  item={item}
-                  value={values[item.key] ?? item.default_value}
-                  showTechnical={showTechnical}
-                  technicalPrefix={technicalPrefix}
-                  onChange={(nextValue) => onAssumptionChange(item.key, nextValue)}
-                />
-              ))}
-            </div>
-          )}
-        </section>
-      ))}
+      <section className="scenario-assumption-group assumption-group">
+        <h4>{t('scenarioLab.assumptions.qpmCoreTitle')}</h4>
+        <p className="scenario-assumption-group__note">{t('scenarioLab.assumptions.qpmCoreDescription')}</p>
+        {qpmCoreAssumptions.length === 0 ? (
+          <p className="empty-state">{t('scenarioLab.assumptions.emptyCategory')}</p>
+        ) : (
+          <div className="scenario-assumption-list">
+            {qpmCoreAssumptions.map((item) => (
+              <AssumptionField
+                key={item.key}
+                item={item}
+                value={values[item.key] ?? item.default_value}
+                showTechnical={showTechnical}
+                technicalPrefix={technicalPrefix}
+                onChange={(nextValue) => onAssumptionChange(item.key, nextValue)}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+
+      {linkedAssumptions.length > 0 ? (
+        <details className="scenario-assumption-linked">
+          <summary>{t('scenarioLab.assumptions.linkedTitle')}</summary>
+          <p>{t('scenarioLab.assumptions.linkedDescription')}</p>
+          <div className="scenario-assumption-list">
+            {linkedAssumptions.map((item) => (
+              <AssumptionField
+                key={item.key}
+                item={item}
+                value={values[item.key] ?? item.default_value}
+                showTechnical={showTechnical}
+                technicalPrefix={technicalPrefix}
+                onChange={(nextValue) => onAssumptionChange(item.key, nextValue)}
+              />
+            ))}
+          </div>
+        </details>
+      ) : null}
 
       {grouped.advanced.length > 0 ? (
         <details className="scenario-assumption-advanced">

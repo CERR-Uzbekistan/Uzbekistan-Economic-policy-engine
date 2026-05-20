@@ -12,7 +12,7 @@ import type {
 
 const ATTRIBUTION: ModelAttribution = {
   model_id: 'scenario-lab-mock-engine',
-  model_name: 'Scenario Lab Mock Engine',
+  model_name: 'QPM reference calculator',
   module: 'scenario-lab',
   version: '0.1.0',
   run_id: 'run-2026-04-17-scenario-lab',
@@ -57,7 +57,7 @@ const PRESETS: ScenarioLabPreset[] = [
     },
   },
   {
-    preset_id: 'remittance-downside',
+    preset_id: 'external-slowdown',
     title: 'External slowdown',
     summary:
       'Foreign output gap weakens relative to baseline; expect softer activity through the active QPM external-demand channel.',
@@ -522,9 +522,9 @@ function buildInterpretationCore(values: ScenarioLabAssumptionState): ScenarioLa
 // Prompt §4.4: clickable suggested-next anchors with route + preset targets.
 const SCENARIO_LAB_SUGGESTED_NEXT: SuggestedNextScenario[] = [
   {
-    label: 'Pair with a remittance shock',
+    label: 'Pair with remittance downside',
     target_route: '/scenario-lab',
-    target_preset: 'remittance-downside',
+    target_preset: 'external-slowdown',
   },
   {
     label: 'Add exchange-rate pass-through stress',
@@ -537,10 +537,10 @@ const SCENARIO_LAB_SUGGESTED_NEXT: SuggestedNextScenario[] = [
   },
 ]
 
-// Prompt §4.4: 3-series impulse-response line chart over 12 quarters, mapping
-// deviation-from-baseline for GDP gap, Inflation, and Policy rate. Shock paths
-// are geometric decays keyed off the current assumption values — they express
-// direction and shape, not calibrated QPM dynamics (live wiring is Shot 2+).
+// Three-series reference response over 12 quarters, mapping
+// deviation-from-baseline for GDP gap, inflation, and policy rate. Shock paths
+// are geometric decays keyed off the current assumption values; they express
+// direction and shape until the live QPM solver is wired into this tab.
 function roundPp(value: number): number {
   return Math.round(value * 100) / 100
 }
@@ -715,7 +715,7 @@ export function buildScenarioLabResults(
         '% GDP',
         baselineCore.fiscalBalance,
         scenarioCore.fiscalBalance,
-        'Fiscal outcomes are driven by spending and revenue assumptions in this mock setup.',
+        'Fiscal outcomes are driven by spending and revenue assumptions in this reference setup.',
       ),
     },
     interpretation,
