@@ -1,7 +1,7 @@
 # PE Trade Shock Bridge / Frontend Contract
 
 Date: 2026-04-27  
-Status: planning contract only; no PE artifact, frontend implementation, backend implementation, live refresh, Scenario Lab activation, or artifact build is authorized by this document  
+Status: historical planning contract with current active-preview update; PE static artifact and Scenario Lab tariff-incidence surface are now implemented within the bounded scope in section 21
 Scope: bridge contract from the existing PE simulator surface to future frontend surfaces
 
 Review resolution: Claude Code reviewed the proposed PE contract and gave NO-GO until this document fixed output-catalogue column shift, HS coverage reconciliation, elasticity catalogue rows, authority rows, identity tests, partner/regime parity, and runtime-only scenario payload clarification. This document records those fixes while preserving docs-only scope: no simulator rewrite, no backend work, no artifact generation, HFI remains gated, and PE remains excluded from macro comparison surfaces.
@@ -14,22 +14,25 @@ PE is not a macro forecast. It is not a CGE/general-equilibrium engine. It is no
 
 This contract defines the future bridge from the existing PE simulator at `pe_model/index.html` and `pe_model/pe_data.js` to future frontend and registry surfaces. It must not redefine, replace, or silently broaden the simulator.
 
-## 2. Non-goals
+## 2. Historical Non-goals
 
-- no artifact build
-- no `/data/pe_baseline.json` generated
-- no frontend PE tab activation
-- no backend implementation
+These non-goals applied to the original 2026-04-27 planning slice. Later work implemented a bounded static PE artifact and Scenario Lab tariff-incidence surface. The still-active non-goals are preserved below and restated in section 21.
+
 - no live WITS refresh
-- no HS coverage expansion
+- no backend implementation
 - no CGE coupling
 - no GE feedback
 - no fiscal-revenue authority claim
 - no WTO policy recommendation
-- no elasticity re-derivation
+- no elasticity re-derivation without owner review
+
+Historical non-goals that are now superseded by the active-preview implementation:
+
+- no artifact build
+- no frontend PE tab activation
 - no app-code edits
 
-HFI remains gated. Backend remains gated. This slice is docs-only.
+HFI remains gated. Backend remains gated. The current PE active-preview scope is frontend-only and static-artifact based.
 
 ## 3. Existing Simulator Relationship
 
@@ -64,11 +67,13 @@ No implementation may proceed until chapters in/out and reasons are accepted by 
 
 ## 5. Artifact Concept
 
-Proposed future static artifact path: `/data/pe_baseline.json`.
+Original proposed future static artifact path: `/data/pe_baseline.json`.
+
+Current active-preview artifact path: `apps/policy-ui/public/data/pe.json`, served as `/policy-ui/data/pe.json` on GitHub Pages.
 
 Named schema: `PeBaselineTradeShockArtifact`.
 
-This artifact is not built in this slice. This contract does not create `/data/pe_baseline.json`, does not regenerate `pe_data.js`, and does not add artifact files.
+The current artifact is a bounded public PE bridge for Scenario Lab tariff-incidence analysis. It does not regenerate `pe_data.js`, does not add live WITS refresh, and does not authorize backend storage.
 
 `PeBaselineTradeShockArtifact` is a future baseline-data artifact concept only. It must represent the accepted baseline WITS/trade/tariff/elasticity surface needed for a future frontend PE tab to render simulator-aligned baseline data and run runtime scenarios without redefining PE math.
 
@@ -343,4 +348,70 @@ Required sequence:
 6. then artifact contract/implementation slice
 7. no app implementation until STOP gates clear
 
-No PE frontend implementation, backend implementation, artifact generation, `pe_data.js` regeneration, HFI activation, CGE coupling, comparison-table integration, or push is authorized by this contract.
+For the original planning contract, no PE frontend implementation, backend implementation, artifact generation, `pe_data.js` regeneration, HFI activation, CGE coupling, comparison-table integration, or push was authorized by this contract. The bounded active-preview implementation has since landed and is recorded below.
+
+## 21. Current Active-Preview Scope And PE v2 Backlog
+
+Date recorded: 2026-05-20
+Implementation state: active-preview ready, static artifact, frontend-only
+
+The implemented PE surface is a bounded Scenario Lab tariff-incidence tool backed by the static public artifact at `apps/policy-ui/public/data/pe.json`. It supports:
+
+- tariff cut and tariff increase scenarios;
+- HS-section, partner, and trade-regime filtering;
+- direct trade, consumer-welfare, and tariff-revenue accounting effects;
+- ranked HS-section direct effects;
+- local saved-run and Comparison handoff in a PE-specific block;
+- low/base/high import-demand elasticity sensitivity for direct trade and welfare effects;
+- explicit data-readiness notes explaining available, approximate, and missing inputs.
+
+This implementation is intentionally partial-equilibrium only. It must not be read as GDP, inflation, household-distribution, firm-cost, fiscal-balance, I-O, CGE, FPP, or WTO-accession advice.
+
+### PE v2 Data Requirements
+
+The next PE upgrade should not be mainly UI polish. It requires better data first:
+
+- product-partner tariff matrix;
+- HS2/HS4/HS6 drill-down with stable labels and coverage metadata;
+- applied tariff by partner, regime, and product scope;
+- source vintage, license/redistribution class, and owner confirmation for the expanded trade/tariff inputs;
+- accepted elasticity provenance by product/chapter/section;
+- parity tests between the source extract, static artifact, and displayed Scenario Lab results.
+
+Until those inputs exist, the current partner and regime views must remain labelled as import-share scaled approximations.
+
+### PE v2 Model Requirements
+
+Future model extensions require separate contracts and should not be inferred from the current PE surface:
+
+- household or income-group incidence;
+- firm cost and intermediate-input exposure;
+- tariff-revenue pass-through into fiscal balance;
+- second-round macro effects;
+- I-O, CGE, or FPP handoff.
+
+Any I-O/CGE/FPP handoff must stay separate from the current PE direct-effect cards and must carry model-specific caveats and tests.
+
+### PE v2 Visualization Requirements
+
+Richer visualization is useful only after the granular data exists. Candidate views:
+
+- HS drill-down table or treemap by product scope;
+- partner-by-product effect matrix;
+- tariff cut/increase decomposition by trade effect, welfare, and revenue;
+- sensitivity ranges tied to accepted elasticity provenance rather than generic low/base/high multipliers.
+
+The current sensitivity panel is sufficient for active-preview v1.5. Do not continue adding visual complexity without the product-partner matrix and drill-down data.
+
+### Acceptance Criteria Before PE v2
+
+PE v2 can start only after:
+
+1. the expanded source inputs are frozen and documented;
+2. product/partner/regime coverage is explicit;
+3. redistribution/license status is accepted;
+4. parity and identity tests are written;
+5. Data Registry wording is updated to reflect the stronger artifact;
+6. UI caveats remain clear that PE is partial-equilibrium and not a macro forecast.
+
+Recommended next product action: treat the current PE surface as production-preview ready and move model-production effort to the next lane, while keeping this PE v2 backlog for a later data-backed upgrade.

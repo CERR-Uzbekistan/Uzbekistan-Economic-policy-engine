@@ -15,7 +15,7 @@ Operational-preview planning freeze: no new planning, contract, or readiness doc
 
 - HFI: gated - pending source owner/license confirmations - forbidden: create `/data/hfi_snapshot.json`
 - FPP: gated - pending final workbook freeze/signoff - forbidden: frontend integration
-- PE: gated - pending accepted implementation gate - forbidden: PE artifact or `pe_data.js` regeneration
+- PE: active-preview implemented - next: defer PE v2 until product-partner tariff data and parity tests exist - forbidden: macro/GE/fiscal claims or live refresh
 - CGE: gated - pending accepted implementation gate - forbidden: active-preview implementation
 - Knowledge Hub: static preview implemented; v2 dossier UI and concept locked - next: deepen verified reform package quality and analytical usefulness - forbidden: backend/API CRUD, live ingest, or external citation
 - Backend artifact registry: gated - pending operations/fallback acceptance - forbidden: FastAPI/Postgres implementation
@@ -75,15 +75,15 @@ STOP conditions must be quoted or line-referenced from source contracts where po
 
 ### PE
 
-- Status: `gated`
-- Last verified: 2026-04-27 on `epic/replatform-execution` at `efb889f`
+- Status: `implemented`
+- Last verified: 2026-05-20 on `main` after commit `61c075a`
 - Source-of-truth doc path: `docs/data-bridge/08_pe_contract.md`
-- Current implementation status: planning contract only; no PE artifact, frontend implementation, backend implementation, live refresh, or `pe_data.js` regeneration is authorized.
-- Blocking STOP conditions: `docs/data-bridge/08_pe_contract.md:292-309` says any one missing means STOP and includes WITS vintage/owner/license, `pe_data.js` provenance/version pin, HS coverage reconciliation, authority table, output catalogue, Data Registry shape, simulator schema acceptance, backend operations + fallback acceptance, and Comparison-table boundary acceptance. `docs/data-bridge/08_pe_contract.md:346` says no PE frontend implementation, backend implementation, artifact generation, `pe_data.js` regeneration, HFI overlap, or push is authorized by the contract.
-- Blocks / blocked-by: blocks PE artifact, PE Scenario Lab tab, PE backend, PE comparison block, and PE Data Registry promotion; blocked by WITS/source freeze, owner/license acceptance, source script provenance, coverage reconciliation, authority acceptance, identity/parity tests, caveats, backend/fallback acceptance, and comparison boundary acceptance.
-- Next allowed action: freeze WITS/source vintage and document owner/license/provenance for `pe_data.js`.
-- Next forbidden action: generate `/data/pe_baseline.json`, regenerate `pe_data.js`, wire PE frontend/backend code, or include PE in the macro Comparison table.
-- Owner decision needed: PE model/data owner: "What frozen WITS/source vintage, `pe_data.js` source script/input set, HS coverage scope, and license/redistribution class are accepted?"
+- Current implementation status: bounded frontend-only active preview. Scenario Lab has an active PE tariff-incidence tab backed by `apps/policy-ui/public/data/pe.json`, with tariff cut/increase controls, HS-section/partner/regime filters, direct trade/welfare/revenue effects, ranked HS-section effects, saved-run/Comparison handoff, low/base/high elasticity sensitivity, and explicit data-readiness caveats.
+- Remaining PE v2 gates: `docs/data-bridge/08_pe_contract.md:350-413` records the required product-partner tariff matrix, HS2/HS4/HS6 drill-down, applied tariffs by partner/regime/product, source vintage/license/owner confirmation, product-specific elasticity provenance, and parity/identity tests before a stronger PE version starts.
+- Blocks / blocked-by: current PE does not block other active-preview work. PE v2 is blocked by granular source data, license/redistribution acceptance, product/partner/regime coverage metadata, accepted elasticity provenance, parity tests, and updated Data Registry wording.
+- Next allowed action: keep current PE as production-preview ready and return to PE only for a data-backed v2 upgrade.
+- Next forbidden action: claim PE GDP, inflation, household distribution, firm-cost, fiscal-balance, I-O, CGE, FPP, or WTO-accession effects from the current direct PE surface; add live WITS refresh or backend storage without a separate operations contract.
+- Owner decision needed: PE model/data owner: "When PE v2 is reopened, what product-partner tariff matrix, applied-tariff source, HS drill-down coverage, elasticity provenance, and redistribution/license class are accepted?"
 
 ### CGE
 
