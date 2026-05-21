@@ -161,6 +161,13 @@ export function AssumptionsPanel({
     t(`scenarioLab.assumptions.inputs.${item.key}.description`, {
       defaultValue: item.description,
     })
+  const selectedPreset = presets.find((preset) => preset.preset_id === selectedPresetId)
+  const displayScenarioName =
+    selectedPreset && scenarioName === selectedPreset.title
+      ? t(`scenarioLab.presets.${selectedPreset.preset_id}.title`, {
+          defaultValue: selectedPreset.title,
+        })
+      : scenarioName
 
   const grouped = useMemo(
     () =>
@@ -230,7 +237,7 @@ export function AssumptionsPanel({
           <span>{t('scenarioLab.form.scenarioName')}</span>
           <input
             type="text"
-            value={scenarioName}
+            value={displayScenarioName}
             onChange={(event) => onScenarioNameChange(event.target.value)}
             placeholder={t('scenarioLab.form.scenarioNamePlaceholder')}
           />

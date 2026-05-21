@@ -920,6 +920,7 @@ export function ScenarioLabPage() {
               <ResultsPanel
                 activeTab={activeTab}
                 onTabChange={setActiveTab}
+                activeAssumptions={buildAssumptions(workspace, lastRunAssumptions)}
                 results={currentResults}
                 scenarioName={scenarioName}
                 selectedPresetId={selectedPresetId}

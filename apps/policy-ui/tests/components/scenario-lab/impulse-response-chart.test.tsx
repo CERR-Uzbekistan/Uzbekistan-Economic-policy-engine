@@ -72,6 +72,10 @@ async function createTestI18n() {
             results: {
               impulseResponseEyebrow: 'Impulse response',
               impulseResponseCaption: 'Generated from the active scenario assumptions.',
+              impulsePanels: {
+                subtitle: 'Deviation from baseline; zero line marks no effect.',
+                yLabel: 'Deviation from baseline',
+              },
               qpmReferenceBadge: 'QPM reference',
               claimLabels: {
                 headlineImpact: 'Baseline deviation',
@@ -94,7 +98,7 @@ async function createTestI18n() {
 }
 
 describe('ImpulseResponseChart', () => {
-  it('renders through ChartRenderer with chart frame and axis context', async () => {
+  it('renders economist-style small multiples with chart frame and axis context', async () => {
     const i18n = await createTestI18n()
     const markup = renderToStaticMarkup(
       <I18nextProvider i18n={i18n}>
@@ -103,10 +107,12 @@ describe('ImpulseResponseChart', () => {
     )
 
     assert.match(markup, /scenario-impulse-card/)
-    assert.match(markup, /Impulse response/)
-    assert.match(markup, /role="img"/)
-    assert.match(markup, /aria-label="Impulse response"/)
-    assert.match(markup, /Quarter · Deviation \(pp\)/)
+    assert.match(markup, /scenario-impulse-grid/)
+    assert.equal(markup.match(/role="img"/g)?.length, 3)
+    assert.match(markup, /aria-label="GDP gap"/)
+    assert.match(markup, /aria-label="Inflation"/)
+    assert.match(markup, /aria-label="Policy rate"/)
+    assert.match(markup, /Quarter · Deviation from baseline \(pp\)/)
     assert.match(markup, /Generated from the active scenario assumptions\./)
     assert.match(markup, />QPM REFERENCE</)
     assert.doesNotMatch(markup, /SCENARIO-LAB-MOCK-ENGINE/)

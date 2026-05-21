@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type {
+  Assumption,
   ChartSpec,
   HeadlineMetric,
   ScenarioLabResultTab,
@@ -11,6 +12,7 @@ import {
   formatSignedNumber,
   formatUnitLabel,
   formatUnavailable,
+  formatValueWithUnit,
   getDefaultFractionDigitsForUnit,
 } from '../../lib/format/locale-format.js'
 import { ImpulseResponseChart } from './ImpulseResponseChart.js'
@@ -22,6 +24,7 @@ type ResultsPanelProps = {
   results: ScenarioLabResultsBundle
   scenarioName?: string
   selectedPresetId?: string
+  activeAssumptions?: Assumption[]
 }
 
 const TAB_LABEL_KEYS: Record<ScenarioLabResultTab, string> = {
@@ -76,8 +79,6 @@ function formatDeltaWithUnit(value: number | null, unit: string, locale: string 
   return unitLabel ? `${signed} ${unitLabel}` : signed
 }
 
-// Non-headline tabs retain the existing table-view — they're out of scope for
-// Shot-1 structural alignment (prompt §4.4 drops only the bar chart).
 function metricLabel(metric: HeadlineMetric, t: ReturnType<typeof useTranslation>['t']) {
   return t(`scenarioLab.results.metrics.${metric.metric_id}`, { defaultValue: metric.label })
 }
@@ -95,15 +96,129 @@ function localizedPresetName(
   })
 }
 
+function isFiniteNumber(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value)
+}
+
+function formatAssumptionShock(value: number, unit: string, locale: string | undefined): string {
+  const precision = getDefaultFractionDigitsForUnit(unit)
+  const signed = formatSignedNumber(value, locale, {
+    maximumFractionDigits: precision,
+    minimumFractionDigits: precision,
+  })
+  const unitLabel = formatAxisUnitLabel(unit, locale)
+  return unitLabel ? `${signed} ${unitLabel}` : signed
+}
+
+function assumptionLabel(assumption: Assumption, t: ReturnType<typeof useTranslation>['t']) {
+  return t(`scenarioLab.assumptions.inputs.${assumption.key}.label`, {
+    defaultValue: assumption.label,
+  })
+}
+
+function terminalValue(values: number[]): { value: number; index: number } | null {
+  for (let index = values.length - 1; index >= 0; index -= 1) {
+    const value = values[index]
+    if (isFiniteNumber(value)) {
+      return { value, index }
+    }
+  }
+  return null
+}
+
+function buildPathDelta(chart: ChartSpec) {
+  const baseline = chart.series.find((series) => series.semantic_role === 'baseline')
+  const scenario =
+    chart.series.find((series) => series.series_id === 'scenario_path') ??
+    chart.series.find((series) => series.semantic_role !== 'baseline')
+
+  if (!baseline || !scenario) {
+    return null
+  }
+
+  const baselineTerminal = terminalValue(baseline.values)
+  const scenarioTerminal = terminalValue(scenario.values)
+  if (!baselineTerminal || !scenarioTerminal) {
+    return null
+  }
+
+  const terminalIndex = Math.min(baselineTerminal.index, scenarioTerminal.index)
+  const baselineValue = baseline.values[terminalIndex]
+  const scenarioValue = scenario.values[terminalIndex]
+  if (!isFiniteNumber(baselineValue) || !isFiniteNumber(scenarioValue)) {
+    return null
+  }
+
+  return {
+    baseline: baselineValue,
+    delta: scenarioValue - baselineValue,
+    period: chart.x.values[terminalIndex]?.toString() ?? '',
+    scenario: scenarioValue,
+    unit: chart.y.unit,
+  }
+}
+
+function ActiveShockSummary({ assumptions }: { assumptions: Assumption[] }) {
+  const { i18n, t } = useTranslation()
+  const locale = i18n.resolvedLanguage ?? i18n.language
+  const activeAssumptions = assumptions.filter(
+    (assumption) => isFiniteNumber(assumption.value) && Math.abs(assumption.value) > 0.0001,
+  )
+
+  return (
+    <section
+      className="qpm-active-shocks"
+      aria-label={t('scenarioLab.results.activeShocks.ariaLabel')}
+    >
+      <span className="qpm-active-shocks__title">{t('scenarioLab.results.activeShocks.title')}</span>
+      {activeAssumptions.length > 0 ? (
+        <ul className="qpm-active-shocks__list">
+          {activeAssumptions.map((assumption) => (
+            <li key={assumption.key}>
+              <span>{assumptionLabel(assumption, t)}</span>
+              <strong>{formatAssumptionShock(assumption.value as number, assumption.unit, locale)}</strong>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>{t('scenarioLab.results.activeShocks.none')}</p>
+      )}
+    </section>
+  )
+}
+
 function ScenarioTabChart({ chart, activeTab }: { chart: ChartSpec; activeTab: ScenarioLabResultTab }) {
-  const { t } = useTranslation()
+  const { i18n, t } = useTranslation()
+  const locale = i18n.resolvedLanguage ?? i18n.language
+  const pathDelta = buildPathDelta(chart)
+
   return (
     <div className="scenario-main-chart">
       <div className="scenario-output-context">
         <span className="claim-label">{t(CLAIM_LABEL_KEYS[activeTab])}</span>
         <p>{t(TAB_EXPLANATION_KEYS[activeTab])}</p>
       </div>
-      <ChartRenderer spec={chart} />
+      {pathDelta ? (
+        <dl className="qpm-path-deltas">
+          <div>
+            <dt>{t('scenarioLab.results.pathDeltas.period')}</dt>
+            <dd>{pathDelta.period}</dd>
+          </div>
+          <div>
+            <dt>{t('scenarioLab.results.pathDeltas.baselineEnd')}</dt>
+            <dd>{formatValueWithUnit(pathDelta.baseline, pathDelta.unit, locale)}</dd>
+          </div>
+          <div>
+            <dt>{t('scenarioLab.results.pathDeltas.scenarioEnd')}</dt>
+            <dd>{formatValueWithUnit(pathDelta.scenario, pathDelta.unit, locale)}</dd>
+          </div>
+          <div>
+            <dt>{t('scenarioLab.results.pathDeltas.difference')}</dt>
+            <dd>{formatDeltaWithUnit(pathDelta.delta, pathDelta.unit, locale)}</dd>
+          </div>
+        </dl>
+      ) : null}
+      <ChartRenderer height={300} spec={chart} />
     </div>
   )
 }
@@ -114,6 +229,7 @@ export function ResultsPanel({
   results,
   scenarioName,
   selectedPresetId,
+  activeAssumptions = [],
 }: ResultsPanelProps) {
   const { i18n, t } = useTranslation()
   const locale = i18n.resolvedLanguage ?? i18n.language
@@ -159,6 +275,8 @@ export function ResultsPanel({
           )
         })}
       </div>
+
+      <ActiveShockSummary assumptions={activeAssumptions} />
 
       <div className="qpm-decision-view">
         <div className="qpm-decision-view__head">

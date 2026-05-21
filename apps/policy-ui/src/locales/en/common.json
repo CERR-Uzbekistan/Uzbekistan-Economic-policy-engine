@@ -940,7 +940,24 @@
         "fiscalEffects": "Fiscal effects"
       },
       "impulseResponseEyebrow": "IMPULSE RESPONSE",
-      "impulseResponseCaption": "QPM reference calculation: deviations from baseline over 12 quarters, in percentage points. It should not be cited as a live forecast.",
+      "impulseResponseCaption": "QPM reference calculation: each panel shows a deviation from baseline over 12 quarters. The dashed zero line means no scenario effect.",
+      "impulsePanels": {
+        "subtitle": "Deviation from baseline; zero line marks no effect.",
+        "xLabel": "Horizon",
+        "yLabel": "Deviation from baseline",
+        "gdp_gap": {
+          "title": "GDP gap",
+          "takeaway": "Positive values indicate demand running above the baseline path."
+        },
+        "inflation": {
+          "title": "Inflation",
+          "takeaway": "Positive values indicate inflation above the baseline path."
+        },
+        "policy_rate": {
+          "title": "Policy rate",
+          "takeaway": "Positive values indicate a higher policy-rate path than baseline."
+        }
+      },
       "qpmReferenceBadge": "QPM reference",
       "headlineMetricsAria": "Headline macro indicators",
       "metrics": {
@@ -967,6 +984,17 @@
         "macroPath": "Scenario path vs baseline",
         "externalBalance": "External-balance scenario path",
         "fiscalEffects": "Fiscal scenario accounting"
+      },
+      "activeShocks": {
+        "ariaLabel": "Active QPM shock assumptions",
+        "title": "Active shocks",
+        "none": "No active shocks; this is a baseline-style reference run."
+      },
+      "pathDeltas": {
+        "period": "Endpoint",
+        "baselineEnd": "Baseline endpoint",
+        "scenarioEnd": "Scenario endpoint",
+        "difference": "Scenario minus baseline"
       },
       "deltaVsBaseline": "{{delta}} vs baseline"
     },

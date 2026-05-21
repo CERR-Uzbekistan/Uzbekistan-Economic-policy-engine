@@ -940,7 +940,24 @@
         "fiscalEffects": "Fiskal ta'sirlar"
       },
       "impulseResponseEyebrow": "IMPULS RESPONSI",
-      "impulseResponseCaption": "QPM ma'lumot hisobi: 12 chorak davomida bazaviydan og'ishlar, foiz punktlarida. Jonli prognoz sifatida keltirilmasin.",
+      "impulseResponseCaption": "QPM ma'lumot hisobi: har bir panel 12 chorak davomida bazaviydan og'ishni ko'rsatadi. Punktir nol chizig'i stsenariy ta'siri yo'qligini bildiradi.",
+      "impulsePanels": {
+        "subtitle": "Bazaviydan og'ish; nol chizig'i ta'sir yo'qligini bildiradi.",
+        "xLabel": "Gorizont",
+        "yLabel": "Bazaviydan og'ish",
+        "gdp_gap": {
+          "title": "YaIM tafovuti",
+          "takeaway": "Ijobiy qiymatlar talab bazaviy trayektoriyadan yuqoriligini bildiradi."
+        },
+        "inflation": {
+          "title": "Inflyatsiya",
+          "takeaway": "Ijobiy qiymatlar inflyatsiya bazaviy trayektoriyadan yuqoriligini bildiradi."
+        },
+        "policy_rate": {
+          "title": "Stavka",
+          "takeaway": "Ijobiy qiymatlar stavka trayektoriyasi bazaviydan yuqoriligini bildiradi."
+        }
+      },
       "qpmReferenceBadge": "QPM ma'lumot",
       "headlineMetricsAria": "Asosiy makro ko'rsatkichlar",
       "metrics": {
@@ -967,6 +984,17 @@
         "macroPath": "Stsenariy trayektoriyasi bazaviyga nisbatan",
         "externalBalance": "Tashqi balans stsenariy trayektoriyasi",
         "fiscalEffects": "Fiskal stsenariy hisob-kitobi"
+      },
+      "activeShocks": {
+        "ariaLabel": "Faol QPM shok taxminlari",
+        "title": "Faol shoklar",
+        "none": "Faol shoklar yo'q; bu bazaviyga o'xshash ma'lumot ishga tushirishidir."
+      },
+      "pathDeltas": {
+        "period": "Yakuniy davr",
+        "baselineEnd": "Bazaviy yakun",
+        "scenarioEnd": "Stsenariy yakuni",
+        "difference": "Stsenariy minus bazaviy"
       },
       "deltaVsBaseline": "{{delta}} bazaviyga nisbatan"
     },

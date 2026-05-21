@@ -22,6 +22,7 @@ import {
   ComposedChart,
   Legend,
   Line,
+  ReferenceLine,
   Tooltip,
   XAxis,
   YAxis,
@@ -32,6 +33,7 @@ type ChartRendererProps = {
   spec: ChartSpec
   height?: number
   ariaLabel?: string
+  showZeroLine?: boolean
 }
 
 type ChartDatum = Record<string, number | string | undefined>
@@ -194,7 +196,12 @@ function publicAttributionLabel(
   return attribution.model_id
 }
 
-export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererProps): JSX.Element {
+export function ChartRenderer({
+  spec,
+  height = 280,
+  ariaLabel,
+  showZeroLine = false,
+}: ChartRendererProps): JSX.Element {
   const { i18n, t } = useTranslation()
   const locale = i18n.resolvedLanguage ?? i18n.language
   const localizedSpec = localizeChartSpec(spec, t)
@@ -256,6 +263,7 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
   const hasIllustrativeBand = bandMeta.some((item) => item.band.is_illustrative)
   const suppressInternalLegend = localizedSpec.series.some((series) => series.series_id === 'gdp_nowcast_yoy')
   const chartWidth = Math.max(measuredWidth, 1)
+  const chartMargin = { top: 10, right: 20, bottom: 8, left: 10 }
 
   const commonChartChildren = (
     <>
@@ -275,6 +283,8 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
       <YAxis
         axisLine={false}
         domain={yDomain}
+        tickMargin={8}
+        width={74}
         tick={Y_AXIS_TICK_STYLE}
         tickFormatter={(value) => {
           if (!isFiniteNumber(value)) {
@@ -314,6 +324,15 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
           wrapperStyle={{ paddingTop: 10 }}
         />
       )}
+      {showZeroLine ? (
+        <ReferenceLine
+          ifOverflow="extendDomain"
+          y={0}
+          stroke="var(--color-border-strong)"
+          strokeDasharray="4 4"
+          strokeWidth={1}
+        />
+      ) : null}
     </>
   )
 
@@ -371,7 +390,7 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
   })
 
   const lineChartBody = (
-    <ComposedChart data={data} height={height} margin={{ top: 8, right: 8, bottom: 6, left: 6 }} width={chartWidth}>
+    <ComposedChart data={data} height={height} margin={chartMargin} width={chartWidth}>
       {uncertaintyPatterns}
       {commonChartChildren}
       {uncertaintyBands}
@@ -419,14 +438,14 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
 
   const barChartBody =
     bandMeta.length > 0 ? (
-      <ComposedChart data={data} height={height} margin={{ top: 8, right: 8, bottom: 6, left: 6 }} width={chartWidth}>
+      <ComposedChart data={data} height={height} margin={chartMargin} width={chartWidth}>
         {uncertaintyPatterns}
         {commonChartChildren}
         {uncertaintyBands}
         {barSeries}
       </ComposedChart>
     ) : (
-      <BarChart data={data} height={height} margin={{ top: 8, right: 8, bottom: 6, left: 6 }} width={chartWidth}>
+      <BarChart data={data} height={height} margin={chartMargin} width={chartWidth}>
         {commonChartChildren}
         {barSeries}
       </BarChart>

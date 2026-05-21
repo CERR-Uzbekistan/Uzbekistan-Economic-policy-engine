@@ -31,8 +31,29 @@ async function createTestI18n() {
               impulseResponseEyebrow: 'IMPULSE RESPONSE',
               impulseResponseCaption:
                 'QPM reference calculation: deviations from baseline over 12 quarters, in percentage points. It should not be cited as a live forecast.',
+              impulsePanels: {
+                subtitle: 'Deviation from baseline; zero line marks no effect.',
+                yLabel: 'Deviation from baseline',
+                gdp_gap: {
+                  title: 'GDP gap',
+                  takeaway: 'GDP gap takeaway.',
+                },
+                inflation: {
+                  title: 'Inflation',
+                  takeaway: 'Inflation takeaway.',
+                },
+                policy_rate: {
+                  title: 'Policy rate',
+                  takeaway: 'Policy rate takeaway.',
+                },
+              },
               qpmReferenceBadge: 'QPM reference',
               headlineMetricsAria: 'Headline macro indicators',
+              activeShocks: {
+                ariaLabel: 'Active QPM shock assumptions',
+                title: 'Active shocks',
+                none: 'No active shocks.',
+              },
               decision: {
                 eyebrow: 'Decision view',
                 title: 'QPM reference result',
@@ -57,7 +78,20 @@ async function createTestI18n() {
                 externalBalance: 'External-balance scenario path',
                 fiscalEffects: 'Fiscal scenario accounting',
               },
+              pathDeltas: {
+                period: 'Endpoint',
+                baselineEnd: 'Baseline endpoint',
+                scenarioEnd: 'Scenario endpoint',
+                difference: 'Scenario minus baseline',
+              },
               deltaVsBaseline: '{{delta}} vs baseline',
+            },
+            assumptions: {
+              inputs: {
+                policy_rate_change: {
+                  label: 'Policy rate change',
+                },
+              },
             },
           },
         },
@@ -73,15 +107,31 @@ describe('ResultsPanel clarification copy', () => {
     const results = buildScenarioLabResults({})
     const markup = renderToStaticMarkup(
       <I18nextProvider i18n={i18n}>
-        <ResultsPanel activeTab="headline_impact" onTabChange={() => {}} results={results} />
+        <ResultsPanel
+          activeAssumptions={[
+            {
+              category: 'macro',
+              key: 'policy_rate_change',
+              label: 'Policy rate change',
+              technical_variable: 'qpm.policy_rate',
+              unit: 'pp',
+              value: 1,
+            },
+          ]}
+          activeTab="headline_impact"
+          onTabChange={() => {}}
+          results={results}
+        />
       </I18nextProvider>,
     )
 
     assert.match(markup, /Scenario impulse response/)
     assert.match(markup, /QPM reference result/)
+    assert.match(markup, /Active shocks/)
+    assert.match(markup, /Policy rate change/)
     assert.match(markup, /QPM REFERENCE/)
-    assert.match(markup, /Deviation from baseline in percentage points/)
-    assert.match(markup, /reference Scenario Lab calculation, not a live forecast/)
+    assert.match(markup, /Deviation from baseline; zero line marks no effect/)
+    assert.match(markup, /QPM reference calculation: deviations from baseline over 12 quarters/)
     assert.match(markup, /deviates from the baseline across 12 quarters/)
     assert.match(markup, /0\.0 pp vs baseline/)
     assert.doesNotMatch(markup, /QPM · FPP/)
@@ -99,6 +149,8 @@ describe('ResultsPanel clarification copy', () => {
 
     assert.match(markup, /Scenario path vs baseline/)
     assert.match(markup, /scenario path next to the baseline path/)
+    assert.match(markup, /Baseline endpoint/)
+    assert.match(markup, /Scenario minus baseline/)
     assert.match(markup, /Growth path reflects combined demand/)
   })
 })
