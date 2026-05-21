@@ -15,9 +15,9 @@
       "value": 0.7,
       "range_min": 0.3,
       "range_max": 0.95,
-      "description": "Inertia in output gap dynamics. Controls how quickly the GDP gap closes; higher b1 means more inertia and slower recovery from shocks.",
-      "description_ru": "Инерция в динамике разрыва выпуска. Контролирует скорость закрытия разрыва ВВП: высокий b1 = больше инерции, медленнее восстановление после шоков.",
-      "description_uz": "Chiqarish bo'shlig'i dinamikasidagi inersiya. YaIM bo'shlig'i qanchalik tez yopilishini boshqaradi: yuqori b1 = ko'proq inersiya, sekinroq tiklanish."
+      "description": "Inertia in output-gap dynamics; higher b1 means slower closure after shocks.",
+      "description_ru": "Инерция в динамике разрыва выпуска; более высокий b1 означает более медленное закрытие после шоков.",
+      "description_uz": "Chiqarish bo'shlig'i dinamikasidagi inersiya; yuqori b1 shoklardan keyin sekinroq yopilishni anglatadi."
     },
     {
       "symbol": "b2",
@@ -25,9 +25,9 @@
       "value": 0.2,
       "range_min": 0.05,
       "range_max": 0.6,
-      "description": "Monetary policy transmission to demand. How strongly monetary conditions (interest rate plus exchange rate) affect the output gap; key monetary transmission parameter.",
-      "description_ru": "Трансмиссия денежной политики на спрос. Насколько денежные условия (ставка + курс) влияют на разрыв выпуска; ключевой параметр денежной трансмиссии.",
-      "description_uz": "Pul-kredit siyosatining talabga transmissiyasi. Pul-kredit shartlari (foiz stavkasi + valyuta kursi) chiqarish bo'shlig'iga ta'sir kuchi; asosiy monetar transmissiya parametri."
+      "description": "Sensitivity of the output gap to monetary conditions.",
+      "description_ru": "Чувствительность разрыва выпуска к денежно-кредитным условиям.",
+      "description_uz": "Chiqarish bo'shlig'ining pul-kredit sharoitlariga sezgirligi."
     },
     {
       "symbol": "b3",
@@ -35,9 +35,9 @@
       "value": 0.3,
       "range_min": 0.05,
       "range_max": 0.6,
-      "description": "Foreign output gap spillover. Sensitivity of domestic output to foreign economic cycles; important for Uzbekistan as an open economy with significant trade and remittances.",
-      "description_ru": "Перелив внешнего разрыва выпуска. Чувствительность внутреннего выпуска к внешним экономическим циклам; важно для открытой экономики Узбекистана с торговлей и денежными переводами.",
-      "description_uz": "Tashqi chiqarish bo'shlig'i ta'siri. Ichki chiqarishning tashqi iqtisodiy tsikllarga sezgirligi; savdo va pul o'tkazmalari bo'lgan ochiq iqtisodiyot uchun muhim."
+      "description": "Sensitivity of domestic demand to the foreign output gap.",
+      "description_ru": "Чувствительность внутреннего спроса к внешнему разрыву выпуска.",
+      "description_uz": "Ichki talabning tashqi chiqarish bo'shlig'iga sezgirligi."
     },
     {
       "symbol": "b4",
@@ -105,9 +105,9 @@
       "value": 1.5,
       "range_min": 1,
       "range_max": 3,
-      "description": "Taylor Principle: must exceed 1 for inflation stability. g2 = 1.5 means the CBU raises the nominal rate by 150 bp for every 1 pp inflation overshoot, ensuring the real rate rises to cool demand.",
-      "description_ru": "Принцип Тейлора: должен превышать 1 для стабильности инфляции. g2 = 1.5: ЦБУ повышает ставку на 150 б.п. при каждом 1 п.п. превышения инфляции.",
-      "description_uz": "Teylor printsipi: inflyatsiya barqarorligi uchun 1 dan katta bo'lishi shart. g2 = 1.5: har 1 p.p. inflyatsiya ortiqchaligida CBU stavkani 150 b.p. ko'taradi."
+      "description": "Inflation-response weight in the Taylor rule.",
+      "description_ru": null,
+      "description_uz": null
     },
     {
       "symbol": "g3",
@@ -125,9 +125,9 @@
       "value": 0.7,
       "range_min": 0.1,
       "range_max": 0.9,
-      "description": "Exchange rate backward-looking share. Fraction of exchange rate expectations that are backward-looking; lower e1 means more forward-looking expectations and stronger UIP arbitrage discipline on the UZS.",
-      "description_ru": "Доля обратных ожиданий курса. Доля ожиданий обменного курса, основанных на прошлых значениях; низкий e1 = более перспективные ожидания, более сильная дисциплина UIP для UZS.",
-      "description_uz": "Valyuta kursining orqaga qaragan kutishlari ulushi. O'tgan kurslarga asoslangan kutishlar ulushi; past e1 = ko'proq istiqbolga yo'nalgan kutishlar, UZS uchun kuchliroq UIP intizomi."
+      "description": "Backward-looking exchange-rate weight in the UIP block.",
+      "description_ru": "Доля обратных ожиданий курса в блоке UIP.",
+      "description_uz": "UIP blokidagi valyuta kursining orqaga qaragan kutishlari ulushi."
     },
     {
       "symbol": "pi_target",
@@ -135,9 +135,9 @@
       "value": 5,
       "range_min": 3,
       "range_max": 12,
-      "description": "Long-run CBU inflation goal. Official target: 5% for 2024-2026. The Taylor Rule anchors the nominal rate to keep inflation near this value.",
-      "description_ru": "Долгосрочная цель ЦБУ по инфляции. Официальная цель: 5% на 2024-2026 гг. Правило Тейлора удерживает номинальную ставку вблизи этого значения.",
-      "description_uz": "CBU ning uzoq muddatli inflyatsiya maqsadi. Rasmiy maqsad: 2024-2026 yillar uchun 5%. Teylor qoidasi nominal stavkani ushbu qiymat atrofida saqlaydi."
+      "description": "Long-run inflation target anchoring the Taylor rule.",
+      "description_ru": "Долгосрочная цель по инфляции, закрепляющая правило Тейлора.",
+      "description_uz": "Teylor qoidasini langarlaydigan uzoq muddatli inflyatsiya maqsadi."
     },
     {
       "symbol": "rs_neutral",
@@ -145,7 +145,7 @@
       "value": 8.5,
       "range_min": 4,
       "range_max": 20,
-      "description": "Neutral nominal policy rate = neutral real rate r_bar (3.5%) + inflation target pi* (5.0%) = 8.5%. The rate consistent with steady-state output and the inflation target; constructed from the two legacy steady-state sliders.",
+      "description": "Neutral nominal policy rate = neutral real rate plus inflation target.",
       "description_ru": null,
       "description_uz": null
     },
@@ -174,59 +174,14 @@
     {
       "scenario_id": "baseline",
       "scenario_name": "Baseline",
-      "description": "All shocks zero; economy follows the Overview-anchored QPM baseline path.",
+      "description": "All shocks zero; economy follows the Overview-anchored QPM baseline path from Overview artifact baseline.",
       "horizon_quarters": 8,
-      "periods": [
-        "2026 Q3",
-        "2026 Q4",
-        "2027 Q1",
-        "2027 Q2",
-        "2027 Q3",
-        "2027 Q4",
-        "2028 Q1",
-        "2028 Q2"
-      ],
+      "periods": ["2026 Q3", "2026 Q4", "2027 Q1", "2027 Q2", "2027 Q3", "2027 Q4", "2028 Q1", "2028 Q2"],
       "paths": {
-        "gdp_growth": [
-          6,
-          6,
-          6,
-          6,
-          6,
-          6,
-          6,
-          6
-        ],
-        "inflation": [
-          7.1,
-          6.95,
-          6.8,
-          6.65,
-          6.5,
-          6.35,
-          6.2,
-          6.05
-        ],
-        "policy_rate": [
-          14,
-          13.75,
-          13.5,
-          13.25,
-          13,
-          12.75,
-          12.5,
-          12.25
-        ],
-        "exchange_rate": [
-          12076.2,
-          12083.3,
-          12237.5,
-          12552.5,
-          12953.5,
-          13386.9,
-          13805.3,
-          14173.6
-        ]
+        "gdp_growth": [6, 6, 6, 6, 6, 6, 6, 6],
+        "inflation": [7.1, 6.95, 6.8, 6.65, 6.5, 6.35, 6.2, 6.05],
+        "policy_rate": [14, 13.75, 13.5, 13.25, 13, 12.75, 12.5, 12.25],
+        "exchange_rate": [12076.2, 12083.3, 12237.5, 12552.5, 12953.5, 13387, 13805.5, 14173.9]
       },
       "shocks_applied": {
         "rs_shock": 0,
@@ -235,64 +190,19 @@
         "pie_shock": 0,
         "external_demand_shock": 0
       },
-      "solver_iterations": 331
+      "solver_iterations": 386
     },
     {
       "scenario_id": "rate-cut-100bp",
       "scenario_name": "Policy rate cut (-100 bp)",
       "description": "CBU cuts the policy rate by 100 bp below the Taylor-rule path; expect higher output gap and temporarily faster disinflation response.",
       "horizon_quarters": 8,
-      "periods": [
-        "2026 Q3",
-        "2026 Q4",
-        "2027 Q1",
-        "2027 Q2",
-        "2027 Q3",
-        "2027 Q4",
-        "2028 Q1",
-        "2028 Q2"
-      ],
+      "periods": ["2026 Q3", "2026 Q4", "2027 Q1", "2027 Q2", "2027 Q3", "2027 Q4", "2028 Q1", "2028 Q2"],
       "paths": {
-        "gdp_growth": [
-          6.1661,
-          6.2451,
-          6.2542,
-          6.2146,
-          6.1488,
-          6.0761,
-          6.0113,
-          5.9633
-        ],
-        "inflation": [
-          7.1611,
-          7.1128,
-          7.0814,
-          7.0452,
-          6.9277,
-          6.7405,
-          6.5056,
-          6.2484
-        ],
-        "policy_rate": [
-          13.2263,
-          13.3676,
-          13.4023,
-          13.3276,
-          13.156,
-          12.91,
-          12.6164,
-          12.3009
-        ],
-        "exchange_rate": [
-          12116.8,
-          12140.9,
-          12296.7,
-          12604.9,
-          12996.1,
-          13420.7,
-          13834.1,
-          14202.3
-        ]
+        "gdp_growth": [6.1661, 6.2452, 6.2542, 6.2146, 6.1487, 6.076, 6.0111, 5.9633],
+        "inflation": [7.1611, 7.1128, 7.0813, 7.0452, 6.9277, 6.7405, 6.5056, 6.2484],
+        "policy_rate": [13.2263, 13.3676, 13.4022, 13.3276, 13.1561, 12.9102, 12.6169, 12.3016],
+        "exchange_rate": [12116.8, 12140.9, 12296.7, 12604.9, 12996.1, 13420.8, 13834.2, 14202.5]
       },
       "shocks_applied": {
         "rs_shock": -1,
@@ -301,64 +211,19 @@
         "pie_shock": 0,
         "external_demand_shock": 0
       },
-      "solver_iterations": 331
+      "solver_iterations": 386
     },
     {
       "scenario_id": "rate-hike-100bp",
       "scenario_name": "Policy rate hike (+100 bp)",
       "description": "CBU hikes the policy rate by 100 bp above the Taylor-rule path; expect lower output gap and stronger UZS via the UIP channel.",
       "horizon_quarters": 8,
-      "periods": [
-        "2026 Q3",
-        "2026 Q4",
-        "2027 Q1",
-        "2027 Q2",
-        "2027 Q3",
-        "2027 Q4",
-        "2028 Q1",
-        "2028 Q2"
-      ],
+      "periods": ["2026 Q3", "2026 Q4", "2027 Q1", "2027 Q2", "2027 Q3", "2027 Q4", "2028 Q1", "2028 Q2"],
       "paths": {
-        "gdp_growth": [
-          5.834,
-          5.7548,
-          5.7458,
-          5.7853,
-          5.8513,
-          5.924,
-          5.9888,
-          6.0366
-        ],
-        "inflation": [
-          7.0389,
-          6.7872,
-          6.5187,
-          6.2547,
-          6.0722,
-          5.9596,
-          5.8944,
-          5.8516
-        ],
-        "policy_rate": [
-          14.7737,
-          14.1325,
-          13.5977,
-          13.1724,
-          12.844,
-          12.5901,
-          12.3836,
-          12.1992
-        ],
-        "exchange_rate": [
-          12035.7,
-          12026,
-          12178.6,
-          12500.3,
-          12911,
-          13353.2,
-          13776.6,
-          14145
-        ]
+        "gdp_growth": [5.834, 5.7549, 5.7457, 5.7853, 5.8513, 5.9241, 5.9888, 6.0367],
+        "inflation": [7.0389, 6.7872, 6.5186, 6.2547, 6.0723, 5.9596, 5.8944, 5.8515],
+        "policy_rate": [14.7737, 14.1325, 13.5977, 13.1724, 12.844, 12.5897, 12.3831, 12.1985],
+        "exchange_rate": [12035.7, 12026, 12178.6, 12500.3, 12911, 13353.3, 13776.8, 14145.3]
       },
       "shocks_applied": {
         "rs_shock": 1,
@@ -367,64 +232,19 @@
         "pie_shock": 0,
         "external_demand_shock": 0
       },
-      "solver_iterations": 331
+      "solver_iterations": 386
     },
     {
       "scenario_id": "exchange-rate-shock",
       "scenario_name": "UZS depreciation (+10%)",
       "description": "One-off 10% UZS depreciation against USD; expect inflation spike via direct pass-through (a4) and RER gap, plus policy-rate response.",
       "horizon_quarters": 8,
-      "periods": [
-        "2026 Q3",
-        "2026 Q4",
-        "2027 Q1",
-        "2027 Q2",
-        "2027 Q3",
-        "2027 Q4",
-        "2028 Q1",
-        "2028 Q2"
-      ],
+      "periods": ["2026 Q3", "2026 Q4", "2027 Q1", "2027 Q2", "2027 Q3", "2027 Q4", "2028 Q1", "2028 Q2"],
       "paths": {
-        "gdp_growth": [
-          7.2465,
-          7.5952,
-          7.3505,
-          6.795,
-          6.1595,
-          5.6072,
-          5.2307,
-          5.0593
-        ],
-        "inflation": [
-          8.2069,
-          9.2908,
-          10.2762,
-          11.009,
-          10.3098,
-          9.1583,
-          7.8335,
-          6.5732
-        ],
-        "policy_rate": [
-          16.2547,
-          17.4641,
-          17.8027,
-          17.3748,
-          16.3943,
-          15.1167,
-          13.7824,
-          12.5793
-        ],
-        "exchange_rate": [
-          13678.3,
-          13363.7,
-          13203.8,
-          13251.2,
-          13450,
-          13756.8,
-          14124.1,
-          14505.9
-        ]
+        "gdp_growth": [7.2465, 7.5953, 7.3506, 6.795, 6.1593, 5.6068, 5.2299, 5.0585],
+        "inflation": [8.2069, 9.2908, 10.2761, 11.0089, 10.3096, 9.158, 7.8332, 6.5733],
+        "policy_rate": [16.2547, 17.4639, 17.8024, 17.3745, 16.3945, 15.1181, 13.7863, 12.5855],
+        "exchange_rate": [13678.4, 13363.7, 13203.8, 13251.2, 13449.9, 13756.7, 14123.8, 14505.6]
       },
       "shocks_applied": {
         "rs_shock": 0,
@@ -433,64 +253,19 @@
         "pie_shock": 0,
         "external_demand_shock": 0
       },
-      "solver_iterations": 292
+      "solver_iterations": 349
     },
     {
       "scenario_id": "remittance-downside",
       "scenario_name": "External demand slowdown (-0.5 pp)",
       "description": "Foreign output-gap downside shock using the active b3 external-demand channel. The foreign gap follows AR(1) decay with rho=0.75 and enters the IS curve as b3 * gap*_t.",
       "horizon_quarters": 8,
-      "periods": [
-        "2026 Q3",
-        "2026 Q4",
-        "2027 Q1",
-        "2027 Q2",
-        "2027 Q3",
-        "2027 Q4",
-        "2028 Q1",
-        "2028 Q2"
-      ],
+      "periods": ["2026 Q3", "2026 Q4", "2027 Q1", "2027 Q2", "2027 Q3", "2027 Q4", "2028 Q1", "2028 Q2"],
       "paths": {
-        "gdp_growth": [
-          5.8492,
-          5.7913,
-          5.7893,
-          5.817,
-          5.8568,
-          5.8971,
-          5.9313,
-          5.9565
-        ],
-        "inflation": [
-          7.0907,
-          6.9253,
-          6.7591,
-          6.5968,
-          6.451,
-          6.3195,
-          6.1957,
-          6.073
-        ],
-        "policy_rate": [
-          13.9579,
-          13.6734,
-          13.4066,
-          13.1598,
-          12.9295,
-          12.7092,
-          12.4916,
-          12.2708
-        ],
-        "exchange_rate": [
-          12080.6,
-          12093.7,
-          12254.5,
-          12575.7,
-          12981.4,
-          13417.3,
-          13835.9,
-          14202.2
-        ]
+        "gdp_growth": [5.8491, 5.7914, 5.7893, 5.817, 5.8568, 5.8971, 5.9312, 5.9566],
+        "inflation": [7.0907, 6.9253, 6.7591, 6.5968, 6.4511, 6.3195, 6.1958, 6.0729],
+        "policy_rate": [13.9579, 13.6733, 13.4065, 13.1598, 12.9295, 12.7091, 12.4917, 12.2708],
+        "exchange_rate": [12080.6, 12093.7, 12254.5, 12575.7, 12981.4, 13417.4, 13836.1, 14202.5]
       },
       "shocks_applied": {
         "rs_shock": 0,
@@ -499,7 +274,7 @@
         "pie_shock": 0,
         "external_demand_shock": -0.5
       },
-      "solver_iterations": 331
+      "solver_iterations": 386
     }
   ],
   "caveats": [
@@ -507,116 +282,69 @@
       "caveat_id": "qpm-external-demand-ar1",
       "severity": "info",
       "message": "External-demand shocks use the active b3 channel. The foreign output gap gap*_t follows AR(1) decay with rho=0.75 and enters the IS curve as b3 * gap*_t.",
-      "affected_metrics": [
-        "gdp_growth"
-      ],
-      "affected_models": [
-        "QPM"
-      ],
+      "affected_metrics": ["gdp_growth"],
+      "affected_models": ["QPM"],
       "source": "mcp_server/models/qpm.py and qpm export solver"
     },
     {
       "caveat_id": "qpm-baseline-irf-reconciliation",
       "severity": "warning",
       "message": "Legacy runBL() baseline forecast historically used an ad-hoc a2*rmc*3 scaling that is inconsistent with solveIRF(). The v2 legacy solver unified both paths through solveIRF(), and this R port matches the unified v2 solver; any residual divergence with older chart snapshots is expected.",
-      "affected_metrics": [
-        "gdp_growth",
-        "inflation",
-        "policy_rate",
-        "exchange_rate"
-      ],
-      "affected_models": [
-        "QPM"
-      ],
+      "affected_metrics": ["gdp_growth", "inflation", "policy_rate", "exchange_rate"],
+      "affected_models": ["QPM"],
       "source": "ROADMAP.md Phase 1B QPM item 3"
     },
     {
       "caveat_id": "qpm-uip-no-risk-premium",
       "severity": "info",
       "message": "The UIP block contains no persistent country-risk premium; sovereign-risk or capital-flight episodes are approximated only by a one-period rho shock (risk shock type).",
-      "affected_metrics": [
-        "exchange_rate",
-        "inflation"
-      ],
-      "affected_models": [
-        "QPM"
-      ],
+      "affected_metrics": ["exchange_rate", "inflation"],
+      "affected_models": ["QPM"],
       "source": "ROADMAP.md Phase 1B QPM item 4"
     },
     {
       "caveat_id": "qpm-direct-import-passthrough",
       "severity": "info",
       "message": "Direct quarterly import-price pass-through a4=0.12 is calibrated from Campa & Goldberg (2005) with Uzbekistan's ~35% import share of absorption; a 10% UZS depreciation adds about +1.2 pp to CPI within one quarter through this channel alone.",
-      "affected_metrics": [
-        "inflation"
-      ],
-      "affected_models": [
-        "QPM"
-      ],
+      "affected_metrics": ["inflation"],
+      "affected_models": ["QPM"],
       "source": "qpm_uzbekistan/index.html Uzbekistan-Specific Notes"
     },
     {
       "caveat_id": "qpm-no-uncertainty-bands",
       "severity": "info",
       "message": "Parameter-uncertainty fan charts are not included in this JSON export. The legacy UI provides Monte Carlo bands (8% CV, 80 draws) interactively; adding them to export requires TA decision (ROADMAP cross-model item).",
-      "affected_metrics": [
-        "gdp_growth",
-        "inflation",
-        "policy_rate",
-        "exchange_rate"
-      ],
-      "affected_models": [
-        "QPM"
-      ],
+      "affected_metrics": ["gdp_growth", "inflation", "policy_rate", "exchange_rate"],
+      "affected_models": ["QPM"],
       "source": "ROADMAP.md Phase 1B cross-model item 2"
     },
     {
       "caveat_id": "qpm-baseline-source",
       "severity": "info",
       "message": "Baseline levels are anchored to the latest valid Overview artifact when available; deterministic Q1 2026 fallback values are used only if that artifact is missing or invalid.",
-      "affected_metrics": [
-        "gdp_growth",
-        "inflation",
-        "policy_rate",
-        "exchange_rate"
-      ],
-      "affected_models": [
-        "QPM"
-      ],
+      "affected_metrics": ["gdp_growth", "inflation", "policy_rate", "exchange_rate"],
+      "affected_models": ["QPM"],
       "source": "apps/policy-ui/public/data/overview.json"
-    },
-    {
-      "caveat_id": "qpm-historical-backtest-deferred",
-      "severity": "warning",
-      "message": "Historical fit/backtest data are not yet sufficient for Uzbekistan-specific forecast-accuracy claims. Validation is limited to schema checks, equation review, and directional shock sign checks.",
-      "affected_metrics": [
-        "gdp_growth",
-        "inflation",
-        "policy_rate",
-        "exchange_rate"
-      ],
-      "affected_models": [
-        "QPM"
-      ],
-      "source": "QPM v1 readiness validation note"
     },
     {
       "caveat_id": "qpm-baseline-transition-overshoot",
       "severity": "info",
       "message": "Displayed scenario levels are the Overview-anchored baseline plus QPM shock deviations. This keeps the baseline near the accepted forecast path while preserving canonical QPM transmission effects.",
-      "affected_metrics": [
-        "inflation",
-        "policy_rate",
-        "gdp_growth"
-      ],
-      "affected_models": [
-        "QPM"
-      ],
+      "affected_metrics": ["inflation", "policy_rate", "gdp_growth"],
+      "affected_models": ["QPM"],
+      "source": "QPM v1 readiness validation note"
+    },
+    {
+      "caveat_id": "qpm-historical-backtest-deferred",
+      "severity": "warning",
+      "message": "Historical fit/backtest data are not yet sufficient for Uzbekistan-specific forecast-accuracy claims. Validation is limited to schema checks, equation review, and directional shock sign checks.",
+      "affected_metrics": ["gdp_growth", "inflation", "policy_rate", "exchange_rate"],
+      "affected_models": ["QPM"],
       "source": "QPM v1 readiness validation note"
     }
   ],
   "metadata": {
-    "exported_at": "2026-05-21T12:00:00Z",
+    "exported_at": "2026-05-21T22:18:04Z",
     "source_script_sha": null,
     "solver_version": "0.3.0",
     "baseline_source": {
