@@ -873,10 +873,10 @@
       "showTechnical": "Show technical variable names",
       "technicalPrefix": "Technical: {{variable}}",
       "numericValueLabel": "{{label}} numeric value",
-      "qpmCoreTitle": "QPM core",
-      "qpmCoreDescription": "Main QPM controls shown first: policy stance, exchange rate, and foreign output gap.",
-      "linkedTitle": "Linked assumptions",
-      "linkedDescription": "Supporting external, fiscal, and trade inputs used in this reference calculation. They are not a live handoff to PE, I-O, DFM, or FPP.",
+      "qpmCoreTitle": "Core QPM shocks",
+      "qpmCoreDescription": "Direct QPM controls: policy-rate shock, exchange-rate/risk-premium shock, and external-demand shock.",
+      "linkedTitle": "Proxy assumptions",
+      "linkedDescription": "Fiscal spending, tariffs, commodity prices, and remittances are simple scenario mappings around the QPM path, not full endogenous QPM blocks.",
       "inputs": {
         "policy_rate_change": {
           "label": "Policy rate change",
@@ -964,6 +964,7 @@
         "gdp_growth": "GDP growth",
         "inflation": "Inflation",
         "current_account": "Current account",
+        "fiscal_balance": "Fiscal balance",
         "policy_rate": "Policy rate"
       },
       "decision": {
@@ -976,14 +977,19 @@
       "explanations": {
         "headlineImpact": "Shows how the selected scenario deviates from the baseline across 12 quarters; values are percentage-point deviations from the canonical QPM calculation.",
         "macroPath": "Shows the scenario path next to the baseline path so the table can be read as a comparison, not a raw dump.",
-        "externalBalance": "Shows the external-balance scenario path under the current assumptions, with units kept in percent of GDP.",
-        "fiscalEffects": "Shows fiscal accounting under the selected scenario assumptions; it is not a new fiscal model run."
+        "externalBalance": "Shows a current-account accounting/proxy view around the QPM path; it is not an endogenous QPM external-sector block.",
+        "fiscalEffects": "Shows fiscal accounting under proxy assumptions; it is not an endogenous QPM fiscal block."
       },
       "claimLabels": {
         "headlineImpact": "Scenario impulse response",
         "macroPath": "Scenario path vs baseline",
-        "externalBalance": "External-balance scenario path",
-        "fiscalEffects": "Fiscal scenario accounting"
+        "externalBalance": "Current-account proxy view",
+        "fiscalEffects": "Fiscal accounting/proxy view"
+      },
+      "baselineSource": {
+        "ariaLabel": "QPM baseline source metadata",
+        "artifact": "Source file",
+        "exportedAt": "Exported"
       },
       "activeShocks": {
         "ariaLabel": "Active QPM shock assumptions",

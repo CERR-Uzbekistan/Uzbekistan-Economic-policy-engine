@@ -2,7 +2,9 @@
 
 **Source:** `scripts/export_qpm.R` → `apps/policy-ui/public/data/qpm.json`
 **Status:** Option B (nightly static JSON) — TB-P2 adopted 2026-04-20
-**Version:** solver 0.1.0, data 2026Q1
+**Version:** solver 0.2.0, data from QPM attribution
+
+See also: `docs/data-bridge/qpm-v1-validation-note.md` for the QPM v1 validation/model note.
 
 ## Purpose
 
@@ -17,7 +19,7 @@ pages to replace the illustrative mock with real solver output.
   parameters:  ParameterDescriptor[],  // 7 entries
   scenarios:   QpmScenario[],          // 5 entries
   caveats:     Caveat[],               // 6 entries (severity info/warning)
-  metadata:    { exported_at, source_script_sha, solver_version }
+  metadata:    { exported_at, source_script_sha, solver_version, baseline_source? }
 }
 ```
 
@@ -57,6 +59,9 @@ re-scale on the consumer side.
 - **No sensitivity table, no parameter overrides.** The export uses
   the canonical Uzbekistan calibration. Parameter-sweep variants are
   out of scope for Option B.
+- **Baseline source metadata is additive.** QPM v1 can derive initial
+  conditions from the latest approved Overview artifact; if it is
+  missing or invalid, the deterministic Q1 2026 fallback remains.
 
 ## Freshness
 

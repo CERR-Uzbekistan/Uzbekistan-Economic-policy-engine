@@ -36,6 +36,10 @@ function assertClosePath(actual: number[], expected: number[], tolerance = 0.01)
   })
 }
 
+function average(values: number[]): number {
+  return values.reduce((sum, value) => sum + value, 0) / values.length
+}
+
 describe('Scenario Lab canonical QPM solver', () => {
   it('matches the public QPM artifact for the exchange-rate shock preset', () => {
     const artifactScenario = loadQpmArtifactScenario('exchange-rate-shock')
@@ -62,11 +66,29 @@ describe('Scenario Lab canonical QPM solver', () => {
     const results = buildScenarioLabResults(applyPresetToState('exchange-rate-shock'))
     const macroChart = results.charts_by_tab.macro_path
     const impulseChart = results.impulse_response_chart
+    const qpmRun = solveScenarioLabQpm(applyPresetToState('exchange-rate-shock'), 8)
 
     assert.equal(results.headline_metrics[0].model_attribution[0].model_id, 'qpm-canonical-solver')
-    assertClosePath(macroChart.series[0].values, [4.2017, 3.9471, 3.8891, 4.0617])
-    assertClosePath(macroChart.series[1].values, [5.4482, 5.5423, 5.2397, 4.8566])
+    assertClosePath(macroChart.series[0].values, [4.1921, 3.3311, 3.2547, 3.7275])
+    assertClosePath(macroChart.series[1].values, [5.4385, 4.9263, 4.6052, 4.5223])
     assert.ok(impulseChart)
     assert.deepEqual(impulseChart.series[1].values.slice(0, 4), [1.11, 2.34, 3.48, 4.36])
+    assert.equal(qpmRun.scenario.periods[0], '2026 Q3')
+    assert.equal(results.baseline_source?.source, 'overview-artifact')
+    assert.equal(results.baseline_source?.metrics.some((metric) => metric.metric_id === 'cpi_yoy'), true)
+  })
+
+  it('keeps risk-premium shock signs consistent with depreciation stress', () => {
+    const baseline = solveScenarioLabQpm({}, 8)
+    const riskPremiumShock = solveScenarioLabQpm({ risk_premium_shock: 1 }, 8)
+
+    assert.ok(
+      average(riskPremiumShock.scenario.inflation.slice(0, 4)) >
+        average(baseline.scenario.inflation.slice(0, 4)),
+    )
+    assert.ok(
+      average(riskPremiumShock.scenario.policyRate.slice(0, 4)) >
+        average(baseline.scenario.policyRate.slice(0, 4)),
+    )
   })
 })

@@ -48,9 +48,15 @@ const CATEGORY_TITLES: Record<AssumptionCategory, string> = {
 }
 
 const SCENARIO_TYPE_OPTIONS: ScenarioType[] = ['baseline', 'alternative', 'stress']
+const QPM_CORE_ASSUMPTION_KEYS = new Set([
+  'policy_rate_change',
+  'exchange_rate_change',
+  'export_demand_change',
+  'risk_premium_shock',
+])
 
 function isQpmCoreAssumption(assumption: ScenarioLabAssumptionInput): boolean {
-  return assumption.category !== 'advanced' && assumption.technical_variable?.startsWith('qpm.') === true
+  return QPM_CORE_ASSUMPTION_KEYS.has(assumption.key)
 }
 
 function formatAssumptionValue(value: number, step: number): string {
@@ -196,6 +202,10 @@ export function AssumptionsPanel({
         (assumption) => assumption.category !== 'advanced' && !isQpmCoreAssumption(assumption),
       ),
     [assumptions],
+  )
+  const advancedAssumptions = useMemo(
+    () => grouped.advanced.filter((assumption) => !isQpmCoreAssumption(assumption)),
+    [grouped.advanced],
   )
 
   return (
@@ -391,7 +401,7 @@ export function AssumptionsPanel({
         </details>
       ) : null}
 
-      {grouped.advanced.length > 0 ? (
+      {advancedAssumptions.length > 0 ? (
         <details className="scenario-assumption-advanced">
           <summary>
             {t('scenarioLab.assumptions.categories.advanced', {
@@ -399,7 +409,7 @@ export function AssumptionsPanel({
             })}
           </summary>
           <div className="scenario-assumption-list">
-            {grouped.advanced.map((item) => (
+            {advancedAssumptions.map((item) => (
               <AssumptionField
                 key={item.key}
                 item={item}

@@ -46,8 +46,137 @@ BASELINE_INIT_LEVELS <- list(
 # Used to convert YoY log depreciation (d4l_s) to a displayable level path.
 EXCHANGE_RATE_BASE_UZS_PER_USD <- 12650
 
-SOLVER_VERSION <- "0.1.0"
+SOLVER_VERSION <- "0.2.0"
 DATA_VERSION   <- "2026Q1"
+OVERVIEW_ARTIFACT_PATH <- "apps/policy-ui/public/data/overview.json"
+
+clamp <- function(x, lo, hi) min(hi, max(lo, x))
+
+metric_by_id <- function(artifact, id) {
+  matches <- artifact$metrics[vapply(artifact$metrics, function(metric) identical(metric$id, id), logical(1))]
+  if (length(matches) == 0) NULL else matches[[1]]
+}
+
+usable_metric <- function(artifact, id) {
+  metric <- metric_by_id(artifact, id)
+  if (is.null(metric)) return(NULL)
+  status <- metric$validation_status %||% "failed"
+  value <- metric$value
+  if (identical(status, "failed") || !is.numeric(value) || !is.finite(value)) return(NULL)
+  metric
+}
+
+`%||%` <- function(x, y) if (is.null(x) || length(x) == 0) y else x
+
+metric_source <- function(metric) {
+  list(
+    metric_id     = metric$id,
+    label         = metric$label,
+    value         = metric$value,
+    unit          = metric$unit,
+    source_label  = metric$source_label,
+    source_period = metric$source_period
+  )
+}
+
+parse_quarter <- function(source_period) {
+  if (is.null(source_period) || !nzchar(source_period)) return(NULL)
+  match <- regexec("\\b(20[0-9]{2})\\s*Q([1-4])\\b", source_period, ignore.case = TRUE)
+  parts <- regmatches(source_period, match)[[1]]
+  if (length(parts) < 3) return(NULL)
+  list(year = as.integer(parts[[2]]), quarter = as.integer(parts[[3]]))
+}
+
+next_quarter <- function(quarter) {
+  if (quarter$quarter < 4L) {
+    return(list(year = quarter$year, quarter = quarter$quarter + 1L))
+  }
+  list(year = quarter$year + 1L, quarter = 1L)
+}
+
+date_label <- function(value) {
+  parsed <- as.POSIXct(value, tz = "UTC", tryFormats = c("%Y-%m-%dT%H:%M:%OSZ", "%Y-%m-%dT%H:%M:%OS"))
+  if (is.na(parsed)) value else format(parsed, "%Y-%m-%d", tz = "UTC")
+}
+
+fallback_baseline <- function() {
+  list(
+    levels = modifyList(
+      BASELINE_INIT_LEVELS,
+      list(
+        er_base = EXCHANGE_RATE_BASE_UZS_PER_USD,
+        external_demand_gap = 0,
+        start_year = 2026L,
+        start_quarter = 1L
+      )
+    ),
+    metadata = list(
+      source = "deterministic-fallback",
+      source_artifact = "checked-in QPM fallback calibration",
+      exported_at = "2026-05-21T00:00:00+05:00",
+      data_version = "2026Q1 fallback",
+      status_label = "Fallback baseline",
+      note = "Using fixed QPM initial conditions because the Overview artifact was unavailable or invalid.",
+      metrics = list()
+    )
+  )
+}
+
+resolve_qpm_baseline <- function(path = OVERVIEW_ARTIFACT_PATH, calib = CALIBRATION) {
+  if (!file.exists(path)) return(fallback_baseline())
+  artifact <- tryCatch(jsonlite::read_json(path, simplifyVector = FALSE), error = function(e) NULL)
+  if (is.null(artifact) || identical(artifact$validation_status, "failed")) return(fallback_baseline())
+
+  inflation <- usable_metric(artifact, "cpi_yoy")
+  policy_rate <- usable_metric(artifact, "policy_rate")
+  er_level <- usable_metric(artifact, "usd_uzs_level")
+  er_move <- usable_metric(artifact, "usd_uzs_yoy_change")
+  if (is.null(er_move)) er_move <- usable_metric(artifact, "usd_uzs_mom_change")
+  exports <- usable_metric(artifact, "exports_yoy")
+  nowcast <- usable_metric(artifact, "gdp_nowcast_current_quarter")
+  latest_quarter_growth <- usable_metric(artifact, "real_gdp_growth_quarter_yoy")
+  growth_state <- if (!is.null(nowcast)) nowcast else latest_quarter_growth
+
+  if (
+    is.null(inflation) || is.null(policy_rate) || is.null(er_level) ||
+      is.null(er_move) || is.null(exports) || is.null(growth_state)
+  ) {
+    return(fallback_baseline())
+  }
+
+  quarter <- parse_quarter(nowcast$source_period %||% NULL)
+  if (is.null(quarter)) quarter <- parse_quarter(latest_quarter_growth$source_period %||% NULL)
+  if (is.null(quarter)) quarter <- list(year = 2026L, quarter = 1L)
+  first_projection_quarter <- next_quarter(quarter)
+
+  metrics <- lapply(
+    list(inflation, policy_rate, growth_state, er_level, er_move, exports),
+    metric_source
+  )
+
+  exported_at <- artifact$exported_at %||% utc_now()
+  list(
+    levels = list(
+      pi = inflation$value,
+      rs = policy_rate$value,
+      gap = clamp(growth_state$value - calib$gdpbar, -5, 5),
+      d4ls = er_move$value,
+      er_base = er_level$value,
+      external_demand_gap = if (identical(exports$validation_status %||% "failed", "valid")) clamp(exports$value / 20, -2, 2) else 0,
+      start_year = first_projection_quarter$year,
+      start_quarter = first_projection_quarter$quarter
+    ),
+    metadata = list(
+      source = "overview-artifact",
+      source_artifact = path,
+      exported_at = exported_at,
+      data_version = paste("Overview", date_label(exported_at)),
+      status_label = "Overview artifact baseline",
+      note = "QPM initial conditions use the latest approved Overview artifact where mapped. Warning-status trade metrics are retained as context but are not allowed to mechanically drive the baseline external-demand gap.",
+      metrics = metrics
+    )
+  )
+}
 
 # ============================================================
 #  PARAMETER DESCRIPTORS
@@ -190,6 +319,7 @@ solve_irf <- function(p, shock_type, shock_size, T,
   shk_rs  <- numeric(N); shk_rho <- numeric(N); gap_star <- numeric(N)
 
   shock_idx <- ST + 1L  # shock lands at the first forecast period
+  gap_star[shock_idx] <- if (has_init) init_conds$external_demand_gap %||% 0 else 0
   if (!is.null(shock_type)) {
     switch(shock_type,
       "demand"    = { shk_gap[shock_idx] <- shock_size },
@@ -197,7 +327,7 @@ solve_irf <- function(p, shock_type, shock_size, T,
       "exchange"  = { shk_s[shock_idx]   <- shock_size },
       "monetary"  = { shk_rs[shock_idx]  <- shock_size },
       "risk"      = { shk_rho[shock_idx] <- shock_size },
-      "external_demand" = { gap_star[shock_idx] <- shock_size },
+      "external_demand" = { gap_star[shock_idx] <- gap_star[shock_idx] + shock_size },
       stop("Unknown shock_type: ", shock_type)
     )
   }
@@ -335,8 +465,7 @@ solve_irf <- function(p, shock_type, shock_size, T,
 # Build a baseline ER reference path anchored at er_base at Q0 and compounding
 # via the baseline solver's d4l_s path. Returned values ARE exchange rate levels
 # in UZS/USD under the unshocked baseline.
-baseline_er_reference <- function(baseline_sol, calib,
-                                  er_base = EXCHANGE_RATE_BASE_UZS_PER_USD) {
+baseline_er_reference <- function(baseline_sol, calib, er_base) {
   d4ls_level <- calib$tar + baseline_sol$d4l_s
   n  <- length(d4ls_level)
   er <- numeric(n); er[1] <- er_base
@@ -389,7 +518,8 @@ init_conds_from_levels <- function(levels, calib) {
     pi   = levels$pi   - calib$tar,
     rs   = levels$rs   - neutral,
     gap  = levels$gap,
-    d4ls = levels$d4ls - calib$tar
+    d4ls = levels$d4ls - calib$tar,
+    external_demand_gap = levels$external_demand_gap %||% 0
   )
 }
 
@@ -399,8 +529,8 @@ init_conds_from_levels <- function(levels, calib) {
 build_scenario <- function(scenario_id, scenario_name, description,
                            shock_type, shock_size, shocks_applied,
                            calib, baseline_sol, baseline_er,
-                           horizon = 8L) {
-  init_dev <- init_conds_from_levels(BASELINE_INIT_LEVELS, calib)
+                           baseline_levels, horizon = 8L) {
+  init_dev <- init_conds_from_levels(baseline_levels, calib)
   sol      <- solve_irf(
     p          = calib,
     shock_type = shock_type,
@@ -415,16 +545,17 @@ build_scenario <- function(scenario_id, scenario_name, description,
     scenario_name     = scenario_name,
     description       = description,
     horizon_quarters  = horizon,
-    periods           = quarter_labels(2026L, 1L, horizon),
+    periods           = quarter_labels(baseline_levels$start_year, baseline_levels$start_quarter, horizon),
     paths             = paths,
     shocks_applied    = shocks_applied,
     solver_iterations = sol$iters
   )
 }
 
-build_scenarios <- function(calib = CALIBRATION, horizon = 8L) {
+build_scenarios <- function(calib = CALIBRATION, horizon = 8L, baseline = resolve_qpm_baseline()) {
   zero_shocks <- list(rs_shock = 0, s_shock = 0, gap_shock = 0, pie_shock = 0, external_demand_shock = 0)
-  init_dev    <- init_conds_from_levels(BASELINE_INIT_LEVELS, calib)
+  baseline_levels <- baseline$levels
+  init_dev    <- init_conds_from_levels(baseline_levels, calib)
 
   # Compute the baseline solver run once; use it to anchor ER levels for all
   # scenarios so that Q0 level differences reflect the actual shock magnitude.
@@ -432,13 +563,13 @@ build_scenarios <- function(calib = CALIBRATION, horizon = 8L) {
     p = calib, shock_type = NULL, shock_size = 0,
     T = horizon - 1L, init_conds = init_dev
   )
-  baseline_er <- baseline_er_reference(baseline_sol, calib)
+  baseline_er <- baseline_er_reference(baseline_sol, calib, baseline_levels$er_base)
 
   specs <- list(
     list(
       scenario_id    = "baseline",
       scenario_name  = "Baseline",
-      description    = "All shocks zero; economy follows the baseline calibration path from Q1 2026 initial conditions (inflation 10.5%, policy rate 13.5%, output gap -1.5%, NER depreciation 8%) toward steady state.",
+      description    = paste0("All shocks zero; economy follows the baseline path from ", baseline$metadata$status_label, " initial conditions toward steady state."),
       shock_type     = NULL, shock_size = 0,
       shocks_applied = zero_shocks
     ),
@@ -483,6 +614,7 @@ build_scenarios <- function(calib = CALIBRATION, horizon = 8L) {
       calib          = calib,
       baseline_sol   = baseline_sol,
       baseline_er    = baseline_er,
+      baseline_levels = baseline_levels,
       horizon        = horizon
     )
   })
@@ -537,12 +669,28 @@ build_caveats <- function() {
       source           = "ROADMAP.md Phase 1B cross-model item 2"
     ),
     list(
-      caveat_id        = "qpm-baseline-disinflation-overshoot",
+      caveat_id        = "qpm-baseline-source",
       severity         = "info",
-      message          = "From Q1 2026 initial conditions (inflation 10.5%, policy rate 13.5%), the baseline disinflation path overshoots the 5% target and plateaus near 3.4% by the 8-quarter horizon. This is a hybrid-NK model dynamic (forward-looking Phillips + Taylor response), not a bug: disinflation overshoots are documented in calibrated open-economy QPMs. Reviewers should read the baseline path as a transition to target, not as a steady-state level.",
-      affected_metrics = I(c("inflation", "policy_rate")),
+      message          = "Baseline initial conditions are taken from the latest valid Overview artifact when available; deterministic Q1 2026 fallback values are used only if that artifact is missing or invalid.",
+      affected_metrics = I(c("gdp_growth", "inflation", "policy_rate", "exchange_rate")),
       affected_models  = I(c("QPM")),
-      source           = "Model dynamics; documented 2026-04-20 Sprint 2 bridge review"
+      source           = "apps/policy-ui/public/data/overview.json"
+    ),
+    list(
+      caveat_id        = "qpm-baseline-transition-overshoot",
+      severity         = "warning",
+      message          = "The dynamic baseline is a model transition from current Overview conditions, not an official forecast. With high policy-rate and exchange-rate inputs, calibrated QPM disinflation can move below target during the transition; interpret this as a calibration caveat until historical fit/backtest work is complete.",
+      affected_metrics = I(c("inflation", "policy_rate", "gdp_growth")),
+      affected_models  = I(c("QPM")),
+      source           = "QPM v1 readiness validation note"
+    ),
+    list(
+      caveat_id        = "qpm-historical-backtest-deferred",
+      severity         = "warning",
+      message          = "Historical fit/backtest data are not yet sufficient for Uzbekistan-specific forecast-accuracy claims. Validation is limited to schema checks, equation review, and directional shock sign checks.",
+      affected_metrics = I(c("gdp_growth", "inflation", "policy_rate", "exchange_rate")),
+      affected_models  = I(c("QPM")),
+      source           = "QPM v1 readiness validation note"
     )
   )
 }
@@ -553,7 +701,7 @@ build_caveats <- function() {
 
 utc_now <- function() format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
 
-build_attribution <- function() {
+build_attribution <- function(baseline) {
   now  <- utc_now()
   date <- format(Sys.time(), "%Y-%m-%d", tz = "UTC")
   list(
@@ -562,21 +710,23 @@ build_attribution <- function() {
     module       = "qpm",
     version      = SOLVER_VERSION,
     run_id       = paste0("qpm-nightly-", date),
-    data_version = DATA_VERSION,
-    timestamp    = now
+    data_version = baseline$metadata$data_version %||% DATA_VERSION,
+    timestamp    = baseline$metadata$exported_at %||% now
   )
 }
 
 assemble_output <- function() {
+  baseline <- resolve_qpm_baseline()
   list(
-    attribution = build_attribution(),
+    attribution = build_attribution(baseline),
     parameters  = build_parameters(),
-    scenarios   = build_scenarios(),
+    scenarios   = build_scenarios(baseline = baseline),
     caveats     = build_caveats(),
     metadata    = list(
       exported_at        = utc_now(),
       source_script_sha  = NA,
-      solver_version     = SOLVER_VERSION
+      solver_version     = SOLVER_VERSION,
+      baseline_source    = baseline$metadata
     )
   )
 }

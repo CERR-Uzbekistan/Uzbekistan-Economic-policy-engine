@@ -75,7 +75,7 @@ describe('model explorer QPM bridge enrichment', () => {
     assert.deepEqual(
       qpmEntry.validation_checks?.map((check) => [check.label, check.status]),
       [
-        ['Baseline initial state', 'pass'],
+        ['Baseline source metadata', 'pass'],
         ['Parameter source', 'caveat'],
         ['Impulse-response signs', 'pass'],
         ['Not estimated', 'caveat'],
@@ -86,7 +86,7 @@ describe('model explorer QPM bridge enrichment', () => {
       qpmEntry.validation_checks?.map((check) => check.detail).join(' ') ?? '',
       /proxy mappings/,
     )
-    assert.equal(qpmEntry.bridge_evidence?.evidence_metrics?.length, 3)
+    assert.equal(qpmEntry.bridge_evidence?.evidence_metrics?.length, 4)
   })
 
   it('locks public QPM economic sign checks used by the validation note', () => {

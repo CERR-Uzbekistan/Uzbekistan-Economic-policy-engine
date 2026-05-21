@@ -1,4 +1,9 @@
 import type { ModelAttribution, ScenarioLabAssumptionState } from '../../contracts/data-contract'
+import {
+  QPM_FALLBACK_BASELINE,
+  resolveQpmBaselineLevels,
+  type QpmBaselineSourceMetadata,
+} from './qpm-baseline.js'
 
 export const QPM_SCENARIO_ATTRIBUTION: ModelAttribution = {
   model_id: 'qpm-canonical-solver',
@@ -11,7 +16,6 @@ export const QPM_SCENARIO_ATTRIBUTION: ModelAttribution = {
 }
 
 const EXTERNAL_DEMAND_RHO = 0.75
-const EXCHANGE_RATE_BASE_UZS_PER_USD = 12650
 const DEFAULT_PARAMS = {
   b1: 0.7,
   b2: 0.2,
@@ -30,13 +34,6 @@ const DEFAULT_PARAMS = {
   potentialGrowth: 6,
 }
 
-const INITIAL_LEVELS = {
-  inflation: 10.5,
-  policyRate: 13.5,
-  outputGap: -1.5,
-  nerDepreciation: 8,
-}
-
 export type QpmLevelPaths = {
   periods: string[]
   gdpGrowth: number[]
@@ -47,6 +44,7 @@ export type QpmLevelPaths = {
 
 export type QpmScenarioRun = {
   attribution: ModelAttribution
+  baselineSource: QpmBaselineSourceMetadata
   baseline: QpmLevelPaths
   scenario: QpmLevelPaths
   deltas: {
@@ -82,6 +80,14 @@ type QpmRawSolution = {
   converged: boolean
 }
 
+function qpmAttributionForBaseline(baselineSource: QpmBaselineSourceMetadata): ModelAttribution {
+  return {
+    ...QPM_SCENARIO_ATTRIBUTION,
+    data_version: baselineSource.data_version,
+    timestamp: baselineSource.exported_at,
+  }
+}
+
 function safeGet(values: number[], index: number): number {
   return index >= 0 && index < values.length ? values[index] : 0
 }
@@ -110,7 +116,12 @@ function quarterLabels(startYear: number, startQuarter: number, n: number): stri
   return labels
 }
 
-function solveCore(shocks: QpmShocks, horizonPoints: number, a4 = DEFAULT_PARAMS.a4): QpmRawSolution {
+function solveCore(
+  shocks: QpmShocks,
+  horizonPoints: number,
+  a4 = DEFAULT_PARAMS.a4,
+  baselineLevels = QPM_FALLBACK_BASELINE,
+): QpmRawSolution {
   const transitions = Math.max(0, horizonPoints - 1)
   const shockIndex = 5
   const n = transitions + shockIndex + 11
@@ -128,14 +139,14 @@ function solveCore(shocks: QpmShocks, horizonPoints: number, a4 = DEFAULT_PARAMS
   const d4ls = Array(n).fill(0)
   const dpm = Array(n).fill(0)
 
-  const initialPi = INITIAL_LEVELS.inflation - DEFAULT_PARAMS.inflationTarget
+  const initialPi = baselineLevels.inflation - DEFAULT_PARAMS.inflationTarget
   const initialRs =
-    INITIAL_LEVELS.policyRate -
+    baselineLevels.policyRate -
     (DEFAULT_PARAMS.neutralRealRate + DEFAULT_PARAMS.inflationTarget)
-  const initialD4ls = INITIAL_LEVELS.nerDepreciation - DEFAULT_PARAMS.inflationTarget
+  const initialD4ls = baselineLevels.nerDepreciation - DEFAULT_PARAMS.inflationTarget
 
   for (let t = 0; t < shockIndex; t += 1) {
-    gap[t] = INITIAL_LEVELS.outputGap
+    gap[t] = baselineLevels.outputGap
     pi[t] = initialPi
     rs[t] = initialRs
     s[t] = (initialD4ls * t) / Math.max(1, shockIndex - 1)
@@ -157,7 +168,7 @@ function solveCore(shocks: QpmShocks, horizonPoints: number, a4 = DEFAULT_PARAMS
   shockS[shockIndex] = shocks.exchange ?? 0
   shockRs[shockIndex] = shocks.monetary ?? 0
   shockRho[shockIndex] = shocks.risk ?? 0
-  gapStar[shockIndex] = shocks.externalDemand ?? 0
+  gapStar[shockIndex] = baselineLevels.externalDemandGap + (shocks.externalDemand ?? 0)
   for (let t = shockIndex + 1; t < n; t += 1) {
     gapStar[t] = EXTERNAL_DEMAND_RHO * gapStar[t - 1]
   }
@@ -260,9 +271,12 @@ function solveCore(shocks: QpmShocks, horizonPoints: number, a4 = DEFAULT_PARAMS
   }
 }
 
-function baselineExchangeRateReference(baseline: QpmRawSolution): number[] {
+function baselineExchangeRateReference(
+  baseline: QpmRawSolution,
+  exchangeRateBase: number,
+): number[] {
   const d4lsLevel = baseline.d4ls.map((value) => DEFAULT_PARAMS.inflationTarget + value)
-  const exchangeRate = [EXCHANGE_RATE_BASE_UZS_PER_USD]
+  const exchangeRate = [exchangeRateBase]
   for (let index = 1; index < d4lsLevel.length; index += 1) {
     exchangeRate.push(exchangeRate[index - 1] * (1 + d4lsLevel[index] / 400))
   }
@@ -273,10 +287,12 @@ function levelPaths(
   raw: QpmRawSolution,
   baseline: QpmRawSolution,
   baselineExchangeRate: number[],
+  startYear: number,
+  startQuarter: number,
 ): QpmLevelPaths {
   const neutralNominal = DEFAULT_PARAMS.neutralRealRate + DEFAULT_PARAMS.inflationTarget
   return {
-    periods: quarterLabels(2026, 1, raw.gap.length),
+    periods: quarterLabels(startYear, startQuarter, raw.gap.length),
     gdpGrowth: raw.gap.map((value) => roundTo(DEFAULT_PARAMS.potentialGrowth + value)),
     inflation: raw.pi4.map((value) => roundTo(DEFAULT_PARAMS.inflationTarget + value)),
     policyRate: raw.rs.map((value) => roundTo(neutralNominal + value)),
@@ -314,14 +330,31 @@ export function solveScenarioLabQpm(
   horizonPoints = 12,
 ): QpmScenarioRun {
   const { shocks, a4 } = toQpmShocks(values)
-  const baselineRaw = solveCore({}, horizonPoints)
-  const scenarioRaw = solveCore(shocks, horizonPoints, a4)
-  const baselineExchangeRate = baselineExchangeRateReference(baselineRaw)
-  const baseline = levelPaths(baselineRaw, baselineRaw, baselineExchangeRate)
-  const scenario = levelPaths(scenarioRaw, baselineRaw, baselineExchangeRate)
+  const baselineLevels = resolveQpmBaselineLevels()
+  const baselineRaw = solveCore({}, horizonPoints, DEFAULT_PARAMS.a4, baselineLevels)
+  const scenarioRaw = solveCore(shocks, horizonPoints, a4, baselineLevels)
+  const baselineExchangeRate = baselineExchangeRateReference(
+    baselineRaw,
+    baselineLevels.exchangeRateBase,
+  )
+  const baseline = levelPaths(
+    baselineRaw,
+    baselineRaw,
+    baselineExchangeRate,
+    baselineLevels.startYear,
+    baselineLevels.startQuarter,
+  )
+  const scenario = levelPaths(
+    scenarioRaw,
+    baselineRaw,
+    baselineExchangeRate,
+    baselineLevels.startYear,
+    baselineLevels.startQuarter,
+  )
 
   return {
-    attribution: QPM_SCENARIO_ATTRIBUTION,
+    attribution: qpmAttributionForBaseline(baselineLevels.metadata),
+    baselineSource: baselineLevels.metadata,
     baseline,
     scenario,
     deltas: {

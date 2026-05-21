@@ -382,6 +382,125 @@ function parseScenario(value: unknown, index: number, issues: QpmValidationIssue
   }
 }
 
+function parseBaselineSourceMetric(
+  value: unknown,
+  index: number,
+  issues: QpmValidationIssue[],
+): NonNullable<QpmBridgePayload['metadata']['baseline_source']>['metrics'][number] | null {
+  const path = `metadata.baseline_source.metrics[${index}]`
+  if (!isRecord(value)) {
+    pushError(issues, path, 'Expected an object.')
+    return null
+  }
+  const metricId = value.metric_id
+  const label = value.label
+  const metricValue = value.value
+  const unit = value.unit
+  const sourceLabel = value.source_label
+  const sourcePeriod = value.source_period
+  if (typeof metricId !== 'string' || metricId.length === 0) {
+    pushError(issues, `${path}.metric_id`, 'Expected a non-empty string.')
+  }
+  if (typeof label !== 'string' || label.length === 0) {
+    pushError(issues, `${path}.label`, 'Expected a non-empty string.')
+  }
+  if (!isFiniteNumber(metricValue)) {
+    pushError(issues, `${path}.value`, 'Expected a finite number.')
+  }
+  if (typeof unit !== 'string' || unit.length === 0) {
+    pushError(issues, `${path}.unit`, 'Expected a non-empty string.')
+  }
+  if (typeof sourceLabel !== 'string' || sourceLabel.length === 0) {
+    pushError(issues, `${path}.source_label`, 'Expected a non-empty string.')
+  }
+  if (typeof sourcePeriod !== 'string' || sourcePeriod.length === 0) {
+    pushError(issues, `${path}.source_period`, 'Expected a non-empty string.')
+  }
+  if (
+    typeof metricId !== 'string' ||
+    typeof label !== 'string' ||
+    !isFiniteNumber(metricValue) ||
+    typeof unit !== 'string' ||
+    typeof sourceLabel !== 'string' ||
+    typeof sourcePeriod !== 'string'
+  ) {
+    return null
+  }
+  return {
+    metric_id: metricId,
+    label,
+    value: metricValue,
+    unit,
+    source_label: sourceLabel,
+    source_period: sourcePeriod,
+  }
+}
+
+function parseBaselineSource(
+  value: unknown,
+  issues: QpmValidationIssue[],
+): QpmBridgePayload['metadata']['baseline_source'] {
+  if (value === undefined) return undefined
+  const path = 'metadata.baseline_source'
+  if (!isRecord(value)) {
+    pushError(issues, path, 'Expected an object.')
+    return undefined
+  }
+  const source = value.source
+  const sourceArtifact = value.source_artifact
+  const exportedAtBaseline = value.exported_at
+  const dataVersion = value.data_version
+  const statusLabel = value.status_label
+  const note = value.note
+  const metricsRaw = value.metrics
+  if (!(source === 'overview-artifact' || source === 'deterministic-fallback')) {
+    pushError(issues, `${path}.source`, 'Expected overview-artifact or deterministic-fallback.')
+  }
+  if (typeof sourceArtifact !== 'string' || sourceArtifact.length === 0) {
+    pushError(issues, `${path}.source_artifact`, 'Expected a non-empty string.')
+  }
+  if (typeof exportedAtBaseline !== 'string' || exportedAtBaseline.length === 0) {
+    pushError(issues, `${path}.exported_at`, 'Expected a non-empty string.')
+  }
+  if (typeof dataVersion !== 'string' || dataVersion.length === 0) {
+    pushError(issues, `${path}.data_version`, 'Expected a non-empty string.')
+  }
+  if (typeof statusLabel !== 'string' || statusLabel.length === 0) {
+    pushError(issues, `${path}.status_label`, 'Expected a non-empty string.')
+  }
+  if (typeof note !== 'string' || note.length === 0) {
+    pushError(issues, `${path}.note`, 'Expected a non-empty string.')
+  }
+  if (!Array.isArray(metricsRaw)) {
+    pushError(issues, `${path}.metrics`, 'Expected an array.')
+  }
+  const metrics = Array.isArray(metricsRaw)
+    ? metricsRaw
+        .map((metric, index) => parseBaselineSourceMetric(metric, index, issues))
+        .filter((metric): metric is NonNullable<QpmBridgePayload['metadata']['baseline_source']>['metrics'][number] => metric !== null)
+    : []
+  if (
+    !(source === 'overview-artifact' || source === 'deterministic-fallback') ||
+    typeof sourceArtifact !== 'string' ||
+    typeof exportedAtBaseline !== 'string' ||
+    typeof dataVersion !== 'string' ||
+    typeof statusLabel !== 'string' ||
+    typeof note !== 'string' ||
+    !Array.isArray(metricsRaw)
+  ) {
+    return undefined
+  }
+  return {
+    source,
+    source_artifact: sourceArtifact,
+    exported_at: exportedAtBaseline,
+    data_version: dataVersion,
+    status_label: statusLabel,
+    note,
+    metrics,
+  }
+}
+
 export function validateQpmBridgePayload(input: unknown): QpmValidationResult {
   const issues: QpmValidationIssue[] = []
   if (!isRecord(input)) {
@@ -437,6 +556,9 @@ export function validateQpmBridgePayload(input: unknown): QpmValidationResult {
   const exportedAt = isRecord(metadataRaw) ? metadataRaw.exported_at : undefined
   const sourceScriptSha = isRecord(metadataRaw) ? metadataRaw.source_script_sha : undefined
   const solverVersion = isRecord(metadataRaw) ? metadataRaw.solver_version : undefined
+  const baselineSource = isRecord(metadataRaw)
+    ? parseBaselineSource(metadataRaw.baseline_source, issues)
+    : undefined
 
   if (typeof exportedAt !== 'string' || exportedAt.length === 0) {
     pushError(issues, 'metadata.exported_at', 'Expected a non-empty string.')
@@ -486,6 +608,7 @@ export function validateQpmBridgePayload(input: unknown): QpmValidationResult {
         exported_at: exportedAt,
         source_script_sha: sourceScriptSha,
         solver_version: solverVersion,
+        ...(baselineSource ? { baseline_source: baselineSource } : {}),
       },
     },
     issues,
