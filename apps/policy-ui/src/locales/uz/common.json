@@ -940,7 +940,7 @@
         "fiscalEffects": "Fiskal ta'sirlar"
       },
       "impulseResponseEyebrow": "IMPULS RESPONSI",
-      "impulseResponseCaption": "QPM ma'lumot hisobi: har bir panel 12 chorak davomida bazaviydan og'ishni ko'rsatadi. Punktir nol chizig'i stsenariy ta'siri yo'qligini bildiradi.",
+      "impulseResponseCaption": "Kanonik QPM hisobi: har bir panel 12 chorak davomida bazaviydan og'ishni ko'rsatadi. Punktir nol chizig'i stsenariy ta'siri yo'qligini bildiradi.",
       "impulsePanels": {
         "subtitle": "Bazaviydan og'ish; nol chizig'i ta'sir yo'qligini bildiradi.",
         "xLabel": "Gorizont",
@@ -958,7 +958,7 @@
           "takeaway": "Ijobiy qiymatlar stavka trayektoriyasi bazaviydan yuqoriligini bildiradi."
         }
       },
-      "qpmReferenceBadge": "QPM ma'lumot",
+      "qpmReferenceBadge": "Kanonik QPM",
       "headlineMetricsAria": "Asosiy makro ko'rsatkichlar",
       "metrics": {
         "gdp_growth": "YaIM o'sishi",
@@ -968,13 +968,13 @@
       },
       "decision": {
         "eyebrow": "Qaror ko'rinishi",
-        "title": "QPM ma'lumot natijasi",
+        "title": "Kanonik QPM natijasi",
         "currentScenario": "joriy stsenariy",
-        "lead": "“{{scenarioName}}” qo'llansa, ma'lumot hisobi quyidagini ko'rsatadi:",
-        "note": "Jonli QPM yechgichi ushbu tabga ulanmaguncha maxsus slayderlar taxminiy rejimda qoladi."
+        "lead": "“{{scenarioName}}” qo'llansa, kanonik QPM hisobi quyidagini ko'rsatadi:",
+        "note": "Macro / QPM bo'limi e'lon qilingan QPM ma'lumotlari bilan bir xil QPM tenglamalaridan foydalanadi. Tashqi va fiskal balans panellari hisob-kitob ko'rinishlari bo'lib qoladi."
       },
       "explanations": {
-        "headlineImpact": "Tanlangan stsenariy 12 chorak davomida bazaviydan qanday og'ishini ko'rsatadi; qiymatlar namunaviy hisobdan foiz punktlaridagi og'ishlardir.",
+        "headlineImpact": "Tanlangan stsenariy 12 chorak davomida bazaviydan qanday og'ishini ko'rsatadi; qiymatlar kanonik QPM hisobidan foiz punktlaridagi og'ishlardir.",
         "macroPath": "Jadval xom chiqish emas, taqqoslash sifatida o'qilishi uchun stsenariy trayektoriyasini bazaviy trayektoriya yonida ko'rsatadi.",
         "externalBalance": "Joriy taxminlar ostida tashqi balans stsenariy trayektoriyasini ko'rsatadi; birliklar YaIM foizida saqlanadi.",
         "fiscalEffects": "Tanlangan stsenariy taxminlari ostidagi fiskal hisob-kitobni ko'rsatadi; bu yangi fiskal model ishga tushirilishi emas."

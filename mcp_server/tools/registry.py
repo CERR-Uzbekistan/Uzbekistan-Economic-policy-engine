@@ -25,7 +25,8 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
                     "description": (
                         "Simulates monetary policy transmission via IS curve, Phillips curve, "
                         "Taylor rule, and UIP. Produces impulse response functions for demand, "
-                        "cost-push, exchange rate, monetary, and external-demand shocks. "
+                        "cost-push, exchange rate, monetary, risk-premium, and external-demand shocks. "
+                        "The Phillips curve includes direct import-price pass-through a4=0.12. "
                         "The external-demand gap gap*_t follows AR(1) decay with rho=0.75 "
                         "and enters the IS curve as b3 * gap*_t."
                     ),
@@ -136,6 +137,7 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
         a1: float = 0.60,
         a2: float = 0.20,
         a3: float = 0.65,
+        a4: float = 0.12,
         g1: float = 0.80,
         g2: float = 1.50,
         g3: float = 0.50,
@@ -148,15 +150,20 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
 
         Simulates how the economy responds to a one-time shock using a New-Keynesian
         DSGE model with IS curve, Phillips curve, Taylor rule, and UIP equation.
+        This MCP solver uses the same canonical equations as the public QPM
+        export: direct import-price pass-through enters inflation as a4 * dpm_t,
+        and a one-period risk-premium shock enters UIP as rho_t.
         For external-demand shocks, the foreign output gap gap*_t follows AR(1)
         decay with rho=0.75 and enters the IS curve as b3 * gap*_t.
 
         Args:
             shock_type: Type of shock. One of: "demand" (aggregate demand),
-                "cost_push" (cost-push inflation), "depreciation" (UZS depreciation),
-                "monetary" (monetary policy tightening), "external_demand"
+                "cost_push" or "inflation" (cost-push inflation),
+                "depreciation" or "exchange" (UZS depreciation),
+                "monetary" (monetary policy tightening), "risk" (temporary
+                UIP risk-premium shock), "external_demand"
                 (foreign output gap spillover).
-            shock_size: Shock magnitude in percentage points (0.25 to 5.0).
+            shock_size: Signed shock magnitude in percentage points (-20.0 to 20.0).
             horizon: Forecast horizon in quarters (8 to 32).
             b1: IS curve — output gap persistence (0.3 to 0.95).
             b2: IS curve — MCI sensitivity (0.05 to 0.6).
@@ -165,6 +172,7 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
             a1: Phillips curve — inflation persistence (0.3 to 0.9).
             a2: Phillips curve — marginal cost pass-through (0.05 to 0.5).
             a3: Phillips curve — domestic cost share (0.2 to 0.9).
+            a4: Phillips curve — direct import-price pass-through (0.0 to 0.35).
             g1: Taylor rule — interest rate smoothing (0.3 to 0.95).
             g2: Taylor rule — inflation response (1.0 to 3.0, >1 = Taylor principle).
             g3: Taylor rule — output gap response (0.1 to 1.5).
@@ -176,12 +184,15 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
         from helpers.validation import validate_qpm_params
         from models.qpm import solve_irf
 
-        valid_types = ("demand", "cost_push", "depreciation", "monetary", "external_demand", "external")
+        valid_types = (
+            "demand", "cost_push", "inflation", "depreciation", "exchange",
+            "monetary", "risk", "external_demand", "external"
+        )
         if shock_type not in valid_types:
             return {"error": f"Invalid shock_type. Must be one of: {valid_types}"}
 
         params = validate_qpm_params(locals())
-        shock_size = max(0.25, min(5.0, shock_size))
+        shock_size = max(-20.0, min(20.0, shock_size))
         horizon = max(8, min(32, horizon))
 
         return solve_irf(params, shock_type, shock_size, horizon)
@@ -195,20 +206,25 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
         horizon: int = 16,
         b1: float = 0.70,
         b2: float = 0.20,
+        b3: float = 0.30,
+        b4: float = 0.60,
         a1: float = 0.60,
         a2: float = 0.20,
         a3: float = 0.65,
+        a4: float = 0.12,
         g1: float = 0.80,
         g2: float = 1.50,
         g3: float = 0.50,
+        e1: float = 0.70,
         inflation_target: float = 5.0,
         neutral_real_rate: float = 3.5,
         potential_growth: float = 6.0,
     ) -> dict:
         """Generate a QPM baseline macroeconomic forecast for Uzbekistan.
 
-        Projects inflation, policy rate, output gap, and NER depreciation forward
-        from current conditions using simplified QPM dynamics.
+        Projects inflation, policy rate, output gap, GDP growth, and NER
+        depreciation forward from current conditions using the canonical QPM
+        solver shared with qpm_impulse_response and the public QPM export.
 
         Args:
             initial_inflation_yoy: Current CPI inflation YoY (%).
@@ -218,12 +234,16 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
             horizon: Forecast horizon in quarters (4 to 32).
             b1: IS curve — output gap persistence.
             b2: IS curve — MCI sensitivity.
+            b3: IS curve — external-demand spillover.
+            b4: MCI — interest-rate weight.
             a1: Phillips curve — inflation persistence.
             a2: Phillips curve — marginal cost pass-through.
             a3: Phillips curve — domestic cost share.
+            a4: Phillips curve — direct import-price pass-through.
             g1: Taylor rule — smoothing.
             g2: Taylor rule — inflation response.
             g3: Taylor rule — output gap response.
+            e1: UIP backward-looking exchange-rate weight.
             inflation_target: Central bank target (%).
             neutral_real_rate: Neutral real rate (%).
             potential_growth: Potential GDP growth (%).

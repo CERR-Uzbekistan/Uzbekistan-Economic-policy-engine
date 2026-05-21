@@ -940,7 +940,7 @@
         "fiscalEffects": "Fiscal effects"
       },
       "impulseResponseEyebrow": "IMPULSE RESPONSE",
-      "impulseResponseCaption": "QPM reference calculation: each panel shows a deviation from baseline over 12 quarters. The dashed zero line means no scenario effect.",
+      "impulseResponseCaption": "Canonical QPM calculation: each panel shows a deviation from baseline over 12 quarters. The dashed zero line means no scenario effect.",
       "impulsePanels": {
         "subtitle": "Deviation from baseline; zero line marks no effect.",
         "xLabel": "Horizon",
@@ -958,7 +958,7 @@
           "takeaway": "Positive values indicate a higher policy-rate path than baseline."
         }
       },
-      "qpmReferenceBadge": "QPM reference",
+      "qpmReferenceBadge": "Canonical QPM",
       "headlineMetricsAria": "Headline macro indicators",
       "metrics": {
         "gdp_growth": "GDP growth",
@@ -968,13 +968,13 @@
       },
       "decision": {
         "eyebrow": "Decision view",
-        "title": "QPM reference result",
+        "title": "Canonical QPM result",
         "currentScenario": "current scenario",
-        "lead": "If “{{scenarioName}}” is applied, the reference calculation shows:",
-        "note": "Custom sliders are approximation mode until the live QPM solver is connected to this tab."
+        "lead": "If “{{scenarioName}}” is applied, the canonical QPM calculation shows:",
+        "note": "The Macro / QPM tab uses the same QPM equations as the published QPM data. External and fiscal balance panels remain accounting views."
       },
       "explanations": {
-        "headlineImpact": "Shows how the selected scenario deviates from the baseline across 12 quarters; values are percentage-point deviations from the reference calculation.",
+        "headlineImpact": "Shows how the selected scenario deviates from the baseline across 12 quarters; values are percentage-point deviations from the canonical QPM calculation.",
         "macroPath": "Shows the scenario path next to the baseline path so the table can be read as a comparison, not a raw dump.",
         "externalBalance": "Shows the external-balance scenario path under the current assumptions, with units kept in percent of GDP.",
         "fiscalEffects": "Shows fiscal accounting under the selected scenario assumptions; it is not a new fiscal model run."

@@ -14,6 +14,7 @@ QPM_PARAM_RANGES = {
     "a1": (0.3, 0.9, 0.60),    # PC: inflation persistence
     "a2": (0.05, 0.5, 0.20),   # PC: marginal cost pass-through
     "a3": (0.2, 0.9, 0.65),    # PC: domestic cost share
+    "a4": (0.0, 0.35, 0.12),    # PC: direct import-price pass-through
     "g1": (0.3, 0.95, 0.80),   # TR: rate smoothing
     "g2": (1.0, 3.0, 1.50),    # TR: inflation response
     "g3": (0.1, 1.5, 0.50),    # TR: output gap response

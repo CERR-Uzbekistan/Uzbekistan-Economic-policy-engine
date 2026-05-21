@@ -1,7 +1,6 @@
 import type {
   ChartSpec,
   HeadlineMetric,
-  ModelAttribution,
   ScenarioLabAssumptionState,
   ScenarioLabInterpretation,
   ScenarioLabPreset,
@@ -9,16 +8,13 @@ import type {
   ScenarioLabWorkspace,
   SuggestedNextScenario,
 } from '../../contracts/data-contract'
+import {
+  QPM_SCENARIO_ATTRIBUTION,
+  solveScenarioLabQpm,
+  type QpmScenarioRun,
+} from '../scenario-lab/qpm-solver.js'
 
-const ATTRIBUTION: ModelAttribution = {
-  model_id: 'scenario-lab-mock-engine',
-  model_name: 'QPM reference calculator',
-  module: 'scenario-lab',
-  version: '0.1.0',
-  run_id: 'run-2026-04-17-scenario-lab',
-  data_version: 'mock-v1',
-  timestamp: '2026-04-17T11:00:00+05:00',
-}
+const ATTRIBUTION = QPM_SCENARIO_ATTRIBUTION
 
 export const scenarioLabBaseDataVersion = ATTRIBUTION.data_version
 
@@ -53,7 +49,6 @@ const PRESETS: ScenarioLabPreset[] = [
     summary: 'One-off 10% UZS depreciation against USD; expect inflation spike via direct pass-through (a4) and RER gap, plus policy-rate response.',
     assumption_overrides: {
       exchange_rate_change: 10,
-      pass_through_adjustment: 0.2,
     },
   },
   {
@@ -206,6 +201,17 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value))
 }
 
+function qpmEndpointIndex(qpmRun: QpmScenarioRun): number {
+  return Math.min(3, qpmRun.scenario.gdpGrowth.length - 1)
+}
+
+function buildAccountingPath(start: number, end: number, points: number): number[] {
+  return Array.from({ length: points }, (_, index) => {
+    const t = points <= 1 ? 1 : index / (points - 1)
+    return roundTo(start + (end - start) * t)
+  })
+}
+
 export function getDefaultAssumptionState(): ScenarioLabAssumptionState {
   return SCENARIO_ASSUMPTIONS.reduce<ScenarioLabAssumptionState>((acc, assumption) => {
     acc[assumption.key] = assumption.default_value
@@ -222,8 +228,8 @@ export function applyPresetToState(presetId: string): ScenarioLabAssumptionState
   return { ...base, ...preset.assumption_overrides }
 }
 
-function getMetricCore(values: ScenarioLabAssumptionState) {
-  const policyRate = values.policy_rate_change ?? 0
+function getMetricCore(values: ScenarioLabAssumptionState, qpmRun = solveScenarioLabQpm(values)) {
+  const endpointIndex = qpmEndpointIndex(qpmRun)
   const fx = values.exchange_rate_change ?? 0
   const remittance = values.remittance_change ?? 0
   const commodity = values.commodity_price_change ?? 0
@@ -231,36 +237,6 @@ function getMetricCore(values: ScenarioLabAssumptionState) {
   const taxEffort = values.tax_revenue_change ?? 0
   const tariff = values.tariff_change ?? 0
   const externalDemand = values.export_demand_change ?? 0
-  const passThrough = values.pass_through_adjustment ?? 0
-  const riskPremium = values.risk_premium_shock ?? 0
-
-  const gdpGrowth = clamp(
-    roundTo(
-      5.8 +
-        0.16 * govSpending -
-        0.12 * policyRate -
-        0.05 * fx +
-        0.3 * externalDemand +
-        0.03 * remittance -
-        0.03 * riskPremium,
-    ),
-    2.5,
-    8.5,
-  )
-
-  const inflation = clamp(
-    roundTo(
-      8.6 +
-        0.24 * fx +
-        0.11 * commodity +
-        0.2 * passThrough -
-        0.16 * policyRate +
-        0.04 * tariff +
-        0.03 * govSpending,
-    ),
-    4.5,
-    16.5,
-  )
 
   const currentAccount = clamp(
     roundTo(
@@ -277,22 +253,24 @@ function getMetricCore(values: ScenarioLabAssumptionState) {
   )
 
   const fiscalBalance = clamp(roundTo(-3.1 - 0.45 * govSpending + 0.36 * taxEffort), -6.5, 1.5)
-  const policyRateLevel = clamp(roundTo(13.5 + policyRate + 0.2 * riskPremium), 10, 20)
-  const exchangeRateLevel = clamp(roundTo(12600 + fx * 85 + riskPremium * 35, 0), 11500, 15000)
 
   return {
-    gdpGrowth,
-    inflation,
+    gdpGrowth: qpmRun.scenario.gdpGrowth[endpointIndex],
+    inflation: qpmRun.scenario.inflation[endpointIndex],
     currentAccount,
     fiscalBalance,
-    policyRateLevel,
-    exchangeRateLevel,
+    policyRateLevel: qpmRun.scenario.policyRate[endpointIndex],
+    exchangeRateLevel: qpmRun.scenario.exchangeRate[endpointIndex],
   }
 }
 
-function buildHeadlineMetrics(values: ScenarioLabAssumptionState): HeadlineMetric[] {
-  const base = getMetricCore(getDefaultAssumptionState())
-  const scenario = getMetricCore(values)
+function buildHeadlineMetrics(
+  values: ScenarioLabAssumptionState,
+  qpmRun: QpmScenarioRun,
+): HeadlineMetric[] {
+  const baseQpm = solveScenarioLabQpm(getDefaultAssumptionState())
+  const base = getMetricCore(getDefaultAssumptionState(), baseQpm)
+  const scenario = getMetricCore(values, qpmRun)
   const now = '2026-04-17T11:00:00+05:00'
 
   const metricRows = [
@@ -367,21 +345,15 @@ function buildHeadlineMetrics(values: ScenarioLabAssumptionState): HeadlineMetri
   })
 }
 
-function buildSeriesPath(baseValue: number, scenarioValue: number, softness = 0.35) {
-  return PERIODS.map((_, index) => {
-    const t = (index + 1) / PERIODS.length
-    return roundTo(baseValue + (scenarioValue - baseValue) * t * (1 + softness * (1 - t)))
-  })
-}
-
 function buildChartSeries(
   chartId: string,
   title: string,
   subtitle: string,
   axisLabel: string,
   unit: string,
-  baselineValue: number,
-  scenarioValue: number,
+  periods: string[],
+  baselineValues: number[],
+  scenarioValues: number[],
   takeaway: string,
 ): ChartSpec {
   return {
@@ -392,25 +364,25 @@ function buildChartSeries(
     x: {
       label: 'Period',
       unit: '',
-      values: PERIODS,
+      values: periods,
     },
     y: {
       label: axisLabel,
       unit,
-      values: buildSeriesPath(baselineValue, scenarioValue),
+      values: scenarioValues,
     },
     series: [
       {
         series_id: 'baseline_path',
         label: 'Baseline path',
         semantic_role: 'baseline',
-        values: buildSeriesPath(baselineValue, baselineValue),
+        values: baselineValues,
       },
       {
         series_id: 'scenario_path',
         label: 'Scenario path',
         semantic_role: 'alternative',
-        values: buildSeriesPath(baselineValue, scenarioValue),
+        values: scenarioValues,
       },
     ],
     view_mode: 'level',
@@ -538,56 +510,16 @@ const SCENARIO_LAB_SUGGESTED_NEXT: SuggestedNextScenario[] = [
   },
 ]
 
-// Three-series reference response over 12 quarters, mapping
-// deviation-from-baseline for GDP gap, inflation, and policy rate. Shock paths
-// are geometric decays keyed off the current assumption values; they express
-// direction and shape until the live QPM solver is wired into this tab.
-function roundPp(value: number): number {
-  return Math.round(value * 100) / 100
-}
-
-function buildImpulseResponseChart(values: ScenarioLabAssumptionState): ChartSpec {
-  const horizons = Array.from({ length: 12 }, (_, index) => `Q${index + 1}`)
-  const policyRateShockPp = (values.policy_rate_change ?? 0) * 0.01 * 100
-  const exchangeRateShock = values.exchange_rate_change ?? 0
-  const remittanceShock = values.remittance_change ?? 0
-  const commodityShock = values.commodity_price_change ?? 0
-  const externalDemandShock = values.export_demand_change ?? 0
-  const governmentSpendingShock = values.gov_spending_change ?? 0
-  const tariffShock = values.tariff_change ?? 0
-  const passThroughShock = values.pass_through_adjustment ?? 0
-  const riskPremiumShock = values.risk_premium_shock ?? 0
-
-  const gdpInitialGap =
-    -0.015 * policyRateShockPp +
-    0.03 * remittanceShock +
-    0.3 * externalDemandShock +
-    0.12 * governmentSpendingShock -
-    0.03 * riskPremiumShock
-  const inflationInitial =
-    0.18 * exchangeRateShock +
-    0.08 * commodityShock +
-    0.04 * tariffShock +
-    0.2 * passThroughShock -
-    0.02 * policyRateShockPp
-  const policyRateInitial = policyRateShockPp + 0.04 * inflationInitial + 0.2 * riskPremiumShock
-
-  const gdpDecay = 0.8
-  const inflationDecay = 0.72
-  const policyDecay = 0.85
-
-  const gdpSeries = horizons.map((_, index) => roundPp(gdpInitialGap * Math.pow(gdpDecay, index)))
-  const inflationSeries = horizons.map((_, index) =>
-    roundPp(inflationInitial * Math.pow(inflationDecay, index)),
-  )
-  const policyRateSeries = horizons.map((_, index) =>
-    roundPp(policyRateInitial * Math.pow(policyDecay, index)),
-  )
+function buildImpulseResponseChart(qpmRun: QpmScenarioRun): ChartSpec {
+  const horizons = qpmRun.baseline.periods.map((_, index) => `Q${index + 1}`)
+  const gdpSeries = qpmRun.deltas.gdpGrowth.map((value) => roundTo(value, 2))
+  const inflationSeries = qpmRun.deltas.inflation.map((value) => roundTo(value, 2))
+  const policyRateSeries = qpmRun.deltas.policyRate.map((value) => roundTo(value, 2))
 
   return {
     chart_id: 'scenario_lab_impulse_response',
     title: 'Scenario impulse response vs baseline · 12 quarters',
-    subtitle: 'Deviation from baseline in percentage points; reference Scenario Lab calculation, not a live forecast.',
+    subtitle: 'Deviation from baseline in percentage points; canonical QPM calculation, not an official forecast.',
     chart_type: 'line',
     x: {
       label: 'Horizon',
@@ -622,7 +554,7 @@ function buildImpulseResponseChart(values: ScenarioLabAssumptionState): ChartSpe
     view_mode: 'delta',
     uncertainty: [],
     takeaway:
-      'Read each line as a scenario deviation from the baseline path across 12 quarters, not as a standalone forecast level.',
+      'Read each line as a scenario deviation from the baseline QPM path, not as a standalone forecast level.',
     model_attribution: [ATTRIBUTION],
   }
 }
@@ -640,10 +572,33 @@ export function buildScenarioLabResults(
   values: ScenarioLabAssumptionState,
   options?: { selectedPresetId?: string },
 ): ScenarioLabResultsBundle {
-  const baselineCore = getMetricCore(getDefaultAssumptionState())
-  const scenarioCore = getMetricCore(values)
-  const headlineMetrics = buildHeadlineMetrics(values)
+  const qpmRun = solveScenarioLabQpm(values)
+  const baselineQpmRun = solveScenarioLabQpm(getDefaultAssumptionState())
+  const baselineCore = getMetricCore(getDefaultAssumptionState(), baselineQpmRun)
+  const scenarioCore = getMetricCore(values, qpmRun)
+  const headlineMetrics = buildHeadlineMetrics(values, qpmRun)
   const interpretation = buildInterpretation(values)
+  const pathPeriods = qpmRun.baseline.periods.slice(0, PERIODS.length)
+  const baselineCurrentAccountPath = buildAccountingPath(
+    baselineCore.currentAccount,
+    baselineCore.currentAccount,
+    pathPeriods.length,
+  )
+  const scenarioCurrentAccountPath = buildAccountingPath(
+    baselineCore.currentAccount,
+    scenarioCore.currentAccount,
+    pathPeriods.length,
+  )
+  const baselineFiscalPath = buildAccountingPath(
+    baselineCore.fiscalBalance,
+    baselineCore.fiscalBalance,
+    pathPeriods.length,
+  )
+  const scenarioFiscalPath = buildAccountingPath(
+    baselineCore.fiscalBalance,
+    scenarioCore.fiscalBalance,
+    pathPeriods.length,
+  )
   void options
   const generationMode = resolveInterpretationGenerationMode()
   interpretation.metadata = { generation_mode: generationMode }
@@ -651,7 +606,7 @@ export function buildScenarioLabResults(
 
   return {
     headline_metrics: headlineMetrics,
-    impulse_response_chart: buildImpulseResponseChart(values),
+    impulse_response_chart: buildImpulseResponseChart(qpmRun),
     charts_by_tab: {
       headline_impact: {
         chart_id: 'headline_impact_delta',
@@ -697,8 +652,9 @@ export function buildScenarioLabResults(
         'Baseline and scenario trajectories',
         'GDP growth',
         '%',
-        baselineCore.gdpGrowth,
-        scenarioCore.gdpGrowth,
+        pathPeriods,
+        qpmRun.baseline.gdpGrowth.slice(0, pathPeriods.length),
+        qpmRun.scenario.gdpGrowth.slice(0, pathPeriods.length),
         'Growth path reflects combined demand, cost, and policy-rate channels.',
       ),
       external_balance: buildChartSeries(
@@ -707,8 +663,9 @@ export function buildScenarioLabResults(
         'Baseline and scenario trajectories',
         'Current account',
         '% GDP',
-        baselineCore.currentAccount,
-        scenarioCore.currentAccount,
+        pathPeriods,
+        baselineCurrentAccountPath,
+        scenarioCurrentAccountPath,
         'External balance responds to exchange-rate, trade, and remittance assumptions.',
       ),
       fiscal_effects: buildChartSeries(
@@ -717,8 +674,9 @@ export function buildScenarioLabResults(
         'Baseline and scenario trajectories',
         'Fiscal balance',
         '% GDP',
-        baselineCore.fiscalBalance,
-        scenarioCore.fiscalBalance,
+        pathPeriods,
+        baselineFiscalPath,
+        scenarioFiscalPath,
         'Fiscal outcomes are driven by spending and revenue assumptions in this reference setup.',
       ),
     },
