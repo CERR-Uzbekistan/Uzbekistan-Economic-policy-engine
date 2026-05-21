@@ -30,6 +30,8 @@ CALIBRATION <- list(
   tar = 5.0, rrbar = 3.5, gdpbar = 6.0
 )
 
+EXTERNAL_DEMAND_RHO <- 0.75
+
 # Baseline initial conditions used on the Baseline page of the legacy UI.
 # These are LEVEL values (percent); converted to deviation form by the solver
 # using the steady-state constants (tar, rrbar+tar).
@@ -49,84 +51,99 @@ DATA_VERSION   <- "2026Q1"
 
 # ============================================================
 #  PARAMETER DESCRIPTORS
-#  Trilingual descriptions extracted verbatim from
-#  qpm_uzbekistan/index.html data-tip / data-tip-ru / data-tip-uz
-#  attributes. If a translation is absent, `null` is emitted.
+#  Public parameter descriptions for the bridge artifact. If a translation is
+#  absent, `null` is emitted.
 # ============================================================
 
 build_parameters <- function(calib = CALIBRATION) {
-  # Each entry: symbol, label, value, range_min, range_max,
-  #             description_en, description_ru, description_uz
+  parameter <- function(symbol, label, value, range_min, range_max,
+                        description, description_ru = NA, description_uz = NA) {
+    list(
+      symbol = symbol,
+      label = label,
+      value = value,
+      range_min = range_min,
+      range_max = range_max,
+      description = description,
+      description_ru = description_ru,
+      description_uz = description_uz
+    )
+  }
+
   list(
-    list(
-      symbol       = "b1",
-      label        = "Gap persistence",
-      value        = calib$b1,
-      range_min    = 0.30,
-      range_max    = 0.95,
-      description  = "Inertia in output gap dynamics. Controls how quickly the GDP gap closes; higher b1 means more inertia and slower recovery from shocks.",
-      description_ru = "Инерция в динамике разрыва выпуска. Контролирует скорость закрытия разрыва ВВП: высокий b1 = больше инерции, медленнее восстановление после шоков.",
-      description_uz = "Chiqarish bo'shlig'i dinamikasidagi inersiya. YaIM bo'shlig'i qanchalik tez yopilishini boshqaradi: yuqori b1 = ko'proq inersiya, sekinroq tiklanish."
+    parameter(
+      "b1", "Gap persistence", calib$b1, 0.30, 0.95,
+      "Inertia in output-gap dynamics; higher b1 means slower closure after shocks.",
+      "Инерция в динамике разрыва выпуска; более высокий b1 означает более медленное закрытие после шоков.",
+      "Chiqarish bo'shlig'i dinamikasidagi inersiya; yuqori b1 shoklardan keyin sekinroq yopilishni anglatadi."
     ),
-    list(
-      symbol       = "b2",
-      label        = "MCI sensitivity",
-      value        = calib$b2,
-      range_min    = 0.05,
-      range_max    = 0.60,
-      description  = "Monetary policy transmission to demand. How strongly monetary conditions (interest rate plus exchange rate) affect the output gap; key monetary transmission parameter.",
-      description_ru = "Трансмиссия денежной политики на спрос. Насколько денежные условия (ставка + курс) влияют на разрыв выпуска; ключевой параметр денежной трансмиссии.",
-      description_uz = "Pul-kredit siyosatining talabga transmissiyasi. Pul-kredit shartlari (foiz stavkasi + valyuta kursi) chiqarish bo'shlig'iga ta'sir kuchi; asosiy monetar transmissiya parametri."
+    parameter(
+      "b2", "MCI sensitivity", calib$b2, 0.05, 0.60,
+      "Sensitivity of the output gap to monetary conditions.",
+      "Чувствительность разрыва выпуска к денежно-кредитным условиям.",
+      "Chiqarish bo'shlig'ining pul-kredit sharoitlariga sezgirligi."
     ),
-    list(
-      symbol       = "b3",
-      label        = "External demand",
-      value        = calib$b3,
-      range_min    = 0.05,
-      range_max    = 0.60,
-      description  = "Foreign output gap spillover. Sensitivity of domestic output to foreign economic cycles; important for Uzbekistan as an open economy with significant trade and remittances.",
-      description_ru = "Перелив внешнего разрыва выпуска. Чувствительность внутреннего выпуска к внешним экономическим циклам; важно для открытой экономики Узбекистана с торговлей и денежными переводами.",
-      description_uz = "Tashqi chiqarish bo'shlig'i ta'siri. Ichki chiqarishning tashqi iqtisodiy tsikllarga sezgirligi; savdo va pul o'tkazmalari bo'lgan ochiq iqtisodiyot uchun muhim."
+    parameter(
+      "b3", "External-demand channel", calib$b3, 0.05, 0.60,
+      "Sensitivity of domestic demand to the foreign output gap.",
+      "Чувствительность внутреннего спроса к внешнему разрыву выпуска.",
+      "Ichki talabning tashqi chiqarish bo'shlig'iga sezgirligi."
     ),
-    list(
-      symbol       = "g2",
-      label        = "Taylor inflation response",
-      value        = calib$g2,
-      range_min    = 1.0,
-      range_max    = 3.0,
-      description  = "Taylor Principle: must exceed 1 for inflation stability. g2 = 1.5 means the CBU raises the nominal rate by 150 bp for every 1 pp inflation overshoot, ensuring the real rate rises to cool demand.",
-      description_ru = "Принцип Тейлора: должен превышать 1 для стабильности инфляции. g2 = 1.5: ЦБУ повышает ставку на 150 б.п. при каждом 1 п.п. превышения инфляции.",
-      description_uz = "Teylor printsipi: inflyatsiya barqarorligi uchun 1 dan katta bo'lishi shart. g2 = 1.5: har 1 p.p. inflyatsiya ortiqchaligida CBU stavkani 150 b.p. ko'taradi."
+    parameter(
+      "b4", "Real-rate MCI weight", calib$b4, 0.00, 1.00,
+      "Weight on the real-interest-rate gap in the monetary conditions index."
     ),
-    list(
-      symbol       = "e1",
-      label        = "UIP backward weight",
-      value        = calib$e1,
-      range_min    = 0.1,
-      range_max    = 0.9,
-      description  = "Exchange rate backward-looking share. Fraction of exchange rate expectations that are backward-looking; lower e1 means more forward-looking expectations and stronger UIP arbitrage discipline on the UZS.",
-      description_ru = "Доля обратных ожиданий курса. Доля ожиданий обменного курса, основанных на прошлых значениях; низкий e1 = более перспективные ожидания, более сильная дисциплина UIP для UZS.",
-      description_uz = "Valyuta kursining orqaga qaragan kutishlari ulushi. O'tgan kurslarga asoslangan kutishlar ulushi; past e1 = ko'proq istiqbolga yo'nalgan kutishlar, UZS uchun kuchliroq UIP intizomi."
+    parameter(
+      "a1", "Inflation persistence", calib$a1, 0.30, 0.90,
+      "Backward-looking weight in the Phillips curve."
     ),
-    list(
-      symbol       = "pi_target",
-      label        = "Inflation target pi*",
-      value        = calib$tar,
-      range_min    = 3.0,
-      range_max    = 12.0,
-      description  = "Long-run CBU inflation goal. Official target: 5% for 2024-2026. The Taylor Rule anchors the nominal rate to keep inflation near this value.",
-      description_ru = "Долгосрочная цель ЦБУ по инфляции. Официальная цель: 5% на 2024-2026 гг. Правило Тейлора удерживает номинальную ставку вблизи этого значения.",
-      description_uz = "CBU ning uzoq muddatli inflyatsiya maqsadi. Rasmiy maqsad: 2024-2026 yillar uchun 5%. Teylor qoidasi nominal stavkani ushbu qiymat atrofida saqlaydi."
+    parameter(
+      "a2", "RMC inflation loading", calib$a2, 0.05, 0.50,
+      "Inflation response to real marginal cost."
     ),
-    list(
-      symbol       = "rs_neutral",
-      label        = "Neutral nominal policy rate",
-      value        = calib$rrbar + calib$tar,
-      range_min    = 4.0,
-      range_max    = 20.0,
-      description  = "Neutral nominal policy rate = neutral real rate r_bar (3.5%) + inflation target pi* (5.0%) = 8.5%. The rate consistent with steady-state output and the inflation target; constructed from the two legacy steady-state sliders.",
-      description_ru = NA,
-      description_uz = NA
+    parameter(
+      "a3", "Output-gap RMC weight", calib$a3, 0.00, 1.00,
+      "Output-gap weight inside real marginal cost."
+    ),
+    parameter(
+      "a4", "Import-price pass-through", calib$a4, 0.00, 0.50,
+      "Direct quarterly import-price pass-through in the Phillips curve."
+    ),
+    parameter(
+      "g1", "Policy-rate smoothing", calib$g1, 0.00, 0.95,
+      "Backward-looking smoothing in the Taylor rule."
+    ),
+    parameter(
+      "g2", "Taylor inflation response", calib$g2, 1.00, 3.00,
+      "Inflation-response weight in the Taylor rule."
+    ),
+    parameter(
+      "g3", "Taylor output-gap response", calib$g3, 0.00, 2.00,
+      "Output-gap response weight in the Taylor rule."
+    ),
+    parameter(
+      "e1", "UIP backward weight", calib$e1, 0.10, 0.90,
+      "Backward-looking exchange-rate weight in the UIP block.",
+      "Доля обратных ожиданий курса в блоке UIP.",
+      "UIP blokidagi valyuta kursining orqaga qaragan kutishlari ulushi."
+    ),
+    parameter(
+      "pi_target", "Inflation target pi*", calib$tar, 3.00, 12.00,
+      "Long-run inflation target anchoring the Taylor rule.",
+      "Долгосрочная цель по инфляции, закрепляющая правило Тейлора.",
+      "Teylor qoidasini langarlaydigan uzoq muddatli inflyatsiya maqsadi."
+    ),
+    parameter(
+      "rs_neutral", "Neutral nominal policy rate", calib$rrbar + calib$tar, 4.00, 20.00,
+      "Neutral nominal policy rate = neutral real rate plus inflation target."
+    ),
+    parameter(
+      "potential_growth", "Potential GDP growth", calib$gdpbar, 2.00, 10.00,
+      "Steady-state potential real GDP growth used to translate gaps into growth paths."
+    ),
+    parameter(
+      "rho_external", "External-demand persistence", EXTERNAL_DEMAND_RHO, 0.00, 0.95,
+      "AR(1) persistence for the foreign output-gap shock gap*_t."
     )
   )
 }
@@ -186,7 +203,7 @@ solve_irf <- function(p, shock_type, shock_size, T,
   }
   if (shock_idx < N) {
     for (t in (shock_idx + 1L):N) {
-      gap_star[t] <- 0.75 * gap_star[t - 1L]
+      gap_star[t] <- EXTERNAL_DEMAND_RHO * gap_star[t - 1L]
     }
   }
 

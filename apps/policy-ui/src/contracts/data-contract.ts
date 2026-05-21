@@ -467,6 +467,18 @@ export type ModelBridgeEvidence = {
   caveats: string[]
 }
 
+export type ModelNoteItem = {
+  label: string
+  value: string
+}
+
+export type ModelNote = {
+  title: string
+  summary: string
+  items: ModelNoteItem[]
+  boundaries: string[]
+}
+
 export type ModelCatalogEntry = {
   id: string
   title: string
@@ -484,6 +496,7 @@ export type ModelCatalogEntry = {
   caveats: ModelCaveat[]
   data_sources: ModelDataSource[]
   validation_summary: string[]
+  model_note?: ModelNote
   bridge_evidence?: ModelBridgeEvidence
   activation_requirements?: string[]
 }

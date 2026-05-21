@@ -13,18 +13,53 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
     full_title: 'QPM — New-Keynesian Small Open Economy',
     lifecycle_label: 'Quarterly Projection Model · Active',
     status: { label: 'Active', severity: 'ok' },
-    model_type: 'DSGE',
+    model_type: 'Semi-structural',
     frequency: 'Quarterly',
-    methodology_signature: 'DSGE · Quarterly · New-Keynesian SOE',
+    methodology_signature: 'Semi-structural · Quarterly · Small open economy',
     description:
-      'Monetary policy transmission, impulse responses, cost-push and demand shocks.',
+      'Calibrated monetary-policy scenario block for demand, inflation, exchange-rate, and policy-rate paths.',
     stats: [
-      { value: '14', label: 'Params' },
+      { value: '16', label: 'Params' },
       { value: '4', label: 'Equations' },
       { value: 'Q', label: 'Freq.' },
     ],
     purpose:
       'A gap-form New-Keynesian block capturing monetary transmission in a small, commodity-exporting, import-dependent economy. Used for impulse-response analysis of policy-rate, external-demand, and exchange-rate shocks.',
+    model_note: {
+      title: 'QPM model note',
+      summary:
+        'Semi-structural monetary-policy model for GDP-gap, inflation, policy-rate, and exchange-rate scenario paths. It is calibrated, not formally estimated, and not an official forecast.',
+      items: [
+        {
+          label: 'Scope',
+          value: 'GDP gap/growth, inflation, policy rate, and exchange rate.',
+        },
+        {
+          label: 'Initial state',
+          value:
+            'Q1 2026: inflation 10.5%, policy rate 13.5%, output gap -1.5%, NER depreciation 8%.',
+        },
+        {
+          label: 'Core shocks',
+          value:
+            'Policy-rate, exchange-rate/import-price, inflation/cost, risk-premium, and external-demand shocks. Direct import-price pass-through a4=0.12.',
+        },
+        {
+          label: 'External demand',
+          value: 'gap*_t follows AR(1) with rho=0.75 and enters the IS curve as b3 * gap*_t.',
+        },
+        {
+          label: 'Scenario Lab boundary',
+          value:
+            'Policy rate, exchange rate, risk premium, and external demand are direct QPM channels. Fiscal, tariff, commodity, and remittance controls are proxy mappings; fiscal and current-account panels are accounting views.',
+        },
+      ],
+      boundaries: [
+        'No formal estimation or historical forecast evaluation is claimed.',
+        'No parameter-uncertainty bands are included in the public QPM output.',
+        'Fiscal balance and current-account results should not be read as endogenous QPM blocks.',
+      ],
+    },
     equations: [
       { id: 'qpm_is', label: 'IS · Aggregate demand' },
       { id: 'qpm_phillips', label: 'Phillips · Inflation' },
@@ -32,16 +67,22 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
       { id: 'qpm_uip', label: 'UIP · Exchange rate' },
     ],
     parameters: [
-      { symbol: 'b_1', name: 'Output persistence', value: '0.60', range: '0.40 – 0.80' },
-      { symbol: 'b_2', name: 'Real-rate sensitivity', value: '0.20', range: '0.10 – 0.35' },
-      {
-        symbol: 'b_3',
-        name: 'External demand channel',
-        value: '0.30',
-        range: '0.05 – 0.60',
-      },
-      { symbol: 'a_1', name: 'Inflation persistence', value: '0.60', range: '0.40 – 0.85' },
-      { symbol: 'γ_π', name: 'Inflation response weight', value: '1.50', range: '1.20 – 2.00' },
+      { symbol: 'b1', name: 'Gap persistence', value: '0.7', range: '0.3 - 0.95' },
+      { symbol: 'b2', name: 'MCI sensitivity', value: '0.2', range: '0.05 - 0.6' },
+      { symbol: 'b3', name: 'External-demand channel', value: '0.3', range: '0.05 - 0.6' },
+      { symbol: 'b4', name: 'Real-rate MCI weight', value: '0.6', range: '0 - 1' },
+      { symbol: 'a1', name: 'Inflation persistence', value: '0.6', range: '0.3 - 0.9' },
+      { symbol: 'a2', name: 'RMC inflation loading', value: '0.2', range: '0.05 - 0.5' },
+      { symbol: 'a3', name: 'Output-gap RMC weight', value: '0.65', range: '0 - 1' },
+      { symbol: 'a4', name: 'Import-price pass-through', value: '0.12', range: '0 - 0.5' },
+      { symbol: 'g1', name: 'Policy-rate smoothing', value: '0.8', range: '0 - 0.95' },
+      { symbol: 'g2', name: 'Taylor inflation response', value: '1.5', range: '1 - 3' },
+      { symbol: 'g3', name: 'Taylor output-gap response', value: '0.5', range: '0 - 2' },
+      { symbol: 'e1', name: 'UIP backward weight', value: '0.7', range: '0.1 - 0.9' },
+      { symbol: 'pi_target', name: 'Inflation target pi*', value: '5', range: '3 - 12' },
+      { symbol: 'rs_neutral', name: 'Neutral nominal policy rate', value: '8.5', range: '4 - 20' },
+      { symbol: 'potential_growth', name: 'Potential GDP growth', value: '6', range: '2 - 10' },
+      { symbol: 'rho_external', name: 'External-demand persistence', value: '0.75', range: '0 - 0.95' },
     ],
     caveats: [
       {
@@ -56,9 +97,9 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
         id: 'qpm-cav-02',
         number: '02',
         severity: 'info',
-        title: 'No country-risk premium in UIP',
+        title: 'No persistent country-risk premium',
         body:
-          'Capital-flight and sovereign-risk scenarios cannot be tested via UIP as specified. Workaround: apply εˢ shock directly.',
+          'Sovereign-risk or capital-flight episodes are approximated only by a one-period rho shock in the public scenario path.',
       },
       {
         id: 'qpm-cav-03',
@@ -92,8 +133,9 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
       },
     ],
     validation_summary: [
-      'Simulated inflation IRF vs. Uzbek SVAR (2015–2024): peak response within ±0.3 pp, timing consistent at 4–5 quarters.',
-      'Calibrated from Berg et al. (2006) and regional analogues; no formal estimation.',
+      'Public qpm.json validates against the QPM bridge schema and contains the canonical baseline, rate-cut, rate-hike, exchange-rate, and external-demand scenarios.',
+      'No formal estimation, real-time forecast evaluation, or parameter-uncertainty bands are claimed in the public QPM output.',
+      'Scenario Lab fiscal and external-balance panels are proxy/accounting views around the QPM paths; they are not separate endogenous QPM blocks.',
     ],
   },
   {

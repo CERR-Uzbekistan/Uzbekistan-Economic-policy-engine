@@ -21,13 +21,42 @@ describe('model catalog mock', () => {
 
   it('documents QPM b3 as active after external-demand channel activation', () => {
     const qpm = modelCatalogEntries.find((entry) => entry.id === 'qpm-uzbekistan')!
-    const b3 = qpm.parameters.find((parameter) => parameter.symbol === 'b_3')
-    assert.ok(b3, 'QPM must carry b_3 parameter')
-    assert.equal(b3?.value, '0.30')
+    const b3 = qpm.parameters.find((parameter) => parameter.symbol === 'b3')
+    assert.ok(b3, 'QPM must carry b3 parameter')
+    assert.equal(b3?.value, '0.3')
     assert.equal(b3?.inactive, undefined)
     assert.equal(
       qpm.caveats.some((caveat) => /inactive/i.test(`${caveat.title} ${caveat.body}`)),
       false,
+    )
+  })
+
+  it('documents the canonical QPM parameter set and Scenario Lab boundaries', () => {
+    const qpm = modelCatalogEntries.find((entry) => entry.id === 'qpm-uzbekistan')!
+    const symbols = qpm.parameters.map((parameter) => parameter.symbol)
+
+    assert.deepEqual(symbols, [
+      'b1',
+      'b2',
+      'b3',
+      'b4',
+      'a1',
+      'a2',
+      'a3',
+      'a4',
+      'g1',
+      'g2',
+      'g3',
+      'e1',
+      'pi_target',
+      'rs_neutral',
+      'potential_growth',
+      'rho_external',
+    ])
+    assert.match(qpm.model_note?.summary ?? '', /calibrated, not formally estimated/)
+    assert.match(
+      qpm.model_note?.items.map((item) => item.value).join(' ') ?? '',
+      /accounting views/,
     )
   })
 

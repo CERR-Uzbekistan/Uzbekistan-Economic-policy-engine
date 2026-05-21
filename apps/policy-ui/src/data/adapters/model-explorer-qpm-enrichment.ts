@@ -2,6 +2,7 @@ import type {
   ModelBridgeEvidence,
   ModelCatalogEntry,
   ModelExplorerWorkspace,
+  ModelNote,
 } from '../../contracts/data-contract.js'
 import type { QpmBridgePayload } from '../bridge/qpm-types.js'
 
@@ -29,6 +30,50 @@ function formatNumber(value: number): string {
 
 function formatParameterRange(rangeMin: number, rangeMax: number): string {
   return `${formatNumber(rangeMin)} - ${formatNumber(rangeMax)}`
+}
+
+function findParameterValue(payload: QpmBridgePayload, symbol: string): string {
+  const parameter = payload.parameters.find((candidate) => candidate.symbol === symbol)
+  return parameter ? formatNumber(parameter.value) : 'n/a'
+}
+
+function createQpmModelNote(payload: QpmBridgePayload): ModelNote {
+  const a4 = findParameterValue(payload, 'a4')
+  const rhoExternal = findParameterValue(payload, 'rho_external')
+
+  return {
+    title: 'QPM model note',
+    summary:
+      'Semi-structural monetary-policy model for GDP-gap, inflation, policy-rate, and exchange-rate scenario paths. It is calibrated, not formally estimated, and not an official forecast.',
+    items: [
+      {
+        label: 'Scope',
+        value: 'GDP gap/growth, inflation, policy rate, and exchange rate.',
+      },
+      {
+        label: 'Initial state',
+        value: 'Q1 2026: inflation 10.5%, policy rate 13.5%, output gap -1.5%, NER depreciation 8%.',
+      },
+      {
+        label: 'Core shocks',
+        value: `Policy-rate, exchange-rate/import-price, inflation/cost, risk-premium, and external-demand shocks. Direct import-price pass-through a4=${a4}.`,
+      },
+      {
+        label: 'External demand',
+        value: `gap*_t follows AR(1) with rho=${rhoExternal} and enters the IS curve as b3 * gap*_t.`,
+      },
+      {
+        label: 'Scenario Lab boundary',
+        value:
+          'Policy rate, exchange rate, risk premium, and external demand are direct QPM channels. Fiscal, tariff, commodity, and remittance controls are proxy mappings; fiscal and current-account panels are accounting views.',
+      },
+    ],
+    boundaries: [
+      'No formal estimation or historical forecast evaluation is claimed.',
+      'No parameter-uncertainty bands are included in the public QPM output.',
+      'Fiscal balance and current-account results should not be read as endogenous QPM blocks.',
+    ],
+  }
 }
 
 export function toModelExplorerQpmBridgeEvidence(payload: QpmBridgePayload): ModelBridgeEvidence {
@@ -73,7 +118,7 @@ function withQpmBridge(entry: ModelCatalogEntry, payload: QpmBridgePayload): Mod
     })),
     data_sources: [
       {
-        institution: 'QPM public bridge artifact',
+        institution: 'QPM public data file',
         description: `${payload.scenarios.length} canonical scenarios and ${payload.parameters.length} public parameters`,
         vintage_label: payload.attribution.data_version,
       },
@@ -90,8 +135,10 @@ function withQpmBridge(entry: ModelCatalogEntry, payload: QpmBridgePayload): Mod
     ],
     validation_summary: [
       'Public qpm.json validates against the QPM bridge schema and contains the canonical baseline, rate-cut, rate-hike, exchange-rate, and external-demand scenarios.',
-      'No formal estimation, real-time forecast evaluation, or parameter-uncertainty bands are claimed in the public artifact.',
+      'No formal estimation, real-time forecast evaluation, or parameter-uncertainty bands are claimed in the public QPM output.',
+      'Scenario Lab fiscal and external-balance panels are proxy/accounting views around the QPM paths; they are not separate endogenous QPM blocks.',
     ],
+    model_note: createQpmModelNote(payload),
     bridge_evidence: toModelExplorerQpmBridgeEvidence(payload),
   }
 }

@@ -134,4 +134,22 @@ describe('Model Explorer catalog cards', () => {
     assert.match(markup, /Required before activation/)
     assert.match(markup, /Economist-approved SAM/)
   })
+
+  it('renders the QPM model note with Scenario Lab boundaries', async () => {
+    const qpmEntry = modelCatalogEntries.find((entry) => entry.id === 'qpm-uzbekistan')!
+    const i18n = await createTestI18n()
+
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <ModelDetail entry={qpmEntry} activeTab="overview" onTabChange={() => undefined} />
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /QPM model note/)
+    assert.match(markup, /calibrated, not formally estimated/)
+    assert.match(markup, /Scenario Lab boundary/)
+    assert.match(markup, /accounting views/)
+    assert.match(markup, /rho=0.75/)
+    assert.match(markup, /a4=0.12/)
+  })
 })

@@ -43,9 +43,33 @@ describe('model explorer QPM bridge enrichment', () => {
     assert.ok(qpmEntry)
     assert.equal(qpmEntry.parameters[0].symbol, 'b1')
     assert.equal(qpmEntry.parameters[0].value, '0.7')
-    assert.equal(qpmEntry.parameters.some((parameter) => parameter.symbol === 'rs_neutral'), true)
+    assert.deepEqual(
+      qpmEntry.parameters.map((parameter) => parameter.symbol),
+      [
+        'b1',
+        'b2',
+        'b3',
+        'b4',
+        'a1',
+        'a2',
+        'a3',
+        'a4',
+        'g1',
+        'g2',
+        'g3',
+        'e1',
+        'pi_target',
+        'rs_neutral',
+        'potential_growth',
+        'rho_external',
+      ],
+    )
     assert.equal(qpmEntry.caveats.some((caveat) => caveat.id === 'qpm-external-demand-ar1'), true)
     assert.match(qpmEntry.validation_summary.join(' '), /canonical baseline, rate-cut, rate-hike/)
+    assert.match(qpmEntry.validation_summary.join(' '), /proxy\/accounting views/)
+    assert.match(qpmEntry.model_note?.summary ?? '', /calibrated, not formally estimated/)
+    assert.match(qpmEntry.model_note?.items.map((item) => item.value).join(' ') ?? '', /a4=0.12/)
+    assert.match(qpmEntry.model_note?.items.map((item) => item.value).join(' ') ?? '', /rho=0.75/)
     assert.equal(qpmEntry.bridge_evidence?.evidence_metrics?.length, 3)
   })
 })

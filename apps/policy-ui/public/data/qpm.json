@@ -31,13 +31,73 @@
     },
     {
       "symbol": "b3",
-      "label": "External demand",
+      "label": "External-demand channel",
       "value": 0.3,
       "range_min": 0.05,
       "range_max": 0.6,
       "description": "Foreign output gap spillover. Sensitivity of domestic output to foreign economic cycles; important for Uzbekistan as an open economy with significant trade and remittances.",
       "description_ru": "Перелив внешнего разрыва выпуска. Чувствительность внутреннего выпуска к внешним экономическим циклам; важно для открытой экономики Узбекистана с торговлей и денежными переводами.",
       "description_uz": "Tashqi chiqarish bo'shlig'i ta'siri. Ichki chiqarishning tashqi iqtisodiy tsikllarga sezgirligi; savdo va pul o'tkazmalari bo'lgan ochiq iqtisodiyot uchun muhim."
+    },
+    {
+      "symbol": "b4",
+      "label": "Real-rate MCI weight",
+      "value": 0.6,
+      "range_min": 0,
+      "range_max": 1,
+      "description": "Weight on the real-interest-rate gap in the monetary conditions index.",
+      "description_ru": null,
+      "description_uz": null
+    },
+    {
+      "symbol": "a1",
+      "label": "Inflation persistence",
+      "value": 0.6,
+      "range_min": 0.3,
+      "range_max": 0.9,
+      "description": "Backward-looking weight in the Phillips curve.",
+      "description_ru": null,
+      "description_uz": null
+    },
+    {
+      "symbol": "a2",
+      "label": "RMC inflation loading",
+      "value": 0.2,
+      "range_min": 0.05,
+      "range_max": 0.5,
+      "description": "Inflation response to real marginal cost.",
+      "description_ru": null,
+      "description_uz": null
+    },
+    {
+      "symbol": "a3",
+      "label": "Output-gap RMC weight",
+      "value": 0.65,
+      "range_min": 0,
+      "range_max": 1,
+      "description": "Output-gap weight inside real marginal cost.",
+      "description_ru": null,
+      "description_uz": null
+    },
+    {
+      "symbol": "a4",
+      "label": "Import-price pass-through",
+      "value": 0.12,
+      "range_min": 0,
+      "range_max": 0.5,
+      "description": "Direct quarterly import-price pass-through in the Phillips curve.",
+      "description_ru": null,
+      "description_uz": null
+    },
+    {
+      "symbol": "g1",
+      "label": "Policy-rate smoothing",
+      "value": 0.8,
+      "range_min": 0,
+      "range_max": 0.95,
+      "description": "Backward-looking smoothing in the Taylor rule.",
+      "description_ru": null,
+      "description_uz": null
     },
     {
       "symbol": "g2",
@@ -48,6 +108,16 @@
       "description": "Taylor Principle: must exceed 1 for inflation stability. g2 = 1.5 means the CBU raises the nominal rate by 150 bp for every 1 pp inflation overshoot, ensuring the real rate rises to cool demand.",
       "description_ru": "Принцип Тейлора: должен превышать 1 для стабильности инфляции. g2 = 1.5: ЦБУ повышает ставку на 150 б.п. при каждом 1 п.п. превышения инфляции.",
       "description_uz": "Teylor printsipi: inflyatsiya barqarorligi uchun 1 dan katta bo'lishi shart. g2 = 1.5: har 1 p.p. inflyatsiya ortiqchaligida CBU stavkani 150 b.p. ko'taradi."
+    },
+    {
+      "symbol": "g3",
+      "label": "Taylor output-gap response",
+      "value": 0.5,
+      "range_min": 0,
+      "range_max": 2,
+      "description": "Output-gap response weight in the Taylor rule.",
+      "description_ru": null,
+      "description_uz": null
     },
     {
       "symbol": "e1",
@@ -76,6 +146,26 @@
       "range_min": 4,
       "range_max": 20,
       "description": "Neutral nominal policy rate = neutral real rate r_bar (3.5%) + inflation target pi* (5.0%) = 8.5%. The rate consistent with steady-state output and the inflation target; constructed from the two legacy steady-state sliders.",
+      "description_ru": null,
+      "description_uz": null
+    },
+    {
+      "symbol": "potential_growth",
+      "label": "Potential GDP growth",
+      "value": 6,
+      "range_min": 2,
+      "range_max": 10,
+      "description": "Steady-state potential real GDP growth used to translate gaps into growth paths.",
+      "description_ru": null,
+      "description_uz": null
+    },
+    {
+      "symbol": "rho_external",
+      "label": "External-demand persistence",
+      "value": 0.75,
+      "range_min": 0,
+      "range_max": 0.95,
+      "description": "AR(1) persistence for the foreign output-gap shock gap*_t.",
       "description_ru": null,
       "description_uz": null
     }

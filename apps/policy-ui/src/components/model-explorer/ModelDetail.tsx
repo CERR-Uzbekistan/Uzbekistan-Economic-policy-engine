@@ -1,6 +1,6 @@
 import type { KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { ModelCatalogEntry } from '../../contracts/data-contract'
+import type { ModelCatalogEntry, ModelNote } from '../../contracts/data-contract'
 import { BridgeEvidencePanel } from './BridgeEvidencePanel.js'
 import { CaveatList } from './CaveatList.js'
 import { DataSourceList } from './DataSourceList.js'
@@ -46,6 +46,32 @@ function Equations({ entry }: { entry: ModelCatalogEntry }) {
         <EquationBlock key={equation.id} equation={equation} jsx={jsxMap[equation.id]} />
       ))}
     </div>
+  )
+}
+
+function ModelNoteBlock({ note }: { note?: ModelNote }) {
+  if (!note) return null
+
+  return (
+    <section className="model-note" aria-labelledby="model-note-title">
+      <div className="model-note__head">
+        <h4 id="model-note-title">{note.title}</h4>
+        <p>{note.summary}</p>
+      </div>
+      <dl className="model-note__facts">
+        {note.items.map((item) => (
+          <div key={item.label}>
+            <dt>{item.label}</dt>
+            <dd>{item.value}</dd>
+          </div>
+        ))}
+      </dl>
+      <ul className="model-note__boundaries">
+        {note.boundaries.map((boundary) => (
+          <li key={boundary}>{boundary}</li>
+        ))}
+      </ul>
+    </section>
   )
 }
 
@@ -149,6 +175,7 @@ export function ModelDetail({ entry, activeTab, onTabChange }: ModelDetailProps)
             <div className="model-detail__column">
               <h4>{t('modelExplorer.purpose.title')}</h4>
               <p className="model-detail__purpose">{entry.purpose}</p>
+              <ModelNoteBlock note={entry.model_note} />
               <h4>{t('modelExplorer.equations.title')}</h4>
               <Equations entry={entry} />
               <h4>{t('modelExplorer.parameters.title')}</h4>
