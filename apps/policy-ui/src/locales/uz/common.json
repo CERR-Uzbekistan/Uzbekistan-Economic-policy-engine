@@ -994,7 +994,8 @@
         "period": "Yakuniy davr",
         "baselineEnd": "Bazaviy yakun",
         "scenarioEnd": "Stsenariy yakuni",
-        "difference": "Stsenariy minus bazaviy"
+        "difference": "Stsenariy minus bazaviy",
+        "noMaterialDifference": "Ushbu stsenariyda bazaviy trayektoriyadan sezilarli farq yo'q."
       },
       "deltaVsBaseline": "{{delta}} bazaviyga nisbatan"
     },

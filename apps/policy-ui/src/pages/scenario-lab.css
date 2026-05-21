@@ -2036,6 +2036,17 @@
   overflow-wrap: anywhere;
 }
 
+.qpm-no-material-difference {
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  margin: 0;
+  padding: var(--space-md);
+}
+
 .scenario-main-chart__head {
   display: grid;
   gap: var(--space-xs);
@@ -2532,6 +2543,12 @@
 
 .scenario-impulse-grid .chart-renderer {
   min-width: 0;
+}
+
+@media (min-width: 761px) {
+  .scenario-impulse-grid .chart-renderer:nth-child(3):last-child {
+    grid-column: 1 / -1;
+  }
 }
 
 .scenario-impulse-grid .chart-renderer__header {

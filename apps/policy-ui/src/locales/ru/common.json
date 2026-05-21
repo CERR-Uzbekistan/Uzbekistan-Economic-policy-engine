@@ -994,7 +994,8 @@
         "period": "Конечный период",
         "baselineEnd": "База в конце",
         "scenarioEnd": "Сценарий в конце",
-        "difference": "Сценарий минус база"
+        "difference": "Сценарий минус база",
+        "noMaterialDifference": "Существенного отличия от базовой траектории в этом сценарии нет."
       },
       "deltaVsBaseline": "{{delta}} к базовому"
     },

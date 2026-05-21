@@ -21,6 +21,7 @@ import {
   Cell,
   ComposedChart,
   Legend,
+  LabelList,
   Line,
   ReferenceLine,
   Tooltip,
@@ -33,6 +34,10 @@ type ChartRendererProps = {
   spec: ChartSpec
   height?: number
   ariaLabel?: string
+  hideAttribution?: boolean
+  hideLegend?: boolean
+  hideTakeaway?: boolean
+  showEndLabels?: boolean
   showZeroLine?: boolean
 }
 
@@ -84,6 +89,24 @@ const NOWCAST_LINE_STYLES: Record<
 }
 
 function lineStyleForSeriesId(seriesId: string) {
+  if (seriesId === 'baseline_path') {
+    return {
+      strokeDasharray: '5 4',
+      showDots: false,
+      connectNulls: false,
+      strokeWidth: 1.8,
+      dotRadius: 0,
+    }
+  }
+  if (seriesId === 'scenario_path') {
+    return {
+      strokeDasharray: undefined,
+      showDots: false,
+      connectNulls: false,
+      strokeWidth: 2.6,
+      dotRadius: 0,
+    }
+  }
   return NOWCAST_LINE_STYLES[seriesId] ?? {
     strokeDasharray: undefined,
     showDots: false,
@@ -91,6 +114,16 @@ function lineStyleForSeriesId(seriesId: string) {
     strokeWidth: 2,
     dotRadius: 0,
   }
+}
+
+function colorForSeries(series: ChartSeries): string {
+  if (series.series_id === 'baseline_path') {
+    return 'var(--color-text-muted)'
+  }
+  if (series.series_id === 'scenario_path') {
+    return 'var(--color-brand)'
+  }
+  return colorForSemanticRole(series.semantic_role)
 }
 
 function isFiniteNumber(value: unknown): value is number {
@@ -101,8 +134,55 @@ function toSeriesMeta(spec: ChartSpec): SeriesMeta[] {
   return spec.series.map((series) => ({
     series,
     key: `series__${series.series_id}`,
-    color: colorForSemanticRole(series.semantic_role),
+    color: colorForSeries(series),
   }))
+}
+
+function collectFiniteValues(spec: ChartSpec): number[] {
+  return [
+    ...spec.series.flatMap((series) => series.values),
+    ...spec.uncertainty.flatMap((band) => [...band.lower, ...band.upper]),
+  ].filter(isFiniteNumber)
+}
+
+function niceCeil(value: number): number {
+  if (value <= 0 || !Number.isFinite(value)) {
+    return 0.5
+  }
+  const exponent = Math.floor(Math.log10(value))
+  const scale = 10 ** exponent
+  const normalized = value / scale
+  const nice = normalized <= 1 ? 1 : normalized <= 2 ? 2 : normalized <= 5 ? 5 : 10
+  return nice * scale
+}
+
+function roundTick(value: number): number {
+  return Number(value.toFixed(4))
+}
+
+function toSymmetricAxis(spec: ChartSpec): { domain: [number, number]; ticks: number[] } {
+  const maxAbs = Math.max(...collectFiniteValues(spec).map((value) => Math.abs(value)), 0)
+  const niceMax = niceCeil(maxAbs)
+  const half = niceMax / 2
+  return {
+    domain: [-niceMax, niceMax],
+    ticks: [-niceMax, -half, 0, half, niceMax].map(roundTick),
+  }
+}
+
+type EndLabelProps = {
+  index?: number
+  x?: number | string
+  y?: number | string
+}
+
+function getLastFiniteIndex(values: number[]): number {
+  for (let index = values.length - 1; index >= 0; index -= 1) {
+    if (isFiniteNumber(values[index])) {
+      return index
+    }
+  }
+  return -1
 }
 
 function hasUsableSeriesData(spec: ChartSpec): boolean {
@@ -200,6 +280,10 @@ export function ChartRenderer({
   spec,
   height = 280,
   ariaLabel,
+  hideAttribution = false,
+  hideLegend = false,
+  hideTakeaway = false,
+  showEndLabels = false,
   showZeroLine = false,
 }: ChartRendererProps): JSX.Element {
   const { i18n, t } = useTranslation()
@@ -255,15 +339,21 @@ export function ChartRenderer({
   const bandMeta = toBandMeta(localizedSpec)
   const data = buildChartData(localizedSpec, seriesMeta, bandMeta)
   const yUnit = localizedSpec.y.unit
-  const yDomain = toYAxisDomain(localizedSpec)
+  const symmetricAxis = showZeroLine ? toSymmetricAxis(localizedSpec) : null
+  const yDomain = symmetricAxis?.domain ?? toYAxisDomain(localizedSpec)
+  const yTicks = symmetricAxis?.ticks
   const screenReaderSummary = buildScreenReaderSummary(
     localizedSpec,
     t('chartRenderer.srFallback', { defaultValue: 'chart' }),
   )
   const hasIllustrativeBand = bandMeta.some((item) => item.band.is_illustrative)
   const suppressInternalLegend = localizedSpec.series.some((series) => series.series_id === 'gdp_nowcast_yoy')
+  const shouldRenderLegend = !hideLegend && !suppressInternalLegend && localizedSpec.series.length > 1
   const chartWidth = Math.max(measuredWidth, 1)
-  const chartMargin = { top: 10, right: 20, bottom: 8, left: 10 }
+  const chartMargin = showEndLabels
+    ? { top: 10, right: 84, bottom: 8, left: 10 }
+    : { top: 10, right: 22, bottom: 8, left: 10 }
+  const yAxisWidth = yUnit.includes('GDP') ? 112 : 78
 
   const commonChartChildren = (
     <>
@@ -284,7 +374,8 @@ export function ChartRenderer({
         axisLine={false}
         domain={yDomain}
         tickMargin={8}
-        width={74}
+        ticks={yTicks}
+        width={yAxisWidth}
         tick={Y_AXIS_TICK_STYLE}
         tickFormatter={(value) => {
           if (!isFiniteNumber(value)) {
@@ -315,7 +406,7 @@ export function ChartRenderer({
           fontSize: '0.82rem',
         }}
       />
-      {suppressInternalLegend ? null : (
+      {shouldRenderLegend ? (
         <Legend
           align="left"
           className="chart-renderer__legend"
@@ -323,14 +414,14 @@ export function ChartRenderer({
           verticalAlign="bottom"
           wrapperStyle={{ paddingTop: 10 }}
         />
-      )}
+      ) : null}
       {showZeroLine ? (
         <ReferenceLine
           ifOverflow="extendDomain"
           y={0}
-          stroke="var(--color-border-strong)"
-          strokeDasharray="4 4"
-          strokeWidth={1}
+          stroke="var(--color-text-muted)"
+          strokeDasharray="3 3"
+          strokeWidth={1.35}
         />
       ) : null}
     </>
@@ -396,6 +487,7 @@ export function ChartRenderer({
       {uncertaintyBands}
       {seriesMeta.map((item) => {
         const style = lineStyleForSeriesId(item.series.series_id)
+        const lastFiniteIndex = getLastFiniteIndex(item.series.values)
         return (
           <Line
             key={item.series.series_id}
@@ -412,7 +504,36 @@ export function ChartRenderer({
             strokeDasharray={style.strokeDasharray}
             strokeWidth={style.strokeWidth}
             type="linear"
-          />
+          >
+            {showEndLabels && lastFiniteIndex >= 0 ? (
+              <LabelList
+                content={(props: EndLabelProps) => {
+                  if (props.index !== lastFiniteIndex) {
+                    return null
+                  }
+                  const x = typeof props.x === 'number' ? props.x : Number(props.x)
+                  const y = typeof props.y === 'number' ? props.y : Number(props.y)
+                  const value = item.series.values[lastFiniteIndex]
+                  if (!Number.isFinite(x) || !Number.isFinite(y) || !isFiniteNumber(value)) {
+                    return null
+                  }
+                  return (
+                    <text
+                      dominantBaseline="middle"
+                      fill={item.color}
+                      fontFamily="var(--font-mono)"
+                      fontSize={11}
+                      fontWeight={700}
+                      x={x + 8}
+                      y={y}
+                    >
+                      {formatValueWithUnit(value, yUnit, locale, { maximumFractionDigits: 1 })}
+                    </text>
+                  )
+                }}
+              />
+            ) : null}
+          </Line>
         )
       })}
     </ComposedChart>
@@ -467,7 +588,7 @@ export function ChartRenderer({
           <h3 id={`chart-renderer-title-${localizedSpec.chart_id}`}>{localizedSpec.title}</h3>
           {localizedSpec.subtitle.trim() ? <p>{localizedSpec.subtitle}</p> : null}
         </div>
-        <AttributionBadge modelId={primaryModel} active />
+        {hideAttribution ? null : <AttributionBadge modelId={primaryModel} active />}
       </header>
 
       <div className="chart-renderer__body" role="img" aria-label={chartAriaLabel} ref={bodyRef}>
@@ -485,7 +606,7 @@ export function ChartRenderer({
         </p>
       ) : null}
 
-      {localizedSpec.takeaway.trim() ? (
+      {!hideTakeaway && localizedSpec.takeaway.trim() ? (
         <p className="chart-renderer__takeaway">
           <strong>{t('chartRenderer.takeawayLabel', { defaultValue: 'Takeaway.' })}</strong> {localizedSpec.takeaway}
         </p>

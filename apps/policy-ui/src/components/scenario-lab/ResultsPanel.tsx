@@ -158,6 +158,30 @@ function buildPathDelta(chart: ChartSpec) {
   }
 }
 
+function hasMaterialPathDifference(chart: ChartSpec): boolean {
+  const baseline = chart.series.find((series) => series.semantic_role === 'baseline')
+  const scenario =
+    chart.series.find((series) => series.series_id === 'scenario_path') ??
+    chart.series.find((series) => series.semantic_role !== 'baseline')
+
+  if (!baseline || !scenario) {
+    return true
+  }
+
+  const maxLength = Math.max(baseline.values.length, scenario.values.length)
+  for (let index = 0; index < maxLength; index += 1) {
+    const baselineValue = baseline.values[index]
+    const scenarioValue = scenario.values[index]
+    if (!isFiniteNumber(baselineValue) || !isFiniteNumber(scenarioValue)) {
+      continue
+    }
+    if (Math.abs(scenarioValue - baselineValue) >= 0.05) {
+      return true
+    }
+  }
+  return false
+}
+
 function ActiveShockSummary({ assumptions }: { assumptions: Assumption[] }) {
   const { i18n, t } = useTranslation()
   const locale = i18n.resolvedLanguage ?? i18n.language
@@ -191,6 +215,7 @@ function ScenarioTabChart({ chart, activeTab }: { chart: ChartSpec; activeTab: S
   const { i18n, t } = useTranslation()
   const locale = i18n.resolvedLanguage ?? i18n.language
   const pathDelta = buildPathDelta(chart)
+  const hasMaterialDifference = hasMaterialPathDifference(chart)
 
   return (
     <div className="scenario-main-chart">
@@ -218,7 +243,19 @@ function ScenarioTabChart({ chart, activeTab }: { chart: ChartSpec; activeTab: S
           </div>
         </dl>
       ) : null}
-      <ChartRenderer height={300} spec={chart} />
+      {hasMaterialDifference ? (
+        <ChartRenderer
+          height={300}
+          hideAttribution
+          hideTakeaway
+          showEndLabels
+          spec={chart}
+        />
+      ) : (
+        <p className="qpm-no-material-difference">
+          {t('scenarioLab.results.pathDeltas.noMaterialDifference')}
+        </p>
+      )}
     </div>
   )
 }

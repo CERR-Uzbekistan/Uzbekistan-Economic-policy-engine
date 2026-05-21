@@ -64,6 +64,9 @@ export function ImpulseResponseChart({ chart }: ImpulseResponseChartProps) {
             key={panelChart.chart_id}
             ariaLabel={panelChart.title}
             height={190}
+            hideAttribution
+            hideLegend
+            hideTakeaway
             showZeroLine
             spec={panelChart}
           />

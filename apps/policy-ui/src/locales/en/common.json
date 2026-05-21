@@ -994,7 +994,8 @@
         "period": "Endpoint",
         "baselineEnd": "Baseline endpoint",
         "scenarioEnd": "Scenario endpoint",
-        "difference": "Scenario minus baseline"
+        "difference": "Scenario minus baseline",
+        "noMaterialDifference": "No material difference from the baseline path under this scenario."
       },
       "deltaVsBaseline": "{{delta}} vs baseline"
     },

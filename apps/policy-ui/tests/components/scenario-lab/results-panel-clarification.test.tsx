@@ -83,6 +83,7 @@ async function createTestI18n() {
                 baselineEnd: 'Baseline endpoint',
                 scenarioEnd: 'Scenario endpoint',
                 difference: 'Scenario minus baseline',
+                noMaterialDifference: 'No material difference from baseline.',
               },
               deltaVsBaseline: '{{delta}} vs baseline',
             },
@@ -129,18 +130,18 @@ describe('ResultsPanel clarification copy', () => {
     assert.match(markup, /QPM reference result/)
     assert.match(markup, /Active shocks/)
     assert.match(markup, /Policy rate change/)
-    assert.match(markup, /QPM REFERENCE/)
     assert.match(markup, /Deviation from baseline; zero line marks no effect/)
     assert.match(markup, /QPM reference calculation: deviations from baseline over 12 quarters/)
     assert.match(markup, /deviates from the baseline across 12 quarters/)
     assert.match(markup, /0\.0 pp vs baseline/)
+    assert.doesNotMatch(markup, />QPM REFERENCE</)
     assert.doesNotMatch(markup, /QPM · FPP/)
     assert.doesNotMatch(markup, /Mock Scenario Lab/)
   })
 
   it('adds claim labels and explanations to table-like macro result tabs', async () => {
     const i18n = await createTestI18n()
-    const results = buildScenarioLabResults({})
+    const results = buildScenarioLabResults({ gov_spending_change: 1 })
     const markup = renderToStaticMarkup(
       <I18nextProvider i18n={i18n}>
         <ResultsPanel activeTab="macro_path" onTabChange={() => {}} results={results} />
@@ -151,6 +152,20 @@ describe('ResultsPanel clarification copy', () => {
     assert.match(markup, /scenario path next to the baseline path/)
     assert.match(markup, /Baseline endpoint/)
     assert.match(markup, /Scenario minus baseline/)
-    assert.match(markup, /Growth path reflects combined demand/)
+    assert.match(markup, /role="img"/)
+    assert.doesNotMatch(markup, /chart-renderer__takeaway/)
+  })
+
+  it('hides no-op path charts when the selected tab is unchanged from baseline', async () => {
+    const i18n = await createTestI18n()
+    const results = buildScenarioLabResults({})
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <ResultsPanel activeTab="external_balance" onTabChange={() => {}} results={results} />
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /No material difference from baseline/)
+    assert.doesNotMatch(markup, /Current account path/)
   })
 })
