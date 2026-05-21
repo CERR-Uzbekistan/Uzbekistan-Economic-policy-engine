@@ -28,7 +28,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { toYAxisDomain } from './chart-domain-utils.js'
+import { toYAxisScale } from './chart-domain-utils.js'
 
 type ChartRendererProps = {
   spec: ChartSpec
@@ -340,8 +340,9 @@ export function ChartRenderer({
   const data = buildChartData(localizedSpec, seriesMeta, bandMeta)
   const yUnit = localizedSpec.y.unit
   const symmetricAxis = showZeroLine ? toSymmetricAxis(localizedSpec) : null
-  const yDomain = symmetricAxis?.domain ?? toYAxisDomain(localizedSpec)
-  const yTicks = symmetricAxis?.ticks
+  const yAxisScale = symmetricAxis ?? toYAxisScale(localizedSpec)
+  const yDomain = yAxisScale.domain
+  const yTicks = yAxisScale.ticks
   const screenReaderSummary = buildScreenReaderSummary(
     localizedSpec,
     t('chartRenderer.srFallback', { defaultValue: 'chart' }),
@@ -499,6 +500,7 @@ export function ChartRenderer({
                 : false
             }
             isAnimationActive={false}
+            legendType="plainline"
             name={item.series.label}
             stroke={item.color}
             strokeDasharray={style.strokeDasharray}

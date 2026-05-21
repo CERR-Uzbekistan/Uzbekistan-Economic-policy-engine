@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { ChartRenderer } from '../../../src/components/system/ChartRenderer.js'
-import { toYAxisDomain } from '../../../src/components/system/chart-domain-utils.js'
+import { toYAxisDomain, toYAxisScale } from '../../../src/components/system/chart-domain-utils.js'
 import { toBandMeta } from '../../../src/components/system/chart-meta-utils.js'
 import type { ChartSpec } from '../../../src/contracts/data-contract.js'
 
@@ -150,6 +150,41 @@ describe('ChartRenderer', () => {
     assert.ok(domain[0] > 0)
     assert.ok(domain[0] < 5)
     assert.ok(domain[1] > 6)
+  })
+
+  it('uses compact rounded ticks for narrow QPM level-path comparisons', () => {
+    const scale = toYAxisScale({
+      ...chartSpecWithIllustrativeBand,
+      chart_id: 'qpm_macro_path',
+      y: {
+        label: 'GDP growth',
+        unit: '%',
+        values: [6, 6, 6, 6, 5.96, 5.83, 5.78, 5.82],
+      },
+      x: {
+        label: 'Period',
+        unit: '',
+        values: ['2026 Q3', '2026 Q4', '2027 Q1', '2027 Q2'],
+      },
+      series: [
+        {
+          series_id: 'baseline_path',
+          label: 'Baseline path',
+          semantic_role: 'baseline',
+          values: [6, 6, 6, 6],
+        },
+        {
+          series_id: 'scenario_path',
+          label: 'Scenario path',
+          semantic_role: 'alternative',
+          values: [5.96, 5.83, 5.78, 5.82],
+        },
+      ],
+      uncertainty: [],
+    })
+
+    assert.deepEqual(scale.domain, [5.7, 6.1])
+    assert.deepEqual(scale.ticks, [5.7, 5.8, 5.9, 6, 6.1])
   })
 
   it('uses a zero baseline for positive bar charts', () => {
