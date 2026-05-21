@@ -68,7 +68,7 @@ async function createTestI18n() {
                 headlineImpact:
                   'Shows how the selected scenario deviates from the baseline across 12 quarters; values are percentage-point deviations from the reference calculation.',
                 macroPath:
-                  'Shows the scenario path next to the baseline path so the table can be read as a comparison, not a raw dump.',
+                  'Shows the scenario effect as scenario minus baseline. Endpoint cards keep the level comparison.',
                 externalBalance:
                   'Shows the external-balance scenario path under the current assumptions, with units kept in percent of GDP.',
                 fiscalEffects:
@@ -76,9 +76,21 @@ async function createTestI18n() {
               },
               claimLabels: {
                 headlineImpact: 'Scenario impulse response',
-                macroPath: 'Scenario path vs baseline',
+                macroPath: 'Scenario effect vs baseline',
                 externalBalance: 'External-balance scenario path',
                 fiscalEffects: 'Fiscal scenario accounting',
+              },
+              effectChart: {
+                title: '{{metric}} effect vs baseline',
+                subtitle: 'Scenario minus baseline; zero line means no scenario effect.',
+                yLabel: 'Scenario minus baseline',
+                series: 'Scenario effect',
+                takeaway: 'Read this as the scenario effect over time, not as a standalone forecast level.',
+                metrics: {
+                  macro_path: 'GDP growth',
+                  external_balance: 'Current account',
+                  fiscal_effects: 'Fiscal balance',
+                },
               },
               baselineSource: {
                 ariaLabel: 'QPM starting point',
@@ -173,10 +185,12 @@ describe('ResultsPanel clarification copy', () => {
       </I18nextProvider>,
     )
 
-    assert.match(markup, /Scenario path vs baseline/)
-    assert.match(markup, /scenario path next to the baseline path/)
+    assert.match(markup, /Scenario effect vs baseline/)
+    assert.match(markup, /scenario effect as scenario minus baseline/)
     assert.match(markup, /Baseline endpoint/)
     assert.match(markup, /Scenario minus baseline/)
+    assert.match(markup, /GDP growth effect vs baseline/)
+    assert.match(markup, /zero line means no scenario effect/)
     assert.match(markup, /role="img"/)
     assert.doesNotMatch(markup, /chart-renderer__takeaway/)
   })

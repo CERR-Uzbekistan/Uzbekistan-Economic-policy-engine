@@ -975,19 +975,31 @@
         "lead": "If “{{scenarioName}}” is applied, the QPM result is shown first as the change versus baseline.",
         "note": "The baseline path is anchored to the latest Overview snapshot. Scenario values add QPM shock effects around that baseline. External and fiscal tabs are accounting views."
       },
-      "explanations": {
-        "headlineImpact": "Shows how the selected scenario deviates from the baseline across 12 quarters; values are percentage-point deviations from the canonical QPM calculation.",
-        "macroPath": "Shows the scenario path next to the baseline path so the table can be read as a comparison, not a raw dump.",
-        "externalBalance": "Shows a current-account accounting/proxy view around the QPM path; it is not an endogenous QPM external-sector block.",
-        "fiscalEffects": "Shows fiscal accounting under proxy assumptions; it is not an endogenous QPM fiscal block."
-      },
-      "claimLabels": {
-        "headlineImpact": "Scenario impulse response",
-        "macroPath": "Scenario path vs baseline",
-        "externalBalance": "Current-account proxy view",
-        "fiscalEffects": "Fiscal accounting/proxy view"
-      },
-      "baselineSource": {
+        "explanations": {
+          "headlineImpact": "Shows how the selected scenario deviates from the baseline across 12 quarters; values are percentage-point deviations from the canonical QPM calculation.",
+          "macroPath": "Shows the scenario effect as scenario minus baseline. Endpoint cards keep the level comparison.",
+          "externalBalance": "Shows the current-account effect as scenario minus baseline. This is an accounting/proxy view, not an endogenous QPM external-sector block.",
+          "fiscalEffects": "Shows the fiscal effect as scenario minus baseline. This is an accounting/proxy view, not an endogenous QPM fiscal block."
+        },
+        "claimLabels": {
+          "headlineImpact": "Scenario impulse response",
+          "macroPath": "Scenario effect vs baseline",
+          "externalBalance": "Current-account effect vs baseline",
+          "fiscalEffects": "Fiscal effect vs baseline"
+        },
+        "effectChart": {
+          "title": "{{metric}} effect vs baseline",
+          "subtitle": "Scenario minus baseline; zero line means no scenario effect.",
+          "yLabel": "Scenario minus baseline",
+          "series": "Scenario effect",
+          "takeaway": "Read this as the scenario effect over time, not as a standalone forecast level.",
+          "metrics": {
+            "macro_path": "GDP growth",
+            "external_balance": "Current account",
+            "fiscal_effects": "Fiscal balance"
+          }
+        },
+        "baselineSource": {
         "ariaLabel": "QPM starting point",
         "eyebrow": "Starting point",
         "title": "Latest Overview snapshot",

@@ -975,19 +975,31 @@
         "lead": "“{{scenarioName}}” qo'llansa, QPM avval bazaviy stsenariyga nisbatan o'zgarishni ko'rsatadi.",
         "note": "Bazaviy trayektoriya so'nggi Overview kesimiga bog'langan. Stsenariy qiymatlari shu bazaga QPM shok effektlarini qo'shadi. Tashqi va fiskal bo'limlar hisob-kitob ko'rinishlaridir."
       },
-      "explanations": {
-        "headlineImpact": "Tanlangan stsenariy 12 chorak davomida bazaviydan qanday og'ishini ko'rsatadi; qiymatlar kanonik QPM hisobidan foiz punktlaridagi og'ishlardir.",
-        "macroPath": "Jadval xom chiqish emas, taqqoslash sifatida o'qilishi uchun stsenariy trayektoriyasini bazaviy trayektoriya yonida ko'rsatadi.",
-        "externalBalance": "QPM trayektoriyasi atrofidagi joriy hisob proksi/hisob-kitob ko'rinishini ko'rsatadi; bu endogen QPM tashqi sektor bloki emas.",
-        "fiscalEffects": "Proksi taxminlar asosidagi fiskal hisob-kitobni ko'rsatadi; bu endogen QPM fiskal bloki emas."
-      },
-      "claimLabels": {
-        "headlineImpact": "Stsenariy impuls responsi",
-        "macroPath": "Stsenariy trayektoriyasi bazaviyga nisbatan",
-        "externalBalance": "Joriy hisob proksi ko'rinishi",
-        "fiscalEffects": "Fiskal hisob/proksi ko'rinishi"
-      },
-      "baselineSource": {
+        "explanations": {
+          "headlineImpact": "Tanlangan stsenariy 12 chorak davomida bazaviydan qanday og'ishini ko'rsatadi; qiymatlar kanonik QPM hisobidan foiz punktlaridagi og'ishlardir.",
+          "macroPath": "Stsenariy effektini stsenariy minus bazaviy sifatida ko'rsatadi. Yakuniy nuqta kartalari daraja taqqoslashini saqlaydi.",
+          "externalBalance": "Joriy hisob effektini stsenariy minus bazaviy sifatida ko'rsatadi. Bu hisob/proksi ko'rinish, endogen QPM tashqi sektor bloki emas.",
+          "fiscalEffects": "Fiskal effektni stsenariy minus bazaviy sifatida ko'rsatadi. Bu hisob/proksi ko'rinish, endogen QPM fiskal bloki emas."
+        },
+        "claimLabels": {
+          "headlineImpact": "Stsenariy impuls responsi",
+          "macroPath": "Stsenariy effekti bazaviyga nisbatan",
+          "externalBalance": "Joriy hisob effekti bazaviyga nisbatan",
+          "fiscalEffects": "Fiskal effekt bazaviyga nisbatan"
+        },
+        "effectChart": {
+          "title": "{{metric}} effekti bazaviyga nisbatan",
+          "subtitle": "Stsenariy minus bazaviy; nol chiziq stsenariy effekti yo'qligini bildiradi.",
+          "yLabel": "Stsenariy minus bazaviy",
+          "series": "Stsenariy effekti",
+          "takeaway": "Buni mustaqil daraja prognozi emas, vaqt bo'yicha stsenariy effekti sifatida o'qing.",
+          "metrics": {
+            "macro_path": "YAIM o'sishi",
+            "external_balance": "Joriy hisob",
+            "fiscal_effects": "Fiskal balans"
+          }
+        },
+        "baselineSource": {
         "ariaLabel": "QPM boshlang'ich nuqtasi",
         "eyebrow": "Boshlang'ich nuqta",
         "title": "So'nggi Overview kesimi",

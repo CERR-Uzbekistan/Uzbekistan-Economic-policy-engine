@@ -144,7 +144,12 @@ function terminalValue(values: number[]): { value: number; index: number } | nul
   return null
 }
 
-function buildPathDelta(chart: ChartSpec) {
+function roundChartValue(value: number, decimals = 3): number {
+  const factor = 10 ** decimals
+  return Math.round(value * factor) / factor
+}
+
+function getPathSeries(chart: ChartSpec) {
   const baseline = chart.series.find((series) => series.semantic_role === 'baseline')
   const scenario =
     chart.series.find((series) => series.series_id === 'scenario_path') ??
@@ -153,6 +158,16 @@ function buildPathDelta(chart: ChartSpec) {
   if (!baseline || !scenario) {
     return null
   }
+
+  return { baseline, scenario }
+}
+
+function buildPathDelta(chart: ChartSpec) {
+  const pathSeries = getPathSeries(chart)
+  if (!pathSeries) {
+    return null
+  }
+  const { baseline, scenario } = pathSeries
 
   const baselineTerminal = terminalValue(baseline.values)
   const scenarioTerminal = terminalValue(scenario.values)
@@ -177,14 +192,11 @@ function buildPathDelta(chart: ChartSpec) {
 }
 
 function hasMaterialPathDifference(chart: ChartSpec): boolean {
-  const baseline = chart.series.find((series) => series.semantic_role === 'baseline')
-  const scenario =
-    chart.series.find((series) => series.series_id === 'scenario_path') ??
-    chart.series.find((series) => series.semantic_role !== 'baseline')
-
-  if (!baseline || !scenario) {
+  const pathSeries = getPathSeries(chart)
+  if (!pathSeries) {
     return true
   }
+  const { baseline, scenario } = pathSeries
 
   const maxLength = Math.max(baseline.values.length, scenario.values.length)
   for (let index = 0; index < maxLength; index += 1) {
@@ -198,6 +210,71 @@ function hasMaterialPathDifference(chart: ChartSpec): boolean {
     }
   }
   return false
+}
+
+function buildDeviationChart(
+  chart: ChartSpec,
+  activeTab: ScenarioLabResultTab,
+  t: ReturnType<typeof useTranslation>['t'],
+): ChartSpec | null {
+  const pathSeries = getPathSeries(chart)
+  if (!pathSeries) {
+    return null
+  }
+
+  const { baseline, scenario } = pathSeries
+  const values = chart.x.values.map((_, index) => {
+    const baselineValue = baseline.values[index]
+    const scenarioValue = scenario.values[index]
+    if (!isFiniteNumber(baselineValue) || !isFiniteNumber(scenarioValue)) {
+      return Number.NaN
+    }
+    return roundChartValue(scenarioValue - baselineValue)
+  })
+  if (!values.some(isFiniteNumber)) {
+    return null
+  }
+
+  const metric = t(`scenarioLab.results.effectChart.metrics.${activeTab}`, {
+    defaultValue: chart.title || chart.y.label,
+  })
+  const unit = chart.y.unit === '%' || chart.y.unit === '% GDP' ? 'pp' : chart.y.unit
+
+  return {
+    ...chart,
+    chart_id: `${chart.chart_id}_deviation`,
+    subtitle: t('scenarioLab.results.effectChart.subtitle', {
+      defaultValue: 'Scenario minus baseline; zero line means no scenario effect.',
+    }),
+    takeaway:
+      chart.takeaway.trim() ||
+      t('scenarioLab.results.effectChart.takeaway', {
+        defaultValue: 'Read this as the scenario effect over time, not as a standalone forecast level.',
+      }),
+    title: t('scenarioLab.results.effectChart.title', {
+      defaultValue: '{{metric}} effect vs baseline',
+      metric,
+    }),
+    view_mode: 'delta',
+    y: {
+      ...chart.y,
+      label: t('scenarioLab.results.effectChart.yLabel', {
+        defaultValue: 'Scenario minus baseline',
+      }),
+      unit,
+      values,
+    },
+    series: [
+      {
+        label: t('scenarioLab.results.effectChart.series', {
+          defaultValue: 'Scenario effect',
+        }),
+        semantic_role: 'alternative',
+        series_id: 'scenario_delta',
+        values,
+      },
+    ],
+  }
 }
 
 function ActiveShockSummary({ assumptions }: { assumptions: Assumption[] }) {
@@ -277,6 +354,7 @@ function ScenarioTabChart({ chart, activeTab }: { chart: ChartSpec; activeTab: S
   const locale = i18n.resolvedLanguage ?? i18n.language
   const pathDelta = buildPathDelta(chart)
   const hasMaterialDifference = hasMaterialPathDifference(chart)
+  const deviationChart = buildDeviationChart(chart, activeTab, t)
 
   return (
     <div className="scenario-main-chart">
@@ -304,13 +382,14 @@ function ScenarioTabChart({ chart, activeTab }: { chart: ChartSpec; activeTab: S
           </div>
         </dl>
       ) : null}
-      {hasMaterialDifference ? (
+      {hasMaterialDifference && deviationChart ? (
         <ChartRenderer
           height={300}
           hideAttribution
           hideTakeaway
           showEndLabels
-          spec={chart}
+          showZeroLine
+          spec={deviationChart}
         />
       ) : (
         <p className="qpm-no-material-difference">
