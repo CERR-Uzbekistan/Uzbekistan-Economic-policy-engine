@@ -3,7 +3,7 @@
     "model_id": "QPM",
     "model_name": "Quarterly Projection Model (Uzbekistan)",
     "module": "qpm",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "run_id": "qpm-nightly-2026-05-21",
     "data_version": "Overview 2026-05-21",
     "timestamp": "2026-05-21T08:09:42Z"
@@ -174,7 +174,7 @@
     {
       "scenario_id": "baseline",
       "scenario_name": "Baseline",
-      "description": "All shocks zero; economy follows the baseline path from Overview artifact baseline initial conditions toward steady state.",
+      "description": "All shocks zero; economy follows the Overview-anchored QPM baseline path.",
       "horizon_quarters": 8,
       "periods": [
         "2026 Q3",
@@ -188,34 +188,34 @@
       ],
       "paths": {
         "gdp_growth": [
-          4.192,
-          3.3311,
-          3.2547,
-          3.7274,
-          4.4958,
-          5.3336,
-          6.0701,
-          6.6025
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
         ],
         "inflation": [
-          6.2037,
-          4.7139,
-          2.9542,
-          1.2066,
-          0.57,
-          0.8523,
-          1.755,
-          2.9546
+          7.1,
+          6.95,
+          6.8,
+          6.65,
+          6.5,
+          6.35,
+          6.2,
+          6.05
         ],
         "policy_rate": [
-          10.6184,
-          7.6957,
-          5.6304,
-          4.5571,
-          4.3991,
-          4.9409,
-          5.9047,
-          7.0152
+          14,
+          13.75,
+          13.5,
+          13.25,
+          13,
+          12.75,
+          12.5,
+          12.25
         ],
         "exchange_rate": [
           12076.2,
@@ -254,34 +254,34 @@
       ],
       "paths": {
         "gdp_growth": [
-          4.3581,
-          3.5762,
-          3.5089,
-          3.942,
-          4.6446,
-          5.4097,
-          6.0814,
-          6.5658
+          6.1661,
+          6.2451,
+          6.2542,
+          6.2146,
+          6.1488,
+          6.0761,
+          6.0113,
+          5.9633
         ],
         "inflation": [
-          6.2648,
-          4.8767,
-          3.2356,
-          1.6018,
-          0.9977,
-          1.2428,
-          2.0606,
-          3.153
+          7.1611,
+          7.1128,
+          7.0814,
+          7.0452,
+          6.9277,
+          6.7405,
+          6.5056,
+          6.2484
         ],
         "policy_rate": [
-          9.8447,
-          7.3133,
-          5.5327,
-          4.6347,
-          4.5551,
-          5.1009,
-          6.0211,
-          7.0661
+          13.2263,
+          13.3676,
+          13.4023,
+          13.3276,
+          13.156,
+          12.91,
+          12.6164,
+          12.3009
         ],
         "exchange_rate": [
           12116.8,
@@ -320,34 +320,34 @@
       ],
       "paths": {
         "gdp_growth": [
-          4.026,
-          3.0859,
-          3.0005,
-          3.5127,
-          4.3471,
-          5.2576,
-          6.0589,
-          6.6391
+          5.834,
+          5.7548,
+          5.7458,
+          5.7853,
+          5.8513,
+          5.924,
+          5.9888,
+          6.0366
         ],
         "inflation": [
-          6.1426,
-          4.5511,
-          2.6729,
-          0.8113,
-          0.1422,
-          0.4619,
-          1.4494,
-          2.7562
+          7.0389,
+          6.7872,
+          6.5187,
+          6.2547,
+          6.0722,
+          5.9596,
+          5.8944,
+          5.8516
         ],
         "policy_rate": [
-          11.3921,
-          8.0782,
-          5.7281,
-          4.4795,
-          4.2431,
-          4.781,
-          5.7883,
-          6.9644
+          14.7737,
+          14.1325,
+          13.5977,
+          13.1724,
+          12.844,
+          12.5901,
+          12.3836,
+          12.1992
         ],
         "exchange_rate": [
           12035.7,
@@ -386,34 +386,34 @@
       ],
       "paths": {
         "gdp_growth": [
-          5.4385,
-          4.9263,
-          4.6052,
-          4.5224,
-          4.6553,
-          4.9408,
-          5.3008,
-          5.6618
+          7.2465,
+          7.5952,
+          7.3505,
+          6.795,
+          6.1595,
+          5.6072,
+          5.2307,
+          5.0593
         ],
         "inflation": [
-          7.3106,
-          7.0547,
-          6.4304,
-          5.5656,
-          4.3798,
-          3.6606,
-          3.3885,
-          3.4778
+          8.2069,
+          9.2908,
+          10.2762,
+          11.009,
+          10.3098,
+          9.1583,
+          7.8335,
+          6.5732
         ],
         "policy_rate": [
-          12.8731,
-          11.4098,
-          9.9331,
-          8.6819,
-          7.7934,
-          7.3076,
-          7.1871,
-          7.3445
+          16.2547,
+          17.4641,
+          17.8027,
+          17.3748,
+          16.3943,
+          15.1167,
+          13.7824,
+          12.5793
         ],
         "exchange_rate": [
           13678.3,
@@ -452,34 +452,34 @@
       ],
       "paths": {
         "gdp_growth": [
-          4.0412,
-          3.1224,
-          3.044,
-          3.5444,
-          4.3526,
-          5.2307,
-          6.0014,
-          6.559
+          5.8492,
+          5.7913,
+          5.7893,
+          5.817,
+          5.8568,
+          5.8971,
+          5.9313,
+          5.9565
         ],
         "inflation": [
-          6.1944,
-          4.6892,
-          2.9133,
-          1.1534,
-          0.521,
-          0.8218,
-          1.7507,
-          2.9776
+          7.0907,
+          6.9253,
+          6.7591,
+          6.5968,
+          6.451,
+          6.3195,
+          6.1957,
+          6.073
         ],
         "policy_rate": [
-          10.5763,
-          7.6191,
-          5.537,
-          4.4669,
-          4.3286,
-          4.9001,
-          5.8963,
-          7.036
+          13.9579,
+          13.6734,
+          13.4066,
+          13.1598,
+          12.9295,
+          12.7092,
+          12.4916,
+          12.2708
         ],
         "exchange_rate": [
           12080.6,
@@ -573,7 +573,7 @@
     {
       "caveat_id": "qpm-baseline-source",
       "severity": "info",
-      "message": "Baseline initial conditions are taken from the latest valid Overview artifact when available; deterministic Q1 2026 fallback values are used only if that artifact is missing or invalid.",
+      "message": "Baseline levels are anchored to the latest valid Overview artifact when available; deterministic Q1 2026 fallback values are used only if that artifact is missing or invalid.",
       "affected_metrics": [
         "gdp_growth",
         "inflation",
@@ -602,8 +602,8 @@
     },
     {
       "caveat_id": "qpm-baseline-transition-overshoot",
-      "severity": "warning",
-      "message": "The dynamic baseline is a model transition from current Overview conditions, not an official forecast. With high policy-rate and exchange-rate inputs, calibrated QPM disinflation can move below target during the transition; interpret this as a calibration caveat until historical fit/backtest work is complete.",
+      "severity": "info",
+      "message": "Displayed scenario levels are the Overview-anchored baseline plus QPM shock deviations. This keeps the baseline near the accepted forecast path while preserving canonical QPM transmission effects.",
       "affected_metrics": [
         "inflation",
         "policy_rate",
@@ -616,16 +616,16 @@
     }
   ],
   "metadata": {
-    "exported_at": "2026-05-21T09:33:40Z",
+    "exported_at": "2026-05-21T12:00:00Z",
     "source_script_sha": null,
-    "solver_version": "0.2.0",
+    "solver_version": "0.3.0",
     "baseline_source": {
       "source": "overview-artifact",
       "source_artifact": "apps/policy-ui/public/data/overview.json",
       "exported_at": "2026-05-21T08:09:42Z",
       "data_version": "Overview 2026-05-21",
       "status_label": "Overview artifact baseline",
-      "note": "QPM initial conditions use the latest approved Overview artifact where mapped. Warning-status trade metrics are retained as context but are not allowed to mechanically drive the baseline external-demand gap.",
+      "note": "Scenario Lab anchors the visible QPM baseline path to the latest approved Overview values where mapped, then applies QPM shock deviations around that path. Warning-status trade metrics are retained as context but are not allowed to mechanically drive the baseline external-demand gap.",
       "metrics": [
         {
           "metric_id": "cpi_yoy",

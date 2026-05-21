@@ -18,6 +18,8 @@ Public parameters are exported in `apps/policy-ui/public/data/qpm.json`: `b1-b4`
 
 The checked-in public QPM artifact and Scenario Lab solver use the latest valid Overview artifact where possible. Mapped inputs are CPI inflation, CBU policy rate, GDP nowcast or latest quarterly GDP state, and USD/UZS level and movement. Exports growth is retained in baseline metadata as external-demand context, but warning-status trade metrics are not allowed to mechanically drive the baseline external-demand gap. If the Overview artifact is missing or invalid, QPM falls back deterministically to the old Q1 2026 initial conditions.
 
+Solver 0.3.0 separates the displayed baseline path from the raw QPM steady-state transition. The visible level path is anchored to the accepted Overview/nowcast baseline and then QPM shock deviations are added around that path. This keeps Scenario Lab results comparable with the current forecasting view while preserving QPM transmission signs and impulse responses.
+
 The first displayed QPM period is the first projection quarter after the Overview baseline quarter. For example, if the current Overview nowcast is 2026 Q2, the QPM path starts at 2026 Q3.
 
 ## Source Data
@@ -38,4 +40,4 @@ Current automated checks require:
 
 QPM v1 does not include fiscal reaction, CGE structure, full external-sector balance, banking-sector balance sheets, or formally estimated parameter uncertainty. Fiscal and current-account panels in Scenario Lab are proxy/accounting views around QPM paths, not endogenous QPM blocks.
 
-Historical fit/backtest data are not yet sufficient for Uzbekistan-specific forecast-accuracy claims. Production use requires owner review of steady states, pass-through priors, risk-premium treatment, baseline transition behavior, and proxy mappings.
+Historical fit/backtest data are not yet sufficient for Uzbekistan-specific forecast-accuracy claims. Production use requires owner review of steady states, pass-through priors, risk-premium treatment, the anchored baseline rule, and proxy mappings.

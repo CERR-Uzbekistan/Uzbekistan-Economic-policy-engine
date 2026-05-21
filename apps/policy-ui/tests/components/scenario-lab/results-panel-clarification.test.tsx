@@ -61,7 +61,8 @@ async function createTestI18n() {
                 periodUnavailable: 'the final quarter',
                 lead:
                   'If “{{scenarioName}}” is applied, the QPM result is shown first as the change versus baseline.',
-                note: 'GDP, inflation, and policy rate use QPM equations.',
+                note:
+                  'The baseline path is anchored to the latest Overview snapshot. Scenario values add QPM shock effects around that baseline.',
               },
               explanations: {
                 headlineImpact:
@@ -83,34 +84,11 @@ async function createTestI18n() {
                 ariaLabel: 'QPM starting point',
                 eyebrow: 'Starting point',
                 title: 'Latest Overview snapshot',
-                summary: 'The scenario starts from these latest Overview values.',
+                summary: 'Baseline path uses the latest Overview snapshot.',
                 details: 'Source and context details',
                 artifact: 'Source file',
                 exportedAt: 'Exported',
                 contextOnly: 'context only',
-              },
-              calculation: {
-                ariaLabel: 'How QPM scenario results are calculated',
-                lead:
-                  'Where the result comes from: QPM combines the starting point, the selected shock, and the model equations.',
-                start: 'Start',
-                shock: 'Shock',
-                model: 'Model',
-                output: 'Output',
-                noShock: 'No active shock',
-                unknownSource: 'Latest available snapshot',
-                qpmModel: 'QPM scenario model',
-              },
-              bridge: {
-                ariaLabel: 'Current indicators to QPM scenario endpoint',
-                eyebrow: 'Current values are not the result',
-                title: "Why the result can differ from today's indicators",
-                body:
-                  'The Overview snapshot sets the starting conditions. QPM then projects a baseline path and compares the selected scenario against that baseline endpoint.',
-                start: 'Start · {{period}}',
-                baseline: 'Baseline endpoint',
-                scenario: 'Scenario endpoint',
-                effect: 'Effect',
               },
               pathDeltas: {
                 period: 'Endpoint',
@@ -166,14 +144,15 @@ describe('ResultsPanel clarification copy', () => {
     assert.match(markup, /Effect by 2027 Q2/)
     assert.match(markup, /Starting point/)
     assert.match(markup, /Latest Overview snapshot/)
-    assert.match(markup, /Where the result comes from/)
     assert.match(markup, /Overview 2026-05-21/)
-    assert.match(markup, /Policy rate change \+1\.0 pp/)
-    assert.match(markup, /Quarterly Projection Model \(Uzbekistan\)/)
+    assert.match(markup, /Policy rate change/)
+    assert.match(markup, /\+1\.0 pp/)
     assert.match(markup, /Effect vs baseline/)
-    assert.match(markup, /Why the result can differ from today&#x27;s indicators/)
-    assert.match(markup, /Current values are not the result/)
+    assert.match(markup, /baseline path is anchored to the latest Overview snapshot/i)
     assert.match(markup, /Scenario .*baseline/)
+    assert.doesNotMatch(markup, /Why the result can differ from today&#x27;s indicators/)
+    assert.doesNotMatch(markup, /Current values are not the result/)
+    assert.doesNotMatch(markup, /Where the result comes from/)
     assert.match(markup, /Active shocks/)
     assert.match(markup, /Policy rate change/)
     assert.match(markup, /Deviation from baseline; zero line marks no effect/)

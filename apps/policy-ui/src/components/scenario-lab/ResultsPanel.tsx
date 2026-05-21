@@ -48,24 +48,6 @@ const CLAIM_LABEL_KEYS: Record<ScenarioLabResultTab, string> = {
 }
 
 const QPM_DECISION_METRIC_ORDER = ['gdp_growth', 'inflation', 'policy_rate'] as const
-const QPM_BASELINE_PRIMARY_METRICS = new Set([
-  'cpi_yoy',
-  'policy_rate',
-  'gdp_nowcast_current_quarter',
-  'real_gdp_growth_quarter_yoy',
-  'usd_uzs_level',
-])
-const QPM_BASELINE_CONTEXT_METRICS = new Set([
-  'exports_yoy',
-  'imports_yoy',
-  'trade_balance',
-  'reer_level',
-])
-const QPM_START_METRIC_BY_DECISION_METRIC: Record<string, string[]> = {
-  gdp_growth: ['gdp_nowcast_current_quarter', 'real_gdp_growth_quarter_yoy'],
-  inflation: ['cpi_yoy'],
-  policy_rate: ['policy_rate'],
-}
 
 function formatMetricLevelValue(value: number | null, unit: string, locale: string | undefined) {
   if (value === null) {
@@ -132,26 +114,6 @@ function getActiveAssumptions(assumptions: Assumption[]): Assumption[] {
   return assumptions.filter(
     (assumption) => isFiniteNumber(assumption.value) && Math.abs(assumption.value) > 0.0001,
   )
-}
-
-function formatActiveShockList(
-  assumptions: Assumption[],
-  t: ReturnType<typeof useTranslation>['t'],
-  locale: string | undefined,
-): string {
-  const activeAssumptions = getActiveAssumptions(assumptions)
-  if (activeAssumptions.length === 0) {
-    return t('scenarioLab.results.calculation.noShock', { defaultValue: 'No active shock' })
-  }
-  return activeAssumptions
-    .map((assumption) =>
-      `${assumptionLabel(assumption, t)} ${formatAssumptionShock(
-        assumption.value as number,
-        assumption.unit,
-        locale,
-      )}`,
-    )
-    .join('; ')
 }
 
 function formatSourceDate(value: string, locale: string | undefined): string {
@@ -274,24 +236,28 @@ function BaselineSourceSummary({ results }: { results: ScenarioLabResultsBundle 
     return null
   }
 
-  const primaryMetrics = source.metrics.filter((metric) =>
-    QPM_BASELINE_PRIMARY_METRICS.has(metric.metric_id),
-  )
-  const detailMetrics = source.metrics.filter(
-    (metric) => !QPM_BASELINE_PRIMARY_METRICS.has(metric.metric_id),
-  )
-
   return (
-    <section className="qpm-baseline-source" aria-label={t('scenarioLab.results.baselineSource.ariaLabel')}>
-      <div className="qpm-baseline-source__head">
+    <details className="qpm-baseline-source" aria-label={t('scenarioLab.results.baselineSource.ariaLabel')}>
+      <summary className="qpm-baseline-source__head">
         <span>{t('scenarioLab.results.baselineSource.eyebrow')}</span>
         <strong>{t('scenarioLab.results.baselineSource.title')}</strong>
         <small>{source.data_version}</small>
-      </div>
+      </summary>
       <p>{t('scenarioLab.results.baselineSource.summary')}</p>
-      {primaryMetrics.length > 0 ? (
-        <ul className="qpm-baseline-source__primary">
-          {primaryMetrics.map((metric) => (
+      <dl>
+        <div>
+          <dt>{t('scenarioLab.results.baselineSource.artifact')}</dt>
+          <dd>{source.source_artifact}</dd>
+        </div>
+        <div>
+          <dt>{t('scenarioLab.results.baselineSource.exportedAt')}</dt>
+          <dd>{formatSourceDate(source.exported_at, locale)}</dd>
+        </div>
+      </dl>
+      <p>{source.note}</p>
+      {source.metrics.length > 0 ? (
+        <ul className="qpm-baseline-source__secondary">
+          {source.metrics.map((metric) => (
             <li key={metric.metric_id}>
               <span>{metric.label}</span>
               <strong>{formatValueWithUnit(metric.value, metric.unit, locale)}</strong>
@@ -302,205 +268,7 @@ function BaselineSourceSummary({ results }: { results: ScenarioLabResultsBundle 
           ))}
         </ul>
       ) : null}
-      <details className="qpm-baseline-source__details">
-        <summary>{t('scenarioLab.results.baselineSource.details')}</summary>
-        <dl>
-          <div>
-            <dt>{t('scenarioLab.results.baselineSource.artifact')}</dt>
-            <dd>{source.source_artifact}</dd>
-          </div>
-          <div>
-            <dt>{t('scenarioLab.results.baselineSource.exportedAt')}</dt>
-            <dd>{formatSourceDate(source.exported_at, locale)}</dd>
-          </div>
-        </dl>
-        <p>{source.note}</p>
-        {detailMetrics.length > 0 ? (
-          <ul className="qpm-baseline-source__secondary">
-            {detailMetrics.map((metric) => {
-              const isContextOnly = QPM_BASELINE_CONTEXT_METRICS.has(metric.metric_id)
-              return (
-                <li key={metric.metric_id}>
-                  <span>{metric.label}</span>
-                  <strong>{formatValueWithUnit(metric.value, metric.unit, locale)}</strong>
-                  <small>
-                    {metric.source_period} · {metric.source_label}
-                    {isContextOnly
-                      ? ` · ${t('scenarioLab.results.baselineSource.contextOnly')}`
-                      : ''}
-                  </small>
-                </li>
-              )
-            })}
-          </ul>
-        ) : null}
-      </details>
-    </section>
-  )
-}
-
-type StartComparisonRow = {
-  baseline: number | null
-  delta: number | null
-  label: string
-  metricId: string
-  scenario: number
-  sourcePeriod: string
-  start: number
-  unit: string
-}
-
-function buildStartComparisonRows(
-  results: ScenarioLabResultsBundle,
-  decisionMetrics: HeadlineMetric[],
-): StartComparisonRow[] {
-  const sourceMetrics = results.baseline_source?.metrics ?? []
-  return decisionMetrics
-    .map((metric) => {
-      const startMetricIds = QPM_START_METRIC_BY_DECISION_METRIC[metric.metric_id] ?? []
-      const sourceMetric = sourceMetrics.find((candidate) =>
-        startMetricIds.includes(candidate.metric_id),
-      )
-      if (!sourceMetric) {
-        return null
-      }
-      return {
-        baseline: metric.baseline_value,
-        delta: metric.delta_abs,
-        label: metric.label,
-        metricId: metric.metric_id,
-        scenario: metric.value,
-        sourcePeriod: sourceMetric.source_period,
-        start: sourceMetric.value,
-        unit: metric.unit,
-      }
-    })
-    .filter((row): row is StartComparisonRow => Boolean(row))
-}
-
-function CalculationTrail({
-  activeAssumptions,
-  decisionPeriod,
-  modelLabel,
-  sourceLabel,
-}: {
-  activeAssumptions: Assumption[]
-  decisionPeriod: string
-  modelLabel: string
-  sourceLabel: string
-}) {
-  const { i18n, t } = useTranslation()
-  const locale = i18n.resolvedLanguage ?? i18n.language
-  const shockText = formatActiveShockList(activeAssumptions, t, locale)
-
-  return (
-    <div
-      className="qpm-calculation-trail"
-      aria-label={t('scenarioLab.results.calculation.ariaLabel', {
-        defaultValue: 'How QPM scenario results are calculated',
-      })}
-    >
-      <p>
-        {t('scenarioLab.results.calculation.lead', {
-          defaultValue:
-            'Where the result comes from: QPM combines the starting point, the selected shock, and the model equations. The numbers below are calculated scenario outputs, not copied directly from Overview.',
-        })}
-      </p>
-      <ol>
-        <li>
-          <span>{t('scenarioLab.results.calculation.start', { defaultValue: 'Start' })}</span>
-          <strong>{sourceLabel}</strong>
-        </li>
-        <li>
-          <span>{t('scenarioLab.results.calculation.shock', { defaultValue: 'Shock' })}</span>
-          <strong>{shockText}</strong>
-        </li>
-        <li>
-          <span>{t('scenarioLab.results.calculation.model', { defaultValue: 'Model' })}</span>
-          <strong>{modelLabel}</strong>
-        </li>
-        <li>
-          <span>{t('scenarioLab.results.calculation.output', { defaultValue: 'Output' })}</span>
-          <strong>{decisionPeriod}</strong>
-        </li>
-      </ol>
-    </div>
-  )
-}
-
-function QpmResultBridge({
-  decisionMetrics,
-  results,
-}: {
-  decisionMetrics: HeadlineMetric[]
-  results: ScenarioLabResultsBundle
-}) {
-  const { i18n, t } = useTranslation()
-  const locale = i18n.resolvedLanguage ?? i18n.language
-  const rows = buildStartComparisonRows(results, decisionMetrics)
-
-  if (rows.length === 0) {
-    return null
-  }
-
-  return (
-    <section
-      className="qpm-result-bridge"
-      aria-label={t('scenarioLab.results.bridge.ariaLabel', {
-        defaultValue: 'Current indicators to QPM scenario endpoint',
-      })}
-    >
-      <div>
-        <span>
-          {t('scenarioLab.results.bridge.eyebrow', {
-            defaultValue: 'Current values are not the result',
-          })}
-        </span>
-        <h4>
-          {t('scenarioLab.results.bridge.title', {
-            defaultValue: "Why the result can differ from today's indicators",
-          })}
-        </h4>
-        <p>
-          {t('scenarioLab.results.bridge.body', {
-            defaultValue:
-              'The Overview snapshot sets the starting conditions. QPM then projects a baseline path and compares the selected scenario against that baseline endpoint.',
-          })}
-        </p>
-      </div>
-      <dl>
-        {rows.map((row) => (
-          <div key={row.metricId}>
-            <dt>
-              {t(`scenarioLab.results.metrics.${row.metricId}`, {
-                defaultValue: row.label,
-              })}
-            </dt>
-            <dd>
-              <span>
-                {t('scenarioLab.results.bridge.start', {
-                  defaultValue: 'Start · {{period}}',
-                  period: row.sourcePeriod,
-                })}
-              </span>
-              <strong>{formatMetricLevelValue(row.start, row.unit, locale)}</strong>
-            </dd>
-            <dd>
-              <span>{t('scenarioLab.results.bridge.baseline', { defaultValue: 'Baseline endpoint' })}</span>
-              <strong>{formatMetricLevelValue(row.baseline, row.unit, locale)}</strong>
-            </dd>
-            <dd>
-              <span>{t('scenarioLab.results.bridge.scenario', { defaultValue: 'Scenario endpoint' })}</span>
-              <strong>{formatMetricLevelValue(row.scenario, row.unit, locale)}</strong>
-            </dd>
-            <dd>
-              <span>{t('scenarioLab.results.bridge.effect', { defaultValue: 'Effect' })}</span>
-              <strong>{formatDeltaWithUnit(row.delta, row.unit, locale)}</strong>
-            </dd>
-          </div>
-        ))}
-      </dl>
-    </section>
+    </details>
   )
 }
 
@@ -564,8 +332,6 @@ export function ResultsPanel({
   const { i18n, t } = useTranslation()
   const locale = i18n.resolvedLanguage ?? i18n.language
   const activeChart = results.charts_by_tab[activeTab]
-  const modelAttribution =
-    results.impulse_response_chart?.model_attribution[0] ?? activeChart.model_attribution[0]
   const decisionMetrics = QPM_DECISION_METRIC_ORDER.map((metricId) =>
     results.headline_metrics.find((metric) => metric.metric_id === metricId),
   ).filter((metric): metric is HeadlineMetric => Boolean(metric))
@@ -573,16 +339,6 @@ export function ResultsPanel({
   const decisionPeriod =
     decisionMetrics.find((metric) => metric.period)?.period ??
     t('scenarioLab.results.decision.periodUnavailable')
-  const calculationSourceLabel =
-    results.baseline_source?.data_version ??
-    t('scenarioLab.results.calculation.unknownSource', {
-      defaultValue: 'Latest available snapshot',
-    })
-  const calculationModelLabel =
-    modelAttribution?.model_name ??
-    t('scenarioLab.results.calculation.qpmModel', {
-      defaultValue: 'QPM scenario model',
-    })
 
   const showImpulseResponse = activeTab === 'headline_impact' && results.impulse_response_chart
 
@@ -622,7 +378,7 @@ export function ResultsPanel({
       </div>
 
       <ActiveShockSummary assumptions={activeAssumptions} />
-      <BaselineSourceSummary results={results} />
+        <BaselineSourceSummary results={results} />
 
       <div className="qpm-decision-view">
         <div className="qpm-decision-view__head">
@@ -634,12 +390,6 @@ export function ResultsPanel({
             })}
           </p>
         </div>
-        <CalculationTrail
-          activeAssumptions={activeAssumptions}
-          decisionPeriod={decisionPeriod}
-          modelLabel={calculationModelLabel}
-          sourceLabel={calculationSourceLabel}
-        />
         <dl className="qpm-decision-view__metrics">
           {decisionMetrics.map((metric) => {
             const deltaText = formatDeltaWithUnit(metric.delta_abs, metric.unit, locale)
@@ -665,7 +415,6 @@ export function ResultsPanel({
             )
           })}
         </dl>
-        <QpmResultBridge decisionMetrics={decisionMetrics} results={results} />
         <p className="qpm-decision-view__note">{t('scenarioLab.results.decision.note')}</p>
       </div>
 

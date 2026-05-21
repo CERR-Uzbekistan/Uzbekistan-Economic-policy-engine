@@ -152,7 +152,7 @@ function buildOverviewBaseline(artifact: OverviewArtifact): QpmBaselineLevels | 
       data_version: `Overview ${toDateLabel(artifact.exported_at)}`,
       status_label: 'Overview artifact baseline',
       note:
-        'QPM initial conditions use the latest approved Overview artifact where mapped. Warning-status trade metrics are retained as context but are not allowed to mechanically drive the baseline external-demand gap.',
+        'Scenario Lab anchors the visible QPM baseline path to the latest approved Overview values where mapped, then applies QPM shock deviations around that path. Warning-status trade metrics are retained as context but are not allowed to mechanically drive the baseline external-demand gap.',
       metrics,
     },
   }

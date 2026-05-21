@@ -2,7 +2,7 @@
 
 **Source:** `scripts/export_qpm.R` → `apps/policy-ui/public/data/qpm.json`
 **Status:** Option B (nightly static JSON) — TB-P2 adopted 2026-04-20
-**Version:** solver 0.2.0, data from QPM attribution
+**Version:** solver 0.3.0, data from QPM attribution
 
 See also: `docs/data-bridge/qpm-v1-validation-note.md` for the QPM v1 validation/model note.
 
@@ -16,9 +16,9 @@ pages to replace the illustrative mock with real solver output.
 ```
 {
   attribution: ModelAttribution,
-  parameters:  ParameterDescriptor[],  // 7 entries
+  parameters:  ParameterDescriptor[],  // canonical calibration parameters
   scenarios:   QpmScenario[],          // 5 entries
-  caveats:     Caveat[],               // 6 entries (severity info/warning)
+  caveats:     Caveat[],               // severity info/warning
   metadata:    { exported_at, source_script_sha, solver_version, baseline_source? }
 }
 ```
@@ -62,6 +62,10 @@ re-scale on the consumer side.
 - **Baseline source metadata is additive.** QPM v1 can derive initial
   conditions from the latest approved Overview artifact; if it is
   missing or invalid, the deterministic Q1 2026 fallback remains.
+- **Displayed baseline levels are anchored.** Solver 0.3.0 keeps the
+  visible baseline path near the accepted Overview/nowcast baseline and
+  adds QPM shock deviations around that path. The raw steady-state
+  transition is not shown as the baseline forecast.
 
 ## Freshness
 

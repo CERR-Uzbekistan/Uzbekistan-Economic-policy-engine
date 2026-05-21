@@ -9,7 +9,7 @@ export const QPM_SCENARIO_ATTRIBUTION: ModelAttribution = {
   model_id: 'qpm-canonical-solver',
   model_name: 'Quarterly Projection Model (Uzbekistan)',
   module: 'qpm',
-  version: '0.2.0',
+  version: '0.3.0',
   run_id: 'scenario-lab-qpm-canonical',
   data_version: '2026Q1',
   timestamp: '2026-05-21T00:00:00+05:00',
@@ -302,6 +302,52 @@ function levelPaths(
   }
 }
 
+function anchoredBaselinePath(
+  raw: QpmRawSolution,
+  baselineExchangeRate: number[],
+  baselineLevels = QPM_FALLBACK_BASELINE,
+): QpmLevelPaths {
+  const periods = quarterLabels(
+    baselineLevels.startYear,
+    baselineLevels.startQuarter,
+    raw.gap.length,
+  )
+  const inflationFloor = Math.max(
+    DEFAULT_PARAMS.inflationTarget + 0.75,
+    baselineLevels.inflation - 1.5,
+  )
+  const policyRateFloor = Math.max(
+    DEFAULT_PARAMS.neutralRealRate + DEFAULT_PARAMS.inflationTarget + 2.5,
+    baselineLevels.policyRate - 3,
+  )
+
+  return {
+    periods,
+    gdpGrowth: raw.gap.map((_, index) => {
+      const outputGapDecay = Math.max(0, 1 - 0.08 * index)
+      return roundTo(DEFAULT_PARAMS.potentialGrowth + baselineLevels.outputGap * outputGapDecay)
+    }),
+    inflation: raw.pi4.map((_, index) =>
+      roundTo(Math.max(inflationFloor, baselineLevels.inflation - 0.15 * index)),
+    ),
+    policyRate: raw.rs.map((_, index) =>
+      roundTo(Math.max(policyRateFloor, baselineLevels.policyRate - 0.25 * index)),
+    ),
+    exchangeRate: baselineExchangeRate.map((value) => roundTo(value, 1)),
+  }
+}
+
+function applyReferenceDeviation(
+  anchoredBaseline: number[],
+  scenarioReference: number[],
+  baselineReference: number[],
+  decimals = 4,
+): number[] {
+  return anchoredBaseline.map((baselineValue, index) =>
+    roundTo(baselineValue + scenarioReference[index] - baselineReference[index], decimals),
+  )
+}
+
 function deltas(path: number[], baseline: number[]): number[] {
   return path.map((value, index) => roundTo(value - baseline[index]))
 }
@@ -337,20 +383,45 @@ export function solveScenarioLabQpm(
     baselineRaw,
     baselineLevels.exchangeRateBase,
   )
-  const baseline = levelPaths(
+  const baselineReference = levelPaths(
     baselineRaw,
     baselineRaw,
     baselineExchangeRate,
     baselineLevels.startYear,
     baselineLevels.startQuarter,
   )
-  const scenario = levelPaths(
+  const scenarioReference = levelPaths(
     scenarioRaw,
     baselineRaw,
     baselineExchangeRate,
     baselineLevels.startYear,
     baselineLevels.startQuarter,
   )
+  const baseline = anchoredBaselinePath(baselineRaw, baselineExchangeRate, baselineLevels)
+  const scenario = {
+    periods: baseline.periods,
+    gdpGrowth: applyReferenceDeviation(
+      baseline.gdpGrowth,
+      scenarioReference.gdpGrowth,
+      baselineReference.gdpGrowth,
+    ),
+    inflation: applyReferenceDeviation(
+      baseline.inflation,
+      scenarioReference.inflation,
+      baselineReference.inflation,
+    ),
+    policyRate: applyReferenceDeviation(
+      baseline.policyRate,
+      scenarioReference.policyRate,
+      baselineReference.policyRate,
+    ),
+    exchangeRate: applyReferenceDeviation(
+      baseline.exchangeRate,
+      scenarioReference.exchangeRate,
+      baselineReference.exchangeRate,
+      1,
+    ),
+  }
 
   return {
     attribution: qpmAttributionForBaseline(baselineLevels.metadata),

@@ -46,7 +46,7 @@ BASELINE_INIT_LEVELS <- list(
 # Used to convert YoY log depreciation (d4l_s) to a displayable level path.
 EXCHANGE_RATE_BASE_UZS_PER_USD <- 12650
 
-SOLVER_VERSION <- "0.2.0"
+SOLVER_VERSION <- "0.3.0"
 DATA_VERSION   <- "2026Q1"
 OVERVIEW_ARTIFACT_PATH <- "apps/policy-ui/public/data/overview.json"
 
@@ -172,7 +172,7 @@ resolve_qpm_baseline <- function(path = OVERVIEW_ARTIFACT_PATH, calib = CALIBRAT
       exported_at = exported_at,
       data_version = paste("Overview", date_label(exported_at)),
       status_label = "Overview artifact baseline",
-      note = "QPM initial conditions use the latest approved Overview artifact where mapped. Warning-status trade metrics are retained as context but are not allowed to mechanically drive the baseline external-demand gap.",
+      note = "Scenario Lab anchors the visible QPM baseline path to the latest approved Overview values where mapped, then applies QPM shock deviations around that path. Warning-status trade metrics are retained as context but are not allowed to mechanically drive the baseline external-demand gap.",
       metrics = metrics
     )
   )
@@ -473,11 +473,8 @@ baseline_er_reference <- function(baseline_sol, calib, er_base) {
   er
 }
 
-# Convert solver outputs (deviation form, percent) to LEVEL paths appropriate
-# for the frontend contract. The Q0 level difference between a shocked scenario
-# and baseline is recovered from the solver's `s` log-level variable, so an
-# exchange-rate shock applied at Q0 shows up as a same-quarter UZS jump.
-paths_from_solver <- function(sol, baseline_sol, baseline_er, calib) {
+# Convert solver outputs (deviation form, percent) to reference LEVEL paths.
+reference_paths_from_solver <- function(sol, baseline_sol, baseline_er, calib) {
   tar     <- calib$tar
   neutral <- calib$rrbar + calib$tar
   gdpbar  <- calib$gdpbar
@@ -496,6 +493,50 @@ paths_from_solver <- function(sol, baseline_sol, baseline_er, calib) {
     inflation     = round(inflation,   4),
     policy_rate   = round(policy_rate, 4),
     exchange_rate = round(er,          1)
+  )
+}
+
+anchored_baseline_paths <- function(baseline_sol, baseline_er, calib, baseline_levels) {
+  n <- length(baseline_sol$gap)
+  start_inflation <- baseline_levels$pi
+  start_policy_rate <- baseline_levels$rs
+  output_gap <- baseline_levels$gap
+  inflation_floor <- max(calib$tar + 0.75, start_inflation - 1.5)
+  policy_floor <- max(calib$rrbar + calib$tar + 2.5, start_policy_rate - 3)
+
+  gdp_growth <- vapply(seq_len(n), function(i) {
+    output_gap_decay <- max(0, 1 - 0.08 * (i - 1))
+    calib$gdpbar + output_gap * output_gap_decay
+  }, numeric(1))
+  inflation <- vapply(seq_len(n), function(i) {
+    max(inflation_floor, start_inflation - 0.15 * (i - 1))
+  }, numeric(1))
+  policy_rate <- vapply(seq_len(n), function(i) {
+    max(policy_floor, start_policy_rate - 0.25 * (i - 1))
+  }, numeric(1))
+
+  list(
+    gdp_growth    = round(gdp_growth, 4),
+    inflation     = round(inflation, 4),
+    policy_rate   = round(policy_rate, 4),
+    exchange_rate = round(baseline_er, 1)
+  )
+}
+
+paths_from_solver <- function(sol, baseline_sol, baseline_er, calib, baseline_levels) {
+  baseline_reference <- reference_paths_from_solver(baseline_sol, baseline_sol, baseline_er, calib)
+  scenario_reference <- reference_paths_from_solver(sol, baseline_sol, baseline_er, calib)
+  anchored_baseline <- anchored_baseline_paths(baseline_sol, baseline_er, calib, baseline_levels)
+
+  list(
+    gdp_growth = round(anchored_baseline$gdp_growth +
+                         scenario_reference$gdp_growth - baseline_reference$gdp_growth, 4),
+    inflation = round(anchored_baseline$inflation +
+                        scenario_reference$inflation - baseline_reference$inflation, 4),
+    policy_rate = round(anchored_baseline$policy_rate +
+                          scenario_reference$policy_rate - baseline_reference$policy_rate, 4),
+    exchange_rate = round(anchored_baseline$exchange_rate +
+                            scenario_reference$exchange_rate - baseline_reference$exchange_rate, 1)
   )
 }
 
@@ -538,7 +579,7 @@ build_scenario <- function(scenario_id, scenario_name, description,
     T          = horizon - 1L,
     init_conds = init_dev
   )
-  paths <- paths_from_solver(sol, baseline_sol, baseline_er, calib)
+  paths <- paths_from_solver(sol, baseline_sol, baseline_er, calib, baseline_levels)
 
   list(
     scenario_id       = scenario_id,
@@ -569,7 +610,7 @@ build_scenarios <- function(calib = CALIBRATION, horizon = 8L, baseline = resolv
     list(
       scenario_id    = "baseline",
       scenario_name  = "Baseline",
-      description    = paste0("All shocks zero; economy follows the baseline path from ", baseline$metadata$status_label, " initial conditions toward steady state."),
+      description    = paste0("All shocks zero; economy follows the Overview-anchored QPM baseline path from ", baseline$metadata$status_label, "."),
       shock_type     = NULL, shock_size = 0,
       shocks_applied = zero_shocks
     ),
@@ -671,15 +712,15 @@ build_caveats <- function() {
     list(
       caveat_id        = "qpm-baseline-source",
       severity         = "info",
-      message          = "Baseline initial conditions are taken from the latest valid Overview artifact when available; deterministic Q1 2026 fallback values are used only if that artifact is missing or invalid.",
+      message          = "Baseline levels are anchored to the latest valid Overview artifact when available; deterministic Q1 2026 fallback values are used only if that artifact is missing or invalid.",
       affected_metrics = I(c("gdp_growth", "inflation", "policy_rate", "exchange_rate")),
       affected_models  = I(c("QPM")),
       source           = "apps/policy-ui/public/data/overview.json"
     ),
     list(
       caveat_id        = "qpm-baseline-transition-overshoot",
-      severity         = "warning",
-      message          = "The dynamic baseline is a model transition from current Overview conditions, not an official forecast. With high policy-rate and exchange-rate inputs, calibrated QPM disinflation can move below target during the transition; interpret this as a calibration caveat until historical fit/backtest work is complete.",
+      severity         = "info",
+      message          = "Displayed scenario levels are the Overview-anchored baseline plus QPM shock deviations. This keeps the baseline near the accepted forecast path while preserving canonical QPM transmission effects.",
       affected_metrics = I(c("inflation", "policy_rate", "gdp_growth")),
       affected_models  = I(c("QPM")),
       source           = "QPM v1 readiness validation note"

@@ -69,13 +69,23 @@ describe('Scenario Lab canonical QPM solver', () => {
     const qpmRun = solveScenarioLabQpm(applyPresetToState('exchange-rate-shock'), 8)
 
     assert.equal(results.headline_metrics[0].model_attribution[0].model_id, 'qpm-canonical-solver')
-    assertClosePath(macroChart.series[0].values, [4.1921, 3.3311, 3.2547, 3.7275])
-    assertClosePath(macroChart.series[1].values, [5.4385, 4.9263, 4.6052, 4.5223])
+    assertClosePath(macroChart.series[0].values, [6, 6, 6, 6])
+    assertClosePath(macroChart.series[1].values, [7.2464, 7.5952, 7.3505, 6.7948])
     assert.ok(impulseChart)
     assert.deepEqual(impulseChart.series[1].values.slice(0, 4), [1.11, 2.34, 3.48, 4.36])
     assert.equal(qpmRun.scenario.periods[0], '2026 Q3')
     assert.equal(results.baseline_source?.source, 'overview-artifact')
     assert.equal(results.baseline_source?.metrics.some((metric) => metric.metric_id === 'cpi_yoy'), true)
+  })
+
+  it('anchors visible baseline levels to the current Overview snapshot instead of raw steady-state transition', () => {
+    const run = solveScenarioLabQpm({}, 8)
+
+    assertClosePath(run.baseline.gdpGrowth.slice(0, 4), [6, 6, 6, 6])
+    assertClosePath(run.baseline.inflation.slice(0, 4), [7.1, 6.95, 6.8, 6.65])
+    assertClosePath(run.baseline.policyRate.slice(0, 4), [14, 13.75, 13.5, 13.25])
+    assert.ok(run.baseline.inflation[3] > 6)
+    assert.ok(run.baseline.policyRate[3] > 12)
   })
 
   it('keeps risk-premium shock signs consistent with depreciation stress', () => {
