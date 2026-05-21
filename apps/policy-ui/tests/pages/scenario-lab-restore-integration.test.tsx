@@ -107,11 +107,12 @@ async function createTestI18n() {
               qpmReferenceBadge: 'QPM reference',
               headlineMetricsAria: 'Headline macro indicators',
               decision: {
-                eyebrow: 'Decision view',
-                title: 'QPM reference result',
+                eyebrow: 'Scenario result',
+                title: 'Scenario result by {{period}}',
                 currentScenario: 'current scenario',
-                lead: 'If “{{scenarioName}}” is applied, the reference calculation shows:',
-                note: 'Custom sliders are approximation mode.',
+                periodUnavailable: 'the final quarter',
+                lead: 'If “{{scenarioName}}” is applied, the QPM result is:',
+                note: 'GDP, inflation, and policy rate use QPM equations.',
               },
               explanations: {
                 headlineImpact: 'Headline path.',

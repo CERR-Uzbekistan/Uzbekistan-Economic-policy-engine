@@ -968,11 +968,12 @@
         "policy_rate": "Policy rate"
       },
       "decision": {
-        "eyebrow": "Decision view",
-        "title": "Canonical QPM result",
+        "eyebrow": "Scenario result",
+        "title": "Scenario result by {{period}}",
         "currentScenario": "current scenario",
-        "lead": "If “{{scenarioName}}” is applied, the canonical QPM calculation shows:",
-        "note": "The Macro / QPM tab uses the same QPM equations as the published QPM data. External and fiscal balance panels remain accounting views."
+        "periodUnavailable": "the final quarter",
+        "lead": "If “{{scenarioName}}” is applied, the QPM result is:",
+        "note": "GDP, inflation, and policy rate use QPM equations. External and fiscal tabs are accounting views."
       },
       "explanations": {
         "headlineImpact": "Shows how the selected scenario deviates from the baseline across 12 quarters; values are percentage-point deviations from the canonical QPM calculation.",
@@ -987,9 +988,14 @@
         "fiscalEffects": "Fiscal accounting/proxy view"
       },
       "baselineSource": {
-        "ariaLabel": "QPM baseline source metadata",
+        "ariaLabel": "QPM starting point",
+        "eyebrow": "Starting point",
+        "title": "Latest Overview snapshot",
+        "summary": "The scenario starts from these latest Overview values. Source and context details are kept below.",
+        "details": "Source and context details",
         "artifact": "Source file",
-        "exportedAt": "Exported"
+        "exportedAt": "Exported",
+        "contextOnly": "context only"
       },
       "activeShocks": {
         "ariaLabel": "Active QPM shock assumptions",

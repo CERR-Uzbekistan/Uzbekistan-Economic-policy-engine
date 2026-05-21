@@ -968,11 +968,12 @@
         "policy_rate": "Stavka"
       },
       "decision": {
-        "eyebrow": "Qaror ko'rinishi",
-        "title": "Kanonik QPM natijasi",
+        "eyebrow": "Stsenariy natijasi",
+        "title": "{{period}} uchun stsenariy natijasi",
         "currentScenario": "joriy stsenariy",
-        "lead": "“{{scenarioName}}” qo'llansa, kanonik QPM hisobi quyidagini ko'rsatadi:",
-        "note": "Macro / QPM bo'limi e'lon qilingan QPM ma'lumotlari bilan bir xil QPM tenglamalaridan foydalanadi. Tashqi va fiskal balans panellari hisob-kitob ko'rinishlari bo'lib qoladi."
+        "periodUnavailable": "yakuniy chorak",
+        "lead": "“{{scenarioName}}” qo'llansa, QPM natijasi:",
+        "note": "YaIM, inflyatsiya va stavka QPM tenglamalari bilan hisoblanadi. Tashqi va fiskal bo'limlar hisob-kitob ko'rinishlaridir."
       },
       "explanations": {
         "headlineImpact": "Tanlangan stsenariy 12 chorak davomida bazaviydan qanday og'ishini ko'rsatadi; qiymatlar kanonik QPM hisobidan foiz punktlaridagi og'ishlardir.",
@@ -987,9 +988,14 @@
         "fiscalEffects": "Fiskal hisob/proksi ko'rinishi"
       },
       "baselineSource": {
-        "ariaLabel": "QPM bazaviy manba metama'lumotlari",
+        "ariaLabel": "QPM boshlang'ich nuqtasi",
+        "eyebrow": "Boshlang'ich nuqta",
+        "title": "So'nggi Overview kesimi",
+        "summary": "Stsenariy shu so'nggi Overview qiymatlaridan boshlanadi. Manba va kontekst tafsilotlari quyida.",
+        "details": "Manba va kontekst",
         "artifact": "Manba fayli",
-        "exportedAt": "Eksport qilingan"
+        "exportedAt": "Eksport qilingan",
+        "contextOnly": "faqat kontekst"
       },
       "activeShocks": {
         "ariaLabel": "Faol QPM shok taxminlari",

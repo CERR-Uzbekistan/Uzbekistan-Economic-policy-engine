@@ -1986,7 +1986,7 @@
 }
 
 .qpm-baseline-source__head span {
-  background: var(--color-surface-muted);
+  background: transparent;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   color: var(--color-text-muted);
@@ -2001,6 +2001,11 @@
   color: var(--color-text);
   font-family: var(--font-mono);
   font-size: 0.8rem;
+}
+
+.qpm-baseline-source__head small {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
 }
 
 .qpm-baseline-source p,
@@ -2018,6 +2023,10 @@
   gap: var(--space-xs);
   margin: 0;
   padding: 0;
+}
+
+.qpm-baseline-source__primary {
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
 }
 
 .qpm-baseline-source dl {
@@ -2045,6 +2054,27 @@
   color: var(--color-text);
   font-size: 0.82rem;
   font-weight: 650;
+}
+
+.qpm-baseline-source__details {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-xs);
+}
+
+.qpm-baseline-source__details summary {
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+.qpm-baseline-source__details[open] {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.qpm-baseline-source__secondary li {
+  background: transparent;
 }
 
 .scenario-main-chart {

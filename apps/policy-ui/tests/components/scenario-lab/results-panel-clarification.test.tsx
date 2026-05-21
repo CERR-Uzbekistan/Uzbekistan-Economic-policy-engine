@@ -55,12 +55,12 @@ async function createTestI18n() {
                 none: 'No active shocks.',
               },
               decision: {
-                eyebrow: 'Decision view',
-                title: 'QPM reference result',
+                eyebrow: 'Scenario result',
+                title: 'Scenario result by {{period}}',
                 currentScenario: 'current scenario',
-                lead: 'If “{{scenarioName}}” is applied, the reference calculation shows:',
-                note:
-                  'Custom sliders are approximation mode until the live QPM solver is connected to this tab.',
+                periodUnavailable: 'the final quarter',
+                lead: 'If “{{scenarioName}}” is applied, the QPM result is:',
+                note: 'GDP, inflation, and policy rate use QPM equations.',
               },
               explanations: {
                 headlineImpact:
@@ -77,6 +77,16 @@ async function createTestI18n() {
                 macroPath: 'Scenario path vs baseline',
                 externalBalance: 'External-balance scenario path',
                 fiscalEffects: 'Fiscal scenario accounting',
+              },
+              baselineSource: {
+                ariaLabel: 'QPM starting point',
+                eyebrow: 'Starting point',
+                title: 'Latest Overview snapshot',
+                summary: 'The scenario starts from these latest Overview values.',
+                details: 'Source and context details',
+                artifact: 'Source file',
+                exportedAt: 'Exported',
+                contextOnly: 'context only',
               },
               pathDeltas: {
                 period: 'Endpoint',
@@ -127,7 +137,9 @@ describe('ResultsPanel clarification copy', () => {
     )
 
     assert.match(markup, /Scenario impulse response/)
-    assert.match(markup, /QPM reference result/)
+    assert.match(markup, /Scenario result by 2027 Q2/)
+    assert.match(markup, /Starting point/)
+    assert.match(markup, /Latest Overview snapshot/)
     assert.match(markup, /Active shocks/)
     assert.match(markup, /Policy rate change/)
     assert.match(markup, /Deviation from baseline; zero line marks no effect/)

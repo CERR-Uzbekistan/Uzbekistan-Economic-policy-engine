@@ -49,6 +49,19 @@ const CLAIM_LABEL_KEYS: Record<ScenarioLabResultTab, string> = {
 }
 
 const QPM_DECISION_METRIC_ORDER = ['gdp_growth', 'inflation', 'policy_rate'] as const
+const QPM_BASELINE_PRIMARY_METRICS = new Set([
+  'cpi_yoy',
+  'policy_rate',
+  'gdp_nowcast_current_quarter',
+  'real_gdp_growth_quarter_yoy',
+  'usd_uzs_level',
+])
+const QPM_BASELINE_CONTEXT_METRICS = new Set([
+  'exports_yoy',
+  'imports_yoy',
+  'trade_balance',
+  'reer_level',
+])
 
 function formatMetricValue(metric: HeadlineMetric, locale: string | undefined) {
   return formatNumber(metric.value, locale, {
@@ -108,6 +121,18 @@ function formatAssumptionShock(value: number, unit: string, locale: string | und
   })
   const unitLabel = formatAxisUnitLabel(unit, locale)
   return unitLabel ? `${signed} ${unitLabel}` : signed
+}
+
+function formatSourceDate(value: string, locale: string | undefined): string {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) {
+    return value
+  }
+  return date.toLocaleDateString(locale, {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  })
 }
 
 function assumptionLabel(assumption: Assumption, t: ReturnType<typeof useTranslation>['t']) {
@@ -220,26 +245,24 @@ function BaselineSourceSummary({ results }: { results: ScenarioLabResultsBundle 
     return null
   }
 
+  const primaryMetrics = source.metrics.filter((metric) =>
+    QPM_BASELINE_PRIMARY_METRICS.has(metric.metric_id),
+  )
+  const detailMetrics = source.metrics.filter(
+    (metric) => !QPM_BASELINE_PRIMARY_METRICS.has(metric.metric_id),
+  )
+
   return (
     <section className="qpm-baseline-source" aria-label={t('scenarioLab.results.baselineSource.ariaLabel')}>
       <div className="qpm-baseline-source__head">
-        <span>{source.status_label}</span>
-        <strong>{source.data_version}</strong>
+        <span>{t('scenarioLab.results.baselineSource.eyebrow')}</span>
+        <strong>{t('scenarioLab.results.baselineSource.title')}</strong>
+        <small>{source.data_version}</small>
       </div>
-      <p>{source.note}</p>
-      <dl>
-        <div>
-          <dt>{t('scenarioLab.results.baselineSource.artifact')}</dt>
-          <dd>{source.source_artifact}</dd>
-        </div>
-        <div>
-          <dt>{t('scenarioLab.results.baselineSource.exportedAt')}</dt>
-          <dd>{source.exported_at}</dd>
-        </div>
-      </dl>
-      {source.metrics.length > 0 ? (
-        <ul>
-          {source.metrics.map((metric) => (
+      <p>{t('scenarioLab.results.baselineSource.summary')}</p>
+      {primaryMetrics.length > 0 ? (
+        <ul className="qpm-baseline-source__primary">
+          {primaryMetrics.map((metric) => (
             <li key={metric.metric_id}>
               <span>{metric.label}</span>
               <strong>{formatValueWithUnit(metric.value, metric.unit, locale)}</strong>
@@ -250,6 +273,39 @@ function BaselineSourceSummary({ results }: { results: ScenarioLabResultsBundle 
           ))}
         </ul>
       ) : null}
+      <details className="qpm-baseline-source__details">
+        <summary>{t('scenarioLab.results.baselineSource.details')}</summary>
+        <dl>
+          <div>
+            <dt>{t('scenarioLab.results.baselineSource.artifact')}</dt>
+            <dd>{source.source_artifact}</dd>
+          </div>
+          <div>
+            <dt>{t('scenarioLab.results.baselineSource.exportedAt')}</dt>
+            <dd>{formatSourceDate(source.exported_at, locale)}</dd>
+          </div>
+        </dl>
+        <p>{source.note}</p>
+        {detailMetrics.length > 0 ? (
+          <ul className="qpm-baseline-source__secondary">
+            {detailMetrics.map((metric) => {
+              const isContextOnly = QPM_BASELINE_CONTEXT_METRICS.has(metric.metric_id)
+              return (
+                <li key={metric.metric_id}>
+                  <span>{metric.label}</span>
+                  <strong>{formatValueWithUnit(metric.value, metric.unit, locale)}</strong>
+                  <small>
+                    {metric.source_period} · {metric.source_label}
+                    {isContextOnly
+                      ? ` · ${t('scenarioLab.results.baselineSource.contextOnly')}`
+                      : ''}
+                  </small>
+                </li>
+              )
+            })}
+          </ul>
+        ) : null}
+      </details>
     </section>
   )
 }
@@ -318,6 +374,9 @@ export function ResultsPanel({
     results.headline_metrics.find((metric) => metric.metric_id === metricId),
   ).filter((metric): metric is HeadlineMetric => Boolean(metric))
   const decisionScenarioName = localizedPresetName(selectedPresetId, scenarioName, t)
+  const decisionPeriod =
+    decisionMetrics.find((metric) => metric.period)?.period ??
+    t('scenarioLab.results.decision.periodUnavailable')
 
   const showImpulseResponse = activeTab === 'headline_impact' && results.impulse_response_chart
 
@@ -362,7 +421,7 @@ export function ResultsPanel({
       <div className="qpm-decision-view">
         <div className="qpm-decision-view__head">
           <span>{t('scenarioLab.results.decision.eyebrow')}</span>
-          <h3>{t('scenarioLab.results.decision.title')}</h3>
+          <h3>{t('scenarioLab.results.decision.title', { period: decisionPeriod })}</h3>
           <p>
             {t('scenarioLab.results.decision.lead', {
               scenarioName: decisionScenarioName,
