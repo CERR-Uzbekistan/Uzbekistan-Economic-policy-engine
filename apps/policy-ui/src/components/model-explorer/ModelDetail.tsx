@@ -1,6 +1,10 @@
 import type { KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { ModelCatalogEntry, ModelNote } from '../../contracts/data-contract'
+import type {
+  ModelCatalogEntry,
+  ModelNote,
+  ModelValidationCheck,
+} from '../../contracts/data-contract'
 import { BridgeEvidencePanel } from './BridgeEvidencePanel.js'
 import { CaveatList } from './CaveatList.js'
 import { DataSourceList } from './DataSourceList.js'
@@ -72,6 +76,34 @@ function ModelNoteBlock({ note }: { note?: ModelNote }) {
         ))}
       </ul>
     </section>
+  )
+}
+
+const VALIDATION_STATUS_LABELS: Record<ModelValidationCheck['status'], string> = {
+  pass: 'Pass',
+  caveat: 'Caveat',
+  needs_review: 'Needs review',
+}
+
+function ValidationCheckList({ checks }: { checks?: ModelValidationCheck[] }) {
+  if (!checks || checks.length === 0) return null
+
+  return (
+    <div className="validation-checks" aria-label="Validation checks">
+      {checks.map((check) => (
+        <article key={check.label} className="validation-check">
+          <div className="validation-check__head">
+            <strong>{check.label}</strong>
+            <span
+              className={`validation-check__status validation-check__status--${check.status}`}
+            >
+              {VALIDATION_STATUS_LABELS[check.status]}
+            </span>
+          </div>
+          <p>{check.detail}</p>
+        </article>
+      ))}
+    </div>
   )
 }
 
@@ -189,6 +221,7 @@ export function ModelDetail({ entry, activeTab, onTabChange }: ModelDetailProps)
               <DataSourceList dataSources={entry.data_sources} />
               <h4>{t('modelExplorer.validation.title')}</h4>
               <ValidationSummary paragraphs={entry.validation_summary} />
+              <ValidationCheckList checks={entry.validation_checks} />
             </div>
           </>
         ) : activeTab === 'equations' ? (

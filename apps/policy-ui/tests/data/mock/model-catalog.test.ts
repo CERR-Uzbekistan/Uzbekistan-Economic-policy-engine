@@ -58,6 +58,19 @@ describe('model catalog mock', () => {
       qpm.model_note?.items.map((item) => item.value).join(' ') ?? '',
       /accounting views/,
     )
+    assert.equal(qpm.validation_checks?.length, 5)
+    assert.equal(
+      qpm.validation_checks?.some(
+        (check) => check.label === 'Impulse-response signs' && check.status === 'pass',
+      ),
+      true,
+    )
+    assert.equal(
+      qpm.validation_checks?.some(
+        (check) => check.label === 'Economist review needed' && check.status === 'needs_review',
+      ),
+      true,
+    )
   })
 
   it('keeps DFM description aligned with the current bridge artifact scope', () => {

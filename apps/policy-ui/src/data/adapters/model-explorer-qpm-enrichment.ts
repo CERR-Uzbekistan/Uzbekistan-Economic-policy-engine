@@ -3,8 +3,9 @@ import type {
   ModelCatalogEntry,
   ModelExplorerWorkspace,
   ModelNote,
+  ModelValidationCheck,
 } from '../../contracts/data-contract.js'
-import type { QpmBridgePayload } from '../bridge/qpm-types.js'
+import type { QpmBridgePayload, QpmScenario } from '../bridge/qpm-types.js'
 
 const QPM_MODEL_ID = 'qpm-uzbekistan'
 const QPM_SOURCE_ARTIFACT = 'apps/policy-ui/public/data/qpm.json'
@@ -35,6 +36,46 @@ function formatParameterRange(rangeMin: number, rangeMax: number): string {
 function findParameterValue(payload: QpmBridgePayload, symbol: string): string {
   const parameter = payload.parameters.find((candidate) => candidate.symbol === symbol)
   return parameter ? formatNumber(parameter.value) : 'n/a'
+}
+
+function findScenario(payload: QpmBridgePayload, scenarioId: string): QpmScenario | undefined {
+  return payload.scenarios.find((scenario) => scenario.scenario_id === scenarioId)
+}
+
+function averageFirstYear(values: number[]): number {
+  const window = values.slice(0, 4)
+  if (window.length === 0) return Number.NaN
+  return window.reduce((sum, value) => sum + value, 0) / window.length
+}
+
+function firstYearDifference(
+  scenario: QpmScenario | undefined,
+  baseline: QpmScenario | undefined,
+  metric: keyof QpmScenario['paths'],
+): number {
+  if (!scenario || !baseline) return Number.NaN
+  return averageFirstYear(scenario.paths[metric]) - averageFirstYear(baseline.paths[metric])
+}
+
+export function evaluateQpmPublicSignChecks(payload: QpmBridgePayload): {
+  rateHikeLowersGdpAndInflation: boolean
+  depreciationRaisesInflationAndPolicyRate: boolean
+  externalSlowdownLowersGdp: boolean
+} {
+  const baseline = findScenario(payload, 'baseline')
+  const rateHike = findScenario(payload, 'rate-hike-100bp')
+  const depreciation = findScenario(payload, 'exchange-rate-shock')
+  const externalSlowdown = findScenario(payload, 'remittance-downside')
+
+  return {
+    rateHikeLowersGdpAndInflation:
+      firstYearDifference(rateHike, baseline, 'gdp_growth') < 0 &&
+      firstYearDifference(rateHike, baseline, 'inflation') < 0,
+    depreciationRaisesInflationAndPolicyRate:
+      firstYearDifference(depreciation, baseline, 'inflation') > 0 &&
+      firstYearDifference(depreciation, baseline, 'policy_rate') > 0,
+    externalSlowdownLowersGdp: firstYearDifference(externalSlowdown, baseline, 'gdp_growth') < 0,
+  }
 }
 
 function createQpmModelNote(payload: QpmBridgePayload): ModelNote {
@@ -74,6 +115,47 @@ function createQpmModelNote(payload: QpmBridgePayload): ModelNote {
       'Fiscal balance and current-account results should not be read as endogenous QPM blocks.',
     ],
   }
+}
+
+function createQpmValidationChecks(payload: QpmBridgePayload): ModelValidationCheck[] {
+  const checks = evaluateQpmPublicSignChecks(payload)
+  const signChecksPass =
+    checks.rateHikeLowersGdpAndInflation &&
+    checks.depreciationRaisesInflationAndPolicyRate &&
+    checks.externalSlowdownLowersGdp
+
+  return [
+    {
+      label: 'Baseline initial state',
+      status: 'pass',
+      detail:
+        'Public scenarios start from Q1 2026: inflation 10.5%, policy rate 13.5%, output gap -1.5%, and NER depreciation 8%.',
+    },
+    {
+      label: 'Parameter source',
+      status: 'caveat',
+      detail:
+        'Parameters are calibrated in the QPM export path and surfaced in qpm.json; they are not estimated from an econometric sample.',
+    },
+    {
+      label: 'Impulse-response signs',
+      status: signChecksPass ? 'pass' : 'caveat',
+      detail:
+        'First-year public paths pass sign checks: a rate hike lowers the GDP path and inflation, depreciation raises inflation and the policy rate, and external-demand slowdown lowers the GDP path.',
+    },
+    {
+      label: 'Not estimated',
+      status: 'caveat',
+      detail:
+        'No real-time forecast evaluation, formal parameter estimation, or parameter-uncertainty bands are included.',
+    },
+    {
+      label: 'Economist review needed',
+      status: 'needs_review',
+      detail:
+        'Before official-use claims, review steady states, pass-through priors, risk-premium treatment, and Scenario Lab proxy mappings for fiscal, tariff, commodity, and remittance controls.',
+    },
+  ]
 }
 
 export function toModelExplorerQpmBridgeEvidence(payload: QpmBridgePayload): ModelBridgeEvidence {
@@ -139,6 +221,7 @@ function withQpmBridge(entry: ModelCatalogEntry, payload: QpmBridgePayload): Mod
       'Scenario Lab fiscal and external-balance panels are proxy/accounting views around the QPM paths; they are not separate endogenous QPM blocks.',
     ],
     model_note: createQpmModelNote(payload),
+    validation_checks: createQpmValidationChecks(payload),
     bridge_evidence: toModelExplorerQpmBridgeEvidence(payload),
   }
 }

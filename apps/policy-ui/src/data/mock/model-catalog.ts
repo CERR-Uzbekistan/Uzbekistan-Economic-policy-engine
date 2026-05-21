@@ -137,6 +137,38 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
       'No formal estimation, real-time forecast evaluation, or parameter-uncertainty bands are claimed in the public QPM output.',
       'Scenario Lab fiscal and external-balance panels are proxy/accounting views around the QPM paths; they are not separate endogenous QPM blocks.',
     ],
+    validation_checks: [
+      {
+        label: 'Baseline initial state',
+        status: 'pass',
+        detail:
+          'Public scenarios start from Q1 2026: inflation 10.5%, policy rate 13.5%, output gap -1.5%, and NER depreciation 8%.',
+      },
+      {
+        label: 'Parameter source',
+        status: 'caveat',
+        detail:
+          'Parameters are calibrated in the QPM export path and surfaced in qpm.json; they are not estimated from an econometric sample.',
+      },
+      {
+        label: 'Impulse-response signs',
+        status: 'pass',
+        detail:
+          'First-year public paths pass sign checks: a rate hike lowers the GDP path and inflation, depreciation raises inflation and the policy rate, and external-demand slowdown lowers the GDP path.',
+      },
+      {
+        label: 'Not estimated',
+        status: 'caveat',
+        detail:
+          'No real-time forecast evaluation, formal parameter estimation, or parameter-uncertainty bands are included.',
+      },
+      {
+        label: 'Economist review needed',
+        status: 'needs_review',
+        detail:
+          'Before official-use claims, review steady states, pass-through priors, risk-premium treatment, and Scenario Lab proxy mappings for fiscal, tariff, commodity, and remittance controls.',
+      },
+    ],
   },
   {
     id: 'dfm-nowcast',

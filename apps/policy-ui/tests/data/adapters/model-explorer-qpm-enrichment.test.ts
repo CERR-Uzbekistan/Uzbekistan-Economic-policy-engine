@@ -4,6 +4,7 @@ import { describe, it } from 'node:test'
 import { fileURLToPath } from 'node:url'
 import {
   enrichModelExplorerWorkspaceWithQpmBridge,
+  evaluateQpmPublicSignChecks,
   toModelExplorerQpmBridgeEvidence,
 } from '../../../src/data/adapters/model-explorer-qpm-enrichment.js'
 import { validateQpmBridgePayload } from '../../../src/data/bridge/qpm-guard.js'
@@ -70,6 +71,45 @@ describe('model explorer QPM bridge enrichment', () => {
     assert.match(qpmEntry.model_note?.summary ?? '', /calibrated, not formally estimated/)
     assert.match(qpmEntry.model_note?.items.map((item) => item.value).join(' ') ?? '', /a4=0.12/)
     assert.match(qpmEntry.model_note?.items.map((item) => item.value).join(' ') ?? '', /rho=0.75/)
+    assert.equal(qpmEntry.validation_checks?.length, 5)
+    assert.deepEqual(
+      qpmEntry.validation_checks?.map((check) => [check.label, check.status]),
+      [
+        ['Baseline initial state', 'pass'],
+        ['Parameter source', 'caveat'],
+        ['Impulse-response signs', 'pass'],
+        ['Not estimated', 'caveat'],
+        ['Economist review needed', 'needs_review'],
+      ],
+    )
+    assert.match(
+      qpmEntry.validation_checks?.map((check) => check.detail).join(' ') ?? '',
+      /proxy mappings/,
+    )
     assert.equal(qpmEntry.bridge_evidence?.evidence_metrics?.length, 3)
+  })
+
+  it('locks public QPM economic sign checks used by the validation note', () => {
+    const payload = loadValidQpmPayload()
+    const checks = evaluateQpmPublicSignChecks(payload)
+
+    assert.equal(checks.rateHikeLowersGdpAndInflation, true)
+    assert.equal(checks.depreciationRaisesInflationAndPolicyRate, true)
+    assert.equal(checks.externalSlowdownLowersGdp, true)
+  })
+
+  it('does not claim Scenario Lab fiscal/current-account panels are endogenous QPM blocks', () => {
+    const payload = loadValidQpmPayload()
+    const enriched = enrichModelExplorerWorkspaceWithQpmBridge(modelExplorerWorkspaceMock, payload)
+    const qpmEntry = enriched.catalog_entries_by_model_id?.['qpm-uzbekistan']
+    const text = [
+      ...(qpmEntry?.validation_summary ?? []),
+      ...(qpmEntry?.model_note?.items.map((item) => item.value) ?? []),
+      ...(qpmEntry?.validation_checks?.map((check) => check.detail) ?? []),
+    ].join(' ')
+
+    assert.match(text, /not separate endogenous QPM blocks/)
+    assert.doesNotMatch(text, /fiscal .* are endogenous QPM/i)
+    assert.doesNotMatch(text, /current-account .* are endogenous QPM/i)
   })
 })

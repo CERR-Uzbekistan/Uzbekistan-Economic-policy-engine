@@ -152,4 +152,21 @@ describe('Model Explorer catalog cards', () => {
     assert.match(markup, /rho=0.75/)
     assert.match(markup, /a4=0.12/)
   })
+
+  it('renders QPM validation checks with economist-review caveats', async () => {
+    const qpmEntry = modelCatalogEntries.find((entry) => entry.id === 'qpm-uzbekistan')!
+    const i18n = await createTestI18n()
+
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <ModelDetail entry={qpmEntry} activeTab="overview" onTabChange={() => undefined} />
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /Baseline initial state/)
+    assert.match(markup, /Impulse-response signs/)
+    assert.match(markup, /Economist review needed/)
+    assert.match(markup, /rate hike lowers the GDP path and inflation/)
+    assert.match(markup, /not estimated from an econometric sample/)
+  })
 })

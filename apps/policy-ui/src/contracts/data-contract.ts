@@ -479,6 +479,14 @@ export type ModelNote = {
   boundaries: string[]
 }
 
+export type ModelValidationCheckStatus = 'pass' | 'caveat' | 'needs_review'
+
+export type ModelValidationCheck = {
+  label: string
+  status: ModelValidationCheckStatus
+  detail: string
+}
+
 export type ModelCatalogEntry = {
   id: string
   title: string
@@ -497,6 +505,7 @@ export type ModelCatalogEntry = {
   data_sources: ModelDataSource[]
   validation_summary: string[]
   model_note?: ModelNote
+  validation_checks?: ModelValidationCheck[]
   bridge_evidence?: ModelBridgeEvidence
   activation_requirements?: string[]
 }
