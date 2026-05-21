@@ -61,5 +61,21 @@ export type QpmBridgePayload = {
     exported_at: string
     source_script_sha: string | null
     solver_version: string
+    baseline_source?: {
+      source: 'overview-artifact' | 'deterministic-fallback'
+      source_artifact: string
+      exported_at: string
+      data_version: string
+      status_label: string
+      note: string
+      metrics: Array<{
+        metric_id: string
+        label: string
+        value: number
+        unit: string
+        source_label: string
+        source_period: string
+      }>
+    }
   }
 }

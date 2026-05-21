@@ -272,6 +272,7 @@ function buildHeadlineMetrics(
   const base = getMetricCore(getDefaultAssumptionState(), baseQpm)
   const scenario = getMetricCore(values, qpmRun)
   const now = '2026-04-17T11:00:00+05:00'
+  const endpointPeriod = qpmRun.scenario.periods[qpmEndpointIndex(qpmRun)] ?? '2026 Q4'
 
   const metricRows = [
     {
@@ -280,7 +281,7 @@ function buildHeadlineMetrics(
       value: scenario.gdpGrowth,
       unit: '%',
       baseline: base.gdpGrowth,
-      period: '2026 Q4',
+      period: endpointPeriod,
     },
     {
       metric_id: 'inflation',
@@ -288,7 +289,7 @@ function buildHeadlineMetrics(
       value: scenario.inflation,
       unit: '%',
       baseline: base.inflation,
-      period: '2026 Q4',
+      period: endpointPeriod,
     },
     {
       metric_id: 'current_account',
@@ -296,7 +297,7 @@ function buildHeadlineMetrics(
       value: scenario.currentAccount,
       unit: '% GDP',
       baseline: base.currentAccount,
-      period: '2026 Q4',
+      period: endpointPeriod,
     },
     {
       metric_id: 'fiscal_balance',
@@ -304,7 +305,7 @@ function buildHeadlineMetrics(
       value: scenario.fiscalBalance,
       unit: '% GDP',
       baseline: base.fiscalBalance,
-      period: '2026 Q4',
+      period: endpointPeriod,
     },
     {
       metric_id: 'policy_rate',
@@ -312,7 +313,7 @@ function buildHeadlineMetrics(
       value: scenario.policyRateLevel,
       unit: '%',
       baseline: base.policyRateLevel,
-      period: '2026 Q4',
+      period: endpointPeriod,
     },
     {
       metric_id: 'exchange_rate',
@@ -320,7 +321,7 @@ function buildHeadlineMetrics(
       value: scenario.exchangeRateLevel,
       unit: 'UZS/USD',
       baseline: base.exchangeRateLevel,
-      period: '2026 Q4',
+      period: endpointPeriod,
     },
   ]
 
@@ -340,7 +341,7 @@ function buildHeadlineMetrics(
       direction,
       confidence: 'medium',
       last_updated: now,
-      model_attribution: [ATTRIBUTION],
+      model_attribution: [qpmRun.attribution],
     } satisfies HeadlineMetric
   })
 }
@@ -355,6 +356,7 @@ function buildChartSeries(
   baselineValues: number[],
   scenarioValues: number[],
   takeaway: string,
+  attribution = ATTRIBUTION,
 ): ChartSpec {
   return {
     chart_id: chartId,
@@ -388,12 +390,15 @@ function buildChartSeries(
     view_mode: 'level',
     uncertainty: [],
     takeaway,
-    model_attribution: [ATTRIBUTION],
+    model_attribution: [attribution],
   }
 }
 
-function buildInterpretation(values: ScenarioLabAssumptionState): ScenarioLabInterpretation {
-  const interpretation = buildInterpretationCore(values)
+function buildInterpretation(
+  values: ScenarioLabAssumptionState,
+  endpointPeriod: string,
+): ScenarioLabInterpretation {
+  const interpretation = buildInterpretationCore(values, endpointPeriod)
   return interpretation
 }
 
@@ -428,7 +433,10 @@ function activeDriverLabels(values: ScenarioLabAssumptionState, keys: string[]):
   return keys.filter((key) => Math.abs(values[key] ?? 0) > 0.01).map(formatDriverLabel)
 }
 
-function buildInterpretationCore(values: ScenarioLabAssumptionState): ScenarioLabInterpretation {
+function buildInterpretationCore(
+  values: ScenarioLabAssumptionState,
+  endpointPeriod: string,
+): ScenarioLabInterpretation {
   const base = getMetricCore(getDefaultAssumptionState())
   const core = getMetricCore(values)
   const majorDrivers = Object.entries(values)
@@ -468,7 +476,7 @@ function buildInterpretationCore(values: ScenarioLabAssumptionState): ScenarioLa
 
   return {
     what_changed: [
-      `GDP growth is ${roundTo(core.gdpGrowth - base.gdpGrowth).toFixed(1)} pp versus baseline by 2026 Q4.`,
+      `GDP growth is ${roundTo(core.gdpGrowth - base.gdpGrowth).toFixed(1)} pp versus baseline by ${endpointPeriod}.`,
       `Inflation is ${roundTo(core.inflation - base.inflation).toFixed(1)} pp versus baseline; ${inflationChannelText}`,
       balanceChannelText,
     ],
@@ -555,7 +563,7 @@ function buildImpulseResponseChart(qpmRun: QpmScenarioRun): ChartSpec {
     uncertainty: [],
     takeaway:
       'Read each line as a scenario deviation from the baseline QPM path, not as a standalone forecast level.',
-    model_attribution: [ATTRIBUTION],
+    model_attribution: [qpmRun.attribution],
   }
 }
 
@@ -577,7 +585,8 @@ export function buildScenarioLabResults(
   const baselineCore = getMetricCore(getDefaultAssumptionState(), baselineQpmRun)
   const scenarioCore = getMetricCore(values, qpmRun)
   const headlineMetrics = buildHeadlineMetrics(values, qpmRun)
-  const interpretation = buildInterpretation(values)
+  const endpointPeriod = qpmRun.scenario.periods[qpmEndpointIndex(qpmRun)] ?? '2026 Q4'
+  const interpretation = buildInterpretation(values, endpointPeriod)
   const pathPeriods = qpmRun.baseline.periods.slice(0, PERIODS.length)
   const baselineCurrentAccountPath = buildAccountingPath(
     baselineCore.currentAccount,
@@ -605,6 +614,7 @@ export function buildScenarioLabResults(
   interpretation.suggested_next = SCENARIO_LAB_SUGGESTED_NEXT
 
   return {
+    baseline_source: qpmRun.baselineSource,
     headline_metrics: headlineMetrics,
     impulse_response_chart: buildImpulseResponseChart(qpmRun),
     charts_by_tab: {
@@ -644,7 +654,7 @@ export function buildScenarioLabResults(
         view_mode: 'delta',
         uncertainty: [],
         takeaway: 'This view highlights directional trade-offs before detailed channel review.',
-        model_attribution: [ATTRIBUTION],
+        model_attribution: [qpmRun.attribution],
       },
       macro_path: buildChartSeries(
         'qpm_macro_path',
@@ -656,6 +666,7 @@ export function buildScenarioLabResults(
         qpmRun.baseline.gdpGrowth.slice(0, pathPeriods.length),
         qpmRun.scenario.gdpGrowth.slice(0, pathPeriods.length),
         'Growth path reflects combined demand, cost, and policy-rate channels.',
+        qpmRun.attribution,
       ),
       external_balance: buildChartSeries(
         'qpm_external_balance',
@@ -666,7 +677,8 @@ export function buildScenarioLabResults(
         pathPeriods,
         baselineCurrentAccountPath,
         scenarioCurrentAccountPath,
-        'External balance responds to exchange-rate, trade, and remittance assumptions.',
+        'External balance is an accounting/proxy view around QPM paths; it is not an endogenous QPM external-sector block.',
+        qpmRun.attribution,
       ),
       fiscal_effects: buildChartSeries(
         'qpm_fiscal_effects',
@@ -677,7 +689,8 @@ export function buildScenarioLabResults(
         pathPeriods,
         baselineFiscalPath,
         scenarioFiscalPath,
-        'Fiscal outcomes are driven by spending and revenue assumptions in this reference setup.',
+        'Fiscal balance is an accounting/proxy view driven by spending and revenue assumptions, not an endogenous QPM fiscal block.',
+        qpmRun.attribution,
       ),
     },
     interpretation,

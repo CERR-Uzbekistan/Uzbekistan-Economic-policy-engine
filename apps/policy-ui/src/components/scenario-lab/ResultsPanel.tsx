@@ -211,6 +211,49 @@ function ActiveShockSummary({ assumptions }: { assumptions: Assumption[] }) {
   )
 }
 
+function BaselineSourceSummary({ results }: { results: ScenarioLabResultsBundle }) {
+  const { i18n, t } = useTranslation()
+  const locale = i18n.resolvedLanguage ?? i18n.language
+  const source = results.baseline_source
+
+  if (!source) {
+    return null
+  }
+
+  return (
+    <section className="qpm-baseline-source" aria-label={t('scenarioLab.results.baselineSource.ariaLabel')}>
+      <div className="qpm-baseline-source__head">
+        <span>{source.status_label}</span>
+        <strong>{source.data_version}</strong>
+      </div>
+      <p>{source.note}</p>
+      <dl>
+        <div>
+          <dt>{t('scenarioLab.results.baselineSource.artifact')}</dt>
+          <dd>{source.source_artifact}</dd>
+        </div>
+        <div>
+          <dt>{t('scenarioLab.results.baselineSource.exportedAt')}</dt>
+          <dd>{source.exported_at}</dd>
+        </div>
+      </dl>
+      {source.metrics.length > 0 ? (
+        <ul>
+          {source.metrics.map((metric) => (
+            <li key={metric.metric_id}>
+              <span>{metric.label}</span>
+              <strong>{formatValueWithUnit(metric.value, metric.unit, locale)}</strong>
+              <small>
+                {metric.source_period} · {metric.source_label}
+              </small>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </section>
+  )
+}
+
 function ScenarioTabChart({ chart, activeTab }: { chart: ChartSpec; activeTab: ScenarioLabResultTab }) {
   const { i18n, t } = useTranslation()
   const locale = i18n.resolvedLanguage ?? i18n.language
@@ -314,6 +357,7 @@ export function ResultsPanel({
       </div>
 
       <ActiveShockSummary assumptions={activeAssumptions} />
+      <BaselineSourceSummary results={results} />
 
       <div className="qpm-decision-view">
         <div className="qpm-decision-view__head">

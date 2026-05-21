@@ -17,6 +17,9 @@ const QPM_CAVEAT_TITLES: Record<string, string> = {
   'qpm-direct-import-passthrough': 'Direct import-price pass-through',
   'qpm-no-uncertainty-bands': 'No uncertainty bands in public artifact',
   'qpm-baseline-disinflation-overshoot': 'Baseline disinflation overshoot',
+  'qpm-baseline-source': 'Baseline source',
+  'qpm-baseline-transition-overshoot': 'Baseline transition caveat',
+  'qpm-historical-backtest-deferred': 'Historical backtest deferred',
 }
 
 function toIsoDateLabel(value: string): string {
@@ -81,6 +84,12 @@ export function evaluateQpmPublicSignChecks(payload: QpmBridgePayload): {
 function createQpmModelNote(payload: QpmBridgePayload): ModelNote {
   const a4 = findParameterValue(payload, 'a4')
   const rhoExternal = findParameterValue(payload, 'rho_external')
+  const baselineSource = payload.metadata.baseline_source
+  const baselineMetricSummary = baselineSource
+    ? baselineSource.metrics
+        .map((metric) => `${metric.label}: ${metric.value} ${metric.unit} (${metric.source_period})`)
+        .join('; ')
+    : 'QPM fallback initial state: inflation 10.5%, policy rate 13.5%, output gap -1.5%, NER depreciation 8%.'
 
   return {
     title: 'QPM model note',
@@ -92,8 +101,10 @@ function createQpmModelNote(payload: QpmBridgePayload): ModelNote {
         value: 'GDP gap/growth, inflation, policy rate, and exchange rate.',
       },
       {
-        label: 'Initial state',
-        value: 'Q1 2026: inflation 10.5%, policy rate 13.5%, output gap -1.5%, NER depreciation 8%.',
+        label: 'Baseline construction',
+        value: baselineSource
+          ? `${baselineSource.status_label} from ${baselineSource.source_artifact}: ${baselineMetricSummary}.`
+          : baselineMetricSummary,
       },
       {
         label: 'Core shocks',
@@ -113,6 +124,7 @@ function createQpmModelNote(payload: QpmBridgePayload): ModelNote {
       'No formal estimation or historical forecast evaluation is claimed.',
       'No parameter-uncertainty bands are included in the public QPM output.',
       'Fiscal balance and current-account results should not be read as endogenous QPM blocks.',
+      'Historical fit/backtest data are not yet sufficient for Uzbekistan-specific forecast-accuracy claims.',
     ],
   }
 }
@@ -126,10 +138,11 @@ function createQpmValidationChecks(payload: QpmBridgePayload): ModelValidationCh
 
   return [
     {
-      label: 'Baseline initial state',
+      label: 'Baseline source metadata',
       status: 'pass',
-      detail:
-        'Public scenarios start from Q1 2026: inflation 10.5%, policy rate 13.5%, output gap -1.5%, and NER depreciation 8%.',
+      detail: payload.metadata.baseline_source
+        ? `Public scenarios include baseline metadata from ${payload.metadata.baseline_source.source_artifact} (${payload.metadata.baseline_source.data_version}).`
+        : 'Public scenarios retain deterministic fallback baseline metadata.',
     },
     {
       label: 'Parameter source',
@@ -147,7 +160,7 @@ function createQpmValidationChecks(payload: QpmBridgePayload): ModelValidationCh
       label: 'Not estimated',
       status: 'caveat',
       detail:
-        'No real-time forecast evaluation, formal parameter estimation, or parameter-uncertainty bands are included.',
+        'No real-time forecast evaluation, formal parameter estimation, historical backtest, or parameter-uncertainty bands are included.',
     },
     {
       label: 'Economist review needed',
@@ -172,6 +185,9 @@ export function toModelExplorerQpmBridgeEvidence(payload: QpmBridgePayload): Mod
       { label: 'Scenarios', value: String(payload.scenarios.length) },
       { label: 'Public parameters', value: String(payload.parameters.length) },
       { label: 'Horizon', value: `${scenario?.horizon_quarters ?? 0} quarters` },
+      ...(payload.metadata.baseline_source
+        ? [{ label: 'Baseline source', value: payload.metadata.baseline_source.status_label }]
+        : []),
     ],
     caveats: payload.caveats.map((caveat) => caveat.message),
   }
@@ -204,6 +220,15 @@ function withQpmBridge(entry: ModelCatalogEntry, payload: QpmBridgePayload): Mod
         description: `${payload.scenarios.length} canonical scenarios and ${payload.parameters.length} public parameters`,
         vintage_label: payload.attribution.data_version,
       },
+      ...(payload.metadata.baseline_source
+        ? [
+            {
+              institution: 'Overview artifact baseline',
+              description: payload.metadata.baseline_source.note,
+              vintage_label: payload.metadata.baseline_source.data_version,
+            },
+          ]
+        : []),
       {
         institution: 'QPM export solver',
         description: 'Deterministic scenario export from the checked-in QPM solver path',
@@ -219,6 +244,7 @@ function withQpmBridge(entry: ModelCatalogEntry, payload: QpmBridgePayload): Mod
       'Public qpm.json validates against the QPM bridge schema and contains the canonical baseline, rate-cut, rate-hike, exchange-rate, and external-demand scenarios.',
       'No formal estimation, real-time forecast evaluation, or parameter-uncertainty bands are claimed in the public QPM output.',
       'Scenario Lab fiscal and external-balance panels are proxy/accounting views around the QPM paths; they are not separate endogenous QPM blocks.',
+      'Historical fit/backtest evidence is not yet available at a quality sufficient for production-use claims.',
     ],
     model_note: createQpmModelNote(payload),
     validation_checks: createQpmValidationChecks(payload),

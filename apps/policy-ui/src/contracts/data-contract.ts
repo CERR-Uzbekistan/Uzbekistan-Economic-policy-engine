@@ -577,6 +577,22 @@ export type ScenarioLabResultsBundle = {
   headline_metrics: HeadlineMetric[]
   charts_by_tab: Record<ScenarioLabResultTab, ChartSpec>
   interpretation: ScenarioLabInterpretation
+  baseline_source?: {
+    source: 'overview-artifact' | 'deterministic-fallback'
+    source_artifact: string
+    exported_at: string
+    data_version: string
+    status_label: string
+    note: string
+    metrics: Array<{
+      metric_id: string
+      label: string
+      value: number
+      unit: string
+      source_label: string
+      source_period: string
+    }>
+  }
   // Shot-1 additive: 3-series impulse-response chart (GDP gap, Inflation, Policy rate)
   // replaces the headline-impact horizontal-bar chart in the new Results panel.
   impulse_response_chart?: ChartSpec

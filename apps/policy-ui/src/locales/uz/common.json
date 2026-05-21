@@ -873,10 +873,10 @@
       "showTechnical": "Texnik o'zgaruvchi nomlarini ko'rsatish",
       "technicalPrefix": "Texnik o'zgaruvchi: {{variable}}",
       "numericValueLabel": "{{label}} raqamli qiymati",
-      "qpmCoreTitle": "QPM yadrosi",
-      "qpmCoreDescription": "Avval asosiy QPM boshqaruvlari ko'rsatiladi: siyosat stavkasi, almashuv kursi va xorijiy ishlab chiqarish uzilishi.",
-      "linkedTitle": "Bog'langan taxminlar",
-      "linkedDescription": "Ushbu ma'lumot hisobida ishlatiladigan qo'shimcha tashqi, fiskal va savdo kirishlari. Bu PE, I-O, DFM yoki FPP bilan jonli almashinuv emas.",
+      "qpmCoreTitle": "Asosiy QPM shoklari",
+      "qpmCoreDescription": "To'g'ridan-to'g'ri QPM boshqaruvlari: stavka shoki, almashuv kursi/risk-premiya shoki va tashqi talab shoki.",
+      "linkedTitle": "Proksi taxminlar",
+      "linkedDescription": "Davlat xarajatlari, tariflar, xomashyo narxlari va pul o'tkazmalari QPM trayektoriyasi atrofidagi oddiy stsenariy xaritalaridir, endogen QPM bloklari emas.",
       "inputs": {
         "policy_rate_change": {
           "label": "Stavka o'zgarishi",
@@ -964,6 +964,7 @@
         "gdp_growth": "YaIM o'sishi",
         "inflation": "Inflyatsiya",
         "current_account": "Joriy hisob",
+        "fiscal_balance": "Fiskal balans",
         "policy_rate": "Stavka"
       },
       "decision": {
@@ -976,14 +977,19 @@
       "explanations": {
         "headlineImpact": "Tanlangan stsenariy 12 chorak davomida bazaviydan qanday og'ishini ko'rsatadi; qiymatlar kanonik QPM hisobidan foiz punktlaridagi og'ishlardir.",
         "macroPath": "Jadval xom chiqish emas, taqqoslash sifatida o'qilishi uchun stsenariy trayektoriyasini bazaviy trayektoriya yonida ko'rsatadi.",
-        "externalBalance": "Joriy taxminlar ostida tashqi balans stsenariy trayektoriyasini ko'rsatadi; birliklar YaIM foizida saqlanadi.",
-        "fiscalEffects": "Tanlangan stsenariy taxminlari ostidagi fiskal hisob-kitobni ko'rsatadi; bu yangi fiskal model ishga tushirilishi emas."
+        "externalBalance": "QPM trayektoriyasi atrofidagi joriy hisob proksi/hisob-kitob ko'rinishini ko'rsatadi; bu endogen QPM tashqi sektor bloki emas.",
+        "fiscalEffects": "Proksi taxminlar asosidagi fiskal hisob-kitobni ko'rsatadi; bu endogen QPM fiskal bloki emas."
       },
       "claimLabels": {
         "headlineImpact": "Stsenariy impuls responsi",
         "macroPath": "Stsenariy trayektoriyasi bazaviyga nisbatan",
-        "externalBalance": "Tashqi balans stsenariy trayektoriyasi",
-        "fiscalEffects": "Fiskal stsenariy hisob-kitobi"
+        "externalBalance": "Joriy hisob proksi ko'rinishi",
+        "fiscalEffects": "Fiskal hisob/proksi ko'rinishi"
+      },
+      "baselineSource": {
+        "ariaLabel": "QPM bazaviy manba metama'lumotlari",
+        "artifact": "Manba fayli",
+        "exportedAt": "Eksport qilingan"
       },
       "activeShocks": {
         "ariaLabel": "Faol QPM shok taxminlari",
