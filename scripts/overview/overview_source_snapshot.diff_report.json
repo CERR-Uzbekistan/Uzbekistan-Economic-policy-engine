@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-20T08:02:38.580Z",
+  "generated_at": "2026-05-21T08:10:06.343Z",
   "family": "overview-source-refresh",
   "families": [
     {
@@ -7,7 +7,7 @@
       "outcome": "changed",
       "changed": true,
       "status": "source_verified_for_public_artifact",
-      "value_hash": "6cd6fba471fde7f2658b6e32326ea019385a037098b49b0fabd9b584e9526ade",
+      "value_hash": "22abd253424ccbeb61007fc0ed2fb3afe4070168a9c04e032e795de5b9cee20f",
       "manual_required": null,
       "error": null,
       "changed_fields": [
@@ -17,13 +17,11 @@
         "usd_uzs_level.source_url",
         "usd_uzs_level.observed_at",
         "usd_uzs_level.caveats",
-        "usd_uzs_level.warnings",
         "usd_uzs_mom_change.value",
         "usd_uzs_mom_change.source_period",
         "usd_uzs_mom_change.source_reference",
         "usd_uzs_mom_change.extracted_at",
         "usd_uzs_mom_change.caveats",
-        "usd_uzs_mom_change.warnings",
         "usd_uzs_yoy_change.value",
         "usd_uzs_yoy_change.source_period",
         "usd_uzs_yoy_change.source_reference",
@@ -36,7 +34,7 @@
       "outcome": "no_change",
       "changed": false,
       "status": "source_verified_for_public_artifact",
-      "value_hash": "6cd6fba471fde7f2658b6e32326ea019385a037098b49b0fabd9b584e9526ade",
+      "value_hash": "22abd253424ccbeb61007fc0ed2fb3afe4070168a9c04e032e795de5b9cee20f",
       "manual_required": null,
       "error": null,
       "changed_fields": []
@@ -46,7 +44,7 @@
       "outcome": "no_change",
       "changed": false,
       "status": "source_verified_for_public_artifact",
-      "value_hash": "6cd6fba471fde7f2658b6e32326ea019385a037098b49b0fabd9b584e9526ade",
+      "value_hash": "22abd253424ccbeb61007fc0ed2fb3afe4070168a9c04e032e795de5b9cee20f",
       "manual_required": null,
       "error": null,
       "changed_fields": []
@@ -56,7 +54,7 @@
       "outcome": "no_change",
       "changed": false,
       "status": "source_verified_for_public_artifact",
-      "value_hash": "6cd6fba471fde7f2658b6e32326ea019385a037098b49b0fabd9b584e9526ade",
+      "value_hash": "22abd253424ccbeb61007fc0ed2fb3afe4070168a9c04e032e795de5b9cee20f",
       "manual_required": null,
       "error": null,
       "changed_fields": []
@@ -66,7 +64,7 @@
       "outcome": "no_change",
       "changed": false,
       "status": "source_verified_for_public_artifact",
-      "value_hash": "6cd6fba471fde7f2658b6e32326ea019385a037098b49b0fabd9b584e9526ade",
+      "value_hash": "22abd253424ccbeb61007fc0ed2fb3afe4070168a9c04e032e795de5b9cee20f",
       "manual_required": null,
       "error": null,
       "changed_fields": []
@@ -75,153 +73,137 @@
   "snapshot": "/home/runner/work/Uzbekistan-Economic-policy-engine/Uzbekistan-Economic-policy-engine/scripts/overview/overview_source_snapshot.json",
   "changed": true,
   "status": "source_verified_for_public_artifact",
-  "value_hash": "6cd6fba471fde7f2658b6e32326ea019385a037098b49b0fabd9b584e9526ade",
+  "value_hash": "22abd253424ccbeb61007fc0ed2fb3afe4070168a9c04e032e795de5b9cee20f",
   "manual_required": null,
   "family_errors": null,
   "diff": [
     {
       "metric_id": "usd_uzs_level",
       "field": "value",
-      "old_value": 12019.27,
-      "new_value": 12055.81
+      "old_value": 12055.81,
+      "new_value": 12076.18
     },
     {
       "metric_id": "usd_uzs_level",
       "field": "previous_value",
-      "old_value": 12165.24,
-      "new_value": 12128.46
+      "old_value": 12128.46,
+      "new_value": 12097.33
     },
     {
       "metric_id": "usd_uzs_level",
       "field": "source_period",
-      "old_value": "2026-05-19",
-      "new_value": "2026-05-20"
+      "old_value": "2026-05-20",
+      "new_value": "2026-05-21"
     },
     {
       "metric_id": "usd_uzs_level",
       "field": "source_url",
-      "old_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-05-19/",
-      "new_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-05-20/"
+      "old_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-05-20/",
+      "new_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-05-21/"
     },
     {
       "metric_id": "usd_uzs_level",
       "field": "observed_at",
-      "old_value": "2026-05-19T00:00:00Z",
-      "new_value": "2026-05-20T00:00:00Z"
+      "old_value": "2026-05-20T00:00:00Z",
+      "new_value": "2026-05-21T00:00:00Z"
     },
     {
       "metric_id": "usd_uzs_level",
       "field": "caveats",
       "old_value": [
-        "Official/reference rate, not transaction-weighted market average.",
-        "Latest observation: requested 2026-05-19; actual CBU date/rate 2026-05-19, 12019.27 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-04-19; actual CBU date/rate 2026-04-17 returned for requested 2026-04-19, 12165.24 UZS per USD."
-      ],
-      "new_value": [
         "Official/reference rate, not transaction-weighted market average.",
         "Latest observation: requested 2026-05-20; actual CBU date/rate 2026-05-20, 12055.81 UZS per USD.",
         "Prior-month comparison observation: requested 2026-04-20; actual CBU date/rate 2026-04-20, 12128.46 UZS per USD."
-      ]
-    },
-    {
-      "metric_id": "usd_uzs_level",
-      "field": "warnings",
-      "old_value": [
-        "Prior-month requested date 2026-04-19 differed from actual CBU date 2026-04-17; nearest available CBU observation was used."
       ],
-      "new_value": []
+      "new_value": [
+        "Official/reference rate, not transaction-weighted market average.",
+        "Latest observation: requested 2026-05-21; actual CBU date/rate 2026-05-21, 12076.18 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-04-21; actual CBU date/rate 2026-04-21, 12097.33 UZS per USD."
+      ]
     },
     {
       "metric_id": "usd_uzs_mom_change",
       "field": "value",
-      "old_value": -1.2,
-      "new_value": -0.6
+      "old_value": -0.6,
+      "new_value": -0.17
     },
     {
       "metric_id": "usd_uzs_mom_change",
       "field": "source_period",
-      "old_value": "2026-05-19 vs 2026-04-17",
-      "new_value": "2026-05-20 vs 2026-04-20"
+      "old_value": "2026-05-20 vs 2026-04-20",
+      "new_value": "2026-05-21 vs 2026-04-21"
     },
     {
       "metric_id": "usd_uzs_mom_change",
       "field": "source_reference",
-      "old_value": "Calculated from CBU official USD rates: 12019.27 on 2026-05-19 and 12165.24 on 2026-04-17. Requested dates: latest 2026-05-19, prior-month 2026-04-19.",
-      "new_value": "Calculated from CBU official USD rates: 12055.81 on 2026-05-20 and 12128.46 on 2026-04-20. Requested dates: latest 2026-05-20, prior-month 2026-04-20."
+      "old_value": "Calculated from CBU official USD rates: 12055.81 on 2026-05-20 and 12128.46 on 2026-04-20. Requested dates: latest 2026-05-20, prior-month 2026-04-20.",
+      "new_value": "Calculated from CBU official USD rates: 12076.18 on 2026-05-21 and 12097.33 on 2026-04-21. Requested dates: latest 2026-05-21, prior-month 2026-04-21."
     },
     {
       "metric_id": "usd_uzs_mom_change",
       "field": "extracted_at",
-      "old_value": "2026-05-19T05:28:02.374Z",
-      "new_value": "2026-05-20T08:02:13.087Z"
+      "old_value": "2026-05-20T08:02:13.087Z",
+      "new_value": "2026-05-21T08:09:42.493Z"
     },
     {
       "metric_id": "usd_uzs_mom_change",
       "field": "caveats",
       "old_value": [
-        "Latest observation: requested 2026-05-19; actual CBU date/rate 2026-05-19, 12019.27 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-04-19; actual CBU date/rate 2026-04-17 returned for requested 2026-04-19, 12165.24 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-05-19; actual CBU date/rate 2025-05-19, 12917.1 UZS per USD.",
-        "Formula: ((latest - comparison) / comparison) * 100.",
-        "Rounded to 2 decimal places.",
-        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
-      ],
-      "new_value": [
         "Latest observation: requested 2026-05-20; actual CBU date/rate 2026-05-20, 12055.81 UZS per USD.",
         "Prior-month comparison observation: requested 2026-04-20; actual CBU date/rate 2026-04-20, 12128.46 UZS per USD.",
         "Prior-year comparison observation: requested 2025-05-20; actual CBU date/rate 2025-05-20, 12858.15 UZS per USD.",
         "Formula: ((latest - comparison) / comparison) * 100.",
         "Rounded to 2 decimal places.",
         "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
-      ]
-    },
-    {
-      "metric_id": "usd_uzs_mom_change",
-      "field": "warnings",
-      "old_value": [
-        "Prior-month requested date 2026-04-19 differed from actual CBU date 2026-04-17; nearest available CBU observation was used."
       ],
-      "new_value": []
+      "new_value": [
+        "Latest observation: requested 2026-05-21; actual CBU date/rate 2026-05-21, 12076.18 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-04-21; actual CBU date/rate 2026-04-21, 12097.33 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-05-21; actual CBU date/rate 2025-05-21, 12892.91 UZS per USD.",
+        "Formula: ((latest - comparison) / comparison) * 100.",
+        "Rounded to 2 decimal places.",
+        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
+      ]
     },
     {
       "metric_id": "usd_uzs_yoy_change",
       "field": "value",
-      "old_value": -6.95,
-      "new_value": -6.24
+      "old_value": -6.24,
+      "new_value": -6.33
     },
     {
       "metric_id": "usd_uzs_yoy_change",
       "field": "source_period",
-      "old_value": "2026-05-19 vs 2025-05-19",
-      "new_value": "2026-05-20 vs 2025-05-20"
+      "old_value": "2026-05-20 vs 2025-05-20",
+      "new_value": "2026-05-21 vs 2025-05-21"
     },
     {
       "metric_id": "usd_uzs_yoy_change",
       "field": "source_reference",
-      "old_value": "Calculated from CBU official USD rates: 12019.27 on 2026-05-19 and 12917.1 on 2025-05-19. Requested dates: latest 2026-05-19, prior-year 2025-05-19.",
-      "new_value": "Calculated from CBU official USD rates: 12055.81 on 2026-05-20 and 12858.15 on 2025-05-20. Requested dates: latest 2026-05-20, prior-year 2025-05-20."
+      "old_value": "Calculated from CBU official USD rates: 12055.81 on 2026-05-20 and 12858.15 on 2025-05-20. Requested dates: latest 2026-05-20, prior-year 2025-05-20.",
+      "new_value": "Calculated from CBU official USD rates: 12076.18 on 2026-05-21 and 12892.91 on 2025-05-21. Requested dates: latest 2026-05-21, prior-year 2025-05-21."
     },
     {
       "metric_id": "usd_uzs_yoy_change",
       "field": "extracted_at",
-      "old_value": "2026-05-19T05:28:02.374Z",
-      "new_value": "2026-05-20T08:02:13.087Z"
+      "old_value": "2026-05-20T08:02:13.087Z",
+      "new_value": "2026-05-21T08:09:42.493Z"
     },
     {
       "metric_id": "usd_uzs_yoy_change",
       "field": "caveats",
       "old_value": [
-        "Latest observation: requested 2026-05-19; actual CBU date/rate 2026-05-19, 12019.27 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-04-19; actual CBU date/rate 2026-04-17 returned for requested 2026-04-19, 12165.24 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-05-19; actual CBU date/rate 2025-05-19, 12917.1 UZS per USD.",
+        "Latest observation: requested 2026-05-20; actual CBU date/rate 2026-05-20, 12055.81 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-04-20; actual CBU date/rate 2026-04-20, 12128.46 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-05-20; actual CBU date/rate 2025-05-20, 12858.15 UZS per USD.",
         "Formula: ((latest - comparison) / comparison) * 100.",
         "Rounded to 2 decimal places.",
         "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
       ],
       "new_value": [
-        "Latest observation: requested 2026-05-20; actual CBU date/rate 2026-05-20, 12055.81 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-04-20; actual CBU date/rate 2026-04-20, 12128.46 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-05-20; actual CBU date/rate 2025-05-20, 12858.15 UZS per USD.",
+        "Latest observation: requested 2026-05-21; actual CBU date/rate 2026-05-21, 12076.18 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-04-21; actual CBU date/rate 2026-04-21, 12097.33 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-05-21; actual CBU date/rate 2025-05-21, 12892.91 UZS per USD.",
         "Formula: ((latest - comparison) / comparison) * 100.",
         "Rounded to 2 decimal places.",
         "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
