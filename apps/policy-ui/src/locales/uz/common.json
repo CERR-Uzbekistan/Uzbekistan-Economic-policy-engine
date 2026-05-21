@@ -968,12 +968,12 @@
         "policy_rate": "Stavka"
       },
       "decision": {
-        "eyebrow": "Stsenariy natijasi",
-        "title": "{{period}} uchun stsenariy natijasi",
+        "eyebrow": "Stsenariy effekti",
+        "title": "{{period}} uchun effekt",
         "currentScenario": "joriy stsenariy",
         "periodUnavailable": "yakuniy chorak",
-        "lead": "“{{scenarioName}}” qo'llansa, QPM natijasi:",
-        "note": "YaIM, inflyatsiya va stavka QPM tenglamalari bilan hisoblanadi. Tashqi va fiskal bo'limlar hisob-kitob ko'rinishlaridir."
+        "lead": "“{{scenarioName}}” qo'llansa, QPM avval bazaviy stsenariyga nisbatan o'zgarishni ko'rsatadi.",
+        "note": "YaIM, inflyatsiya va stavka QPM tenglamalari bilan hisoblanadi. Yuqoridagi darajalar davr oxiridagi model qiymatlari; effekt stsenariy yakuni minus bazaviy yakunga teng. Tashqi va fiskal bo'limlar hisob-kitob ko'rinishlaridir."
       },
       "explanations": {
         "headlineImpact": "Tanlangan stsenariy 12 chorak davomida bazaviydan qanday og'ishini ko'rsatadi; qiymatlar kanonik QPM hisobidan foiz punktlaridagi og'ishlardir.",
@@ -997,6 +997,27 @@
         "exportedAt": "Eksport qilingan",
         "contextOnly": "faqat kontekst"
       },
+      "calculation": {
+        "ariaLabel": "QPM stsenariy natijalari qanday hisoblanadi",
+        "lead": "Natija qayerdan keladi: QPM boshlang'ich nuqta, tanlangan shok va model tenglamalarini birlashtiradi. Quyidagi raqamlar hisoblangan stsenariy natijalari, Overview'dan to'g'ridan-to'g'ri ko'chirilgan emas.",
+        "start": "Boshlanish",
+        "shock": "Shok",
+        "model": "Model",
+        "output": "Natija",
+        "noShock": "Faol shok yo'q",
+        "unknownSource": "So'nggi mavjud kesim",
+        "qpmModel": "QPM stsenariy modeli"
+      },
+      "bridge": {
+        "ariaLabel": "Joriy indikatorlardan QPM stsenariy yakunigacha",
+        "eyebrow": "Joriy qiymatlar natija emas",
+        "title": "Nima uchun natija bugungi indikatorlardan farq qiladi",
+        "body": "Overview kesimi boshlang'ich sharoitlarni beradi. Keyin QPM bazaviy trayektoriyani hisoblaydi va tanlangan stsenariyni bazaviy yakun bilan solishtiradi.",
+        "start": "Boshlanish · {{period}}",
+        "baseline": "Bazaviy yakun",
+        "scenario": "Stsenariy yakuni",
+        "effect": "Effekt"
+      },
       "activeShocks": {
         "ariaLabel": "Faol QPM shok taxminlari",
         "title": "Faol shoklar",
@@ -1009,7 +1030,9 @@
         "difference": "Stsenariy minus bazaviy",
         "noMaterialDifference": "Ushbu stsenariyda bazaviy trayektoriyadan sezilarli farq yo'q."
       },
-      "deltaVsBaseline": "{{delta}} bazaviyga nisbatan"
+      "deltaVsBaseline": "{{delta}} bazaviyga nisbatan",
+      "effectVsBaseline": "Bazaviyga nisbatan effekt",
+      "scenarioAndBaseline": "Stsenariy {{scenario}} · bazaviy {{baseline}}"
     },
     "interpretation": {
       "title": "Talqin",

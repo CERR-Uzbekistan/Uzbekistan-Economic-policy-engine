@@ -55,11 +55,12 @@ async function createTestI18n() {
                 none: 'No active shocks.',
               },
               decision: {
-                eyebrow: 'Scenario result',
-                title: 'Scenario result by {{period}}',
+                eyebrow: 'Scenario effect',
+                title: 'Effect by {{period}}',
                 currentScenario: 'current scenario',
                 periodUnavailable: 'the final quarter',
-                lead: 'If “{{scenarioName}}” is applied, the QPM result is:',
+                lead:
+                  'If “{{scenarioName}}” is applied, the QPM result is shown first as the change versus baseline.',
                 note: 'GDP, inflation, and policy rate use QPM equations.',
               },
               explanations: {
@@ -88,6 +89,29 @@ async function createTestI18n() {
                 exportedAt: 'Exported',
                 contextOnly: 'context only',
               },
+              calculation: {
+                ariaLabel: 'How QPM scenario results are calculated',
+                lead:
+                  'Where the result comes from: QPM combines the starting point, the selected shock, and the model equations.',
+                start: 'Start',
+                shock: 'Shock',
+                model: 'Model',
+                output: 'Output',
+                noShock: 'No active shock',
+                unknownSource: 'Latest available snapshot',
+                qpmModel: 'QPM scenario model',
+              },
+              bridge: {
+                ariaLabel: 'Current indicators to QPM scenario endpoint',
+                eyebrow: 'Current values are not the result',
+                title: "Why the result can differ from today's indicators",
+                body:
+                  'The Overview snapshot sets the starting conditions. QPM then projects a baseline path and compares the selected scenario against that baseline endpoint.',
+                start: 'Start · {{period}}',
+                baseline: 'Baseline endpoint',
+                scenario: 'Scenario endpoint',
+                effect: 'Effect',
+              },
               pathDeltas: {
                 period: 'Endpoint',
                 baselineEnd: 'Baseline endpoint',
@@ -96,6 +120,8 @@ async function createTestI18n() {
                 noMaterialDifference: 'No material difference from baseline.',
               },
               deltaVsBaseline: '{{delta}} vs baseline',
+              effectVsBaseline: 'Effect vs baseline',
+              scenarioAndBaseline: 'Scenario {{scenario}} · baseline {{baseline}}',
             },
             assumptions: {
               inputs: {
@@ -137,15 +163,23 @@ describe('ResultsPanel clarification copy', () => {
     )
 
     assert.match(markup, /Scenario impulse response/)
-    assert.match(markup, /Scenario result by 2027 Q2/)
+    assert.match(markup, /Effect by 2027 Q2/)
     assert.match(markup, /Starting point/)
     assert.match(markup, /Latest Overview snapshot/)
+    assert.match(markup, /Where the result comes from/)
+    assert.match(markup, /Overview 2026-05-21/)
+    assert.match(markup, /Policy rate change \+1\.0 pp/)
+    assert.match(markup, /Quarterly Projection Model \(Uzbekistan\)/)
+    assert.match(markup, /Effect vs baseline/)
+    assert.match(markup, /Why the result can differ from today&#x27;s indicators/)
+    assert.match(markup, /Current values are not the result/)
+    assert.match(markup, /Scenario .*baseline/)
     assert.match(markup, /Active shocks/)
     assert.match(markup, /Policy rate change/)
     assert.match(markup, /Deviation from baseline; zero line marks no effect/)
     assert.match(markup, /QPM reference calculation: deviations from baseline over 12 quarters/)
     assert.match(markup, /deviates from the baseline across 12 quarters/)
-    assert.match(markup, /0\.0 pp vs baseline/)
+    assert.match(markup, /0\.0 pp/)
     assert.doesNotMatch(markup, />QPM REFERENCE</)
     assert.doesNotMatch(markup, /QPM · FPP/)
     assert.doesNotMatch(markup, /Mock Scenario Lab/)
