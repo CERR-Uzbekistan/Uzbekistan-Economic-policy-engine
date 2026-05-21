@@ -158,16 +158,53 @@ function buildScreenReaderSummary(spec: ChartSpec, fallbackLabel: string): strin
   return `${spec.title} ${fallbackLabel}`
 }
 
+function localizeChartSpec(spec: ChartSpec, t: ReturnType<typeof useTranslation>['t']): ChartSpec {
+  const key = `chartRenderer.spec.${spec.chart_id}`
+  return {
+    ...spec,
+    title: t(`${key}.title`, { defaultValue: spec.title }),
+    subtitle: t(`${key}.subtitle`, { defaultValue: spec.subtitle }),
+    x: {
+      ...spec.x,
+      label: t(`${key}.xLabel`, { defaultValue: spec.x.label }),
+    },
+    y: {
+      ...spec.y,
+      label: t(`${key}.yLabel`, { defaultValue: spec.y.label }),
+    },
+    series: spec.series.map((series) => ({
+      ...series,
+      label: t(`${key}.series.${series.series_id}`, { defaultValue: series.label }),
+    })),
+    takeaway: t(`${key}.takeaway`, { defaultValue: spec.takeaway }),
+  }
+}
+
+function publicAttributionLabel(
+  attribution: ChartSpec['model_attribution'][number] | undefined,
+  t: ReturnType<typeof useTranslation>['t'],
+  locale: string | undefined,
+) {
+  if (!attribution) {
+    return formatUnavailable(locale)
+  }
+  if (attribution.model_id === 'scenario-lab-mock-engine') {
+    return t('scenarioLab.results.qpmReferenceBadge', { defaultValue: 'QPM reference' })
+  }
+  return attribution.model_id
+}
+
 export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererProps): JSX.Element {
   const { i18n, t } = useTranslation()
   const locale = i18n.resolvedLanguage ?? i18n.language
+  const localizedSpec = localizeChartSpec(spec, t)
   const bodyRef = useRef<HTMLDivElement>(null)
   const [measuredWidth, setMeasuredWidth] = useState(() =>
     typeof document === 'undefined' ? 640 : 0,
   )
-  const primaryModel = spec.model_attribution[0]?.model_id ?? formatUnavailable(locale)
-  const chartAriaLabel = ariaLabel ?? spec.title
-  const freshness = getFreshness(spec)
+  const primaryModel = publicAttributionLabel(localizedSpec.model_attribution[0], t, locale)
+  const chartAriaLabel = ariaLabel ?? localizedSpec.title
+  const freshness = getFreshness(localizedSpec)
 
   useChartMeasureEffect(() => {
     const element = bodyRef.current
@@ -190,13 +227,13 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
     return () => globalThis.removeEventListener?.('resize', updateWidth)
   }, [])
 
-  if (!hasUsableSeriesData(spec)) {
+  if (!hasUsableSeriesData(localizedSpec)) {
     return (
-      <article className="chart-renderer" aria-labelledby={`chart-renderer-title-${spec.chart_id}`}>
+      <article className="chart-renderer" aria-labelledby={`chart-renderer-title-${localizedSpec.chart_id}`}>
         <header className="chart-renderer__header">
           <div className="chart-renderer__titles">
-            <h3 id={`chart-renderer-title-${spec.chart_id}`}>{spec.title}</h3>
-            {spec.subtitle.trim() ? <p>{spec.subtitle}</p> : null}
+            <h3 id={`chart-renderer-title-${localizedSpec.chart_id}`}>{localizedSpec.title}</h3>
+            {localizedSpec.subtitle.trim() ? <p>{localizedSpec.subtitle}</p> : null}
           </div>
           <AttributionBadge modelId={primaryModel} active />
         </header>
@@ -207,17 +244,17 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
     )
   }
 
-  const seriesMeta = toSeriesMeta(spec)
-  const bandMeta = toBandMeta(spec)
-  const data = buildChartData(spec, seriesMeta, bandMeta)
-  const yUnit = spec.y.unit
-  const yDomain = toYAxisDomain(spec)
+  const seriesMeta = toSeriesMeta(localizedSpec)
+  const bandMeta = toBandMeta(localizedSpec)
+  const data = buildChartData(localizedSpec, seriesMeta, bandMeta)
+  const yUnit = localizedSpec.y.unit
+  const yDomain = toYAxisDomain(localizedSpec)
   const screenReaderSummary = buildScreenReaderSummary(
-    spec,
+    localizedSpec,
     t('chartRenderer.srFallback', { defaultValue: 'chart' }),
   )
   const hasIllustrativeBand = bandMeta.some((item) => item.band.is_illustrative)
-  const suppressInternalLegend = spec.series.some((series) => series.series_id === 'gdp_nowcast_yoy')
+  const suppressInternalLegend = localizedSpec.series.some((series) => series.series_id === 'gdp_nowcast_yoy')
   const chartWidth = Math.max(measuredWidth, 1)
 
   const commonChartChildren = (
@@ -405,11 +442,11 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
   }
 
   return (
-    <article className="chart-renderer" aria-labelledby={`chart-renderer-title-${spec.chart_id}`}>
+    <article className="chart-renderer" aria-labelledby={`chart-renderer-title-${localizedSpec.chart_id}`}>
       <header className="chart-renderer__header">
         <div className="chart-renderer__titles">
-          <h3 id={`chart-renderer-title-${spec.chart_id}`}>{spec.title}</h3>
-          {spec.subtitle.trim() ? <p>{spec.subtitle}</p> : null}
+          <h3 id={`chart-renderer-title-${localizedSpec.chart_id}`}>{localizedSpec.title}</h3>
+          {localizedSpec.subtitle.trim() ? <p>{localizedSpec.subtitle}</p> : null}
         </div>
         <AttributionBadge modelId={primaryModel} active />
       </header>
@@ -419,9 +456,9 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
         {measuredWidth > 0 ? chartBody : null}
       </div>
       <p className="chart-renderer__axis-note">
-        {spec.x.label}
-        {spec.x.unit ? ` (${formatAxisUnitLabel(spec.x.unit, locale)})` : ''} · {spec.y.label}
-        {spec.y.unit ? ` (${formatAxisUnitLabel(spec.y.unit, locale)})` : ''}
+        {localizedSpec.x.label}
+        {localizedSpec.x.unit ? ` (${formatAxisUnitLabel(localizedSpec.x.unit, locale)})` : ''} · {localizedSpec.y.label}
+        {localizedSpec.y.unit ? ` (${formatAxisUnitLabel(localizedSpec.y.unit, locale)})` : ''}
       </p>
       {hasIllustrativeBand ? (
         <p className="chart-renderer__illustrative-note">
@@ -429,9 +466,9 @@ export function ChartRenderer({ spec, height = 280, ariaLabel }: ChartRendererPr
         </p>
       ) : null}
 
-      {spec.takeaway.trim() ? (
+      {localizedSpec.takeaway.trim() ? (
         <p className="chart-renderer__takeaway">
-          <strong>{t('chartRenderer.takeawayLabel', { defaultValue: 'Takeaway.' })}</strong> {spec.takeaway}
+          <strong>{t('chartRenderer.takeawayLabel', { defaultValue: 'Takeaway.' })}</strong> {localizedSpec.takeaway}
         </p>
       ) : null}
 

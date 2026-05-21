@@ -46,8 +46,8 @@ const impulseChart: ChartSpec = {
   takeaway: 'Impulse response peaks in Q2.',
   model_attribution: [
     {
-      model_id: 'QPM',
-      model_name: 'Quarterly Projection Model',
+      model_id: 'scenario-lab-mock-engine',
+      model_name: 'QPM reference calculator',
       module: 'scenario_lab',
       version: '1',
       run_id: 'run-1',
@@ -81,6 +81,11 @@ async function createTestI18n() {
               },
             },
           },
+          chartRenderer: {
+            empty: 'No data available for this chart.',
+            srFallback: 'chart',
+            takeawayLabel: 'Takeaway.',
+          },
         },
       },
     },
@@ -104,6 +109,7 @@ describe('ImpulseResponseChart', () => {
     assert.match(markup, /Quarter · Deviation \(pp\)/)
     assert.match(markup, /Generated from the active scenario assumptions\./)
     assert.match(markup, />QPM REFERENCE</)
+    assert.doesNotMatch(markup, /SCENARIO-LAB-MOCK-ENGINE/)
     assert.doesNotMatch(markup, />QPM · FPP</)
   })
 })

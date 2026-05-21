@@ -743,6 +743,16 @@ export function ScenarioLabPage() {
     saved_runs: 'scenarioLab.modelTabs.savedRuns',
     synthesis_preview: 'scenarioLab.modelTabs.synthesisPreview',
   }
+  const selectedPreset = findPreset(workspace, selectedPresetId)
+  const localizedSelectedPresetName = selectedPreset
+    ? t(`scenarioLab.presets.${selectedPreset.preset_id}.title`, {
+        defaultValue: selectedPreset.title,
+      })
+    : scenarioName
+  const displayScenarioName =
+    selectedPreset && scenarioName === selectedPreset.title
+      ? localizedSelectedPresetName
+      : scenarioName
   const activeContext =
     activeModelTab === 'io_sector_shock'
       ? {
@@ -770,7 +780,7 @@ export function ScenarioLabPage() {
         ? {
             lane: t('scenarioLab.context.lane.macroScenario'),
             model: t('scenarioLab.context.model.qpm'),
-            runName: scenarioName,
+            runName: displayScenarioName,
             dataVintage: dataDateLabel,
             saveState:
               currentScenarioId && !hasPendingEdits
@@ -912,6 +922,7 @@ export function ScenarioLabPage() {
                 onTabChange={setActiveTab}
                 results={currentResults}
                 scenarioName={scenarioName}
+                selectedPresetId={selectedPresetId}
               />
             ) : (
               <section className="scenario-panel scenario-panel--results">

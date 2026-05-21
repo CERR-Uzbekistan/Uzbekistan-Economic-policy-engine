@@ -375,6 +375,7 @@ function buildSeriesPath(baseValue: number, scenarioValue: number, softness = 0.
 }
 
 function buildChartSeries(
+  chartId: string,
   title: string,
   subtitle: string,
   axisLabel: string,
@@ -384,7 +385,7 @@ function buildChartSeries(
   takeaway: string,
 ): ChartSpec {
   return {
-    chart_id: title.toLowerCase().replace(/\s+/g, '_'),
+    chart_id: chartId,
     title,
     subtitle,
     chart_type: 'line',
@@ -522,7 +523,7 @@ function buildInterpretationCore(values: ScenarioLabAssumptionState): ScenarioLa
 // Prompt §4.4: clickable suggested-next anchors with route + preset targets.
 const SCENARIO_LAB_SUGGESTED_NEXT: SuggestedNextScenario[] = [
   {
-    label: 'Pair with remittance downside',
+    label: 'Deepen external-demand slowdown',
     target_route: '/scenario-lab',
     target_preset: 'external-slowdown',
   },
@@ -691,6 +692,7 @@ export function buildScenarioLabResults(
         model_attribution: [ATTRIBUTION],
       },
       macro_path: buildChartSeries(
+        'qpm_macro_path',
         'Macro path (real GDP growth)',
         'Baseline and scenario trajectories',
         'GDP growth',
@@ -700,6 +702,7 @@ export function buildScenarioLabResults(
         'Growth path reflects combined demand, cost, and policy-rate channels.',
       ),
       external_balance: buildChartSeries(
+        'qpm_external_balance',
         'External balance path (current account)',
         'Baseline and scenario trajectories',
         'Current account',
@@ -709,6 +712,7 @@ export function buildScenarioLabResults(
         'External balance responds to exchange-rate, trade, and remittance assumptions.',
       ),
       fiscal_effects: buildChartSeries(
+        'qpm_fiscal_effects',
         'Fiscal effects path (fiscal balance)',
         'Baseline and scenario trajectories',
         'Fiscal balance',

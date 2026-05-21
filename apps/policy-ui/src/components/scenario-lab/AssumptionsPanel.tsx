@@ -67,19 +67,25 @@ function AssumptionField({
   showTechnical,
   onChange,
   technicalPrefix,
+  numericValueLabel,
+  label,
+  description,
 }: {
   item: ScenarioLabAssumptionInput
   value: number
   showTechnical: boolean
   onChange: (nextValue: number) => void
   technicalPrefix: string
+  numericValueLabel: string
+  label: string
+  description: string
 }) {
   const displayValue = Number.isFinite(value) ? value : item.default_value
 
   return (
     <div className="scenario-assumption-field assumption-field">
       <div className="scenario-assumption-field__label assumption-field__label">
-        <span className="name">{item.label}</span>
+        <span className="name">{label}</span>
         <span className="value">
           {formatAssumptionValue(displayValue, item.step)} {item.unit}
         </span>
@@ -92,10 +98,10 @@ function AssumptionField({
         step={item.step}
         value={displayValue}
         onChange={(event) => onChange(normalizeAssumptionValue(item, Number(event.target.value)))}
-        aria-label={item.label}
+        aria-label={label}
       />
       <span className="scenario-assumption-field__description assumption-field__help">
-        {item.description}
+        {description}
       </span>
       <div className="scenario-assumption-field__control">
         <input
@@ -105,7 +111,7 @@ function AssumptionField({
           step={item.step}
           value={displayValue}
           onChange={(event) => onChange(normalizeAssumptionValue(item, Number(event.target.value)))}
-          aria-label={`${item.label} numeric value`}
+          aria-label={numericValueLabel.replace('{{label}}', label)}
         />
         <span className="scenario-assumption-field__unit">{item.unit}</span>
       </div>
@@ -148,6 +154,13 @@ export function AssumptionsPanel({
   const [showTechnical, setShowTechnical] = useState(false)
   const [isSavedModalOpen, setIsSavedModalOpen] = useState(false)
   const technicalPrefix = t('scenarioLab.assumptions.technicalPrefix')
+  const numericValueLabel = t('scenarioLab.assumptions.numericValueLabel')
+  const assumptionLabel = (item: ScenarioLabAssumptionInput) =>
+    t(`scenarioLab.assumptions.inputs.${item.key}.label`, { defaultValue: item.label })
+  const assumptionDescription = (item: ScenarioLabAssumptionInput) =>
+    t(`scenarioLab.assumptions.inputs.${item.key}.description`, {
+      defaultValue: item.description,
+    })
 
   const grouped = useMemo(
     () =>
@@ -189,7 +202,7 @@ export function AssumptionsPanel({
       </div>
 
       {/* Preset chip rail */}
-      <div className="presets" role="radiogroup" aria-label={t('scenarioLab.form.preset')}>
+      <div className="presets" aria-label={t('scenarioLab.form.preset')}>
         {presets.map((preset) => {
           const presentation = buildPresetChipPresentation(
             selectedPresetId,
@@ -205,7 +218,7 @@ export function AssumptionsPanel({
               onClick={presentation.onClick}
               onKeyDown={presentation.onKeyDown}
             >
-              {preset.title}
+              {t(`scenarioLab.presets.${preset.preset_id}.title`, { defaultValue: preset.title })}
             </button>
           )
         })}
@@ -339,6 +352,9 @@ export function AssumptionsPanel({
                 value={values[item.key] ?? item.default_value}
                 showTechnical={showTechnical}
                 technicalPrefix={technicalPrefix}
+                numericValueLabel={numericValueLabel}
+                label={assumptionLabel(item)}
+                description={assumptionDescription(item)}
                 onChange={(nextValue) => onAssumptionChange(item.key, nextValue)}
               />
             ))}
@@ -358,6 +374,9 @@ export function AssumptionsPanel({
                 value={values[item.key] ?? item.default_value}
                 showTechnical={showTechnical}
                 technicalPrefix={technicalPrefix}
+                numericValueLabel={numericValueLabel}
+                label={assumptionLabel(item)}
+                description={assumptionDescription(item)}
                 onChange={(nextValue) => onAssumptionChange(item.key, nextValue)}
               />
             ))}
@@ -380,6 +399,9 @@ export function AssumptionsPanel({
                 value={values[item.key] ?? item.default_value}
                 showTechnical={showTechnical}
                 technicalPrefix={technicalPrefix}
+                numericValueLabel={numericValueLabel}
+                label={assumptionLabel(item)}
+                description={assumptionDescription(item)}
                 onChange={(nextValue) => onAssumptionChange(item.key, nextValue)}
               />
             ))}

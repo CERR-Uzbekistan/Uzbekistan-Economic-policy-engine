@@ -44,7 +44,54 @@
     "empty": "No data available for this chart.",
     "srFallback": "chart",
     "illustrativeBand": "Illustrative uncertainty band (hatched).",
-    "takeawayLabel": "Takeaway."
+    "takeawayLabel": "Takeaway.",
+    "spec": {
+      "scenario_lab_impulse_response": {
+        "title": "QPM impulse response vs baseline",
+        "subtitle": "Deviation from baseline over 12 quarters; reference calculation, not a live forecast.",
+        "xLabel": "Horizon",
+        "yLabel": "Deviation from baseline",
+        "series": {
+          "gdp_gap": "GDP gap",
+          "inflation": "Inflation",
+          "policy_rate": "Policy rate"
+        },
+        "takeaway": "Read each line as a scenario deviation from baseline, not as a standalone forecast level."
+      },
+      "qpm_macro_path": {
+        "title": "Real GDP growth path",
+        "subtitle": "Baseline and selected scenario",
+        "xLabel": "Period",
+        "yLabel": "GDP growth",
+        "series": {
+          "baseline_path": "Baseline",
+          "scenario_path": "Scenario"
+        },
+        "takeaway": "Growth path reflects demand, cost, and policy-rate channels."
+      },
+      "qpm_external_balance": {
+        "title": "Current account path",
+        "subtitle": "Baseline and selected scenario",
+        "xLabel": "Period",
+        "yLabel": "Current account",
+        "series": {
+          "baseline_path": "Baseline",
+          "scenario_path": "Scenario"
+        },
+        "takeaway": "External balance responds to exchange-rate, trade, and remittance assumptions."
+      },
+      "qpm_fiscal_effects": {
+        "title": "Fiscal balance path",
+        "subtitle": "Baseline and selected scenario",
+        "xLabel": "Period",
+        "yLabel": "Fiscal balance",
+        "series": {
+          "baseline_path": "Baseline",
+          "scenario_path": "Scenario"
+        },
+        "takeaway": "Fiscal outcomes are reference accounting effects, not a separate fiscal-model run."
+      }
+    }
   },
   "nav": {
     "overview": "Overview",
@@ -781,6 +828,23 @@
         "saved": "Saved"
       }
     },
+    "presets": {
+      "baseline": {
+        "title": "Baseline"
+      },
+      "rate-cut-100bp": {
+        "title": "Policy rate cut (-100 bp)"
+      },
+      "rate-hike-100bp": {
+        "title": "Policy rate hike (+100 bp)"
+      },
+      "exchange-rate-shock": {
+        "title": "UZS depreciation (+10%)"
+      },
+      "external-slowdown": {
+        "title": "External slowdown"
+      }
+    },
     "form": {
       "preset": "Preset",
       "scenarioName": "Scenario name",
@@ -808,10 +872,53 @@
       "description": "Define policy and shock assumptions in plain language.",
       "showTechnical": "Show technical variable names",
       "technicalPrefix": "Technical: {{variable}}",
+      "numericValueLabel": "{{label}} numeric value",
       "qpmCoreTitle": "QPM core",
       "qpmCoreDescription": "Main QPM controls shown first: policy stance, exchange rate, and foreign output gap.",
       "linkedTitle": "Linked assumptions",
       "linkedDescription": "Supporting external, fiscal, and trade inputs used in this reference calculation. They are not a live handoff to PE, I-O, DFM, or FPP.",
+      "inputs": {
+        "policy_rate_change": {
+          "label": "Policy rate change",
+          "description": "Change in policy rate relative to baseline stance."
+        },
+        "exchange_rate_change": {
+          "label": "Exchange-rate depreciation",
+          "description": "Additional depreciation relative to baseline path."
+        },
+        "export_demand_change": {
+          "label": "Foreign output gap shock",
+          "description": "Foreign output-gap shock entering the QPM IS curve through b3 * gap*_t."
+        },
+        "remittance_change": {
+          "label": "Remittance shock",
+          "description": "Change in remittance inflows against baseline."
+        },
+        "commodity_price_change": {
+          "label": "Commodity price shock",
+          "description": "External commodity-price move affecting import bill and inflation."
+        },
+        "gov_spending_change": {
+          "label": "Government spending",
+          "description": "Change in government spending relative to baseline."
+        },
+        "tax_revenue_change": {
+          "label": "Tax revenue effort",
+          "description": "Change in tax revenue effort relative to baseline."
+        },
+        "tariff_change": {
+          "label": "Import tariff change",
+          "description": "Change in import tariff setting relative to baseline."
+        },
+        "pass_through_adjustment": {
+          "label": "FX pass-through",
+          "description": "Additional exchange-rate pass-through to inflation."
+        },
+        "risk_premium_shock": {
+          "label": "Risk premium shock",
+          "description": "External financing-risk shock affecting policy and activity."
+        }
+      },
       "categories": {
         "macro": "Monetary",
         "external": "External",
@@ -836,6 +943,12 @@
       "impulseResponseCaption": "QPM reference calculation: deviations from baseline over 12 quarters, in percentage points. It should not be cited as a live forecast.",
       "qpmReferenceBadge": "QPM reference",
       "headlineMetricsAria": "Headline macro indicators",
+      "metrics": {
+        "gdp_growth": "GDP growth",
+        "inflation": "Inflation",
+        "current_account": "Current account",
+        "policy_rate": "Policy rate"
+      },
       "decision": {
         "eyebrow": "Decision view",
         "title": "QPM reference result",
@@ -860,12 +973,43 @@
     "interpretation": {
       "title": "Interpretation",
       "description": "Translate model outputs into decision language.",
+      "and": "and",
       "sections": {
         "whatChanged": "What changed",
         "whyItChanged": "Why it changed",
         "keyRisks": "Key risks",
         "policyImplications": "Policy implications",
         "suggestedNextScenarios": "Suggested next scenarios"
+      },
+      "drivers": {
+        "policyRate": "policy-rate setting",
+        "exchangeRate": "exchange-rate path",
+        "remittances": "remittance inflows",
+        "commodityPrices": "commodity-price pressure",
+        "governmentSpending": "government spending",
+        "taxRevenue": "tax-revenue effort",
+        "importTariff": "import tariff setting",
+        "externalDemand": "external demand",
+        "passThrough": "pass-through calibration",
+        "riskPremium": "risk premium"
+      },
+      "items": {
+        "gdpGrowthDelta": "GDP growth is {{delta}} pp versus baseline by 2026 Q4.",
+        "inflationNoShock": "Inflation is {{delta}} pp versus baseline; no additional price shock channel is selected.",
+        "inflationDrivers": "Inflation is {{delta}} pp versus baseline; active price channels: {{drivers}}.",
+        "balanceDrivers": "External and fiscal balances move through {{drivers}}.",
+        "balanceNearBaseline": "External and fiscal balances stay near baseline because remittance, trade, spending, and revenue settings are unchanged.",
+        "mainDrivers": "Main drivers are {{drivers}}.",
+        "domesticDemandSequence": "Domestic demand and price channels respond first, then external and fiscal balances adjust.",
+        "passThroughRisk": "Pass-through may be stronger than assumed when exchange-rate shocks are persistent.",
+        "fiscalExternalRisk": "Fiscal and external shocks can amplify each other in downside cases.",
+        "sequencePolicy": "Sequence monetary and fiscal decisions to avoid conflicting signals.",
+        "targetedMitigation": "Use targeted mitigation if downside scenarios widen the growth-inflation trade-off."
+      },
+      "suggestedNext": {
+        "external-slowdown": "Deepen external-demand slowdown",
+        "exchange-rate-shock": "Add exchange-rate pass-through stress",
+        "compare_with_baseline_and_tight_money": "Compare with baseline and tight money"
       },
       "aiAttribution": {
         "title": "AI-assisted · Unreviewed draft",

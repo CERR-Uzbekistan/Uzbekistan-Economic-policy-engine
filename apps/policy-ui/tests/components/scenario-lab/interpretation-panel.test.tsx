@@ -7,10 +7,10 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { InterpretationPanel } from '../../../src/components/scenario-lab/InterpretationPanel.js'
 import type { ScenarioLabInterpretation } from '../../../src/contracts/data-contract.js'
 
-async function createTestI18n() {
+async function createTestI18n(lng = 'en') {
   const instance = i18next.createInstance()
   await instance.use(initReactI18next).init({
-    lng: 'en',
+    lng,
     fallbackLng: 'en',
     defaultNS: 'common',
     ns: ['common'],
@@ -22,12 +22,28 @@ async function createTestI18n() {
             interpretation: {
               title: 'Interpretation',
               description: 'Translate model outputs into decision language.',
+              and: 'and',
               sections: {
                 whatChanged: 'What changed',
                 whyItChanged: 'Why it changed',
                 keyRisks: 'Key risks',
                 policyImplications: 'Policy implications',
                 suggestedNextScenarios: 'Suggested next scenarios',
+              },
+              drivers: {
+                externalDemand: 'external demand',
+                exchangeRate: 'exchange-rate path',
+              },
+              items: {
+                gdpGrowthDelta: 'GDP growth is {{delta}} pp versus baseline by 2026 Q4.',
+                mainDrivers: 'Main drivers are {{drivers}}.',
+                passThroughRisk:
+                  'Pass-through may be stronger than assumed when exchange-rate shocks are persistent.',
+                targetedMitigation:
+                  'Use targeted mitigation if downside scenarios widen the growth-inflation trade-off.',
+              },
+              suggestedNext: {
+                'external-slowdown': 'Deepen external-demand slowdown',
               },
               aiAttribution: {
                 assisted: {
@@ -39,6 +55,51 @@ async function createTestI18n() {
                   title: 'AI-assisted · Reviewed {{reviewed_at}}',
                   body:
                     'AI-assisted narrative, reviewed by {{reviewer_name}} on {{review_date}}. Cleared for internal use and citation.',
+                },
+              },
+            },
+          },
+        },
+      },
+      ru: {
+        common: {
+          scenarioLab: {
+            interpretation: {
+              title: 'Интерпретация',
+              description: 'Преобразуйте результаты моделей в язык решений.',
+              and: 'и',
+              sections: {
+                whatChanged: 'Что изменилось',
+                whyItChanged: 'Почему это изменилось',
+                keyRisks: 'Ключевые риски',
+                policyImplications: 'Политические последствия',
+                suggestedNextScenarios: 'Следующие сценарии',
+              },
+              drivers: {
+                externalDemand: 'внешний спрос',
+                exchangeRate: 'траектория обменного курса',
+              },
+              items: {
+                gdpGrowthDelta: 'Рост ВВП на {{delta}} п.п. к базовой траектории к 2026 Q4.',
+                mainDrivers: 'Основные драйверы: {{drivers}}.',
+                passThroughRisk:
+                  'Перенос курса в цены может быть сильнее, если курсовой шок сохраняется.',
+                targetedMitigation:
+                  'Используйте адресные меры, если негативные сценарии ухудшают компромисс между ростом и инфляцией.',
+              },
+              suggestedNext: {
+                'external-slowdown': 'Углубить сценарий внешнего замедления',
+              },
+              aiAttribution: {
+                assisted: {
+                  title: 'С участием ИИ · непроверенный черновик',
+                  body:
+                    'Черновик с участием ИИ. Сгенерирован на основе результатов модели, ещё не проверен аналитическим персоналом CERR. Не цитировать, не экспортировать и не передавать вне организации.',
+                },
+                reviewed: {
+                  title: 'С участием ИИ · проверено {{reviewed_at}}',
+                  body:
+                    'Нарратив с участием ИИ, проверен {{reviewer_name}} {{review_date}}. Допущен для внутреннего использования и цитирования.',
                 },
               },
             },
@@ -190,5 +251,41 @@ describe('InterpretationPanel', () => {
 
     assert.match(markup, /href="\/scenario-lab\?preset=russia_slowdown"/)
     assert.match(markup, /href="\/comparison"/)
+  })
+
+  it('localizes generated QPM interpretation sentences and suggested links', async () => {
+    const i18n = await createTestI18n('ru')
+    const markup = renderToStaticMarkup(
+      <MemoryRouter>
+        <I18nextProvider i18n={i18n}>
+          <InterpretationPanel
+            interpretation={buildInterpretation({
+              what_changed: ['GDP growth is -0.2 pp versus baseline by 2026 Q4.'],
+              why_it_changed: ['Main drivers are external demand and exchange-rate path.'],
+              key_risks: [
+                'Pass-through may be stronger than assumed when exchange-rate shocks are persistent.',
+              ],
+              policy_implications: [
+                'Use targeted mitigation if downside scenarios widen the growth-inflation trade-off.',
+              ],
+              suggested_next: [
+                {
+                  label: 'Deepen external-demand slowdown',
+                  target_route: '/scenario-lab',
+                  target_preset: 'external-slowdown',
+                },
+              ],
+            })}
+          />
+        </I18nextProvider>
+      </MemoryRouter>,
+    )
+
+    assert.match(markup, /Рост ВВП на -0\.2 п\.п\./)
+    assert.match(markup, /Основные драйверы: внешний спрос и траектория обменного курса/)
+    assert.match(markup, /Углубить сценарий внешнего замедления/)
+    assert.doesNotMatch(markup, /GDP growth is/)
+    assert.doesNotMatch(markup, /Main drivers are/)
+    assert.doesNotMatch(markup, /Deepen external-demand slowdown/)
   })
 })

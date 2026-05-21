@@ -44,7 +44,54 @@
     "empty": "Bu grafik uchun ma'lumot mavjud emas.",
     "srFallback": "grafik",
     "illustrativeBand": "Noaniqlikning illustrativ oralig'i (shtrixlangan).",
-    "takeawayLabel": "Xulosa."
+    "takeawayLabel": "Xulosa.",
+    "spec": {
+      "scenario_lab_impulse_response": {
+        "title": "QPM impuls javobi bazaga nisbatan",
+        "subtitle": "12 chorak bo'yicha bazadan og'ish; ma'lumot hisob-kitobi, rasmiy prognoz emas.",
+        "xLabel": "Gorizont",
+        "yLabel": "Bazadan og'ish",
+        "series": {
+          "gdp_gap": "YaIM tafovuti",
+          "inflation": "Inflyatsiya",
+          "policy_rate": "Stavka"
+        },
+        "takeaway": "Har bir chiziq stsenariyning bazadan og'ishini ko'rsatadi, mustaqil prognoz darajasi emas."
+      },
+      "qpm_macro_path": {
+        "title": "Real YaIM o'sishi trayektoriyasi",
+        "subtitle": "Baza va tanlangan stsenariy",
+        "xLabel": "Davr",
+        "yLabel": "YaIM o'sishi",
+        "series": {
+          "baseline_path": "Baza",
+          "scenario_path": "Stsenariy"
+        },
+        "takeaway": "O'sish trayektoriyasi talab, xarajatlar va siyosiy stavka kanallarini aks ettiradi."
+      },
+      "qpm_external_balance": {
+        "title": "Joriy hisob trayektoriyasi",
+        "subtitle": "Baza va tanlangan stsenariy",
+        "xLabel": "Davr",
+        "yLabel": "Joriy hisob",
+        "series": {
+          "baseline_path": "Baza",
+          "scenario_path": "Stsenariy"
+        },
+        "takeaway": "Tashqi balans kurs, savdo va pul o'tkazmalari bo'yicha taxminlarga javob beradi."
+      },
+      "qpm_fiscal_effects": {
+        "title": "Fiskal balans trayektoriyasi",
+        "subtitle": "Baza va tanlangan stsenariy",
+        "xLabel": "Davr",
+        "yLabel": "Fiskal balans",
+        "series": {
+          "baseline_path": "Baza",
+          "scenario_path": "Stsenariy"
+        },
+        "takeaway": "Fiskal ta'sirlar alohida fiskal model emas, ma'lumot buxgalteriya bahosidir."
+      }
+    }
   },
   "nav": {
     "overview": "Umumiy ko'rinish",
@@ -781,6 +828,23 @@
         "saved": "Saqlangan"
       }
     },
+    "presets": {
+      "baseline": {
+        "title": "Bazaviy stsenariy"
+      },
+      "rate-cut-100bp": {
+        "title": "Stavkani pasaytirish (-100 b.p.)"
+      },
+      "rate-hike-100bp": {
+        "title": "Stavkani oshirish (+100 b.p.)"
+      },
+      "exchange-rate-shock": {
+        "title": "So'm qadrsizlanishi (+10%)"
+      },
+      "external-slowdown": {
+        "title": "Tashqi sekinlashuv"
+      }
+    },
     "form": {
       "preset": "Andoza",
       "scenarioName": "Stsenariy nomi",
@@ -808,10 +872,53 @@
       "description": "Siyosat va shok taxminlarini sodda tilda belgilang.",
       "showTechnical": "Texnik o'zgaruvchi nomlarini ko'rsatish",
       "technicalPrefix": "Texnik o'zgaruvchi: {{variable}}",
+      "numericValueLabel": "{{label}} raqamli qiymati",
       "qpmCoreTitle": "QPM yadrosi",
       "qpmCoreDescription": "Avval asosiy QPM boshqaruvlari ko'rsatiladi: siyosat stavkasi, almashuv kursi va xorijiy ishlab chiqarish uzilishi.",
       "linkedTitle": "Bog'langan taxminlar",
       "linkedDescription": "Ushbu ma'lumot hisobida ishlatiladigan qo'shimcha tashqi, fiskal va savdo kirishlari. Bu PE, I-O, DFM yoki FPP bilan jonli almashinuv emas.",
+      "inputs": {
+        "policy_rate_change": {
+          "label": "Stavka o'zgarishi",
+          "description": "Siyosat stavkasining bazaviy trayektoriyaga nisbatan o'zgarishi."
+        },
+        "exchange_rate_change": {
+          "label": "Almashuv kursi qadrsizlanishi",
+          "description": "Bazaviy trayektoriyaga nisbatan qo'shimcha qadrsizlanish."
+        },
+        "export_demand_change": {
+          "label": "Tashqi ishlab chiqarish tafovuti shoki",
+          "description": "Tashqi ishlab chiqarish tafovuti QPM IS egri chizig'iga b3 * gap*_t orqali kiradi."
+        },
+        "remittance_change": {
+          "label": "Pul o'tkazmalari shoki",
+          "description": "Pul o'tkazmalari oqimining bazaga nisbatan o'zgarishi."
+        },
+        "commodity_price_change": {
+          "label": "Xomashyo narxi shoki",
+          "description": "Import xarajati va inflyatsiyaga ta'sir qiluvchi tashqi xomashyo narxi o'zgarishi."
+        },
+        "gov_spending_change": {
+          "label": "Davlat xarajatlari",
+          "description": "Davlat xarajatlarining bazaga nisbatan o'zgarishi."
+        },
+        "tax_revenue_change": {
+          "label": "Soliq tushumlari",
+          "description": "Soliq yig'imlari harakatining bazaga nisbatan o'zgarishi."
+        },
+        "tariff_change": {
+          "label": "Import tarifi o'zgarishi",
+          "description": "Import tarifi sozlamasining bazaga nisbatan o'zgarishi."
+        },
+        "pass_through_adjustment": {
+          "label": "Kursdan narxlarga o'tish",
+          "description": "Almashuv kursining inflyatsiyaga qo'shimcha o'tishi."
+        },
+        "risk_premium_shock": {
+          "label": "Risk-premiya shoki",
+          "description": "Stavka va faollikka ta'sir qiluvchi tashqi moliyalashtirish riski shoki."
+        }
+      },
       "categories": {
         "macro": "Makro taxminlar",
         "external": "Tashqi taxminlar",
@@ -836,6 +943,12 @@
       "impulseResponseCaption": "QPM ma'lumot hisobi: 12 chorak davomida bazaviydan og'ishlar, foiz punktlarida. Jonli prognoz sifatida keltirilmasin.",
       "qpmReferenceBadge": "QPM ma'lumot",
       "headlineMetricsAria": "Asosiy makro ko'rsatkichlar",
+      "metrics": {
+        "gdp_growth": "YaIM o'sishi",
+        "inflation": "Inflyatsiya",
+        "current_account": "Joriy hisob",
+        "policy_rate": "Stavka"
+      },
       "decision": {
         "eyebrow": "Qaror ko'rinishi",
         "title": "QPM ma'lumot natijasi",
@@ -860,12 +973,43 @@
     "interpretation": {
       "title": "Talqin",
       "description": "Model natijalarini qaror qabul qilish tiliga o'tkazing.",
+      "and": "va",
       "sections": {
         "whatChanged": "Nima o'zgardi",
         "whyItChanged": "Nima uchun o'zgardi",
         "keyRisks": "Asosiy risklar",
         "policyImplications": "Siyosiy xulosalar",
         "suggestedNextScenarios": "Keyingi tavsiya etilgan stsenariylar"
+      },
+      "drivers": {
+        "policyRate": "stavka sozlamasi",
+        "exchangeRate": "almashuv kursi trayektoriyasi",
+        "remittances": "pul o'tkazmalari",
+        "commodityPrices": "xomashyo narxlari",
+        "governmentSpending": "davlat xarajatlari",
+        "taxRevenue": "soliq tushumlari",
+        "importTariff": "import tarifi",
+        "externalDemand": "tashqi talab",
+        "passThrough": "kursdan narxlarga o'tish kalibrovkasi",
+        "riskPremium": "risk-premiya"
+      },
+      "items": {
+        "gdpGrowthDelta": "YaIM o'sishi 2026 Q4 ga kelib bazaga nisbatan {{delta}} f.p.",
+        "inflationNoShock": "Inflyatsiya bazaga nisbatan {{delta}} f.p.; qo'shimcha narx shoki tanlanmagan.",
+        "inflationDrivers": "Inflyatsiya bazaga nisbatan {{delta}} f.p.; faol narx kanallari: {{drivers}}.",
+        "balanceDrivers": "Tashqi va fiskal balanslar {{drivers}} orqali o'zgaradi.",
+        "balanceNearBaseline": "Pul o'tkazmalari, savdo, xarajat va tushum sozlamalari o'zgarmagani uchun tashqi va fiskal balanslar bazaga yaqin qoladi.",
+        "mainDrivers": "Asosiy drayverlar: {{drivers}}.",
+        "domesticDemandSequence": "Avval ichki talab va narx kanallari javob beradi, keyin tashqi va fiskal balanslar moslashadi.",
+        "passThroughRisk": "Kurs shoki barqaror bo'lsa, kursdan narxlarga o'tish kuchliroq bo'lishi mumkin.",
+        "fiscalExternalRisk": "Fiskal va tashqi shoklar salbiy holatlarda bir-birini kuchaytirishi mumkin.",
+        "sequencePolicy": "Qarama-qarshi signallar bo'lmasligi uchun monetar va fiskal qarorlarni ketma-ketlikda baholang.",
+        "targetedMitigation": "Salbiy stsenariylar o'sish-inflyatsiya muvozanatini yomonlashtirsa, manzilli yumshatish choralaridan foydalaning."
+      },
+      "suggestedNext": {
+        "external-slowdown": "Tashqi sekinlashuv stsenariysini chuqurlashtirish",
+        "exchange-rate-shock": "Kursdan narxlarga o'tish stressini qo'shish",
+        "compare_with_baseline_and_tight_money": "Baza va qattiq pul-kredit sharoiti bilan solishtirish"
       },
       "aiAttribution": {
         "title": "AI yordamida · ko'rib chiqilmagan qoralama",
