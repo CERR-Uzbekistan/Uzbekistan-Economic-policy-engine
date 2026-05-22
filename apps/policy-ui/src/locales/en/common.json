@@ -647,6 +647,13 @@
         "employmentNote": "Fixed-intensity estimate",
         "multiplierNote": "Total resources per 1 UZS final-demand shock"
       },
+      "importContent": {
+        "title": "Domestic and import content",
+        "body": "Estimated with each sector's source import share. This is an I-O accounting split, not a trade forecast.",
+        "domestic": "Domestic resource part",
+        "imported": "Import content",
+        "share": "Import share"
+      },
       "decision": {
         "eyebrow": "Decision view",
         "title": "Final-demand shock result",

@@ -23,6 +23,7 @@ const IO_CAVEAT_TITLES: Record<string, string> = {
   'io-sector-names-ru-source': 'Sector names in source language',
   'io-sector-dictionary-prepared': 'Sector dictionary prepared',
   'io-employment-mcp-source': 'Employment effects are linear estimates',
+  'io-import-content-accounting': 'Import content is accounting only',
 }
 
 function toIsoDateLabel(value: string): string {
@@ -131,6 +132,12 @@ function withBridgeEvidence(
           value: `${payload.metadata.source_title}; source ${payload.metadata.source}; base year ${payload.metadata.base_year}; ${adapterOutput.metadata.n_sectors} sectors; source monetary arrays with Scenario Lab results in bln UZS.`,
         },
         {
+          label: 'Source workbooks',
+          value: payload.metadata.source_workbooks
+            .map((workbook) => `${workbook.file_name} (${workbook.sheets.join(', ')})`)
+            .join('; '),
+        },
+        {
           label: 'Sector codes',
           value:
             'Sector codes are carried from the source artifact. Broad groups are derived only from the leading sector-code letter; tradable/upstream tags remain null until a source or rule is accepted.',
@@ -220,6 +227,11 @@ function withBridgeEvidence(
         description: payload.metadata.source_artifact,
         vintage_label: toIsoDateLabel(payload.metadata.exported_at),
       },
+      ...payload.metadata.source_workbooks.map((workbook) => ({
+        institution: 'Local I-O source workbook',
+        description: `${workbook.file_name}: ${workbook.description}`,
+        vintage_label: workbook.sheets.join(', '),
+      })),
       {
         institution: 'United Nations',
         description:
@@ -241,7 +253,7 @@ function withBridgeEvidence(
     ],
     validation_summary: [
       `Readiness status: internally ready as a documented sector-transmission and multiplier tool, using base year ${payload.metadata.base_year} and ${adapterOutput.metadata.n_sectors} sectors.`,
-      `Core validation checks cover Leontief matrix usability, aligned sector arrays, coefficient bounds, final-demand bucket coverage, multiplier bounds, employment-intensity coverage, total-resources baseline reconstruction, proportional 1 bln UZS scaling, and deterministic sector rankings.`,
+      `Core validation checks cover Leontief matrix usability, aligned sector arrays, coefficient bounds, final-demand bucket coverage, multiplier bounds, employment-intensity coverage, import-content accounting, total-resources baseline reconstruction, proportional 1 bln UZS scaling, and deterministic sector rankings.`,
       `Linkage classes are derived from backward and forward Leontief indices; current counts are ${linkageCountLabel(adapterOutput)}.`,
       'Limits are explicit: no prices, inflation, substitution, fiscal feedback, external balance, or CGE/general-equilibrium behavior is claimed.',
     ],

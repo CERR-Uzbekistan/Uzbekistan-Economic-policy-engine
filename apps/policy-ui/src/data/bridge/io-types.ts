@@ -61,12 +61,20 @@ export type IoTotals = {
   imports_thousand_uzs: number[]
 }
 
+export type IoSourceWorkbook = {
+  role: string
+  file_name: string
+  sheets: string[]
+  description: string
+}
+
 export type IoMetadata = {
   exported_at: string
   source_script_sha: string | null
   solver_version: string
   source_artifact: string
   source_artifact_generated: string
+  source_workbooks: IoSourceWorkbook[]
   source_title: string
   source: string
   framework: string

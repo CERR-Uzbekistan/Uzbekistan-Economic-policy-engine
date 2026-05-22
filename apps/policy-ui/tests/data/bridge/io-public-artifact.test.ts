@@ -51,6 +51,18 @@ describe('io bridge public artifact', () => {
     )
     assert.match(validation.value.metadata.units, /bln UZS/)
     assert.equal(validation.value.metadata.n_sectors, 136)
+    assert.deepEqual(
+      validation.value.metadata.source_workbooks.map((workbook) => workbook.file_name),
+      ['ТЗВ 2022 136х136.xlsx', 'Employment.xlsx'],
+    )
+    assert.equal(
+      validation.value.metadata.source_workbooks.some(
+        (workbook) =>
+          workbook.role === 'symmetric_input_output_table' &&
+          workbook.sheets.includes('к-ты полных затрат (Е-А)-1'),
+      ),
+      true,
+    )
     assert.equal(validation.value.sectors.length, 136)
     assert.equal(validation.value.sector_dictionary.length, 136)
     assert.equal(validation.value.sector_dictionary[0].source_label, validation.value.sectors[0].name_ru)
@@ -66,6 +78,10 @@ describe('io bridge public artifact', () => {
     )
     assert.equal(
       validation.value.caveats.some((caveat) => caveat.caveat_id === 'io-employment-mcp-source'),
+      true,
+    )
+    assert.equal(
+      validation.value.caveats.some((caveat) => caveat.caveat_id === 'io-import-content-accounting'),
       true,
     )
   })

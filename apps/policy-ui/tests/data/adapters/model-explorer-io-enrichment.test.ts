@@ -39,6 +39,10 @@ describe('model explorer IO bridge enrichment', () => {
       evidence.caveats.some((caveat) => caveat.includes('Sector dictionary support')),
       true,
     )
+    assert.equal(
+      evidence.caveats.some((caveat) => caveat.includes('Import content is estimated')),
+      true,
+    )
   })
 
   it('adds bridge evidence only to the existing I-O catalog entry', () => {
@@ -70,6 +74,17 @@ describe('model explorer IO bridge enrichment', () => {
       ioEntry?.data_sources.some((source) => source.institution === 'OECD' && source.description.includes('ICIO')),
       true,
     )
+    assert.equal(
+      ioEntry?.data_sources.some((source) => source.description.includes('Employment.xlsx')),
+      true,
+    )
+    assert.equal(
+      ioEntry?.model_note?.items.some(
+        (item) => item.label === 'Source workbooks' && item.value.includes('ТЗВ 2022 136х136.xlsx'),
+      ),
+      true,
+    )
+    assert.equal(ioEntry?.caveats.some((caveat) => caveat.id === 'io-import-content-accounting'), true)
     assert.equal(
       ioEntry?.validation_checks?.some((check) => check.label === 'Leontief inverse exists' && check.status === 'pass'),
       true,

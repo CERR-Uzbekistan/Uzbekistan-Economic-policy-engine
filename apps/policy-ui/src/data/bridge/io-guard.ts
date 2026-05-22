@@ -6,6 +6,7 @@ import type {
   IoSector,
   IoSectorBroadGroup,
   IoSectorDictionaryEntry,
+  IoSourceWorkbook,
 } from './io-types.js'
 
 export type IoValidationIssue = {
@@ -132,6 +133,40 @@ function parseCaveats(value: unknown, issues: IoValidationIssue[]): Caveat[] | n
   return ok ? caveats : null
 }
 
+function parseSourceWorkbooks(value: unknown, issues: IoValidationIssue[]): IoSourceWorkbook[] | null {
+  if (!Array.isArray(value)) {
+    pushError(issues, 'metadata.source_workbooks', 'Expected an array.')
+    return null
+  }
+
+  let ok = true
+  const workbooks: IoSourceWorkbook[] = []
+  value.forEach((entry, index) => {
+    const path = `metadata.source_workbooks[${index}]`
+    if (!isRecord(entry)) {
+      pushError(issues, path, 'Expected an object.')
+      ok = false
+      return
+    }
+    const role = nonEmptyString(entry.role, issues, `${path}.role`)
+    const fileName = nonEmptyString(entry.file_name, issues, `${path}.file_name`)
+    const sheets = parseStringArray(entry.sheets, issues, `${path}.sheets`)
+    const description = nonEmptyString(entry.description, issues, `${path}.description`)
+    if (!role || !fileName || !sheets || !description) {
+      ok = false
+      return
+    }
+    workbooks.push({
+      role,
+      file_name: fileName,
+      sheets,
+      description,
+    })
+  })
+
+  return ok ? workbooks : null
+}
+
 function parseMetadata(value: unknown, issues: IoValidationIssue[]): IoMetadata | null {
   if (!isRecord(value)) {
     pushError(issues, 'metadata', 'Expected an object.')
@@ -146,6 +181,7 @@ function parseMetadata(value: unknown, issues: IoValidationIssue[]): IoMetadata 
     issues,
     'metadata.source_artifact_generated',
   )
+  const sourceWorkbooks = parseSourceWorkbooks(value.source_workbooks, issues)
   const sourceTitle = nonEmptyString(value.source_title, issues, 'metadata.source_title')
   const source = nonEmptyString(value.source, issues, 'metadata.source')
   const framework = nonEmptyString(value.framework, issues, 'metadata.framework')
@@ -161,6 +197,7 @@ function parseMetadata(value: unknown, issues: IoValidationIssue[]): IoMetadata 
     !solverVersion ||
     !sourceArtifact ||
     !sourceArtifactGenerated ||
+    !sourceWorkbooks ||
     !sourceTitle ||
     !source ||
     !framework ||
@@ -176,6 +213,7 @@ function parseMetadata(value: unknown, issues: IoValidationIssue[]): IoMetadata 
     solver_version: solverVersion,
     source_artifact: sourceArtifact,
     source_artifact_generated: sourceArtifactGenerated,
+    source_workbooks: sourceWorkbooks,
     source_title: sourceTitle,
     source,
     framework,

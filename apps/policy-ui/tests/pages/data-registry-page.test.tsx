@@ -81,6 +81,14 @@ function minimalIoPayload(): IoBridgePayload {
       solver_version: '0.1.0',
       source_artifact: 'io_model/io_data.json',
       source_artifact_generated: '2026-04-22T08:00:00Z',
+      source_workbooks: [
+        {
+          role: 'symmetric_input_output_table',
+          file_name: 'ТЗВ 2022 136х136.xlsx',
+          sheets: ['ТЗВ всего'],
+          description: 'Source symmetric input-output table.',
+        },
+      ],
       source_title: 'Uzbekistan Input-Output Table',
       source: 'Statistical Agency',
       framework: 'SNA',

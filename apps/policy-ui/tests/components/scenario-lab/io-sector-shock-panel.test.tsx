@@ -126,6 +126,14 @@ async function createTestI18n() {
                 employmentNote: 'Fixed-intensity estimate',
                 multiplierNote: 'Total resources per 1 UZS final-demand shock',
               },
+              importContent: {
+                title: 'Domestic and import content',
+                body:
+                  'Estimated with each sector source import share. This is an I-O accounting split, not a trade forecast.',
+                domestic: 'Domestic resource part',
+                imported: 'Import content',
+                share: 'Import share',
+              },
               decision: {
                 eyebrow: 'Decision view',
                 title: 'Final-demand shock result',
@@ -291,6 +299,9 @@ describe('IoSectorShockPanel', () => {
     assert.match(markup, /Accounting GDP contribution/)
     assert.match(markup, /Jobs estimate/)
     assert.match(markup, /Domestic output plus import content/)
+    assert.match(markup, /Domestic and import content/)
+    assert.match(markup, /Domestic resource part/)
+    assert.match(markup, /Import share/)
     assert.match(markup, /Fixed-intensity estimate/)
     assert.match(markup, /Read this as sector transmission evidence/)
     assert.match(markup, /Detailed sector table/)

@@ -7,6 +7,23 @@ const sourcePath = join(repoRoot, 'io_model', 'io_data.json')
 const mcpConversionSourcePath = join(repoRoot, 'io_model', 'io_data.js')
 const outputPath = join(repoRoot, 'apps', 'policy-ui', 'public', 'data', 'io.json')
 
+const sourceWorkbooks = [
+  {
+    role: 'symmetric_input_output_table',
+    file_name: 'ТЗВ 2022 136х136.xlsx',
+    sheets: ['ТЗВ всего', 'К-ты прямых затрат А', 'к-ты полных затрат (Е-А)-1'],
+    description:
+      'Source 136-sector Uzbekistan symmetric input-output table, direct technical coefficients, and Leontief inverse.',
+  },
+  {
+    role: 'employment_by_sector',
+    file_name: 'Employment.xlsx',
+    sheets: ['Employment'],
+    description:
+      'Formal, informal, and total employment by source I-O sector code, aligned by sector order.',
+  },
+]
+
 const source = JSON.parse(readFileSync(sourcePath, 'utf8'))
 const mcpSource = loadIoDataJs(mcpConversionSourcePath)
 const sourceGenerated = requireString(source.metadata.generated, 'metadata.generated')
@@ -183,6 +200,14 @@ const payload = {
       affected_metrics: ['employment_effect_persons'],
       affected_models: ['IO'],
     },
+    {
+      caveat_id: 'io-import-content-accounting',
+      severity: 'info',
+      message:
+        'Import content is estimated from each sector average imports-to-total-resources share. It is an accounting split, not a behavioral import-substitution or trade forecast.',
+      affected_metrics: ['import_content_effect_bln_uzs', 'domestic_resource_effect_bln_uzs'],
+      affected_models: ['IO'],
+    },
   ],
   metadata: {
     exported_at: exportedAt,
@@ -190,6 +215,7 @@ const payload = {
     solver_version: '0.1.0',
     source_artifact: 'io_model/io_data.json + io_model/io_data.js',
     source_artifact_generated: sourceGenerated,
+    source_workbooks: sourceWorkbooks,
     source_title: requireString(source.metadata.title_en, 'metadata.title_en'),
     source: requireString(source.metadata.source, 'metadata.source'),
     framework: requireString(source.metadata.framework, 'metadata.framework'),

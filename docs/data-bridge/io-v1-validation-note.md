@@ -44,8 +44,14 @@ The value-added total is shown as an accounting contribution, not GDP growth.
   `io_model/io_data.json`.
 - Employment arrays come from the tracked `io_model/io_data.js` source used by
   the MCP data converter.
+- Local source workbook provenance is recorded in the public artifact:
+  `ТЗВ 2022 136х136.xlsx` (`ТЗВ всего`, `К-ты прямых затрат А`,
+  `к-ты полных затрат (Е-А)-1`) and `Employment.xlsx` (`Employment`).
 - `scripts/export_io.mjs` checks that the employment source aligns with the
   public sector source by normalized sector code and exact source label.
+- The local workbook audit on 2026-05-22 found 136/136 sector-code matches in
+  both the I-O workbook and employment workbook, and 136/136 source-name matches
+  for the I-O workbook.
 - Public bridge monetary field names keep the legacy `_thousand_uzs` suffix for
   compatibility, but Scenario Lab converts displayed results to billion UZS and
   carries an explicit scale caveat.
@@ -58,6 +64,8 @@ The value-added total is shown as an accounting contribution, not GDP growth.
   allocation is kept as a robustness comparison, not as the default policy
   targeting story.
 - Output and value-added totals are reported in billion UZS.
+- Total-resource effects are split into domestic-resource and import-content
+  accounting parts using each sector's fixed imports-to-total-resources share.
 - Employment is labelled as a fixed-intensity estimate.
 - Sector labels remain in the source language until a reconciled EN/RU/UZ sector
   label source is accepted.
@@ -73,8 +81,9 @@ The value-added total is shown as an accounting contribution, not GDP growth.
 - Static 2022 production structure.
 - Linear coefficients with no substitution or capacity constraints.
 - Type I multipliers only; no induced household-consumption Type II loop.
-- No prices, margins, taxes, imports substitution, or domestic/import split
-  response.
+- No prices, margins, taxes, or behavioral import substitution. The domestic/import
+  split is now shown, but it is an accounting split using fixed source import
+  shares, not a response model.
 - No time path or dynamic adjustment.
 - No fiscal, inflation, current-account, welfare, or distributional feedback.
 - Employment is exposure-style scaling, not a labor-market forecast.

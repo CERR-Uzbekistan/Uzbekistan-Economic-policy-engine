@@ -520,6 +520,43 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
                 </div>
               </dl>
 
+              <div className="io-shock__import-split" aria-label={t('scenarioLab.ioShock.importContent.title')}>
+                <div>
+                  <strong>{t('scenarioLab.ioShock.importContent.title')}</strong>
+                  <p>{t('scenarioLab.ioShock.importContent.body')}</p>
+                </div>
+                <dl>
+                  <div>
+                    <dt>{t('scenarioLab.ioShock.importContent.domestic')}</dt>
+                    <dd>
+                      {formatCurrencyAmount(result.totals.domestic_resource_effect_bln_uzs, 'bln_uzs', locale, {
+                        maximumFractionDigits: 1,
+                        minimumFractionDigits: 1,
+                      })}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>{t('scenarioLab.ioShock.importContent.imported')}</dt>
+                    <dd>
+                      {formatCurrencyAmount(result.totals.import_content_effect_bln_uzs, 'bln_uzs', locale, {
+                        maximumFractionDigits: 1,
+                        minimumFractionDigits: 1,
+                      })}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>{t('scenarioLab.ioShock.importContent.share')}</dt>
+                    <dd>
+                      {formatNumber(result.totals.weighted_import_share * 100, locale, {
+                        maximumFractionDigits: 1,
+                        minimumFractionDigits: 1,
+                      })}
+                      %
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+
               <div className="io-shock__meta">
                 <span>{state.workspace.framework}</span>
                 <span>{t('scenarioLab.ioShock.meta.dataVintage', { vintage: state.workspace.data_vintage })}</span>

@@ -622,6 +622,8 @@ export type ScenarioLabIoSensitivityCase = {
   assumption: string
   output_effect_bln_uzs: number
   value_added_effect_bln_uzs: number
+  import_content_effect_bln_uzs: number
+  domestic_resource_effect_bln_uzs: number
   employment_effect_persons: number | null
   aggregate_output_multiplier: number | null
 }
@@ -679,6 +681,8 @@ export type ScenarioLabIoSectorEffect = {
   sector_code: string
   sector_name: string
   output_effect_bln_uzs: number
+  import_content_effect_bln_uzs: number
+  domestic_resource_effect_bln_uzs: number
   value_added_effect_bln_uzs: number
   output_multiplier: number
   value_added_multiplier: number
@@ -695,6 +699,9 @@ export type ScenarioLabIoShockResult = {
     input_currency: ScenarioLabIoShockCurrency
     demand_shock_bln_uzs: number
     output_effect_bln_uzs: number
+    import_content_effect_bln_uzs: number
+    domestic_resource_effect_bln_uzs: number
+    weighted_import_share: number
     value_added_effect_bln_uzs: number
     gdp_accounting_contribution_bln_uzs: number
     employment_effect_persons: number | null

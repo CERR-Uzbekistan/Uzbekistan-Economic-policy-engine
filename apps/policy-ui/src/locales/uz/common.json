@@ -647,6 +647,13 @@
         "employmentNote": "O'zgarmas intensivlik bahosi",
         "multiplierNote": "Yakuniy talab shokining 1 so'miga resurslar"
       },
+      "importContent": {
+        "title": "Ichki va import tarkibi",
+        "body": "Har bir sektorning manbadagi import ulushi asosida baholanadi. Bu I-O hisob-kitob ajratmasi, savdo prognozi emas.",
+        "domestic": "Ichki resurs qismi",
+        "imported": "Import tarkibi",
+        "share": "Import ulushi"
+      },
       "decision": {
         "eyebrow": "Qaror ko'rinishi",
         "title": "Yakuniy talab shoki natijasi",

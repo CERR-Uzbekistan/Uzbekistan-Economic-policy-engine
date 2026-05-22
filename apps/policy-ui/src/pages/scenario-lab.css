@@ -517,6 +517,54 @@
   line-height: 1.35;
 }
 
+.io-shock__import-split {
+  align-items: start;
+  background: color-mix(in srgb, var(--color-surface-muted) 72%, white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  display: grid;
+  gap: var(--space-sm);
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.9fr);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.io-shock__import-split strong {
+  display: block;
+  font-size: 0.86rem;
+  margin-bottom: 0.2rem;
+}
+
+.io-shock__import-split p {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.io-shock__import-split dl {
+  display: grid;
+  gap: var(--space-xs);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+}
+
+.io-shock__import-split div {
+  min-width: 0;
+}
+
+.io-shock__import-split dt {
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  font-weight: 650;
+}
+
+.io-shock__import-split dd {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
 .io-shock__analysis-grid {
   align-items: start;
   display: grid;
@@ -774,13 +822,14 @@
 .io-shock__sector-effect dl {
   display: grid;
   gap: var(--space-xs);
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(7.25rem, 1fr));
   margin: 0;
 }
 
 .io-shock__sector-effect dt {
   color: var(--color-text-muted);
   font-size: 0.7rem;
+  overflow-wrap: anywhere;
 }
 
 .io-shock__sector-effect dd {
@@ -788,6 +837,7 @@
   font-size: 0.78rem;
   font-weight: 700;
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .io-shock__insight-rail {
@@ -2815,6 +2865,8 @@
   .io-shock__sensitivity-row dl,
   .io-shock__kpis,
   .io-shock__metric-strip,
+  .io-shock__import-split,
+  .io-shock__import-split dl,
   .io-shock__sector-effect dl,
   .qpm-active-shocks,
   .qpm-baseline-source dl,

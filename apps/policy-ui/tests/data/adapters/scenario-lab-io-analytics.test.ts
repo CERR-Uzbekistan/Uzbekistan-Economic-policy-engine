@@ -52,6 +52,17 @@ describe('scenario lab IO analytics adapter', () => {
     assert.equal(typeof result.totals.output_effect_bln_uzs, 'number')
     assert.equal(result.totals.output_effect_bln_uzs > 1000, true)
     assert.equal(result.totals.value_added_effect_bln_uzs > 0, true)
+    assert.equal(result.totals.import_content_effect_bln_uzs > 0, true)
+    assert.equal(result.totals.domestic_resource_effect_bln_uzs > 0, true)
+    assert.equal(result.totals.weighted_import_share > 0 && result.totals.weighted_import_share < 1, true)
+    assert.equal(
+      Math.abs(
+        result.totals.output_effect_bln_uzs -
+          result.totals.import_content_effect_bln_uzs -
+          result.totals.domestic_resource_effect_bln_uzs,
+      ) < 0.01,
+      true,
+    )
     assert.equal(
       result.totals.gdp_accounting_contribution_bln_uzs,
       result.totals.value_added_effect_bln_uzs,
@@ -64,7 +75,19 @@ describe('scenario lab IO analytics adapter', () => {
     assert.equal(result.top_sectors.length, 10)
     assert.equal(result.sensitivity?.allocation_modes.length, 3)
     assert.equal(result.sensitivity?.parameter_ranges.length, 9)
+    assert.equal(
+      typeof result.sensitivity?.allocation_modes[0].import_content_effect_bln_uzs,
+      'number',
+    )
     assert.equal(typeof result.top_sectors[0].employment_effect_persons, 'number')
+    assert.equal(
+      Math.abs(
+        result.top_sectors[0].output_effect_bln_uzs -
+          result.top_sectors[0].import_content_effect_bln_uzs -
+          result.top_sectors[0].domestic_resource_effect_bln_uzs,
+      ) < 0.01,
+      true,
+    )
     assert.equal(
       Math.abs(result.top_sectors[0].output_effect_bln_uzs) >=
         Math.abs(result.top_sectors[1].output_effect_bln_uzs),

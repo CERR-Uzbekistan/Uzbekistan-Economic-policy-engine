@@ -34,6 +34,9 @@ Employment effects are fixed-intensity exposure estimates, not labor-market fore
 
 - Source: Statistics Agency under the President of Uzbekistan, `Uzbekistan Input-Output Table 2022`.
 - Checked-in source artifacts: `io_model/io_data.json` and `io_model/io_data.js`.
+- Local source workbooks checked on 2026-05-22:
+  - `model sources/Input-Output model/ТЗВ 2022 136х136.xlsx` with sheets `ТЗВ всего`, `К-ты прямых затрат А`, and `к-ты полных затрат (Е-А)-1`.
+  - `model sources/Input-Output model/Employment.xlsx` with sheet `Employment`.
 - Public UI artifact: `apps/policy-ui/public/data/io.json`.
 - Base year: 2022.
 - Sector count: 136.
@@ -41,12 +44,34 @@ Employment effects are fixed-intensity exposure estimates, not labor-market fore
 - Sector-code assumptions: source sector codes are preserved. Broad sector groups are derived only from the leading code letter (`A` agriculture, `B-E` industry, `F` construction, `G-H` trade/transport, `O-Q` public/social, remaining coded services as services). Tradable and upstream/downstream tags remain explicit nulls until a reviewed source or rule is accepted.
 - Sector labels: source Russian labels are displayed in the Scenario Lab. The sector dictionary also carries available EN/RU/UZ labels from the tracked I-O JavaScript source, but those labels are not treated as official translations in the current UI.
 
+## Local Source Workbook Cross-Check
+
+The 2026-05-22 workbook audit matched the public artifact against the local source
+files now kept under `model sources/Input-Output model`:
+
+- `ТЗВ 2022 136х136.xlsx` contains 136 source sector rows matching the public
+  I-O artifact by normalized sector code and source name.
+- `Employment.xlsx` contains 136 employment sector rows matching the public I-O
+  artifact by normalized sector code.
+- Employment columns cover formal, informal, and total employment for all 136
+  sectors. The first sector row (`A01.11`) has formal employment `46,636`,
+  informal employment `296,928`, and total employment `343,564`, matching the
+  current public artifact.
+- Source import shares are bounded from `0.0` to `0.998166`, with average sector
+  import share about `25.1%`; 29 sectors have import share above `50%`.
+
+Scenario Lab now uses those source import shares to split the total-resource
+response into domestic-resource and import-content accounting parts. This is
+not a behavioral import-substitution or trade forecast.
+
 ## What The Model Can Answer
 
 - Short-run sector total-resource transmission from a final-demand shock.
 - Direct plus indirect sector multiplier effects under fixed 2022 input coefficients.
 - Value-added accounting effects using fixed sector value-added coefficients.
 - Employment-intensity exposure using fixed employment coefficients.
+- Domestic-resource versus import-content accounting split using fixed sector
+  import shares.
 - Sensitivity of the sector story to allocation mode, employment intensity, import leakage, and FX conversion assumptions.
 
 ## What The Model Cannot Answer

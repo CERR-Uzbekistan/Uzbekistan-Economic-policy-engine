@@ -42925,6 +42925,18 @@
       "affected_models": [
         "IO"
       ]
+    },
+    {
+      "caveat_id": "io-import-content-accounting",
+      "severity": "info",
+      "message": "Import content is estimated from each sector average imports-to-total-resources share. It is an accounting split, not a behavioral import-substitution or trade forecast.",
+      "affected_metrics": [
+        "import_content_effect_bln_uzs",
+        "domestic_resource_effect_bln_uzs"
+      ],
+      "affected_models": [
+        "IO"
+      ]
     }
   ],
   "metadata": {
@@ -42933,6 +42945,26 @@
     "solver_version": "0.1.0",
     "source_artifact": "io_model/io_data.json + io_model/io_data.js",
     "source_artifact_generated": "2026-04-09",
+    "source_workbooks": [
+      {
+        "role": "symmetric_input_output_table",
+        "file_name": "ТЗВ 2022 136х136.xlsx",
+        "sheets": [
+          "ТЗВ всего",
+          "К-ты прямых затрат А",
+          "к-ты полных затрат (Е-А)-1"
+        ],
+        "description": "Source 136-sector Uzbekistan symmetric input-output table, direct technical coefficients, and Leontief inverse."
+      },
+      {
+        "role": "employment_by_sector",
+        "file_name": "Employment.xlsx",
+        "sheets": [
+          "Employment"
+        ],
+        "description": "Formal, informal, and total employment by source I-O sector code, aligned by sector order."
+      }
+    ],
     "source_title": "Uzbekistan Input-Output Table 2022",
     "source": "Statistics Agency under the President of Uzbekistan",
     "framework": "Leontief — symmetric IO table at basic prices",

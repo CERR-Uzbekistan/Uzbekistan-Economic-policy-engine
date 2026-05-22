@@ -98,6 +98,13 @@ function valueAddedCoefficient(sector: IoSector): number {
   return sector.gva_thousand_uzs / sector.total_resources_thousand_uzs
 }
 
+function importShare(sector: IoSector): number {
+  if (sector.total_resources_thousand_uzs <= 0) {
+    return 0
+  }
+  return Math.min(1, Math.max(0, sector.imports_thousand_uzs / sector.total_resources_thousand_uzs))
+}
+
 function employmentCoefficient(sector: IoSector): number | null {
   if (sector.employment_total === undefined || sector.total_resources_thousand_uzs <= 0) {
     return null
@@ -151,6 +158,8 @@ function toSensitivityCase(
     assumption,
     output_effect_bln_uzs: result.totals.output_effect_bln_uzs,
     value_added_effect_bln_uzs: result.totals.value_added_effect_bln_uzs,
+    import_content_effect_bln_uzs: result.totals.import_content_effect_bln_uzs,
+    domestic_resource_effect_bln_uzs: result.totals.domestic_resource_effect_bln_uzs,
     employment_effect_persons: result.totals.employment_effect_persons,
     aggregate_output_multiplier: result.totals.aggregate_output_multiplier,
   }
@@ -221,6 +230,12 @@ function runScenarioLabIoDemandShockCore(
   const valueAddedEffects = outputEffects.map(
     (outputEffect, index) => outputEffect * valueAddedCoefficient(payload.sectors[index]),
   )
+  const importContentEffects = outputEffects.map(
+    (outputEffect, index) => outputEffect * importShare(payload.sectors[index]),
+  )
+  const domesticResourceEffects = outputEffects.map(
+    (outputEffect, index) => outputEffect - importContentEffects[index],
+  )
   const employmentEffects = outputEffects.map((outputEffect, index) => {
     const coefficient = employmentCoefficient(payload.sectors[index])
     return coefficient === null
@@ -233,6 +248,8 @@ function runScenarioLabIoDemandShockCore(
       sector_code: sector.code,
       sector_name: sector.name_ru,
       output_effect_bln_uzs: round(toBlnUzS(outputEffects[index])),
+      import_content_effect_bln_uzs: round(toBlnUzS(importContentEffects[index])),
+      domestic_resource_effect_bln_uzs: round(toBlnUzS(domesticResourceEffects[index])),
       value_added_effect_bln_uzs: round(toBlnUzS(valueAddedEffects[index])),
       output_multiplier: round(sector.output_multiplier, 3),
       value_added_multiplier: round(sector.value_added_multiplier, 3),
@@ -245,6 +262,8 @@ function runScenarioLabIoDemandShockCore(
   })
   const totalOutputEffect = outputEffects.reduce((sum, value) => sum + value, 0)
   const totalValueAddedEffect = valueAddedEffects.reduce((sum, value) => sum + value, 0)
+  const totalImportContentEffect = importContentEffects.reduce((sum, value) => sum + value, 0)
+  const totalDomesticResourceEffect = domesticResourceEffects.reduce((sum, value) => sum + value, 0)
   const knownEmploymentEffects = employmentEffects.filter((value): value is number => value !== null)
   const totalEmploymentEffect =
     knownEmploymentEffects.length === employmentEffects.length
@@ -260,6 +279,12 @@ function runScenarioLabIoDemandShockCore(
       input_currency: request.currency,
       demand_shock_bln_uzs: round(shockBlnUzS),
       output_effect_bln_uzs: round(totalOutputBlnUzS),
+      import_content_effect_bln_uzs: round(toBlnUzS(totalImportContentEffect)),
+      domestic_resource_effect_bln_uzs: round(toBlnUzS(totalDomesticResourceEffect)),
+      weighted_import_share:
+        totalOutputEffect === 0
+          ? 0
+          : round(Math.min(1, Math.max(0, totalImportContentEffect / totalOutputEffect)), 4),
       value_added_effect_bln_uzs: round(totalValueAddedBlnUzS),
       gdp_accounting_contribution_bln_uzs: round(totalValueAddedBlnUzS),
       employment_effect_persons: totalEmploymentEffect,
