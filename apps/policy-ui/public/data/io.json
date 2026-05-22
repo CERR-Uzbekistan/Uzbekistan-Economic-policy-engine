@@ -41520,6 +41520,18 @@
       ]
     },
     {
+      "caveat_id": "io-monetary-scale-audited",
+      "severity": "info",
+      "message": "Raw monetary source arrays are retained under the legacy bridge field names; Scenario Lab converts results to billion UZS and tests guard against scale drift.",
+      "affected_metrics": [
+        "output_effect_bln_uzs",
+        "value_added_effect_bln_uzs"
+      ],
+      "affected_models": [
+        "IO"
+      ]
+    },
+    {
       "caveat_id": "io-sector-names-ru-source",
       "severity": "info",
       "message": "Sector names are carried in Russian from the source JSON; English and Uzbek labels require a later reconciled sector-name source.",
@@ -41551,7 +41563,7 @@
     "source_title": "Uzbekistan Input-Output Table 2022",
     "source": "Statistics Agency under the President of Uzbekistan",
     "framework": "Leontief — symmetric IO table at basic prices",
-    "units": "thousand UZS",
+    "units": "raw source monetary arrays; Scenario Lab results in bln UZS",
     "base_year": 2022,
     "n_sectors": 136
   }

@@ -25,7 +25,7 @@ describe('comparison IO sector evidence adapter', () => {
     assert.equal(evidence.data_vintage, '2022')
     assert.equal(evidence.exported_at, '2026-04-09')
     assert.equal(evidence.sector_count, 136)
-    assert.equal(evidence.units, 'thousand UZS')
+    assert.match(evidence.units, /bln UZS/)
     assert.equal(linkageCountSum, 136)
     assert.equal(
       evidence.caveats.some((caveat) => caveat.includes('Type II induced-consumption arrays')),

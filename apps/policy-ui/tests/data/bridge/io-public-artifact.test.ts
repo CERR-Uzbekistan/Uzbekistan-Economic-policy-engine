@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { describe, it } from 'node:test'
 import { fileURLToPath } from 'node:url'
 import { toIoAdapterOutput } from '../../../src/data/bridge/io-adapter.js'
@@ -13,6 +14,7 @@ import { validateIoBridgePayload } from '../../../src/data/bridge/io-guard.js'
 import type { IoBridgePayload } from '../../../src/data/bridge/io-types.js'
 
 const IO_PUBLIC_ARTIFACT_PATH = fileURLToPath(new URL('../../../../public/data/io.json', import.meta.url))
+const MCP_IO_SOURCE_PATH = join(process.cwd(), '..', '..', 'mcp_server', 'data', 'io_data.json')
 
 function loadPublicIoPayload(): IoBridgePayload {
   return JSON.parse(readFileSync(IO_PUBLIC_ARTIFACT_PATH, 'utf8')) as IoBridgePayload
@@ -32,11 +34,36 @@ describe('io bridge public artifact', () => {
       validation.value.metadata.source_artifact,
       'io_model/io_data.json + mcp_server/data/io_data.json',
     )
+    assert.match(validation.value.metadata.units, /bln UZS/)
     assert.equal(validation.value.metadata.n_sectors, 136)
     assert.equal(validation.value.sectors.length, 136)
     assert.equal(validation.value.sectors[0].employment_total, 343564)
     assert.equal(validation.value.matrices.technical_coefficients.length, 136)
     assert.equal(validation.value.matrices.leontief_inverse[0].length, 136)
+    assert.equal(
+      validation.value.caveats.some((caveat) => caveat.caveat_id === 'io-monetary-scale-audited'),
+      true,
+    )
+    assert.equal(
+      validation.value.caveats.some((caveat) => caveat.caveat_id === 'io-employment-mcp-source'),
+      true,
+    )
+  })
+
+  it('keeps public employment fields aligned with the MCP-converted source arrays', () => {
+    const validation = validateIoBridgePayload(loadPublicIoPayload())
+    const mcpSource = JSON.parse(readFileSync(MCP_IO_SOURCE_PATH, 'utf8')) as {
+      EmpTotal: number[]
+      EmpFormal: number[]
+      EmpInformal: number[]
+    }
+    assert.ok(validation.value)
+
+    for (const index of [0, 4, 42, 135]) {
+      assert.equal(validation.value.sectors[index].employment_total, mcpSource.EmpTotal[index])
+      assert.equal(validation.value.sectors[index].employment_formal, mcpSource.EmpFormal[index])
+      assert.equal(validation.value.sectors[index].employment_informal, mcpSource.EmpInformal[index])
+    }
   })
 
   it('rejects malformed matrix dimensions with a path-scoped issue', () => {

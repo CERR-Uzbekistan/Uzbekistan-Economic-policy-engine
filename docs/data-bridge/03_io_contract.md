@@ -1,9 +1,9 @@
 # IO Data Bridge — Consumer Contract
 
-**Source:** `io_model/io_data.json` → `scripts/export_io.mjs` → `apps/policy-ui/public/data/io.json`
+**Source:** `io_model/io_data.json` + `mcp_server/data/io_data.json` → `scripts/export_io.mjs` → `apps/policy-ui/public/data/io.json`
 **Status:** First IO bridge slice; static JSON bridge target
 **Version:** solver 0.1.0, data 2022
-**Upstream input:** Statistics Agency 2022 symmetric input-output table, as committed in `io_model/io_data.json`
+**Upstream input:** Statistics Agency 2022 symmetric input-output table, as committed in `io_model/io_data.json`, plus MCP-converted employment arrays in `mcp_server/data/io_data.json`
 
 ## Purpose
 
@@ -53,24 +53,32 @@ matrix, totals, and metadata types live in
 
 | Field | Unit | Notes |
 |---|---|---|
-| `sectors[].output_thousand_uzs` | thousand UZS | Source field `output`. |
-| `sectors[].total_resources_thousand_uzs` | thousand UZS | Domestic output plus imports. |
-| `sectors[].imports_thousand_uzs` | thousand UZS | Source imports. |
-| `sectors[].gva_thousand_uzs` | thousand UZS | Gross value added. |
-| `sectors[].compensation_of_employees_thousand_uzs` | thousand UZS | Source `coe`. |
-| `sectors[].gross_operating_surplus_thousand_uzs` | thousand UZS | Source `gos`. |
+| `sectors[].output_thousand_uzs` | legacy source monetary field | Source field `output`; field name is retained for compatibility. |
+| `sectors[].total_resources_thousand_uzs` | legacy source monetary field | Domestic output plus imports; field name is retained for compatibility. |
+| `sectors[].imports_thousand_uzs` | legacy source monetary field | Source imports; field name is retained for compatibility. |
+| `sectors[].gva_thousand_uzs` | legacy source monetary field | Gross value added; field name is retained for compatibility. |
+| `sectors[].compensation_of_employees_thousand_uzs` | legacy source monetary field | Source `coe`; field name is retained for compatibility. |
+| `sectors[].gross_operating_surplus_thousand_uzs` | legacy source monetary field | Source `gos`; field name is retained for compatibility. |
+| `sectors[].employment_total` | persons | MCP-converted employment array aligned by sector code/name. |
+| `sectors[].employment_formal` | persons | MCP-converted formal employment array aligned by sector code/name. |
+| `sectors[].employment_informal` | persons | MCP-converted informal employment array aligned by sector code/name. |
 | `sectors[].output_multiplier` | ratio | Type I output multiplier from source JSON. |
 | `sectors[].value_added_multiplier` | ratio | Type I value-added multiplier from source JSON. |
 | `matrices.technical_coefficients` | ratio | A matrix, computed as intermediate use divided by total resources. |
 | `matrices.leontief_inverse` | ratio | L = `(I - A)^-1`. |
 
+The public field names with `_thousand_uzs` are legacy names from the first
+bridge slice. Scenario Lab does not display those raw fields directly. It
+converts demand shocks and results to **billion UZS** through the audited I-O
+Scenario Lab adapter and keeps a scale caveat in the public artifact.
+
 ## Absent Fields, By Design
 
 - **No `ComparisonContent`.** Comparison remains a page-native view
   model composed by page adapters/composers.
-- **No Type II arrays.** `io_model/io_data.js` contains Type II arrays,
-  but the chosen source artifact `io_model/io_data.json` does not. Type II
-  reconciliation is a later model/data decision.
+- **No Type II arrays.** The chosen source artifact `io_model/io_data.json`
+  does not carry Type II induced-consumption arrays. Type II reconciliation is
+  a later model/data decision.
 - **No English or Uzbek sector labels.** The chosen JSON source carries
   Russian sector names. Multilingual sector labels should be added only
   after a reconciled source is chosen.

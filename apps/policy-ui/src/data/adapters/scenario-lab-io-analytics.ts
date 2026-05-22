@@ -10,8 +10,7 @@ import { toIoAdapterOutput } from '../bridge/io-adapter.js'
 import type { IoBridgePayload, IoSector } from '../bridge/io-types.js'
 
 const TOP_EFFECT_COUNT = 10
-const THOUSAND_UZS_PER_BLN_UZS = 1_000_000
-const MCP_OUTPUT_RAW_PER_BLN_UZS = 1_000
+const SOURCE_MONETARY_UNITS_PER_BLN_UZS = 1_000
 const DEFAULT_EXCHANGE_RATE_UZS_PER_USD = 12_652.7
 
 function round(value: number, digits = 3): number {
@@ -19,8 +18,12 @@ function round(value: number, digits = 3): number {
   return Math.round(value * factor) / factor
 }
 
-function toBlnUzS(valueThousandUzS: number): number {
-  return valueThousandUzS / THOUSAND_UZS_PER_BLN_UZS
+function toBlnUzS(valueSourceUnits: number): number {
+  return valueSourceUnits / SOURCE_MONETARY_UNITS_PER_BLN_UZS
+}
+
+function toSourceMonetaryUnitsFromBlnUzS(valueBlnUzS: number): number {
+  return valueBlnUzS * SOURCE_MONETARY_UNITS_PER_BLN_UZS
 }
 
 function positiveWeight(value: number): number {
@@ -92,10 +95,7 @@ function employmentCoefficient(sector: IoSector): number | null {
   if (sector.employment_total === undefined || sector.output_thousand_uzs <= 0) {
     return null
   }
-  // Employment arrays come from the MCP I-O source, where sector output is
-  // interpreted as million UZS. Keep monetary UI outputs on the existing public
-  // bridge scale, but compute employment intensity with the MCP model scale.
-  return sector.employment_total / (sector.output_thousand_uzs / MCP_OUTPUT_RAW_PER_BLN_UZS)
+  return sector.employment_total / toBlnUzS(sector.output_thousand_uzs)
 }
 
 function toBlnUzSShock(request: ScenarioLabIoShockRequest): number {
@@ -144,8 +144,8 @@ export function runScenarioLabIoDemandShock(
     ),
   )
   const shockBlnUzS = toBlnUzSShock(request)
-  const shockThousandUzS = shockBlnUzS * THOUSAND_UZS_PER_BLN_UZS
-  const demandShock = weights.map((weight) => weight * shockThousandUzS)
+  const shockSourceUnits = toSourceMonetaryUnitsFromBlnUzS(shockBlnUzS)
+  const demandShock = weights.map((weight) => weight * shockSourceUnits)
   const outputEffects = multiplyMatrixVector(payload.matrices.leontief_inverse, demandShock)
   const valueAddedEffects = outputEffects.map(
     (outputEffect, index) => outputEffect * valueAddedCoefficient(payload.sectors[index]),

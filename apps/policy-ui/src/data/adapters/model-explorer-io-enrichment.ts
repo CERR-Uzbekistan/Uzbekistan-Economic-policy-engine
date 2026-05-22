@@ -17,6 +17,7 @@ const LINKAGE_LABELS: Record<IoLinkageClassification, string> = {
 
 const IO_CAVEAT_TITLES: Record<string, string> = {
   'io-type-i-only-json-source': 'Type I multipliers only',
+  'io-monetary-scale-audited': 'Monetary scale guarded',
   'io-sector-names-ru-source': 'Sector names in source language',
   'io-employment-mcp-source': 'Employment effects are linear estimates',
 }

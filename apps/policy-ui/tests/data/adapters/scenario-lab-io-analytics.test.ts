@@ -47,6 +47,8 @@ describe('scenario lab IO analytics adapter', () => {
       result.totals.value_added_effect_bln_uzs,
     )
     assert.equal(result.totals.aggregate_output_multiplier !== null, true)
+    assert.equal(result.totals.output_effect_bln_uzs < 3_000, true)
+    assert.equal(result.totals.value_added_effect_bln_uzs < 1_500, true)
     assert.equal(typeof result.totals.employment_effect_persons, 'number')
     assert.equal((result.totals.employment_effect_persons ?? 0) > 0, true)
     assert.equal(result.top_sectors.length, 10)
@@ -56,6 +58,21 @@ describe('scenario lab IO analytics adapter', () => {
         Math.abs(result.top_sectors[1].output_effect_bln_uzs),
       true,
     )
+  })
+
+  it('keeps the I-O monetary scale in billion UZS for displayed totals', () => {
+    const result = runScenarioLabIoDemandShock(loadValidIoPayload(), {
+      demand_bucket: 'export',
+      amount: 1000,
+      currency: 'bln_uzs',
+      distribution: 'final_demand',
+    })
+
+    assert.equal(result.totals.demand_shock_bln_uzs, 1000)
+    assert.equal(result.totals.aggregate_output_multiplier, 1.627)
+    assert.equal(result.totals.output_effect_bln_uzs, 1626.991)
+    assert.equal(result.totals.value_added_effect_bln_uzs, 791.984)
+    assert.equal(result.top_sectors[0].sector_code, 'C24.4')
   })
 
   it('converts million USD shocks through the supplied FX assumption', () => {

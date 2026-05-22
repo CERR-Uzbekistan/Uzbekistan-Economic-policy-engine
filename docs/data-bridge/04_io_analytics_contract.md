@@ -99,6 +99,33 @@ type IoDemandShockResult = {
 contribution, not a macro forecast. It equals the I-O value-added effect unless a
 future reconciliation layer applies additional macro consistency adjustments.
 
+## Current Economic Validation Boundary
+
+The Scenario Lab I-O implementation is ready as a static sector-transmission
+tool, not as a final economy-wide policy model.
+
+Implemented and checked:
+
+- final-demand shock propagation follows `dX = L * dY` using the public
+  Leontief inverse;
+- value-added effects use sector value-added/output coefficients;
+- employment effects use MCP-converted sector employment intensities and are
+  explicitly presented as fixed-intensity estimates;
+- Scenario Lab outputs are displayed in billion UZS and tests guard the
+  monetary scale against accidental 1000x drift;
+- consumption, government, investment, and export shocks use the selected
+  final-demand bucket when `distribution = 'final_demand'`;
+- value-added is labelled as an accounting contribution, not GDP growth.
+
+Still not claimed:
+
+- price, wage, import-substitution, or capacity responses;
+- fiscal, inflation, or current-account feedback;
+- behavioral reallocation across sectors;
+- Type II induced household-consumption multipliers;
+- dynamic adjustment over time;
+- welfare or distributional incidence.
+
 ## UI Use
 
 Scenario Lab may render this result as:
@@ -123,6 +150,10 @@ The frontend guard should validate:
 - optional employment fields are only shown when present;
 - linkage classes match the allowed enum;
 - caveats are present for public-facing interpretation.
+
+The exporter should also remain reproducible: public employment fields must be
+generated from `mcp_server/data/io_data.json` after checking sector alignment
+against `io_model/io_data.json`.
 
 ## Non-Claims
 

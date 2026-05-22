@@ -29,7 +29,7 @@ describe('model explorer IO bridge enrichment', () => {
     assert.equal(evidence.exported_at, '2026-04-09')
     assert.equal(evidence.solver_version, '0.1.0')
     assert.equal(evidence.sector_count, 136)
-    assert.equal(evidence.units, 'thousand UZS')
+    assert.match(evidence.units ?? '', /bln UZS/)
     assert.equal(linkageCountSum, 136)
     assert.equal(
       evidence.caveats.some((caveat) => caveat.includes('Type II induced-consumption arrays')),
@@ -51,6 +51,7 @@ describe('model explorer IO bridge enrichment', () => {
       true,
     )
     assert.equal(ioEntry?.caveats.some((caveat) => caveat.id === 'io-type-i-only-json-source'), true)
+    assert.equal(ioEntry?.caveats.some((caveat) => caveat.id === 'io-monetary-scale-audited'), true)
     assert.match(ioEntry?.validation_summary.join(' ') ?? '', /does not claim price, substitution/)
     assert.equal(enriched.catalog_entries_by_model_id?.['qpm-uzbekistan']?.bridge_evidence, undefined)
   })
