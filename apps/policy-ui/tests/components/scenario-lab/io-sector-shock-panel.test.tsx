@@ -49,20 +49,17 @@ async function createTestI18n() {
               unavailable: 'I-O analytics data is unavailable.',
               controlsAria: 'I-O sector shock controls',
               policyShockType: 'Policy use case',
-              policyShockTypeHint:
-                'Use cases set a sensible demand bucket and allocation; unsupported production shocks stay disabled.',
+              policyShockTypeHint: 'Use cases choose the demand bucket and allocation.',
               demandBucket: 'Demand shock type',
-              demandBucketHint: 'Only used when distribution is “By selected demand shares”.',
+              demandBucketHint: 'Used for selected-demand allocation.',
               amount: 'Shock amount',
               currency: 'Currency',
               exchangeRate: 'FX assumption, UZS/USD',
               distribution: 'Distribution',
               sector: 'Target sector',
               sectorHint: 'Single-sector shocks route the final-demand vector to one of {{count}} sectors.',
-              boundary:
-                'Sector transmission only. Value-added is an I-O accounting contribution to GDP, not a macro forecast.',
-              employmentBoundary:
-                'Employment is a linear employment-intensity estimate, not a labor-market forecast.',
+              boundary: 'Scope: sector accounting only. This is not a macro, price, or employment forecast.',
+              employmentBoundary: 'Jobs are fixed-intensity estimates.',
               topSectors: 'Top affected sectors',
               caveats: 'Source caveats',
               convertedShock: 'Converted demand shock: {{amount}} bln UZS',
@@ -106,7 +103,7 @@ async function createTestI18n() {
                 mln_usd: 'Million USD',
               },
               summary: {
-                title: 'Run summary',
+                title: 'Current run',
                 bucket: 'Demand bucket',
                 amount: 'Amount',
                 fx: 'FX assumption',
@@ -114,25 +111,26 @@ async function createTestI18n() {
                 selectedSector: 'Selected sector',
                 dataVintage: 'Base year',
                 policyUse: 'Policy use case',
+                compact: '{{bucket}} · {{amount}} · {{distribution}} · {{vintage}}',
+                fxCompact: 'FX: {{fx}}',
+                sectorCompact: 'Sector: {{sector}}',
               },
               kpis: {
-                output: 'Total-resource requirement',
-                valueAdded: 'Value-added effect',
+                output: 'Total resources',
+                valueAdded: 'Value added',
                 gdpContribution: 'GDP accounting contribution',
-                employment: 'Employment effect',
+                employment: 'Jobs estimate',
                 multiplier: 'Resource multiplier',
                 outputNote: 'Domestic output plus import content',
                 valueAddedNote: 'Accounting GDP contribution',
                 employmentNote: 'Fixed-intensity estimate',
-                multiplierNote: 'Total resources per 1 UZS of converted demand',
+                multiplierNote: 'Total resources per 1 UZS final-demand shock',
               },
               decision: {
                 eyebrow: 'Decision view',
                 title: 'Final-demand shock result',
-                lead:
-                  '{{bucket}} shock: {{amount}}. Allocation: {{distribution}}. The I-O calculation shows:',
-                sectorLead:
-                  'Single-sector shock: {{amount}} assigned to {{sector}}. The I-O calculation shows:',
+                lead: '{{bucket}} shock of {{amount}}, allocated {{distribution}}.',
+                sectorLead: 'Shock of {{amount}} assigned to {{sector}}.',
               },
               meta: {
                 dataVintage: 'Base year {{vintage}}',
@@ -144,15 +142,15 @@ async function createTestI18n() {
                 share: 'Share',
               },
               sensitivity: {
-                title: 'Sensitivity ranges',
-                subtitle:
-                  'These are robustness checks around allocation, employment intensity, import leakage, and FX conversion. They are not forecasts.',
+                title: 'Advanced robustness checks',
+                subtitle: 'Compare allocation and assumption choices against the base run.',
                 allocations: 'Allocation modes',
                 parameters: 'Assumption ranges',
+                deltaLabel: 'vs base',
                 headers: {
                   case: 'Case',
                   output: 'Resources',
-                  valueAdded: 'VA',
+                  valueAdded: 'Value added',
                   employment: 'Employment',
                   multiplier: 'Mult.',
                 },
@@ -187,7 +185,7 @@ async function createTestI18n() {
                   },
                   'import-leakage-base': {
                     label: 'Import leakage base',
-                    assumption: 'Uses source import coefficients.',
+                    assumption: 'Uses source import shares.',
                   },
                   'import-leakage-high': {
                     label: 'Import leakage high',
@@ -219,7 +217,7 @@ async function createTestI18n() {
                   'Read this as sector transmission evidence. It is not a price, inflation, or macro forecast.',
                 sensitivity: 'Sensitivity',
                 sensitivityBody:
-                  'Use the range table to see whether the sector story depends on allocation, employment intensity, import leakage, or FX assumptions.',
+                  'Use advanced checks to see whether the sector story changes under allocation, jobs, import, or FX assumptions.',
                 nextUse: 'Next model to link',
                 nextUseBody:
                   'Save this run for Comparison, then connect it to PE tariff shocks or future CGE work when model links are available.',
@@ -230,8 +228,8 @@ async function createTestI18n() {
                 sector: 'Sector',
                 sectorCode: 'Code',
                 sourceLabel: 'Source label',
-                output: 'Resources, bln UZS',
-                valueAdded: 'VA, bln UZS',
+                output: 'Total resources, bln UZS',
+                valueAdded: 'Value added, bln UZS',
                 employment: 'Employment',
                 linkage: 'Linkage',
               },
@@ -270,20 +268,20 @@ describe('IoSectorShockPanel', () => {
     assert.match(markup, /Final-demand shock result/)
     assert.match(markup, /Where the effect concentrates/)
     assert.match(markup, /Interpretation/)
-    assert.match(markup, /Sensitivity ranges/)
-    assert.match(markup, /not forecasts/)
+    assert.match(markup, /Advanced robustness checks/)
+    assert.match(markup, /Compare allocation and assumption choices/)
     assert.match(markup, /Selected final-demand shares/)
     assert.match(markup, /Sector resource shares/)
     assert.match(markup, /One selected sector/)
     assert.match(markup, /Employment intensity low/)
-    assert.match(markup, /Import leakage base/)
-    assert.match(markup, /FX conversion base/)
-    assert.match(markup, /Run summary/)
-    assert.match(markup, /Demand bucket/)
-    assert.match(markup, /Only used when distribution is/)
+    assert.match(markup, /Employment intensity high/)
+    assert.match(markup, /Import leakage low/)
+    assert.match(markup, /Import leakage high/)
+    assert.match(markup, /Current run/)
+    assert.match(markup, /Used for selected-demand allocation/)
     assert.match(markup, /By selected demand shares/)
     assert.match(markup, /Accounting GDP contribution/)
-    assert.match(markup, /Employment effect/)
+    assert.match(markup, /Jobs estimate/)
     assert.match(markup, /Domestic output plus import content/)
     assert.match(markup, /Fixed-intensity estimate/)
     assert.match(markup, /Read this as sector transmission evidence/)
@@ -296,8 +294,8 @@ describe('IoSectorShockPanel', () => {
     assert.doesNotMatch(markup, /gross output/i)
     assert.doesNotMatch(markup, /Import-substitution/)
     assert.doesNotMatch(markup, /scenarioLab\.ioShock\.sensitivity/)
-    assert.match(markup, /not a macro forecast/)
-    assert.match(markup, /linear employment-intensity estimate/)
+    assert.match(markup, /not a macro, price, or employment forecast/)
+    assert.match(markup, /fixed-intensity estimates/)
   })
 
   it('renders a non-breaking fallback when IO analytics is unavailable', async () => {

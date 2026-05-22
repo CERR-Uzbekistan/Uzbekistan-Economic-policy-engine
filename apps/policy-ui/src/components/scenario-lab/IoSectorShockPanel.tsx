@@ -50,7 +50,6 @@ const POLICY_SHOCK_TYPES: ScenarioLabIoPolicyShockType[] = [
 const CURRENCY_OPTIONS: ScenarioLabIoShockCurrency[] = ['bln_uzs', 'mln_usd']
 const DEFAULT_EXCHANGE_RATE_UZS_PER_USD = 12_652.7
 const DISPLAYED_SECTOR_COUNT = 5
-const DISPLAYED_PARAMETER_SENSITIVITY_COUNT = 9
 
 function formatOptionalNumber(value: number | null, locale: string | undefined): string {
   if (value === null) {
@@ -69,52 +68,103 @@ function shareStyle(value: number): CSSProperties {
   return { '--io-share-width': `${Math.min(100, Math.max(0, value))}%` } as CSSProperties
 }
 
-function formatMultiplier(value: number | null, locale: string | undefined): string {
-  if (value === null) {
-    return formatUnavailable(locale)
+function formatSignedNumber(value: number, locale: string | undefined, maximumFractionDigits = 1): string {
+  if (!Number.isFinite(value) || Math.abs(value) < 0.0001) {
+    return formatNumber(0, locale, {
+      maximumFractionDigits,
+      minimumFractionDigits: maximumFractionDigits,
+    })
   }
-  return formatNumber(value, locale, {
-    maximumFractionDigits: 2,
-    minimumFractionDigits: 2,
-  })
+
+  const sign = value > 0 ? '+' : '-'
+  return `${sign}${formatNumber(Math.abs(value), locale, {
+    maximumFractionDigits,
+    minimumFractionDigits: maximumFractionDigits,
+  })}`
 }
 
-function SensitivityTable({
+function sensitivityDeltaStyle(value: number, maxValue: number): CSSProperties {
+  const width = maxValue > 0 ? Math.max(4, Math.min(100, (Math.abs(value) / maxValue) * 100)) : 0
+  return { '--io-delta-width': `${width}%` } as CSSProperties
+}
+
+function SensitivityComparisonGroup({
+  title,
   cases,
+  base,
   locale,
   t,
 }: {
+  title: string
   cases: ScenarioLabIoSensitivityCase[]
+  base: {
+    output: number
+    valueAdded: number
+    employment: number | null
+  }
   locale: string | undefined
   t: TFunction<'common'>
 }) {
+  const maxOutputDelta = Math.max(
+    ...cases.map((item) => Math.abs(item.output_effect_bln_uzs - base.output)),
+    1,
+  )
+  const baseEmployment = base.employment ?? 0
+
   return (
-    <div className="io-shock__sensitivity-table-wrap">
-      <table className="io-shock__sensitivity-table">
-        <thead>
-          <tr>
-            <th>{t('scenarioLab.ioShock.sensitivity.headers.case')}</th>
-            <th>{t('scenarioLab.ioShock.sensitivity.headers.output')}</th>
-            <th>{t('scenarioLab.ioShock.sensitivity.headers.valueAdded')}</th>
-            <th>{t('scenarioLab.ioShock.sensitivity.headers.employment')}</th>
-            <th>{t('scenarioLab.ioShock.sensitivity.headers.multiplier')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cases.map((item) => (
-            <tr key={item.id}>
-              <th scope="row">
+    <div className="io-shock__sensitivity-group">
+      <h4>{title}</h4>
+      <div className="io-shock__sensitivity-list">
+        {cases.map((item) => {
+          const outputDelta = item.output_effect_bln_uzs - base.output
+          const valueAddedDelta = item.value_added_effect_bln_uzs - base.valueAdded
+          const employmentDelta =
+            item.employment_effect_persons === null
+              ? null
+              : item.employment_effect_persons - baseEmployment
+
+          return (
+            <article className="io-shock__sensitivity-row" key={item.id}>
+              <div className="io-shock__sensitivity-label">
                 <strong>{t(`scenarioLab.ioShock.sensitivity.cases.${item.id}.label`)}</strong>
                 <span>{t(`scenarioLab.ioShock.sensitivity.cases.${item.id}.assumption`)}</span>
-              </th>
-              <td>{formatNumber(item.output_effect_bln_uzs, locale, { maximumFractionDigits: 1 })}</td>
-              <td>{formatNumber(item.value_added_effect_bln_uzs, locale, { maximumFractionDigits: 1 })}</td>
-              <td>{formatOptionalNumber(item.employment_effect_persons, locale)}</td>
-              <td>{formatMultiplier(item.aggregate_output_multiplier, locale)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              </div>
+              <span
+                className={`io-shock__sensitivity-bar ${outputDelta < 0 ? 'is-negative' : 'is-positive'}`}
+                style={sensitivityDeltaStyle(outputDelta, maxOutputDelta)}
+                aria-hidden="true"
+              >
+                <span />
+              </span>
+              <dl>
+                <div>
+                  <dt>{t('scenarioLab.ioShock.sensitivity.headers.output')}</dt>
+                  <dd>
+                    {formatSignedNumber(outputDelta, locale)}
+                    <span>{t('scenarioLab.ioShock.sensitivity.deltaLabel')}</span>
+                  </dd>
+                </div>
+                <div>
+                  <dt>{t('scenarioLab.ioShock.sensitivity.headers.valueAdded')}</dt>
+                  <dd>
+                    {formatSignedNumber(valueAddedDelta, locale)}
+                    <span>{t('scenarioLab.ioShock.sensitivity.deltaLabel')}</span>
+                  </dd>
+                </div>
+                <div>
+                  <dt>{t('scenarioLab.ioShock.sensitivity.headers.employment')}</dt>
+                  <dd>
+                    {employmentDelta === null
+                      ? formatUnavailable(locale)
+                      : formatSignedNumber(employmentDelta, locale, 0)}
+                    <span>{t('scenarioLab.ioShock.sensitivity.deltaLabel')}</span>
+                  </dd>
+                </div>
+              </dl>
+            </article>
+          )
+        })}
+      </div>
     </div>
   )
 }
@@ -180,6 +230,19 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
     [result],
   )
   const sensitivity = result?.sensitivity ?? { allocation_modes: [], parameter_ranges: [] }
+  const displayedParameterSensitivity = useMemo(
+    () =>
+      sensitivity.parameter_ranges.filter((item) => {
+        if (item.id.endsWith('-base')) {
+          return false
+        }
+        if (request.currency !== 'mln_usd' && item.id.startsWith('fx-')) {
+          return false
+        }
+        return true
+      }),
+    [request.currency, sensitivity.parameter_ranges],
+  )
   const totalAbsOutputEffect = Math.max(1, Math.abs(result?.totals.output_effect_bln_uzs ?? 0))
   const leadingSector = concentrationRows[0]
 
@@ -352,52 +415,34 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
 
           <div className="io-shock__summary" aria-label={t('scenarioLab.ioShock.summary.title')}>
             <h3>{t('scenarioLab.ioShock.summary.title')}</h3>
-            <dl>
-              <div>
-                <dt>{t('scenarioLab.ioShock.summary.bucket')}</dt>
-                <dd>{t(`scenarioLab.ioShock.buckets.${request.demand_bucket}`)}</dd>
-              </div>
-              <div>
-                <dt>{t('scenarioLab.ioShock.summary.amount')}</dt>
-                <dd>
-                  {formatCurrencyAmount(request.amount, request.currency, locale, {
+            <p>
+              {t('scenarioLab.ioShock.summary.compact', {
+                bucket: t(`scenarioLab.ioShock.buckets.${request.demand_bucket}`),
+                amount: formatCurrencyAmount(request.amount, request.currency, locale, {
+                  maximumFractionDigits: 1,
+                  minimumFractionDigits: 1,
+                }),
+                distribution: t(`scenarioLab.ioShock.distributions.${request.distribution}`),
+                vintage: state.workspace.data_vintage,
+              })}
+            </p>
+            {request.currency === 'mln_usd' ? (
+              <p>
+                {t('scenarioLab.ioShock.summary.fxCompact', {
+                  fx: formatCurrencyAmount(request.exchange_rate_uzs_per_usd ?? 0, 'uzs_usd', locale, {
                     maximumFractionDigits: 1,
                     minimumFractionDigits: 1,
-                  })}
-                </dd>
-              </div>
-              {request.currency === 'mln_usd' ? (
-                <div>
-                  <dt>{t('scenarioLab.ioShock.summary.fx')}</dt>
-                  <dd>
-                    {formatCurrencyAmount(request.exchange_rate_uzs_per_usd ?? 0, 'uzs_usd', locale, {
-                      maximumFractionDigits: 1,
-                      minimumFractionDigits: 1,
-                    })}
-                  </dd>
-                </div>
-              ) : null}
-              <div>
-                <dt>{t('scenarioLab.ioShock.summary.distribution')}</dt>
-                <dd>{t(`scenarioLab.ioShock.distributions.${request.distribution}`)}</dd>
-              </div>
-              {request.distribution === 'sector' && selectedSector ? (
-                <div>
-                  <dt>{t('scenarioLab.ioShock.summary.selectedSector')}</dt>
-                  <dd>
-                    {selectedSector.code} · {selectedSector.name}
-                  </dd>
-                </div>
-              ) : null}
-                <div>
-                  <dt>{t('scenarioLab.ioShock.summary.dataVintage')}</dt>
-                  <dd>{state.workspace.data_vintage}</dd>
-                </div>
-              <div>
-                <dt>{t('scenarioLab.ioShock.summary.policyUse')}</dt>
-                <dd>{t(`scenarioLab.ioShock.policyShockTypes.${policyShockType}`)}</dd>
-              </div>
-            </dl>
+                  }),
+                })}
+              </p>
+            ) : null}
+            {request.distribution === 'sector' && selectedSector ? (
+              <p>
+                {t('scenarioLab.ioShock.summary.sectorCompact', {
+                  sector: `${selectedSector.code} · ${selectedSector.name}`,
+                })}
+              </p>
+            ) : null}
           </div>
 
           <div className="io-shock__boundary">
@@ -434,16 +479,6 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
 
               <dl className="io-shock__metric-strip">
                 <div className="io-shock__metric-card">
-                  <dt>{t('scenarioLab.ioShock.kpis.output')}</dt>
-                  <dd>
-                    {formatCurrencyAmount(result.totals.output_effect_bln_uzs, 'bln_uzs', locale, {
-                      maximumFractionDigits: 1,
-                      minimumFractionDigits: 1,
-                    })}
-                  </dd>
-                  <span>{t('scenarioLab.ioShock.kpis.outputNote')}</span>
-                </div>
-                <div className="io-shock__metric-card">
                   <dt>{t('scenarioLab.ioShock.kpis.valueAdded')}</dt>
                   <dd>
                     {formatCurrencyAmount(result.totals.value_added_effect_bln_uzs, 'bln_uzs', locale, {
@@ -459,6 +494,16 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
                     {formatOptionalNumber(result.totals.employment_effect_persons, locale)}
                   </dd>
                   <span>{t('scenarioLab.ioShock.kpis.employmentNote')}</span>
+                </div>
+                <div className="io-shock__metric-card">
+                  <dt>{t('scenarioLab.ioShock.kpis.output')}</dt>
+                  <dd>
+                    {formatCurrencyAmount(result.totals.output_effect_bln_uzs, 'bln_uzs', locale, {
+                      maximumFractionDigits: 1,
+                      minimumFractionDigits: 1,
+                    })}
+                  </dd>
+                  <span>{t('scenarioLab.ioShock.kpis.outputNote')}</span>
                 </div>
                 <div className="io-shock__metric-card">
                   <dt>{t('scenarioLab.ioShock.kpis.multiplier')}</dt>
@@ -488,41 +533,6 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
                 </span>
               </div>
             </section>
-
-            <section className="io-shock__sensitivity" aria-labelledby="io-shock-sensitivity-title">
-              <div className="io-shock__block-head">
-                <h3 id="io-shock-sensitivity-title">{t('scenarioLab.ioShock.sensitivity.title')}</h3>
-                <p>{t('scenarioLab.ioShock.sensitivity.subtitle')}</p>
-              </div>
-              <div className="io-shock__sensitivity-grid">
-                <div>
-                  <h4>{t('scenarioLab.ioShock.sensitivity.allocations')}</h4>
-                  <SensitivityTable cases={sensitivity.allocation_modes} locale={locale} t={t} />
-                </div>
-                <div>
-                  <h4>{t('scenarioLab.ioShock.sensitivity.parameters')}</h4>
-                  <SensitivityTable
-                    cases={sensitivity.parameter_ranges.slice(0, DISPLAYED_PARAMETER_SENSITIVITY_COUNT)}
-                    locale={locale}
-                    t={t}
-                  />
-                </div>
-              </div>
-              <p className="io-shock__source-note">{t('scenarioLab.ioShock.sensitivity.note')}</p>
-            </section>
-
-            {onSaveRun ? (
-              <div className="io-shock__actions">
-                <button type="button" className="ui-secondary-action" onClick={() => onSaveRun(result, state.workspace)}>
-                  {t('scenarioLab.ioShock.saveRun')}
-                </button>
-                {saveStatus ? (
-                  <p className="io-shock__save-status" role="status" aria-live="polite">
-                    {saveStatus}
-                  </p>
-                ) : null}
-              </div>
-            ) : null}
 
             <div className="io-shock__analysis-grid">
               <section className="io-shock__concentration" aria-labelledby="io-shock-concentration-title">
@@ -605,6 +615,51 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
                 </div>
               </aside>
             </div>
+
+            {onSaveRun ? (
+              <div className="io-shock__actions">
+                <button type="button" className="ui-secondary-action" onClick={() => onSaveRun(result, state.workspace)}>
+                  {t('scenarioLab.ioShock.saveRun')}
+                </button>
+                {saveStatus ? (
+                  <p className="io-shock__save-status" role="status" aria-live="polite">
+                    {saveStatus}
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
+
+            <details className="io-shock__sensitivity">
+              <summary>
+                <strong>{t('scenarioLab.ioShock.sensitivity.title')}</strong>
+                <span>{t('scenarioLab.ioShock.sensitivity.subtitle')}</span>
+              </summary>
+              <div className="io-shock__sensitivity-grid">
+                <SensitivityComparisonGroup
+                  title={t('scenarioLab.ioShock.sensitivity.allocations')}
+                  cases={sensitivity.allocation_modes}
+                  base={{
+                    output: result.totals.output_effect_bln_uzs,
+                    valueAdded: result.totals.value_added_effect_bln_uzs,
+                    employment: result.totals.employment_effect_persons,
+                  }}
+                  locale={locale}
+                  t={t}
+                />
+                <SensitivityComparisonGroup
+                  title={t('scenarioLab.ioShock.sensitivity.parameters')}
+                  cases={displayedParameterSensitivity}
+                  base={{
+                    output: result.totals.output_effect_bln_uzs,
+                    valueAdded: result.totals.value_added_effect_bln_uzs,
+                    employment: result.totals.employment_effect_persons,
+                  }}
+                  locale={locale}
+                  t={t}
+                />
+              </div>
+              <p className="io-shock__source-note">{t('scenarioLab.ioShock.sensitivity.note')}</p>
+            </details>
 
             <details className="io-shock__caveats">
               <summary>{t('scenarioLab.ioShock.detailTable')}</summary>

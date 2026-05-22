@@ -568,17 +568,17 @@
       "unavailable": "I-O analytics ma'lumotlari mavjud emas. Scenario Lab'ning mavjud ishlashi o'zgarmaydi.",
       "controlsAria": "I-O sektor shoki boshqaruvlari",
       "policyShockType": "Siyosat qo'llanishi",
-      "policyShockTypeHint": "Qo'llanish turi mos talab guruhi va taqsimlashni tanlaydi; qo'llab-quvvatlanmagan ishlab chiqarish shoklari o'chirilgan.",
+      "policyShockTypeHint": "Qo'llanish turi talab guruhi va taqsimlashni tanlaydi.",
       "demandBucket": "Talab shoki turi",
-      "demandBucketHint": "Faqat “Tanlangan talab ulushlari bo'yicha” taqsimlashda ishlatiladi.",
+      "demandBucketHint": "Tanlangan talab bo'yicha taqsimlashda ishlatiladi.",
       "amount": "Shok miqdori",
       "currency": "Valyuta",
       "exchangeRate": "FX taxmini, so'm/USD",
       "distribution": "Taqsimlash",
       "sector": "Maqsadli sektor",
       "sectorHint": "Bitta sektor shoklari yakuniy talab vektorini {{sectorCount}} ichidan biriga yo'naltiradi.",
-      "boundary": "Faqat sektor uzatishi. Umumiy resurs talabi ichki ishlab chiqarish va import tarkibini o'z ichiga oladi. Qo'shilgan qiymat I-O hisob-kitobidagi YaIM hissasi, lekin makroprognoz, QPM stsenariy effekti yoki umumiy muvozanat natijasi emas.",
-      "employmentBoundary": "Bandlik chiziqli employment-intensity bahosi, mehnat bozori prognozi emas.",
+      "boundary": "Chegara: faqat sektor hisobi. Bu makro, narx yoki bandlik prognozi emas.",
+      "employmentBoundary": "Ish o'rinlari o'zgarmas intensivlik bo'yicha baholanadi.",
       "topSectors": "Eng ko'p ta'sirlangan sektorlar",
       "caveats": "Manba cheklovlari",
       "saveRun": "I-O ishini saqlash",
@@ -624,31 +624,34 @@
         "mln_usd": "Mln USD"
       },
       "summary": {
-        "title": "Ish qisqacha xulosasi",
+        "title": "Joriy hisob",
         "bucket": "Talab guruhi",
         "amount": "Miqdor",
         "fx": "FX taxmini",
         "distribution": "Taqsimlash rejimi",
         "selectedSector": "Tanlangan sektor",
         "dataVintage": "Bazaviy yil",
-        "policyUse": "Siyosat qo'llanishi"
+        "policyUse": "Siyosat qo'llanishi",
+        "compact": "{{bucket}} · {{amount}} · {{distribution}} · {{vintage}}",
+        "fxCompact": "FX: {{fx}}",
+        "sectorCompact": "Sektor: {{sector}}"
       },
       "kpis": {
-        "output": "Umumiy resurs talabi",
-        "valueAdded": "Qo'shilgan qiymat ta'siri",
+        "output": "Umumiy resurslar",
+        "valueAdded": "Qo'shilgan qiymat",
         "gdpContribution": "YaIM hisob-kitob hissasi",
-        "employment": "Bandlik ta'siri",
+        "employment": "Ish o'rinlari bahosi",
         "multiplier": "Resurs multiplikatori",
         "outputNote": "Ichki ishlab chiqarish va import tarkibi",
         "valueAddedNote": "YaIMga hisob-kitob hissasi",
         "employmentNote": "O'zgarmas intensivlik bahosi",
-        "multiplierNote": "Konvertatsiya qilingan talabning 1 so'miga resurslar"
+        "multiplierNote": "Yakuniy talab shokining 1 so'miga resurslar"
       },
       "decision": {
         "eyebrow": "Qaror ko'rinishi",
         "title": "Yakuniy talab shoki natijasi",
-        "lead": "{{bucket}} shoki: {{amount}}. Taqsimlash: {{distribution}}. I-O hisob-kitobi quyidagini ko'rsatadi:",
-        "sectorLead": "Bitta sektor shoki: {{amount}} {{sector}} sektoriga yo'naltiriladi. I-O hisob-kitobi quyidagini ko'rsatadi:"
+        "lead": "{{bucket}} shoki {{amount}}, taqsimlash — {{distribution}}.",
+        "sectorLead": "{{amount}} shoki {{sector}} sektoriga yo'naltiriladi."
       },
       "meta": {
         "dataVintage": "Bazaviy yil {{vintage}}"
@@ -659,14 +662,15 @@
         "share": "Ulush"
       },
       "sensitivity": {
-        "title": "Sezgirlik diapazonlari",
-        "subtitle": "Bu taqsimlash, bandlik intensivligi, import oqishi va FX konvertatsiyasi bo'yicha barqarorlik tekshiruvlari. Ular prognoz emas.",
+        "title": "Kengaytirilgan barqarorlik tekshiruvlari",
+        "subtitle": "Taqsimlash va taxminlarni bazaviy hisob bilan solishtiring.",
         "allocations": "Taqsimlash rejimlari",
         "parameters": "Taxmin diapazonlari",
+        "deltaLabel": "bazaga nisbatan",
         "headers": {
           "case": "Holat",
           "output": "Resurslar",
-          "valueAdded": "QQ",
+          "valueAdded": "Qo'shilgan qiymat",
           "employment": "Bandlik",
           "multiplier": "Mult."
         },
@@ -701,7 +705,7 @@
           },
           "import-leakage-base": {
             "label": "Bazaviy import oqishi",
-            "assumption": "Vaznlangan import ulushi qo'shimcha ichki talab skeyleri sifatida qo'llanadi."
+            "assumption": "Manbadagi import ulushlaridan foydalanadi."
           },
           "import-leakage-high": {
             "label": "Yuqori import oqishi",
@@ -730,7 +734,7 @@
         "boundary": "Talqin chegarasi",
         "boundaryBody": "Buni sektor uzatish dalili sifatida o'qing. Bu narx, inflyatsiya yoki makro prognoz emas.",
         "sensitivity": "Sezgirlik",
-        "sensitivityBody": "Diapazon jadvali sektor hikoyasi taqsimlash, bandlik intensivligi, import oqishi yoki FX taxminlariga qanchalik bog'liqligini ko'rsatadi.",
+        "sensitivityBody": "Kengaytirilgan tekshiruvlar sektor manzarasi boshqa taxminlarda o'zgarishini ko'rsatadi.",
         "nextUse": "Keyingi model bog'lanishi",
         "nextUseBody": "Natijani Comparison uchun saqlang, keyin model bog'lanishlari tayyor bo'lganda PE tarif shoklari yoki kelajakdagi CGE bilan ulang."
       },
@@ -740,8 +744,8 @@
         "sector": "Sektor",
         "sectorCode": "Kod",
         "sourceLabel": "Manba yorlig'i",
-        "output": "Resurslar, mlrd so'm",
-        "valueAdded": "QQ, mlrd so'm",
+        "output": "Umumiy resurslar, mlrd so'm",
+        "valueAdded": "Qo'shilgan qiymat, mlrd so'm",
         "employment": "Bandlik",
         "linkage": "Bog'lanish"
       }

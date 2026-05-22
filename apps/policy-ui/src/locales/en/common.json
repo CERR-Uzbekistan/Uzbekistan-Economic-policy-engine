@@ -568,17 +568,17 @@
       "unavailable": "I-O analytics data is unavailable. Existing Scenario Lab behavior is unchanged.",
       "controlsAria": "I-O sector shock controls",
       "policyShockType": "Policy use case",
-      "policyShockTypeHint": "Use cases set a sensible demand bucket and allocation; unsupported production shocks stay disabled.",
+      "policyShockTypeHint": "Use cases choose the demand bucket and allocation.",
       "demandBucket": "Demand shock type",
-      "demandBucketHint": "Only used when distribution is “By selected demand shares”.",
+      "demandBucketHint": "Used for selected-demand allocation.",
       "amount": "Shock amount",
       "currency": "Currency",
       "exchangeRate": "FX assumption, UZS/USD",
       "distribution": "Distribution",
       "sector": "Target sector",
       "sectorHint": "Single-sector shocks route the final-demand vector to one of {{sectorCount}}.",
-      "boundary": "Sector transmission only. Total-resource requirements include domestic output plus import content. Value-added is an I-O accounting contribution to GDP, not a macro forecast, QPM scenario effect, or general-equilibrium result.",
-      "employmentBoundary": "Employment is a linear employment-intensity estimate, not a labor-market forecast.",
+      "boundary": "Scope: sector accounting only. This is not a macro, price, or employment forecast.",
+      "employmentBoundary": "Jobs are fixed-intensity estimates.",
       "topSectors": "Top affected sectors",
       "caveats": "Source caveats",
       "saveRun": "Save I-O run",
@@ -624,31 +624,34 @@
         "mln_usd": "Million USD"
       },
       "summary": {
-        "title": "Run summary",
+        "title": "Current run",
         "bucket": "Demand bucket",
         "amount": "Amount",
         "fx": "FX assumption",
         "distribution": "Distribution mode",
         "selectedSector": "Selected sector",
         "dataVintage": "Base year",
-        "policyUse": "Policy use case"
+        "policyUse": "Policy use case",
+        "compact": "{{bucket}} · {{amount}} · {{distribution}} · {{vintage}}",
+        "fxCompact": "FX: {{fx}}",
+        "sectorCompact": "Sector: {{sector}}"
       },
       "kpis": {
-        "output": "Total-resource requirement",
-        "valueAdded": "Value-added effect",
+        "output": "Total resources",
+        "valueAdded": "Value added",
         "gdpContribution": "GDP accounting contribution",
-        "employment": "Employment effect",
+        "employment": "Jobs estimate",
         "multiplier": "Resource multiplier",
         "outputNote": "Domestic output plus import content",
         "valueAddedNote": "Accounting GDP contribution",
         "employmentNote": "Fixed-intensity estimate",
-        "multiplierNote": "Total resources per 1 UZS of converted demand"
+        "multiplierNote": "Total resources per 1 UZS final-demand shock"
       },
       "decision": {
         "eyebrow": "Decision view",
         "title": "Final-demand shock result",
-        "lead": "{{bucket}} shock: {{amount}}. Allocation: {{distribution}}. The I-O calculation shows:",
-        "sectorLead": "Single-sector shock: {{amount}} assigned to {{sector}}. The I-O calculation shows:"
+        "lead": "{{bucket}} shock of {{amount}}, allocated {{distribution}}.",
+        "sectorLead": "Shock of {{amount}} assigned to {{sector}}."
       },
       "meta": {
         "dataVintage": "Base year {{vintage}}"
@@ -659,14 +662,15 @@
         "share": "Share"
       },
       "sensitivity": {
-        "title": "Sensitivity ranges",
-        "subtitle": "These are robustness checks around allocation, employment intensity, import leakage, and FX conversion. They are not forecasts.",
+        "title": "Advanced robustness checks",
+        "subtitle": "Compare allocation and assumption choices against the base run.",
         "allocations": "Allocation modes",
         "parameters": "Assumption ranges",
+        "deltaLabel": "vs base",
         "headers": {
           "case": "Case",
           "output": "Resources",
-          "valueAdded": "VA",
+          "valueAdded": "Value added",
           "employment": "Employment",
           "multiplier": "Mult."
         },
@@ -701,7 +705,7 @@
           },
           "import-leakage-base": {
             "label": "Import leakage base",
-            "assumption": "Weighted import share applied as an additional domestic-demand scaler."
+            "assumption": "Uses source import shares."
           },
           "import-leakage-high": {
             "label": "Import leakage high",
@@ -730,7 +734,7 @@
         "boundary": "Boundary",
         "boundaryBody": "Read this as sector transmission evidence. It is not a price, inflation, or macro forecast.",
         "sensitivity": "Sensitivity",
-        "sensitivityBody": "Use the range table to see whether the sector story depends on allocation, employment intensity, import leakage, or FX assumptions.",
+        "sensitivityBody": "Use advanced checks to see whether the sector story changes under allocation, jobs, import, or FX assumptions.",
         "nextUse": "Next model to link",
         "nextUseBody": "Save this run for Comparison, then connect it to PE tariff shocks or future CGE work when model links are available."
       },
@@ -740,8 +744,8 @@
         "sector": "Sector",
         "sectorCode": "Code",
         "sourceLabel": "Source label",
-        "output": "Resources, bln UZS",
-        "valueAdded": "VA, bln UZS",
+        "output": "Total resources, bln UZS",
+        "valueAdded": "Value added, bln UZS",
         "employment": "Employment",
         "linkage": "Linkage"
       }
