@@ -446,6 +446,7 @@
 
 .io-shock__decision-card,
 .io-shock__concentration,
+.io-shock__sensitivity,
 .io-shock__insight-rail {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -534,6 +535,65 @@
   display: grid;
   gap: var(--space-md);
   padding: var(--space-md);
+}
+
+.io-shock__sensitivity {
+  display: grid;
+  gap: var(--space-md);
+  padding: var(--space-md);
+}
+
+.io-shock__sensitivity-grid {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.io-shock__sensitivity-grid h4 {
+  font-size: 0.86rem;
+  margin: 0 0 var(--space-xs);
+}
+
+.io-shock__sensitivity-table-wrap {
+  overflow-x: auto;
+}
+
+.io-shock__sensitivity-table {
+  border-collapse: collapse;
+  min-width: 34rem;
+  width: 100%;
+}
+
+.io-shock__sensitivity-table th,
+.io-shock__sensitivity-table td {
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.78rem;
+  padding: 0.5rem 0.45rem;
+  text-align: right;
+  vertical-align: top;
+}
+
+.io-shock__sensitivity-table th:first-child,
+.io-shock__sensitivity-table td:first-child {
+  text-align: left;
+}
+
+.io-shock__sensitivity-table tbody th {
+  display: grid;
+  gap: 0.15rem;
+  max-width: 18rem;
+}
+
+.io-shock__sensitivity-table tbody th strong {
+  color: var(--color-text);
+  font-size: 0.8rem;
+}
+
+.io-shock__sensitivity-table tbody th span {
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.35;
 }
 
 .io-shock__block-head {
@@ -2661,6 +2721,7 @@
   .scenario-model-tabs__list,
   .scenario-tab-shell,
   .io-shock__layout,
+  .io-shock__sensitivity-grid,
   .io-shock__kpis,
   .io-shock__metric-strip,
   .io-shock__sector-effect dl,

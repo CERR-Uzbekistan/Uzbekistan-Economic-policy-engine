@@ -30,7 +30,7 @@ function minimalIoPayload(): IoBridgePayload {
     },
     sectors: [
       {
-        id: 1,
+        id: 0,
         code: 'A',
         name_ru: 'Agriculture',
         output_thousand_uzs: 100,
@@ -50,6 +50,18 @@ function minimalIoPayload(): IoBridgePayload {
           exports: 20,
           total: 80,
         },
+      },
+    ],
+    sector_dictionary: [
+      {
+        code: 'A',
+        source_label: 'Agriculture',
+        display_label_en: 'Agriculture',
+        display_label_ru: 'Agriculture',
+        display_label_uz: null,
+        broad_group: 'agriculture',
+        tradable_tag: null,
+        value_chain_tag: null,
       },
     ],
     matrices: {

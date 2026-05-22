@@ -35,6 +35,10 @@ describe('model explorer IO bridge enrichment', () => {
       evidence.caveats.some((caveat) => caveat.includes('Type II induced-consumption arrays')),
       true,
     )
+    assert.equal(
+      evidence.caveats.some((caveat) => caveat.includes('Sector dictionary support')),
+      true,
+    )
   })
 
   it('adds bridge evidence only to the existing I-O catalog entry', () => {
@@ -52,7 +56,25 @@ describe('model explorer IO bridge enrichment', () => {
     )
     assert.equal(ioEntry?.caveats.some((caveat) => caveat.id === 'io-type-i-only-json-source'), true)
     assert.equal(ioEntry?.caveats.some((caveat) => caveat.id === 'io-monetary-scale-audited'), true)
-    assert.match(ioEntry?.validation_summary.join(' ') ?? '', /does not claim price, substitution/)
+    assert.match(ioEntry?.purpose ?? '', /Plain-language use/)
+    assert.match(ioEntry?.model_note?.summary ?? '', /x = \(I - A\)\^-1 f/)
+    assert.equal(
+      ioEntry?.model_note?.boundaries.some((boundary) => boundary.includes('Cannot answer price')),
+      true,
+    )
+    assert.equal(
+      ioEntry?.parameters.some((parameter) => parameter.symbol === 'v' && parameter.value === 'GVA_i / X_i'),
+      true,
+    )
+    assert.equal(
+      ioEntry?.data_sources.some((source) => source.institution === 'OECD' && source.description.includes('ICIO')),
+      true,
+    )
+    assert.equal(
+      ioEntry?.validation_checks?.some((check) => check.label === 'Leontief inverse exists' && check.status === 'pass'),
+      true,
+    )
+    assert.match(ioEntry?.validation_summary.join(' ') ?? '', /no prices, inflation, substitution/)
     assert.equal(enriched.catalog_entries_by_model_id?.['qpm-uzbekistan']?.bridge_evidence, undefined)
   })
 })

@@ -4,6 +4,7 @@ import { join } from 'node:path'
 import { describe, it } from 'node:test'
 import { fileURLToPath } from 'node:url'
 import { toIoAdapterOutput } from '../../../src/data/bridge/io-adapter.js'
+import { auditIoBridgePayload } from '../../../src/data/bridge/io-audit.js'
 import {
   fetchIoBridgePayload,
   IoTransportError,
@@ -51,6 +52,11 @@ describe('io bridge public artifact', () => {
     assert.match(validation.value.metadata.units, /bln UZS/)
     assert.equal(validation.value.metadata.n_sectors, 136)
     assert.equal(validation.value.sectors.length, 136)
+    assert.equal(validation.value.sector_dictionary.length, 136)
+    assert.equal(validation.value.sector_dictionary[0].source_label, validation.value.sectors[0].name_ru)
+    assert.equal(validation.value.sector_dictionary[0].display_label_en, 'Cereal crops (excl. rice), legumes and oil seeds')
+    assert.equal(validation.value.sector_dictionary[0].broad_group, 'agriculture')
+    assert.equal(validation.value.sector_dictionary[0].tradable_tag, null)
     assert.equal(validation.value.sectors[0].employment_total, 343564)
     assert.equal(validation.value.matrices.technical_coefficients.length, 136)
     assert.equal(validation.value.matrices.leontief_inverse[0].length, 136)
@@ -74,6 +80,28 @@ describe('io bridge public artifact', () => {
       assert.equal(validation.value.sectors[index].employment_formal, mcpSource.EmpFormal[index])
       assert.equal(validation.value.sectors[index].employment_informal, mcpSource.EmpInformal[index])
     }
+  })
+
+  it('passes focused I-O numerical readiness audit checks', () => {
+    const validation = validateIoBridgePayload(loadPublicIoPayload())
+    assert.ok(validation.value)
+
+    const audit = auditIoBridgePayload(validation.value)
+
+    assert.equal(audit.ok, true)
+    assert.equal(audit.checks.every((check) => check.status === 'pass'), true)
+    assert.equal(
+      audit.checks.some((check) => check.id === 'leontief-inverse' && check.detail.includes('136 x 136')),
+      true,
+    )
+    assert.equal(
+      audit.checks.some(
+        (check) =>
+          check.id === 'baseline-reconstruction' &&
+          check.detail.includes('L * final demand reconstructs total resources'),
+      ),
+      true,
+    )
   })
 
   it('rejects malformed matrix dimensions with a path-scoped issue', () => {

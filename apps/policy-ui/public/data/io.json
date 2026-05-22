@@ -3410,6 +3410,1368 @@
       "employment_informal": 191999
     }
   ],
+  "sector_dictionary": [
+    {
+      "code": "A01.11",
+      "source_label": "Культуры зерновые (кроме риса), бобовые и масличные",
+      "display_label_en": "Cereal crops (excl. rice), legumes and oil seeds",
+      "display_label_ru": "Культуры зерновые (кроме риса), бобовые и масличные",
+      "display_label_uz": "Don ekinlari (guruchsiz), dukkaklilar va moyli o'simliklar",
+      "broad_group": "agriculture",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "А01.13",
+      "source_label": "Овощи и бахчевые культуры, корнеплоды и клубнеплоды",
+      "display_label_en": "Vegetables, melons, root and tuber crops",
+      "display_label_ru": "Овощи и бахчевые культуры, корнеплоды и клубнеплоды",
+      "display_label_uz": "Sabzavot, poliz va ildizmevali ekinlar",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "А01.16",
+      "source_label": "Культуры волокнистые прядильные",
+      "display_label_en": "Fibre crops",
+      "display_label_ru": "Культуры волокнистые прядильные",
+      "display_label_uz": "Tolali ekinlar",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "А01.21",
+      "source_label": "Виноград",
+      "display_label_en": "Grapes",
+      "display_label_ru": "Виноград",
+      "display_label_uz": "Uzum",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "А01.4.",
+      "source_label": "Животные живые и продукция животноводства",
+      "display_label_en": "Live animals and livestock products",
+      "display_label_ru": "Животные живые и продукция животноводства",
+      "display_label_uz": "Tirik hayvonlar va chorvachilik mahsulotlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "A01 \n(без 01.11, 01.13, 01.16, 01.21, 01.4.)",
+      "source_label": "Прочая продукция растениеводства , охоты и услуги в этих областях",
+      "display_label_en": "Other crop and animal products; hunting and related services",
+      "display_label_ru": "Прочая продукция растениеводства , охоты и услуги в этих областях",
+      "display_label_uz": "Boshqa o'simlik va hayvon mahsulotlari; ov va unga aloqador xizmatlar",
+      "broad_group": "agriculture",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "A02",
+      "source_label": "Продукция лесного хозяйства, лесозаготовок и услуги в этих областях",
+      "display_label_en": "Forestry and logging products and services",
+      "display_label_ru": "Продукция лесного хозяйства, лесозаготовок и услуги в этих областях",
+      "display_label_uz": "O'rmonchilik va lесоzаготовка mahsulotlari va xizmatlari",
+      "broad_group": "agriculture",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "A03",
+      "source_label": "Рыба и прочая продукция рыболовства; продукция рыбоводства; услуги связанные с рыболовством и рыбоводством",
+      "display_label_en": "Fish, aquaculture products and fishery services",
+      "display_label_ru": "Рыба и прочая продукция рыболовства; продукция рыбоводства; услуги связанные с рыболовством и рыбоводством",
+      "display_label_uz": "Baliq, akvakultura mahsulotlari va baliqchilik xizmatlari",
+      "broad_group": "agriculture",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "B05",
+      "source_label": "Уголь каменный и уголь бурый (лигнит)",
+      "display_label_en": "Hard coal and lignite",
+      "display_label_ru": "Уголь каменный и уголь бурый (лигнит)",
+      "display_label_uz": "Toshko'mir va jigarrang ko'mir (lignit)",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "B06.1",
+      "source_label": "Нефть сырая",
+      "display_label_en": "Crude oil",
+      "display_label_ru": "Нефть сырая",
+      "display_label_uz": "Xom neft",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "B06.2",
+      "source_label": "Газ природный в сжиженном или газообразном состоянии",
+      "display_label_en": "Natural gas",
+      "display_label_ru": "Газ природный в сжиженном или газообразном состоянии",
+      "display_label_uz": "Tabiiy gaz",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "B07.1",
+      "source_label": "Руды железные",
+      "display_label_en": "Iron ores",
+      "display_label_ru": "Руды железные",
+      "display_label_uz": "Temir rudalari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "B07.2",
+      "source_label": "Руды цветных металлов",
+      "display_label_en": "Non-ferrous metal ores",
+      "display_label_ru": "Руды цветных металлов",
+      "display_label_uz": "Rangli metallar rudalari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "B08",
+      "source_label": "Продукция добычи прочих полезных ископаемых",
+      "display_label_en": "Other mining and quarrying products",
+      "display_label_ru": "Продукция добычи прочих полезных ископаемых",
+      "display_label_uz": "Boshqa qazib olish sanoati mahsulotlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "B09",
+      "source_label": "Услуги в области добычи полезных ископаемых",
+      "display_label_en": "Mining support services",
+      "display_label_ru": "Услуги в области добычи полезных ископаемых",
+      "display_label_uz": "Foydali qazilmalar qazib olish sohasidagi xizmatlar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C10.1",
+      "source_label": "Мясо и мясопродукты",
+      "display_label_en": "Meat and meat products",
+      "display_label_ru": "Мясо и мясопродукты",
+      "display_label_uz": "Go'sht va go'sht mahsulotlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C10.2",
+      "source_label": "Рыба, ракообразные и моллюски, переработанные и консервированные",
+      "display_label_en": "Processed fish, crustaceans and molluscs",
+      "display_label_ru": "Рыба, ракообразные и моллюски, переработанные и консервированные",
+      "display_label_uz": "Qayta ishlangan baliq, qisqichbaqasimonlar va mollyuskalar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C10.3",
+      "source_label": "Фрукты и овощи переработанные и консервированные",
+      "display_label_en": "Processed and preserved fruits and vegetables",
+      "display_label_ru": "Фрукты и овощи переработанные и консервированные",
+      "display_label_uz": "Qayta ishlangan va konservalangan meva va sabzavotlar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C10.4",
+      "source_label": "Масла и жиры животные и растительные",
+      "display_label_en": "Animal and vegetable oils and fats",
+      "display_label_ru": "Масла и жиры животные и растительные",
+      "display_label_uz": "Hayvon va o'simlik moylari va yogʻlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C10.5",
+      "source_label": "Продукты молочные",
+      "display_label_en": "Dairy products",
+      "display_label_ru": "Продукты молочные",
+      "display_label_uz": "Sut mahsulotlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C10.6",
+      "source_label": "Продукция мукомольно-крупяная, крахмалы и крахмалопродукты",
+      "display_label_en": "Grain mill products, starches and starch products",
+      "display_label_ru": "Продукция мукомольно-крупяная, крахмалы и крахмалопродукты",
+      "display_label_uz": "Un-yorma mahsulotlari, kraxmal va kraxmal mahsulotlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C10.7",
+      "source_label": "Изделия хлебобулочные и мучные кондитерские",
+      "display_label_en": "Bakery and farinaceous products",
+      "display_label_ru": "Изделия хлебобулочные и мучные кондитерские",
+      "display_label_uz": "Non-bulochka va un konfet mahsulotlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C10.8\n (без 10.81)",
+      "source_label": "Продукты пищевые прочие",
+      "display_label_en": "Other food products",
+      "display_label_ru": "Продукты пищевые прочие",
+      "display_label_uz": "Boshqa oziq-ovqat mahsulotlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C10.81",
+      "source_label": "Сахар",
+      "display_label_en": "Sugar",
+      "display_label_ru": "Сахар",
+      "display_label_uz": "Shakar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C10.9",
+      "source_label": "Корма готовые для животных",
+      "display_label_en": "Prepared animal feeds",
+      "display_label_ru": "Корма готовые для животных",
+      "display_label_uz": "Hayvonlar uchun tayyor ozuqa",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C11",
+      "source_label": "Напитки",
+      "display_label_en": "Beverages",
+      "display_label_ru": "Напитки",
+      "display_label_uz": "Ichimliklar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C12",
+      "source_label": "Изделия табачные",
+      "display_label_en": "Tobacco products",
+      "display_label_ru": "Изделия табачные",
+      "display_label_uz": "Tamaki mahsulotlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C13.1",
+      "source_label": "Пряжа и нити текстильные",
+      "display_label_en": "Textile yarns and threads",
+      "display_label_ru": "Пряжа и нити текстильные",
+      "display_label_uz": "To'qimachilik iplari va ipliklari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C13.2",
+      "source_label": "Ткани текстильные",
+      "display_label_en": "Woven fabrics",
+      "display_label_ru": "Ткани текстильные",
+      "display_label_uz": "To'qilgan matolar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C13.3",
+      "source_label": "Услуги по отделке текстильных изделий",
+      "display_label_en": "Textile finishing services",
+      "display_label_ru": "Услуги по отделке текстильных изделий",
+      "display_label_uz": "To'qimachilik buyumlarini bezash xizmatlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C13.9",
+      "source_label": "Изделия текстильные прочие",
+      "display_label_en": "Other textiles",
+      "display_label_ru": "Изделия текстильные прочие",
+      "display_label_uz": "Boshqa to'qimachilik mahsulotlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C14",
+      "source_label": "Одежда",
+      "display_label_en": "Wearing apparel",
+      "display_label_ru": "Одежда",
+      "display_label_uz": "Kiyim-bosh",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C15",
+      "source_label": "Кожа и изделия из кожи",
+      "display_label_en": "Leather and leather products",
+      "display_label_ru": "Кожа и изделия из кожи",
+      "display_label_uz": "Ko'n va ko'n buyumlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C16",
+      "source_label": "Древесина и изделия из древесины и пробки (кроме мебели); изделия из соломки и материалов для плетения",
+      "display_label_en": "Wood and wood products (excl. furniture); cork and basketware",
+      "display_label_ru": "Древесина и изделия из древесины и пробки (кроме мебели); изделия из соломки и материалов для плетения",
+      "display_label_uz": "Yog'och va yog'och buyumlari (mebeldan tashqari)",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C17",
+      "source_label": "Бумага и изделия из бумаги",
+      "display_label_en": "Paper and paper products",
+      "display_label_ru": "Бумага и изделия из бумаги",
+      "display_label_uz": "Qog'oz va qog'oz mahsulotlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C18",
+      "source_label": "Услуги печатные и услуги по воспроизведению записанных материалов",
+      "display_label_en": "Printing and reproduction of recorded media",
+      "display_label_ru": "Услуги печатные и услуги по воспроизведению записанных материалов",
+      "display_label_uz": "Bosmaxona va yozilgan materiallarni ko'paytirish xizmatlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C19.1",
+      "source_label": "Продукция коксовых печей",
+      "display_label_en": "Coke oven products",
+      "display_label_ru": "Продукция коксовых печей",
+      "display_label_uz": "Koks pech mahsulotlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C19.2",
+      "source_label": "Продукты переработки нефти",
+      "display_label_en": "Refined petroleum products",
+      "display_label_ru": "Продукты переработки нефти",
+      "display_label_uz": "Neftni qayta ishlash mahsulotlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C20.1 \n(без C20.15 и C20.16)",
+      "source_label": "Вещества химические основные",
+      "display_label_en": "Basic chemicals",
+      "display_label_ru": "Вещества химические основные",
+      "display_label_uz": "Asosiy kimyo mahsulotlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C20.15",
+      "source_label": "Удобрения и азотные соединения",
+      "display_label_en": "Fertilisers and nitrogen compounds",
+      "display_label_ru": "Удобрения и азотные соединения",
+      "display_label_uz": "O'g'itlar va azotli birikmalar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C20.16",
+      "source_label": "Пластмассы в первичных формах",
+      "display_label_en": "Plastics in primary forms",
+      "display_label_ru": "Пластмассы в первичных формах",
+      "display_label_uz": "Birlamchi shakldagi plastmassalar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C20.2",
+      "source_label": "Пестициды и прочие агрохимические продукты",
+      "display_label_en": "Pesticides and other agrochemical products",
+      "display_label_ru": "Пестициды и прочие агрохимические продукты",
+      "display_label_uz": "Pestitsidlar va boshqa agrokimyo mahsulotlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C20.3",
+      "source_label": "Краски, лаки и аналогичные красящие вещества, типографские краски и мастики",
+      "display_label_en": "Paints, varnishes, printing ink and mastics",
+      "display_label_ru": "Краски, лаки и аналогичные красящие вещества, типографские краски и мастики",
+      "display_label_uz": "Boyoqlar, laklar va mastikalar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C20.4",
+      "source_label": "Мыло и моющие, чистящие и полирующие средства; парфюмерные и косметические средства",
+      "display_label_en": "Soap, detergents, cleaning and polishing; perfumes and cosmetics",
+      "display_label_ru": "Мыло и моющие, чистящие и полирующие средства; парфюмерные и косметические средства",
+      "display_label_uz": "Sovun, yuvish vositalari; parfyumeriya va kosmetika",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C20.5",
+      "source_label": "Продукция химическая прочая",
+      "display_label_en": "Other chemical products",
+      "display_label_ru": "Продукция химическая прочая",
+      "display_label_uz": "Boshqa kimyo mahsulotlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C20.6",
+      "source_label": "Волокна химические",
+      "display_label_en": "Chemical fibres",
+      "display_label_ru": "Волокна химические",
+      "display_label_uz": "Kimyoviy tolalar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C21",
+      "source_label": "Продукты фармацевтические основные и препараты фармацевтические",
+      "display_label_en": "Basic pharmaceutical products and preparations",
+      "display_label_ru": "Продукты фармацевтические основные и препараты фармацевтические",
+      "display_label_uz": "Asosiy farmatsevtika mahsulotlari va preparatlar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C22.1",
+      "source_label": "Изделия резиновые",
+      "display_label_en": "Rubber products",
+      "display_label_ru": "Изделия резиновые",
+      "display_label_uz": "Rezina buyumlar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C22.21",
+      "source_label": "Плиты, листы, трубы и профили пластмассовые",
+      "display_label_en": "Plastic plates, sheets, tubes and profiles",
+      "display_label_ru": "Плиты, листы, трубы и профили пластмассовые",
+      "display_label_uz": "Plastmassa plitalar, varaqlar, trubalar va profillar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C22.22",
+      "source_label": "Изделия упаковочные из пластмасс",
+      "display_label_en": "Plastic packaging goods",
+      "display_label_ru": "Изделия упаковочные из пластмасс",
+      "display_label_uz": "Plastmassa qadoqlash buyumlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C22.23",
+      "source_label": "Изделия строительные из пластмасс",
+      "display_label_en": "Builders ware of plastic",
+      "display_label_ru": "Изделия строительные из пластмасс",
+      "display_label_uz": "Plastmassadan qurilish buyumlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C22.29",
+      "source_label": "Изделия из пластмасс прочие",
+      "display_label_en": "Other plastic products",
+      "display_label_ru": "Изделия из пластмасс прочие",
+      "display_label_uz": "Boshqa plastmassa buyumlar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C23.1",
+      "source_label": "Стекло и изделия из стекла",
+      "display_label_en": "Glass and glass products",
+      "display_label_ru": "Стекло и изделия из стекла",
+      "display_label_uz": "Shisha va shisha buyumlar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C23.2",
+      "source_label": "Изделия огнеупорные",
+      "display_label_en": "Refractory products",
+      "display_label_ru": "Изделия огнеупорные",
+      "display_label_uz": "O'tga chidamli mahsulotlar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C23.3",
+      "source_label": "Керамические строительные материалы",
+      "display_label_en": "Ceramic building materials",
+      "display_label_ru": "Керамические строительные материалы",
+      "display_label_uz": "Keramik qurilish materiallari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C23.4",
+      "source_label": "Изделия фарфоровые и керамические прочие",
+      "display_label_en": "Other porcelain and ceramic products",
+      "display_label_ru": "Изделия фарфоровые и керамические прочие",
+      "display_label_uz": "Boshqa chinni va keramika mahsulotlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C23.5",
+      "source_label": "Цемент, известь и гипс",
+      "display_label_en": "Cement, lime and plaster",
+      "display_label_ru": "Цемент, известь и гипс",
+      "display_label_uz": "Tsement, ohak va gips",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C23.6",
+      "source_label": "Изделия из бетона, гипса и цемента",
+      "display_label_en": "Articles of concrete, cement and plaster",
+      "display_label_ru": "Изделия из бетона, гипса и цемента",
+      "display_label_uz": "Beton, gips va tsementdan buyumlar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C23.7",
+      "source_label": "Камень обработанный, используемый для строительства, отделки или памятников, и изделия из него",
+      "display_label_en": "Cut, shaped and finished stone",
+      "display_label_ru": "Камень обработанный, используемый для строительства, отделки или памятников, и изделия из него",
+      "display_label_uz": "Kesilgan, shakllangan va ishlangan tosh",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C23.9",
+      "source_label": "Изделия минеральные неметаллические прочие",
+      "display_label_en": "Other non-metallic mineral products",
+      "display_label_ru": "Изделия минеральные неметаллические прочие",
+      "display_label_uz": "Boshqa noorganic mineral mahsulotlar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C24.1",
+      "source_label": "Металлы основные черные: железо, чугун, сталь и ферросплавы",
+      "display_label_en": "Basic iron, steel and ferro-alloys",
+      "display_label_ru": "Металлы основные черные: железо, чугун, сталь и ферросплавы",
+      "display_label_uz": "Asosiy qora metallar: temir, cho'yan va po'lat",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C24.2",
+      "source_label": "Трубы, трубки и профили полые и фитинги к ним, из стали",
+      "display_label_en": "Steel tubes, pipes and hollow profiles",
+      "display_label_ru": "Трубы, трубки и профили полые и фитинги к ним, из стали",
+      "display_label_uz": "Po'lat trubalar, quvurlar va qo'shimchalari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C24.3",
+      "source_label": "Продукция первичной обработки стали прочая",
+      "display_label_en": "Other products of first processing of steel",
+      "display_label_ru": "Продукция первичной обработки стали прочая",
+      "display_label_uz": "Po'latni birlamchi qayta ishlashning boshqa mahsulotlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C24.4",
+      "source_label": "Основные драгоценные и прочие цветные основные металлы",
+      "display_label_en": "Basic precious and other non-ferrous metals",
+      "display_label_ru": "Основные драгоценные и прочие цветные основные металлы",
+      "display_label_uz": "Asosiy qimmatbaho va rangli metallar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C24.5",
+      "source_label": "Услуги по литью металлов",
+      "display_label_en": "Metal casting services",
+      "display_label_ru": "Услуги по литью металлов",
+      "display_label_uz": "Metall eritish xizmatlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C25 \n(без C25.1)",
+      "source_label": "Изделия металлические готовые, кроме машин и оборудования",
+      "display_label_en": "Fabricated metal products (excl. machinery)",
+      "display_label_ru": "Изделия металлические готовые, кроме машин и оборудования",
+      "display_label_uz": "Tayyor metall buyumlar (mashinalardan tashqari)",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C25.1",
+      "source_label": "Строительные металлические конструкции и изделия",
+      "display_label_en": "Structural metal products",
+      "display_label_ru": "Строительные металлические конструкции и изделия",
+      "display_label_uz": "Metall qurilish konstruktsiyalari va buyumlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C26",
+      "source_label": "Компьютеры, электронное и оптическое оборудование",
+      "display_label_en": "Computers, electronic and optical products",
+      "display_label_ru": "Компьютеры, электронное и оптическое оборудование",
+      "display_label_uz": "Kompyuterlar, elektron va optik jihozlar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C27.1",
+      "source_label": "Электродвигатели, генераторы, трансформаторы и электрораспределительная и регулирующая аппаратура",
+      "display_label_en": "Electrical motors, generators and transformers",
+      "display_label_ru": "Электродвигатели, генераторы, трансформаторы и электрораспределительная и регулирующая аппаратура",
+      "display_label_uz": "Elektr dvigatellari, generatorlar va transformatorlar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C27.2",
+      "source_label": "Аккумуляторы и батареи",
+      "display_label_en": "Batteries and accumulators",
+      "display_label_ru": "Аккумуляторы и батареи",
+      "display_label_uz": "Akkumulyatorlar va batareyalar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C27.3",
+      "source_label": "Провода электрические и приспособления для электропроводки",
+      "display_label_en": "Wiring and wiring devices",
+      "display_label_ru": "Провода электрические и приспособления для электропроводки",
+      "display_label_uz": "Elektr simlari va simli qurilmalar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C27.4",
+      "source_label": "Оборудование электрическое осветительное",
+      "display_label_en": "Electric lighting equipment",
+      "display_label_ru": "Оборудование электрическое осветительное",
+      "display_label_uz": "Elektr yoritish jihozlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C27.5",
+      "source_label": "Приборы бытовые",
+      "display_label_en": "Domestic appliances",
+      "display_label_ru": "Приборы бытовые",
+      "display_label_uz": "Maishiy elektr jihozlar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C27.9",
+      "source_label": "Оборудование электрическое прочее",
+      "display_label_en": "Other electrical equipment",
+      "display_label_ru": "Оборудование электрическое прочее",
+      "display_label_uz": "Boshqa elektr jihozlar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C28\n (без C28.13, C28.22, C28.3, C28.94)",
+      "source_label": "Машины и оборудование, не включенные в другие группировки",
+      "display_label_en": "General-purpose machinery and equipment n.e.c.",
+      "display_label_ru": "Машины и оборудование, не включенные в другие группировки",
+      "display_label_uz": "Umumiy maqsadli mashinalar va uskunalar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C28.13",
+      "source_label": "Насосы и компрессоры прочие",
+      "display_label_en": "Other pumps and compressors",
+      "display_label_ru": "Насосы и компрессоры прочие",
+      "display_label_uz": "Boshqa nasos va kompressorlar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C28.22",
+      "source_label": "Оборудование подъемно-транспортное",
+      "display_label_en": "Lifting and handling equipment",
+      "display_label_ru": "Оборудование подъемно-транспортное",
+      "display_label_uz": "Ko'tarish va tashish uskunalari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C28.3",
+      "source_label": "Машины для сельского и лесного хозяйства",
+      "display_label_en": "Agricultural and forestry machinery",
+      "display_label_ru": "Машины для сельского и лесного хозяйства",
+      "display_label_uz": "Qishloq va o'rmon xo'jaligi mashinalari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C28.94",
+      "source_label": "Оборудование для изготовления текстильных, швейных, меховых и кожаных изделий",
+      "display_label_en": "Machinery for textile and leather production",
+      "display_label_ru": "Оборудование для изготовления текстильных, швейных, меховых и кожаных изделий",
+      "display_label_uz": "To'qimachilik va charm buyumlar ishlab chiqarish mashinalari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C29",
+      "source_label": "Автотранспортные средства, прицепы и полуприцепы",
+      "display_label_en": "Motor vehicles, trailers and semi-trailers",
+      "display_label_ru": "Автотранспортные средства, прицепы и полуприцепы",
+      "display_label_uz": "Avtomobil transporti vositalari va pritseplar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C30",
+      "source_label": "Прочие транспортные средства и оборудование",
+      "display_label_en": "Other transport equipment",
+      "display_label_ru": "Прочие транспортные средства и оборудование",
+      "display_label_uz": "Boshqa transport vositalari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C31",
+      "source_label": "Мебель",
+      "display_label_en": "Furniture",
+      "display_label_ru": "Мебель",
+      "display_label_uz": "Mebel",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C32\n (без C32.4, C32.5)",
+      "source_label": "Продукция прочая",
+      "display_label_en": "Other manufactured goods",
+      "display_label_ru": "Продукция прочая",
+      "display_label_uz": "Boshqa ishlab chiqarilgan tovarlar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C32.4",
+      "source_label": "Игры и игрушки",
+      "display_label_en": "Games and toys",
+      "display_label_ru": "Игры и игрушки",
+      "display_label_uz": "O'yinlar va o'yinchoqlar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C32.5",
+      "source_label": "Инструменты и приспособления, используемые в медицине и стоматологии",
+      "display_label_en": "Medical and dental instruments and supplies",
+      "display_label_ru": "Инструменты и приспособления, используемые в медицине и стоматологии",
+      "display_label_uz": "Tibbiy va stomatologik asbob-uskunalar",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "C33",
+      "source_label": "Услуги по ремонту и установке  машин и оборудования",
+      "display_label_en": "Repair and installation of machinery and equipment",
+      "display_label_ru": "Услуги по ремонту и установке  машин и оборудования",
+      "display_label_uz": "Mashinalar va uskunalarni ta'mirlash va o'rnatish",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "D35.11",
+      "source_label": "Электроэнергия",
+      "display_label_en": "Electricity generation",
+      "display_label_ru": "Электроэнергия",
+      "display_label_uz": "Elektr energiyasini ishlab chiqarish",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "D35.13",
+      "source_label": "Услуги по распределению электроэнергии",
+      "display_label_en": "Electricity distribution services",
+      "display_label_ru": "Услуги по распределению электроэнергии",
+      "display_label_uz": "Elektr energiyasini taqsimlash xizmatlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "D35.21",
+      "source_label": "Искусственный газ",
+      "display_label_en": "Manufactured gas",
+      "display_label_ru": "Искусственный газ",
+      "display_label_uz": "Sun'iy gaz",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "D35.22",
+      "source_label": "Услуги по распределению газообразного топлива по трубопроводам",
+      "display_label_en": "Gas distribution services via mains",
+      "display_label_ru": "Услуги по распределению газообразного топлива по трубопроводам",
+      "display_label_uz": "Gaz tarmoqlari orqali gaz taqsimlash xizmatlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "D35.12, D35.14, D35.23, D35.3",
+      "source_label": "Услуги по передаче, продаже электроэнергии, продаже газообразного топлива по трубопроводам: пар и горячая вода (тепловая энергия)",
+      "display_label_en": "Steam, hot water and electricity transmission and sale",
+      "display_label_ru": "Услуги по передаче, продаже электроэнергии, продаже газообразного топлива по трубопроводам: пар и горячая вода (тепловая энергия)",
+      "display_label_uz": "Bug', issiq suv va elektr energiyasini uzatish va sotish",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "E36",
+      "source_label": "Вода природная; услуги по обработке воды и водоснабжению",
+      "display_label_en": "Natural water; water treatment and supply services",
+      "display_label_ru": "Вода природная; услуги по обработке воды и водоснабжению",
+      "display_label_uz": "Tabiiy suv; suvni tozalash va ta'minlash xizmatlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "E37",
+      "source_label": "Услуги канализационных систем; шлам сточных вод",
+      "display_label_en": "Sewerage services; sewage sludge",
+      "display_label_ru": "Услуги канализационных систем; шлам сточных вод",
+      "display_label_uz": "Kanalizatsiya xizmatlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "E38",
+      "source_label": "Услуги по сбору, обработке и удалению отходов; услуги по утилизации отходов",
+      "display_label_en": "Waste collection, treatment and disposal; materials recovery",
+      "display_label_ru": "Услуги по сбору, обработке и удалению отходов; услуги по утилизации отходов",
+      "display_label_uz": "Chiqindilarni yig'ish, qayta ishlash va yo'q qilish",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "E39",
+      "source_label": "Услуги по рекультивации и прочие услуги в области удаления отходов",
+      "display_label_en": "Remediation and other waste management services",
+      "display_label_ru": "Услуги по рекультивации и прочие услуги в области удаления отходов",
+      "display_label_uz": "Rekultivatsiya va chiqindilarni boshqarish xizmatlari",
+      "broad_group": "industry",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "F",
+      "source_label": "Сооружения и работы строительные",
+      "display_label_en": "Buildings and construction works",
+      "display_label_ru": "Сооружения и работы строительные",
+      "display_label_uz": "Binolar va qurilish ishlari",
+      "broad_group": "construction",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "G",
+      "source_label": "Услуги по оптовой и розничной торговле ; услуги по ремонту автомобилей и мотоциклов",
+      "display_label_en": "Wholesale and retail trade; repair of motor vehicles",
+      "display_label_ru": "Услуги по оптовой и розничной торговле ; услуги по ремонту автомобилей и мотоциклов",
+      "display_label_uz": "Ulgurji va chakana savdo; avtomobil va mototsikllarni ta'mirlash",
+      "broad_group": "trade_transport",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "H49-51",
+      "source_label": "Услуги транспорта",
+      "display_label_en": "Land, water and air transport services",
+      "display_label_ru": "Услуги транспорта",
+      "display_label_uz": "Quruqlik, suv va havo transporti xizmatlari",
+      "broad_group": "trade_transport",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "H52",
+      "source_label": "Услуги по складированию и вспомогательные транспортные услуги",
+      "display_label_en": "Warehousing and support services for transportation",
+      "display_label_ru": "Услуги по складированию и вспомогательные транспортные услуги",
+      "display_label_uz": "Omborlash va transport yordamchi xizmatlari",
+      "broad_group": "trade_transport",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "H53",
+      "source_label": "Услуги почтовые и курьерские",
+      "display_label_en": "Postal and courier services",
+      "display_label_ru": "Услуги почтовые и курьерские",
+      "display_label_uz": "Pochta va kuryer xizmatlari",
+      "broad_group": "trade_transport",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "I55",
+      "source_label": "Услуги проживания",
+      "display_label_en": "Accommodation services",
+      "display_label_ru": "Услуги проживания",
+      "display_label_uz": "Joylashtirish xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "I56",
+      "source_label": "Услуги по предоставлению продуктов питания и напитков",
+      "display_label_en": "Food and beverage serving services",
+      "display_label_ru": "Услуги по предоставлению продуктов питания и напитков",
+      "display_label_uz": "Ovqat va ichimlik xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "J58",
+      "source_label": "Услуги издательские",
+      "display_label_en": "Publishing services",
+      "display_label_ru": "Услуги издательские",
+      "display_label_uz": "Nashriyot xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "J59",
+      "source_label": "Услуги по производству кино-, видеофильмов и телевизионных программ, услуги по звукозаписи и изданию музыкальных произведений",
+      "display_label_en": "Motion picture, video, TV and music production services",
+      "display_label_ru": "Услуги по производству кино-, видеофильмов и телевизионных программ, услуги по звукозаписи и изданию музыкальных произведений",
+      "display_label_uz": "Kino-, video-, televideniye va musiqa yozuvi xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "J60",
+      "source_label": "Услуги по составлению программ и телерадиовещанию",
+      "display_label_en": "Programming and broadcasting services",
+      "display_label_ru": "Услуги по составлению программ и телерадиовещанию",
+      "display_label_uz": "Dasturlash va teleeshittirish xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "J61",
+      "source_label": "Услуги телекоммуникационные",
+      "display_label_en": "Telecommunications services",
+      "display_label_ru": "Услуги телекоммуникационные",
+      "display_label_uz": "Telekommunikatsiya xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "J62",
+      "source_label": "Услуги по компьютерному программированию, консультационные и другие сопутствующие услуги",
+      "display_label_en": "Computer programming, consultancy and related services",
+      "display_label_ru": "Услуги по компьютерному программированию, консультационные и другие сопутствующие услуги",
+      "display_label_uz": "Kompyuter dasturlash va maslahat xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "J63",
+      "source_label": "Услуги в области информации",
+      "display_label_en": "Information services",
+      "display_label_ru": "Услуги в области информации",
+      "display_label_uz": "Axborot xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "K64",
+      "source_label": "Услуги финансовые, кроме услуг по страхованию и пенсионному обеспечению",
+      "display_label_en": "Financial services (excl. insurance and pension)",
+      "display_label_ru": "Услуги финансовые, кроме услуг по страхованию и пенсионному обеспечению",
+      "display_label_uz": "Moliyaviy xizmatlar (sug'urtadan tashqari)",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "K65",
+      "source_label": "Услуги по страхованию, перестрахованию и пенсионному обеспечению, кроме услуг по обязательному социальному страхованию",
+      "display_label_en": "Insurance, reinsurance and pension funding services",
+      "display_label_ru": "Услуги по страхованию, перестрахованию и пенсионному обеспечению, кроме услуг по обязательному социальному страхованию",
+      "display_label_uz": "Sug'urta, qayta sug'urta va pensiya ta'minoti xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "K66",
+      "source_label": "Услуги, вспомогательные по отношению к финансовым и страховым услугам",
+      "display_label_en": "Services auxiliary to financial and insurance activities",
+      "display_label_ru": "Услуги, вспомогательные по отношению к финансовым и страховым услугам",
+      "display_label_uz": "Moliyaviy va sug'urta faoliyatiga yordamchi xizmatlar",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "L68",
+      "source_label": "Услуги, связанные с недвижимым имуществом",
+      "display_label_en": "Real estate services",
+      "display_label_ru": "Услуги, связанные с недвижимым имуществом",
+      "display_label_uz": "Ko'chmas mulk xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "M69",
+      "source_label": "Услуги в области права и бухгалтерского учета",
+      "display_label_en": "Legal and accounting services",
+      "display_label_ru": "Услуги в области права и бухгалтерского учета",
+      "display_label_uz": "Huquqiy va buxgalteriya xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "M70",
+      "source_label": "Услуги головных компаний; услуги консультационные по вопросам управления",
+      "display_label_en": "Services of head offices; management consulting",
+      "display_label_ru": "Услуги головных компаний; услуги консультационные по вопросам управления",
+      "display_label_uz": "Bosh kompaniyalar xizmatlari; boshqaruv bo'yicha maslahat",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "M71",
+      "source_label": "Услуги в области архитектуры, инженерных изысканий, технических испытаний и анализа",
+      "display_label_en": "Architectural and engineering services; technical testing",
+      "display_label_ru": "Услуги в области архитектуры, инженерных изысканий, технических испытаний и анализа",
+      "display_label_uz": "Arxitektura va muhandislik xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "M72",
+      "source_label": "Услуги по научным исследованиям и разработкам",
+      "display_label_en": "Scientific research and development services",
+      "display_label_ru": "Услуги по научным исследованиям и разработкам",
+      "display_label_uz": "Ilmiy tadqiqot va ishlanmalar xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "M73",
+      "source_label": "Услуги в области рекламы и изучения конъюнктуры рынка",
+      "display_label_en": "Advertising and market research services",
+      "display_label_ru": "Услуги в области рекламы и изучения конъюнктуры рынка",
+      "display_label_uz": "Reklama va bozor tadqiqoti xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "M74",
+      "source_label": "Услуги профессиональные, научные и технические прочие",
+      "display_label_en": "Other professional, scientific and technical services",
+      "display_label_ru": "Услуги профессиональные, научные и технические прочие",
+      "display_label_uz": "Boshqa professional va texnik xizmatlar",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "M75",
+      "source_label": "Услуги ветеринарные",
+      "display_label_en": "Veterinary services",
+      "display_label_ru": "Услуги ветеринарные",
+      "display_label_uz": "Veterinariya xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "N77",
+      "source_label": "Услуги по аренде и лизингу",
+      "display_label_en": "Rental and leasing services",
+      "display_label_ru": "Услуги по аренде и лизингу",
+      "display_label_uz": "Ijara va lizing xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "N78",
+      "source_label": "Услуги по трудоустройству",
+      "display_label_en": "Employment services",
+      "display_label_ru": "Услуги по трудоустройству",
+      "display_label_uz": "Bandlik xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "N79",
+      "source_label": "Услуги туристических агентств, туроператоров и прочие услуги по бронированию и связанные с ними услуги",
+      "display_label_en": "Travel agency and tour operator services",
+      "display_label_ru": "Услуги туристических агентств, туроператоров и прочие услуги по бронированию и связанные с ними услуги",
+      "display_label_uz": "Sayohat agentligi va tur operator xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "N80",
+      "source_label": "Услуги по обеспечению безопасности и проведению расследований",
+      "display_label_en": "Security and investigation services",
+      "display_label_ru": "Услуги по обеспечению безопасности и проведению расследований",
+      "display_label_uz": "Xavfsizlik va tergov xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "N81",
+      "source_label": "Услуги по обслуживанию зданий и благоустройству ландшафта",
+      "display_label_en": "Building and landscape services",
+      "display_label_ru": "Услуги по обслуживанию зданий и благоустройству ландшафта",
+      "display_label_uz": "Binolarni tozalash va obodonlashtirish xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "N82",
+      "source_label": "Услуги в области административно-управленческого, хозяйственного и прочего вспомогательного обслуживания",
+      "display_label_en": "Office administrative and other business support services",
+      "display_label_ru": "Услуги в области административно-управленческого, хозяйственного и прочего вспомогательного обслуживания",
+      "display_label_uz": "Ofis ma'muriyati va biznes yordamchi xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "O84",
+      "source_label": "Услуги в области государственного управления и обороны; услуги по обязательному социальному обеспечению",
+      "display_label_en": "Public administration, defence and compulsory social security",
+      "display_label_ru": "Услуги в области государственного управления и обороны; услуги по обязательному социальному обеспечению",
+      "display_label_uz": "Davlat boshqaruvi, mudofaa va majburiy ijtimoiy sug'urta",
+      "broad_group": "public_social",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "P85",
+      "source_label": "Услуги в области образования",
+      "display_label_en": "Education services",
+      "display_label_ru": "Услуги в области образования",
+      "display_label_uz": "Ta'lim xizmatlari",
+      "broad_group": "public_social",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "Q86",
+      "source_label": "Услуги в области здравоохранения",
+      "display_label_en": "Human health services",
+      "display_label_ru": "Услуги в области здравоохранения",
+      "display_label_uz": "Inson salomatligi xizmatlari",
+      "broad_group": "public_social",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "Q87",
+      "source_label": "Услуги по предоставлению ухода с обеспечением проживания",
+      "display_label_en": "Residential care services",
+      "display_label_ru": "Услуги по предоставлению ухода с обеспечением проживания",
+      "display_label_uz": "Turar joy ta'minoti bilan qarash xizmatlari",
+      "broad_group": "public_social",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "Q88",
+      "source_label": "Услуги социальные без обеспечения проживания",
+      "display_label_en": "Social work services (without accommodation)",
+      "display_label_ru": "Услуги социальные без обеспечения проживания",
+      "display_label_uz": "Ijtimoiy xizmatlar (turar joysiz)",
+      "broad_group": "public_social",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "R90",
+      "source_label": "Услуги в области творчества, искусства и развлечений",
+      "display_label_en": "Creative, arts and entertainment services",
+      "display_label_ru": "Услуги в области творчества, искусства и развлечений",
+      "display_label_uz": "Ijodiy, san'at va ko'ngil ochar xizmatlar",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "R91",
+      "source_label": "Услуги библиотек, архивов, музеев и прочие услуги в области культуры",
+      "display_label_en": "Library, archive, museum and other cultural services",
+      "display_label_ru": "Услуги библиотек, архивов, музеев и прочие услуги в области культуры",
+      "display_label_uz": "Kutubxona, arxiv, muzey va madaniyat xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "R93",
+      "source_label": "Услуги в области спорта и организации развлечений и отдыха",
+      "display_label_en": "Sports, amusement and recreation services",
+      "display_label_ru": "Услуги в области спорта и организации развлечений и отдыха",
+      "display_label_uz": "Sport, ko'ngil ochar va dam olish xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "S94",
+      "source_label": "Услуги, предоставляемые членскими организациями",
+      "display_label_en": "Services furnished by membership organisations",
+      "display_label_ru": "Услуги, предоставляемые членскими организациями",
+      "display_label_uz": "A'zolik tashkilotlar xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "S95",
+      "source_label": "Услуги по ремонту компьютеров, предметов личного пользования и бытовых товаров",
+      "display_label_en": "Repair of computers and personal and household goods",
+      "display_label_ru": "Услуги по ремонту компьютеров, предметов личного пользования и бытовых товаров",
+      "display_label_uz": "Kompyuterlar va shaxsiy buyumlarni ta'mirlash xizmatlari",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    },
+    {
+      "code": "S96",
+      "source_label": "Услуги индивидуальные прочие",
+      "display_label_en": "Other personal services",
+      "display_label_ru": "Услуги индивидуальные прочие",
+      "display_label_uz": "Boshqa shaxsiy xizmatlar",
+      "broad_group": "services",
+      "tradable_tag": null,
+      "value_chain_tag": null
+    }
+  ],
   "matrices": {
     "technical_coefficients": [
       [
@@ -41534,9 +42896,20 @@
     {
       "caveat_id": "io-sector-names-ru-source",
       "severity": "info",
-      "message": "Sector names are carried in Russian from the source JSON; English and Uzbek labels require a later reconciled sector-name source.",
+      "message": "Scenario Lab displays source Russian sector labels. The sector dictionary also carries English and Uzbek labels from the tracked I-O JavaScript source, but those labels are not used as official translations in the UI.",
       "affected_metrics": [
         "sector_name"
+      ],
+      "affected_models": [
+        "IO"
+      ]
+    },
+    {
+      "caveat_id": "io-sector-dictionary-prepared",
+      "severity": "info",
+      "message": "Sector dictionary support carries source label, EN/RU/UZ display labels where available, and broad groups derived from the leading sector-code letter; tradable and value-chain tags are explicit nulls until a source or rule is accepted.",
+      "affected_metrics": [
+        "sector_dictionary"
       ],
       "affected_models": [
         "IO"

@@ -1,5 +1,12 @@
 import type { Caveat, ModelAttribution } from '../../contracts/data-contract.js'
-import type { IoBridgePayload, IoFinalDemand, IoMetadata, IoSector } from './io-types.js'
+import type {
+  IoBridgePayload,
+  IoFinalDemand,
+  IoMetadata,
+  IoSector,
+  IoSectorBroadGroup,
+  IoSectorDictionaryEntry,
+} from './io-types.js'
 
 export type IoValidationIssue = {
   path: string
@@ -303,6 +310,83 @@ function parseSectors(value: unknown, issues: IoValidationIssue[], expectedLengt
   return ok ? sectors : null
 }
 
+const BROAD_GROUPS: ReadonlySet<IoSectorBroadGroup> = new Set([
+  'agriculture',
+  'industry',
+  'construction',
+  'trade_transport',
+  'services',
+  'public_social',
+  'other',
+])
+
+function nullableString(value: unknown, issues: IoValidationIssue[], path: string): string | null {
+  if (value === null) {
+    return null
+  }
+  if (typeof value !== 'string' || value.length === 0) {
+    pushError(issues, path, 'Expected a non-empty string or null.')
+    return null
+  }
+  return value
+}
+
+function parseSectorDictionary(
+  value: unknown,
+  issues: IoValidationIssue[],
+  sectors: IoSector[] | null,
+  expectedLength: number,
+): IoSectorDictionaryEntry[] | null {
+  if (!Array.isArray(value)) {
+    pushError(issues, 'sector_dictionary', 'Expected an array.')
+    return null
+  }
+  let ok = value.length === expectedLength
+  if (!ok) pushError(issues, 'sector_dictionary', `Expected ${expectedLength} entries.`)
+  const entries: IoSectorDictionaryEntry[] = []
+  value.forEach((entry, index) => {
+    const path = `sector_dictionary[${index}]`
+    if (!isRecord(entry)) {
+      pushError(issues, path, 'Expected an object.')
+      ok = false
+      return
+    }
+    const code = nonEmptyString(entry.code, issues, `${path}.code`)
+    const sourceLabel = nonEmptyString(entry.source_label, issues, `${path}.source_label`)
+    const displayLabelEn = nullableString(entry.display_label_en, issues, `${path}.display_label_en`)
+    const displayLabelRu = nullableString(entry.display_label_ru, issues, `${path}.display_label_ru`)
+    const displayLabelUz = nullableString(entry.display_label_uz, issues, `${path}.display_label_uz`)
+    const broadGroup = entry.broad_group
+    const tradableTag = nullableString(entry.tradable_tag, issues, `${path}.tradable_tag`)
+    const valueChainTag = nullableString(entry.value_chain_tag, issues, `${path}.value_chain_tag`)
+    if (typeof broadGroup !== 'string' || !BROAD_GROUPS.has(broadGroup as IoSectorBroadGroup)) {
+      pushError(issues, `${path}.broad_group`, 'Expected a known I-O broad group.')
+      ok = false
+    }
+    if (!code || !sourceLabel) {
+      ok = false
+      return
+    }
+    if (sectors?.[index] && sectors[index].code !== code) {
+      pushError(issues, `${path}.code`, `Expected dictionary code to equal sector code ${sectors[index].code}.`)
+      ok = false
+    }
+    if (typeof broadGroup === 'string' && BROAD_GROUPS.has(broadGroup as IoSectorBroadGroup)) {
+      entries.push({
+        code,
+        source_label: sourceLabel,
+        display_label_en: displayLabelEn,
+        display_label_ru: displayLabelRu,
+        display_label_uz: displayLabelUz,
+        broad_group: broadGroup as IoSectorBroadGroup,
+        tradable_tag: tradableTag,
+        value_chain_tag: valueChainTag,
+      })
+    }
+  })
+  return ok ? entries : null
+}
+
 function parseNumberArray(value: unknown, issues: IoValidationIssue[], path: string, expectedLength: number): number[] | null {
   if (!Array.isArray(value)) {
     pushError(issues, path, 'Expected an array of finite numbers.')
@@ -354,6 +438,8 @@ export function validateIoBridgePayload(value: unknown): IoValidationResult {
   const metadata = parseMetadata(value.metadata, issues)
   const n = metadata?.n_sectors ?? 0
   const sectors = n > 0 ? parseSectors(value.sectors, issues, n) : null
+  const sectorDictionary =
+    n > 0 ? parseSectorDictionary(value.sector_dictionary, issues, sectors, n) : null
   const matricesRecord = isRecord(value.matrices) ? value.matrices : null
   if (!matricesRecord) pushError(issues, 'matrices', 'Expected an object.')
   const technicalCoefficients = matricesRecord
@@ -378,6 +464,7 @@ export function validateIoBridgePayload(value: unknown): IoValidationResult {
     !attribution ||
     !metadata ||
     !sectors ||
+    !sectorDictionary ||
     !technicalCoefficients ||
     !leontiefInverse ||
     !output ||
@@ -395,6 +482,7 @@ export function validateIoBridgePayload(value: unknown): IoValidationResult {
     value: {
       attribution,
       sectors,
+      sector_dictionary: sectorDictionary,
       matrices: { technical_coefficients: technicalCoefficients, leontief_inverse: leontiefInverse },
       totals: {
         output_thousand_uzs: output,

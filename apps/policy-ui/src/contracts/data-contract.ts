@@ -609,6 +609,27 @@ export type ScenarioLabWorkspace = {
 export type ScenarioLabIoDemandBucket = 'consumption' | 'government' | 'investment' | 'export'
 export type ScenarioLabIoDistributionMode = 'final_demand' | 'output' | 'gva' | 'equal' | 'sector'
 export type ScenarioLabIoShockCurrency = 'bln_uzs' | 'mln_usd'
+export type ScenarioLabIoPolicyShockType =
+  | 'public_investment_project'
+  | 'export_expansion'
+  | 'domestic_demand_reallocation'
+  | 'government_procurement'
+  | 'single_sector_final_demand'
+
+export type ScenarioLabIoSensitivityCase = {
+  id: string
+  label: string
+  assumption: string
+  output_effect_bln_uzs: number
+  value_added_effect_bln_uzs: number
+  employment_effect_persons: number | null
+  aggregate_output_multiplier: number | null
+}
+
+export type ScenarioLabIoSensitivityResult = {
+  allocation_modes: ScenarioLabIoSensitivityCase[]
+  parameter_ranges: ScenarioLabIoSensitivityCase[]
+}
 
 export type ScenarioLabIoSectorOption = {
   code: string
@@ -662,6 +683,7 @@ export type ScenarioLabIoShockResult = {
     aggregate_output_multiplier: number | null
   }
   top_sectors: ScenarioLabIoSectorEffect[]
+  sensitivity?: ScenarioLabIoSensitivityResult
   caveats: string[]
 }
 

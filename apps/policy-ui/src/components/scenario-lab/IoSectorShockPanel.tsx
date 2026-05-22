@@ -7,6 +7,8 @@ import type {
   ScenarioLabIoAnalyticsWorkspace,
   ScenarioLabIoShockResult,
   ScenarioLabIoShockCurrency,
+  ScenarioLabIoPolicyShockType,
+  ScenarioLabIoSensitivityCase,
   ScenarioLabIoShockRequest,
 } from '../../contracts/data-contract.js'
 import type { ScenarioLabIoAnalyticsState } from '../../data/scenario-lab/io-analytics-source.js'
@@ -35,13 +37,19 @@ const DEMAND_BUCKETS: ScenarioLabIoDemandBucket[] = [
 const DISTRIBUTION_MODES: ScenarioLabIoDistributionMode[] = [
   'final_demand',
   'output',
-  'gva',
-  'equal',
   'sector',
+]
+const POLICY_SHOCK_TYPES: ScenarioLabIoPolicyShockType[] = [
+  'public_investment_project',
+  'export_expansion',
+  'domestic_demand_reallocation',
+  'government_procurement',
+  'single_sector_final_demand',
 ]
 const CURRENCY_OPTIONS: ScenarioLabIoShockCurrency[] = ['bln_uzs', 'mln_usd']
 const DEFAULT_EXCHANGE_RATE_UZS_PER_USD = 12_652.7
 const DISPLAYED_SECTOR_COUNT = 5
+const DISPLAYED_PARAMETER_SENSITIVITY_COUNT = 9
 
 function formatOptionalNumber(value: number | null, locale: string | undefined): string {
   if (value === null) {
@@ -60,9 +68,59 @@ function shareStyle(value: number): CSSProperties {
   return { '--io-share-width': `${Math.min(100, Math.max(0, value))}%` } as CSSProperties
 }
 
+function formatMultiplier(value: number | null, locale: string | undefined): string {
+  if (value === null) {
+    return formatUnavailable(locale)
+  }
+  return formatNumber(value, locale, {
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 2,
+  })
+}
+
+function SensitivityTable({
+  cases,
+  locale,
+}: {
+  cases: ScenarioLabIoSensitivityCase[]
+  locale: string | undefined
+}) {
+  return (
+    <div className="io-shock__sensitivity-table-wrap">
+      <table className="io-shock__sensitivity-table">
+        <thead>
+          <tr>
+            <th>Case</th>
+            <th>Output</th>
+            <th>VA</th>
+            <th>Employment</th>
+            <th>Mult.</th>
+          </tr>
+        </thead>
+        <tbody>
+          {cases.map((item) => (
+            <tr key={item.id}>
+              <th scope="row">
+                <strong>{item.label}</strong>
+                <span>{item.assumption}</span>
+              </th>
+              <td>{formatNumber(item.output_effect_bln_uzs, locale, { maximumFractionDigits: 1 })}</td>
+              <td>{formatNumber(item.value_added_effect_bln_uzs, locale, { maximumFractionDigits: 1 })}</td>
+              <td>{formatOptionalNumber(item.employment_effect_persons, locale)}</td>
+              <td>{formatMultiplier(item.aggregate_output_multiplier, locale)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
 export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: IoSectorShockPanelProps) {
   const { i18n, t } = useTranslation()
   const locale = i18n.resolvedLanguage ?? i18n.language
+  const [policyShockType, setPolicyShockType] =
+    useState<ScenarioLabIoPolicyShockType>('export_expansion')
   const [demandBucket, setDemandBucket] = useState<ScenarioLabIoDemandBucket>('export')
   const [amount, setAmount] = useState(1000)
   const [currency, setCurrency] = useState<ScenarioLabIoShockCurrency>('bln_uzs')
@@ -118,8 +176,28 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
     () => result?.top_sectors.slice(0, DISPLAYED_SECTOR_COUNT) ?? [],
     [result],
   )
+  const sensitivity = result?.sensitivity ?? { allocation_modes: [], parameter_ranges: [] }
   const totalAbsOutputEffect = Math.max(1, Math.abs(result?.totals.output_effect_bln_uzs ?? 0))
   const leadingSector = concentrationRows[0]
+
+  function applyPolicyShockType(nextType: ScenarioLabIoPolicyShockType) {
+    setPolicyShockType(nextType)
+    if (nextType === 'public_investment_project') {
+      setDemandBucket('investment')
+      setDistribution('final_demand')
+    } else if (nextType === 'export_expansion') {
+      setDemandBucket('export')
+      setDistribution('final_demand')
+    } else if (nextType === 'domestic_demand_reallocation') {
+      setDemandBucket('consumption')
+      setDistribution('output')
+    } else if (nextType === 'government_procurement') {
+      setDemandBucket('government')
+      setDistribution('final_demand')
+    } else {
+      setDistribution('sector')
+    }
+  }
 
   if (state.status === 'loading') {
     return (
@@ -169,6 +247,24 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
 
       <div className="io-shock__layout">
         <div className="io-shock__controls" aria-label={t('scenarioLab.ioShock.controlsAria')}>
+          <label>
+            <span>{t('scenarioLab.ioShock.policyShockType')}</span>
+            <select
+              value={policyShockType}
+              onChange={(event) => applyPolicyShockType(event.target.value as ScenarioLabIoPolicyShockType)}
+            >
+              {POLICY_SHOCK_TYPES.map((option) => (
+                <option key={option} value={option}>
+                  {t(`scenarioLab.ioShock.policyShockTypes.${option}`)}
+                </option>
+              ))}
+              <option disabled value="single_sector_production">
+                {t('scenarioLab.ioShock.policyShockTypes.single_sector_production_disabled')}
+              </option>
+            </select>
+            <small className="io-shock__field-hint">{t('scenarioLab.ioShock.policyShockTypeHint')}</small>
+          </label>
+
           <fieldset>
             <legend>{t('scenarioLab.ioShock.demandBucket')}</legend>
             <div className="io-shock__segments">
@@ -290,9 +386,13 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
                   </dd>
                 </div>
               ) : null}
+                <div>
+                  <dt>{t('scenarioLab.ioShock.summary.dataVintage')}</dt>
+                  <dd>{state.workspace.data_vintage}</dd>
+                </div>
               <div>
-                <dt>{t('scenarioLab.ioShock.summary.dataVintage')}</dt>
-                <dd>{state.workspace.data_vintage}</dd>
+                <dt>{t('scenarioLab.ioShock.summary.policyUse')}</dt>
+                <dd>{t(`scenarioLab.ioShock.policyShockTypes.${policyShockType}`)}</dd>
               </div>
             </dl>
           </div>
@@ -386,6 +486,27 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
               </div>
             </section>
 
+            <section className="io-shock__sensitivity" aria-labelledby="io-shock-sensitivity-title">
+              <div className="io-shock__block-head">
+                <h3 id="io-shock-sensitivity-title">{t('scenarioLab.ioShock.sensitivity.title')}</h3>
+                <p>{t('scenarioLab.ioShock.sensitivity.subtitle')}</p>
+              </div>
+              <div className="io-shock__sensitivity-grid">
+                <div>
+                  <h4>{t('scenarioLab.ioShock.sensitivity.allocations')}</h4>
+                  <SensitivityTable cases={sensitivity.allocation_modes} locale={locale} />
+                </div>
+                <div>
+                  <h4>{t('scenarioLab.ioShock.sensitivity.parameters')}</h4>
+                  <SensitivityTable
+                    cases={sensitivity.parameter_ranges.slice(0, DISPLAYED_PARAMETER_SENSITIVITY_COUNT)}
+                    locale={locale}
+                  />
+                </div>
+              </div>
+              <p className="io-shock__source-note">{t('scenarioLab.ioShock.sensitivity.note')}</p>
+            </section>
+
             {onSaveRun ? (
               <div className="io-shock__actions">
                 <button type="button" className="ui-secondary-action" onClick={() => onSaveRun(result, state.workspace)}>
@@ -469,6 +590,10 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
                 <div>
                   <strong>{t('scenarioLab.ioShock.interpretation.boundary')}</strong>
                   <p>{t('scenarioLab.ioShock.interpretation.boundaryBody')}</p>
+                </div>
+                <div>
+                  <strong>{t('scenarioLab.ioShock.interpretation.sensitivity')}</strong>
+                  <p>{t('scenarioLab.ioShock.interpretation.sensitivityBody')}</p>
                 </div>
                 <div>
                   <strong>{t('scenarioLab.ioShock.interpretation.nextUse')}</strong>

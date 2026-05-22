@@ -41,6 +41,18 @@ function normalizeCode(value) {
   return String(value).replace(/\s+/g, ' ').trim()
 }
 
+function broadGroupForCode(code) {
+  const normalized = normalizeCode(code)
+  const first = normalized[0]?.toUpperCase()
+  if (first === 'A') return 'agriculture'
+  if (['B', 'C', 'D', 'E'].includes(first)) return 'industry'
+  if (first === 'F') return 'construction'
+  if (first === 'G' || first === 'H') return 'trade_transport'
+  if (['O', 'P', 'Q'].includes(first)) return 'public_social'
+  if (first) return 'services'
+  return 'other'
+}
+
 function requireAlignedMcpSource(index, sector) {
   const mcpCode = requireString(mcpSource.codes?.[index], `mcp.codes[${index}]`)
   const mcpName = requireString(mcpSource.names?.[index], `mcp.names[${index}]`)
@@ -49,6 +61,13 @@ function requireAlignedMcpSource(index, sector) {
       `MCP I-O employment source does not align at sector ${index}: ${sector.code} / ${mcpCode}.`,
     )
   }
+}
+
+function optionalDictionaryLabel(arrayName, index) {
+  const values = mcpSource[arrayName]
+  if (values === undefined || values === null) return null
+  const label = requireString(requireArray(values, `mcp.${arrayName}`)[index], `mcp.${arrayName}[${index}]`)
+  return label
 }
 
 function requireEmploymentNumber(arrayName, index) {
@@ -85,6 +104,17 @@ const sectors = requireArray(source.sectors, 'sectors').map((sector, index) => {
   }
 })
 
+const sectorDictionary = sectors.map((sector, index) => ({
+  code: sector.code,
+  source_label: sector.name_ru,
+  display_label_en: optionalDictionaryLabel('namesEN', index),
+  display_label_ru: sector.name_ru,
+  display_label_uz: optionalDictionaryLabel('namesUZ', index),
+  broad_group: broadGroupForCode(sector.code),
+  tradable_tag: null,
+  value_chain_tag: null,
+}))
+
 const nSectors = requireNumber(source.metadata.n_sectors, 'metadata.n_sectors')
 if (sectors.length !== nSectors) {
   throw new Error(`Expected ${nSectors} sectors, received ${sectors.length}.`)
@@ -101,6 +131,7 @@ const payload = {
     timestamp: exportedAt,
   },
   sectors,
+  sector_dictionary: sectorDictionary,
   matrices: {
     technical_coefficients: requireArray(source.A, 'A'),
     leontief_inverse: requireArray(source.L, 'L'),
@@ -132,8 +163,16 @@ const payload = {
       caveat_id: 'io-sector-names-ru-source',
       severity: 'info',
       message:
-        'Sector names are carried in Russian from the source JSON; English and Uzbek labels require a later reconciled sector-name source.',
+        'Scenario Lab displays source Russian sector labels. The sector dictionary also carries English and Uzbek labels from the tracked I-O JavaScript source, but those labels are not used as official translations in the UI.',
       affected_metrics: ['sector_name'],
+      affected_models: ['IO'],
+    },
+    {
+      caveat_id: 'io-sector-dictionary-prepared',
+      severity: 'info',
+      message:
+        'Sector dictionary support carries source label, EN/RU/UZ display labels where available, and broad groups derived from the leading sector-code letter; tradable and value-chain tags are explicit nulls until a source or rule is accepted.',
+      affected_metrics: ['sector_dictionary'],
       affected_models: ['IO'],
     },
     {

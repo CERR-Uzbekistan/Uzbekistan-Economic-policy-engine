@@ -52,6 +52,8 @@ describe('scenario lab IO analytics adapter', () => {
     assert.equal(typeof result.totals.employment_effect_persons, 'number')
     assert.equal((result.totals.employment_effect_persons ?? 0) > 0, true)
     assert.equal(result.top_sectors.length, 10)
+    assert.equal(result.sensitivity?.allocation_modes.length, 3)
+    assert.equal(result.sensitivity?.parameter_ranges.length, 9)
     assert.equal(typeof result.top_sectors[0].employment_effect_persons, 'number')
     assert.equal(
       Math.abs(result.top_sectors[0].output_effect_bln_uzs) >=
@@ -111,5 +113,83 @@ describe('scenario lab IO analytics adapter', () => {
       exportShock.top_sectors.slice(0, 3).map((sector) => sector.sector_code),
       consumptionShock.top_sectors.slice(0, 3).map((sector) => sector.sector_code),
     )
+  })
+
+  it('scales 1 bln UZS shocks proportionally and keeps sector rankings deterministic', () => {
+    const payload = loadValidIoPayload()
+    const oneBlnShock = runScenarioLabIoDemandShock(payload, {
+      demand_bucket: 'export',
+      amount: 1,
+      currency: 'bln_uzs',
+      distribution: 'final_demand',
+    })
+    const thousandBlnShock = runScenarioLabIoDemandShock(payload, {
+      demand_bucket: 'export',
+      amount: 1000,
+      currency: 'bln_uzs',
+      distribution: 'final_demand',
+    })
+    const repeatedShock = runScenarioLabIoDemandShock(payload, {
+      demand_bucket: 'export',
+      amount: 1000,
+      currency: 'bln_uzs',
+      distribution: 'final_demand',
+    })
+
+    assert.equal(
+      Math.abs(thousandBlnShock.totals.output_effect_bln_uzs - oneBlnShock.totals.output_effect_bln_uzs * 1000) <
+        0.1,
+      true,
+    )
+    assert.equal(
+      Math.abs(
+        thousandBlnShock.totals.value_added_effect_bln_uzs -
+          oneBlnShock.totals.value_added_effect_bln_uzs * 1000,
+      ) < 0.1,
+      true,
+    )
+    assert.deepEqual(
+      thousandBlnShock.top_sectors.map((sector) => sector.sector_code),
+      repeatedShock.top_sectors.map((sector) => sector.sector_code),
+    )
+  })
+
+  it('returns allocation, employment, import-leakage, and FX sensitivity ranges without forecast framing', () => {
+    const result = runScenarioLabIoDemandShock(loadValidIoPayload(), {
+      demand_bucket: 'export',
+      amount: 100,
+      currency: 'mln_usd',
+      exchange_rate_uzs_per_usd: 12_500,
+      distribution: 'output',
+      sector_code: 'F',
+    })
+    assert.ok(result.sensitivity)
+    const allocationIds = result.sensitivity.allocation_modes.map((item) => item.id)
+    const rangeIds = result.sensitivity.parameter_ranges.map((item) => item.id)
+    const employmentLow = result.sensitivity.parameter_ranges.find((item) => item.id === 'employment-low')
+    const employmentHigh = result.sensitivity.parameter_ranges.find((item) => item.id === 'employment-high')
+    const fxLow = result.sensitivity.parameter_ranges.find((item) => item.id === 'fx-low')
+    const fxHigh = result.sensitivity.parameter_ranges.find((item) => item.id === 'fx-high')
+    const leakageBase = result.sensitivity.parameter_ranges.find((item) => item.id === 'import-leakage-base')
+
+    assert.deepEqual(allocationIds, [
+      'allocation-final-demand',
+      'allocation-output',
+      'allocation-sector',
+    ])
+    assert.equal(rangeIds.includes('employment-low'), true)
+    assert.equal(rangeIds.includes('import-leakage-base'), true)
+    assert.equal(rangeIds.includes('fx-high'), true)
+    assert.ok(employmentLow)
+    assert.ok(employmentHigh)
+    assert.ok(employmentLow.employment_effect_persons)
+    assert.ok(employmentHigh.employment_effect_persons)
+    assert.equal((employmentLow.employment_effect_persons ?? 0) < (employmentHigh.employment_effect_persons ?? 0), true)
+    assert.ok(fxLow)
+    assert.ok(fxHigh)
+    assert.equal(fxLow.output_effect_bln_uzs < fxHigh.output_effect_bln_uzs, true)
+    assert.ok(leakageBase)
+    assert.equal(leakageBase.output_effect_bln_uzs < result.totals.output_effect_bln_uzs, true)
+    assert.equal(result.sensitivity.parameter_ranges.every((item) => !/forecast/i.test(item.assumption)), true)
   })
 })

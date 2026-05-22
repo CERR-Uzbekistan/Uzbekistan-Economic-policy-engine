@@ -48,6 +48,9 @@ async function createTestI18n() {
               loading: 'Loading I-O analytics data...',
               unavailable: 'I-O analytics data is unavailable.',
               controlsAria: 'I-O sector shock controls',
+              policyShockType: 'Policy use case',
+              policyShockTypeHint:
+                'Use cases set a sensible demand bucket and allocation; unsupported production shocks stay disabled.',
               demandBucket: 'Demand shock type',
               demandBucketHint: 'Only used when distribution is “By selected demand shares”.',
               amount: 'Shock amount',
@@ -83,6 +86,14 @@ async function createTestI18n() {
                 investment: 'Investment',
                 export: 'Export',
               },
+              policyShockTypes: {
+                public_investment_project: 'Public investment project',
+                export_expansion: 'Export expansion',
+                domestic_demand_reallocation: 'Import-substitution / domestic-demand reallocation',
+                government_procurement: 'Government procurement',
+                single_sector_final_demand: 'Single-sector final-demand shock',
+                single_sector_production_disabled: 'Single-sector production shock (not yet available)',
+              },
               distributions: {
                 final_demand: 'By selected demand shares',
                 output: 'By output shares',
@@ -102,6 +113,7 @@ async function createTestI18n() {
                 distribution: 'Distribution mode',
                 selectedSector: 'Selected sector',
                 dataVintage: 'Base year',
+                policyUse: 'Policy use case',
               },
               kpis: {
                 output: 'Output effect',
@@ -131,6 +143,15 @@ async function createTestI18n() {
                   'Top sectors by gross output response. Value-added and employment are shown beside each row.',
                 share: 'Share',
               },
+              sensitivity: {
+                title: 'Sensitivity ranges',
+                subtitle:
+                  'These are robustness checks around allocation, employment intensity, import leakage, and FX conversion. They are not forecasts.',
+                allocations: 'Allocation modes',
+                parameters: 'Assumption ranges',
+                note:
+                  'Sensitivity rows are deterministic re-runs of the same static I-O calculation; they do not add prices, substitution, fiscal feedback, or general-equilibrium effects.',
+              },
               interpretation: {
                 title: 'Interpretation',
                 exposure: 'Largest exposure',
@@ -139,6 +160,9 @@ async function createTestI18n() {
                 boundary: 'Boundary',
                 boundaryBody:
                   'Read this as sector transmission evidence. It is not a price, inflation, or macro forecast.',
+                sensitivity: 'Sensitivity',
+                sensitivityBody:
+                  'Use the range table to see whether the sector story depends on allocation, employment intensity, import leakage, or FX assumptions.',
                 nextUse: 'Next model to link',
                 nextUseBody:
                   'Save this run for Comparison, then connect it to PE tariff shocks or future CGE work when model links are available.',
@@ -182,10 +206,21 @@ describe('IoSectorShockPanel', () => {
 
     assert.match(markup, /I-O Sector Shock/)
     assert.match(markup, /Shock amount/)
+    assert.match(markup, /Policy use case/)
+    assert.match(markup, /Public investment project/)
+    assert.match(markup, /Single-sector production shock \(not yet available\)/)
     assert.match(markup, /Currency/)
     assert.match(markup, /Final-demand shock result/)
     assert.match(markup, /Where the effect concentrates/)
     assert.match(markup, /Interpretation/)
+    assert.match(markup, /Sensitivity ranges/)
+    assert.match(markup, /not forecasts/)
+    assert.match(markup, /Selected final-demand shares/)
+    assert.match(markup, /Output shares/)
+    assert.match(markup, /One selected sector/)
+    assert.match(markup, /Employment intensity low/)
+    assert.match(markup, /Import leakage base/)
+    assert.match(markup, /FX conversion base/)
     assert.match(markup, /Run summary/)
     assert.match(markup, /Demand bucket/)
     assert.match(markup, /Only used when distribution is/)

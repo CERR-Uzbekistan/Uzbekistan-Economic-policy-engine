@@ -1,6 +1,25 @@
 import type { Caveat, ModelAttribution } from '../../contracts/data-contract.js'
 
 export type IoLinkageClassification = 'key' | 'backward' | 'forward' | 'weak'
+export type IoSectorBroadGroup =
+  | 'agriculture'
+  | 'industry'
+  | 'construction'
+  | 'trade_transport'
+  | 'services'
+  | 'public_social'
+  | 'other'
+
+export type IoSectorDictionaryEntry = {
+  code: string
+  source_label: string
+  display_label_en: string | null
+  display_label_ru: string | null
+  display_label_uz: string | null
+  broad_group: IoSectorBroadGroup
+  tradable_tag: string | null
+  value_chain_tag: string | null
+}
 
 export type IoFinalDemand = {
   household: number
@@ -59,6 +78,7 @@ export type IoMetadata = {
 export type IoBridgePayload = {
   attribution: ModelAttribution
   sectors: IoSector[]
+  sector_dictionary: IoSectorDictionaryEntry[]
   matrices: IoMatrices
   totals: IoTotals
   caveats: Caveat[]
