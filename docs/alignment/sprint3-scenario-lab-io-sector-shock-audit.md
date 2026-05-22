@@ -28,7 +28,7 @@ It supports:
 - Leontief inverse propagation from final demand to sector output effects;
 - value-added effects using sector GVA/output coefficients;
 - value-added effects labeled as an I-O accounting contribution to GDP;
-- employment effects using MCP-converted sector employment arrays;
+- employment effects using sector employment arrays from the tracked I-O JavaScript source;
 - ranked top affected sectors;
 - linkage classification from the existing I-O bridge adapter;
 - source caveats and an explicit boundary statement.
@@ -39,9 +39,9 @@ The panel does not claim macro forecast effects, QPM scenario effects, fiscal
 effects, inflation effects, or general-equilibrium results.
 
 Employment effects are now available because the public I-O artifact is enriched
-with `EmpTotal`, `EmpFormal`, and `EmpInformal` arrays from the MCP-converted
-I-O source. The UI labels them as linear employment-intensity estimates, not
-labor-market forecasts.
+with `EmpTotal`, `EmpFormal`, and `EmpInformal` arrays from the tracked
+`io_model/io_data.js` source used by the MCP converter. The UI labels them as
+linear employment-intensity estimates, not labor-market forecasts.
 
 ## Architecture Notes
 
@@ -51,8 +51,8 @@ Scenario Lab consumes page-native analytics through:
 - `apps/policy-ui/src/data/adapters/scenario-lab-io-analytics.ts`;
 - `apps/policy-ui/src/data/scenario-lab/io-analytics-source.ts`;
 - `apps/policy-ui/src/components/scenario-lab/IoSectorShockPanel.tsx`.
-- `apps/policy-ui/scripts/enrich-io-public-artifact.mjs` enriches the public
-  bridge artifact with MCP employment arrays after sector-code alignment checks.
+- `scripts/export_io.mjs` enriches the public bridge artifact with tracked
+  employment arrays after sector-code alignment checks.
 
 ## Tests Added
 
@@ -68,6 +68,5 @@ Focused coverage was added for:
 
 - Saving I-O sector shock outputs as first-class saved runs.
 - Rendering saved I-O runs in Comparison as separate sector-output blocks.
-- Using richer MCP employment arrays once exported through a validated public
 - Adding English/Uzbek sector labels through a validated sector-name source.
 - PE/CGE/FPP tabs and synthesis execution.

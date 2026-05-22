@@ -184,6 +184,7 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
                 </button>
               ))}
             </div>
+            <small className="io-shock__field-hint">{t('scenarioLab.ioShock.demandBucketHint')}</small>
           </fieldset>
 
           <label>
@@ -309,14 +310,22 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
                 <span>{t('scenarioLab.ioShock.decision.eyebrow')}</span>
                 <h3 id="io-shock-decision-title">{t('scenarioLab.ioShock.decision.title')}</h3>
                 <p>
-                  {t('scenarioLab.ioShock.decision.lead', {
-                    bucket: t(`scenarioLab.ioShock.buckets.${request.demand_bucket}`),
-                    amount: formatCurrencyAmount(request.amount, request.currency, locale, {
-                      maximumFractionDigits: 1,
-                      minimumFractionDigits: 1,
-                    }),
-                    distribution: t(`scenarioLab.ioShock.distributions.${request.distribution}`),
-                  })}
+                  {request.distribution === 'sector' && selectedSector
+                    ? t('scenarioLab.ioShock.decision.sectorLead', {
+                      amount: formatCurrencyAmount(request.amount, request.currency, locale, {
+                        maximumFractionDigits: 1,
+                        minimumFractionDigits: 1,
+                      }),
+                      sector: `${selectedSector.code} · ${selectedSector.name}`,
+                    })
+                    : t('scenarioLab.ioShock.decision.lead', {
+                      bucket: t(`scenarioLab.ioShock.buckets.${request.demand_bucket}`),
+                      amount: formatCurrencyAmount(request.amount, request.currency, locale, {
+                        maximumFractionDigits: 1,
+                        minimumFractionDigits: 1,
+                      }),
+                      distribution: t(`scenarioLab.ioShock.distributions.${request.distribution}`),
+                    })}
                 </p>
               </div>
 

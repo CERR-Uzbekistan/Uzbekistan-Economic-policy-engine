@@ -113,7 +113,7 @@ export function toScenarioLabIoAnalyticsWorkspace(
     source_artifact: payload.metadata.source_artifact,
     data_vintage: payload.attribution.data_version,
     exported_at: payload.metadata.exported_at,
-    framework: payload.metadata.framework,
+    framework: payload.metadata.framework.replace(/\bIO\b/g, 'I-O'),
     units: payload.metadata.units,
     base_year: payload.metadata.base_year,
     sector_count: payload.metadata.n_sectors,
@@ -124,7 +124,7 @@ export function toScenarioLabIoAnalyticsWorkspace(
     caveats: [
       ...payload.caveats.map((caveat) => caveat.message),
       payload.sectors.every((sector) => sector.employment_total !== undefined)
-        ? 'Employment effects use sector employment arrays from the MCP-converted I-O source and should be read as linear employment-intensity estimates.'
+        ? 'Employment effects use sector employment arrays from the tracked I-O source and should be read as linear employment-intensity estimates.'
         : 'Employment effects are unavailable in the current public I-O bridge artifact.',
     ],
   }

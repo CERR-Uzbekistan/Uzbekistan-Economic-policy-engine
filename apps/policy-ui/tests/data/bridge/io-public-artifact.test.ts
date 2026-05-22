@@ -64,7 +64,7 @@ describe('io bridge public artifact', () => {
     )
   })
 
-  it('keeps public employment fields aligned with the MCP-converted source arrays', () => {
+  it('keeps public employment fields aligned with the tracked JS source arrays', () => {
     const validation = validateIoBridgePayload(loadPublicIoPayload())
     const mcpSource = loadIoDataJs(MCP_CONVERSION_SOURCE_PATH)
     assert.ok(validation.value)

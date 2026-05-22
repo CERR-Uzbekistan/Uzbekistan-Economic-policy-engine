@@ -568,11 +568,12 @@
       "unavailable": "I-O analytics ma'lumotlari mavjud emas. Scenario Lab'ning mavjud ishlashi o'zgarmaydi.",
       "controlsAria": "I-O sektor shoki boshqaruvlari",
       "demandBucket": "Talab shoki turi",
+      "demandBucketHint": "Faqat “Tanlangan talab ulushlari bo'yicha” taqsimlashda ishlatiladi.",
       "amount": "Shok miqdori",
       "currency": "Valyuta",
       "exchangeRate": "FX taxmini, so'm/USD",
       "distribution": "Taqsimlash",
-      "sector": "Sektor",
+      "sector": "Maqsadli sektor",
       "sectorHint": "Bitta sektor shoklari yakuniy talab vektorini {{sectorCount}} ichidan biriga yo'naltiradi.",
       "boundary": "Faqat sektor uzatishi. Qo'shilgan qiymat I-O hisob-kitobidagi YaIM hissasi, lekin makroprognoz, QPM stsenariy effekti yoki umumiy muvozanat natijasi emas.",
       "employmentBoundary": "Bandlik chiziqli employment-intensity bahosi, mehnat bozori prognozi emas.",
@@ -606,7 +607,7 @@
         "output": "Ishlab chiqarish ulushi bo'yicha",
         "gva": "QQ ulushi bo'yicha",
         "equal": "Sektorlarga teng",
-        "sector": "Bitta sektor"
+        "sector": "Bitta sektorga"
       },
       "currencies": {
         "bln_uzs": "Mlrd so'm",
@@ -619,7 +620,7 @@
         "fx": "FX taxmini",
         "distribution": "Taqsimlash rejimi",
         "selectedSector": "Tanlangan sektor",
-        "dataVintage": "Ma'lumot sanasi"
+        "dataVintage": "Bazaviy yil"
       },
       "kpis": {
         "output": "Ishlab chiqarish ta'siri",
@@ -630,15 +631,16 @@
         "outputNote": "Sektor yalpi ishlab chiqarishi",
         "valueAddedNote": "YaIMga hisob-kitob hissasi",
         "employmentNote": "O'zgarmas intensivlik bahosi",
-        "multiplierNote": "1 so'm talabga ishlab chiqarish"
+        "multiplierNote": "Konvertatsiya qilingan talabning 1 so'miga ishlab chiqarish"
       },
       "decision": {
         "eyebrow": "Qaror ko'rinishi",
         "title": "Yakuniy talab shoki natijasi",
-        "lead": "Agar {{bucket}} shoki {{amount}} miqdorida «{{distribution}}» taqsimlansa, I-O hisob-kitobi quyidagini ko'rsatadi:"
+        "lead": "{{bucket}} shoki: {{amount}}. Taqsimlash: {{distribution}}. I-O hisob-kitobi quyidagini ko'rsatadi:",
+        "sectorLead": "Bitta sektor shoki: {{amount}} {{sector}} sektoriga yo'naltiriladi. I-O hisob-kitobi quyidagini ko'rsatadi:"
       },
       "meta": {
-        "dataVintage": "{{vintage}} ma'lumotlari"
+        "dataVintage": "Bazaviy yil {{vintage}}"
       },
       "concentration": {
         "title": "Ta'sir qayerda jamlanadi",
@@ -648,7 +650,7 @@
       "interpretation": {
         "title": "Talqin",
         "exposure": "Eng katta ekspozitsiya",
-        "exposureBody": "{{sector}} ko'rsatilgan yalpi ishlab chiqarish effektining {{share}}% qismini beradi.",
+        "exposureBody": "{{sector}} jami yalpi ishlab chiqarish effektining {{share}}% qismini beradi.",
         "noExposure": "Bu shok uchun sektorlar bo'yicha jamlanish mavjud emas.",
         "boundary": "Talqin chegarasi",
         "boundaryBody": "Buni sektor uzatish dalili sifatida o'qing. Bu narx, inflyatsiya yoki makro prognoz emas.",

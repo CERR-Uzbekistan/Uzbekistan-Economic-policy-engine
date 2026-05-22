@@ -568,11 +568,12 @@
       "unavailable": "I-O analytics data is unavailable. Existing Scenario Lab behavior is unchanged.",
       "controlsAria": "I-O sector shock controls",
       "demandBucket": "Demand shock type",
+      "demandBucketHint": "Only used when distribution is “By selected demand shares”.",
       "amount": "Shock amount",
       "currency": "Currency",
       "exchangeRate": "FX assumption, UZS/USD",
       "distribution": "Distribution",
-      "sector": "Sector",
+      "sector": "Target sector",
       "sectorHint": "Single-sector shocks route the final-demand vector to one of {{sectorCount}}.",
       "boundary": "Sector transmission only. Value-added is an I-O accounting contribution to GDP, not a macro forecast, QPM scenario effect, or general-equilibrium result.",
       "employmentBoundary": "Employment is a linear employment-intensity estimate, not a labor-market forecast.",
@@ -606,7 +607,7 @@
         "output": "By output shares",
         "gva": "By GVA shares",
         "equal": "Equal across sectors",
-        "sector": "Single sector"
+        "sector": "To one sector"
       },
       "currencies": {
         "bln_uzs": "Billion UZS",
@@ -619,7 +620,7 @@
         "fx": "FX assumption",
         "distribution": "Distribution mode",
         "selectedSector": "Selected sector",
-        "dataVintage": "Data date"
+        "dataVintage": "Base year"
       },
       "kpis": {
         "output": "Output effect",
@@ -630,15 +631,16 @@
         "outputNote": "Gross sector output",
         "valueAddedNote": "Accounting GDP contribution",
         "employmentNote": "Fixed-intensity estimate",
-        "multiplierNote": "Output per 1 UZS demand"
+        "multiplierNote": "Output per 1 UZS of converted demand"
       },
       "decision": {
         "eyebrow": "Decision view",
         "title": "Final-demand shock result",
-        "lead": "If a {{bucket}} shock of {{amount}} is allocated {{distribution}}, the I-O calculation shows:"
+        "lead": "{{bucket}} shock: {{amount}}. Allocation: {{distribution}}. The I-O calculation shows:",
+        "sectorLead": "Single-sector shock: {{amount}} assigned to {{sector}}. The I-O calculation shows:"
       },
       "meta": {
-        "dataVintage": "Data {{vintage}}"
+        "dataVintage": "Base year {{vintage}}"
       },
       "concentration": {
         "title": "Where the effect concentrates",
@@ -648,7 +650,7 @@
       "interpretation": {
         "title": "Interpretation",
         "exposure": "Largest exposure",
-        "exposureBody": "{{sector}} accounts for {{share}}% of the displayed gross output effect.",
+        "exposureBody": "{{sector}} accounts for {{share}}% of the total gross output effect.",
         "noExposure": "No sector concentration is available for this shock.",
         "boundary": "Boundary",
         "boundaryBody": "Read this as sector transmission evidence. It is not a price, inflation, or macro forecast.",

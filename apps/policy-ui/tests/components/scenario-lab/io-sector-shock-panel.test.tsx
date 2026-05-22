@@ -49,11 +49,12 @@ async function createTestI18n() {
               unavailable: 'I-O analytics data is unavailable.',
               controlsAria: 'I-O sector shock controls',
               demandBucket: 'Demand shock type',
+              demandBucketHint: 'Only used when distribution is “By selected demand shares”.',
               amount: 'Shock amount',
               currency: 'Currency',
               exchangeRate: 'FX assumption, UZS/USD',
               distribution: 'Distribution',
-              sector: 'Sector',
+              sector: 'Target sector',
               sectorHint: 'Single-sector shocks route the final-demand vector to one of {{count}} sectors.',
               boundary:
                 'Sector transmission only. Value-added is an I-O accounting contribution to GDP, not a macro forecast.',
@@ -87,7 +88,7 @@ async function createTestI18n() {
                 output: 'By output shares',
                 gva: 'By GVA shares',
                 equal: 'Equal across sectors',
-                sector: 'Single sector',
+                sector: 'To one sector',
               },
               currencies: {
                 bln_uzs: 'Billion UZS',
@@ -100,7 +101,7 @@ async function createTestI18n() {
                 fx: 'FX assumption',
                 distribution: 'Distribution mode',
                 selectedSector: 'Selected sector',
-                dataVintage: 'Data vintage',
+                dataVintage: 'Base year',
               },
               kpis: {
                 output: 'Output effect',
@@ -111,16 +112,18 @@ async function createTestI18n() {
                 outputNote: 'Gross sector output',
                 valueAddedNote: 'Accounting GDP contribution',
                 employmentNote: 'Fixed-intensity estimate',
-                multiplierNote: 'Output per 1 UZS demand',
+                multiplierNote: 'Output per 1 UZS of converted demand',
               },
               decision: {
                 eyebrow: 'Decision view',
                 title: 'Final-demand shock result',
                 lead:
-                  'If a {{bucket}} shock of {{amount}} is allocated {{distribution}}, the I-O calculation shows:',
+                  '{{bucket}} shock: {{amount}}. Allocation: {{distribution}}. The I-O calculation shows:',
+                sectorLead:
+                  'Single-sector shock: {{amount}} assigned to {{sector}}. The I-O calculation shows:',
               },
               meta: {
-                dataVintage: 'Data {{vintage}}',
+                dataVintage: 'Base year {{vintage}}',
               },
               concentration: {
                 title: 'Where the effect concentrates',
@@ -131,7 +134,7 @@ async function createTestI18n() {
               interpretation: {
                 title: 'Interpretation',
                 exposure: 'Largest exposure',
-                exposureBody: '{{sector}} accounts for {{share}}% of the displayed gross output effect.',
+                exposureBody: '{{sector}} accounts for {{share}}% of the total gross output effect.',
                 noExposure: 'No sector concentration is available for this shock.',
                 boundary: 'Boundary',
                 boundaryBody:
@@ -185,6 +188,7 @@ describe('IoSectorShockPanel', () => {
     assert.match(markup, /Interpretation/)
     assert.match(markup, /Run summary/)
     assert.match(markup, /Demand bucket/)
+    assert.match(markup, /Only used when distribution is/)
     assert.match(markup, /By selected demand shares/)
     assert.match(markup, /Accounting GDP contribution/)
     assert.match(markup, /Employment effect/)
@@ -195,6 +199,7 @@ describe('IoSectorShockPanel', () => {
     assert.match(markup, /Sector labels are shown as source labels/)
     assert.match(markup, /Code:/)
     assert.match(markup, /Source label:/)
+    assert.doesNotMatch(markup, /If a Export shock/)
     assert.doesNotMatch(markup, /n\/a/)
     assert.match(markup, /not a macro forecast/)
     assert.match(markup, /linear employment-intensity estimate/)
