@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import type { CSSProperties } from 'react'
+import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import type {
   ScenarioLabIoDemandBucket,
@@ -81,28 +82,30 @@ function formatMultiplier(value: number | null, locale: string | undefined): str
 function SensitivityTable({
   cases,
   locale,
+  t,
 }: {
   cases: ScenarioLabIoSensitivityCase[]
   locale: string | undefined
+  t: TFunction<'common'>
 }) {
   return (
     <div className="io-shock__sensitivity-table-wrap">
       <table className="io-shock__sensitivity-table">
         <thead>
           <tr>
-            <th>Case</th>
-            <th>Output</th>
-            <th>VA</th>
-            <th>Employment</th>
-            <th>Mult.</th>
+            <th>{t('scenarioLab.ioShock.sensitivity.headers.case')}</th>
+            <th>{t('scenarioLab.ioShock.sensitivity.headers.output')}</th>
+            <th>{t('scenarioLab.ioShock.sensitivity.headers.valueAdded')}</th>
+            <th>{t('scenarioLab.ioShock.sensitivity.headers.employment')}</th>
+            <th>{t('scenarioLab.ioShock.sensitivity.headers.multiplier')}</th>
           </tr>
         </thead>
         <tbody>
           {cases.map((item) => (
             <tr key={item.id}>
               <th scope="row">
-                <strong>{item.label}</strong>
-                <span>{item.assumption}</span>
+                <strong>{t(`scenarioLab.ioShock.sensitivity.cases.${item.id}.label`)}</strong>
+                <span>{t(`scenarioLab.ioShock.sensitivity.cases.${item.id}.assumption`)}</span>
               </th>
               <td>{formatNumber(item.output_effect_bln_uzs, locale, { maximumFractionDigits: 1 })}</td>
               <td>{formatNumber(item.value_added_effect_bln_uzs, locale, { maximumFractionDigits: 1 })}</td>
@@ -494,13 +497,14 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
               <div className="io-shock__sensitivity-grid">
                 <div>
                   <h4>{t('scenarioLab.ioShock.sensitivity.allocations')}</h4>
-                  <SensitivityTable cases={sensitivity.allocation_modes} locale={locale} />
+                  <SensitivityTable cases={sensitivity.allocation_modes} locale={locale} t={t} />
                 </div>
                 <div>
                   <h4>{t('scenarioLab.ioShock.sensitivity.parameters')}</h4>
                   <SensitivityTable
                     cases={sensitivity.parameter_ranges.slice(0, DISPLAYED_PARAMETER_SENSITIVITY_COUNT)}
                     locale={locale}
+                    t={t}
                   />
                 </div>
               </div>

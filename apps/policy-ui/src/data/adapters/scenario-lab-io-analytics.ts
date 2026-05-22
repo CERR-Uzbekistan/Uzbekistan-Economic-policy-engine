@@ -75,7 +75,7 @@ function weightsForDistribution(
     return sectors.map((sector) => positiveWeight(sector.gva_thousand_uzs))
   }
 
-  return sectors.map((sector) => positiveWeight(sector.output_thousand_uzs))
+  return sectors.map((sector) => positiveWeight(sector.total_resources_thousand_uzs))
 }
 
 function normalizeWeights(weights: number[]): number[] {
@@ -91,17 +91,17 @@ function multiplyMatrixVector(matrix: number[][], vector: number[]): number[] {
 }
 
 function valueAddedCoefficient(sector: IoSector): number {
-  if (sector.output_thousand_uzs <= 0) {
+  if (sector.total_resources_thousand_uzs <= 0) {
     return 0
   }
-  return sector.gva_thousand_uzs / sector.output_thousand_uzs
+  return sector.gva_thousand_uzs / sector.total_resources_thousand_uzs
 }
 
 function employmentCoefficient(sector: IoSector): number | null {
-  if (sector.employment_total === undefined || sector.output_thousand_uzs <= 0) {
+  if (sector.employment_total === undefined || sector.total_resources_thousand_uzs <= 0) {
     return null
   }
-  return sector.employment_total / toBlnUzS(sector.output_thousand_uzs)
+  return sector.employment_total / toBlnUzS(sector.total_resources_thousand_uzs)
 }
 
 function toBlnUzSShock(request: ScenarioLabIoShockRequest): number {
@@ -289,8 +289,8 @@ function buildSensitivity(
     ),
     toSensitivityCase(
       'allocation-output',
-      'Output shares',
-      'Allocates the same shock by baseline sector output shares.',
+      'Sector resource shares',
+      'Allocates the same shock by baseline total-resource shares.',
       runScenarioLabIoDemandShockCore(payload, {
         ...request,
         distribution: 'output',

@@ -16,6 +16,7 @@ export type IoAuditReport = {
 
 const BASELINE_RELATIVE_TOLERANCE = 0.0002
 const BASELINE_ABSOLUTE_TOLERANCE = 5
+const INVERSE_IDENTITY_TOLERANCE = 0.000001
 
 function pushCheck(checks: IoAuditCheck[], check: IoAuditCheck) {
   checks.push(check)
@@ -27,6 +28,27 @@ function maxAbs(values: number[]): number {
 
 function multiplyMatrixVector(matrix: number[][], vector: number[]): number[] {
   return matrix.map((row) => row.reduce((sum, value, index) => sum + value * vector[index], 0))
+}
+
+function leontiefIdentityResidual(payload: IoBridgePayload): number {
+  const coefficients = payload.matrices.technical_coefficients
+  const inverse = payload.matrices.leontief_inverse
+  const n = payload.metadata.n_sectors
+  let maxResidual = 0
+
+  for (let rowIndex = 0; rowIndex < n; rowIndex += 1) {
+    for (let columnIndex = 0; columnIndex < n; columnIndex += 1) {
+      let product = 0
+      for (let innerIndex = 0; innerIndex < n; innerIndex += 1) {
+        const identityValue = rowIndex === innerIndex ? 1 : 0
+        product += (identityValue - coefficients[rowIndex][innerIndex]) * inverse[innerIndex][columnIndex]
+      }
+      const target = rowIndex === columnIndex ? 1 : 0
+      maxResidual = Math.max(maxResidual, Math.abs(product - target))
+    }
+  }
+
+  return maxResidual
 }
 
 function isUsableSquareMatrix(matrix: number[][], expectedSize: number): boolean {
@@ -110,6 +132,18 @@ function baselineReconstructionCheck(payload: IoBridgePayload): IoAuditCheck {
   }
 }
 
+function inverseIdentityCheck(payload: IoBridgePayload): IoAuditCheck {
+  const maxResidual = leontiefIdentityResidual(payload)
+  const withinTolerance = maxResidual <= INVERSE_IDENTITY_TOLERANCE
+
+  return {
+    id: 'leontief-identity',
+    label: 'Leontief identity check',
+    status: withinTolerance ? 'pass' : 'fail',
+    detail: `(I - A) * L approximates identity with max residual ${maxResidual.toExponential(3)}.`,
+  }
+}
+
 export function auditIoBridgePayload(payload: IoBridgePayload): IoAuditReport {
   const checks: IoAuditCheck[] = []
   const n = payload.metadata.n_sectors
@@ -145,7 +179,8 @@ export function auditIoBridgePayload(payload: IoBridgePayload): IoAuditReport {
       'Technical coefficients, output, imports, value added, multipliers, and employment fields are non-negative; inventory final demand may be negative.',
   })
 
-  if (leontiefUsable) {
+  if (leontiefUsable && technicalCoefficientsUsable) {
+    pushCheck(checks, inverseIdentityCheck(payload))
     pushCheck(checks, baselineReconstructionCheck(payload))
   }
 

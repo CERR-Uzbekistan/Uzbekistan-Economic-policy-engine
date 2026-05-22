@@ -8,24 +8,24 @@
 The Scenario Lab I-O lane uses the static Leontief demand model:
 
 ```text
-x = (I - A)^-1 f
+r = (I - A)^-1 f
 ```
 
 Where:
 
-- `x` is the sector gross-output requirement vector.
-- `A` is the technical-coefficient matrix. Each coefficient records intermediate input requirement per unit of sector output.
+- `r` is the sector total-resource requirement vector.
+- `A` is the technical-coefficient matrix. In the current public artifact each coefficient records intermediate input requirement per unit of total resources (`domestic output + imports`).
 - `I` is the identity matrix.
-- `L = (I - A)^-1` is the Leontief inverse. It converts a final-demand vector into direct plus indirect output requirements.
-- `f` is the final-demand shock vector allocated by selected final-demand shares, output shares, or one selected sector.
+- `L = (I - A)^-1` is the Leontief inverse. It converts a final-demand vector into direct plus indirect total-resource requirements.
+- `f` is the final-demand shock vector allocated by selected final-demand shares, total-resource shares, or one selected sector.
 
-Value-added and employment exposure are computed after the gross-output response:
+Value-added and employment exposure are computed after the total-resource response:
 
 ```text
-va_i = GVA_i / X_i
-emp_i = EMP_i / X_i
-dVA_i = va_i * dx_i
-dEMP_i = emp_i * dx_i
+va_i = GVA_i / total_resources_i
+emp_i = EMP_i / total_resources_i
+dVA_i = va_i * dr_i
+dEMP_i = emp_i * dr_i
 ```
 
 Employment effects are fixed-intensity exposure estimates, not labor-market forecasts.
@@ -43,7 +43,7 @@ Employment effects are fixed-intensity exposure estimates, not labor-market fore
 
 ## What The Model Can Answer
 
-- Short-run sector gross-output transmission from a final-demand shock.
+- Short-run sector total-resource transmission from a final-demand shock.
 - Direct plus indirect sector multiplier effects under fixed 2022 input coefficients.
 - Value-added accounting effects using fixed sector value-added coefficients.
 - Employment-intensity exposure using fixed employment coefficients.

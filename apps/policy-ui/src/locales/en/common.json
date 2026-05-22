@@ -511,7 +511,7 @@
         "description": "This tab runs final-demand sector transmission analysis with the I-O data layer.",
         "items": {
           "inputs": "Inputs: demand bucket, amount in billion UZS, distribution mode, and optional sector selector.",
-          "outputs": "Outputs: output, value-added, employment effects, top affected sectors, and linkage classes.",
+          "outputs": "Outputs: total-resource requirement, value-added, employment effects, top affected sectors, and linkage classes.",
           "boundary": "Boundary: sector transmission evidence only; not a macro forecast or general-equilibrium result."
         }
       },
@@ -563,7 +563,7 @@
     },
     "ioShock": {
       "title": "I-O Sector Shock",
-      "description": "Run a final-demand shock through the I-O data layer and inspect sector output and value-added transmission.",
+      "description": "Run a final-demand shock through the I-O data layer and inspect sector total-resource and value-added transmission.",
       "loading": "Loading I-O analytics data...",
       "unavailable": "I-O analytics data is unavailable. Existing Scenario Lab behavior is unchanged.",
       "controlsAria": "I-O sector shock controls",
@@ -577,7 +577,7 @@
       "distribution": "Distribution",
       "sector": "Target sector",
       "sectorHint": "Single-sector shocks route the final-demand vector to one of {{sectorCount}}.",
-      "boundary": "Sector transmission only. Value-added is an I-O accounting contribution to GDP, not a macro forecast, QPM scenario effect, or general-equilibrium result.",
+      "boundary": "Sector transmission only. Total-resource requirements include domestic output plus import content. Value-added is an I-O accounting contribution to GDP, not a macro forecast, QPM scenario effect, or general-equilibrium result.",
       "employmentBoundary": "Employment is a linear employment-intensity estimate, not a labor-market forecast.",
       "topSectors": "Top affected sectors",
       "caveats": "Source caveats",
@@ -596,7 +596,7 @@
       },
       "whatThisMeans": {
         "title": "What this means",
-        "body": "This demand shock produces {{output}} of gross output effect and {{valueAdded}} of value-added accounting contribution. Employment is shown as {{employment}} estimated positions from fixed sector intensities."
+        "body": "This demand shock produces {{output}} of total-resource requirement and {{valueAdded}} of value-added accounting contribution. Employment is shown as {{employment}} estimated positions from fixed sector intensities."
       },
       "buckets": {
         "consumption": "Consumption",
@@ -607,14 +607,14 @@
       "policyShockTypes": {
         "public_investment_project": "Public investment project",
         "export_expansion": "Export expansion",
-        "domestic_demand_reallocation": "Import-substitution / domestic-demand reallocation",
+        "domestic_demand_reallocation": "Domestic-demand allocation check",
         "government_procurement": "Government procurement",
         "single_sector_final_demand": "Single-sector final-demand shock",
         "single_sector_production_disabled": "Single-sector production shock (not yet available)"
       },
       "distributions": {
         "final_demand": "By selected demand shares",
-        "output": "By output shares",
+        "output": "By sector resource shares",
         "gva": "By GVA shares",
         "equal": "Equal across sectors",
         "sector": "To one sector"
@@ -634,15 +634,15 @@
         "policyUse": "Policy use case"
       },
       "kpis": {
-        "output": "Output effect",
+        "output": "Total-resource requirement",
         "valueAdded": "Value-added effect",
         "gdpContribution": "GDP accounting contribution",
         "employment": "Employment effect",
-        "multiplier": "Output multiplier",
-        "outputNote": "Gross sector output",
+        "multiplier": "Resource multiplier",
+        "outputNote": "Domestic output plus import content",
         "valueAddedNote": "Accounting GDP contribution",
         "employmentNote": "Fixed-intensity estimate",
-        "multiplierNote": "Output per 1 UZS of converted demand"
+        "multiplierNote": "Total resources per 1 UZS of converted demand"
       },
       "decision": {
         "eyebrow": "Decision view",
@@ -655,7 +655,7 @@
       },
       "concentration": {
         "title": "Where the effect concentrates",
-        "subtitle": "Top sectors by gross output response. Value-added and employment are shown beside each row.",
+        "subtitle": "Top sectors by total-resource response. Value-added and employment are shown beside each row.",
         "share": "Share"
       },
       "sensitivity": {
@@ -663,12 +663,69 @@
         "subtitle": "These are robustness checks around allocation, employment intensity, import leakage, and FX conversion. They are not forecasts.",
         "allocations": "Allocation modes",
         "parameters": "Assumption ranges",
+        "headers": {
+          "case": "Case",
+          "output": "Resources",
+          "valueAdded": "VA",
+          "employment": "Employment",
+          "multiplier": "Mult."
+        },
+        "cases": {
+          "allocation-final-demand": {
+            "label": "Selected final-demand shares",
+            "assumption": "Uses the selected final-demand bucket as allocation weights."
+          },
+          "allocation-output": {
+            "label": "Sector resource shares",
+            "assumption": "Allocates the same shock by baseline total-resource shares."
+          },
+          "allocation-sector": {
+            "label": "One selected sector",
+            "assumption": "Assigns the shock to one selected sector."
+          },
+          "employment-low": {
+            "label": "Employment intensity low",
+            "assumption": "-15% fixed employment coefficient."
+          },
+          "employment-base": {
+            "label": "Employment intensity base",
+            "assumption": "Source employment coefficient."
+          },
+          "employment-high": {
+            "label": "Employment intensity high",
+            "assumption": "+15% fixed employment coefficient."
+          },
+          "import-leakage-low": {
+            "label": "Import leakage low",
+            "assumption": "Lower additional import-leakage scaler."
+          },
+          "import-leakage-base": {
+            "label": "Import leakage base",
+            "assumption": "Weighted import share applied as an additional domestic-demand scaler."
+          },
+          "import-leakage-high": {
+            "label": "Import leakage high",
+            "assumption": "Higher additional import-leakage scaler."
+          },
+          "fx-low": {
+            "label": "FX conversion low",
+            "assumption": "-5% UZS/USD conversion assumption when USD input is active."
+          },
+          "fx-base": {
+            "label": "FX conversion base",
+            "assumption": "Selected UZS/USD conversion assumption."
+          },
+          "fx-high": {
+            "label": "FX conversion high",
+            "assumption": "+5% UZS/USD conversion assumption when USD input is active."
+          }
+        },
         "note": "Sensitivity rows are deterministic re-runs of the same static I-O calculation; they do not add prices, substitution, fiscal feedback, or general-equilibrium effects."
       },
       "interpretation": {
         "title": "Interpretation",
         "exposure": "Largest exposure",
-        "exposureBody": "{{sector}} accounts for {{share}}% of the total gross output effect.",
+        "exposureBody": "{{sector}} accounts for {{share}}% of the total-resource effect.",
         "noExposure": "No sector concentration is available for this shock.",
         "boundary": "Boundary",
         "boundaryBody": "Read this as sector transmission evidence. It is not a price, inflation, or macro forecast.",
@@ -683,7 +740,7 @@
         "sector": "Sector",
         "sectorCode": "Code",
         "sourceLabel": "Source label",
-        "output": "Output, bln UZS",
+        "output": "Resources, bln UZS",
         "valueAdded": "VA, bln UZS",
         "employment": "Employment",
         "linkage": "Linkage"

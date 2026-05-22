@@ -57,13 +57,13 @@ describe('model explorer IO bridge enrichment', () => {
     assert.equal(ioEntry?.caveats.some((caveat) => caveat.id === 'io-type-i-only-json-source'), true)
     assert.equal(ioEntry?.caveats.some((caveat) => caveat.id === 'io-monetary-scale-audited'), true)
     assert.match(ioEntry?.purpose ?? '', /Plain-language use/)
-    assert.match(ioEntry?.model_note?.summary ?? '', /x = \(I - A\)\^-1 f/)
+    assert.match(ioEntry?.model_note?.summary ?? '', /r = \(I - A\)\^-1 f/)
     assert.equal(
       ioEntry?.model_note?.boundaries.some((boundary) => boundary.includes('Cannot answer price')),
       true,
     )
     assert.equal(
-      ioEntry?.parameters.some((parameter) => parameter.symbol === 'v' && parameter.value === 'GVA_i / X_i'),
+      ioEntry?.parameters.some((parameter) => parameter.symbol === 'v' && parameter.value === 'GVA_i / total_resources_i'),
       true,
     )
     assert.equal(

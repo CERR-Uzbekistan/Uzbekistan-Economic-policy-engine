@@ -78,7 +78,7 @@ async function createTestI18n() {
               },
               whatThisMeans: {
                 title: 'What this means',
-                body: 'This demand shock produces {{output}} bln UZS of gross output effect and {{valueAdded}} bln UZS of value-added accounting contribution. Employment is shown as {{employment}} estimated positions from fixed sector intensities.',
+                body: 'This demand shock requires {{output}} bln UZS of total resources and carries {{valueAdded}} bln UZS of value-added accounting contribution. Employment is shown as {{employment}} estimated positions from fixed sector intensities.',
               },
               buckets: {
                 consumption: 'Consumption',
@@ -89,14 +89,14 @@ async function createTestI18n() {
               policyShockTypes: {
                 public_investment_project: 'Public investment project',
                 export_expansion: 'Export expansion',
-                domestic_demand_reallocation: 'Import-substitution / domestic-demand reallocation',
+                domestic_demand_reallocation: 'Domestic-demand allocation check',
                 government_procurement: 'Government procurement',
                 single_sector_final_demand: 'Single-sector final-demand shock',
                 single_sector_production_disabled: 'Single-sector production shock (not yet available)',
               },
               distributions: {
                 final_demand: 'By selected demand shares',
-                output: 'By output shares',
+                output: 'By sector resource shares',
                 gva: 'By GVA shares',
                 equal: 'Equal across sectors',
                 sector: 'To one sector',
@@ -116,15 +116,15 @@ async function createTestI18n() {
                 policyUse: 'Policy use case',
               },
               kpis: {
-                output: 'Output effect',
+                output: 'Total-resource requirement',
                 valueAdded: 'Value-added effect',
                 gdpContribution: 'GDP accounting contribution',
                 employment: 'Employment effect',
-                multiplier: 'Output multiplier',
-                outputNote: 'Gross sector output',
+                multiplier: 'Resource multiplier',
+                outputNote: 'Domestic output plus import content',
                 valueAddedNote: 'Accounting GDP contribution',
                 employmentNote: 'Fixed-intensity estimate',
-                multiplierNote: 'Output per 1 UZS of converted demand',
+                multiplierNote: 'Total resources per 1 UZS of converted demand',
               },
               decision: {
                 eyebrow: 'Decision view',
@@ -140,7 +140,7 @@ async function createTestI18n() {
               concentration: {
                 title: 'Where the effect concentrates',
                 subtitle:
-                  'Top sectors by gross output response. Value-added and employment are shown beside each row.',
+                  'Top sectors by total-resource response. Value-added and employment are shown beside each row.',
                 share: 'Share',
               },
               sensitivity: {
@@ -149,13 +149,70 @@ async function createTestI18n() {
                   'These are robustness checks around allocation, employment intensity, import leakage, and FX conversion. They are not forecasts.',
                 allocations: 'Allocation modes',
                 parameters: 'Assumption ranges',
+                headers: {
+                  case: 'Case',
+                  output: 'Resources',
+                  valueAdded: 'VA',
+                  employment: 'Employment',
+                  multiplier: 'Mult.',
+                },
+                cases: {
+                  'allocation-final-demand': {
+                    label: 'Selected final-demand shares',
+                    assumption: 'Uses the chosen final-demand bucket shares.',
+                  },
+                  'allocation-output': {
+                    label: 'Sector resource shares',
+                    assumption: 'Allocates the same shock by baseline total-resource shares.',
+                  },
+                  'allocation-sector': {
+                    label: 'One selected sector',
+                    assumption: 'Routes the shock to the selected sector only.',
+                  },
+                  'employment-low': {
+                    label: 'Employment intensity low',
+                    assumption: 'Employment coefficients scaled down by 15%.',
+                  },
+                  'employment-base': {
+                    label: 'Employment intensity base',
+                    assumption: 'Uses the source employment coefficients.',
+                  },
+                  'employment-high': {
+                    label: 'Employment intensity high',
+                    assumption: 'Employment coefficients scaled up by 15%.',
+                  },
+                  'import-leakage-low': {
+                    label: 'Import leakage low',
+                    assumption: 'Import leakage scaled down by 10%.',
+                  },
+                  'import-leakage-base': {
+                    label: 'Import leakage base',
+                    assumption: 'Uses source import coefficients.',
+                  },
+                  'import-leakage-high': {
+                    label: 'Import leakage high',
+                    assumption: 'Import leakage scaled up by 10%.',
+                  },
+                  'fx-low': {
+                    label: 'FX conversion low',
+                    assumption: 'USD shocks converted with FX 10% lower.',
+                  },
+                  'fx-base': {
+                    label: 'FX conversion base',
+                    assumption: 'Uses the selected FX assumption.',
+                  },
+                  'fx-high': {
+                    label: 'FX conversion high',
+                    assumption: 'USD shocks converted with FX 10% higher.',
+                  },
+                },
                 note:
                   'Sensitivity rows are deterministic re-runs of the same static I-O calculation; they do not add prices, substitution, fiscal feedback, or general-equilibrium effects.',
               },
               interpretation: {
                 title: 'Interpretation',
                 exposure: 'Largest exposure',
-                exposureBody: '{{sector}} accounts for {{share}}% of the total gross output effect.',
+                exposureBody: '{{sector}} accounts for {{share}}% of the total-resource effect.',
                 noExposure: 'No sector concentration is available for this shock.',
                 boundary: 'Boundary',
                 boundaryBody:
@@ -173,7 +230,7 @@ async function createTestI18n() {
                 sector: 'Sector',
                 sectorCode: 'Code',
                 sourceLabel: 'Source label',
-                output: 'Output, bln UZS',
+                output: 'Resources, bln UZS',
                 valueAdded: 'VA, bln UZS',
                 employment: 'Employment',
                 linkage: 'Linkage',
@@ -216,7 +273,7 @@ describe('IoSectorShockPanel', () => {
     assert.match(markup, /Sensitivity ranges/)
     assert.match(markup, /not forecasts/)
     assert.match(markup, /Selected final-demand shares/)
-    assert.match(markup, /Output shares/)
+    assert.match(markup, /Sector resource shares/)
     assert.match(markup, /One selected sector/)
     assert.match(markup, /Employment intensity low/)
     assert.match(markup, /Import leakage base/)
@@ -227,7 +284,7 @@ describe('IoSectorShockPanel', () => {
     assert.match(markup, /By selected demand shares/)
     assert.match(markup, /Accounting GDP contribution/)
     assert.match(markup, /Employment effect/)
-    assert.match(markup, /Gross sector output/)
+    assert.match(markup, /Domestic output plus import content/)
     assert.match(markup, /Fixed-intensity estimate/)
     assert.match(markup, /Read this as sector transmission evidence/)
     assert.match(markup, /Detailed sector table/)
@@ -236,6 +293,9 @@ describe('IoSectorShockPanel', () => {
     assert.match(markup, /Source label:/)
     assert.doesNotMatch(markup, /If a Export shock/)
     assert.doesNotMatch(markup, /n\/a/)
+    assert.doesNotMatch(markup, /gross output/i)
+    assert.doesNotMatch(markup, /Import-substitution/)
+    assert.doesNotMatch(markup, /scenarioLab\.ioShock\.sensitivity/)
     assert.match(markup, /not a macro forecast/)
     assert.match(markup, /linear employment-intensity estimate/)
   })

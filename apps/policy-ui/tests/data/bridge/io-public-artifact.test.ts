@@ -97,6 +97,14 @@ describe('io bridge public artifact', () => {
     assert.equal(
       audit.checks.some(
         (check) =>
+          check.id === 'leontief-identity' &&
+          check.detail.includes('(I - A) * L approximates identity'),
+      ),
+      true,
+    )
+    assert.equal(
+      audit.checks.some(
+        (check) =>
           check.id === 'baseline-reconstruction' &&
           check.detail.includes('L * final demand reconstructs total resources'),
       ),

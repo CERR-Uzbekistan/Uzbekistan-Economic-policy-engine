@@ -111,20 +111,20 @@ function withBridgeEvidence(
       { value: 'Type I', label: 'Multipliers' },
     ],
     purpose:
-      'Plain-language use: ask how a final-demand shock moves through supplier sectors under fixed 2022 production relationships. The model reports gross output, value-added accounting effects, employment-intensity exposure, and linkage rankings. It is not a forecast of prices, inflation, fiscal balances, external balance, substitution, or general-equilibrium adjustment.',
+      'Plain-language use: ask how a final-demand shock moves through supplier sectors under fixed 2022 production relationships. The model reports total-resource requirements, value-added accounting effects, employment-intensity exposure, and linkage rankings. It is not a forecast of prices, inflation, fiscal balances, external balance, substitution, or general-equilibrium adjustment.',
     model_note: {
       title: 'I-O model note',
       summary:
-        'Static Leontief input-output model for Uzbekistan: x = (I - A)^-1 f. Technical coefficients A convert sector output into input requirements; the Leontief inverse L captures direct and indirect total requirements.',
+        'Static Leontief input-output model for Uzbekistan: r = (I - A)^-1 f. Technical coefficients A use total resources as denominator; the Leontief inverse L captures direct and indirect total-resource requirements.',
       items: [
         {
           label: 'Core equation',
-          value: 'x = (I - A)^-1 f, with f as a final-demand shock vector and x as gross output requirements.',
+          value: 'r = (I - A)^-1 f, with f as a final-demand shock vector and r as total-resource requirements.',
         },
         {
           label: 'Coefficients',
           value:
-            'Technical coefficients, Leontief inverse, value-added coefficients GVA_i / X_i, and employment coefficients employment_i / X_i.',
+            'Technical coefficients, Leontief inverse, value-added coefficients GVA_i / total_resources_i, and employment coefficients employment_i / total_resources_i.',
         },
         {
           label: 'Data',
@@ -138,7 +138,7 @@ function withBridgeEvidence(
         {
           label: 'Answers',
           value:
-            'Short-run sector output, value-added accounting, employment-intensity exposure, multiplier, and allocation-sensitivity questions.',
+            'Short-run sector resource requirements, value-added accounting, employment-intensity exposure, multiplier, and allocation-sensitivity questions.',
         },
       ],
       boundaries: [
@@ -169,7 +169,7 @@ function withBridgeEvidence(
       {
         symbol: 'v',
         name: 'Value-added coefficients',
-        value: 'GVA_i / X_i',
+        value: 'GVA_i / total_resources_i',
         range: 'computed from source sector accounts',
       },
       {

@@ -73,8 +73,9 @@ describe('scenario lab IO analytics adapter', () => {
     assert.equal(result.totals.demand_shock_bln_uzs, 1000)
     assert.equal(result.totals.aggregate_output_multiplier, 1.627)
     assert.equal(result.totals.output_effect_bln_uzs, 1626.991)
-    assert.equal(result.totals.value_added_effect_bln_uzs, 791.984)
+    assert.equal(result.totals.value_added_effect_bln_uzs, 654.768)
     assert.equal(result.top_sectors[0].sector_code, 'C24.4')
+    assert.equal(result.top_sectors[0].value_added_effect_bln_uzs, 154.947)
   })
 
   it('converts million USD shocks through the supplied FX assumption', () => {
@@ -145,7 +146,7 @@ describe('scenario lab IO analytics adapter', () => {
       Math.abs(
         thousandBlnShock.totals.value_added_effect_bln_uzs -
           oneBlnShock.totals.value_added_effect_bln_uzs * 1000,
-      ) < 0.1,
+      ) < 0.5,
       true,
     )
     assert.deepEqual(

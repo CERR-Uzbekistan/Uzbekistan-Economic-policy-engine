@@ -511,7 +511,7 @@
         "description": "Bu tab I-O ma'lumot qatlami orqali yakuniy talabning sektorlar bo'ylab uzatilishini hisoblaydi.",
         "items": {
           "inputs": "Kirishlar: talab turi, mlrd so'mdagi miqdor, taqsimlash rejimi va ixtiyoriy sektor tanlovi.",
-          "outputs": "Chiqishlar: ishlab chiqarish, qo'shilgan qiymat, bandlik ta'sirlari, eng ko'p ta'sirlangan sektorlar va linkage klasslari.",
+          "outputs": "Chiqishlar: umumiy resurs talabi, qo'shilgan qiymat, bandlik ta'sirlari, eng ko'p ta'sirlangan sektorlar va linkage klasslari.",
           "boundary": "Chegara: faqat sektor uzatish dalili; makroprognoz yoki umumiy muvozanat natijasi emas."
         }
       },
@@ -563,7 +563,7 @@
     },
     "ioShock": {
       "title": "I-O sektor shoki",
-      "description": "Yakuniy talab shokini I-O ma'lumot qatlami orqali ishga tushiring va sektor ishlab chiqarishi hamda qo'shilgan qiymat uzatilishini ko'ring.",
+      "description": "Yakuniy talab shokini I-O ma'lumot qatlami orqali ishga tushiring va sektor umumiy resurs talabi hamda qo'shilgan qiymat uzatilishini ko'ring.",
       "loading": "I-O analytics ma'lumotlari yuklanmoqda...",
       "unavailable": "I-O analytics ma'lumotlari mavjud emas. Scenario Lab'ning mavjud ishlashi o'zgarmaydi.",
       "controlsAria": "I-O sektor shoki boshqaruvlari",
@@ -577,7 +577,7 @@
       "distribution": "Taqsimlash",
       "sector": "Maqsadli sektor",
       "sectorHint": "Bitta sektor shoklari yakuniy talab vektorini {{sectorCount}} ichidan biriga yo'naltiradi.",
-      "boundary": "Faqat sektor uzatishi. Qo'shilgan qiymat I-O hisob-kitobidagi YaIM hissasi, lekin makroprognoz, QPM stsenariy effekti yoki umumiy muvozanat natijasi emas.",
+      "boundary": "Faqat sektor uzatishi. Umumiy resurs talabi ichki ishlab chiqarish va import tarkibini o'z ichiga oladi. Qo'shilgan qiymat I-O hisob-kitobidagi YaIM hissasi, lekin makroprognoz, QPM stsenariy effekti yoki umumiy muvozanat natijasi emas.",
       "employmentBoundary": "Bandlik chiziqli employment-intensity bahosi, mehnat bozori prognozi emas.",
       "topSectors": "Eng ko'p ta'sirlangan sektorlar",
       "caveats": "Manba cheklovlari",
@@ -596,7 +596,7 @@
       },
       "whatThisMeans": {
         "title": "Bu nimani anglatadi",
-        "body": "Ushbu talab shoki {{output}} yalpi ishlab chiqarish effekti va {{valueAdded}} qo'shilgan qiymat hisob-kitob hissasini beradi. Bandlik {{employment}} baholangan ish o'rinlari sifatida, o'zgarmas sektor intensivliklari bo'yicha ko'rsatiladi."
+        "body": "Ushbu talab shoki {{output}} umumiy resurs talabini va {{valueAdded}} qo'shilgan qiymat hisob-kitob hissasini beradi. Bandlik {{employment}} baholangan ish o'rinlari sifatida, o'zgarmas sektor intensivliklari bo'yicha ko'rsatiladi."
       },
       "buckets": {
         "consumption": "Iste'mol",
@@ -607,14 +607,14 @@
       "policyShockTypes": {
         "public_investment_project": "Davlat investitsiya loyihasi",
         "export_expansion": "Eksport kengayishi",
-        "domestic_demand_reallocation": "Import o'rnini bosish / ichki talabni qayta taqsimlash",
+        "domestic_demand_reallocation": "Ichki talab taqsimoti tekshiruvi",
         "government_procurement": "Davlat xaridlari",
         "single_sector_final_demand": "Bitta sektor yakuniy talab shoki",
         "single_sector_production_disabled": "Bitta sektor ishlab chiqarish shoki (hali mavjud emas)"
       },
       "distributions": {
         "final_demand": "Tanlangan talab ulushi bo'yicha",
-        "output": "Ishlab chiqarish ulushi bo'yicha",
+        "output": "Sektor resurs ulushi bo'yicha",
         "gva": "QQ ulushi bo'yicha",
         "equal": "Sektorlarga teng",
         "sector": "Bitta sektorga"
@@ -634,15 +634,15 @@
         "policyUse": "Siyosat qo'llanishi"
       },
       "kpis": {
-        "output": "Ishlab chiqarish ta'siri",
+        "output": "Umumiy resurs talabi",
         "valueAdded": "Qo'shilgan qiymat ta'siri",
         "gdpContribution": "YaIM hisob-kitob hissasi",
         "employment": "Bandlik ta'siri",
-        "multiplier": "Ishlab chiqarish multiplikatori",
-        "outputNote": "Sektor yalpi ishlab chiqarishi",
+        "multiplier": "Resurs multiplikatori",
+        "outputNote": "Ichki ishlab chiqarish va import tarkibi",
         "valueAddedNote": "YaIMga hisob-kitob hissasi",
         "employmentNote": "O'zgarmas intensivlik bahosi",
-        "multiplierNote": "Konvertatsiya qilingan talabning 1 so'miga ishlab chiqarish"
+        "multiplierNote": "Konvertatsiya qilingan talabning 1 so'miga resurslar"
       },
       "decision": {
         "eyebrow": "Qaror ko'rinishi",
@@ -655,7 +655,7 @@
       },
       "concentration": {
         "title": "Ta'sir qayerda jamlanadi",
-        "subtitle": "Yalpi ishlab chiqarish javobi bo'yicha yetakchi sektorlar. Qo'shilgan qiymat va bandlik ham ko'rsatilgan.",
+        "subtitle": "Umumiy resurs talabi javobi bo'yicha yetakchi sektorlar. Qo'shilgan qiymat va bandlik ham ko'rsatilgan.",
         "share": "Ulush"
       },
       "sensitivity": {
@@ -663,12 +663,69 @@
         "subtitle": "Bu taqsimlash, bandlik intensivligi, import oqishi va FX konvertatsiyasi bo'yicha barqarorlik tekshiruvlari. Ular prognoz emas.",
         "allocations": "Taqsimlash rejimlari",
         "parameters": "Taxmin diapazonlari",
+        "headers": {
+          "case": "Holat",
+          "output": "Resurslar",
+          "valueAdded": "QQ",
+          "employment": "Bandlik",
+          "multiplier": "Mult."
+        },
+        "cases": {
+          "allocation-final-demand": {
+            "label": "Tanlangan yakuniy talab ulushlari",
+            "assumption": "Tanlangan yakuniy talab guruhini taqsimlash vaznlari sifatida ishlatadi."
+          },
+          "allocation-output": {
+            "label": "Sektor resurs ulushlari",
+            "assumption": "Xuddi shu shokni bazaviy umumiy resurs ulushlari bo'yicha taqsimlaydi."
+          },
+          "allocation-sector": {
+            "label": "Bitta tanlangan sektor",
+            "assumption": "Shokni bitta tanlangan sektorga yo'naltiradi."
+          },
+          "employment-low": {
+            "label": "Past bandlik intensivligi",
+            "assumption": "O'zgarmas bandlik koeffitsiyentiga -15%."
+          },
+          "employment-base": {
+            "label": "Bazaviy bandlik intensivligi",
+            "assumption": "Manbadagi bandlik koeffitsiyenti."
+          },
+          "employment-high": {
+            "label": "Yuqori bandlik intensivligi",
+            "assumption": "O'zgarmas bandlik koeffitsiyentiga +15%."
+          },
+          "import-leakage-low": {
+            "label": "Past import oqishi",
+            "assumption": "Pastroq qo'shimcha import oqishi skeyleri."
+          },
+          "import-leakage-base": {
+            "label": "Bazaviy import oqishi",
+            "assumption": "Vaznlangan import ulushi qo'shimcha ichki talab skeyleri sifatida qo'llanadi."
+          },
+          "import-leakage-high": {
+            "label": "Yuqori import oqishi",
+            "assumption": "Yuqoriroq qo'shimcha import oqishi skeyleri."
+          },
+          "fx-low": {
+            "label": "Past FX konvertatsiyasi",
+            "assumption": "USD kiritish faol bo'lsa, so'm/USD taxminiga -5%."
+          },
+          "fx-base": {
+            "label": "Bazaviy FX konvertatsiyasi",
+            "assumption": "Tanlangan so'm/USD konvertatsiya taxmini."
+          },
+          "fx-high": {
+            "label": "Yuqori FX konvertatsiyasi",
+            "assumption": "USD kiritish faol bo'lsa, so'm/USD taxminiga +5%."
+          }
+        },
         "note": "Sezgirlik qatorlari ayni statik I-O hisobining deterministik qayta ishga tushirilishidir; ular narxlar, almashtirish, fiskal qayta aloqa yoki umumiy muvozanat effektlarini qo'shmaydi."
       },
       "interpretation": {
         "title": "Talqin",
         "exposure": "Eng katta ekspozitsiya",
-        "exposureBody": "{{sector}} jami yalpi ishlab chiqarish effektining {{share}}% qismini beradi.",
+        "exposureBody": "{{sector}} jami resurs talabi effektining {{share}}% qismini beradi.",
         "noExposure": "Bu shok uchun sektorlar bo'yicha jamlanish mavjud emas.",
         "boundary": "Talqin chegarasi",
         "boundaryBody": "Buni sektor uzatish dalili sifatida o'qing. Bu narx, inflyatsiya yoki makro prognoz emas.",
@@ -683,7 +740,7 @@
         "sector": "Sektor",
         "sectorCode": "Kod",
         "sourceLabel": "Manba yorlig'i",
-        "output": "Ishlab chiqarish, mlrd so'm",
+        "output": "Resurslar, mlrd so'm",
         "valueAdded": "QQ, mlrd so'm",
         "employment": "Bandlik",
         "linkage": "Bog'lanish"
