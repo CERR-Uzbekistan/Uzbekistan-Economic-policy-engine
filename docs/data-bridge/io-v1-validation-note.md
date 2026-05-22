@@ -42,8 +42,9 @@ The value-added total is shown as an accounting contribution, not GDP growth.
 - The sector table, final-demand vectors, technical coefficients, Leontief
   inverse, output multipliers, and value-added multipliers come from
   `io_model/io_data.json`.
-- Employment arrays come from `mcp_server/data/io_data.json`.
-- `scripts/export_io.mjs` checks that the MCP employment source aligns with the
+- Employment arrays come from the tracked `io_model/io_data.js` source used by
+  the MCP data converter.
+- `scripts/export_io.mjs` checks that the employment source aligns with the
   public sector source by normalized sector code and exact source label.
 - Public bridge monetary field names keep the legacy `_thousand_uzs` suffix for
   compatibility, but Scenario Lab converts displayed results to billion UZS and

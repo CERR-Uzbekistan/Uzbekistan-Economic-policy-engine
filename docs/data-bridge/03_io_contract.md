@@ -1,9 +1,9 @@
 # IO Data Bridge — Consumer Contract
 
-**Source:** `io_model/io_data.json` + `mcp_server/data/io_data.json` → `scripts/export_io.mjs` → `apps/policy-ui/public/data/io.json`
+**Source:** `io_model/io_data.json` + `io_model/io_data.js` → `scripts/export_io.mjs` → `apps/policy-ui/public/data/io.json`
 **Status:** First IO bridge slice; static JSON bridge target
 **Version:** solver 0.1.0, data 2022
-**Upstream input:** Statistics Agency 2022 symmetric input-output table, as committed in `io_model/io_data.json`, plus MCP-converted employment arrays in `mcp_server/data/io_data.json`
+**Upstream input:** Statistics Agency 2022 symmetric input-output table, as committed in `io_model/io_data.json`, plus employment arrays from the tracked `io_model/io_data.js` source used by the MCP data converter.
 
 ## Purpose
 
@@ -59,9 +59,9 @@ matrix, totals, and metadata types live in
 | `sectors[].gva_thousand_uzs` | legacy source monetary field | Gross value added; field name is retained for compatibility. |
 | `sectors[].compensation_of_employees_thousand_uzs` | legacy source monetary field | Source `coe`; field name is retained for compatibility. |
 | `sectors[].gross_operating_surplus_thousand_uzs` | legacy source monetary field | Source `gos`; field name is retained for compatibility. |
-| `sectors[].employment_total` | persons | MCP-converted employment array aligned by sector code/name. |
-| `sectors[].employment_formal` | persons | MCP-converted formal employment array aligned by sector code/name. |
-| `sectors[].employment_informal` | persons | MCP-converted informal employment array aligned by sector code/name. |
+| `sectors[].employment_total` | persons | Employment array from tracked JS source aligned by sector code/name. |
+| `sectors[].employment_formal` | persons | Formal employment array from tracked JS source aligned by sector code/name. |
+| `sectors[].employment_informal` | persons | Informal employment array from tracked JS source aligned by sector code/name. |
 | `sectors[].output_multiplier` | ratio | Type I output multiplier from source JSON. |
 | `sectors[].value_added_multiplier` | ratio | Type I value-added multiplier from source JSON. |
 | `matrices.technical_coefficients` | ratio | A matrix, computed as intermediate use divided by total resources. |

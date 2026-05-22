@@ -41545,7 +41545,7 @@
     {
       "caveat_id": "io-employment-mcp-source",
       "severity": "info",
-      "message": "Employment arrays are merged from the MCP-converted I-O source. Employment effects are linear employment-intensity estimates, not labor-market forecasts.",
+      "message": "Employment arrays are merged from the tracked I-O JavaScript source used by the MCP data converter. Employment effects are linear employment-intensity estimates, not labor-market forecasts.",
       "affected_metrics": [
         "employment_effect_persons"
       ],
@@ -41558,7 +41558,7 @@
     "exported_at": "2026-04-09T00:00:00Z",
     "source_script_sha": null,
     "solver_version": "0.1.0",
-    "source_artifact": "io_model/io_data.json + mcp_server/data/io_data.json",
+    "source_artifact": "io_model/io_data.json + io_model/io_data.js",
     "source_artifact_generated": "2026-04-09",
     "source_title": "Uzbekistan Input-Output Table 2022",
     "source": "Statistics Agency under the President of Uzbekistan",

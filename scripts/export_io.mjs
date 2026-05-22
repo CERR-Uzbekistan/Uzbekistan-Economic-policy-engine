@@ -4,13 +4,19 @@ import { fileURLToPath } from 'node:url'
 
 const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)))
 const sourcePath = join(repoRoot, 'io_model', 'io_data.json')
-const mcpSourcePath = join(repoRoot, 'mcp_server', 'data', 'io_data.json')
+const mcpConversionSourcePath = join(repoRoot, 'io_model', 'io_data.js')
 const outputPath = join(repoRoot, 'apps', 'policy-ui', 'public', 'data', 'io.json')
 
 const source = JSON.parse(readFileSync(sourcePath, 'utf8'))
-const mcpSource = JSON.parse(readFileSync(mcpSourcePath, 'utf8'))
+const mcpSource = loadIoDataJs(mcpConversionSourcePath)
 const sourceGenerated = requireString(source.metadata.generated, 'metadata.generated')
 const exportedAt = `${sourceGenerated}T00:00:00Z`
+
+function loadIoDataJs(path) {
+  const code = readFileSync(path, 'utf8')
+  const load = new Function(`${code}; return IO_DATA;`)
+  return load()
+}
 
 function requireArray(value, field) {
   if (!Array.isArray(value)) throw new Error(`Expected ${field} to be an array.`)
@@ -134,7 +140,7 @@ const payload = {
       caveat_id: 'io-employment-mcp-source',
       severity: 'info',
       message:
-        'Employment arrays are merged from the MCP-converted I-O source. Employment effects are linear employment-intensity estimates, not labor-market forecasts.',
+        'Employment arrays are merged from the tracked I-O JavaScript source used by the MCP data converter. Employment effects are linear employment-intensity estimates, not labor-market forecasts.',
       affected_metrics: ['employment_effect_persons'],
       affected_models: ['IO'],
     },
@@ -143,7 +149,7 @@ const payload = {
     exported_at: exportedAt,
     source_script_sha: null,
     solver_version: '0.1.0',
-    source_artifact: 'io_model/io_data.json + mcp_server/data/io_data.json',
+    source_artifact: 'io_model/io_data.json + io_model/io_data.js',
     source_artifact_generated: sourceGenerated,
     source_title: requireString(source.metadata.title_en, 'metadata.title_en'),
     source: requireString(source.metadata.source, 'metadata.source'),

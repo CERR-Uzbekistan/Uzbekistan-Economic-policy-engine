@@ -9,12 +9,12 @@
 
 - Planning/adjudication: `docs/planning/sprint-3-execution-plan.md`, `docs/planning/sprint-3-week2-plan.md`, `docs/planning/sprint-3-week1-handoff.md`, `docs/reviews/sprint-2-close-flavor-B-adjudication.md`.
 - Existing bridge precedent: `docs/data-bridge/00_qpm_contract.md`, `docs/data-bridge/02_dfm_contract.md`, QPM/DFM `types`, `guard`, `client`, `adapter`, fixtures, and guard/adapter tests under `apps/policy-ui`.
-- IO artifacts: `io_model/io_data.json`, `io_model/io_data.js`, `io_model/index.html`, `mcp_server/data/io_data.json`, `mcp_server/models/io_model.py`, `mcp_server/tests/test_io.py`.
+- IO artifacts: `io_model/io_data.json`, `io_model/io_data.js`, `io_model/index.html`, generated local `mcp_server/data/io_data.json`, `mcp_server/models/io_model.py`, `mcp_server/tests/test_io.py`.
 - Boundaries: `apps/policy-ui/src/contracts/data-contract.ts`, `apps/policy-ui/src/data/adapters/comparison.ts`, `apps/policy-ui/src/data/overview/dfm-composition.ts`.
 
 ## Findings
 
-1. `io_model/io_data.json` is the best first frontend source artifact because it carries metadata, 136 sectors, `A`, `L`, and aggregate arrays. `mcp_server/data/io_data.json` is useful for Python tests but lacks metadata.
+1. `io_model/io_data.json` is the best first frontend source artifact because it carries metadata, 136 sectors, `A`, `L`, and aggregate arrays. `io_model/io_data.js` carries the employment arrays used by the MCP converter; generated `mcp_server/data/io_data.json` is useful locally for Python tests but is intentionally ignored.
 2. The expected public React target should follow QPM/DFM precedent: `apps/policy-ui/public/data/io.json`.
 3. QPM and DFM clients duplicate static JSON fetch, timeout, HTTP, abort, and network handling. That narrow block can be extracted without moving page adapter logic.
 4. IO bridge code must stay bridge-native. It must not emit `ComparisonContent`.

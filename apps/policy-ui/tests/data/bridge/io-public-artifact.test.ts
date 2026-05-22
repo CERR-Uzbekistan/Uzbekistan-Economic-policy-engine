@@ -14,7 +14,21 @@ import { validateIoBridgePayload } from '../../../src/data/bridge/io-guard.js'
 import type { IoBridgePayload } from '../../../src/data/bridge/io-types.js'
 
 const IO_PUBLIC_ARTIFACT_PATH = fileURLToPath(new URL('../../../../public/data/io.json', import.meta.url))
-const MCP_IO_SOURCE_PATH = join(process.cwd(), '..', '..', 'mcp_server', 'data', 'io_data.json')
+const MCP_CONVERSION_SOURCE_PATH = join(process.cwd(), '..', '..', 'io_model', 'io_data.js')
+
+function loadIoDataJs(path: string): {
+  EmpTotal: number[]
+  EmpFormal: number[]
+  EmpInformal: number[]
+} {
+  const code = readFileSync(path, 'utf8')
+  const load = new Function(`${code}; return IO_DATA;`) as () => {
+    EmpTotal: number[]
+    EmpFormal: number[]
+    EmpInformal: number[]
+  }
+  return load()
+}
 
 function loadPublicIoPayload(): IoBridgePayload {
   return JSON.parse(readFileSync(IO_PUBLIC_ARTIFACT_PATH, 'utf8')) as IoBridgePayload
@@ -32,7 +46,7 @@ describe('io bridge public artifact', () => {
     assert.ok(validation.value)
     assert.equal(
       validation.value.metadata.source_artifact,
-      'io_model/io_data.json + mcp_server/data/io_data.json',
+      'io_model/io_data.json + io_model/io_data.js',
     )
     assert.match(validation.value.metadata.units, /bln UZS/)
     assert.equal(validation.value.metadata.n_sectors, 136)
@@ -52,11 +66,7 @@ describe('io bridge public artifact', () => {
 
   it('keeps public employment fields aligned with the MCP-converted source arrays', () => {
     const validation = validateIoBridgePayload(loadPublicIoPayload())
-    const mcpSource = JSON.parse(readFileSync(MCP_IO_SOURCE_PATH, 'utf8')) as {
-      EmpTotal: number[]
-      EmpFormal: number[]
-      EmpInformal: number[]
-    }
+    const mcpSource = loadIoDataJs(MCP_CONVERSION_SOURCE_PATH)
     assert.ok(validation.value)
 
     for (const index of [0, 4, 42, 135]) {

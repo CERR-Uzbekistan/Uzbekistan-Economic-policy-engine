@@ -32,7 +32,7 @@ Browser QA was run against `http://127.0.0.1:5180` after the successful producti
 | Scenario Lab I-O run/save | Pass | I-O Sector Shock tab rendered analytics, `Save I-O run` worked, saved run appeared under Saved Runs with provenance and `Open in Comparison`. |
 | Comparison saved I-O add flow | Pass | Saved I-O panel detected available runs, modal opened, selected run added, and the selected I-O analytics block rendered below the macro table without changing macro rows. |
 | Data Registry MVP | Pass | Registry shows QPM, DFM, I-O implemented rows and PE, CGE, FPP planned rows. QPM/DFM show warning freshness states; I-O shows valid 2022 base-year vintage. |
-| Model Explorer I-O bridge evidence | Pass | I-O detail shows `Bridge evidence`, source artifact `io_model/io_data.json + mcp_server/data/io_data.json`, 2022 vintage, 136 sectors, Leontief framework, linkage classes, and bridge caveats. |
+| Model Explorer I-O bridge evidence | Pass | I-O detail shows `Bridge evidence`, source artifact `io_model/io_data.json + io_model/io_data.js`, 2022 vintage, 136 sectors, Leontief framework, linkage classes, and bridge caveats. |
 
 ## Deployment Readiness Notes
 
