@@ -256,11 +256,12 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
       setDistribution('final_demand')
     } else if (nextType === 'domestic_demand_reallocation') {
       setDemandBucket('consumption')
-      setDistribution('output')
+      setDistribution('final_demand')
     } else if (nextType === 'government_procurement') {
       setDemandBucket('government')
       setDistribution('final_demand')
     } else {
+      setDemandBucket('investment')
       setDistribution('sector')
     }
   }
@@ -524,6 +525,22 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
                 <span>{t('scenarioLab.ioShock.meta.dataVintage', { vintage: state.workspace.data_vintage })}</span>
                 <span>{formatSectorCount(state.workspace.sector_count, locale)}</span>
                 <span>
+                  {state.workspace.audit.ok
+                    ? t('scenarioLab.ioShock.meta.auditPassed', {
+                      passed: formatNumber(state.workspace.audit.passed, locale, {
+                        maximumFractionDigits: 0,
+                      }),
+                      total: formatNumber(state.workspace.audit.checks.length, locale, {
+                        maximumFractionDigits: 0,
+                      }),
+                    })
+                    : t('scenarioLab.ioShock.meta.auditFailed', {
+                      failed: formatNumber(state.workspace.audit.failed, locale, {
+                        maximumFractionDigits: 0,
+                      }),
+                    })}
+                </span>
+                <span>
                   {t('scenarioLab.ioShock.convertedShock', {
                     amount: formatCurrencyAmount(result.totals.demand_shock_bln_uzs, 'bln_uzs', locale, {
                       maximumFractionDigits: 1,
@@ -731,6 +748,18 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
                   </tbody>
                 </table>
               </div>
+            </details>
+
+            <details className="io-shock__caveats">
+              <summary>{t('scenarioLab.ioShock.dataChecks.title')}</summary>
+              <ul>
+                {state.workspace.audit.checks.map((check) => (
+                  <li key={check.id}>
+                    <strong>{check.label}:</strong> {check.detail}
+                  </li>
+                ))}
+              </ul>
+              <p>{t('scenarioLab.ioShock.dataChecks.note')}</p>
             </details>
 
             <details className="io-shock__caveats">

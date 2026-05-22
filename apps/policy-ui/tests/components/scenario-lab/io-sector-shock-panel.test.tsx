@@ -86,7 +86,7 @@ async function createTestI18n() {
               policyShockTypes: {
                 public_investment_project: 'Public investment project',
                 export_expansion: 'Export expansion',
-                domestic_demand_reallocation: 'Domestic-demand allocation check',
+                domestic_demand_reallocation: 'Domestic demand support',
                 government_procurement: 'Government procurement',
                 single_sector_final_demand: 'Single-sector final-demand shock',
                 single_sector_production_disabled: 'Single-sector production shock (not yet available)',
@@ -134,6 +134,8 @@ async function createTestI18n() {
               },
               meta: {
                 dataVintage: 'Base year {{vintage}}',
+                auditPassed: 'Data checks passed {{passed}}/{{total}}',
+                auditFailed: 'Data checks need review: {{failed}}',
               },
               concentration: {
                 title: 'Where the effect concentrates',
@@ -223,6 +225,11 @@ async function createTestI18n() {
                   'Save this run for Comparison, then connect it to PE tariff shocks or future CGE work when model links are available.',
               },
               detailTable: 'Detailed sector table',
+              dataChecks: {
+                title: 'Data quality checks',
+                note:
+                  'These checks test artifact structure and accounting identities. They do not validate behavioral responses or forecast accuracy.',
+              },
               table: {
                 rank: 'Rank',
                 sector: 'Sector',
@@ -266,6 +273,7 @@ describe('IoSectorShockPanel', () => {
     assert.match(markup, /Single-sector production shock \(not yet available\)/)
     assert.match(markup, /Currency/)
     assert.match(markup, /Final-demand shock result/)
+    assert.match(markup, /Data checks passed/)
     assert.match(markup, /Where the effect concentrates/)
     assert.match(markup, /Interpretation/)
     assert.match(markup, /Advanced robustness checks/)
@@ -286,6 +294,8 @@ describe('IoSectorShockPanel', () => {
     assert.match(markup, /Fixed-intensity estimate/)
     assert.match(markup, /Read this as sector transmission evidence/)
     assert.match(markup, /Detailed sector table/)
+    assert.match(markup, /Data quality checks/)
+    assert.match(markup, /Coefficient bounds/)
     assert.match(markup, /Sector labels are shown as source labels/)
     assert.match(markup, /Code:/)
     assert.match(markup, /Source label:/)

@@ -17,6 +17,8 @@ export type IoAuditReport = {
 const BASELINE_RELATIVE_TOLERANCE = 0.0002
 const BASELINE_ABSOLUTE_TOLERANCE = 5
 const INVERSE_IDENTITY_TOLERANCE = 0.000001
+const MAX_REASONABLE_OUTPUT_MULTIPLIER = 5
+const MAX_REASONABLE_EMPLOYMENT_PER_BLN_UZS = 1_000
 
 function pushCheck(checks: IoAuditCheck[], check: IoAuditCheck) {
   checks.push(check)
@@ -107,6 +109,118 @@ function hasValidNonNegativeFields(sectors: IoSector[], technicalCoefficients: n
   )
 }
 
+function coefficientBoundsCheck(payload: IoBridgePayload): IoAuditCheck {
+  const invalidSectors = payload.sectors.filter((sector) => {
+    if (sector.total_resources_thousand_uzs <= 0) {
+      return false
+    }
+    const valueAddedShare = sector.gva_thousand_uzs / sector.total_resources_thousand_uzs
+    const importShare = sector.imports_thousand_uzs / sector.total_resources_thousand_uzs
+    return valueAddedShare < 0 || valueAddedShare > 1 || importShare < 0 || importShare > 1
+  })
+
+  return {
+    id: 'coefficient-bounds',
+    label: 'Coefficient bounds',
+    status: invalidSectors.length === 0 ? 'pass' : 'fail',
+    detail:
+      invalidSectors.length === 0
+        ? 'Value-added and import shares are bounded between 0 and 1 for sectors with positive total resources.'
+        : `Value-added or import shares are outside [0, 1] for ${invalidSectors.length} sector(s).`,
+  }
+}
+
+function finalDemandCoverageCheck(payload: IoBridgePayload): IoAuditCheck {
+  const demandBuckets = {
+    consumption: payload.sectors.reduce(
+      (sum, sector) => sum + positiveFinalDemand(sector.final_demand.household) + positiveFinalDemand(sector.final_demand.npish),
+      0,
+    ),
+    government: payload.sectors.reduce(
+      (sum, sector) => sum + positiveFinalDemand(sector.final_demand.government),
+      0,
+    ),
+    investment: payload.sectors.reduce(
+      (sum, sector) => sum + positiveFinalDemand(sector.final_demand.gfcf) + positiveFinalDemand(sector.final_demand.inventories),
+      0,
+    ),
+    export: payload.sectors.reduce(
+      (sum, sector) => sum + positiveFinalDemand(sector.final_demand.exports),
+      0,
+    ),
+  }
+  const missingBuckets = Object.entries(demandBuckets)
+    .filter(([, value]) => value <= 0)
+    .map(([bucket]) => bucket)
+
+  return {
+    id: 'final-demand-coverage',
+    label: 'Final-demand buckets available',
+    status: missingBuckets.length === 0 ? 'pass' : 'fail',
+    detail:
+      missingBuckets.length === 0
+        ? 'Consumption, government, investment, and export final-demand buckets all contain positive source values for scenario allocation.'
+        : `Final-demand allocation cannot support: ${missingBuckets.join(', ')}.`,
+  }
+}
+
+function multiplierRangeCheck(payload: IoBridgePayload): IoAuditCheck {
+  const invalidSectors = payload.sectors.filter(
+    (sector) =>
+      !Number.isFinite(sector.output_multiplier) ||
+      !Number.isFinite(sector.value_added_multiplier) ||
+      sector.output_multiplier < 1 ||
+      sector.output_multiplier > MAX_REASONABLE_OUTPUT_MULTIPLIER ||
+      sector.value_added_multiplier < 0 ||
+      sector.value_added_multiplier > sector.output_multiplier,
+  )
+  const maxOutputMultiplier = Math.max(...payload.sectors.map((sector) => sector.output_multiplier))
+  const maxValueAddedMultiplier = Math.max(...payload.sectors.map((sector) => sector.value_added_multiplier))
+
+  return {
+    id: 'multiplier-range',
+    label: 'Multiplier range',
+    status: invalidSectors.length === 0 ? 'pass' : 'fail',
+    detail:
+      invalidSectors.length === 0
+        ? `Output multipliers are finite and between 1 and ${MAX_REASONABLE_OUTPUT_MULTIPLIER}; max output multiplier ${maxOutputMultiplier.toFixed(
+            3,
+          )}, max value-added multiplier ${maxValueAddedMultiplier.toFixed(3)}.`
+        : `Multiplier bounds are violated for ${invalidSectors.length} sector(s).`,
+  }
+}
+
+function employmentCoverageCheck(payload: IoBridgePayload): IoAuditCheck {
+  const sectorsWithEmployment = payload.sectors.filter((sector) => sector.employment_total !== undefined)
+  const invalidEmployment = sectorsWithEmployment.filter(
+    (sector) =>
+      sector.employment_total === undefined ||
+      sector.employment_total < 0 ||
+      sector.total_resources_thousand_uzs <= 0 ||
+      sector.employment_total / (sector.total_resources_thousand_uzs / 1_000) >
+        MAX_REASONABLE_EMPLOYMENT_PER_BLN_UZS,
+  )
+
+  return {
+    id: 'employment-intensity-coverage',
+    label: 'Employment intensity coverage',
+    status:
+      sectorsWithEmployment.length === payload.metadata.n_sectors && invalidEmployment.length === 0
+        ? 'pass'
+        : 'fail',
+    detail:
+      sectorsWithEmployment.length === payload.metadata.n_sectors && invalidEmployment.length === 0
+        ? `Employment arrays cover all ${payload.metadata.n_sectors} sectors and remain within fixed-intensity plausibility bounds.`
+        : `Employment coverage or intensity bounds fail for ${
+            payload.metadata.n_sectors - sectorsWithEmployment.length + invalidEmployment.length
+          } sector(s).`,
+  }
+}
+
+function positiveFinalDemand(value: number): number {
+  return Number.isFinite(value) && value > 0 ? value : 0
+}
+
 function baselineReconstructionCheck(payload: IoBridgePayload): IoAuditCheck {
   const reconstructed = multiplyMatrixVector(
     payload.matrices.leontief_inverse,
@@ -178,6 +292,11 @@ export function auditIoBridgePayload(payload: IoBridgePayload): IoAuditReport {
     detail:
       'Technical coefficients, output, imports, value added, multipliers, and employment fields are non-negative; inventory final demand may be negative.',
   })
+
+  pushCheck(checks, coefficientBoundsCheck(payload))
+  pushCheck(checks, finalDemandCoverageCheck(payload))
+  pushCheck(checks, multiplierRangeCheck(payload))
+  pushCheck(checks, employmentCoverageCheck(payload))
 
   if (leontiefUsable && technicalCoefficientsUsable) {
     pushCheck(checks, inverseIdentityCheck(payload))

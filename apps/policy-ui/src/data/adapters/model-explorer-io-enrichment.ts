@@ -241,7 +241,7 @@ function withBridgeEvidence(
     ],
     validation_summary: [
       `Readiness status: internally ready as a documented sector-transmission and multiplier tool, using base year ${payload.metadata.base_year} and ${adapterOutput.metadata.n_sectors} sectors.`,
-      `Core validation checks cover Leontief matrix usability, aligned sector arrays, impossible negative coefficients, total-resources baseline reconstruction, proportional 1 bln UZS scaling, and deterministic sector rankings.`,
+      `Core validation checks cover Leontief matrix usability, aligned sector arrays, coefficient bounds, final-demand bucket coverage, multiplier bounds, employment-intensity coverage, total-resources baseline reconstruction, proportional 1 bln UZS scaling, and deterministic sector rankings.`,
       `Linkage classes are derived from backward and forward Leontief indices; current counts are ${linkageCountLabel(adapterOutput)}.`,
       'Limits are explicit: no prices, inflation, substitution, fiscal feedback, external balance, or CGE/general-equilibrium behavior is claimed.',
     ],

@@ -65,10 +65,30 @@ Implemented checks in `apps/policy-ui/src/data/bridge/io-audit.ts` and related t
 - Leontief inverse exists and is a finite square matrix.
 - Sector output, total resources, final demand, import, employment, and sector dictionary arrays align by sector code/order.
 - Impossible negative fields are absent for technical coefficients, output, imports, value added, multipliers, and employment. Inventory final demand may be negative.
+- Value-added and import coefficients remain inside `[0, 1]` for sectors with positive total resources.
+- Consumption, government, investment, and export final-demand buckets all have positive source coverage for the Scenario Lab policy-use cases.
+- Output and value-added multipliers are finite, non-negative, and within the current static-model plausibility guardrails.
+- Employment arrays cover all sectors and fixed employment-intensity coefficients remain inside the documented plausibility guardrail.
 - Baseline reconstruction uses `L * final_demand` against total resources where the source data support that identity.
 - 1 bln UZS shocks scale proportionally within rounding tolerance.
 - Sector rankings are deterministic.
 - Sensitivity outputs cover allocation modes, employment intensity, import leakage, and FX conversion.
+
+## Scenario Lab Policy-Use Defaults
+
+The Scenario Lab I-O lane now treats policy-use cases as presets for a final-demand
+bucket and an allocation rule:
+
+- Public investment project: investment bucket, selected final-demand shares.
+- Export expansion: export bucket, selected final-demand shares.
+- Domestic demand support: consumption bucket, selected final-demand shares.
+- Government procurement: government bucket, selected final-demand shares.
+- Single-sector final-demand shock: investment bucket routed to one selected
+  sector.
+
+Output-share and one-sector allocations remain available as robustness checks, but
+the default policy-use cases avoid presenting output-share allocation as if it were
+an observed policy targeting rule.
 
 ## References
 

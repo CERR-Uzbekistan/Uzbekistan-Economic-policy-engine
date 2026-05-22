@@ -53,11 +53,20 @@ The value-added total is shown as an accounting contribution, not GDP growth.
 ## Implemented Guardrails
 
 - Default shocks are allocated by the selected final-demand bucket.
+- Policy-use presets map to concrete final-demand buckets: investment,
+  export, consumption, government, or one selected sector. Output-share
+  allocation is kept as a robustness comparison, not as the default policy
+  targeting story.
 - Output and value-added totals are reported in billion UZS.
 - Employment is labelled as a fixed-intensity estimate.
 - Sector labels remain in the source language until a reconciled EN/RU/UZ sector
   label source is accepted.
 - Comparison keeps I-O saved runs separate from macro scenario rows.
+- The public artifact now runs data-quality checks for matrix usability,
+  sector-array alignment, impossible negative values, coefficient bounds,
+  final-demand bucket coverage, multiplier bounds, employment-intensity
+  coverage, Leontief identity, and baseline reconstruction. Scenario Lab shows
+  the check count and exposes the detail list behind a collapsed section.
 
 ## Remaining Limitations
 

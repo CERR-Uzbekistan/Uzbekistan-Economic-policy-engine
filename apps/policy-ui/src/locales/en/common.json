@@ -607,7 +607,7 @@
       "policyShockTypes": {
         "public_investment_project": "Public investment project",
         "export_expansion": "Export expansion",
-        "domestic_demand_reallocation": "Domestic-demand allocation check",
+        "domestic_demand_reallocation": "Domestic demand support",
         "government_procurement": "Government procurement",
         "single_sector_final_demand": "Single-sector final-demand shock",
         "single_sector_production_disabled": "Single-sector production shock (not yet available)"
@@ -654,7 +654,9 @@
         "sectorLead": "Shock of {{amount}} assigned to {{sector}}."
       },
       "meta": {
-        "dataVintage": "Base year {{vintage}}"
+        "dataVintage": "Base year {{vintage}}",
+        "auditPassed": "Data checks passed {{passed}}/{{total}}",
+        "auditFailed": "Data checks need review: {{failed}}"
       },
       "concentration": {
         "title": "Where the effect concentrates",
@@ -736,9 +738,13 @@
         "sensitivity": "Sensitivity",
         "sensitivityBody": "Use advanced checks to see whether the sector story changes under allocation, jobs, import, or FX assumptions.",
         "nextUse": "Next model to link",
-        "nextUseBody": "Save this run for Comparison, then connect it to PE tariff shocks or future CGE work when model links are available."
+        "nextUseBody": "Use this as sector evidence. PE, CGE, or macro links need a separate model handoff before making broader claims."
       },
       "detailTable": "Detailed sector table",
+      "dataChecks": {
+        "title": "Data quality checks",
+        "note": "These checks test data-file structure and accounting identities. They do not validate behavioral responses or forecast accuracy."
+      },
       "table": {
         "rank": "Rank",
         "sector": "Sector",

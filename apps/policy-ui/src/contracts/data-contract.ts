@@ -636,6 +636,23 @@ export type ScenarioLabIoSectorOption = {
   name: string
 }
 
+export type ScenarioLabIoAuditStatus = 'pass' | 'caveat' | 'fail'
+
+export type ScenarioLabIoAuditCheck = {
+  id: string
+  label: string
+  status: ScenarioLabIoAuditStatus
+  detail: string
+}
+
+export type ScenarioLabIoAuditSummary = {
+  ok: boolean
+  passed: number
+  caveats: number
+  failed: number
+  checks: ScenarioLabIoAuditCheck[]
+}
+
 export type ScenarioLabIoAnalyticsWorkspace = {
   source_artifact: string
   data_vintage: string
@@ -646,6 +663,7 @@ export type ScenarioLabIoAnalyticsWorkspace = {
   sector_count: number
   sectors: ScenarioLabIoSectorOption[]
   caveats: string[]
+  audit: ScenarioLabIoAuditSummary
 }
 
 export type ScenarioLabIoShockRequest = {

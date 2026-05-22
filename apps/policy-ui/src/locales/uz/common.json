@@ -607,7 +607,7 @@
       "policyShockTypes": {
         "public_investment_project": "Davlat investitsiya loyihasi",
         "export_expansion": "Eksport kengayishi",
-        "domestic_demand_reallocation": "Ichki talab taqsimoti tekshiruvi",
+        "domestic_demand_reallocation": "Ichki talabni qo'llab-quvvatlash",
         "government_procurement": "Davlat xaridlari",
         "single_sector_final_demand": "Bitta sektor yakuniy talab shoki",
         "single_sector_production_disabled": "Bitta sektor ishlab chiqarish shoki (hali mavjud emas)"
@@ -654,7 +654,9 @@
         "sectorLead": "{{amount}} shoki {{sector}} sektoriga yo'naltiriladi."
       },
       "meta": {
-        "dataVintage": "Bazaviy yil {{vintage}}"
+        "dataVintage": "Bazaviy yil {{vintage}}",
+        "auditPassed": "Ma'lumot tekshiruvlari o'tdi {{passed}}/{{total}}",
+        "auditFailed": "Ma'lumot tekshiruvlari ko'rib chiqilishi kerak: {{failed}}"
       },
       "concentration": {
         "title": "Ta'sir qayerda jamlanadi",
@@ -736,9 +738,13 @@
         "sensitivity": "Sezgirlik",
         "sensitivityBody": "Kengaytirilgan tekshiruvlar sektor manzarasi boshqa taxminlarda o'zgarishini ko'rsatadi.",
         "nextUse": "Keyingi model bog'lanishi",
-        "nextUseBody": "Natijani Comparison uchun saqlang, keyin model bog'lanishlari tayyor bo'lganda PE tarif shoklari yoki kelajakdagi CGE bilan ulang."
+        "nextUseBody": "Buni sektor dalili sifatida ishlating. PE, CGE yoki makro bog'lanishlar kengroq xulosa uchun alohida model o'tkazmasini talab qiladi."
       },
       "detailTable": "Batafsil sektor jadvali",
+      "dataChecks": {
+        "title": "Ma'lumot sifati tekshiruvlari",
+        "note": "Bu tekshiruvlar artefakt tuzilmasi va hisob-kitob ayniyatlarini sinaydi. Ular xulq-atvor javoblari yoki prognoz aniqligini tasdiqlamaydi."
+      },
       "table": {
         "rank": "Rang",
         "sector": "Sektor",

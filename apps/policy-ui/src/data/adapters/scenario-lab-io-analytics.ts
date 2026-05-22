@@ -10,6 +10,7 @@ import type {
 } from '../../contracts/data-contract.js'
 import { toIoAdapterOutput } from '../bridge/io-adapter.js'
 import type { IoBridgePayload, IoSector } from '../bridge/io-types.js'
+import { auditIoBridgePayload } from '../bridge/io-audit.js'
 
 const TOP_EFFECT_COUNT = 10
 const SOURCE_MONETARY_UNITS_PER_BLN_UZS = 1_000
@@ -158,6 +159,7 @@ function toSensitivityCase(
 export function toScenarioLabIoAnalyticsWorkspace(
   payload: IoBridgePayload,
 ): ScenarioLabIoAnalyticsWorkspace {
+  const audit = auditIoBridgePayload(payload)
   return {
     source_artifact: payload.metadata.source_artifact,
     data_vintage: payload.attribution.data_version,
@@ -176,6 +178,13 @@ export function toScenarioLabIoAnalyticsWorkspace(
         ? 'Employment effects use sector employment arrays from the tracked I-O source and should be read as linear employment-intensity estimates.'
         : 'Employment effects are unavailable in the current public I-O bridge artifact.',
     ],
+    audit: {
+      ok: audit.ok,
+      passed: audit.checks.filter((check) => check.status === 'pass').length,
+      caveats: audit.checks.filter((check) => check.status === 'caveat').length,
+      failed: audit.checks.filter((check) => check.status === 'fail').length,
+      checks: audit.checks,
+    },
   }
 }
 

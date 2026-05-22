@@ -24,6 +24,16 @@ describe('scenario lab IO analytics adapter', () => {
     assert.equal(workspace.sector_count, 136)
     assert.equal(workspace.data_vintage, '2022')
     assert.equal(workspace.sectors.length, 136)
+    assert.equal(workspace.audit.ok, true)
+    assert.equal(workspace.audit.failed, 0)
+    assert.equal(
+      workspace.audit.checks.some((check) => check.id === 'coefficient-bounds'),
+      true,
+    )
+    assert.equal(
+      workspace.audit.checks.some((check) => check.id === 'final-demand-coverage'),
+      true,
+    )
     assert.equal(
       workspace.caveats.some((caveat) => caveat.includes('Employment effects use sector employment arrays')),
       true,

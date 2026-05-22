@@ -110,6 +110,28 @@ describe('io bridge public artifact', () => {
       ),
       true,
     )
+    assert.equal(
+      audit.checks.some(
+        (check) =>
+          check.id === 'coefficient-bounds' &&
+          check.detail.includes('Value-added and import shares are bounded'),
+      ),
+      true,
+    )
+    assert.equal(
+      audit.checks.some(
+        (check) =>
+          check.id === 'final-demand-coverage' &&
+          check.detail.includes('Consumption, government, investment, and export'),
+      ),
+      true,
+    )
+    assert.equal(
+      audit.checks.some(
+        (check) => check.id === 'employment-intensity-coverage' && check.detail.includes('all 136 sectors'),
+      ),
+      true,
+    )
   })
 
   it('rejects malformed matrix dimensions with a path-scoped issue', () => {
