@@ -607,7 +607,7 @@ export type ScenarioLabWorkspace = {
 }
 
 export type ScenarioLabIoDemandBucket = 'consumption' | 'government' | 'investment' | 'export'
-export type ScenarioLabIoDistributionMode = 'output' | 'gva' | 'equal' | 'sector'
+export type ScenarioLabIoDistributionMode = 'final_demand' | 'output' | 'gva' | 'equal' | 'sector'
 export type ScenarioLabIoShockCurrency = 'bln_uzs' | 'mln_usd'
 
 export type ScenarioLabIoSectorOption = {

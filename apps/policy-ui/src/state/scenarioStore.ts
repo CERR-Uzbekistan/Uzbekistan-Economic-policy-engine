@@ -213,7 +213,13 @@ function isIoDemandBucket(value: unknown): boolean {
 }
 
 function isIoDistributionMode(value: unknown): boolean {
-  return value === 'output' || value === 'gva' || value === 'equal' || value === 'sector'
+  return (
+    value === 'final_demand' ||
+    value === 'output' ||
+    value === 'gva' ||
+    value === 'equal' ||
+    value === 'sector'
+  )
 }
 
 function isIoShockCurrency(value: unknown): boolean {

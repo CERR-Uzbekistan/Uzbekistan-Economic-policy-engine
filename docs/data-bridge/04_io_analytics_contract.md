@@ -43,10 +43,18 @@ type IoDemandShockRequest = {
   amount: number
   currency: 'bln_uzs' | 'mln_usd'
   exchange_rate_uzs_per_usd?: number
-  distribution: 'output' | 'gva' | 'equal' | 'sector'
+  distribution: 'final_demand' | 'output' | 'gva' | 'equal' | 'sector'
   sector_code?: string
 }
 ```
+
+`distribution = 'final_demand'` is the default Scenario Lab production setting.
+It allocates the shock across sectors using the selected final-demand bucket:
+household plus NPISH for consumption, government final demand for government,
+GFCF plus positive inventory demand for investment, and exports for export. The
+other distribution modes are explicit sensitivity views and should be described
+as alternative allocations, not as the baseline interpretation of the demand
+bucket.
 
 ## Proposed Result Shape
 

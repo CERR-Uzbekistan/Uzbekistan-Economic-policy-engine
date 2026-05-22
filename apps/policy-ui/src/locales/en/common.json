@@ -602,6 +602,7 @@
         "export": "Export"
       },
       "distributions": {
+        "final_demand": "By selected demand shares",
         "output": "By output shares",
         "gva": "By GVA shares",
         "equal": "Equal across sectors",
@@ -625,8 +626,36 @@
         "valueAdded": "Value-added effect",
         "gdpContribution": "GDP accounting contribution",
         "employment": "Employment effect",
-        "multiplier": "Output multiplier"
+        "multiplier": "Output multiplier",
+        "outputNote": "Gross sector output",
+        "valueAddedNote": "Accounting GDP contribution",
+        "employmentNote": "Fixed-intensity estimate",
+        "multiplierNote": "Output per 1 UZS demand"
       },
+      "decision": {
+        "eyebrow": "Decision view",
+        "title": "Final-demand shock result",
+        "lead": "If a {{bucket}} shock of {{amount}} is allocated {{distribution}}, the I-O calculation shows:"
+      },
+      "meta": {
+        "dataVintage": "Data {{vintage}}"
+      },
+      "concentration": {
+        "title": "Where the effect concentrates",
+        "subtitle": "Top sectors by gross output response. Value-added and employment are shown beside each row.",
+        "share": "Share"
+      },
+      "interpretation": {
+        "title": "Interpretation",
+        "exposure": "Largest exposure",
+        "exposureBody": "{{sector}} accounts for {{share}}% of the displayed gross output effect.",
+        "noExposure": "No sector concentration is available for this shock.",
+        "boundary": "Boundary",
+        "boundaryBody": "Read this as sector transmission evidence. It is not a price, inflation, or macro forecast.",
+        "nextUse": "Next model to link",
+        "nextUseBody": "Save this run for Comparison, then connect it to PE tariff shocks or future CGE work when model links are available."
+      },
+      "detailTable": "Detailed sector table",
       "table": {
         "rank": "Rank",
         "sector": "Sector",

@@ -1,5 +1,6 @@
 import type {
   ScenarioLabIoAnalyticsWorkspace,
+  ScenarioLabIoDemandBucket,
   ScenarioLabIoDistributionMode,
   ScenarioLabIoSectorEffect,
   ScenarioLabIoShockRequest,
@@ -26,14 +27,35 @@ function positiveWeight(value: number): number {
   return Number.isFinite(value) && value > 0 ? value : 0
 }
 
+function finalDemandWeight(sector: IoSector, demandBucket: ScenarioLabIoDemandBucket): number {
+  if (demandBucket === 'consumption') {
+    return positiveWeight(sector.final_demand.household) + positiveWeight(sector.final_demand.npish)
+  }
+
+  if (demandBucket === 'government') {
+    return positiveWeight(sector.final_demand.government)
+  }
+
+  if (demandBucket === 'investment') {
+    return positiveWeight(sector.final_demand.gfcf) + positiveWeight(sector.final_demand.inventories)
+  }
+
+  return positiveWeight(sector.final_demand.exports)
+}
+
 function weightsForDistribution(
   sectors: IoSector[],
   distribution: ScenarioLabIoDistributionMode,
   sectorCode: string | undefined,
+  demandBucket: ScenarioLabIoDemandBucket,
 ): number[] {
   if (distribution === 'sector') {
     const selectedIndex = sectors.findIndex((sector) => sector.code === sectorCode)
     return sectors.map((_, index) => (index === selectedIndex ? 1 : 0))
+  }
+
+  if (distribution === 'final_demand') {
+    return sectors.map((sector) => finalDemandWeight(sector, demandBucket))
   }
 
   if (distribution === 'equal') {
@@ -114,7 +136,12 @@ export function runScenarioLabIoDemandShock(
 ): ScenarioLabIoShockResult {
   const adapterOutput = toIoAdapterOutput(payload)
   const weights = normalizeWeights(
-    weightsForDistribution(payload.sectors, request.distribution, request.sector_code),
+    weightsForDistribution(
+      payload.sectors,
+      request.distribution,
+      request.sector_code,
+      request.demand_bucket,
+    ),
   )
   const shockBlnUzS = toBlnUzSShock(request)
   const shockThousandUzS = shockBlnUzS * THOUSAND_UZS_PER_BLN_UZS

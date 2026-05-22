@@ -602,6 +602,7 @@
         "export": "Eksport"
       },
       "distributions": {
+        "final_demand": "Tanlangan talab ulushi bo'yicha",
         "output": "Ishlab chiqarish ulushi bo'yicha",
         "gva": "QQ ulushi bo'yicha",
         "equal": "Sektorlarga teng",
@@ -625,8 +626,36 @@
         "valueAdded": "Qo'shilgan qiymat ta'siri",
         "gdpContribution": "YaIM hisob-kitob hissasi",
         "employment": "Bandlik ta'siri",
-        "multiplier": "Ishlab chiqarish multiplikatori"
+        "multiplier": "Ishlab chiqarish multiplikatori",
+        "outputNote": "Sektor yalpi ishlab chiqarishi",
+        "valueAddedNote": "YaIMga hisob-kitob hissasi",
+        "employmentNote": "O'zgarmas intensivlik bahosi",
+        "multiplierNote": "1 so'm talabga ishlab chiqarish"
       },
+      "decision": {
+        "eyebrow": "Qaror ko'rinishi",
+        "title": "Yakuniy talab shoki natijasi",
+        "lead": "Agar {{bucket}} shoki {{amount}} miqdorida «{{distribution}}» taqsimlansa, I-O hisob-kitobi quyidagini ko'rsatadi:"
+      },
+      "meta": {
+        "dataVintage": "{{vintage}} ma'lumotlari"
+      },
+      "concentration": {
+        "title": "Ta'sir qayerda jamlanadi",
+        "subtitle": "Yalpi ishlab chiqarish javobi bo'yicha yetakchi sektorlar. Qo'shilgan qiymat va bandlik ham ko'rsatilgan.",
+        "share": "Ulush"
+      },
+      "interpretation": {
+        "title": "Talqin",
+        "exposure": "Eng katta ekspozitsiya",
+        "exposureBody": "{{sector}} ko'rsatilgan yalpi ishlab chiqarish effektining {{share}}% qismini beradi.",
+        "noExposure": "Bu shok uchun sektorlar bo'yicha jamlanish mavjud emas.",
+        "boundary": "Talqin chegarasi",
+        "boundaryBody": "Buni sektor uzatish dalili sifatida o'qing. Bu narx, inflyatsiya yoki makro prognoz emas.",
+        "nextUse": "Keyingi model bog'lanishi",
+        "nextUseBody": "Natijani Comparison uchun saqlang, keyin model bog'lanishlari tayyor bo'lganda PE tarif shoklari yoki kelajakdagi CGE bilan ulang."
+      },
+      "detailTable": "Batafsil sektor jadvali",
       "table": {
         "rank": "Rang",
         "sector": "Sektor",

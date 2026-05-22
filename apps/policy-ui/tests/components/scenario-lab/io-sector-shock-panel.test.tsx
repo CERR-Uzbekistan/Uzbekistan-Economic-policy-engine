@@ -83,6 +83,7 @@ async function createTestI18n() {
                 export: 'Export',
               },
               distributions: {
+                final_demand: 'By selected demand shares',
                 output: 'By output shares',
                 gva: 'By GVA shares',
                 equal: 'Equal across sectors',
@@ -107,7 +108,39 @@ async function createTestI18n() {
                 gdpContribution: 'GDP accounting contribution',
                 employment: 'Employment effect',
                 multiplier: 'Output multiplier',
+                outputNote: 'Gross sector output',
+                valueAddedNote: 'Accounting GDP contribution',
+                employmentNote: 'Fixed-intensity estimate',
+                multiplierNote: 'Output per 1 UZS demand',
               },
+              decision: {
+                eyebrow: 'Decision view',
+                title: 'Final-demand shock result',
+                lead:
+                  'If a {{bucket}} shock of {{amount}} is allocated {{distribution}}, the I-O calculation shows:',
+              },
+              meta: {
+                dataVintage: 'Data {{vintage}}',
+              },
+              concentration: {
+                title: 'Where the effect concentrates',
+                subtitle:
+                  'Top sectors by gross output response. Value-added and employment are shown beside each row.',
+                share: 'Share',
+              },
+              interpretation: {
+                title: 'Interpretation',
+                exposure: 'Largest exposure',
+                exposureBody: '{{sector}} accounts for {{share}}% of the displayed gross output effect.',
+                noExposure: 'No sector concentration is available for this shock.',
+                boundary: 'Boundary',
+                boundaryBody:
+                  'Read this as sector transmission evidence. It is not a price, inflation, or macro forecast.',
+                nextUse: 'Next model to link',
+                nextUseBody:
+                  'Save this run for Comparison, then connect it to PE tariff shocks or future CGE work when model links are available.',
+              },
+              detailTable: 'Detailed sector table',
               table: {
                 rank: 'Rank',
                 sector: 'Sector',
@@ -147,19 +180,21 @@ describe('IoSectorShockPanel', () => {
     assert.match(markup, /I-O Sector Shock/)
     assert.match(markup, /Shock amount/)
     assert.match(markup, /Currency/)
-    assert.match(markup, /Top affected sectors/)
+    assert.match(markup, /Final-demand shock result/)
+    assert.match(markup, /Where the effect concentrates/)
+    assert.match(markup, /Interpretation/)
     assert.match(markup, /Run summary/)
     assert.match(markup, /Demand bucket/)
-    assert.match(markup, /GDP accounting contribution/)
+    assert.match(markup, /By selected demand shares/)
+    assert.match(markup, /Accounting GDP contribution/)
     assert.match(markup, /Employment effect/)
-    assert.match(markup, /Accounting multiplier \/ structural sector linkage/)
-    assert.match(markup, /I-O value-added accounting contribution, not macro forecast/)
-    assert.match(markup, /Linear employment-intensity estimate, not labor-market forecast/)
-    assert.match(markup, /What this means/)
+    assert.match(markup, /Gross sector output/)
+    assert.match(markup, /Fixed-intensity estimate/)
+    assert.match(markup, /Read this as sector transmission evidence/)
+    assert.match(markup, /Detailed sector table/)
     assert.match(markup, /Sector labels are shown as source labels/)
     assert.match(markup, /Code:/)
     assert.match(markup, /Source label:/)
-    assert.match(markup, /employment count estimate/)
     assert.doesNotMatch(markup, /n\/a/)
     assert.match(markup, /not a macro forecast/)
     assert.match(markup, /linear employment-intensity estimate/)

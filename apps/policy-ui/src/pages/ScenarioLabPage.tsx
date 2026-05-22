@@ -829,7 +829,7 @@ export function ScenarioLabPage() {
       </span>
       <span>
         <strong>{t('scenarioLab.header.meta.dataVintageLabel')}</strong>{' '}
-        {t('overview.common.middleDot')} {dataDateLabel}
+        {t('overview.common.middleDot')} {activeContext.dataVintage}
       </span>
     </>
   )

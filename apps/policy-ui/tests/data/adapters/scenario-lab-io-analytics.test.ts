@@ -72,4 +72,27 @@ describe('scenario lab IO analytics adapter', () => {
     assert.equal(result.totals.demand_shock_bln_uzs, 1250)
     assert.equal(result.totals.output_effect_bln_uzs > 1250, true)
   })
+
+  it('uses selected final-demand shares when the allocation mode is final demand', () => {
+    const payload = loadValidIoPayload()
+    const exportShock = runScenarioLabIoDemandShock(payload, {
+      demand_bucket: 'export',
+      amount: 1000,
+      currency: 'bln_uzs',
+      distribution: 'final_demand',
+    })
+    const consumptionShock = runScenarioLabIoDemandShock(payload, {
+      demand_bucket: 'consumption',
+      amount: 1000,
+      currency: 'bln_uzs',
+      distribution: 'final_demand',
+    })
+
+    assert.equal(exportShock.request.distribution, 'final_demand')
+    assert.equal(consumptionShock.request.distribution, 'final_demand')
+    assert.notDeepEqual(
+      exportShock.top_sectors.slice(0, 3).map((sector) => sector.sector_code),
+      consumptionShock.top_sectors.slice(0, 3).map((sector) => sector.sector_code),
+    )
+  })
 })
