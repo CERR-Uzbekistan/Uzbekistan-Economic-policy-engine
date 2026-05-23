@@ -1,10 +1,10 @@
 {
   "trustState": {
     "labels": {
-      "mockFixture": "Справочные данные",
-      "liveBridgeJson": "Актуальные данные",
-      "fallbackMock": "Справочные данные",
-      "staticCuratedContent": "Курируемый контент",
+      "mockFixture": "Демонстрационные данные",
+      "liveBridgeJson": "Текущий источник",
+      "fallbackMock": "Резервная справка",
+      "staticCuratedContent": "Отобранный источник",
       "localBrowserDraft": "Сохранено в этом браузере",
       "planned": "Не активно",
       "artifactGuardChecked": "Формат проверен",
@@ -13,7 +13,7 @@
       "registryGenerated": "Последняя проверка",
       "lastValidationCheck": "Последняя проверка",
       "overviewArtifact": "Текущий снимок",
-      "staticOverviewFallback": "Справочная сводка"
+      "staticOverviewFallback": "Утверждённый снимок"
     }
   },
   "format": {

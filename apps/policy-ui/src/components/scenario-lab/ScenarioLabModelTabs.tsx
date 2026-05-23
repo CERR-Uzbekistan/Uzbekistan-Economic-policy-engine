@@ -1,4 +1,6 @@
+import type { KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
+import { focusElementById, getRovingTabIndexForKey } from './tabKeyboard.js'
 
 export type ScenarioLabModelTab =
   | 'macro_qpm'
@@ -64,6 +66,8 @@ const PLANNED_SCENARIO_LAB_MODEL_LANES: ScenarioLabModelTabDefinition[] = [
   },
 ]
 
+const ACTIVE_SCENARIO_LAB_MODEL_TAB_IDS = ACTIVE_SCENARIO_LAB_MODEL_TABS.map((tab) => tab.id)
+
 type ScenarioLabModelTabsProps = {
   activeTab: ScenarioLabModelTab
   onTabChange: (tab: ScenarioLabModelTab) => void
@@ -73,6 +77,18 @@ export function ScenarioLabModelTabs({ activeTab, onTabChange }: ScenarioLabMode
   const { t } = useTranslation()
   const plannedTitle = t('scenarioLab.modelTabs.plannedTitle')
   const plannedDescription = t('scenarioLab.modelTabs.plannedDescription')
+  const activeTabIsInTablist = ACTIVE_SCENARIO_LAB_MODEL_TAB_IDS.includes(activeTab)
+
+  function handleTabKeyDown(event: KeyboardEvent<HTMLButtonElement>, tabId: ScenarioLabModelTab) {
+    const currentIndex = ACTIVE_SCENARIO_LAB_MODEL_TAB_IDS.indexOf(tabId)
+    const nextIndex = getRovingTabIndexForKey(event.key, currentIndex, ACTIVE_SCENARIO_LAB_MODEL_TAB_IDS.length)
+    if (nextIndex === null) return
+
+    event.preventDefault()
+    const nextTab = ACTIVE_SCENARIO_LAB_MODEL_TAB_IDS[nextIndex]
+    onTabChange(nextTab)
+    focusElementById(`scenario-model-tab-${nextTab}`)
+  }
 
   return (
     <section className="scenario-model-tabs" aria-labelledby="scenario-model-tabs-title">
@@ -85,8 +101,9 @@ export function ScenarioLabModelTabs({ activeTab, onTabChange }: ScenarioLabMode
         role="tablist"
         aria-label={t('scenarioLab.modelTabs.tabsAria')}
       >
-        {ACTIVE_SCENARIO_LAB_MODEL_TABS.map((tab) => {
+        {ACTIVE_SCENARIO_LAB_MODEL_TABS.map((tab, index) => {
           const isActive = activeTab === tab.id
+          const isFocusable = isActive || (!activeTabIsInTablist && index === 0)
           return (
             <button
               key={tab.id}
@@ -95,9 +112,10 @@ export function ScenarioLabModelTabs({ activeTab, onTabChange }: ScenarioLabMode
               role="tab"
               aria-selected={isActive}
               aria-controls={`scenario-model-tabpanel-${tab.id}`}
-              tabIndex={0}
+              tabIndex={isFocusable ? 0 : -1}
               className={isActive ? 'scenario-model-tabs__tab active' : 'scenario-model-tabs__tab'}
               onClick={() => onTabChange(tab.id)}
+              onKeyDown={(event) => handleTabKeyDown(event, tab.id)}
             >
               <span>{t(tab.labelKey)}</span>
               <small className="scenario-model-tabs__subtitle">{t(tab.subtitleKey)}</small>

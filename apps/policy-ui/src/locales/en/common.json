@@ -1,10 +1,10 @@
 {
   "trustState": {
     "labels": {
-      "mockFixture": "Reference data",
-      "liveBridgeJson": "Live data",
-      "fallbackMock": "Reference data",
-      "staticCuratedContent": "Curated content",
+      "mockFixture": "Demo data",
+      "liveBridgeJson": "Live source",
+      "fallbackMock": "Backup reference",
+      "staticCuratedContent": "Curated source",
       "localBrowserDraft": "Saved in this browser",
       "planned": "Not active",
       "artifactGuardChecked": "Format checked",
@@ -13,7 +13,7 @@
       "registryGenerated": "Last checked",
       "lastValidationCheck": "Last checked",
       "overviewArtifact": "Current snapshot",
-      "staticOverviewFallback": "Reference summary"
+      "staticOverviewFallback": "Approved snapshot"
     }
   },
   "format": {

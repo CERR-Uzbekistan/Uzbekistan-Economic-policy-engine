@@ -1,3 +1,4 @@
+import type { KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import type {
   Assumption,
@@ -16,6 +17,7 @@ import {
 } from '../../lib/format/locale-format.js'
 import { ImpulseResponseChart } from './ImpulseResponseChart.js'
 import { ChartRenderer } from '../system/ChartRenderer.js'
+import { focusElementById, getRovingTabIndexForKey } from './tabKeyboard.js'
 
 type ResultsPanelProps = {
   activeTab: ScenarioLabResultTab
@@ -32,6 +34,8 @@ const TAB_LABEL_KEYS: Record<ScenarioLabResultTab, string> = {
   external_balance: 'scenarioLab.results.tabs.externalBalance',
   fiscal_effects: 'scenarioLab.results.tabs.fiscalEffects',
 }
+
+const RESULT_TABS = Object.keys(TAB_LABEL_KEYS) as ScenarioLabResultTab[]
 
 const TAB_EXPLANATION_KEYS: Record<ScenarioLabResultTab, string> = {
   headline_impact: 'scenarioLab.results.explanations.headlineImpact',
@@ -410,6 +414,18 @@ export function ResultsPanel({
 }: ResultsPanelProps) {
   const { i18n, t } = useTranslation()
   const locale = i18n.resolvedLanguage ?? i18n.language
+
+  function handleResultTabKeyDown(event: KeyboardEvent<HTMLButtonElement>, tab: ScenarioLabResultTab) {
+    const currentIndex = RESULT_TABS.indexOf(tab)
+    const nextIndex = getRovingTabIndexForKey(event.key, currentIndex, RESULT_TABS.length)
+    if (nextIndex === null) return
+
+    event.preventDefault()
+    const nextTab = RESULT_TABS[nextIndex]
+    onTabChange(nextTab)
+    focusElementById(`scenario-tab-${nextTab}`)
+  }
+
   const activeChart = results.charts_by_tab[activeTab]
   const decisionMetrics = QPM_DECISION_METRIC_ORDER.map((metricId) =>
     results.headline_metrics.find((metric) => metric.metric_id === metricId),
@@ -436,7 +452,7 @@ export function ResultsPanel({
         role="tablist"
         aria-label={t('scenarioLab.results.tabsAria')}
       >
-        {(Object.keys(TAB_LABEL_KEYS) as ScenarioLabResultTab[]).map((tab) => {
+        {RESULT_TABS.map((tab) => {
           const isActive = activeTab === tab
           return (
             <button
@@ -449,6 +465,7 @@ export function ResultsPanel({
               tabIndex={isActive ? 0 : -1}
               className={isActive ? 'active' : ''}
               onClick={() => onTabChange(tab)}
+              onKeyDown={(event) => handleResultTabKeyDown(event, tab)}
             >
               {t(TAB_LABEL_KEYS[tab])}
             </button>

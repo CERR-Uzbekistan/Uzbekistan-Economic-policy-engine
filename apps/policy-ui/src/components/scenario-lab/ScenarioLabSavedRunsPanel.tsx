@@ -138,13 +138,12 @@ export function ScenarioLabSavedRunsPanel({
         <p className="saved-runs-panel__local-note">{t('scenarioLab.saved.localBrowserDisclosure')}</p>
       </div>
 
-      <div className="saved-runs-panel__filters" role="tablist" aria-label={t('scenarioLab.savedRuns.filtersAria')}>
+      <div className="saved-runs-panel__filters" aria-label={t('scenarioLab.savedRuns.filtersAria')}>
         {filters.map((filter) => (
           <button
             key={filter}
             type="button"
-            role="tab"
-            aria-selected={activeFilter === filter}
+            aria-pressed={activeFilter === filter}
             className={activeFilter === filter ? 'active' : undefined}
             onClick={() => setActiveFilter(filter)}
           >

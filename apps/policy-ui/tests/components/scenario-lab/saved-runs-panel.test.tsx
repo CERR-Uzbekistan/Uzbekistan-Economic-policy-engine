@@ -244,6 +244,8 @@ describe('ScenarioLabSavedRunsPanel', () => {
 
     assert.match(markup, /Macro\/QPM/)
     assert.match(markup, /Saved runs are stored only in this browser/)
+    assert.match(markup, /aria-pressed="true" class="active"><span>All<\/span>/)
+    assert.doesNotMatch(markup, /role="tablist"/)
     assert.match(markup, /I-O sector shock/)
     assert.match(markup, /2026Q1/)
     assert.match(markup, /2026Q1-live/)

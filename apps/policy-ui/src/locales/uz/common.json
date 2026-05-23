@@ -1,10 +1,10 @@
 {
   "trustState": {
     "labels": {
-      "mockFixture": "Ma'lumot namunasi",
-      "liveBridgeJson": "Joriy ma'lumot",
-      "fallbackMock": "Ma'lumot namunasi",
-      "staticCuratedContent": "Saralangan kontent",
+      "mockFixture": "Demo ma'lumotlar",
+      "liveBridgeJson": "Jonli manba",
+      "fallbackMock": "Zaxira ma'lumot",
+      "staticCuratedContent": "Saralangan manba",
       "localBrowserDraft": "Shu brauzerda saqlangan",
       "planned": "Faol emas",
       "artifactGuardChecked": "Format tekshirildi",
@@ -13,7 +13,7 @@
       "registryGenerated": "Oxirgi tekshiruv",
       "lastValidationCheck": "Oxirgi tekshiruv",
       "overviewArtifact": "Joriy kesim",
-      "staticOverviewFallback": "Namuna xulosa"
+      "staticOverviewFallback": "Tasdiqlangan kesim"
     }
   },
   "format": {
