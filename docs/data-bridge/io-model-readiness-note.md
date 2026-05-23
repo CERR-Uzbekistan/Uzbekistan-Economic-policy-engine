@@ -30,6 +30,29 @@ dEMP_i = emp_i * dr_i
 
 Employment effects are fixed-intensity exposure estimates, not labor-market forecasts.
 
+## Plain-Language Reading Guide
+
+The page should be read as a sector accounting calculator:
+
+1. The user enters a final-demand shock, for example `1,000 bln UZS` of export
+   demand.
+2. The model allocates that demand across sectors using the selected rule.
+3. The Leontief inverse adds direct and supplier requirements. This is why
+   `total resources` can be larger than the entered shock.
+4. The result is split into:
+   - `domestic resource part`: the part supplied domestically in the source
+     accounting table;
+   - `import content`: the source import-share part embedded in the resource
+     response;
+   - `value added`: the GDP-accounting part of the resource response;
+   - `jobs exposure`: a fixed 2022 employment-intensity estimate.
+
+Toy example: if a `100 bln UZS` construction demand shock requires cement,
+transport, energy, and business services, total resources may be `160 bln UZS`.
+Only the value-added part should be read as a GDP-accounting contribution, and
+the jobs number is exposure under fixed employment coefficients, not a forecast
+that those jobs will be created.
+
 ## Current Data
 
 - Source: Statistics Agency under the President of Uzbekistan, `Uzbekistan Input-Output Table 2022`.
@@ -71,6 +94,16 @@ files now kept under `model sources/Input-Output model`:
 Scenario Lab now uses those source import shares to split the total-resource
 response into domestic-resource and import-content accounting parts. This is
 not a behavioral import-substitution or trade forecast.
+
+Repeat the source-workbook check with:
+
+```powershell
+py -3 scripts\export_io_from_workbooks.py --check-current
+```
+
+That command parses the local Statistics Agency workbook and `Employment.xlsx`,
+then compares the generated source payloads to the checked-in `io_model`
+artifacts without writing files.
 
 ## What The Model Can Answer
 

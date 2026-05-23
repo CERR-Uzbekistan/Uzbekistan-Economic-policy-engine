@@ -655,9 +655,17 @@
       "importContent": {
         "title": "Ichki va import tarkibi",
         "body": "Har bir sektorning manbadagi import ulushi asosida baholanadi. Bu I-O hisob-kitob ajratmasi, savdo prognozi emas.",
+        "formula": "Umumiy resurslar = ichki resurs qismi + import tarkibi; import ulushi = import tarkibi / umumiy resurslar.",
         "domestic": "Ichki resurs qismi",
         "imported": "Import tarkibi",
         "share": "Import ulushi"
+      },
+      "readerNote": {
+        "title": "Natijani qanday o'qish kerak",
+        "shock": "Kiritilgan shok {{shock}} yakuniy talabga aylanadi.",
+        "resources": "Umumiy resurslar, {{resources}}, bevosita talab va yetkazib beruvchilar talabini o'z ichiga oladi.",
+        "valueAdded": "Qo'shilgan qiymat, {{valueAdded}}, YaIM hisob-kitob qismi; {{imports}} import tarkibidir.",
+        "jobs": "Ish o'rinlari, {{jobs}}, 2022 yilgi o'zgarmas bandlik nisbatlari bo'yicha ekspozitsiya, yollash prognozi emas."
       },
       "decision": {
         "eyebrow": "Qaror ko'rinishi",
@@ -764,6 +772,12 @@
       "dataChecks": {
         "title": "Ma'lumot sifati tekshiruvlari",
         "note": "Bu tekshiruvlar artefakt tuzilmasi va hisob-kitob ayniyatlarini sinaydi. Ular xulq-atvor javoblari yoki prognoz aniqligini tasdiqlamaydi."
+      },
+      "sourceLedger": {
+        "title": "Manba jurnali",
+        "source": "Manba jadvali",
+        "owner": "Manba egasi",
+        "workbooks": "Lokal ish kitoblari"
       },
       "table": {
         "rank": "Rang",

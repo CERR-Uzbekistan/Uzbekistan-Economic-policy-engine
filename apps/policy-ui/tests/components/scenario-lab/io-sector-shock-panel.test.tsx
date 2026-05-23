@@ -135,9 +135,20 @@ async function createTestI18n() {
                 title: 'Domestic and import content',
                 body:
                   'Estimated with each sector source import share. This is an I-O accounting split, not a trade forecast.',
+                formula:
+                  'Total resources = domestic resource part + import content; import share = import content divided by total resources.',
                 domestic: 'Domestic resource part',
                 imported: 'Import content',
                 share: 'Import share',
+              },
+              readerNote: {
+                title: 'How to read this result',
+                shock: 'The entered shock becomes {{shock}} of final demand.',
+                resources: 'Total resources, {{resources}}, include direct and supplier requirements.',
+                valueAdded:
+                  'Value added, {{valueAdded}}, is the GDP-accounting part; {{imports}} is import content.',
+                jobs:
+                  'Jobs, {{jobs}}, are exposure from fixed 2022 employment ratios, not a hiring forecast.',
               },
               decision: {
                 eyebrow: 'Decision view',
@@ -251,6 +262,12 @@ async function createTestI18n() {
                 note:
                   'These checks test artifact structure and accounting identities. They do not validate behavioral responses or forecast accuracy.',
               },
+              sourceLedger: {
+                title: 'Source ledger',
+                source: 'Source table',
+                owner: 'Source owner',
+                workbooks: 'Local workbooks',
+              },
               table: {
                 rank: 'Rank',
                 sector: 'Sector',
@@ -317,12 +334,18 @@ describe('IoSectorShockPanel', () => {
     assert.match(markup, /Jobs estimate/)
     assert.match(markup, /Domestic output plus import content/)
     assert.match(markup, /Domestic and import content/)
+    assert.match(markup, /How to read this result/)
+    assert.match(markup, /The entered shock becomes/)
+    assert.match(markup, /Total resources = domestic resource part/)
     assert.match(markup, /Domestic resource part/)
     assert.match(markup, /Import share/)
     assert.match(markup, /Fixed-intensity estimate/)
     assert.match(markup, /Read this as sector transmission evidence/)
     assert.match(markup, /Detailed sector table/)
     assert.match(markup, /Data quality checks/)
+    assert.match(markup, /Source ledger/)
+    assert.match(markup, /Uzbekistan Input-Output Table 2022/)
+    assert.match(markup, /ТЗВ 2022 136х136\.xlsx/)
     assert.match(markup, /Coefficient bounds/)
     assert.match(markup, /Sector labels are shown as source labels/)
     assert.match(markup, /Code:/)

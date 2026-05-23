@@ -300,6 +300,8 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
     )
   }
 
+  const sourceWorkbooks = state.payload.metadata.source_workbooks
+
   return (
     <section
       className="scenario-panel scenario-panel--io-shock io-shock"
@@ -535,10 +537,50 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
                 </div>
               </dl>
 
+              <section className="io-shock__reader-note" aria-labelledby="io-shock-reader-note-title">
+                <h4 id="io-shock-reader-note-title">{t('scenarioLab.ioShock.readerNote.title')}</h4>
+                <ul>
+                  <li>
+                    {t('scenarioLab.ioShock.readerNote.shock', {
+                      shock: formatCurrencyAmount(result.totals.demand_shock_bln_uzs, 'bln_uzs', locale, {
+                        maximumFractionDigits: 1,
+                        minimumFractionDigits: 1,
+                      }),
+                    })}
+                  </li>
+                  <li>
+                    {t('scenarioLab.ioShock.readerNote.resources', {
+                      resources: formatCurrencyAmount(result.totals.output_effect_bln_uzs, 'bln_uzs', locale, {
+                        maximumFractionDigits: 1,
+                        minimumFractionDigits: 1,
+                      }),
+                    })}
+                  </li>
+                  <li>
+                    {t('scenarioLab.ioShock.readerNote.valueAdded', {
+                      valueAdded: formatCurrencyAmount(result.totals.value_added_effect_bln_uzs, 'bln_uzs', locale, {
+                        maximumFractionDigits: 1,
+                        minimumFractionDigits: 1,
+                      }),
+                      imports: formatCurrencyAmount(result.totals.import_content_effect_bln_uzs, 'bln_uzs', locale, {
+                        maximumFractionDigits: 1,
+                        minimumFractionDigits: 1,
+                      }),
+                    })}
+                  </li>
+                  <li>
+                    {t('scenarioLab.ioShock.readerNote.jobs', {
+                      jobs: formatOptionalNumber(result.totals.employment_effect_persons, locale),
+                    })}
+                  </li>
+                </ul>
+              </section>
+
               <div className="io-shock__import-split" aria-label={t('scenarioLab.ioShock.importContent.title')}>
                 <div>
                   <strong>{t('scenarioLab.ioShock.importContent.title')}</strong>
                   <p>{t('scenarioLab.ioShock.importContent.body')}</p>
+                  <p>{t('scenarioLab.ioShock.importContent.formula')}</p>
                 </div>
                 <dl>
                   <div>
@@ -804,6 +846,32 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
 
             <details className="io-shock__caveats">
               <summary>{t('scenarioLab.ioShock.dataChecks.title')}</summary>
+              <div className="io-shock__source-ledger">
+                <h4>{t('scenarioLab.ioShock.sourceLedger.title')}</h4>
+                <dl>
+                  <div>
+                    <dt>{t('scenarioLab.ioShock.sourceLedger.source')}</dt>
+                    <dd>{state.payload.metadata.source_title}</dd>
+                  </div>
+                  <div>
+                    <dt>{t('scenarioLab.ioShock.sourceLedger.owner')}</dt>
+                    <dd>{state.payload.metadata.source}</dd>
+                  </div>
+                  <div>
+                    <dt>{t('scenarioLab.ioShock.sourceLedger.workbooks')}</dt>
+                    <dd>
+                      <ul>
+                        {sourceWorkbooks.map((workbook) => (
+                          <li key={workbook.role}>
+                            <strong>{workbook.file_name}</strong>
+                            <span>{workbook.sheets.join(', ')}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
               <ul>
                 {state.workspace.audit.checks.map((check) => (
                   <li key={check.id}>
