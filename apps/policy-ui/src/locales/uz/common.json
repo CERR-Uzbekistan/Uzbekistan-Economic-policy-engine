@@ -562,11 +562,16 @@
       }
     },
     "ioShock": {
-      "title": "I-O sektor shoki",
-      "description": "Yakuniy talab shokini I-O ma'lumot qatlami orqali ishga tushiring va sektor umumiy resurs talabi hamda qo'shilgan qiymat uzatilishini ko'ring.",
+      "title": "I-O yakuniy talab shoki",
+      "description": "Talab shokini qaysi sektorlar qoplayishini, qancha qo'shilgan qiymat berishini va qancha ish o'rni ta'sirda qolishini baholang.",
       "loading": "I-O analytics ma'lumotlari yuklanmoqda...",
       "unavailable": "I-O analytics ma'lumotlari mavjud emas. Scenario Lab'ning mavjud ishlashi o'zgarmaydi.",
       "controlsAria": "I-O sektor shoki boshqaruvlari",
+      "setup": {
+        "eyebrow": "Ssenariy sozlamasi",
+        "title": "Talab shokini tanlang",
+        "description": "Siyosat holati, miqdor va taqsimlash qoidasini belgilang, keyin sektor natijalarini o'qing."
+      },
       "policyShockType": "Siyosat qo'llanishi",
       "policyShockTypeHint": "Qo'llanish turi talab guruhi va taqsimlashni tanlaydi.",
       "demandBucket": "Talab shoki turi",
@@ -580,7 +585,7 @@
       "boundary": "Chegara: faqat sektor hisobi. Bu makro, narx yoki bandlik prognozi emas.",
       "employmentBoundary": "Ish o'rinlari o'zgarmas intensivlik bo'yicha baholanadi.",
       "topSectors": "Eng ko'p ta'sirlangan sektorlar",
-      "caveats": "Manba cheklovlari",
+      "caveats": "Cheklovlar va manba izohlari",
       "saveRun": "I-O ishini saqlash",
       "savedTitle": "I-O {{bucket}} shoki · {{amount}} {{currency}}",
       "savedDescription": "Sektor uzatish tahlili uchun saqlangan I-O sektor shoki.",
@@ -659,6 +664,14 @@
         "title": "Yakuniy talab shoki natijasi",
         "lead": "{{bucket}} shoki {{amount}}, taqsimlash — {{distribution}}.",
         "sectorLead": "{{amount}} shoki {{sector}} sektoriga yo'naltiriladi."
+      },
+      "method": {
+        "title": "Bu hisob qanday ishlaydi",
+        "steps": {
+          "finalDemand": "Kiritilgan miqdor yakuniy talab vektoriga aylantiriladi.",
+          "leontief": "Vektor 2022 yilgi Leontief I-O jadvalidan o'tkaziladi.",
+          "outputs": "Umumiy resurslar, qo'shilgan qiymat, import tarkibi va ish o'rni ekspozitsiyasi o'qiladi."
+        }
       },
       "meta": {
         "dataVintage": "Bazaviy yil {{vintage}}",

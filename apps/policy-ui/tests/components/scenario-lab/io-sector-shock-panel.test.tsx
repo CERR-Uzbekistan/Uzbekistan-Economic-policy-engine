@@ -43,11 +43,16 @@ async function createTestI18n() {
           },
           scenarioLab: {
             ioShock: {
-              title: 'I-O Sector Shock',
+              title: 'I-O final-demand shock',
               description: 'Run a final-demand shock.',
               loading: 'Loading I-O analytics data...',
               unavailable: 'I-O analytics data is unavailable.',
               controlsAria: 'I-O sector shock controls',
+              setup: {
+                eyebrow: 'Scenario setup',
+                title: 'Choose the demand shock',
+                description: 'Set the policy case, amount, and allocation rule before reading the sector results.',
+              },
               policyShockType: 'Policy use case',
               policyShockTypeHint: 'Use cases choose the demand bucket and allocation.',
               demandBucket: 'Demand shock type',
@@ -61,7 +66,7 @@ async function createTestI18n() {
               boundary: 'Scope: sector accounting only. This is not a macro, price, or employment forecast.',
               employmentBoundary: 'Jobs are fixed-intensity estimates.',
               topSectors: 'Top affected sectors',
-              caveats: 'Source caveats',
+              caveats: 'Limits and source notes',
               convertedShock: 'Converted demand shock: {{amount}} bln UZS',
               sourceLabelNote:
                 'Sector labels are shown as source labels from {{artifact}} and are not translated here.',
@@ -139,6 +144,14 @@ async function createTestI18n() {
                 title: 'Final-demand shock result',
                 lead: '{{bucket}} shock of {{amount}}, allocated {{distribution}}.',
                 sectorLead: 'Shock of {{amount}} assigned to {{sector}}.',
+              },
+              method: {
+                title: 'How this run is calculated',
+                steps: {
+                  finalDemand: 'Convert the entered amount into a final-demand vector.',
+                  leontief: 'Pass it through the 2022 Leontief I-O table.',
+                  outputs: 'Read total resources, value added, import content, and jobs exposure.',
+                },
               },
               meta: {
                 dataVintage: 'Base year {{vintage}}',
@@ -274,13 +287,17 @@ describe('IoSectorShockPanel', () => {
       </I18nextProvider>,
     )
 
-    assert.match(markup, /I-O Sector Shock/)
+    assert.match(markup, /I-O final-demand shock/)
+    assert.match(markup, /Choose the demand shock/)
     assert.match(markup, /Shock amount/)
     assert.match(markup, /Policy use case/)
     assert.match(markup, /Public investment project/)
     assert.match(markup, /Single-sector production shock \(not yet available\)/)
     assert.match(markup, /Currency/)
     assert.match(markup, /Final-demand shock result/)
+    assert.match(markup, /How this run is calculated/)
+    assert.match(markup, /final-demand vector/)
+    assert.match(markup, /Leontief I-O table/)
     assert.match(markup, /Data checks passed/)
     assert.match(markup, /Where the effect concentrates/)
     assert.match(markup, /Interpretation/)

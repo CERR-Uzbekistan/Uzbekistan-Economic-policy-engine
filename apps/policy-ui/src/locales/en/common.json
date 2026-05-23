@@ -562,11 +562,16 @@
       }
     },
     "ioShock": {
-      "title": "I-O Sector Shock",
-      "description": "Run a final-demand shock through the I-O data layer and inspect sector total-resource and value-added transmission.",
+      "title": "I-O final-demand shock",
+      "description": "Estimate which sectors supply a demand shock, how much value added it carries, and how many jobs are exposed.",
       "loading": "Loading I-O analytics data...",
       "unavailable": "I-O analytics data is unavailable. Existing Scenario Lab behavior is unchanged.",
       "controlsAria": "I-O sector shock controls",
+      "setup": {
+        "eyebrow": "Scenario setup",
+        "title": "Choose the demand shock",
+        "description": "Set the policy case, amount, and allocation rule before reading the sector results."
+      },
       "policyShockType": "Policy use case",
       "policyShockTypeHint": "Use cases choose the demand bucket and allocation.",
       "demandBucket": "Demand shock type",
@@ -580,7 +585,7 @@
       "boundary": "Scope: sector accounting only. This is not a macro, price, or employment forecast.",
       "employmentBoundary": "Jobs are fixed-intensity estimates.",
       "topSectors": "Top affected sectors",
-      "caveats": "Source caveats",
+      "caveats": "Limits and source notes",
       "saveRun": "Save I-O run",
       "savedTitle": "I-O {{bucket}} shock · {{amount}} {{currency}}",
       "savedDescription": "Saved I-O sector shock run for sector transmission analysis.",
@@ -659,6 +664,14 @@
         "title": "Final-demand shock result",
         "lead": "{{bucket}} shock of {{amount}}, allocated {{distribution}}.",
         "sectorLead": "Shock of {{amount}} assigned to {{sector}}."
+      },
+      "method": {
+        "title": "How this run is calculated",
+        "steps": {
+          "finalDemand": "Convert the entered amount into a final-demand vector.",
+          "leontief": "Pass it through the 2022 Leontief I-O table.",
+          "outputs": "Read total resources, value added, import content, and jobs exposure."
+        }
       },
       "meta": {
         "dataVintage": "Base year {{vintage}}",

@@ -314,6 +314,12 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
 
       <div className="io-shock__layout">
         <div className="io-shock__controls" aria-label={t('scenarioLab.ioShock.controlsAria')}>
+          <div className="io-shock__setup-head">
+            <span>{t('scenarioLab.ioShock.setup.eyebrow')}</span>
+            <h3>{t('scenarioLab.ioShock.setup.title')}</h3>
+            <p>{t('scenarioLab.ioShock.setup.description')}</p>
+          </div>
+
           <label>
             <span>{t('scenarioLab.ioShock.policyShockType')}</span>
             <select
@@ -476,6 +482,15 @@ export function IoSectorShockPanel({ state, onRetry, onSaveRun, saveStatus }: Io
                       distribution: t(`scenarioLab.ioShock.distributions.${request.distribution}`),
                     })}
                 </p>
+              </div>
+
+              <div className="io-shock__method-flow" aria-label={t('scenarioLab.ioShock.method.title')}>
+                <strong>{t('scenarioLab.ioShock.method.title')}</strong>
+                <ol>
+                  <li>{t('scenarioLab.ioShock.method.steps.finalDemand')}</li>
+                  <li>{t('scenarioLab.ioShock.method.steps.leontief')}</li>
+                  <li>{t('scenarioLab.ioShock.method.steps.outputs')}</li>
+                </ol>
               </div>
 
               <dl className="io-shock__metric-strip">
