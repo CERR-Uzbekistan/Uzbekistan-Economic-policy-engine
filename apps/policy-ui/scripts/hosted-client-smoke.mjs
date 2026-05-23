@@ -774,6 +774,9 @@ function knowledgeHubTrackerExpression() {
         (count, card) => count + card.querySelectorAll('.change-bullet-list li').length,
         0,
       );
+      const everyLatestCardHasBullets = latestCards.every(
+        (card) => card.querySelectorAll('.change-bullet-list li').length > 0,
+      );
       const latestRegisterPreview = document.querySelector('.knowledge-hub-page .register-preview');
       const latestUpcomingPreview = document.querySelector('.knowledge-hub-page .upcoming-preview');
       const latestSourceChecks = document.querySelector('.knowledge-hub-page .source-checks-strip');
@@ -850,7 +853,7 @@ function knowledgeHubTrackerExpression() {
           !!latestChanges &&
           latestCards.length >= 3 &&
           !!changeBulletList &&
-          bulletCount >= 12 &&
+          everyLatestCardHasBullets &&
           !!latestRegisterPreview &&
           !!latestUpcomingPreview &&
           !!latestSourceChecks &&
@@ -874,6 +877,7 @@ function knowledgeHubTrackerExpression() {
         latestChangeCount: latestCards.length,
         hasChangeBulletList: !!changeBulletList,
         bulletCount,
+        everyLatestCardHasBullets,
         hasRegisterPreview: !!latestRegisterPreview,
         hasUpcomingPreview: !!latestUpcomingPreview,
         hasSourceChecks: !!latestSourceChecks,
