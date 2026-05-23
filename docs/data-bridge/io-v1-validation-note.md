@@ -42,13 +42,19 @@ The value-added total is shown as an accounting contribution, not GDP growth.
 - The sector table, final-demand vectors, technical coefficients, Leontief
   inverse, output multipliers, and value-added multipliers come from
   `io_model/io_data.json`.
-- Employment arrays come from the tracked `io_model/io_data.js` source used by
-  the MCP data converter.
+- Employment arrays come from `io_model/io_employment.json`, generated from
+  the `Employment.xlsx` source workbook.
+- `scripts/export_io_from_workbooks.py` regenerates `io_model/io_data.json`
+  from the `ТЗВ всего` transaction table and keeps the app convention that
+  technical coefficients are `Z / total_resources`. The workbook coefficient
+  sheets are retained as source context, not copied blindly into the public
+  bridge.
 - Local source workbook provenance is recorded in the public artifact:
   `ТЗВ 2022 136х136.xlsx` (`ТЗВ всего`, `К-ты прямых затрат А`,
   `к-ты полных затрат (Е-А)-1`) and `Employment.xlsx` (`Employment`).
-- `scripts/export_io.mjs` checks that the employment source aligns with the
-  public sector source by normalized sector code and exact source label.
+- `scripts/export_io.mjs` checks that the label source aligns with the public
+  sector source by normalized sector code and exact source label, and checks
+  that the employment source aligns by normalized sector code.
 - The local workbook audit on 2026-05-22 found 136/136 sector-code matches in
   both the I-O workbook and employment workbook, and 136/136 source-name matches
   for the I-O workbook.

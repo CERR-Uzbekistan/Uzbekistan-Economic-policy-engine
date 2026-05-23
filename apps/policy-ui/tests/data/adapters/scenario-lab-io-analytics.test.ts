@@ -35,7 +35,7 @@ describe('scenario lab IO analytics adapter', () => {
       true,
     )
     assert.equal(
-      workspace.caveats.some((caveat) => caveat.includes('Employment effects use sector employment arrays')),
+      workspace.caveats.some((caveat) => caveat.includes('Employment effects use sector employment arrays generated from the Employment.xlsx source workbook')),
       true,
     )
   })

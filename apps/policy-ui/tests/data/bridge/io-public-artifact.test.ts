@@ -15,20 +15,22 @@ import { validateIoBridgePayload } from '../../../src/data/bridge/io-guard.js'
 import type { IoBridgePayload } from '../../../src/data/bridge/io-types.js'
 
 const IO_PUBLIC_ARTIFACT_PATH = fileURLToPath(new URL('../../../../public/data/io.json', import.meta.url))
-const MCP_CONVERSION_SOURCE_PATH = join(process.cwd(), '..', '..', 'io_model', 'io_data.js')
+const IO_EMPLOYMENT_SOURCE_PATH = join(process.cwd(), '..', '..', 'io_model', 'io_employment.json')
 
-function loadIoDataJs(path: string): {
-  EmpTotal: number[]
-  EmpFormal: number[]
-  EmpInformal: number[]
+function loadIoEmploymentSource(path: string): {
+  sectors: Array<{
+    employment_total: number
+    employment_formal: number
+    employment_informal: number
+  }>
 } {
-  const code = readFileSync(path, 'utf8')
-  const load = new Function(`${code}; return IO_DATA;`) as () => {
-    EmpTotal: number[]
-    EmpFormal: number[]
-    EmpInformal: number[]
+  return JSON.parse(readFileSync(path, 'utf8')) as {
+    sectors: Array<{
+      employment_total: number
+      employment_formal: number
+      employment_informal: number
+    }>
   }
-  return load()
 }
 
 function loadPublicIoPayload(): IoBridgePayload {
@@ -47,7 +49,7 @@ describe('io bridge public artifact', () => {
     assert.ok(validation.value)
     assert.equal(
       validation.value.metadata.source_artifact,
-      'io_model/io_data.json + io_model/io_data.js',
+      'io_model/io_data.json + io_model/io_employment.json + io_model/io_data.js labels',
     )
     assert.match(validation.value.metadata.units, /bln UZS/)
     assert.equal(validation.value.metadata.n_sectors, 136)
@@ -86,15 +88,15 @@ describe('io bridge public artifact', () => {
     )
   })
 
-  it('keeps public employment fields aligned with the tracked JS source arrays', () => {
+  it('keeps public employment fields aligned with the generated employment source', () => {
     const validation = validateIoBridgePayload(loadPublicIoPayload())
-    const mcpSource = loadIoDataJs(MCP_CONVERSION_SOURCE_PATH)
+    const employmentSource = loadIoEmploymentSource(IO_EMPLOYMENT_SOURCE_PATH)
     assert.ok(validation.value)
 
     for (const index of [0, 4, 42, 135]) {
-      assert.equal(validation.value.sectors[index].employment_total, mcpSource.EmpTotal[index])
-      assert.equal(validation.value.sectors[index].employment_formal, mcpSource.EmpFormal[index])
-      assert.equal(validation.value.sectors[index].employment_informal, mcpSource.EmpInformal[index])
+      assert.equal(validation.value.sectors[index].employment_total, employmentSource.sectors[index].employment_total)
+      assert.equal(validation.value.sectors[index].employment_formal, employmentSource.sectors[index].employment_formal)
+      assert.equal(validation.value.sectors[index].employment_informal, employmentSource.sectors[index].employment_informal)
     }
   })
 

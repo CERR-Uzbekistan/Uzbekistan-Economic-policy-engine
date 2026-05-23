@@ -1,9 +1,9 @@
 # IO Data Bridge — Consumer Contract
 
-**Source:** `io_model/io_data.json` + `io_model/io_data.js` → `scripts/export_io.mjs` → `apps/policy-ui/public/data/io.json`
+**Source:** source workbooks → `scripts/export_io_from_workbooks.py` → `io_model/io_data.json` + `io_model/io_employment.json` + `io_model/io_data.js` labels → `scripts/export_io.mjs` → `apps/policy-ui/public/data/io.json`
 **Status:** First IO bridge slice; static JSON bridge target
 **Version:** solver 0.1.0, data 2022
-**Upstream input:** Statistics Agency 2022 symmetric input-output table, as committed in `io_model/io_data.json`, plus employment arrays from the tracked `io_model/io_data.js` source used by the MCP data converter.
+**Upstream input:** Statistics Agency 2022 symmetric input-output table and employment workbook. The source exporter regenerates `io_model/io_data.json` and `io_model/io_employment.json` from `ТЗВ 2022 136х136.xlsx` and `Employment.xlsx`; `io_model/io_data.js` is retained only as the current EN/UZ display-label source.
 
 ## Purpose
 
@@ -59,9 +59,9 @@ matrix, totals, and metadata types live in
 | `sectors[].gva_thousand_uzs` | legacy source monetary field | Gross value added; field name is retained for compatibility. |
 | `sectors[].compensation_of_employees_thousand_uzs` | legacy source monetary field | Source `coe`; field name is retained for compatibility. |
 | `sectors[].gross_operating_surplus_thousand_uzs` | legacy source monetary field | Source `gos`; field name is retained for compatibility. |
-| `sectors[].employment_total` | persons | Employment array from tracked JS source aligned by sector code/name. |
-| `sectors[].employment_formal` | persons | Formal employment array from tracked JS source aligned by sector code/name. |
-| `sectors[].employment_informal` | persons | Informal employment array from tracked JS source aligned by sector code/name. |
+| `sectors[].employment_total` | persons | Employment array from `io_model/io_employment.json`, generated from `Employment.xlsx` and aligned by sector code. |
+| `sectors[].employment_formal` | persons | Formal employment array from `io_model/io_employment.json`, generated from `Employment.xlsx` and aligned by sector code. |
+| `sectors[].employment_informal` | persons | Informal employment array from `io_model/io_employment.json`, generated from `Employment.xlsx` and aligned by sector code. |
 | `sectors[].output_multiplier` | ratio | Type I output multiplier from source JSON. |
 | `sectors[].value_added_multiplier` | ratio | Type I value-added multiplier from source JSON. |
 | `matrices.technical_coefficients` | ratio | A matrix, computed as intermediate use divided by total resources. |
@@ -79,9 +79,10 @@ Scenario Lab adapter and keeps a scale caveat in the public artifact.
 - **No Type II arrays.** The chosen source artifact `io_model/io_data.json`
   does not carry Type II induced-consumption arrays. Type II reconciliation is
   a later model/data decision.
-- **No English or Uzbek sector labels.** The chosen JSON source carries
-  Russian sector names. Multilingual sector labels should be added only
-  after a reconciled source is chosen.
+- **No official English or Uzbek sector labels.** The public sector dictionary
+  carries working EN/UZ display labels from `io_model/io_data.js`, but the
+  source Russian sector labels remain authoritative until a reconciled
+  translation source is accepted.
 - **No live UI consumption in this slice.** This PR stops at
   export/contract/client/guard/bridge-native adapter.
 
@@ -96,6 +97,7 @@ with the export date (`metadata.exported_at`).
 ## Consumer Wiring Checklist
 
 - [x] `scripts/export_io.mjs` — deterministic source-to-public JSON transform.
+- [x] `scripts/export_io_from_workbooks.py` — deterministic local workbook-to-source JSON transform.
 - [x] `apps/policy-ui/public/data/io.json` — expected public bridge target.
 - [x] `apps/policy-ui/src/data/bridge/io-types.ts` — IO-specific bridge types.
 - [x] `apps/policy-ui/src/data/bridge/io-guard.ts` — schema guard with path-scoped issues.

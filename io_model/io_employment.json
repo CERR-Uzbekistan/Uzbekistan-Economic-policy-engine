@@ -1,0 +1,963 @@
+{
+  "metadata": {
+    "source_workbook": "Employment.xlsx",
+    "source_sheet": "Employment",
+    "n_sectors": 136,
+    "units": "persons",
+    "generated": "2026-04-09"
+  },
+  "sectors": [
+    {
+      "id": 0,
+      "code": "A01.11",
+      "employment_formal": 46636,
+      "employment_informal": 296928,
+      "employment_total": 343564
+    },
+    {
+      "id": 1,
+      "code": "А01.13",
+      "employment_formal": 79102,
+      "employment_informal": 503639,
+      "employment_total": 582741
+    },
+    {
+      "id": 2,
+      "code": "А01.16",
+      "employment_formal": 33800,
+      "employment_informal": 215204,
+      "employment_total": 249004
+    },
+    {
+      "id": 3,
+      "code": "А01.21",
+      "employment_formal": 13975,
+      "employment_informal": 88981,
+      "employment_total": 102956
+    },
+    {
+      "id": 4,
+      "code": "А01.4.",
+      "employment_formal": 210964,
+      "employment_informal": 1343197,
+      "employment_total": 1554161
+    },
+    {
+      "id": 5,
+      "code": "A01 \n(без 01.11, 01.13, 01.16, 01.21, 01.4.)",
+      "employment_formal": 66412,
+      "employment_informal": 422838,
+      "employment_total": 489250
+    },
+    {
+      "id": 6,
+      "code": "A02",
+      "employment_formal": 7339,
+      "employment_informal": 46727,
+      "employment_total": 54066
+    },
+    {
+      "id": 7,
+      "code": "A03",
+      "employment_formal": 8546,
+      "employment_informal": 54412,
+      "employment_total": 62958
+    },
+    {
+      "id": 8,
+      "code": "B05",
+      "employment_formal": 6303,
+      "employment_informal": 361,
+      "employment_total": 6664
+    },
+    {
+      "id": 9,
+      "code": "B06.1",
+      "employment_formal": 4797,
+      "employment_informal": 275,
+      "employment_total": 5072
+    },
+    {
+      "id": 10,
+      "code": "B06.2",
+      "employment_formal": 21061,
+      "employment_informal": 1206,
+      "employment_total": 22267
+    },
+    {
+      "id": 11,
+      "code": "B07.1",
+      "employment_formal": 2,
+      "employment_informal": 0,
+      "employment_total": 2
+    },
+    {
+      "id": 12,
+      "code": "B07.2",
+      "employment_formal": 7201,
+      "employment_informal": 412,
+      "employment_total": 7613
+    },
+    {
+      "id": 13,
+      "code": "B08",
+      "employment_formal": 11892,
+      "employment_informal": 681,
+      "employment_total": 12573
+    },
+    {
+      "id": 14,
+      "code": "B09",
+      "employment_formal": 3129,
+      "employment_informal": 179,
+      "employment_total": 3308
+    },
+    {
+      "id": 15,
+      "code": "C10.1",
+      "employment_formal": 12360,
+      "employment_informal": 15186,
+      "employment_total": 27546
+    },
+    {
+      "id": 16,
+      "code": "C10.2",
+      "employment_formal": 484,
+      "employment_informal": 596,
+      "employment_total": 1080
+    },
+    {
+      "id": 17,
+      "code": "C10.3",
+      "employment_formal": 7665,
+      "employment_informal": 9418,
+      "employment_total": 17083
+    },
+    {
+      "id": 18,
+      "code": "C10.4",
+      "employment_formal": 10267,
+      "employment_informal": 12617,
+      "employment_total": 22884
+    },
+    {
+      "id": 19,
+      "code": "C10.5",
+      "employment_formal": 7056,
+      "employment_informal": 8669,
+      "employment_total": 15725
+    },
+    {
+      "id": 20,
+      "code": "C10.6",
+      "employment_formal": 18459,
+      "employment_informal": 22681,
+      "employment_total": 41140
+    },
+    {
+      "id": 21,
+      "code": "C10.7",
+      "employment_formal": 9396,
+      "employment_informal": 11545,
+      "employment_total": 20941
+    },
+    {
+      "id": 22,
+      "code": "C10.8\n (без 10.81)",
+      "employment_formal": 3332,
+      "employment_informal": 4095,
+      "employment_total": 7427
+    },
+    {
+      "id": 23,
+      "code": "C10.81",
+      "employment_formal": 7132,
+      "employment_informal": 8763,
+      "employment_total": 15895
+    },
+    {
+      "id": 24,
+      "code": "C10.9",
+      "employment_formal": 4498,
+      "employment_informal": 5526,
+      "employment_total": 10024
+    },
+    {
+      "id": 25,
+      "code": "C11",
+      "employment_formal": 15186,
+      "employment_informal": 18660,
+      "employment_total": 33846
+    },
+    {
+      "id": 26,
+      "code": "C12",
+      "employment_formal": 957,
+      "employment_informal": 1176,
+      "employment_total": 2133
+    },
+    {
+      "id": 27,
+      "code": "C13.1",
+      "employment_formal": 98822,
+      "employment_informal": 121428,
+      "employment_total": 220250
+    },
+    {
+      "id": 28,
+      "code": "C13.2",
+      "employment_formal": 8907,
+      "employment_informal": 10944,
+      "employment_total": 19851
+    },
+    {
+      "id": 29,
+      "code": "C13.3",
+      "employment_formal": 645,
+      "employment_informal": 791,
+      "employment_total": 1436
+    },
+    {
+      "id": 30,
+      "code": "C13.9",
+      "employment_formal": 33641,
+      "employment_informal": 41335,
+      "employment_total": 74976
+    },
+    {
+      "id": 31,
+      "code": "C14",
+      "employment_formal": 73635,
+      "employment_informal": 90479,
+      "employment_total": 164114
+    },
+    {
+      "id": 32,
+      "code": "C15",
+      "employment_formal": 8867,
+      "employment_informal": 10895,
+      "employment_total": 19762
+    },
+    {
+      "id": 33,
+      "code": "C16",
+      "employment_formal": 4973,
+      "employment_informal": 6111,
+      "employment_total": 11084
+    },
+    {
+      "id": 34,
+      "code": "C17",
+      "employment_formal": 11310,
+      "employment_informal": 13897,
+      "employment_total": 25207
+    },
+    {
+      "id": 35,
+      "code": "C18",
+      "employment_formal": 6388,
+      "employment_informal": 7849,
+      "employment_total": 14237
+    },
+    {
+      "id": 36,
+      "code": "C19.1",
+      "employment_formal": 0,
+      "employment_informal": 0,
+      "employment_total": 0
+    },
+    {
+      "id": 37,
+      "code": "C19.2",
+      "employment_formal": 10177,
+      "employment_informal": 12505,
+      "employment_total": 22682
+    },
+    {
+      "id": 38,
+      "code": "C20.1 \n(без C20.15 и C20.16)",
+      "employment_formal": 7686,
+      "employment_informal": 9445,
+      "employment_total": 17131
+    },
+    {
+      "id": 39,
+      "code": "C20.15",
+      "employment_formal": 19112,
+      "employment_informal": 23483,
+      "employment_total": 42595
+    },
+    {
+      "id": 40,
+      "code": "C20.16",
+      "employment_formal": 12928,
+      "employment_informal": 15885,
+      "employment_total": 28813
+    },
+    {
+      "id": 41,
+      "code": "C20.2",
+      "employment_formal": 513,
+      "employment_informal": 630,
+      "employment_total": 1143
+    },
+    {
+      "id": 42,
+      "code": "C20.3",
+      "employment_formal": 2729,
+      "employment_informal": 3354,
+      "employment_total": 6083
+    },
+    {
+      "id": 43,
+      "code": "C20.4",
+      "employment_formal": 2441,
+      "employment_informal": 3000,
+      "employment_total": 5441
+    },
+    {
+      "id": 44,
+      "code": "C20.5",
+      "employment_formal": 1882,
+      "employment_informal": 2313,
+      "employment_total": 4195
+    },
+    {
+      "id": 45,
+      "code": "C20.6",
+      "employment_formal": 917,
+      "employment_informal": 1127,
+      "employment_total": 2044
+    },
+    {
+      "id": 46,
+      "code": "C21",
+      "employment_formal": 9702,
+      "employment_informal": 11921,
+      "employment_total": 21623
+    },
+    {
+      "id": 47,
+      "code": "C22.1",
+      "employment_formal": 1592,
+      "employment_informal": 1956,
+      "employment_total": 3548
+    },
+    {
+      "id": 48,
+      "code": "C22.21",
+      "employment_formal": 8784,
+      "employment_informal": 10793,
+      "employment_total": 19577
+    },
+    {
+      "id": 49,
+      "code": "C22.22",
+      "employment_formal": 4894,
+      "employment_informal": 6013,
+      "employment_total": 10907
+    },
+    {
+      "id": 50,
+      "code": "C22.23",
+      "employment_formal": 3766,
+      "employment_informal": 4628,
+      "employment_total": 8394
+    },
+    {
+      "id": 51,
+      "code": "C22.29",
+      "employment_formal": 1576,
+      "employment_informal": 1938,
+      "employment_total": 3514
+    },
+    {
+      "id": 52,
+      "code": "C23.1",
+      "employment_formal": 6279,
+      "employment_informal": 7716,
+      "employment_total": 13995
+    },
+    {
+      "id": 53,
+      "code": "C23.2",
+      "employment_formal": 802,
+      "employment_informal": 986,
+      "employment_total": 1788
+    },
+    {
+      "id": 54,
+      "code": "C23.3",
+      "employment_formal": 4711,
+      "employment_informal": 5789,
+      "employment_total": 10500
+    },
+    {
+      "id": 55,
+      "code": "C23.4",
+      "employment_formal": 852,
+      "employment_informal": 1048,
+      "employment_total": 1900
+    },
+    {
+      "id": 56,
+      "code": "C23.5",
+      "employment_formal": 22288,
+      "employment_informal": 27386,
+      "employment_total": 49674
+    },
+    {
+      "id": 57,
+      "code": "C23.6",
+      "employment_formal": 23616,
+      "employment_informal": 29017,
+      "employment_total": 52633
+    },
+    {
+      "id": 58,
+      "code": "C23.7",
+      "employment_formal": 1123,
+      "employment_informal": 1380,
+      "employment_total": 2503
+    },
+    {
+      "id": 59,
+      "code": "C23.9",
+      "employment_formal": 6497,
+      "employment_informal": 7982,
+      "employment_total": 14479
+    },
+    {
+      "id": 60,
+      "code": "C24.1",
+      "employment_formal": 12513,
+      "employment_informal": 15375,
+      "employment_total": 27888
+    },
+    {
+      "id": 61,
+      "code": "C24.2",
+      "employment_formal": 3545,
+      "employment_informal": 4355,
+      "employment_total": 7900
+    },
+    {
+      "id": 62,
+      "code": "C24.3",
+      "employment_formal": 2662,
+      "employment_informal": 3271,
+      "employment_total": 5933
+    },
+    {
+      "id": 63,
+      "code": "C24.4",
+      "employment_formal": 84235,
+      "employment_informal": 103503,
+      "employment_total": 187738
+    },
+    {
+      "id": 64,
+      "code": "C24.5",
+      "employment_formal": 128,
+      "employment_informal": 157,
+      "employment_total": 285
+    },
+    {
+      "id": 65,
+      "code": "C25 \n(без C25.1)",
+      "employment_formal": 14976,
+      "employment_informal": 18403,
+      "employment_total": 33379
+    },
+    {
+      "id": 66,
+      "code": "C25.1",
+      "employment_formal": 14167,
+      "employment_informal": 17407,
+      "employment_total": 31574
+    },
+    {
+      "id": 67,
+      "code": "C26",
+      "employment_formal": 7463,
+      "employment_informal": 9170,
+      "employment_total": 16633
+    },
+    {
+      "id": 68,
+      "code": "C27.1",
+      "employment_formal": 4935,
+      "employment_informal": 6063,
+      "employment_total": 10998
+    },
+    {
+      "id": 69,
+      "code": "C27.2",
+      "employment_formal": 546,
+      "employment_informal": 670,
+      "employment_total": 1216
+    },
+    {
+      "id": 70,
+      "code": "C27.3",
+      "employment_formal": 6963,
+      "employment_informal": 8555,
+      "employment_total": 15518
+    },
+    {
+      "id": 71,
+      "code": "C27.4",
+      "employment_formal": 873,
+      "employment_informal": 1074,
+      "employment_total": 1947
+    },
+    {
+      "id": 72,
+      "code": "C27.5",
+      "employment_formal": 6982,
+      "employment_informal": 8578,
+      "employment_total": 15560
+    },
+    {
+      "id": 73,
+      "code": "C27.9",
+      "employment_formal": 610,
+      "employment_informal": 750,
+      "employment_total": 1360
+    },
+    {
+      "id": 74,
+      "code": "C28\n (без C28.13, C28.22, C28.3, C28.94)",
+      "employment_formal": 6462,
+      "employment_informal": 7941,
+      "employment_total": 14403
+    },
+    {
+      "id": 75,
+      "code": "C28.13",
+      "employment_formal": 979,
+      "employment_informal": 1203,
+      "employment_total": 2182
+    },
+    {
+      "id": 76,
+      "code": "C28.22",
+      "employment_formal": 543,
+      "employment_informal": 668,
+      "employment_total": 1211
+    },
+    {
+      "id": 77,
+      "code": "C28.3",
+      "employment_formal": 1024,
+      "employment_informal": 1257,
+      "employment_total": 2281
+    },
+    {
+      "id": 78,
+      "code": "C28.94",
+      "employment_formal": 64,
+      "employment_informal": 78,
+      "employment_total": 142
+    },
+    {
+      "id": 79,
+      "code": "C29",
+      "employment_formal": 27429,
+      "employment_informal": 33703,
+      "employment_total": 61132
+    },
+    {
+      "id": 80,
+      "code": "C30",
+      "employment_formal": 5558,
+      "employment_informal": 6829,
+      "employment_total": 12387
+    },
+    {
+      "id": 81,
+      "code": "C31",
+      "employment_formal": 15039,
+      "employment_informal": 18479,
+      "employment_total": 33518
+    },
+    {
+      "id": 82,
+      "code": "C32\n (без C32.4, C32.5)",
+      "employment_formal": 3793,
+      "employment_informal": 4662,
+      "employment_total": 8455
+    },
+    {
+      "id": 83,
+      "code": "C32.4",
+      "employment_formal": 276,
+      "employment_informal": 339,
+      "employment_total": 615
+    },
+    {
+      "id": 84,
+      "code": "C32.5",
+      "employment_formal": 964,
+      "employment_informal": 1184,
+      "employment_total": 2148
+    },
+    {
+      "id": 85,
+      "code": "C33",
+      "employment_formal": 9824,
+      "employment_informal": 12071,
+      "employment_total": 21895
+    },
+    {
+      "id": 86,
+      "code": "D35.11",
+      "employment_formal": 46744,
+      "employment_informal": 628,
+      "employment_total": 47372
+    },
+    {
+      "id": 87,
+      "code": "D35.13",
+      "employment_formal": 455,
+      "employment_informal": 6,
+      "employment_total": 461
+    },
+    {
+      "id": 88,
+      "code": "D35.21",
+      "employment_formal": 67,
+      "employment_informal": 1,
+      "employment_total": 68
+    },
+    {
+      "id": 89,
+      "code": "D35.22",
+      "employment_formal": 4117,
+      "employment_informal": 55,
+      "employment_total": 4172
+    },
+    {
+      "id": 90,
+      "code": "D35.12, D35.14, D35.23, D35.3",
+      "employment_formal": 21143,
+      "employment_informal": 284,
+      "employment_total": 21427
+    },
+    {
+      "id": 91,
+      "code": "E36",
+      "employment_formal": 24857,
+      "employment_informal": 4576,
+      "employment_total": 29433
+    },
+    {
+      "id": 92,
+      "code": "E37",
+      "employment_formal": 8424,
+      "employment_informal": 1550,
+      "employment_total": 9974
+    },
+    {
+      "id": 93,
+      "code": "E38",
+      "employment_formal": 8504,
+      "employment_informal": 1565,
+      "employment_total": 10069
+    },
+    {
+      "id": 94,
+      "code": "E39",
+      "employment_formal": 19,
+      "employment_informal": 4,
+      "employment_total": 23
+    },
+    {
+      "id": 95,
+      "code": "F",
+      "employment_formal": 285031,
+      "employment_informal": 1029269,
+      "employment_total": 1314300
+    },
+    {
+      "id": 96,
+      "code": "G",
+      "employment_formal": 347843,
+      "employment_informal": 1177357,
+      "employment_total": 1525200
+    },
+    {
+      "id": 97,
+      "code": "H49-51",
+      "employment_formal": 131160,
+      "employment_informal": 329541,
+      "employment_total": 460701
+    },
+    {
+      "id": 98,
+      "code": "H52",
+      "employment_formal": 43584,
+      "employment_informal": 109506,
+      "employment_total": 153090
+    },
+    {
+      "id": 99,
+      "code": "H53",
+      "employment_formal": 5497,
+      "employment_informal": 13812,
+      "employment_total": 19309
+    },
+    {
+      "id": 100,
+      "code": "I55",
+      "employment_formal": 22457,
+      "employment_informal": 66460,
+      "employment_total": 88917
+    },
+    {
+      "id": 101,
+      "code": "I56",
+      "employment_formal": 65636,
+      "employment_informal": 194247,
+      "employment_total": 259883
+    },
+    {
+      "id": 102,
+      "code": "J58",
+      "employment_formal": 4451,
+      "employment_informal": 962,
+      "employment_total": 5413
+    },
+    {
+      "id": 103,
+      "code": "J59",
+      "employment_formal": 719,
+      "employment_informal": 155,
+      "employment_total": 874
+    },
+    {
+      "id": 104,
+      "code": "J60",
+      "employment_formal": 4262,
+      "employment_informal": 921,
+      "employment_total": 5183
+    },
+    {
+      "id": 105,
+      "code": "J61",
+      "employment_formal": 28596,
+      "employment_informal": 6179,
+      "employment_total": 34775
+    },
+    {
+      "id": 106,
+      "code": "J62",
+      "employment_formal": 17509,
+      "employment_informal": 3784,
+      "employment_total": 21293
+    },
+    {
+      "id": 107,
+      "code": "J63",
+      "employment_formal": 8028,
+      "employment_informal": 1734,
+      "employment_total": 9762
+    },
+    {
+      "id": 108,
+      "code": "K64",
+      "employment_formal": 59665,
+      "employment_informal": 934,
+      "employment_total": 60599
+    },
+    {
+      "id": 109,
+      "code": "K65",
+      "employment_formal": 6644,
+      "employment_informal": 104,
+      "employment_total": 6748
+    },
+    {
+      "id": 110,
+      "code": "K66",
+      "employment_formal": 2218,
+      "employment_informal": 35,
+      "employment_total": 2253
+    },
+    {
+      "id": 111,
+      "code": "L68",
+      "employment_formal": 39531,
+      "employment_informal": 22669,
+      "employment_total": 62200
+    },
+    {
+      "id": 112,
+      "code": "M69",
+      "employment_formal": 13090,
+      "employment_informal": 512,
+      "employment_total": 13602
+    },
+    {
+      "id": 113,
+      "code": "M70",
+      "employment_formal": 4821,
+      "employment_informal": 189,
+      "employment_total": 5010
+    },
+    {
+      "id": 114,
+      "code": "M71",
+      "employment_formal": 81324,
+      "employment_informal": 3180,
+      "employment_total": 84504
+    },
+    {
+      "id": 115,
+      "code": "M72",
+      "employment_formal": 14888,
+      "employment_informal": 583,
+      "employment_total": 15471
+    },
+    {
+      "id": 116,
+      "code": "M73",
+      "employment_formal": 5618,
+      "employment_informal": 220,
+      "employment_total": 5838
+    },
+    {
+      "id": 117,
+      "code": "M74",
+      "employment_formal": 5863,
+      "employment_informal": 229,
+      "employment_total": 6092
+    },
+    {
+      "id": 118,
+      "code": "M75",
+      "employment_formal": 4988,
+      "employment_informal": 195,
+      "employment_total": 5183
+    },
+    {
+      "id": 119,
+      "code": "N77",
+      "employment_formal": 4601,
+      "employment_informal": 664,
+      "employment_total": 5265
+    },
+    {
+      "id": 120,
+      "code": "N78",
+      "employment_formal": 5277,
+      "employment_informal": 761,
+      "employment_total": 6038
+    },
+    {
+      "id": 121,
+      "code": "N79",
+      "employment_formal": 2026,
+      "employment_informal": 293,
+      "employment_total": 2319
+    },
+    {
+      "id": 122,
+      "code": "N80",
+      "employment_formal": 107,
+      "employment_informal": 15,
+      "employment_total": 122
+    },
+    {
+      "id": 123,
+      "code": "N81",
+      "employment_formal": 67659,
+      "employment_informal": 9764,
+      "employment_total": 77423
+    },
+    {
+      "id": 124,
+      "code": "N82",
+      "employment_formal": 14797,
+      "employment_informal": 2136,
+      "employment_total": 16933
+    },
+    {
+      "id": 125,
+      "code": "O84",
+      "employment_formal": 182121,
+      "employment_informal": 454679,
+      "employment_total": 636800
+    },
+    {
+      "id": 126,
+      "code": "P85",
+      "employment_formal": 1155664,
+      "employment_informal": 113036,
+      "employment_total": 1268700
+    },
+    {
+      "id": 127,
+      "code": "Q86",
+      "employment_formal": 513103,
+      "employment_informal": 132599,
+      "employment_total": 645702
+    },
+    {
+      "id": 128,
+      "code": "Q87",
+      "employment_formal": 15303,
+      "employment_informal": 3954,
+      "employment_total": 19257
+    },
+    {
+      "id": 129,
+      "code": "Q88",
+      "employment_formal": 5039,
+      "employment_informal": 1302,
+      "employment_total": 6341
+    },
+    {
+      "id": 130,
+      "code": "R90",
+      "employment_formal": 7299,
+      "employment_informal": 5139,
+      "employment_total": 12438
+    },
+    {
+      "id": 131,
+      "code": "R91",
+      "employment_formal": 8218,
+      "employment_informal": 5786,
+      "employment_total": 14004
+    },
+    {
+      "id": 132,
+      "code": "R93",
+      "employment_formal": 26558,
+      "employment_informal": 18700,
+      "employment_total": 45258
+    },
+    {
+      "id": 133,
+      "code": "S94",
+      "employment_formal": 26569,
+      "employment_informal": 985430,
+      "employment_total": 1011999
+    },
+    {
+      "id": 134,
+      "code": "S95",
+      "employment_formal": 8531,
+      "employment_informal": 316394,
+      "employment_total": 324925
+    },
+    {
+      "id": 135,
+      "code": "S96",
+      "employment_formal": 5177,
+      "employment_informal": 191999,
+      "employment_total": 197176
+    }
+  ]
+}

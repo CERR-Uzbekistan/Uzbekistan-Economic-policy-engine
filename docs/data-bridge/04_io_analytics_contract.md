@@ -109,8 +109,7 @@ Implemented and checked:
 - final-demand shock propagation follows `dX = L * dY` using the public
   Leontief inverse;
 - value-added effects use sector value-added/output coefficients;
-- employment effects use sector employment intensities from the tracked JS source used by the MCP converter and are
-  explicitly presented as fixed-intensity estimates;
+- employment effects use sector employment intensities from `io_model/io_employment.json`, generated from the source employment workbook, and are explicitly presented as fixed-intensity estimates;
 - Scenario Lab outputs are displayed in billion UZS and tests guard the
   monetary scale against accidental 1000x drift;
 - consumption, government, investment, and export shocks use the selected
@@ -151,10 +150,11 @@ The frontend guard should validate:
 - linkage classes match the allowed enum;
 - caveats are present for public-facing interpretation.
 
-The exporter should also remain reproducible: public employment fields must be
-generated from tracked `io_model/io_data.js` after checking sector alignment
-against `io_model/io_data.json`. It must not require ignored local MCP JSON
-outputs to exist in CI.
+The exporter should also remain reproducible: source JSON is regenerated from
+the local Statistics Agency workbooks by `scripts/export_io_from_workbooks.py`.
+Public employment fields must be generated from `io_model/io_employment.json`
+after checking sector alignment against `io_model/io_data.json`. It must not
+require ignored local MCP JSON outputs to exist in CI.
 
 ## Non-Claims
 

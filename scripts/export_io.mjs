@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)))
 const sourcePath = join(repoRoot, 'io_model', 'io_data.json')
 const mcpConversionSourcePath = join(repoRoot, 'io_model', 'io_data.js')
+const employmentSourcePath = join(repoRoot, 'io_model', 'io_employment.json')
 const outputPath = join(repoRoot, 'apps', 'policy-ui', 'public', 'data', 'io.json')
 
 const sourceWorkbooks = [
@@ -26,6 +27,7 @@ const sourceWorkbooks = [
 
 const source = JSON.parse(readFileSync(sourcePath, 'utf8'))
 const mcpSource = loadIoDataJs(mcpConversionSourcePath)
+const employmentSource = JSON.parse(readFileSync(employmentSourcePath, 'utf8'))
 const sourceGenerated = requireString(source.metadata.generated, 'metadata.generated')
 const exportedAt = `${sourceGenerated}T00:00:00Z`
 
@@ -70,12 +72,20 @@ function broadGroupForCode(code) {
   return 'other'
 }
 
-function requireAlignedMcpSource(index, sector) {
+function requireAlignedSources(index, sector) {
   const mcpCode = requireString(mcpSource.codes?.[index], `mcp.codes[${index}]`)
   const mcpName = requireString(mcpSource.names?.[index], `mcp.names[${index}]`)
   if (normalizeCode(sector.code) !== normalizeCode(mcpCode) || normalizeCode(sector.name) !== normalizeCode(mcpName)) {
     throw new Error(
-      `MCP I-O employment source does not align at sector ${index}: ${sector.code} / ${mcpCode}.`,
+      `MCP I-O label source does not align at sector ${index}: ${sector.code} / ${mcpCode}.`,
+    )
+  }
+
+  const employmentSector = requireArray(employmentSource.sectors, 'employmentSource.sectors')[index]
+  const employmentCode = requireString(employmentSector?.code, `employmentSource.sectors[${index}].code`)
+  if (normalizeCode(sector.code) !== normalizeCode(employmentCode)) {
+    throw new Error(
+      `I-O employment source does not align at sector ${index}: ${sector.code} / ${employmentCode}.`,
     )
   }
 }
@@ -88,12 +98,12 @@ function optionalDictionaryLabel(arrayName, index) {
 }
 
 function requireEmploymentNumber(arrayName, index) {
-  const values = requireArray(mcpSource[arrayName], `mcp.${arrayName}`)
-  return requireNumber(values[index], `mcp.${arrayName}[${index}]`)
+  const employmentSector = requireArray(employmentSource.sectors, 'employmentSource.sectors')[index]
+  return requireNumber(employmentSector?.[arrayName], `employmentSource.sectors[${index}].${arrayName}`)
 }
 
 const sectors = requireArray(source.sectors, 'sectors').map((sector, index) => {
-  requireAlignedMcpSource(index, sector)
+  requireAlignedSources(index, sector)
   return {
     id: requireNumber(sector.id, `sectors[${index}].id`),
     code: requireString(sector.code, `sectors[${index}].code`),
@@ -115,9 +125,9 @@ const sectors = requireArray(source.sectors, 'sectors').map((sector, index) => {
       exports: requireNumber(sector.final_demand.exports, `sectors[${index}].final_demand.exports`),
       total: requireNumber(sector.final_demand.total, `sectors[${index}].final_demand.total`),
     },
-    employment_total: requireEmploymentNumber('EmpTotal', index),
-    employment_formal: requireEmploymentNumber('EmpFormal', index),
-    employment_informal: requireEmploymentNumber('EmpInformal', index),
+    employment_total: requireEmploymentNumber('employment_total', index),
+    employment_formal: requireEmploymentNumber('employment_formal', index),
+    employment_informal: requireEmploymentNumber('employment_informal', index),
   }
 })
 
@@ -196,7 +206,7 @@ const payload = {
       caveat_id: 'io-employment-mcp-source',
       severity: 'info',
       message:
-        'Employment arrays are merged from the tracked I-O JavaScript source used by the MCP data converter. Employment effects are linear employment-intensity estimates, not labor-market forecasts.',
+        'Employment arrays are merged from io_model/io_employment.json, generated from the Employment.xlsx source workbook. Employment effects are linear employment-intensity estimates, not labor-market forecasts.',
       affected_metrics: ['employment_effect_persons'],
       affected_models: ['IO'],
     },
@@ -213,7 +223,7 @@ const payload = {
     exported_at: exportedAt,
     source_script_sha: null,
     solver_version: '0.1.0',
-    source_artifact: 'io_model/io_data.json + io_model/io_data.js',
+    source_artifact: 'io_model/io_data.json + io_model/io_employment.json + io_model/io_data.js labels',
     source_artifact_generated: sourceGenerated,
     source_workbooks: sourceWorkbooks,
     source_title: requireString(source.metadata.title_en, 'metadata.title_en'),

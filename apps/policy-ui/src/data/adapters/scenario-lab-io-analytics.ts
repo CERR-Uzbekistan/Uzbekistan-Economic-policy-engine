@@ -184,7 +184,7 @@ export function toScenarioLabIoAnalyticsWorkspace(
     caveats: [
       ...payload.caveats.map((caveat) => caveat.message),
       payload.sectors.every((sector) => sector.employment_total !== undefined)
-        ? 'Employment effects use sector employment arrays from the tracked I-O source and should be read as linear employment-intensity estimates.'
+        ? 'Employment effects use sector employment arrays generated from the Employment.xlsx source workbook and should be read as linear employment-intensity estimates.'
         : 'Employment effects are unavailable in the current public I-O bridge artifact.',
     ],
     audit: {

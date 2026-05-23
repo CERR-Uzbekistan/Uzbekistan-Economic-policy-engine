@@ -1269,7 +1269,7 @@
       "gva_thousand_uzs": 727536.61,
       "compensation_of_employees_thousand_uzs": 144436.65,
       "gross_operating_surplus_thousand_uzs": 568849.57,
-      "output_multiplier": 1.802284,
+      "output_multiplier": 1.802283,
       "value_added_multiplier": 0.472695,
       "final_demand": {
         "household": 79588.81,
@@ -1420,7 +1420,7 @@
       "compensation_of_employees_thousand_uzs": 796044.02,
       "gross_operating_surplus_thousand_uzs": 3472745.25,
       "output_multiplier": 1.795861,
-      "value_added_multiplier": 0.704985,
+      "value_added_multiplier": 0.704986,
       "final_demand": {
         "household": 552683.74,
         "government": 0,
@@ -2370,7 +2370,7 @@
       "compensation_of_employees_thousand_uzs": 492.88,
       "gross_operating_surplus_thousand_uzs": 615.52,
       "output_multiplier": 1.859394,
-      "value_added_multiplier": 0.734038,
+      "value_added_multiplier": 0.73404,
       "final_demand": {
         "household": 0,
         "government": 0,
@@ -2495,7 +2495,7 @@
       "compensation_of_employees_thousand_uzs": 298500.14,
       "gross_operating_surplus_thousand_uzs": 106361.04,
       "output_multiplier": 1.609472,
-      "value_added_multiplier": 0.784511,
+      "value_added_multiplier": 0.784512,
       "final_demand": {
         "household": 240155.53,
         "government": 0,
@@ -42918,7 +42918,7 @@
     {
       "caveat_id": "io-employment-mcp-source",
       "severity": "info",
-      "message": "Employment arrays are merged from the tracked I-O JavaScript source used by the MCP data converter. Employment effects are linear employment-intensity estimates, not labor-market forecasts.",
+      "message": "Employment arrays are merged from io_model/io_employment.json, generated from the Employment.xlsx source workbook. Employment effects are linear employment-intensity estimates, not labor-market forecasts.",
       "affected_metrics": [
         "employment_effect_persons"
       ],
@@ -42943,7 +42943,7 @@
     "exported_at": "2026-04-09T00:00:00Z",
     "source_script_sha": null,
     "solver_version": "0.1.0",
-    "source_artifact": "io_model/io_data.json + io_model/io_data.js",
+    "source_artifact": "io_model/io_data.json + io_model/io_employment.json + io_model/io_data.js labels",
     "source_artifact_generated": "2026-04-09",
     "source_workbooks": [
       {

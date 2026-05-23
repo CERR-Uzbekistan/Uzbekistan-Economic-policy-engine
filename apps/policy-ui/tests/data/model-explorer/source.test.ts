@@ -122,7 +122,7 @@ describe('model explorer source live integration flow', () => {
     assert.equal(dfmEntry?.bridge_evidence?.source_artifact, 'apps/policy-ui/public/data/dfm.json')
     assert.equal(
       ioEntry?.bridge_evidence?.source_artifact,
-      'io_model/io_data.json + io_model/io_data.js',
+      'io_model/io_data.json + io_model/io_employment.json + io_model/io_data.js labels',
     )
     assert.equal(ioEntry?.bridge_evidence?.sector_count, 136)
     assert.equal(peEntry?.bridge_evidence?.source_artifact, 'mcp_server/data/pe_data.json')

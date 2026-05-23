@@ -21,7 +21,7 @@ describe('comparison IO sector evidence adapter', () => {
     const evidence = toComparisonSectorEvidence(loadValidIoPayload())
     const linkageCountSum = evidence.linkage_counts.reduce((sum, item) => sum + item.value, 0)
 
-    assert.equal(evidence.source_artifact, 'io_model/io_data.json + io_model/io_data.js')
+    assert.equal(evidence.source_artifact, 'io_model/io_data.json + io_model/io_employment.json + io_model/io_data.js labels')
     assert.equal(evidence.data_vintage, '2022')
     assert.equal(evidence.exported_at, '2026-04-09')
     assert.equal(evidence.sector_count, 136)

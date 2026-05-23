@@ -121,7 +121,7 @@ describe('comparison source QPM bridge flow', () => {
     assert.equal(state.status, 'ready')
     assert.equal(state.mode, 'live')
     assert.equal(state.workspace?.default_baseline_id, 'baseline')
-    assert.equal(state.ioSectorEvidence?.source_artifact, 'io_model/io_data.json + io_model/io_data.js')
+    assert.equal(state.ioSectorEvidence?.source_artifact, 'io_model/io_data.json + io_model/io_employment.json + io_model/io_data.js labels')
     assert.equal(state.ioSectorEvidence?.sector_count, 136)
     assert.deepEqual(
       state.workspace?.metric_definitions.map((metric) => metric.metric_id),
