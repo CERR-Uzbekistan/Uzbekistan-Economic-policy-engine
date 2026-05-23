@@ -2009,12 +2009,12 @@ async function enrichReformPackageWithOfficialLanguages(reformPackage, { fetchSo
     const enriched = await enrichSourceEventWithOfficialLanguages(event, { fetchSource, fetchImpl })
     enrichedEvents.push(enriched.event)
     for (const [language, snippets] of Object.entries(enriched.snippets)) {
-      if (language === 'en' || snippetsByLanguage[language]?.length > 0) continue
+      if (language === 'en' || snippets.length === 0) continue
       snippetsByLanguage[language] = snippets
     }
   }
 
-  const primaryEvent = enrichedEvents[0]
+  const primaryEvent = enrichedEvents.at(-1)
   const localized = {
     title: cleanLocalizedTextMap(reformPackage.localized?.title),
     short_summary: cleanLocalizedTextMap(reformPackage.localized?.short_summary),
@@ -2837,7 +2837,7 @@ const PACKAGE_TOPIC_DEFINITIONS = [
     title: 'Tax administration and investment incentive reform',
     policy_area: 'Tax administration and fiscal incentives',
     reform_category: 'fiscal_tax',
-    patterns: [/\b(tax|vat|incentive|incentives|excise|duty)\b/i],
+    patterns: [/\b(tax|vat|incentive|incentives|excise|duty|soliq|maxsus soliq rejimi)\b/i],
   },
   {
     id: 'energy-tariff-compensation',
@@ -2963,6 +2963,27 @@ function topicPackageEnrichment(topic, sortedCandidates, sourceEvents) {
   const groupText = sortedCandidates.map((candidate) => `${candidate.title} ${candidate.summary}`).join(' ')
 
   if (topic?.id === 'tax-administration-incentives') {
+    if (/(maxsus soliq rejim|special tax regime|foreign citizens|chet el fuqarolari)/i.test(groupText)) {
+      return {
+        short_summary: 'Special tax-regime procedures for foreign citizens are approved.',
+        parameters_or_amounts: [
+          'Administrative regulation for granting a special tax regime to foreign citizens is approved.',
+          'Tax-administration procedures are updated for the special-regime application process.',
+        ],
+        policy_channels: [
+          'Tax administration',
+          'Foreign-resident fiscal treatment',
+          'Investment and talent attraction',
+          'Business compliance procedures',
+        ],
+        model_relevance: ['Fiscal administration', 'Investment climate', 'Business costs'],
+        why_tracked:
+          'The verified legal act approves administrative regulation for granting a special tax regime to foreign citizens.',
+        measure_label: 'Special tax-regime administrative regulation was approved',
+        milestone_label: 'special tax-regime regulation approved',
+      }
+    }
+
     if (!/\bincentives?\b/i.test(groupText) || !/\binfrastructure projects?\b/i.test(groupText)) return {}
 
     return {
@@ -3206,8 +3227,12 @@ function sourceConfidenceForCandidates(candidates) {
 function measureLabelFromCandidate(candidate) {
   const text = candidate.title.toLowerCase()
   if (text.includes('amend')) return 'amended rules'
+  if (/o[‘'ʻ’`]?zgartirish|o[‘'ʻ’`]?zgartish/.test(text)) return 'amended rules'
   if (text.includes('approved')) return 'approved measures'
+  if (text.includes('tasdiqlash')) return 'approved regulation'
   if (text.includes('introduced')) return 'introduced rules'
+  if (/chora-tadbir/.test(text)) return 'approved measures'
+  if (/maxsus soliq rejimi/.test(text)) return 'special tax-regime regulation approved'
   if (text.includes('expanded') || text.includes('expands')) return 'expanded incentives'
   if (text.includes('launched')) return 'launched implementation'
   return 'verified official measure'
@@ -3225,9 +3250,9 @@ function genericPackageSummary(topic, defaults, sourceEvents) {
   const eventCount = sourceEvents.length
   const policyArea = topic?.policy_area ?? defaults.policy_area
   if (eventCount > 1) {
-    return `Consolidates ${eventCount} official measures under ${policyArea}. The dossier groups related source events while keeping legal and currentness interpretation limited to the cited official documents.`
+    return `${eventCount} official measures update ${policyArea.toLowerCase()} rules or procedures.`
   }
-  return `Records a specific official measure under ${policyArea}. The dossier summarizes the cited document without inferring unpublished implementation deadlines or legal effects.`
+  return `The cited official document updates ${policyArea.toLowerCase()} rules or procedures.`
 }
 
 function genericPackageParameters(sortedCandidates, _sourceEvents, financingOrIncentive) {
@@ -3377,7 +3402,7 @@ function publicDigestEffectiveStatus(reformPackage) {
 }
 
 function addPublicDigest(reformPackage) {
-  const sourceEvent = reformPackage.official_source_events[0]
+  const sourceEvent = reformPackage.official_source_events.at(-1)
   const documentTitle = sourceEvent?.title && !/^Official detail page did not expose/i.test(sourceEvent.title)
     ? sourceEvent.title
     : reformPackage.official_basis

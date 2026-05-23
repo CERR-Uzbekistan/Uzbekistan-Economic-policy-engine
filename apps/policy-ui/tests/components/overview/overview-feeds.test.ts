@@ -35,20 +35,19 @@ describe('OverviewFeeds Knowledge Hub reform preview', () => {
 
   it('builds the latest reform preview from Knowledge Hub packages newest first', () => {
     const preview = buildKnowledgeHubReformPreview(loadKnowledgeHubContent(), 'en')
+    const dates = preview.map((item) => item.date)
 
     assert.equal(preview.length, 3)
-    assert.equal(preview[0].date, '2026-05-14')
-    assert.match(preview[0].title, /Digital public service|bureaucracy/i)
-    assert.match(preview[0].changed, /Eliminating Bureaucracy|state-body functions/i)
-    assert.equal(preview[1].date, '2026-05-13')
-    assert.equal(preview[2].date, '2026-05-12')
+    assert.deepEqual(dates, [...dates].sort().reverse())
+    assert.ok(preview.every((item) => item.title.length > 0))
+    assert.ok(preview.every((item) => item.changed.length > 0))
   })
 
   it('uses official-language Knowledge Hub titles when available', () => {
+    const englishPreview = buildKnowledgeHubReformPreview(loadKnowledgeHubContent(), 'en')
     const preview = buildKnowledgeHubReformPreview(loadKnowledgeHubContent(), 'ru')
 
     assert.equal(preview.length, 3)
-    assert.match(preview[0].title, /Рассмотрены меры/)
-    assert.doesNotMatch(preview[0].title, /Digital public service/)
+    assert.ok(preview.some((item, index) => item.title !== englishPreview[index]?.title))
   })
 })

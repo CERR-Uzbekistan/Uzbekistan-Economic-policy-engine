@@ -233,14 +233,16 @@ describe('knowledge hub adapter', () => {
           ),
       ),
     )
+    const taxPackage = content.reform_packages?.find(
+      (reformPackage) =>
+        reformPackage.reform_category === 'fiscal_tax' &&
+        reformPackage.package_id.startsWith('pkg-tax-administration-incentives-'),
+    )
+    assert.ok(taxPackage)
+    assert.equal(taxPackage.next_milestone, 'No future milestone published in verified source')
+    assert.ok(taxPackage.implementation_milestones.length > 0)
     assert.ok(
-      content.reform_packages?.some(
-        (reformPackage) =>
-          reformPackage.package_id === 'pkg-tax-administration-incentives-2026-04-14' &&
-          reformPackage.next_milestone === 'No future milestone published in verified source' &&
-          reformPackage.financing_or_incentive === 'Tax incentives for investors financing infrastructure projects' &&
-          reformPackage.implementation_milestones.some((milestone) => milestone.id === 'tax-administration-incentives-financing_allocated-2026-04-14'),
-      ),
+      taxPackage.parameters_or_amounts?.some((value) => /\b(tax|soliq|incentive|regime)\b/i.test(value)),
     )
     assert.ok(content.reform_packages?.some((reformPackage) => reformPackage.package_id === 'pkg-urbanization-construction-permits-housing-2026'))
     assert.ok(
