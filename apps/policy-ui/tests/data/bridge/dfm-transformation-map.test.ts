@@ -9,6 +9,9 @@ const TRANSFORM_MAP_PATH = fileURLToPath(
 const DFM_PUBLIC_ARTIFACT_PATH = fileURLToPath(
   new URL('../../../../public/data/dfm.json', import.meta.url),
 )
+const SOURCE_REFIT_SUMMARY_PATH = fileURLToPath(
+  new URL('../../../../../../docs/data-bridge/dfm-source-refit-summary.json', import.meta.url),
+)
 
 type TransformRow = {
   source_sheet: string
@@ -63,5 +66,30 @@ describe('DFM transformation map', () => {
     assert.equal(rowsById.get('rate_1y')?.transformation_status, 'needs_economist_review')
     assert.equal(rowsById.get('IND_YOY')?.transformation_status, 'needs_economist_review')
     assert.equal(rowsById.get('uzs_usd')?.frequency, 'weekly')
+  })
+
+  it('records a completed local source refit that matches the public nowcast', () => {
+    const refit = JSON.parse(readFileSync(SOURCE_REFIT_SUMMARY_PATH, 'utf8')) as {
+      artifact: { status: string; r_version: string }
+      runtime: { report_render_status: string }
+      estimation: { status: string; converged: boolean; iterations: number }
+      current_nowcast: {
+        source_period: string
+        public_period: string
+        source_gdp_growth_yoy_pct: number
+        public_gdp_growth_yoy_pct: number
+        yoy_difference_source_minus_public_pp: number
+      }
+    }
+
+    assert.equal(refit.artifact.status, 'completed_without_pdf_report')
+    assert.match(refit.artifact.r_version, /^4\./)
+    assert.equal(refit.estimation.status, 'completed')
+    assert.equal(refit.estimation.converged, true)
+    assert.equal(refit.estimation.iterations, 155)
+    assert.equal(refit.current_nowcast.source_period, refit.current_nowcast.public_period)
+    assert.equal(refit.current_nowcast.source_gdp_growth_yoy_pct, refit.current_nowcast.public_gdp_growth_yoy_pct)
+    assert.equal(refit.current_nowcast.yoy_difference_source_minus_public_pp, 0)
+    assert.equal(refit.runtime.report_render_status, 'skipped_by_runner_pandoc_not_available')
   })
 })

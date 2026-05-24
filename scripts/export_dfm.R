@@ -48,6 +48,7 @@ TRANSFORM_MAP_ARTIFACT <- "docs/data-bridge/dfm-transformation-map.json"
 TRANSFORM_MAP_CSV <- "docs/data-bridge/dfm-transformation-map.csv"
 VALIDATION_ARTIFACT <- "docs/data-bridge/dfm-validation-summary.json"
 VALIDATION_REPORT <- "docs/data-bridge/dfm-validation-report.md"
+SOURCE_REFIT_ARTIFACT <- "docs/data-bridge/dfm-source-refit-summary.json"
 
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
@@ -64,6 +65,14 @@ git_blob_sha <- function(path) {
   )
   if (length(out) < 1L || is.na(out[[1L]]) || !nzchar(out[[1L]])) return(NA_character_)
   out[[1L]]
+}
+
+read_json_if_exists <- function(path) {
+  if (!file.exists(path)) return(NULL)
+  tryCatch(
+    jsonlite::fromJSON(path, simplifyVector = FALSE),
+    error = function(e) NULL
+  )
 }
 
 # ============================================================
@@ -355,6 +364,27 @@ build_attribution <- function() {
 }
 
 build_metadata <- function(d) {
+  source_refit <- read_json_if_exists(SOURCE_REFIT_ARTIFACT)
+  source_refit_available <- !is.null(source_refit) &&
+    identical(source_refit$artifact$status, "completed_without_pdf_report") &&
+    identical(source_refit$estimation$status, "completed")
+  source_refit_status <- if (source_refit_available) {
+    sprintf(
+      "local_source_refit_completed_without_pdf_report; artifact=%s; iterations=%s; converged=%s; source_public_yoy_diff_pp=%s",
+      SOURCE_REFIT_ARTIFACT,
+      source_refit$estimation$iterations %||% "unknown",
+      source_refit$estimation$converged %||% "unknown",
+      source_refit$current_nowcast$yoy_difference_source_minus_public_pp %||% "unknown"
+    )
+  } else {
+    "source_R_workflow_audited_but_refit_artifact_not_available"
+  }
+  source_refit_blocker <- if (source_refit_available) {
+    "No local Rscript blocker remains. Remaining blockers: public export still publishes the frozen dfm_nowcast bridge until source-refit output is reconciled and signed off; PDF report rendering requires Pandoc; CI still needs a reproducible R dependency setup."
+  } else {
+    "Source refit summary is not available. Run scripts/dfm/run-source-refit.R with a configured R runtime and required packages, then review output before replacing the frozen public bridge."
+  }
+
   list(
     exported_at                 = utc_now(),
     source_script_sha           = git_blob_sha(EXPORT_SCRIPT),
@@ -400,10 +430,10 @@ build_metadata <- function(d) {
       ))
     ),
     refit_status                = list(
-      status = "blocked_in_current_environment",
+      status = if (source_refit_available) "available" else "blocked_in_current_environment",
       public_export_reads_source_workbook = FALSE,
-      blocker = "Rscript is not available on PATH in the current workspace environment; source R dependencies also need reproducible lock/install checks before CI refit.",
-      source_logic_status = "source_R_workflow_audited_but_not_executed_here"
+      blocker = source_refit_blocker,
+      source_logic_status = source_refit_status
     ),
     backtest_status             = list(
       status = "proxy_validation_available",

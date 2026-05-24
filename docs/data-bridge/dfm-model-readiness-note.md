@@ -133,7 +133,7 @@ Current public artifact checks:
 - economist sign-off: `not_available`
 - source workbook status: `available_locally_untracked`
 - transform coverage: `36_of_36`
-- refit status: `blocked_in_current_environment`
+- refit status: `available` for the local source runner; public export still uses the frozen bridge
 - validation/backtest status: `proxy_validation_available`
 - uncertainty range status: `available_illustrative`
 
@@ -187,9 +187,13 @@ The local source bundle is useful, but it is not production-hardened yet:
   used as validation evidence.
 - The current one-factor setting may be reasonable for a preview, but
   should be tested against alternative factor counts and block structures.
-- `Rscript` is not available on PATH in the current workspace, so the
-  source R refit could not be executed here. A reproducible R runtime and
-  package-lock/install story are required before CI refit automation.
+- R is available locally through
+  `C:\Program Files\R\R-4.5.2\bin\Rscript.exe`. The repo runner
+  `scripts/dfm/run-source-refit.R` executes data prep, EM estimation,
+  prediction, and GDP postprocessing and converged in 155 iterations. The
+  remaining local source-workflow blocker is PDF report rendering because
+  Pandoc is not available; CI also still needs a reproducible R
+  dependency setup.
 - The source workbook includes a weekly UZS/USD row while the public DFM
   schema exposes monthly/quarterly frequencies. That harmonization needs
   model-owner sign-off before production.
@@ -198,10 +202,10 @@ The local source bundle is useful, but it is not production-hardened yet:
 
 ## Remaining work
 
-1. Configure a reproducible R runtime (`Rscript` plus packages:
+1. Add CI/runtime dependency management for `Rscript` plus packages:
    `readxl`, `dplyr`, `pracma`, `Matrix`, `zoo`, `purrr`, `lubridate`,
-   `tidyr`, `signal`, `seasonal`, `urca`, `rmarkdown`, `ggplot2`) and
-   rerun the source workflow from a clean checkout.
+   `tidyr`, `signal`, `seasonal`, `urca`, `rmarkdown`, and `ggplot2`;
+   install Pandoc if the PDF report is required.
 2. Rebuild the source-to-public pipeline so `dfm.json` can be generated
    directly from the source workbook and R refit output.
 3. Move the transform map into reviewed source metadata and block refits

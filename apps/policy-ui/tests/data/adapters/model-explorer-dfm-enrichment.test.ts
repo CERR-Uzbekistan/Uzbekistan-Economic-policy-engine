@@ -54,7 +54,7 @@ describe('model explorer DFM bridge enrichment', () => {
     )
     assert.equal(
       evidence.evidence_metrics?.find((metric) => metric.label === 'Refit status')?.value,
-      'blocked_in_current_environment',
+      'available',
     )
     assert.equal(
       evidence.evidence_metrics?.find((metric) => metric.label === 'Backtest status')?.value,
@@ -79,7 +79,7 @@ describe('model explorer DFM bridge enrichment', () => {
     assert.match(dfmEntry.validation_summary.join(' '), /does not validate model economics/)
     assert.match(dfmEntry.validation_summary.join(' '), /standardized DFM factor signals/)
     assert.match(dfmEntry.validation_summary.join(' '), /transform coverage is 36_of_36/)
-    assert.match(dfmEntry.validation_summary.join(' '), /Rscript is not available on PATH/)
+    assert.match(dfmEntry.validation_summary.join(' '), /No local Rscript blocker remains/)
     assert.match(dfmEntry.validation_summary.join(' '), /not an official forecast interval/)
     assert.equal(dfmEntry.bridge_evidence?.source_artifact, 'apps/policy-ui/public/data/dfm.json')
     assert.equal(

@@ -6,7 +6,7 @@
     "version": "0.1.0",
     "run_id": "dfm-nightly-2026-05-24",
     "data_version": "2026Q1",
-    "timestamp": "2026-05-24T10:49:21Z"
+    "timestamp": "2026-05-24T11:29:19Z"
   },
   "nowcast": {
     "last_observed_date": "2025-12-01",
@@ -297,218 +297,8 @@
   },
   "factor": {
     "n_factors": 1,
-    "dates": [
-      "2017-05-01",
-      "2017-06-01",
-      "2017-07-01",
-      "2017-08-01",
-      "2017-09-01",
-      "2017-10-01",
-      "2017-11-01",
-      "2017-12-01",
-      "2018-01-01",
-      "2018-02-01",
-      "2018-03-01",
-      "2018-04-01",
-      "2018-05-01",
-      "2018-06-01",
-      "2018-07-01",
-      "2018-08-01",
-      "2018-09-01",
-      "2018-10-01",
-      "2018-11-01",
-      "2018-12-01",
-      "2019-01-01",
-      "2019-02-01",
-      "2019-03-01",
-      "2019-04-01",
-      "2019-05-01",
-      "2019-06-01",
-      "2019-07-01",
-      "2019-08-01",
-      "2019-09-01",
-      "2019-10-01",
-      "2019-11-01",
-      "2019-12-01",
-      "2020-01-01",
-      "2020-02-01",
-      "2020-03-01",
-      "2020-04-01",
-      "2020-05-01",
-      "2020-06-01",
-      "2020-07-01",
-      "2020-08-01",
-      "2020-09-01",
-      "2020-10-01",
-      "2020-11-01",
-      "2020-12-01",
-      "2021-01-01",
-      "2021-02-01",
-      "2021-03-01",
-      "2021-04-01",
-      "2021-05-01",
-      "2021-06-01",
-      "2021-07-01",
-      "2021-08-01",
-      "2021-09-01",
-      "2021-10-01",
-      "2021-11-01",
-      "2021-12-01",
-      "2022-01-01",
-      "2022-02-01",
-      "2022-03-01",
-      "2022-04-01",
-      "2022-05-01",
-      "2022-06-01",
-      "2022-07-01",
-      "2022-08-01",
-      "2022-09-01",
-      "2022-10-01",
-      "2022-11-01",
-      "2022-12-01",
-      "2023-01-01",
-      "2023-02-01",
-      "2023-03-01",
-      "2023-04-01",
-      "2023-05-01",
-      "2023-06-01",
-      "2023-07-01",
-      "2023-08-01",
-      "2023-09-01",
-      "2023-10-01",
-      "2023-11-01",
-      "2023-12-01",
-      "2024-01-01",
-      "2024-02-01",
-      "2024-03-01",
-      "2024-04-01",
-      "2024-05-01",
-      "2024-06-01",
-      "2024-07-01",
-      "2024-08-01",
-      "2024-09-01",
-      "2024-10-01",
-      "2024-11-01",
-      "2024-12-01",
-      "2025-01-01",
-      "2025-02-01",
-      "2025-03-01",
-      "2025-04-01",
-      "2025-05-01",
-      "2025-06-01",
-      "2025-07-01",
-      "2025-08-01",
-      "2025-09-01",
-      "2025-10-01",
-      "2025-11-01",
-      "2025-12-01"
-    ],
-    "path": [
-      -0.605423,
-      -0.18063,
-      0.037476,
-      -0.132189,
-      -0.170919,
-      0.849812,
-      -0.109316,
-      0.04561,
-      0.349218,
-      -0.185049,
-      0.53455,
-      1.016726,
-      -0.73139,
-      0.093147,
-      0.033955,
-      0.132352,
-      0.369036,
-      -0.071977,
-      0.452629,
-      0.232738,
-      -2.405382,
-      0.142324,
-      0.128489,
-      0.148032,
-      0.0447,
-      -0.057887,
-      -0.0342,
-      -0.066129,
-      -0.14749,
-      0.073973,
-      0.050314,
-      0.334602,
-      -1.873829,
-      0.284454,
-      -0.170197,
-      -1.71483,
-      0.239637,
-      0.657151,
-      -1.230193,
-      0.101111,
-      0.87511,
-      0.138629,
-      0.869608,
-      0.254856,
-      -1.17417,
-      0.769396,
-      1.211697,
-      0.839848,
-      0.149462,
-      0.058007,
-      0.142088,
-      0.181987,
-      -0.096117,
-      0.252825,
-      -0.075267,
-      -0.022565,
-      -0.240776,
-      -0.2796,
-      -0.420718,
-      0.119385,
-      -0.028262,
-      -0.222766,
-      0.211949,
-      0.033246,
-      -0.084534,
-      0.090321,
-      0.073643,
-      -0.071872,
-      -6.395384,
-      3.192688,
-      3.105222,
-      -0.095241,
-      0.189042,
-      -0.005876,
-      0.153348,
-      0.14137,
-      -0.0572,
-      0.016489,
-      0.103361,
-      -0.126325,
-      3.146591,
-      -0.060847,
-      -3.335884,
-      1.271319,
-      -0.566193,
-      -0.060422,
-      -0.063399,
-      -0.113497,
-      -0.041921,
-      0.079861,
-      -0.103239,
-      0.09885,
-      -0.607988,
-      0.580843,
-      0.057584,
-      -0.092839,
-      -0.048637,
-      0.070579,
-      0.009139,
-      0.019649,
-      0.275903,
-      0.027642,
-      -0.116661,
-      -0.06755
-    ],
+    "dates": ["2017-05-01", "2017-06-01", "2017-07-01", "2017-08-01", "2017-09-01", "2017-10-01", "2017-11-01", "2017-12-01", "2018-01-01", "2018-02-01", "2018-03-01", "2018-04-01", "2018-05-01", "2018-06-01", "2018-07-01", "2018-08-01", "2018-09-01", "2018-10-01", "2018-11-01", "2018-12-01", "2019-01-01", "2019-02-01", "2019-03-01", "2019-04-01", "2019-05-01", "2019-06-01", "2019-07-01", "2019-08-01", "2019-09-01", "2019-10-01", "2019-11-01", "2019-12-01", "2020-01-01", "2020-02-01", "2020-03-01", "2020-04-01", "2020-05-01", "2020-06-01", "2020-07-01", "2020-08-01", "2020-09-01", "2020-10-01", "2020-11-01", "2020-12-01", "2021-01-01", "2021-02-01", "2021-03-01", "2021-04-01", "2021-05-01", "2021-06-01", "2021-07-01", "2021-08-01", "2021-09-01", "2021-10-01", "2021-11-01", "2021-12-01", "2022-01-01", "2022-02-01", "2022-03-01", "2022-04-01", "2022-05-01", "2022-06-01", "2022-07-01", "2022-08-01", "2022-09-01", "2022-10-01", "2022-11-01", "2022-12-01", "2023-01-01", "2023-02-01", "2023-03-01", "2023-04-01", "2023-05-01", "2023-06-01", "2023-07-01", "2023-08-01", "2023-09-01", "2023-10-01", "2023-11-01", "2023-12-01", "2024-01-01", "2024-02-01", "2024-03-01", "2024-04-01", "2024-05-01", "2024-06-01", "2024-07-01", "2024-08-01", "2024-09-01", "2024-10-01", "2024-11-01", "2024-12-01", "2025-01-01", "2025-02-01", "2025-03-01", "2025-04-01", "2025-05-01", "2025-06-01", "2025-07-01", "2025-08-01", "2025-09-01", "2025-10-01", "2025-11-01", "2025-12-01"],
+    "path": [-0.605423, -0.18063, 0.037476, -0.132189, -0.170919, 0.849812, -0.109316, 0.04561, 0.349218, -0.185049, 0.53455, 1.016726, -0.73139, 0.093147, 0.033955, 0.132352, 0.369036, -0.071977, 0.452629, 0.232738, -2.405382, 0.142324, 0.128489, 0.148032, 0.0447, -0.057887, -0.0342, -0.066129, -0.14749, 0.073973, 0.050314, 0.334602, -1.873829, 0.284454, -0.170197, -1.71483, 0.239637, 0.657151, -1.230193, 0.101111, 0.87511, 0.138629, 0.869608, 0.254856, -1.17417, 0.769396, 1.211697, 0.839848, 0.149462, 0.058007, 0.142088, 0.181987, -0.096117, 0.252825, -0.075267, -0.022565, -0.240776, -0.2796, -0.420718, 0.119385, -0.028262, -0.222766, 0.211949, 0.033246, -0.084534, 0.090321, 0.073643, -0.071872, -6.395384, 3.192688, 3.105222, -0.095241, 0.189042, -0.005876, 0.153348, 0.14137, -0.0572, 0.016489, 0.103361, -0.126325, 3.146591, -0.060847, -3.335884, 1.271319, -0.566193, -0.060422, -0.063399, -0.113497, -0.041921, 0.079861, -0.103239, 0.09885, -0.607988, 0.580843, 0.057584, -0.092839, -0.048637, 0.070579, 0.009139, 0.019649, 0.275903, 0.027642, -0.116661, -0.06755],
     "converged": true,
     "n_iter": 155,
     "loglik": 3157.2246,
@@ -531,7 +321,7 @@
       "category": "Production",
       "frequency": "monthly",
       "loading": 0.022277,
-      "contribution": -0.000009,
+      "contribution": -9e-06,
       "latest_value": 0
     },
     {
@@ -540,7 +330,7 @@
       "category": "Trade",
       "frequency": "monthly",
       "loading": -0.009665,
-      "contribution": 0.000056,
+      "contribution": 5.6e-05,
       "latest_value": 0.8119
     },
     {
@@ -585,7 +375,7 @@
       "category": "Prices",
       "frequency": "monthly",
       "loading": 0.000612,
-      "contribution": 0.000003,
+      "contribution": 3e-06,
       "latest_value": 0.3681
     },
     {
@@ -594,7 +384,7 @@
       "category": "Prices",
       "frequency": "monthly",
       "loading": 0.000477,
-      "contribution": 0.000001,
+      "contribution": 1e-06,
       "latest_value": 0.1736
     },
     {
@@ -603,7 +393,7 @@
       "category": "Prices",
       "frequency": "monthly",
       "loading": 0.000122,
-      "contribution": -0.000001,
+      "contribution": -1e-06,
       "latest_value": -0.699
     },
     {
@@ -657,7 +447,7 @@
       "category": "Foreign Variables",
       "frequency": "monthly",
       "loading": 0.001152,
-      "contribution": 0.000003,
+      "contribution": 3e-06,
       "latest_value": 0.2746
     },
     {
@@ -711,7 +501,7 @@
       "category": "Production",
       "frequency": "monthly",
       "loading": 0.02295,
-      "contribution": 0.000022,
+      "contribution": 2.2e-05,
       "latest_value": 0.0955
     },
     {
@@ -738,7 +528,7 @@
       "category": "Production",
       "frequency": "monthly",
       "loading": 0.007044,
-      "contribution": 0.000017,
+      "contribution": 1.7e-05,
       "latest_value": 0.7689
     },
     {
@@ -783,7 +573,7 @@
       "category": "Services",
       "frequency": "monthly",
       "loading": 0.004492,
-      "contribution": 0.000009,
+      "contribution": 9e-06,
       "latest_value": 0.0872
     },
     {
@@ -846,124 +636,84 @@
       "caveat_id": "dfm-single-factor",
       "severity": "info",
       "message": "Model uses a single common factor (n_factors = 1). A richer factor structure (e.g., tradable vs non-tradable) would capture more indicator heterogeneity but was judged unnecessary at current data length.",
-      "affected_metrics": [
-        "gdp_growth"
-      ],
-      "affected_models": [
-        "DFM"
-      ],
+      "affected_metrics": ["gdp_growth"],
+      "affected_models": ["DFM"],
       "source": "dfm_nowcast/dfm_data.js meta.n_factors"
     },
     {
       "caveat_id": "dfm-fan-chart-rmse-constant",
       "severity": "info",
       "message": "Nowcast bands use an illustrative sigma_base = 3.3867 pp scaled by sqrt(h), calibrated from a historical GDP-only benchmark validation report. This is not a DFM real-time vintage backtest and does not vary with the current filtered-state covariance V_last.",
-      "affected_metrics": [
-        "gdp_growth"
-      ],
-      "affected_models": [
-        "DFM"
-      ],
+      "affected_metrics": ["gdp_growth"],
+      "affected_models": ["DFM"],
       "source": "docs/data-bridge/dfm-validation-summary.json"
-    },
-    {
-      "caveat_id": "dfm-transform-map-needed",
-      "severity": "warning",
-      "message": "A source-derived transformation map is now published, but many rate, ratio, index, and already-growth series remain flagged for economist review before a production refit. The source R workflow still applies generic log-growth transformations.",
-      "affected_metrics": [
-        "gdp_growth",
-        "indicator_contributions"
-      ],
-      "affected_models": [
-        "DFM"
-      ],
-      "source": "docs/data-bridge/dfm-transformation-map.json; model sources/Fore+Nowcast/DFM/functions/calculate_growth.R"
-    },
-    {
-      "caveat_id": "dfm-vintage-backtest-blocked",
-      "severity": "warning",
-      "message": "A historical benchmark validation report is published, but true DFM real-time vintage backtesting is blocked because historical source-workbook vintages or saved pre-release DFM outputs are not source-controlled.",
-      "affected_metrics": [
-        "gdp_growth",
-        "uncertainty_bands"
-      ],
-      "affected_models": [
-        "DFM"
-      ],
-      "source": "docs/data-bridge/dfm-validation-report.md"
-    },
-    {
-      "caveat_id": "dfm-contribution-guardrail",
-      "severity": "warning",
-      "message": "Top indicator contributions are standardized factor signals. Native-unit source indicators, rates, ratios, and already-growth rows must not be read as direct growth impulses or percentage-point GDP effects.",
-      "affected_metrics": [
-        "indicator_contributions"
-      ],
-      "affected_models": [
-        "DFM"
-      ],
-      "source": "docs/data-bridge/dfm-transformation-map.json"
     },
     {
       "caveat_id": "dfm-quarterly-aggregation",
       "severity": "info",
       "message": "GDP is observed quarterly but the factor is monthly; the quarterly nowcast aggregates monthly factor filtered states through the loading C[gdp_idx]. Intra-quarter revisions to monthly indicators (PR 2+ consumer may surface a 'news decomposition' view) can shift the nowcast without new quarterly data.",
-      "affected_metrics": [
-        "gdp_growth"
-      ],
-      "affected_models": [
-        "DFM"
-      ],
+      "affected_metrics": ["gdp_growth"],
+      "affected_models": ["DFM"],
       "source": "dfm_nowcast/index.html kalmanStep(); mcp_server/models/dfm.py run_kalman_update()"
     },
     {
       "caveat_id": "dfm-statoffice-latency",
       "severity": "warning",
       "message": "The current nowcast quarter is defined as any quarter strictly after meta.last_data_date. Official StatOffice YoY publication typically trails by 6-10 weeks, so the current nowcast quarter is expected to be partially or fully 'before publication' and subject to subsequent revision.",
-      "affected_metrics": [
-        "gdp_growth"
-      ],
-      "affected_models": [
-        "DFM"
-      ],
+      "affected_metrics": ["gdp_growth"],
+      "affected_models": ["DFM"],
       "source": "Convention; dfm_nowcast/index.html renderNowcastPage()"
     },
     {
       "caveat_id": "dfm-parameters-frozen-at-refit",
       "severity": "warning",
       "message": "State-space parameters (C, A, Q, R, means, sdevs) are produced by an offline EM refit (legacy export_dfm_for_web.R, not in this repository) and are not re-estimated by this export. The nightly export regenerates the consumer JSON from those frozen parameters; a refit is a separate modelling event.",
-      "affected_metrics": [
-        "gdp_growth"
-      ],
-      "affected_models": [
-        "DFM"
-      ],
+      "affected_metrics": ["gdp_growth"],
+      "affected_models": ["DFM"],
       "source": "dfm_nowcast/dfm_data.js header comment"
     },
     {
       "caveat_id": "dfm-source-refit-not-automated",
       "severity": "warning",
       "message": "The local source-model bundle is reference material for model review. This export does not read the source workbook or rerun the R EM estimator, so workbook updates require a separate reviewed refit/export step before public dfm.json changes.",
-      "affected_metrics": [
-        "gdp_growth",
-        "factor_path",
-        "indicator_contributions"
-      ],
-      "affected_models": [
-        "DFM"
-      ],
+      "affected_metrics": ["gdp_growth", "factor_path", "indicator_contributions"],
+      "affected_models": ["DFM"],
       "source": "model sources/Fore+Nowcast/DFM/main.R; scripts/export_dfm.R"
+    },
+    {
+      "caveat_id": "dfm-transform-map-needed",
+      "severity": "warning",
+      "message": "A source-derived transformation map is now published, but many rate, ratio, index, and already-growth series remain flagged for economist review before a production refit. The source R workflow still applies generic log-growth transformations.",
+      "affected_metrics": ["gdp_growth", "indicator_contributions"],
+      "affected_models": ["DFM"],
+      "source": "docs/data-bridge/dfm-transformation-map.json; model sources/Fore+Nowcast/DFM/functions/calculate_growth.R"
+    },
+    {
+      "caveat_id": "dfm-vintage-backtest-blocked",
+      "severity": "warning",
+      "message": "A historical benchmark validation report is published, but true DFM real-time vintage backtesting is blocked because historical source-workbook vintages or saved pre-release DFM outputs are not source-controlled.",
+      "affected_metrics": ["gdp_growth", "uncertainty_bands"],
+      "affected_models": ["DFM"],
+      "source": "docs/data-bridge/dfm-validation-report.md"
+    },
+    {
+      "caveat_id": "dfm-contribution-guardrail",
+      "severity": "warning",
+      "message": "Top indicator contributions are standardized factor signals. Native-unit source indicators, rates, ratios, and already-growth rows must not be read as direct growth impulses or percentage-point GDP effects.",
+      "affected_metrics": ["indicator_contributions"],
+      "affected_models": ["DFM"],
+      "source": "docs/data-bridge/dfm-transformation-map.json"
     }
   ],
   "metadata": {
-    "exported_at": "2026-05-24T10:49:21Z",
-    "source_script_sha": "be7fe913a46d81a4208c0b676bbb4796ed8a6379",
+    "exported_at": "2026-05-24T11:29:19Z",
+    "source_script_sha": "1eb700be80fb6cf78e75df2bcb909a35957ec7cf",
     "solver_version": "0.1.0",
     "source_artifact": "dfm_nowcast/dfm_data.js",
     "source_artifact_md5": "ec91be3922a6c4ba6e0b67d7a271aacb",
     "source_artifact_exported_at": "2026-04-08 10:09:12",
     "export_script": "scripts/export_dfm.R",
-    "export_script_md5": "13c7f31968c952c89531938e9290f386",
+    "export_script_md5": "34d8361e02ce4a75f6aeffae0823eaf4",
     "export_mode": "frozen_state_space_bridge",
     "source_model_reference": {
       "status": "reference_only_not_public_export_input",
@@ -972,50 +722,25 @@
       "source_workbook_updates_require_refit": true,
       "public_export_reads_source_workbook": false
     },
-    "readiness_status": {
-      "public_status": "internal_preview_bridge",
-      "source_refit_in_ci": "not_available",
-      "per_series_transform_map": "available",
-      "historical_backtest": "available",
-      "diagnostics_audit": "available",
-      "economist_signoff": "not_available"
-    },
     "source_audit": {
       "source_folder_status": "available_locally_untracked",
       "workbook_status": "available_locally_untracked",
       "workbook_md5": "42a1e478f39a77db3797c188cd841f78",
-      "source_scripts": [
-        "main.R",
-        "settings.R",
-        "functions/prepare_data.R",
-        "functions/calculate_growth.R",
-        "functions/estimate_dfm.R",
-        "functions/predict_dfm.R",
-        "functions/postprocess_gdp.R",
-        "functions/diagnostics_dfm.R"
-      ],
-      "saved_model_objects": [
-        ".RData",
-        "output/results.RData",
-        "output/report.pdf"
-      ]
+      "source_scripts": ["main.R", "settings.R", "functions/prepare_data.R", "functions/calculate_growth.R", "functions/estimate_dfm.R", "functions/predict_dfm.R", "functions/postprocess_gdp.R", "functions/diagnostics_dfm.R"],
+      "saved_model_objects": [".RData", "output/results.RData", "output/report.pdf"]
     },
     "transformation_map": {
       "status": "available_with_review_flags",
       "json_artifact": "docs/data-bridge/dfm-transformation-map.json",
       "csv_artifact": "docs/data-bridge/dfm-transformation-map.csv",
       "public_indicator_coverage": "36_of_36",
-      "reviewed_blockers": [
-        "rates_ratios_and_already_growth_series_need_economist_review",
-        "weekly_exchange_rate_harmonization_needs_model_owner_signoff",
-        "generic_log_difference_source_workflow_not_final_for_all_series"
-      ]
+      "reviewed_blockers": ["rates_ratios_and_already_growth_series_need_economist_review", "weekly_exchange_rate_harmonization_needs_model_owner_signoff", "generic_log_difference_source_workflow_not_final_for_all_series"]
     },
     "refit_status": {
-      "status": "blocked_in_current_environment",
+      "status": "available",
       "public_export_reads_source_workbook": false,
-      "blocker": "Rscript is not available on PATH in the current workspace environment; source R dependencies also need reproducible lock/install checks before CI refit.",
-      "source_logic_status": "source_R_workflow_audited_but_not_executed_here"
+      "blocker": "No local Rscript blocker remains. Remaining blockers: public export still publishes the frozen dfm_nowcast bridge until source-refit output is reconciled and signed off; PDF report rendering requires Pandoc; CI still needs a reproducible R dependency setup.",
+      "source_logic_status": "local_source_refit_completed_without_pdf_report; artifact=docs/data-bridge/dfm-source-refit-summary.json; iterations=155; converged=TRUE; source_public_yoy_diff_pp=0"
     },
     "backtest_status": {
       "status": "proxy_validation_available",
@@ -1036,6 +761,14 @@
       "status": "guarded_factor_signal_only",
       "top_contribution_audit": "native-unit and rate rows are labelled as non-growth source indicators in the UI",
       "not_percentage_point_gdp_effects": true
+    },
+    "readiness_status": {
+      "public_status": "internal_preview_bridge",
+      "source_refit_in_ci": "not_available",
+      "per_series_transform_map": "available",
+      "historical_backtest": "available",
+      "diagnostics_audit": "available",
+      "economist_signoff": "not_available"
     }
   }
 }

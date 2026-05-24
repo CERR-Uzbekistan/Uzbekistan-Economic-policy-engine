@@ -167,10 +167,12 @@ export function buildValidDfmPayload(): DfmBridgePayload {
         reviewed_blockers: ['rates_ratios_and_already_growth_series_need_economist_review'],
       },
       refit_status: {
-        status: 'blocked_in_current_environment',
+        status: 'available',
         public_export_reads_source_workbook: false,
-        blocker: 'Rscript is not available on PATH in the current workspace environment.',
-        source_logic_status: 'source_R_workflow_audited_but_not_executed_here',
+        blocker:
+          'No local Rscript blocker remains. Remaining blockers: public export still publishes the frozen bridge until source-refit output is reconciled and signed off.',
+        source_logic_status:
+          'local_source_refit_completed_without_pdf_report; artifact=docs/data-bridge/dfm-source-refit-summary.json; iterations=155; converged=TRUE; source_public_yoy_diff_pp=0',
       },
       backtest_status: {
         status: 'proxy_validation_available',

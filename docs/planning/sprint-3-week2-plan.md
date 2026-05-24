@@ -15,7 +15,7 @@ Completed:
 - Frontend env typing now covers current `VITE_*` keys, and page data-mode defaults are documented.
 - Sentinel inventory test is complete and is the Shot 2 burn-down ledger.
 - Duplicate-key locale JSON guard is complete for EN/RU/UZ locale files.
-- Week 1 verification passed for `npm test` and `npm run build` in `apps/policy-ui`; local R export remains blocked because `Rscript` is unavailable on this machine.
+- Week 1 verification passed for `npm test` and `npm run build` in `apps/policy-ui`; later DFM readiness work found local R at `C:\Program Files\R\R-4.5.2\bin\Rscript.exe` and added `scripts/dfm/run-source-refit.R` for source-refit verification without the PDF report step.
 
 Shot 2 English/source editorial content can begin for inventoried surfaces:
 

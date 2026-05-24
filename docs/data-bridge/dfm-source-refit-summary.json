@@ -1,0 +1,64 @@
+{
+  "artifact": {
+    "id": "dfm-source-refit-summary",
+    "generated_at": "2026-05-24T11:33:33Z",
+    "status": "completed_without_pdf_report",
+    "source_folder": "model sources/Fore+Nowcast/DFM",
+    "source_workbook": "model sources/Fore+Nowcast/DFM/data/data_uzbekistan.xlsx",
+    "source_workbook_md5": "42a1e478f39a77db3797c188cd841f78",
+    "runner": "scripts/dfm/run-source-refit.R",
+    "r_version": "4.5.2",
+    "elapsed_seconds": 136.9
+  },
+  "runtime": {
+    "start_date": "2016-01-01",
+    "n_factors": 1,
+    "months_ahead": 3,
+    "max_iter": 200,
+    "threshold": 1e-05,
+    "pandoc_available": false,
+    "report_render_status": "skipped_by_runner_pandoc_not_available",
+    "package_versions": {
+      "readxl": "1.4.5",
+      "dplyr": "1.2.0",
+      "pracma": "2.4.6",
+      "Matrix": "1.7.4",
+      "zoo": "1.8.15",
+      "purrr": "1.2.0",
+      "lubridate": "1.9.4",
+      "tidyr": "1.3.2",
+      "signal": "1.8.1",
+      "seasonal": "1.10.0",
+      "urca": "1.3.4",
+      "ggplot2": "4.0.2"
+    }
+  },
+  "data": {
+    "level_rows": 107,
+    "growth_rows": 104,
+    "variable_count": 36,
+    "growth_variable_count": 36,
+    "first_growth_date": "2017-05-01",
+    "last_growth_date": "2025-12-01",
+    "last_observed_gdp_date": "2025-12-01"
+  },
+  "estimation": {
+    "status": "completed",
+    "converged": true,
+    "convergence_code": 1,
+    "iterations": 155,
+    "loglik": 3157.224604,
+    "model_variable_count": 36,
+    "state_dimension": 45
+  },
+  "current_nowcast": {
+    "source_period": "2026Q1",
+    "source_gdp_growth_yoy_pct": 7.0078,
+    "source_gdp_growth_qoq_pct": 1.4398,
+    "public_period": "2026Q1",
+    "public_gdp_growth_yoy_pct": 7.0078,
+    "yoy_difference_source_minus_public_pp": 0
+  },
+  "warnings": [],
+  "limitations": ["This runner proves the local source workbook and R estimator can execute without the PDF report step.", "The public dfm.json export still publishes the frozen dfm_nowcast/dfm_data.js bridge until source-refit output is reconciled and signed off.", "True vintage backtesting still requires historical source-workbook vintages or saved pre-release DFM outputs."]
+}

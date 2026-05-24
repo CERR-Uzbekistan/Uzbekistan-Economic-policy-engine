@@ -33,7 +33,7 @@
 |---|---|
 | `npm test` from `apps/policy-ui` | Passed. 157 tests, 42 suites, 0 failures. |
 | `npm run build` from `apps/policy-ui` | Passed. Vite produced production build; existing large chunk warning remains. |
-| `Rscript scripts/export_dfm.R` from repo root | Blocked locally: `Rscript` is not installed/available in this environment. |
+| `Rscript scripts/export_dfm.R` from repo root | Historical note superseded: local R was later found at `C:\Program Files\R\R-4.5.2\bin\Rscript.exe`; DFM source-refit verification now uses `scripts/dfm/run-source-refit.R`. |
 | `npm run dev -- --host 127.0.0.1 --port 5183` from `apps/policy-ui` | Sandboxed run failed with Vite/Rolldown `spawn EPERM`; approved non-sandbox run served `/model-explorer` with HTTP 200. |
 | Browser runtime preview at `http://127.0.0.1:5183/model-explorer` | Passed. In-app browser snapshot showed all six catalog cards: QPM, DFM, PE, I-O, CGE, FPP. No loading or unavailable error state remained. Screenshot captured during preview. |
 
@@ -50,7 +50,7 @@ RU/UZ translation should not begin yet. Translation ownership and final policy-r
 
 ## Blocked or Deferred
 
-- Local DFM export execution is blocked until R/Rscript is available on the machine. CI should still run the workflow on Ubuntu with R installed by `r-lib/actions/setup-r`.
+- Local DFM export execution is no longer blocked by missing R/Rscript on this machine. CI should still run the workflow on Ubuntu with R installed by `r-lib/actions/setup-r`, and DFM source-refit automation still needs dependency/Pandoc handling before production use.
 - Default-branch scheduled DFM cron activation is deferred until TB-P1 deployment migration lands on `main`.
 - TB-P1 implementation is not part of this Week 1 branch.
 - TB-P4 named pilot users remain an owner decision before pilot readiness is claimed.
