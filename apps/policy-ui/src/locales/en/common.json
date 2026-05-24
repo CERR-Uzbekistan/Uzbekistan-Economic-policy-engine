@@ -376,14 +376,16 @@
     },
     "dfmContributionDetail": {
       "kicker": "DFM contribution detail",
-      "title": "Latest indicator contribution slice",
-      "description": "Top contributors by absolute contribution, with Industry YoY and Wholesale Trade Growth pinned when needed.",
+      "title": "What is moving the nowcast",
+      "description": "Top standardized factor signals. Industry YoY and Wholesale Trade Growth stay visible as checkpoints.",
       "pinnedSuffix": "pinned",
+      "factorUnit": "factor units",
+      "footnote": "These are standardized DFM factor contributions, not percentage-point effects on GDP growth.",
       "headers": {
         "indicator": "Indicator",
         "signal": "Signal",
         "latest": "Latest",
-        "contribution": "Contribution"
+        "contribution": "Factor contribution"
       },
       "signals": {
         "contracting": "Contracting growth signal",

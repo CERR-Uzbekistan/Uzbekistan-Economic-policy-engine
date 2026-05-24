@@ -34,7 +34,23 @@ function forecastHorizonLabel(payload: DfmBridgePayload): string {
   return count === 1 ? '1 quarter' : `${count} quarters`
 }
 
+function dfmRowSummary(payload: DfmBridgePayload) {
+  const targetRows = payload.indicators.filter(
+    (indicator) => indicator.frequency === 'quarterly' || indicator.category === 'Target variable',
+  ).length
+  const highFrequencyRows = Math.max(0, payload.indicators.length - targetRows)
+
+  return {
+    highFrequencyRows,
+    targetRows,
+    publishedRows: payload.indicators.length,
+    label: `${highFrequencyRows} high-frequency inputs + ${targetRows} quarterly GDP target`,
+  }
+}
+
 export function toModelExplorerDfmBridgeEvidence(payload: DfmBridgePayload): ModelBridgeEvidence {
+  const rows = dfmRowSummary(payload)
+
   return {
     status_label: 'Validated',
     source_artifact: DFM_SOURCE_ARTIFACT,
@@ -45,7 +61,8 @@ export function toModelExplorerDfmBridgeEvidence(payload: DfmBridgePayload): Mod
     units: 'GDP growth in percent; indicator latest values remain in native units',
     evidence_metrics: [
       { label: 'Current quarter', value: payload.nowcast.current_quarter.period },
-      { label: 'Indicators', value: String(payload.indicators.length) },
+      { label: 'Published rows', value: String(rows.publishedRows) },
+      { label: 'Input rows', value: String(rows.highFrequencyRows) },
       { label: 'Latent factors', value: String(payload.factor.n_factors) },
       { label: 'Forward horizon', value: forecastHorizonLabel(payload) },
     ],
@@ -56,23 +73,24 @@ export function toModelExplorerDfmBridgeEvidence(payload: DfmBridgePayload): Mod
 function withDfmBridge(entry: ModelCatalogEntry, payload: DfmBridgePayload): ModelCatalogEntry {
   const current = payload.nowcast.current_quarter
   const uncertaintyBands = current.uncertainty.bands.length
+  const rows = dfmRowSummary(payload)
 
   return {
     ...entry,
-    description: `GDP nowcast bridge artifact for ${current.period}; ${payload.indicators.length} indicators, ${payload.factor.n_factors} latent factor, ${forecastHorizonLabel(payload)} forward horizon.`,
+    description: `GDP nowcast bridge artifact for ${current.period}; ${rows.label}, ${payload.factor.n_factors} latent factor, ${forecastHorizonLabel(payload)} forward horizon.`,
     stats: [
-      { value: String(payload.indicators.length), label: 'Indicators' },
+      { value: String(rows.highFrequencyRows), label: 'Inputs' },
       { value: String(payload.factor.n_factors), label: 'Factor' },
       { value: current.period, label: 'Quarter' },
     ],
     purpose:
-      'Mixed-frequency DFM that maps monthly indicators into a quarterly GDP growth nowcast. The public artifact carries one current-quarter nowcast, contribution diagnostics, and uncertainty bands; it does not claim an official GDP forecast.',
+      'Mixed-frequency DFM that maps high-frequency indicators into a quarterly GDP growth nowcast. The public artifact carries one current-quarter nowcast, standardized factor-contribution diagnostics, and uncertainty bands; it does not claim an official GDP forecast.',
     parameters: [
       {
         symbol: 'N',
-        name: 'Public indicator series',
-        value: String(payload.indicators.length),
-        range: 'artifact count',
+        name: 'Published DFM rows',
+        value: String(rows.publishedRows),
+        range: rows.label,
       },
       {
         symbol: 'f',
@@ -109,7 +127,7 @@ function withDfmBridge(entry: ModelCatalogEntry, payload: DfmBridgePayload): Mod
     data_sources: [
       {
         institution: 'DFM public bridge artifact',
-        description: `${payload.indicators.length} indicators, factor path, current nowcast, contribution rows, and caveats`,
+        description: `${rows.label}; factor path, current nowcast, standardized contribution rows, and caveats`,
         vintage_label: payload.attribution.data_version,
       },
       {
@@ -124,9 +142,10 @@ function withDfmBridge(entry: ModelCatalogEntry, payload: DfmBridgePayload): Mod
       },
     ],
     validation_summary: [
-      `Public dfm.json validates against the DFM bridge schema and exposes ${payload.indicators.length} indicators, ${payload.factor.n_factors} latent factor, and current quarter ${current.period}.`,
+      `Public dfm.json validates against the DFM bridge schema and exposes ${rows.label}, ${payload.factor.n_factors} latent factor, and current quarter ${current.period}.`,
       `The artifact carries ${forecastHorizonLabel(payload)} forward horizon; Overview only uses the DFM chart when its current quarter is ahead of the accepted actual and not older than the Overview nowcast period.`,
-      'Frontend validation checks shape, units, periods, factor state, indicators, caveats, and metadata; it does not validate model economics or official GDP publication status.',
+      'Frontend validation checks shape, units, periods, factor state, rows, caveats, and metadata; it does not validate model economics or official GDP publication status.',
+      'Indicator contribution values are standardized DFM factor signals, not percentage-point GDP-growth effects.',
     ],
     bridge_evidence: toModelExplorerDfmBridgeEvidence(payload),
   }

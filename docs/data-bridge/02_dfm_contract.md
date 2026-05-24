@@ -4,6 +4,7 @@
 **Status:** Option B (nightly static JSON) — TB-P2 adopted 2026-04-20
 **Version:** solver 0.1.0, data 2026Q1
 **Upstream input:** `dfm_nowcast/dfm_data.js` (EM-fitted state-space parameters; refit is a separate modelling event)
+**Readiness note:** `docs/data-bridge/dfm-model-readiness-note.md`
 
 ## Purpose
 
@@ -27,7 +28,7 @@ second bridge artefact after `qpm.json`.
     n_factors, dates[], path[], converged, n_iter,
     loglik, last_data_date, monthly_series_start
   },
-  indicators:  DfmIndicator[],   // 36 entries (monthly + GDP)
+  indicators:  DfmIndicator[],   // 36 entries (35 high-frequency inputs + GDP)
   caveats:     Caveat[],         // 5 entries (severity info/warning)
   metadata: {
     exported_at, source_script_sha, solver_version,
@@ -95,6 +96,16 @@ the series (YoY is undefined before t+4 observations).
 | `indicators[].contribution` | standardised units | Latest indicator value × loading, in the factor's z-scale. |
 | `indicators[].latest_value` | native | Native indicator units (YoY % for growth series, index level for IP, USD for trade, etc.); retained verbatim from `dfm_data.js` `latest.values`. Do not aggregate across indicators. |
 | `attribution.data_version` / `metadata.solver_version` | string | `"2026Q1"` and `"0.1.0"` in the current export. |
+
+`indicators[].contribution` must not be labelled as a GDP-growth
+percentage-point effect. It is a standardized DFM factor signal used to
+explain what moved the nowcast.
+
+The source workbook contains one weekly exchange-rate series. The
+checked-in legacy bridge harmonizes non-quarterly inputs into the public
+high-frequency row set exposed as monthly/quarterly in `dfm.json`; the
+public schema therefore remains `"monthly" | "quarterly"` until the
+refit/export path is upgraded.
 
 The fan-chart formula is locked to `σ(h) = σ_base × √h` with
 `σ_base = 0.45 pp`, sourced verbatim from the legacy UI

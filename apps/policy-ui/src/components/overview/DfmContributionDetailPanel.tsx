@@ -22,11 +22,11 @@ function formatLatest(value: number | null, isGrowthRate: boolean, locale: strin
   return isGrowthRate ? `${formatted}%` : formatted
 }
 
-function formatContribution(value: number, locale: string): string {
+function formatContribution(value: number, locale: string, unitLabel: string): string {
   return `${formatSignedNumber(value, locale, {
     maximumFractionDigits: 3,
     minimumFractionDigits: 3,
-  })} pp`
+  })} ${unitLabel}`
 }
 
 export function DfmContributionDetailPanel({ rows, locale }: DfmContributionDetailPanelProps) {
@@ -97,7 +97,13 @@ export function DfmContributionDetailPanel({ rows, locale }: DfmContributionDeta
                   </td>
                   <td>
                     <div className="dfm-contribution-detail__contribution">
-                      <span>{formatContribution(row.contribution, locale)}</span>
+                      <span>
+                        {formatContribution(
+                          row.contribution,
+                          locale,
+                          t('overview.dfmContributionDetail.factorUnit'),
+                        )}
+                      </span>
                       <span
                         aria-hidden="true"
                         className={`dfm-contribution-detail__bar dfm-contribution-detail__bar--${
@@ -113,6 +119,9 @@ export function DfmContributionDetailPanel({ rows, locale }: DfmContributionDeta
           </tbody>
         </table>
       </div>
+      <p className="dfm-contribution-detail__footnote">
+        {t('overview.dfmContributionDetail.footnote')}
+      </p>
     </section>
   )
 }

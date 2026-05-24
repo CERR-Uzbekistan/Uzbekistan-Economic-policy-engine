@@ -1001,6 +1001,13 @@ body:has(.overview-page) {
   opacity: 0.72;
 }
 
+.dfm-contribution-detail__footnote {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
 .overview-nowcast-refreshing {
   color: var(--color-text-muted);
   font-family: var(--font-mono);

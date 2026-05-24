@@ -77,7 +77,13 @@ describe('model catalog mock', () => {
     const dfm = modelCatalogEntries.find((entry) => entry.id === 'dfm-nowcast')!
 
     assert.match(dfm.description, /Current-quarter GDP nowcasting/)
+    assert.match(dfm.description, /35 high-frequency inputs plus quarterly GDP target/)
+    assert.equal(dfm.stats[0].value, '35')
+    assert.equal(dfm.stats[0].label, 'Inputs')
+    assert.match(dfm.model_note?.summary ?? '', /model nowcast/)
+    assert.match(dfm.model_note?.items.map((item) => item.value).join(' ') ?? '', /not percentage-point GDP effects/)
     assert.doesNotMatch(`${dfm.description} ${dfm.purpose}`, /3-month|3 month|ahead forecast/i)
+    assert.match(dfm.validation_summary.join(' '), /standardized factor signals/)
   })
 
   it('renders source validation summaries on non-QPM models without SME sentinels', () => {

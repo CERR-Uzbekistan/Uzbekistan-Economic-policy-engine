@@ -179,14 +179,42 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
     model_type: 'Dynamic factor',
     frequency: 'Monthly',
     methodology_signature: 'Dynamic Factor · Mixed-frequency',
-    description: 'Current-quarter GDP nowcasting via Kalman filter; 34 indicators.',
+    description: 'Current-quarter GDP nowcasting via Kalman filter; 35 high-frequency inputs plus quarterly GDP target.',
     stats: [
-      { value: '34', label: 'Indicators' },
+      { value: '35', label: 'Inputs' },
       { value: '1', label: 'Factor' },
       { value: 'M', label: 'Freq.' },
     ],
     purpose:
-      'Single-factor mixed-frequency DFM with a Kalman smoother. Produces the current-quarter GDP nowcast from 34 monthly indicators; the checked-in bridge artifact does not publish a forward forecast horizon.',
+      'Single-factor mixed-frequency DFM with a Kalman smoother. Produces the current-quarter GDP nowcast from high-frequency activity, price, trade, financial, and survey inputs; the checked-in bridge artifact does not publish a forward forecast horizon.',
+    model_note: {
+      title: 'DFM model note',
+      summary:
+        'Mixed-frequency GDP nowcast lane backed by the checked-in DFM source bundle and public bridge artifact. It is a model nowcast, not an official GDP forecast.',
+      items: [
+        {
+          label: 'Source bundle',
+          value: 'model sources/Fore+Nowcast/DFM with R estimation scripts and data_uzbekistan.xlsx.',
+        },
+        {
+          label: 'Public artifact',
+          value: 'apps/policy-ui/public/data/dfm.json, exported from the legacy DFM bridge path.',
+        },
+        {
+          label: 'Rows',
+          value: '35 high-frequency input rows plus one quarterly GDP target row in the current source/artifact ledger.',
+        },
+        {
+          label: 'Contribution units',
+          value: 'Standardized DFM factor units, not percentage-point GDP effects.',
+        },
+      ],
+      boundaries: [
+        'The browser reads the static public artifact; it does not re-estimate the R model.',
+        'No real-time vintage backtest or production-grade forecast evaluation is claimed yet.',
+        'Single-factor loadings can miss sector-specific divergence during structural breaks.',
+      ],
+    },
     equations: [
       { id: 'dfm_factor', label: 'Factor · Latent state transition' },
       { id: 'dfm_obs', label: 'Observation · Loadings' },
@@ -208,17 +236,18 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
     data_sources: [
       {
         institution: 'Statistics Agency',
-        description: '34 monthly activity indicators',
+        description: 'Quarterly GDP target plus high-frequency activity, trade, price, services, and construction indicators',
         vintage_label: 'Apr 2026',
       },
       {
         institution: 'Central Bank of Uzbekistan',
-        description: 'Financial and monetary high-frequency series',
+        description: 'Financial, monetary, and exchange-rate high-frequency series',
         vintage_label: 'Apr 2026',
       },
     ],
     validation_summary: [
-      'Nowcast validation is limited to real-time monitoring of incoming monthly indicators and published empirical uncertainty bands.',
+      'Nowcast validation is limited to public bridge schema checks, convergence metadata, source-row coverage, and published empirical uncertainty bands.',
+      'Indicator contribution values are standardized factor signals, not percentage-point effects on GDP growth.',
       'Single-factor loadings remain a caveat; sector-specific divergence is not yet validated in this UI.',
     ],
   },

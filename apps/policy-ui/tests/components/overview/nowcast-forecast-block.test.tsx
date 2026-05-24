@@ -97,14 +97,16 @@ async function createTestI18n() {
             },
             dfmContributionDetail: {
               kicker: 'DFM contribution detail',
-              title: 'Latest indicator contribution slice',
-              description: 'Top contributors by absolute contribution, with Industry YoY and Wholesale Trade Growth pinned when needed.',
+              title: 'What is moving the nowcast',
+              description: 'Top standardized factor signals.',
               pinnedSuffix: 'pinned',
+              factorUnit: 'factor units',
+              footnote: 'These are standardized DFM factor contributions, not percentage-point effects on GDP growth.',
               headers: {
                 indicator: 'Indicator',
                 signal: 'Signal',
                 latest: 'Latest',
-                contribution: 'Contribution',
+                contribution: 'Factor contribution',
               },
               signals: {
                 contracting: 'Contracting growth signal',
@@ -565,7 +567,10 @@ describe('NowcastForecastBlock (shape-agnostic)', () => {
 
     const html = renderBlock(buildShortSegmentedChart(), { contributionDetails }, i18n)
 
-    assert.match(html, /Latest indicator contribution slice/)
+    assert.match(html, /What is moving the nowcast/)
+    assert.match(html, /factor units/)
+    assert.match(html, /not percentage-point effects on GDP growth/)
+    assert.equal(html.includes('0.099 pp'), false)
     assert.match(html, /Industry YoY Growth/)
     assert.match(html, /Wholesale Trade Growth/)
     assert.match(html, /Money Supply M0/)
@@ -588,14 +593,16 @@ describe('NowcastForecastBlock (shape-agnostic)', () => {
             overview: {
               dfmContributionDetail: {
                 kicker: 'DFM contribution detail',
-                title: 'Latest indicator contribution slice',
-                description: 'Top contributors by absolute contribution.',
+                title: 'What is moving the nowcast',
+                description: 'Top standardized factor signals.',
                 pinnedSuffix: 'pinned',
+                factorUnit: 'factor units',
+                footnote: 'These are standardized DFM factor contributions, not percentage-point effects on GDP growth.',
                 headers: {
                   indicator: 'Indicator',
                   signal: 'Signal',
                   latest: 'Latest',
-                  contribution: 'Contribution',
+                  contribution: 'Factor contribution',
                 },
                 signals: {
                   contracting: 'Contracting growth signal',
@@ -609,14 +616,16 @@ describe('NowcastForecastBlock (shape-agnostic)', () => {
             overview: {
               dfmContributionDetail: {
                 kicker: 'Детализация вклада DFM',
-                title: 'Последний срез вкладов индикаторов',
-                description: 'Крупнейшие вклады по абсолютной величине.',
+                title: 'Что двигает наукаст',
+                description: 'Крупнейшие стандартизированные сигналы фактора.',
                 pinnedSuffix: 'закреплено',
+                factorUnit: 'ед. фактора',
+                footnote: 'Это стандартизированные вклады в фактор DFM, а не процентные пункты влияния на рост ВВП.',
                 headers: {
                   indicator: 'Индикатор',
                   signal: 'Сигнал',
                   latest: 'Последнее',
-                  contribution: 'Вклад',
+                  contribution: 'Вклад в фактор',
                 },
                 signals: {
                   contracting: 'Сигнал сокращения роста',
@@ -652,8 +661,9 @@ describe('NowcastForecastBlock (shape-agnostic)', () => {
     )
 
     assert.match(html, /Детализация вклада DFM/)
-    assert.match(html, /Последний срез вкладов индикаторов/)
+    assert.match(html, /Что двигает наукаст/)
     assert.match(html, /Индикатор/)
+    assert.match(html, /ед\. фактора/)
     assert.match(html, /Сигнал сокращения роста/)
     assert.match(html, /закреплено/)
   })

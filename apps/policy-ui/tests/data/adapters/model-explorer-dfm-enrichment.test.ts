@@ -29,8 +29,12 @@ describe('model explorer DFM bridge enrichment', () => {
     assert.equal(evidence.exported_at, payload.metadata.exported_at.slice(0, 10))
     assert.equal(evidence.solver_version, payload.metadata.solver_version)
     assert.equal(
-      evidence.evidence_metrics?.find((metric) => metric.label === 'Indicators')?.value,
+      evidence.evidence_metrics?.find((metric) => metric.label === 'Published rows')?.value,
       String(payload.indicators.length),
+    )
+    assert.equal(
+      evidence.evidence_metrics?.find((metric) => metric.label === 'Input rows')?.value,
+      String(payload.indicators.length - 1),
     )
     assert.equal(
       evidence.evidence_metrics?.find((metric) => metric.label === 'Forward horizon')?.value,
@@ -48,11 +52,12 @@ describe('model explorer DFM bridge enrichment', () => {
     const dfmEntry = enriched.catalog_entries_by_model_id?.['dfm-nowcast']
 
     assert.ok(dfmEntry)
-    assert.equal(dfmEntry.stats[0].value, String(payload.indicators.length))
+    assert.equal(dfmEntry.stats[0].value, String(payload.indicators.length - 1))
     assert.equal(dfmEntry.stats[2].value, payload.nowcast.current_quarter.period)
     assert.equal(dfmEntry.parameters.some((parameter) => parameter.symbol === 'h' && parameter.value === '0 quarters'), true)
     assert.equal(dfmEntry.caveats.some((caveat) => caveat.id === 'dfm-parameters-frozen-at-refit'), true)
     assert.match(dfmEntry.validation_summary.join(' '), /does not validate model economics/)
+    assert.match(dfmEntry.validation_summary.join(' '), /standardized DFM factor signals/)
     assert.equal(dfmEntry.bridge_evidence?.source_artifact, 'apps/policy-ui/public/data/dfm.json')
   })
 })

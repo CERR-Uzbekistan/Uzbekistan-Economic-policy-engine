@@ -376,14 +376,16 @@
     },
     "dfmContributionDetail": {
       "kicker": "Детализация вклада DFM",
-      "title": "Последний срез вкладов индикаторов",
-      "description": "Крупнейшие вклады по абсолютной величине; Industry YoY и Wholesale Trade Growth закрепляются при необходимости.",
+      "title": "Что двигает наукаст",
+      "description": "Крупнейшие стандартизированные сигналы фактора. Industry YoY и Wholesale Trade Growth остаются видимыми как контрольные индикаторы.",
       "pinnedSuffix": "закреплено",
+      "factorUnit": "ед. фактора",
+      "footnote": "Это стандартизированные вклады в фактор DFM, а не процентные пункты влияния на рост ВВП.",
       "headers": {
         "indicator": "Индикатор",
         "signal": "Сигнал",
         "latest": "Последнее",
-        "contribution": "Вклад"
+        "contribution": "Вклад в фактор"
       },
       "signals": {
         "contracting": "Сигнал сокращения роста",

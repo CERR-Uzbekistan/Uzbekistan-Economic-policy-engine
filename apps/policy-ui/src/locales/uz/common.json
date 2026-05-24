@@ -376,14 +376,16 @@
     },
     "dfmContributionDetail": {
       "kicker": "DFM hissasi tafsiloti",
-      "title": "So'nggi indikator hissalari kesimi",
-      "description": "Mutlaq hissa bo'yicha eng katta omillar; kerak bo'lsa Industry YoY va Wholesale Trade Growth mahkamlanadi.",
+      "title": "Nowcastni nima harakatlantiryapti",
+      "description": "Eng katta standartlashtirilgan faktor signallari. Industry YoY va Wholesale Trade Growth nazorat indikatorlari sifatida ko'rinib turadi.",
       "pinnedSuffix": "mahkamlangan",
+      "factorUnit": "faktor birligi",
+      "footnote": "Bular DFM faktoriga standartlashtirilgan hissalar, YaIM o'sishiga foiz punkt ta'siri emas.",
       "headers": {
         "indicator": "Indikator",
         "signal": "Signal",
         "latest": "So'nggi",
-        "contribution": "Hissa"
+        "contribution": "Faktorga hissa"
       },
       "signals": {
         "contracting": "O'sish qisqarishi signali",
