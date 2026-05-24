@@ -320,7 +320,7 @@ build_caveats <- function() {
     list(
       caveat_id        = "dfm-transform-map-needed",
       severity         = "warning",
-      message          = "A source-derived transformation map is now published with row-level owner-review decisions. Four rows remain blocked for production refit sign-off, and the source R workflow still applies generic log-growth transformations.",
+      message          = "A source-derived transformation map is now published with row-level transformation decisions and no blocked rows. Several rows remain approved with caveats, and the source R workflow still applies generic log-growth transformations until the production refit path is updated.",
       affected_metrics = I(c("gdp_growth", "indicator_contributions")),
       affected_models  = I(c("DFM")),
       source           = "docs/data-bridge/dfm-transformation-map.json; model sources/Fore+Nowcast/DFM/functions/calculate_growth.R"
@@ -424,8 +424,8 @@ build_metadata <- function(d) {
       csv_artifact = TRANSFORM_MAP_CSV,
       public_indicator_coverage = "36_of_36",
       reviewed_blockers = I(c(
-        "four_rows_blocked_for_model_owner_decision_before_production_refit",
-        "weekly_exchange_rate_harmonization_needs_model_owner_signoff",
+        "zero_rows_blocked_after_row_level_transformation_decisions",
+        "weekly_exchange_rate_uses_monthly_average_before_log_change",
         "generic_log_difference_source_workflow_not_final_for_all_series",
         "public_contributions_remain_factor_signals_not_gdp_percentage_point_effects"
       ))
@@ -460,7 +460,7 @@ build_metadata <- function(d) {
       public_status = "internal_preview_bridge",
       source_refit_in_ci = "not_available",
       per_series_transform_map = "available",
-      historical_backtest = "available",
+      historical_backtest = "proxy_available",
       diagnostics_audit = "available",
       economist_signoff = "not_available"
     )

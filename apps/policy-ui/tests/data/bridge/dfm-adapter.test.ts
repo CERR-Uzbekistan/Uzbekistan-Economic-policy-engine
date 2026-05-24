@@ -95,7 +95,7 @@ describe('dfm adapter', () => {
     assert.equal(output.meta.source_script_sha, payload.metadata.source_script_sha)
     assert.equal(output.meta.export_mode, 'frozen_state_space_bridge')
     assert.equal(output.meta.source_model_reference.public_export_reads_source_workbook, false)
-    assert.equal(output.meta.readiness_status.historical_backtest, 'available')
+    assert.equal(output.meta.readiness_status.historical_backtest, 'proxy_available')
     assert.equal(output.meta.transformation_map.public_indicator_coverage, '36_of_36')
     assert.equal(output.meta.refit_status.status, 'available')
     assert.equal(output.meta.backtest_status.status, 'proxy_validation_available')

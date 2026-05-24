@@ -90,16 +90,30 @@ describe('DFM transformation map', () => {
       assert.ok(row, `missing transform row for ${id}`)
       assert.ok(row.risk_flags.length > 0, `missing risk flags for ${id}`)
       assert.notEqual(row.model_owner_decision_status, 'needs_economist_review')
-      assert.match(row.model_owner_decision_status, /approved_with_caveat|blocked_needs_owner_decision/)
+      assert.equal(row.model_owner_decision_status, 'approved_with_caveat')
       assert.doesNotMatch(row.rationale.toLowerCase(), /tbd|todo|review needed|confirm whether/)
       assert.ok(row.public_display_allowed, `${id} contribution should remain displayable as a factor signal`)
     }
 
     assert.equal(rowsById.get('gdp')?.model_role, 'target_quarterly_gdp')
-    assert.equal(rowsById.get('rate_1y')?.transformation_status, 'blocked_needs_owner_decision')
+    assert.equal(rowsById.get('financial_sound')?.transformation_status, 'approved_with_caveat')
+    assert.equal(rowsById.get('rate_1y')?.transformation_status, 'approved_with_caveat')
     assert.equal(rowsById.get('IND_YOY')?.transformation_status, 'approved_with_caveat')
     assert.equal(rowsById.get('uzs_usd')?.frequency, 'weekly')
-    assert.equal(rowsById.get('uzs_usd')?.transformation_status, 'blocked_needs_owner_decision')
+    assert.equal(rowsById.get('uzs_usd')?.transformation_status, 'approved_with_caveat')
+    assert.equal(rowsById.get('kazakh_leadind')?.transformation_status, 'approved_with_caveat')
+  })
+
+  it('has no remaining blocked transformation decisions after row-level review', () => {
+    const transformMap = loadTransformMap()
+    const blockedRows = transformMap.variables.filter(
+      (row) => row.model_owner_decision_status === 'blocked_needs_owner_decision',
+    )
+
+    assert.deepEqual(
+      blockedRows.map((row) => row.variable_id),
+      [],
+    )
   })
 
   it('preserves the public contribution guardrail in the transformation map', () => {

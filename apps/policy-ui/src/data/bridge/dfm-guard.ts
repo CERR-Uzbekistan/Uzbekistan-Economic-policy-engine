@@ -941,7 +941,13 @@ function parseReadinessStatus(
     return null
   }
 
-  const allowedAvailability = new Set(['not_available', 'available'])
+  const allowedAvailabilityByField = new Map<string, Set<string>>([
+    ['source_refit_in_ci', new Set(['not_available', 'available'])],
+    ['per_series_transform_map', new Set(['not_available', 'available'])],
+    ['historical_backtest', new Set(['not_available', 'proxy_available', 'available'])],
+    ['diagnostics_audit', new Set(['not_available', 'available'])],
+    ['economist_signoff', new Set(['not_available', 'available'])],
+  ])
   const publicStatus = value.public_status
   const sourceRefitInCi = value.source_refit_in_ci
   const perSeriesTransformMap = value.per_series_transform_map
@@ -968,11 +974,12 @@ function parseReadinessStatus(
   ] as const
 
   for (const [field, raw] of fields) {
-    if (typeof raw !== 'string' || !allowedAvailability.has(raw)) {
+    const allowedValues = allowedAvailabilityByField.get(field) ?? new Set(['not_available', 'available'])
+    if (typeof raw !== 'string' || !allowedValues.has(raw)) {
       pushError(
         issues,
         `metadata.readiness_status.${field}`,
-        'Expected available or not_available.',
+        `Expected one of: ${Array.from(allowedValues).join(', ')}.`,
       )
       ok = false
     }

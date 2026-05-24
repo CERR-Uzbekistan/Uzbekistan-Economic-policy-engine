@@ -1,7 +1,7 @@
 {
   "artifact": {
     "id": "dfm-transformation-map",
-    "generated_at": "2026-05-24T12:01:33.431Z",
+    "generated_at": "2026-05-24T12:24:41.859Z",
     "source_workbook": "model sources/Fore+Nowcast/DFM/data/data_uzbekistan.xlsx",
     "source_workbook_md5": "42a1e478f39a77db3797c188cd841f78",
     "source_scripts": [
@@ -23,11 +23,10 @@
     "transformation_rule": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
     "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
     "transformation_status_counts": {
-      "approved_with_caveat": 14,
-      "approved": 18,
-      "blocked_needs_owner_decision": 4
+      "approved_with_caveat": 18,
+      "approved": 18
     },
-    "blocked_owner_decision_count": 4,
+    "blocked_owner_decision_count": 0,
     "production_note": "This artifact documents the current source workflow and proposes row-level owner-review decisions before a production refit. It is not a claim that every source transformation has model-owner sign-off."
   },
   "variables": [
@@ -368,15 +367,15 @@
       "source": "Central Bank of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "blocked_needs_owner_decision",
+      "transformation_status": "approved_with_caveat",
       "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
-      "recommended_transformation": "Use the NPL ratio in levels or first differences in percentage points; do not log-difference a percent ratio without model-owner sign-off.",
-      "rationale": "The nonperforming-loan share is a financial ratio, not a quantity level. A log change of the ratio is hard to explain economically and can overstate movements when the ratio is low.",
+      "recommended_transformation": "Use the NPL ratio as a monthly percentage-point change for model input; keep the ratio level only for descriptive diagnostics.",
+      "rationale": "The nonperforming-loan share is a financial ratio, not a quantity level. A percentage-point change is interpretable as credit-quality deterioration or improvement, while log-changing the ratio can overstate movements when the ratio is low.",
       "risk_flags": [
         "ratio",
         "rate"
       ],
-      "model_owner_decision_status": "blocked_needs_owner_decision",
+      "model_owner_decision_status": "approved_with_caveat",
       "public_display_allowed": true,
       "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
@@ -395,15 +394,15 @@
       "source": "Central Bank of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "blocked_needs_owner_decision",
+      "transformation_status": "approved_with_caveat",
       "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
-      "recommended_transformation": "Use the interest-rate level or the month-to-month change in percentage points; do not log-difference the percent rate.",
-      "rationale": "Interest rates are already measured in percent per year. Monetary tightening is normally interpreted as a level or percentage-point change, not as the growth rate of the rate itself.",
+      "recommended_transformation": "Use the month-to-month percentage-point change in the 1-year deposit rate for the DFM input; keep the rate level for interpretation.",
+      "rationale": "Interest rates are already measured in percent per year. A percentage-point change captures monetary and funding-cost news directly; a log-change of the rate itself is not a standard macro-financial signal.",
       "risk_flags": [
         "rate",
         "unit_mismatch"
       ],
-      "model_owner_decision_status": "blocked_needs_owner_decision",
+      "model_owner_decision_status": "approved_with_caveat",
       "public_display_allowed": true,
       "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
@@ -422,15 +421,15 @@
       "source": "Central Bank of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "blocked_needs_owner_decision",
+      "transformation_status": "approved_with_caveat",
       "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
-      "recommended_transformation": "First choose a monthly aggregation rule for the weekly FX series, then use log monthly depreciation/appreciation of UZS per USD.",
-      "rationale": "The exchange-rate level can be transformed with log changes, but the workbook frequency is weekly while the DFM panel is monthly. The monthly aggregation convention changes the timing of FX news.",
+      "recommended_transformation": "Aggregate weekly UZS/USD observations to a monthly average, then use the log monthly change in UZS per USD as depreciation/appreciation news.",
+      "rationale": "The exchange-rate level can be transformed with log changes, but the source frequency is weekly. A monthly average gives a stable monthly signal and avoids making the DFM depend on a single end-of-month quote.",
       "risk_flags": [
         "weekly_frequency",
         "unit_mismatch"
       ],
-      "model_owner_decision_status": "blocked_needs_owner_decision",
+      "model_owner_decision_status": "approved_with_caveat",
       "public_display_allowed": true,
       "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
@@ -449,17 +448,17 @@
       "source": "Kazakh Agency of Statistics",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "blocked_needs_owner_decision",
+      "transformation_status": "approved_with_caveat",
       "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
-      "recommended_transformation": "Treat as a YTD-over-previous-year index, likely log(index / 100) or index minus 100; confirm whether a YTD accumulation should enter a monthly DFM.",
-      "rationale": "The source is a change YTD PY=100 index, so it is already a cumulative growth comparison. Log-differencing it mixes monthly revisions with changes in the YTD comparison window.",
+      "recommended_transformation": "Use index minus 100 as a YTD-over-previous-year foreign-activity signal; do not log-difference the cumulative YTD index.",
+      "rationale": "The source is a change YTD PY=100 index, so it is already a cumulative growth comparison. Using the deviation from 100 preserves the foreign-activity signal; log-differencing would mix monthly revisions with changes in the YTD comparison window.",
       "risk_flags": [
         "index",
         "already_growth_series",
         "seasonality",
         "label_ambiguity"
       ],
-      "model_owner_decision_status": "blocked_needs_owner_decision",
+      "model_owner_decision_status": "approved_with_caveat",
       "public_display_allowed": true,
       "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",

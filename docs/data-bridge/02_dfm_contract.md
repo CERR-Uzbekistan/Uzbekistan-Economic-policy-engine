@@ -113,7 +113,7 @@ the series (YoY is undefined before t+4 observations).
 | `metadata.backtest_status` | object | Points to `docs/data-bridge/dfm-validation-summary.json` and `dfm-validation-report.md`; true DFM vintage backtesting is blocked by missing historical vintages. |
 | `metadata.uncertainty_range` | object | Current illustrative uncertainty metadata, including sigma base, method, calibration source, and official-forecast flag. |
 | `metadata.contribution_diagnostics` | object | Guardrail metadata: contributions are factor signals, not GDP percentage-point effects. |
-| `metadata.readiness_status` | object | Explicit readiness gates: source refit in CI, per-series transform map, historical backtest/validation, diagnostics audit, and economist sign-off. |
+| `metadata.readiness_status` | object | Explicit readiness gates: source refit in CI, per-series transform map, historical backtest/validation, diagnostics audit, and economist sign-off. `historical_backtest` may be `proxy_available` when only benchmark validation exists. |
 
 `indicators[].contribution` must not be labelled as a GDP-growth
 percentage-point effect. It is a standardized DFM factor signal used to
@@ -225,7 +225,7 @@ vintages or saved pre-release DFM outputs are not source-controlled.
   range, but it is not evidence of real-time DFM forecast accuracy.
 - **No production validation gates yet.** The current artifact must keep
   `metadata.readiness_status.public_status = "internal_preview_bridge"`
-  until the source refit path, economist-reviewed transformations, true
+  until the source refit path, reviewed transformations, true
   DFM vintage backtest, diagnostics audit, and economist sign-off are
   available.
 - **No scenario variants.** Unlike QPM, DFM has no "policy rate cut"

@@ -138,7 +138,7 @@ export type DfmMetadata = {
     public_status: 'internal_preview_bridge'
     source_refit_in_ci: 'not_available' | 'available'
     per_series_transform_map: 'not_available' | 'available'
-    historical_backtest: 'not_available' | 'available'
+    historical_backtest: 'not_available' | 'proxy_available' | 'available'
     diagnostics_audit: 'not_available' | 'available'
     economist_signoff: 'not_available' | 'available'
   }

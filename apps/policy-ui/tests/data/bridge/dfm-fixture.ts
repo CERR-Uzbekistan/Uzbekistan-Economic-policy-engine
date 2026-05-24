@@ -165,7 +165,7 @@ export function buildValidDfmPayload(): DfmBridgePayload {
         csv_artifact: 'docs/data-bridge/dfm-transformation-map.csv',
         public_indicator_coverage: '36_of_36',
         reviewed_blockers: [
-          'four_rows_blocked_for_model_owner_decision_before_production_refit',
+          'zero_rows_blocked_after_row_level_transformation_decisions',
           'public_contributions_remain_factor_signals_not_gdp_percentage_point_effects',
         ],
       },
@@ -201,7 +201,7 @@ export function buildValidDfmPayload(): DfmBridgePayload {
         public_status: 'internal_preview_bridge',
         source_refit_in_ci: 'not_available',
         per_series_transform_map: 'available',
-        historical_backtest: 'available',
+        historical_backtest: 'proxy_available',
         diagnostics_audit: 'available',
         economist_signoff: 'not_available',
       },

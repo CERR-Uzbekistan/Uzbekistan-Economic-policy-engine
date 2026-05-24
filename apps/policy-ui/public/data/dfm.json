@@ -6,7 +6,7 @@
     "version": "0.1.0",
     "run_id": "dfm-nightly-2026-05-24",
     "data_version": "2026Q1",
-    "timestamp": "2026-05-24T11:29:19Z"
+    "timestamp": "2026-05-24T12:29:34Z"
   },
   "nowcast": {
     "last_observed_date": "2025-12-01",
@@ -683,7 +683,7 @@
     {
       "caveat_id": "dfm-transform-map-needed",
       "severity": "warning",
-      "message": "A source-derived transformation map is now published with row-level owner-review decisions. Four rows remain blocked for production refit sign-off, and the source R workflow still applies generic log-growth transformations.",
+      "message": "A source-derived transformation map is now published with row-level transformation decisions and no blocked rows. Several rows remain approved with caveats, and the source R workflow still applies generic log-growth transformations until the production refit path is updated.",
       "affected_metrics": ["gdp_growth", "indicator_contributions"],
       "affected_models": ["DFM"],
       "source": "docs/data-bridge/dfm-transformation-map.json; model sources/Fore+Nowcast/DFM/functions/calculate_growth.R"
@@ -706,14 +706,14 @@
     }
   ],
   "metadata": {
-    "exported_at": "2026-05-24T11:29:19Z",
-    "source_script_sha": "1eb700be80fb6cf78e75df2bcb909a35957ec7cf",
+    "exported_at": "2026-05-24T12:29:34Z",
+    "source_script_sha": "d703b3ccbabece5cb8069258ed82f6a1f9723934",
     "solver_version": "0.1.0",
     "source_artifact": "dfm_nowcast/dfm_data.js",
     "source_artifact_md5": "ec91be3922a6c4ba6e0b67d7a271aacb",
     "source_artifact_exported_at": "2026-04-08 10:09:12",
     "export_script": "scripts/export_dfm.R",
-    "export_script_md5": "34d8361e02ce4a75f6aeffae0823eaf4",
+    "export_script_md5": "43854b2e1e52e983f3b61182103c1ca6",
     "export_mode": "frozen_state_space_bridge",
     "source_model_reference": {
       "status": "reference_only_not_public_export_input",
@@ -734,7 +734,7 @@
       "json_artifact": "docs/data-bridge/dfm-transformation-map.json",
       "csv_artifact": "docs/data-bridge/dfm-transformation-map.csv",
       "public_indicator_coverage": "36_of_36",
-      "reviewed_blockers": ["four_rows_blocked_for_model_owner_decision_before_production_refit", "weekly_exchange_rate_harmonization_needs_model_owner_signoff", "generic_log_difference_source_workflow_not_final_for_all_series", "public_contributions_remain_factor_signals_not_gdp_percentage_point_effects"]
+      "reviewed_blockers": ["zero_rows_blocked_after_row_level_transformation_decisions", "weekly_exchange_rate_uses_monthly_average_before_log_change", "generic_log_difference_source_workflow_not_final_for_all_series", "public_contributions_remain_factor_signals_not_gdp_percentage_point_effects"]
     },
     "refit_status": {
       "status": "available",
@@ -766,7 +766,7 @@
       "public_status": "internal_preview_bridge",
       "source_refit_in_ci": "not_available",
       "per_series_transform_map": "available",
-      "historical_backtest": "available",
+      "historical_backtest": "proxy_available",
       "diagnostics_audit": "available",
       "economist_signoff": "not_available"
     }

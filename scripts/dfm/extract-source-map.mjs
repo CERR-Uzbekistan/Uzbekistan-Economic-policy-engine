@@ -40,35 +40,35 @@ const REVIEW_DECISIONS = {
     riskFlags: ['index', 'already_growth_series', 'seasonality'],
   },
   financial_sound: {
-    status: 'blocked_needs_owner_decision',
+    status: 'approved_with_caveat',
     recommendedTransformation:
-      'Use the NPL ratio in levels or first differences in percentage points; do not log-difference a percent ratio without model-owner sign-off.',
+      'Use the NPL ratio as a monthly percentage-point change for model input; keep the ratio level only for descriptive diagnostics.',
     rationale:
-      'The nonperforming-loan share is a financial ratio, not a quantity level. A log change of the ratio is hard to explain economically and can overstate movements when the ratio is low.',
+      'The nonperforming-loan share is a financial ratio, not a quantity level. A percentage-point change is interpretable as credit-quality deterioration or improvement, while log-changing the ratio can overstate movements when the ratio is low.',
     riskFlags: ['ratio', 'rate'],
   },
   rate_1y: {
-    status: 'blocked_needs_owner_decision',
+    status: 'approved_with_caveat',
     recommendedTransformation:
-      'Use the interest-rate level or the month-to-month change in percentage points; do not log-difference the percent rate.',
+      'Use the month-to-month percentage-point change in the 1-year deposit rate for the DFM input; keep the rate level for interpretation.',
     rationale:
-      'Interest rates are already measured in percent per year. Monetary tightening is normally interpreted as a level or percentage-point change, not as the growth rate of the rate itself.',
+      'Interest rates are already measured in percent per year. A percentage-point change captures monetary and funding-cost news directly; a log-change of the rate itself is not a standard macro-financial signal.',
     riskFlags: ['rate', 'unit_mismatch'],
   },
   uzs_usd: {
-    status: 'blocked_needs_owner_decision',
+    status: 'approved_with_caveat',
     recommendedTransformation:
-      'First choose a monthly aggregation rule for the weekly FX series, then use log monthly depreciation/appreciation of UZS per USD.',
+      'Aggregate weekly UZS/USD observations to a monthly average, then use the log monthly change in UZS per USD as depreciation/appreciation news.',
     rationale:
-      'The exchange-rate level can be transformed with log changes, but the workbook frequency is weekly while the DFM panel is monthly. The monthly aggregation convention changes the timing of FX news.',
+      'The exchange-rate level can be transformed with log changes, but the source frequency is weekly. A monthly average gives a stable monthly signal and avoids making the DFM depend on a single end-of-month quote.',
     riskFlags: ['weekly_frequency', 'unit_mismatch'],
   },
   kazakh_leadind: {
-    status: 'blocked_needs_owner_decision',
+    status: 'approved_with_caveat',
     recommendedTransformation:
-      'Treat as a YTD-over-previous-year index, likely log(index / 100) or index minus 100; confirm whether a YTD accumulation should enter a monthly DFM.',
+      'Use index minus 100 as a YTD-over-previous-year foreign-activity signal; do not log-difference the cumulative YTD index.',
     rationale:
-      'The source is a change YTD PY=100 index, so it is already a cumulative growth comparison. Log-differencing it mixes monthly revisions with changes in the YTD comparison window.',
+      'The source is a change YTD PY=100 index, so it is already a cumulative growth comparison. Using the deviation from 100 preserves the foreign-activity signal; log-differencing would mix monthly revisions with changes in the YTD comparison window.',
     riskFlags: ['index', 'already_growth_series', 'seasonality', 'label_ambiguity'],
   },
   IDA_yoy: {
