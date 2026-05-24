@@ -42,7 +42,7 @@ describe('model explorer DFM bridge enrichment', () => {
     )
     assert.equal(
       evidence.evidence_metrics?.find((metric) => metric.label === 'Export mode')?.value,
-      'frozen_state_space_bridge',
+      'source_reconciled_bridge',
     )
     assert.equal(
       evidence.evidence_metrics?.find((metric) => metric.label === 'Public status')?.value,

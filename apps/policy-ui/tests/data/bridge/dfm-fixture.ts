@@ -144,9 +144,9 @@ export function buildValidDfmPayload(): DfmBridgePayload {
       source_artifact_exported_at: '2026-04-08 10:09:12',
       export_script: 'scripts/export_dfm.R',
       export_script_md5: 'fixture-export-script-md5',
-      export_mode: 'frozen_state_space_bridge',
+      export_mode: 'source_reconciled_bridge',
       source_model_reference: {
-        status: 'reference_only_not_public_export_input',
+        status: 'source_refit_reconciled_not_direct_public_input',
         path: 'model sources/Fore+Nowcast/DFM',
         data_workbook: 'model sources/Fore+Nowcast/DFM/data/data_uzbekistan.xlsx',
         source_workbook_updates_require_refit: true,
@@ -176,6 +176,8 @@ export function buildValidDfmPayload(): DfmBridgePayload {
           'No local Rscript blocker remains. Remaining blockers: public export still publishes the frozen bridge until source-refit output is reconciled and signed off.',
         source_logic_status:
           'local_source_refit_completed_without_pdf_report; artifact=docs/data-bridge/dfm-source-refit-summary.json; iterations=155; converged=TRUE; source_public_yoy_diff_pp=0',
+        reconciliation_status: 'matched_public_artifact',
+        canonical_export_report: 'docs/data-bridge/dfm-canonical-export-report.json',
       },
       backtest_status: {
         status: 'proxy_validation_available',
@@ -199,7 +201,7 @@ export function buildValidDfmPayload(): DfmBridgePayload {
       },
       readiness_status: {
         public_status: 'internal_preview_bridge',
-        source_refit_in_ci: 'not_available',
+        source_refit_in_ci: 'local_only_not_ci',
         per_series_transform_map: 'available',
         historical_backtest: 'proxy_available',
         diagnostics_audit: 'available',

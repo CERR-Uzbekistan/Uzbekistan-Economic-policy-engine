@@ -12,6 +12,9 @@ const DFM_PUBLIC_ARTIFACT_PATH = fileURLToPath(
 const SOURCE_REFIT_SUMMARY_PATH = fileURLToPath(
   new URL('../../../../../../docs/data-bridge/dfm-source-refit-summary.json', import.meta.url),
 )
+const CANONICAL_EXPORT_REPORT_PATH = fileURLToPath(
+  new URL('../../../../../../docs/data-bridge/dfm-canonical-export-report.json', import.meta.url),
+)
 
 type TransformRow = {
   source_sheet: string
@@ -151,5 +154,41 @@ describe('DFM transformation map', () => {
     assert.equal(refit.current_nowcast.source_gdp_growth_yoy_pct, refit.current_nowcast.public_gdp_growth_yoy_pct)
     assert.equal(refit.current_nowcast.yoy_difference_source_minus_public_pp, 0)
     assert.equal(refit.runtime.report_render_status, 'skipped_by_runner_pandoc_not_available')
+  })
+
+  it('records canonical source reconciliation against the public bridge artifact', () => {
+    const report = JSON.parse(readFileSync(CANONICAL_EXPORT_REPORT_PATH, 'utf8')) as {
+      artifact: { id: string }
+      source_workbook_status: string
+      source_refit: { status: string; skipped: boolean }
+      public_export: { status: string; export_mode: string }
+      validation: { status: string; vintage_backtest_status: string }
+      reconciliation: {
+        status: string
+        source_period: string
+        public_period: string
+        source_gdp_growth_yoy_pct: number
+        public_gdp_growth_yoy_pct: number
+        source_minus_public_yoy_pp: number
+        source_gdp_growth_qoq_pct: number
+        public_gdp_growth_qoq_pct: number
+        source_minus_public_qoq_pp: number
+      }
+    }
+
+    assert.equal(report.artifact.id, 'dfm-canonical-export-report')
+    assert.equal(report.source_workbook_status, 'available_locally_untracked')
+    assert.equal(report.source_refit.status, 'completed_without_pdf_report')
+    assert.equal(report.source_refit.skipped, false)
+    assert.equal(report.public_export.status, 'completed')
+    assert.equal(report.public_export.export_mode, 'source_reconciled_bridge')
+    assert.equal(report.validation.status, 'completed')
+    assert.equal(report.validation.vintage_backtest_status, 'blocked_no_historical_vintages')
+    assert.equal(report.reconciliation.status, 'matched_public_artifact')
+    assert.equal(report.reconciliation.source_period, report.reconciliation.public_period)
+    assert.equal(report.reconciliation.source_gdp_growth_yoy_pct, report.reconciliation.public_gdp_growth_yoy_pct)
+    assert.equal(report.reconciliation.source_minus_public_yoy_pp, 0)
+    assert.equal(report.reconciliation.source_gdp_growth_qoq_pct, report.reconciliation.public_gdp_growth_qoq_pct)
+    assert.equal(report.reconciliation.source_minus_public_qoq_pp, 0)
   })
 })

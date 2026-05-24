@@ -1,0 +1,38 @@
+{
+  "artifact": {
+    "id": "dfm-canonical-export-report",
+    "generated_at": "2026-05-24T13:10:43.814Z"
+  },
+  "generated_at": "2026-05-24T13:10:43.815Z",
+  "command": "node scripts/dfm/export-canonical.mjs",
+  "source_workbook": "model sources/Fore+Nowcast/DFM/data/data_uzbekistan.xlsx",
+  "source_workbook_status": "available_locally_untracked",
+  "source_refit": {
+    "status": "completed_without_pdf_report",
+    "artifact": "docs/data-bridge/dfm-source-refit-summary.json",
+    "skipped": false
+  },
+  "public_export": {
+    "status": "completed",
+    "artifact": "apps/policy-ui/public/data/dfm.json",
+    "export_mode": "source_reconciled_bridge"
+  },
+  "validation": {
+    "status": "completed",
+    "artifact": "docs/data-bridge/dfm-validation-summary.json",
+    "vintage_backtest_status": "blocked_no_historical_vintages"
+  },
+  "reconciliation": {
+    "status": "matched_public_artifact",
+    "period_matches": true,
+    "source_period": "2026Q1",
+    "public_period": "2026Q1",
+    "source_gdp_growth_yoy_pct": 7.0078,
+    "public_gdp_growth_yoy_pct": 7.0078,
+    "source_minus_public_yoy_pp": 0,
+    "source_gdp_growth_qoq_pct": 1.4398,
+    "public_gdp_growth_qoq_pct": 1.4398,
+    "source_minus_public_qoq_pp": 0,
+    "message": "The local source refit reproduces the public bridge nowcast, so the public artifact is source-reconciled."
+  }
+}

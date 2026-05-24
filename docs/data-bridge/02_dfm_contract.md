@@ -3,15 +3,14 @@
 **Source:** `scripts/export_dfm.R` → `apps/policy-ui/public/data/dfm.json`
 **Status:** Option B (nightly static JSON) — TB-P2 adopted 2026-04-20
 **Version:** solver 0.1.0, data 2026Q1
-**Upstream input:** `dfm_nowcast/dfm_data.js` (EM-fitted state-space parameters; refit is a separate modelling event)
+**Upstream input:** canonical export runner (`scripts/dfm/export-canonical.mjs`) reconciles the local source refit against the checked-in bridge before publishing `dfm.json`
 **Readiness note:** `docs/data-bridge/dfm-model-readiness-note.md`
 
 ## Purpose
 
 This file is consumed by the frontend Overview page (nowcast block and
-GDP-forecast chart) and, later, by a DFM-specific Model Explorer surface,
-to replace the illustrative mock nowcast with real DFM output. It is the
-second bridge artefact after `qpm.json`.
+GDP-forecast chart) and the Model Explorer DFM surface. It is the second
+bridge artefact after `qpm.json`.
 
 ## Shape
 
@@ -105,15 +104,15 @@ the series (YoY is undefined before t+4 observations).
 | `indicators[].contribution` | standardised units | Latest indicator value × loading, in the factor's z-scale. |
 | `indicators[].latest_value` | native | Native indicator units (YoY % for growth series, index level for IP, USD for trade, etc.); retained verbatim from `dfm_data.js` `latest.values`. Do not aggregate across indicators. |
 | `attribution.data_version` / `metadata.solver_version` | string | `"2026Q1"` and `"0.1.0"` in the current export. |
-| `metadata.export_mode` | enum | `"frozen_state_space_bridge"` until the exporter is rewired to run a source-model refit. |
-| `metadata.source_model_reference` | object | Points to the local source-model bundle and records that the public export does not read the source workbook. |
+| `metadata.export_mode` | enum | `"source_reconciled_bridge"` when the local source refit reproduces the public bridge output; `"frozen_state_space_bridge"` is retained only for older artifacts. |
+| `metadata.source_model_reference` | object | Points to the local source-model bundle and records that the public export is reconciled to, but does not yet directly read, the source-refit output. |
 | `metadata.source_audit` | object | Local source-folder/workbook/script/object audit status. The raw source folder remains untracked. |
-| `metadata.transformation_map` | object | Points to `docs/data-bridge/dfm-transformation-map.json` and CSV; records 36-of-36 public indicator coverage, row-level owner-review decisions, and remaining blockers. |
-| `metadata.refit_status` | object | Current source-refit automation status and remaining blockers. Local source refit now runs through data prep, EM estimation, prediction, and GDP postprocessing via `scripts/dfm/run-source-refit.R`; the public export still publishes the frozen bridge until that source-refit output is reconciled and signed off. |
+| `metadata.transformation_map` | object | Points to `docs/data-bridge/dfm-transformation-map.json` and CSV; records 36-of-36 public indicator coverage and row-level owner-review decisions. |
+| `metadata.refit_status` | object | Current source-refit automation and reconciliation status. Local source refit now runs through data prep, EM estimation, prediction, and GDP postprocessing via `scripts/dfm/run-source-refit.R`; `reconciliation_status` and `canonical_export_report` point to the source/public bridge comparison. Direct publication from source-refit output still needs a reviewed source-output contract and model-owner sign-off. |
 | `metadata.backtest_status` | object | Points to `docs/data-bridge/dfm-validation-summary.json` and `dfm-validation-report.md`; true DFM vintage backtesting is blocked by missing historical vintages. |
 | `metadata.uncertainty_range` | object | Current illustrative uncertainty metadata, including sigma base, method, calibration source, and official-forecast flag. |
 | `metadata.contribution_diagnostics` | object | Guardrail metadata: contributions are factor signals, not GDP percentage-point effects. |
-| `metadata.readiness_status` | object | Explicit readiness gates: source refit in CI, per-series transform map, historical backtest/validation, diagnostics audit, and economist sign-off. `historical_backtest` may be `proxy_available` when only benchmark validation exists. |
+| `metadata.readiness_status` | object | Explicit readiness gates: source refit in CI, per-series transform map, historical backtest/validation, diagnostics audit, and economist sign-off. `source_refit_in_ci` is currently `local_only_not_ci`; `historical_backtest` may be `proxy_available` when only benchmark validation exists. |
 
 `indicators[].contribution` must not be labelled as a GDP-growth
 percentage-point effect. It is a standardized DFM factor signal used to
@@ -150,33 +149,37 @@ node scripts/dfm/extract-source-map.mjs
 
 The current source R workflow still applies generic log differences after
 optional seasonal adjustment. The map therefore distinguishes documented
-coverage from economist acceptance: 18 rows are approved, 14 are
-approved with caveats, and 4 are blocked pending model-owner choices
-before a production refit.
+coverage from economist acceptance: 18 rows are approved, 18 are
+approved with caveats, and 0 remain blocked after row-level review.
 
 ## Source Refit Status
 
-The local source refit artifact is:
+The local source refit and canonical reconciliation artifacts are:
 
 - `docs/data-bridge/dfm-source-refit-summary.json`
+- `docs/data-bridge/dfm-canonical-export-report.json`
+- `docs/data-bridge/dfm-canonical-export-report.md`
 
-It is generated by:
+They are generated by:
 
 ```text
-"C:\Program Files\R\R-4.5.2\bin\Rscript.exe" scripts/dfm/run-source-refit.R
+node scripts/dfm/export-canonical.mjs
 ```
 
-The runner executes the source workbook data preparation, one-factor EM
-estimation, prediction, and GDP postprocessing without rendering the PDF
-report. The latest run converged in 155 iterations and reproduced the
-public 2026Q1 YoY nowcast at 7.0078%, with a 0 pp source/public
-difference. The remaining local report issue is Pandoc availability for
-`rmarkdown::render()`, not R availability.
+The runner refreshes the source transformation map, executes the source
+workbook data preparation, one-factor EM estimation, prediction, and GDP
+postprocessing without rendering the PDF report, regenerates the public
+`dfm.json`, rebuilds the validation artifacts, and writes the canonical
+comparison report. The latest run converged in 155 iterations and
+matched the public bridge at 2026Q1: 7.0078% YoY and 1.4398% QoQ, with
+0 pp source/public differences. The remaining local report issue is
+Pandoc availability for `rmarkdown::render()`, not R availability.
 
-The public `scripts/export_dfm.R` still publishes the frozen
-`dfm_nowcast/dfm_data.js` bridge. Replacing that frozen bridge with direct
-source-refit output still requires model-owner reconciliation and
-economist sign-off.
+The public `scripts/export_dfm.R` still reads the checked-in bridge
+artifact as its immediate data input, but the canonical runner now proves
+that the bridge and source refit agree before publication. Replacing the
+bridge input with direct source-refit output still requires a reviewed
+source-output contract and model-owner sign-off.
 
 ## Validation And Backtest Status
 
@@ -203,7 +206,7 @@ vintages or saved pre-release DFM outputs are not source-controlled.
 - **No news decomposition.** The legacy UI computes an indicator-level
   news decomposition interactively on the Kalman-update page. The nightly
   export ships the current filtered state's nowcast only; the news view
-  is a Sprint 3+ consumer-wiring decision.
+  remains a future modelling/product decision.
 - **No V_last-aware uncertainty.** The fan chart uses an illustrative
   historical benchmark proxy, not the per-run filtered-state covariance
   `V_last`. `V_last` is present in the upstream artefact but is not
@@ -211,15 +214,11 @@ vintages or saved pre-release DFM outputs are not source-controlled.
   contract by adding an optional field to `uncertainty`.
 - **No multi-factor decomposition.** The model is single-factor
   (`n_factors = 1`); a multi-factor view is not in scope for this export.
-- **No re-estimation.** The script **consumes** the EM-fitted parameters
-  frozen in `dfm_nowcast/dfm_data.js`; it does not re-run EM or re-fit
-  the state-space system. Re-fit is a separate modelling event (see
-  `dfm-parameters-frozen-at-refit` caveat).
-- **No direct source-workbook refit/export yet.** The local source model bundle
-  in `model sources/Fore+Nowcast/DFM` is reference material for review.
-  Public `dfm.json` is still generated from the checked-in frozen bridge
-  artifact. Workbook updates require a reviewed refit/export step before
-  public values change.
+- **No direct source-workbook publication yet.** The canonical local export
+  reruns the source refit and reconciles it to the checked-in bridge, but
+  public `dfm.json` still reads the bridge artifact as its immediate input.
+  Publishing directly from source-refit output requires a reviewed
+  source-output contract and model-owner sign-off.
 - **No true DFM vintage backtest yet.** The current validation report is a
   GDP-history benchmark proxy. It is useful for a conservative internal
   range, but it is not evidence of real-time DFM forecast accuracy.
@@ -235,19 +234,18 @@ vintages or saved pre-release DFM outputs are not source-controlled.
 ## Freshness
 
 The JSON is regenerated by the GitHub Actions data-regeneration workflow
-(`.github/workflows/data-regen.yml`). During Sprint 3 the workflow is
-complete on `epic/replatform-execution` and can be run with
-`workflow_dispatch`; scheduled/default-branch cron activation becomes
-operational only after the TB-P1 deployment migration is promoted to
-`main`. The TB-P1 epic-branch pilot deployment does not, by itself, make
-scheduled freshness active.
+(`.github/workflows/data-regen.yml`) on the default branch. The workflow
+calls `node scripts/dfm/export-canonical.mjs --allow-missing-source` so
+CI can regenerate the checked-in bridge artifact even when the raw source
+workbook is absent. Full source-refit reconciliation remains a local
+model-owner workflow because the raw workbook is not source-controlled.
 `attribution.timestamp` and
 `attribution.run_id` reflect the nightly build. If the JSON is older
 than 48 hours, the Overview page / NowcastForecastBlock should surface
 the vintage prominently; if older than 7 days, the vintage warning
 should escalate to a caveat-level banner (per TA-3 scenario-store rule
-and the `dfm-parameters-frozen-at-refit` caveat — a stale export means
-a stale refit).
+and the `dfm-parameters-frozen-at-refit` caveat; a stale export means the
+source-reconciled bridge is stale).
 
 Two sources of "freshness" are in play and should not be conflated:
 
@@ -260,33 +258,17 @@ Two sources of "freshness" are in play and should not be conflated:
 
 The consumer should surface both vintages when relevant.
 
-## Consumer wiring checklist (PR 2 of 4 — next PR)
+## Consumer wiring status
 
-- [ ] `apps/policy-ui/src/data/bridge/dfm-types.ts` — DFM-specific
-      TypeScript types (`DfmBridgePayload`, `DfmNowcastQuarter`,
-      `DfmQuarterHistory`, `DfmIndicator`, `DfmFactorBlock`).
-- [ ] `apps/policy-ui/src/data/bridge/dfm-guard.ts` — schema validator
-      with path-level issues, matching the per-page guard pattern
-      established by `qpm-guard.ts`.
-- [ ] `apps/policy-ui/src/data/bridge/dfm-client.ts` — fetch
-      `/data/dfm.json`, validate, return `DfmBridgePayload` with guarded
-      error modes.
-- [ ] `apps/policy-ui/src/data/bridge/dfm-adapter.ts` — adapt
-      `DfmBridgePayload` to downstream contract shapes:
-      `HeadlineMetric` for the nowcast KPI (using the 90% band to
-      populate `confidence`), `ChartSpec` with `UncertaintyBand[]` for
-      the quarterly GDP fan chart (`is_illustrative: false`).
-- [ ] Integration test: given a committed `dfm.json` fixture → produces
-      a valid `HeadlineMetric` for `gdp_growth_yoy`, a valid `ChartSpec`
-      for the GDP fan chart with three non-empty uncertainty bands, and
-      a populated `indicators` table.
-
-## Downstream PRs (not in this slice)
-
-- **Overview page integration.** Switch nowcast source in
-  `apps/policy-ui/src/data/raw/overview-live.ts` (or the adapter
-  upstream of it) from mock to the DFM bridge, with mock fallback
-  gated on a failed guard.
-- **Default-branch activation.** Keep manual dispatch on the epic branch
-  until the TB-P1 deployment migration is promoted to `main`; after that,
-  scheduled cron runs update user-facing pilot data.
+- `apps/policy-ui/src/data/bridge/dfm-types.ts` defines the DFM-specific
+  public artifact contract.
+- `apps/policy-ui/src/data/bridge/dfm-guard.ts` validates the committed
+  artifact, including source-refit reconciliation metadata.
+- `apps/policy-ui/src/data/bridge/dfm-client.ts` fetches `/data/dfm.json`
+  through the guarded static-data path.
+- `apps/policy-ui/src/data/bridge/dfm-adapter.ts` adapts the bridge into
+  Overview/Model Explorer shapes and keeps the uncertainty bands marked
+  illustrative.
+- The current remaining model-work items are direct source-refit
+  publication, true vintage backtesting, richer DFM diagnostics, and
+  economist/model-owner sign-off.

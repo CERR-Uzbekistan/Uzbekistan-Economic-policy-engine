@@ -86,9 +86,9 @@ export type DfmMetadata = {
   source_artifact_exported_at: string
   export_script: string
   export_script_md5: string | null
-  export_mode: 'frozen_state_space_bridge'
+  export_mode: 'frozen_state_space_bridge' | 'source_reconciled_bridge'
   source_model_reference: {
-    status: 'reference_only_not_public_export_input'
+    status: 'reference_only_not_public_export_input' | 'source_refit_reconciled_not_direct_public_input'
     path: string
     data_workbook: string
     source_workbook_updates_require_refit: boolean
@@ -113,6 +113,8 @@ export type DfmMetadata = {
     public_export_reads_source_workbook: boolean
     blocker: string
     source_logic_status: string
+    reconciliation_status?: 'matched_public_artifact' | 'not_reconciled'
+    canonical_export_report?: string | null
   }
   backtest_status: {
     status: 'proxy_validation_available' | 'available' | 'not_available'
@@ -136,7 +138,7 @@ export type DfmMetadata = {
   }
   readiness_status: {
     public_status: 'internal_preview_bridge'
-    source_refit_in_ci: 'not_available' | 'available'
+    source_refit_in_ci: 'not_available' | 'local_only_not_ci' | 'available'
     per_series_transform_map: 'not_available' | 'available'
     historical_backtest: 'not_available' | 'proxy_available' | 'available'
     diagnostics_audit: 'not_available' | 'available'

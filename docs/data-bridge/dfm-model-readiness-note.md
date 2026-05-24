@@ -19,12 +19,16 @@ diagnostics, indicator loadings, indicator contributions, and caveats.
 Current tracked export mode:
 
 ```text
-metadata.export_mode = "frozen_state_space_bridge"
+metadata.export_mode = "source_reconciled_bridge"
 ```
 
-That means the public bridge export reads the frozen checked-in
-`dfm_nowcast/dfm_data.js` state-space artifact. It does not yet read
-`data_uzbekistan.xlsx` or rerun the R EM estimator in CI.
+That means the local canonical export runs the source R refit from
+`model sources/Fore+Nowcast/DFM`, then checks that the checked-in bridge
+artifact reproduces the same current public nowcast. The public `dfm.json`
+still reads through `dfm_nowcast/dfm_data.js`; direct publication from
+source-refit output is the next model-owner sign-off step. In GitHub
+Actions, raw source files are not available, so CI can regenerate the
+bridge artifact but cannot rerun the source refit.
 
 The current public artifact now also carries explicit readiness metadata:
 
@@ -80,6 +84,22 @@ risk flags, owner-decision status, public-display guidance,
 missing-value rule, and model role for all 36 current public DFM rows.
 The raw workbook remains outside source control.
 
+The canonical local export command is:
+
+```text
+node scripts/dfm/export-canonical.mjs
+```
+
+It refreshes the transformation map, runs the source refit, regenerates
+the public `dfm.json`, rebuilds the validation report, and writes:
+
+- `docs/data-bridge/dfm-canonical-export-report.json`
+- `docs/data-bridge/dfm-canonical-export-report.md`
+
+The latest report shows that the source refit and public bridge both
+produce `2026Q1` GDP growth of `7.0078%` YoY and `1.4398%` QoQ, with
+zero source-minus-public difference.
+
 ## How the model works
 
 1. The source workbook provides quarterly GDP and high-frequency monthly
@@ -125,9 +145,9 @@ Current public artifact checks:
 - public row count: `36`
 - latent factor count: `1`
 - public forward horizon: `0 quarters`
-- export mode: `frozen_state_space_bridge`
+- export mode: `source_reconciled_bridge`
 - public status: `internal_preview_bridge`
-- source refit in CI: `not_available`
+- source refit in CI: `local_only_not_ci`
 - per-series transform map: `available`
 - historical backtest/validation: `proxy_available`; true DFM vintages are still unavailable
 - diagnostics audit: `available` as contribution guardrails, not model-owner sign-off
@@ -136,7 +156,7 @@ Current public artifact checks:
 - transform coverage: `36_of_36`
 - transformation-map decision status: 18 `approved`, 18
   `approved_with_caveat`, and 0 `blocked_needs_owner_decision`
-- refit status: `available` for the local source runner; public export still uses the frozen bridge
+- refit status: `available` for the local source runner; public export is reconciled to the source refit through the canonical local command
 - validation/backtest status: `proxy_validation_available`
 - uncertainty range status: `available_illustrative`
 
@@ -213,8 +233,8 @@ The local source bundle is useful, but it is not production-hardened yet:
    `readxl`, `dplyr`, `pracma`, `Matrix`, `zoo`, `purrr`, `lubridate`,
    `tidyr`, `signal`, `seasonal`, `urca`, `rmarkdown`, and `ggplot2`;
    install Pandoc if the PDF report is required.
-2. Rebuild the source-to-public pipeline so `dfm.json` can be generated
-   directly from the source workbook and R refit output.
+2. Replace bridge publication with direct source-refit output after the
+   source-output contract is reviewed and signed off.
 3. Move the transform map into reviewed source metadata and block refits
    when a series lacks an accepted transformation decision.
 4. Add data integrity checks: duplicate dates, metadata/order mismatch,

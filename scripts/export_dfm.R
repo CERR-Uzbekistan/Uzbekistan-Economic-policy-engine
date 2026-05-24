@@ -1,9 +1,9 @@
 # export_dfm.R — nightly DFM nowcast export
 #
 # Produces: apps/policy-ui/public/data/dfm.json
-# Source:   dfm_nowcast/dfm_data.js (pre-estimated state-space parameters
-#           from the legacy Mixed-frequency DFM — Uzbekistan GDP Nowcasting;
-#           see dfm_nowcast/index.html for the runtime consumer).
+# Source:   dfm_nowcast/dfm_data.js, reconciled against the local source
+#           R refit when `scripts/dfm/export-canonical.mjs` is run with the
+#           untracked source bundle available.
 # Run:      Rscript scripts/export_dfm.R
 #
 # This script is intended to run in CI (.github/workflows/data-regen.yml;
@@ -12,8 +12,9 @@
 #
 # Determinism: the script reads the frozen state-space parameters committed
 # in dfm_nowcast/dfm_data.js and applies a fixed validation-proxy fan-chart
-# formula. No RNG, no network. Running the script twice on the same checkout
-# produces byte-identical output except for export timestamps.
+# formula. The canonical runner first runs the source refit and checks this
+# bridge against it. No RNG, no network. Running the script twice on the same
+# checkout produces byte-identical output except for export timestamps.
 
 suppressPackageStartupMessages({
   library(jsonlite)
@@ -49,6 +50,7 @@ TRANSFORM_MAP_CSV <- "docs/data-bridge/dfm-transformation-map.csv"
 VALIDATION_ARTIFACT <- "docs/data-bridge/dfm-validation-summary.json"
 VALIDATION_REPORT <- "docs/data-bridge/dfm-validation-report.md"
 SOURCE_REFIT_ARTIFACT <- "docs/data-bridge/dfm-source-refit-summary.json"
+CANONICAL_EXPORT_REPORT <- "docs/data-bridge/dfm-canonical-export-report.json"
 
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
@@ -73,6 +75,11 @@ read_json_if_exists <- function(path) {
     jsonlite::fromJSON(path, simplifyVector = FALSE),
     error = function(e) NULL
   )
+}
+
+values_match <- function(a, b, tolerance = 0.0001) {
+  if (is.null(a) || is.null(b) || is.na(a) || is.na(b)) return(FALSE)
+  isTRUE(abs(as.numeric(a) - as.numeric(b)) <= tolerance)
 }
 
 # ============================================================
@@ -304,7 +311,7 @@ build_caveats <- function() {
     list(
       caveat_id        = "dfm-parameters-frozen-at-refit",
       severity         = "warning",
-      message          = "State-space parameters (C, A, Q, R, means, sdevs) are produced by an offline EM refit (legacy export_dfm_for_web.R, not in this repository) and are not re-estimated by this export. The nightly export regenerates the consumer JSON from those frozen parameters; a refit is a separate modelling event.",
+      message          = "State-space parameters (C, A, Q, R, means, sdevs) are produced by the source EM refit and published through the checked-in bridge. The canonical export runner reconciles the local source refit against this bridge before publication when the source bundle is available.",
       affected_metrics = I(c("gdp_growth")),
       affected_models  = I(c("DFM")),
       source           = "dfm_nowcast/dfm_data.js header comment"
@@ -312,10 +319,10 @@ build_caveats <- function() {
     list(
       caveat_id        = "dfm-source-refit-not-automated",
       severity         = "warning",
-      message          = "The local source-model bundle is reference material for model review. This export does not read the source workbook or rerun the R EM estimator, so workbook updates require a separate reviewed refit/export step before public dfm.json changes.",
+      message          = "The canonical local export runs the source workbook refit and reconciles it with the public bridge. CI can still regenerate the bridge without raw source files, so direct source-workbook publication remains blocked until the source bundle is available in a controlled release lane.",
       affected_metrics = I(c("gdp_growth", "factor_path", "indicator_contributions")),
       affected_models  = I(c("DFM")),
-      source           = "model sources/Fore+Nowcast/DFM/main.R; scripts/export_dfm.R"
+      source           = "model sources/Fore+Nowcast/DFM/main.R; scripts/dfm/export-canonical.mjs"
     ),
     list(
       caveat_id        = "dfm-transform-map-needed",
@@ -365,9 +372,26 @@ build_attribution <- function() {
 
 build_metadata <- function(d) {
   source_refit <- read_json_if_exists(SOURCE_REFIT_ARTIFACT)
+  canonical_report <- read_json_if_exists(CANONICAL_EXPORT_REPORT)
+  current_public <- build_nowcast(d)$current_quarter
+  source_current <- source_refit$current_nowcast %||% list()
   source_refit_available <- !is.null(source_refit) &&
     identical(source_refit$artifact$status, "completed_without_pdf_report") &&
     identical(source_refit$estimation$status, "completed")
+  source_refit_reconciled <- source_refit_available &&
+    !is.null(current_public) &&
+    identical(source_current$source_period, current_public$period) &&
+    values_match(source_current$source_gdp_growth_yoy_pct, current_public$gdp_growth_yoy_pct) &&
+    values_match(source_current$source_gdp_growth_qoq_pct, current_public$gdp_growth_qoq_pct)
+  canonical_report_available <- source_refit_reconciled || (
+    !is.null(canonical_report) && file.exists(CANONICAL_EXPORT_REPORT)
+  )
+  export_mode <- if (source_refit_reconciled) "source_reconciled_bridge" else "frozen_state_space_bridge"
+  source_reference_status <- if (source_refit_reconciled) {
+    "source_refit_reconciled_not_direct_public_input"
+  } else {
+    "reference_only_not_public_export_input"
+  }
   source_refit_status <- if (source_refit_available) {
     sprintf(
       "local_source_refit_completed_without_pdf_report; artifact=%s; iterations=%s; converged=%s; source_public_yoy_diff_pp=%s",
@@ -380,7 +404,7 @@ build_metadata <- function(d) {
     "source_R_workflow_audited_but_refit_artifact_not_available"
   }
   source_refit_blocker <- if (source_refit_available) {
-    "No local Rscript blocker remains. Remaining blockers: public export still publishes the frozen dfm_nowcast bridge until source-refit output is reconciled and signed off; PDF report rendering requires Pandoc; CI still needs a reproducible R dependency setup."
+    "No local Rscript blocker remains. The canonical export now checks source-refit/public bridge reconciliation when the local source bundle is available. Remaining blockers: direct publication from source-refit output, Pandoc-backed PDF report rendering, CI raw-source availability, and economist sign-off."
   } else {
     "Source refit summary is not available. Run scripts/dfm/run-source-refit.R with a configured R runtime and required packages, then review output before replacing the frozen public bridge."
   }
@@ -394,9 +418,9 @@ build_metadata <- function(d) {
     source_artifact_exported_at = d$meta$exported_at,
     export_script               = EXPORT_SCRIPT,
     export_script_md5           = hash_file(EXPORT_SCRIPT),
-    export_mode                 = "frozen_state_space_bridge",
+    export_mode                 = export_mode,
     source_model_reference      = list(
-      status = "reference_only_not_public_export_input",
+      status = source_reference_status,
       path = SOURCE_MODEL_BUNDLE,
       data_workbook = SOURCE_MODEL_WORKBOOK,
       source_workbook_updates_require_refit = TRUE,
@@ -434,7 +458,9 @@ build_metadata <- function(d) {
       status = if (source_refit_available) "available" else "blocked_in_current_environment",
       public_export_reads_source_workbook = FALSE,
       blocker = source_refit_blocker,
-      source_logic_status = source_refit_status
+      source_logic_status = source_refit_status,
+      reconciliation_status = if (source_refit_reconciled) "matched_public_artifact" else "not_reconciled",
+      canonical_export_report = if (canonical_report_available) CANONICAL_EXPORT_REPORT else NULL
     ),
     backtest_status             = list(
       status = "proxy_validation_available",
@@ -458,7 +484,7 @@ build_metadata <- function(d) {
     ),
     readiness_status            = list(
       public_status = "internal_preview_bridge",
-      source_refit_in_ci = "not_available",
+      source_refit_in_ci = "local_only_not_ci",
       per_series_transform_map = "available",
       historical_backtest = "proxy_available",
       diagnostics_audit = "available",

@@ -6,7 +6,7 @@
     "version": "0.1.0",
     "run_id": "dfm-nightly-2026-05-24",
     "data_version": "2026Q1",
-    "timestamp": "2026-05-24T12:29:34Z"
+    "timestamp": "2026-05-24T13:10:43Z"
   },
   "nowcast": {
     "last_observed_date": "2025-12-01",
@@ -667,7 +667,7 @@
     {
       "caveat_id": "dfm-parameters-frozen-at-refit",
       "severity": "warning",
-      "message": "State-space parameters (C, A, Q, R, means, sdevs) are produced by an offline EM refit (legacy export_dfm_for_web.R, not in this repository) and are not re-estimated by this export. The nightly export regenerates the consumer JSON from those frozen parameters; a refit is a separate modelling event.",
+      "message": "State-space parameters (C, A, Q, R, means, sdevs) are produced by the source EM refit and published through the checked-in bridge. The canonical export runner reconciles the local source refit against this bridge before publication when the source bundle is available.",
       "affected_metrics": ["gdp_growth"],
       "affected_models": ["DFM"],
       "source": "dfm_nowcast/dfm_data.js header comment"
@@ -675,10 +675,10 @@
     {
       "caveat_id": "dfm-source-refit-not-automated",
       "severity": "warning",
-      "message": "The local source-model bundle is reference material for model review. This export does not read the source workbook or rerun the R EM estimator, so workbook updates require a separate reviewed refit/export step before public dfm.json changes.",
+      "message": "The canonical local export runs the source workbook refit and reconciles it with the public bridge. CI can still regenerate the bridge without raw source files, so direct source-workbook publication remains blocked until the source bundle is available in a controlled release lane.",
       "affected_metrics": ["gdp_growth", "factor_path", "indicator_contributions"],
       "affected_models": ["DFM"],
-      "source": "model sources/Fore+Nowcast/DFM/main.R; scripts/export_dfm.R"
+      "source": "model sources/Fore+Nowcast/DFM/main.R; scripts/dfm/export-canonical.mjs"
     },
     {
       "caveat_id": "dfm-transform-map-needed",
@@ -706,17 +706,17 @@
     }
   ],
   "metadata": {
-    "exported_at": "2026-05-24T12:29:34Z",
-    "source_script_sha": "d703b3ccbabece5cb8069258ed82f6a1f9723934",
+    "exported_at": "2026-05-24T13:10:43Z",
+    "source_script_sha": "af66a61aa53e669e9213185667f5158322dbc271",
     "solver_version": "0.1.0",
     "source_artifact": "dfm_nowcast/dfm_data.js",
     "source_artifact_md5": "ec91be3922a6c4ba6e0b67d7a271aacb",
     "source_artifact_exported_at": "2026-04-08 10:09:12",
     "export_script": "scripts/export_dfm.R",
-    "export_script_md5": "43854b2e1e52e983f3b61182103c1ca6",
-    "export_mode": "frozen_state_space_bridge",
+    "export_script_md5": "6d763a18238c869ecc0fac8a4aa5c21c",
+    "export_mode": "source_reconciled_bridge",
     "source_model_reference": {
-      "status": "reference_only_not_public_export_input",
+      "status": "source_refit_reconciled_not_direct_public_input",
       "path": "model sources/Fore+Nowcast/DFM",
       "data_workbook": "model sources/Fore+Nowcast/DFM/data/data_uzbekistan.xlsx",
       "source_workbook_updates_require_refit": true,
@@ -739,8 +739,10 @@
     "refit_status": {
       "status": "available",
       "public_export_reads_source_workbook": false,
-      "blocker": "No local Rscript blocker remains. Remaining blockers: public export still publishes the frozen dfm_nowcast bridge until source-refit output is reconciled and signed off; PDF report rendering requires Pandoc; CI still needs a reproducible R dependency setup.",
-      "source_logic_status": "local_source_refit_completed_without_pdf_report; artifact=docs/data-bridge/dfm-source-refit-summary.json; iterations=155; converged=TRUE; source_public_yoy_diff_pp=0"
+      "blocker": "No local Rscript blocker remains. The canonical export now checks source-refit/public bridge reconciliation when the local source bundle is available. Remaining blockers: direct publication from source-refit output, Pandoc-backed PDF report rendering, CI raw-source availability, and economist sign-off.",
+      "source_logic_status": "local_source_refit_completed_without_pdf_report; artifact=docs/data-bridge/dfm-source-refit-summary.json; iterations=155; converged=TRUE; source_public_yoy_diff_pp=0",
+      "reconciliation_status": "matched_public_artifact",
+      "canonical_export_report": "docs/data-bridge/dfm-canonical-export-report.json"
     },
     "backtest_status": {
       "status": "proxy_validation_available",
@@ -764,7 +766,7 @@
     },
     "readiness_status": {
       "public_status": "internal_preview_bridge",
-      "source_refit_in_ci": "not_available",
+      "source_refit_in_ci": "local_only_not_ci",
       "per_series_transform_map": "available",
       "historical_backtest": "proxy_available",
       "diagnostics_audit": "available",

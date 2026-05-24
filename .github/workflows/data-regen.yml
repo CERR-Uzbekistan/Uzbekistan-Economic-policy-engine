@@ -39,7 +39,7 @@ jobs:
         run: Rscript scripts/export_qpm.R
 
       - name: Run DFM export
-        run: Rscript scripts/export_dfm.R
+        run: node scripts/dfm/export-canonical.mjs --allow-missing-source
 
       - name: Check whether data JSON changed
         id: diff

@@ -601,11 +601,14 @@ function parseSourceModelReference(
   const publicExportReadsSourceWorkbook = value.public_export_reads_source_workbook
   let ok = true
 
-  if (status !== 'reference_only_not_public_export_input') {
+  if (
+    status !== 'reference_only_not_public_export_input' &&
+    status !== 'source_refit_reconciled_not_direct_public_input'
+  ) {
     pushError(
       issues,
       'metadata.source_model_reference.status',
-      'Expected reference_only_not_public_export_input.',
+      'Expected reference_only_not_public_export_input or source_refit_reconciled_not_direct_public_input.',
     )
     ok = false
   }
@@ -640,7 +643,7 @@ function parseSourceModelReference(
 
   if (!ok) return null
   return {
-    status: 'reference_only_not_public_export_input',
+    status: status as DfmMetadata['source_model_reference']['status'],
     path: path as string,
     data_workbook: dataWorkbook as string,
     source_workbook_updates_require_refit: true,
@@ -759,6 +762,8 @@ function parseRefitStatus(
   const publicExportReadsSourceWorkbook = value.public_export_reads_source_workbook
   const blocker = value.blocker
   const sourceLogicStatus = value.source_logic_status
+  const reconciliationStatus = value.reconciliation_status
+  const canonicalExportReport = value.canonical_export_report
   let ok = true
   if (status !== 'blocked_in_current_environment' && status !== 'available') {
     pushError(issues, 'metadata.refit_status.status', 'Expected blocked_in_current_environment or available.')
@@ -781,12 +786,41 @@ function parseRefitStatus(
       ok = false
     }
   }
+  if (
+    reconciliationStatus !== undefined &&
+    reconciliationStatus !== 'matched_public_artifact' &&
+    reconciliationStatus !== 'not_reconciled'
+  ) {
+    pushError(
+      issues,
+      'metadata.refit_status.reconciliation_status',
+      'Expected matched_public_artifact or not_reconciled when present.',
+    )
+    ok = false
+  }
+  if (!(canonicalExportReport === undefined || canonicalExportReport === null || typeof canonicalExportReport === 'string')) {
+    pushError(
+      issues,
+      'metadata.refit_status.canonical_export_report',
+      'Expected a string or null when present.',
+    )
+    ok = false
+  }
   if (!ok) return null
   return {
     status: status as DfmMetadata['refit_status']['status'],
     public_export_reads_source_workbook: publicExportReadsSourceWorkbook as boolean,
     blocker: blocker as string,
     source_logic_status: sourceLogicStatus as string,
+    ...(reconciliationStatus === undefined
+      ? {}
+      : {
+          reconciliation_status:
+            reconciliationStatus as NonNullable<DfmMetadata['refit_status']['reconciliation_status']>,
+        }),
+    ...(canonicalExportReport === undefined
+      ? {}
+      : { canonical_export_report: (canonicalExportReport ?? null) as string | null }),
   }
 }
 
@@ -942,7 +976,7 @@ function parseReadinessStatus(
   }
 
   const allowedAvailabilityByField = new Map<string, Set<string>>([
-    ['source_refit_in_ci', new Set(['not_available', 'available'])],
+    ['source_refit_in_ci', new Set(['not_available', 'local_only_not_ci', 'available'])],
     ['per_series_transform_map', new Set(['not_available', 'available'])],
     ['historical_backtest', new Set(['not_available', 'proxy_available', 'available'])],
     ['diagnostics_audit', new Set(['not_available', 'available'])],
@@ -1059,8 +1093,12 @@ function parseMetadata(value: unknown, issues: DfmValidationIssue[]): DfmMetadat
     pushError(issues, 'metadata.export_script_md5', 'Expected a string or null.')
     ok = false
   }
-  if (exportMode !== 'frozen_state_space_bridge') {
-    pushError(issues, 'metadata.export_mode', 'Expected frozen_state_space_bridge.')
+  if (exportMode !== 'frozen_state_space_bridge' && exportMode !== 'source_reconciled_bridge') {
+    pushError(
+      issues,
+      'metadata.export_mode',
+      'Expected frozen_state_space_bridge or source_reconciled_bridge.',
+    )
     ok = false
   }
   if (
@@ -1097,7 +1135,7 @@ function parseMetadata(value: unknown, issues: DfmValidationIssue[]): DfmMetadat
     source_artifact_exported_at: sourceArtifactExportedAt as string,
     export_script: exportScript as string,
     export_script_md5: (exportScriptMd5 ?? null) as string | null,
-    export_mode: 'frozen_state_space_bridge',
+    export_mode: exportMode as DfmMetadata['export_mode'],
     source_model_reference: sourceModelReference,
     source_audit: sourceAudit,
     transformation_map: transformationMap,
