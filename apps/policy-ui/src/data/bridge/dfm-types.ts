@@ -82,7 +82,26 @@ export type DfmMetadata = {
   source_script_sha: string | null
   solver_version: string
   source_artifact: string
+  source_artifact_md5: string | null
   source_artifact_exported_at: string
+  export_script: string
+  export_script_md5: string | null
+  export_mode: 'frozen_state_space_bridge'
+  source_model_reference: {
+    status: 'reference_only_not_public_export_input'
+    path: string
+    data_workbook: string
+    source_workbook_updates_require_refit: boolean
+    public_export_reads_source_workbook: boolean
+  }
+  readiness_status: {
+    public_status: 'internal_preview_bridge'
+    source_refit_in_ci: 'not_available' | 'available'
+    per_series_transform_map: 'not_available' | 'available'
+    historical_backtest: 'not_available' | 'available'
+    diagnostics_audit: 'not_available' | 'available'
+    economist_signoff: 'not_available' | 'available'
+  }
 }
 
 export type DfmBridgePayload = {

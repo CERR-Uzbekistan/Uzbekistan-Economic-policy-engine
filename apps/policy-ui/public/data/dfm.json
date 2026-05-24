@@ -666,18 +666,61 @@
     },
     {
       "caveat_id": "dfm-parameters-frozen-at-refit",
-      "severity": "info",
+      "severity": "warning",
       "message": "State-space parameters (C, A, Q, R, means, sdevs) are produced by an offline EM refit (legacy export_dfm_for_web.R, not in this repository) and are not re-estimated by this export. The nightly export regenerates the consumer JSON from those frozen parameters; a refit is a separate modelling event.",
       "affected_metrics": ["gdp_growth"],
       "affected_models": ["DFM"],
       "source": "dfm_nowcast/dfm_data.js header comment"
+    },
+    {
+      "caveat_id": "dfm-source-refit-not-automated",
+      "severity": "warning",
+      "message": "The local source-model bundle is reference material for model review. This export does not read the source workbook or rerun the R EM estimator, so workbook updates require a separate reviewed refit/export step before public dfm.json changes.",
+      "affected_metrics": ["gdp_growth", "factor_path", "indicator_contributions"],
+      "affected_models": ["DFM"],
+      "source": "model sources/Fore+Nowcast/DFM/main.R; scripts/export_dfm.R"
+    },
+    {
+      "caveat_id": "dfm-transform-map-needed",
+      "severity": "warning",
+      "message": "The audited source R workflow applies generic log-growth transformations. A production refit needs a per-series transform map for rates, ratios, levels, weekly series, negative values, and already-growth-rate indicators.",
+      "affected_metrics": ["gdp_growth", "indicator_contributions"],
+      "affected_models": ["DFM"],
+      "source": "model sources/Fore+Nowcast/DFM/functions/calculate_growth.R"
+    },
+    {
+      "caveat_id": "dfm-backtest-missing",
+      "severity": "warning",
+      "message": "No source-controlled historical vintage backtest or fit report is published with this artifact. Treat the nowcast as an internal-preview bridge until rolling-origin errors and diagnostics are added.",
+      "affected_metrics": ["gdp_growth", "uncertainty_bands"],
+      "affected_models": ["DFM"],
+      "source": "docs/data-bridge/dfm-model-readiness-note.md"
     }
   ],
   "metadata": {
     "exported_at": "2026-05-23T21:52:26Z",
-    "source_script_sha": null,
+    "source_script_sha": "4b27c793451f20571afb848671ca40617ce24d68",
     "solver_version": "0.1.0",
     "source_artifact": "dfm_nowcast/dfm_data.js",
-    "source_artifact_exported_at": "2026-04-08 10:09:12"
+    "source_artifact_md5": "ec91be3922a6c4ba6e0b67d7a271aacb",
+    "source_artifact_exported_at": "2026-04-08 10:09:12",
+    "export_script": "scripts/export_dfm.R",
+    "export_script_md5": "2e9cb7dfd2df1cb761cc7689a0e7097f",
+    "export_mode": "frozen_state_space_bridge",
+    "source_model_reference": {
+      "status": "reference_only_not_public_export_input",
+      "path": "model sources/Fore+Nowcast/DFM",
+      "data_workbook": "model sources/Fore+Nowcast/DFM/data/data_uzbekistan.xlsx",
+      "source_workbook_updates_require_refit": true,
+      "public_export_reads_source_workbook": false
+    },
+    "readiness_status": {
+      "public_status": "internal_preview_bridge",
+      "source_refit_in_ci": "not_available",
+      "per_series_transform_map": "not_available",
+      "historical_backtest": "not_available",
+      "diagnostics_audit": "not_available",
+      "economist_signoff": "not_available"
+    }
   }
 }

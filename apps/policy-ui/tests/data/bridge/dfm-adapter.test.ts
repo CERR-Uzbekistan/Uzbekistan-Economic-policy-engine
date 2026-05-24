@@ -92,6 +92,9 @@ describe('dfm adapter', () => {
       output.meta.source_artifact_exported_at,
       payload.metadata.source_artifact_exported_at,
     )
-    assert.equal(output.meta.source_script_sha, null)
+    assert.equal(output.meta.source_script_sha, payload.metadata.source_script_sha)
+    assert.equal(output.meta.export_mode, 'frozen_state_space_bridge')
+    assert.equal(output.meta.source_model_reference.public_export_reads_source_workbook, false)
+    assert.equal(output.meta.readiness_status.historical_backtest, 'not_available')
   })
 })

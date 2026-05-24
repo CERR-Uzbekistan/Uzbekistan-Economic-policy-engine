@@ -41,6 +41,14 @@ describe('model explorer DFM bridge enrichment', () => {
       '0 quarters',
     )
     assert.equal(
+      evidence.evidence_metrics?.find((metric) => metric.label === 'Export mode')?.value,
+      'frozen_state_space_bridge',
+    )
+    assert.equal(
+      evidence.evidence_metrics?.find((metric) => metric.label === 'Public status')?.value,
+      'internal_preview_bridge',
+    )
+    assert.equal(
       evidence.caveats.some((caveat) => caveat.includes('Official StatOffice YoY publication')),
       true,
     )
@@ -58,6 +66,11 @@ describe('model explorer DFM bridge enrichment', () => {
     assert.equal(dfmEntry.caveats.some((caveat) => caveat.id === 'dfm-parameters-frozen-at-refit'), true)
     assert.match(dfmEntry.validation_summary.join(' '), /does not validate model economics/)
     assert.match(dfmEntry.validation_summary.join(' '), /standardized DFM factor signals/)
+    assert.match(dfmEntry.validation_summary.join(' '), /does not yet rerun the source workbook refit/)
     assert.equal(dfmEntry.bridge_evidence?.source_artifact, 'apps/policy-ui/public/data/dfm.json')
+    assert.equal(
+      dfmEntry.data_sources.some((source) => source.institution === 'DFM source-model bundle'),
+      true,
+    )
   })
 })

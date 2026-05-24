@@ -32,7 +32,10 @@ second bridge artefact after `qpm.json`.
   caveats:     Caveat[],         // 5 entries (severity info/warning)
   metadata: {
     exported_at, source_script_sha, solver_version,
-    source_artifact, source_artifact_exported_at
+    source_artifact, source_artifact_md5, source_artifact_exported_at,
+    export_script, export_script_md5, export_mode,
+    source_model_reference,
+    readiness_status
   }
 }
 ```
@@ -96,6 +99,9 @@ the series (YoY is undefined before t+4 observations).
 | `indicators[].contribution` | standardised units | Latest indicator value × loading, in the factor's z-scale. |
 | `indicators[].latest_value` | native | Native indicator units (YoY % for growth series, index level for IP, USD for trade, etc.); retained verbatim from `dfm_data.js` `latest.values`. Do not aggregate across indicators. |
 | `attribution.data_version` / `metadata.solver_version` | string | `"2026Q1"` and `"0.1.0"` in the current export. |
+| `metadata.export_mode` | enum | `"frozen_state_space_bridge"` until the exporter is rewired to run a source-model refit. |
+| `metadata.source_model_reference` | object | Points to the local source-model bundle and records that the public export does not read the source workbook. |
+| `metadata.readiness_status` | object | Explicit readiness gates: source refit in CI, per-series transform map, historical backtest, diagnostics audit, and economist sign-off. |
 
 `indicators[].contribution` must not be labelled as a GDP-growth
 percentage-point effect. It is a standardized DFM factor signal used to
@@ -130,6 +136,15 @@ side.
   frozen in `dfm_nowcast/dfm_data.js`; it does not re-run EM or re-fit
   the state-space system. Re-fit is a separate modelling event (see
   `dfm-parameters-frozen-at-refit` caveat).
+- **No direct source-workbook export yet.** The local source model bundle
+  in `model sources/Fore+Nowcast/DFM` is reference material for review.
+  Public `dfm.json` is still generated from the checked-in frozen bridge
+  artifact. Workbook updates require a reviewed refit/export step before
+  public values change.
+- **No production validation gates yet.** The current artifact must keep
+  `metadata.readiness_status.public_status = "internal_preview_bridge"`
+  until the source refit path, per-series transform map, historical
+  backtest, diagnostics audit, and economist sign-off are available.
 - **No scenario variants.** Unlike QPM, DFM has no "policy rate cut"
   or "UZS depreciation" scenarios — there is one nowcast, one factor
   path. The JSON has no top-level `scenarios[]` array by design.

@@ -65,6 +65,8 @@ export function toModelExplorerDfmBridgeEvidence(payload: DfmBridgePayload): Mod
       { label: 'Input rows', value: String(rows.highFrequencyRows) },
       { label: 'Latent factors', value: String(payload.factor.n_factors) },
       { label: 'Forward horizon', value: forecastHorizonLabel(payload) },
+      { label: 'Export mode', value: payload.metadata.export_mode },
+      { label: 'Public status', value: payload.metadata.readiness_status.public_status },
     ],
     caveats: payload.caveats.map((caveat) => caveat.message),
   }
@@ -132,13 +134,18 @@ function withDfmBridge(entry: ModelCatalogEntry, payload: DfmBridgePayload): Mod
       },
       {
         institution: 'DFM source artifact',
-        description: payload.metadata.source_artifact,
+        description: `${payload.metadata.source_artifact} (md5 ${payload.metadata.source_artifact_md5 ?? 'not recorded'})`,
         vintage_label: toIsoDateLabel(payload.metadata.source_artifact_exported_at),
       },
       {
         institution: 'DFM export script',
-        description: 'Deterministic JSON export from the checked-in DFM bridge path',
+        description: `${payload.metadata.export_script}; mode ${payload.metadata.export_mode}`,
         vintage_label: toIsoDateLabel(payload.metadata.exported_at),
+      },
+      {
+        institution: 'DFM source-model bundle',
+        description: `${payload.metadata.source_model_reference.path}; source workbook is reference-only until a reviewed refit path is wired`,
+        vintage_label: payload.metadata.source_model_reference.status,
       },
     ],
     validation_summary: [
@@ -146,6 +153,7 @@ function withDfmBridge(entry: ModelCatalogEntry, payload: DfmBridgePayload): Mod
       `The artifact carries ${forecastHorizonLabel(payload)} forward horizon; Overview only uses the DFM chart when its current quarter is ahead of the accepted actual and not older than the Overview nowcast period.`,
       'Frontend validation checks shape, units, periods, factor state, rows, caveats, and metadata; it does not validate model economics or official GDP publication status.',
       'Indicator contribution values are standardized DFM factor signals, not percentage-point GDP-growth effects.',
+      'The public export uses frozen state-space parameters and does not yet rerun the source workbook refit in CI; a per-series transform map, historical backtest, diagnostics audit, and economist sign-off remain unavailable.',
     ],
     bridge_evidence: toModelExplorerDfmBridgeEvidence(payload),
   }

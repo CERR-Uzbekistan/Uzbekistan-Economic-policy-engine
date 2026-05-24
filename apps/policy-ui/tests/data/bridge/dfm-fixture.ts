@@ -137,10 +137,29 @@ export function buildValidDfmPayload(): DfmBridgePayload {
     caveats: CAVEATS.map(clone),
     metadata: {
       exported_at: '2026-04-22T11:58:03Z',
-      source_script_sha: null,
+      source_script_sha: 'fixture-export-script-md5',
       solver_version: '0.1.0',
       source_artifact: 'dfm_nowcast/dfm_data.js',
+      source_artifact_md5: 'fixture-source-artifact-md5',
       source_artifact_exported_at: '2026-04-08 10:09:12',
+      export_script: 'scripts/export_dfm.R',
+      export_script_md5: 'fixture-export-script-md5',
+      export_mode: 'frozen_state_space_bridge',
+      source_model_reference: {
+        status: 'reference_only_not_public_export_input',
+        path: 'model sources/Fore+Nowcast/DFM',
+        data_workbook: 'model sources/Fore+Nowcast/DFM/data/data_uzbekistan.xlsx',
+        source_workbook_updates_require_refit: true,
+        public_export_reads_source_workbook: false,
+      },
+      readiness_status: {
+        public_status: 'internal_preview_bridge',
+        source_refit_in_ci: 'not_available',
+        per_series_transform_map: 'not_available',
+        historical_backtest: 'not_available',
+        diagnostics_audit: 'not_available',
+        economist_signoff: 'not_available',
+      },
     },
   }
 }

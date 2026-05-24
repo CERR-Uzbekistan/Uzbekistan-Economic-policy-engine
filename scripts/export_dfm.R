@@ -40,8 +40,26 @@ SOLVER_VERSION <- "0.1.0"
 DATA_VERSION   <- "2026Q1"
 
 SOURCE_ARTIFACT <- "dfm_nowcast/dfm_data.js"
+EXPORT_SCRIPT <- "scripts/export_dfm.R"
+SOURCE_MODEL_BUNDLE <- "model sources/Fore+Nowcast/DFM"
+SOURCE_MODEL_WORKBOOK <- "model sources/Fore+Nowcast/DFM/data/data_uzbekistan.xlsx"
 
 `%||%` <- function(a, b) if (is.null(a)) b else a
+
+hash_file <- function(path) {
+  if (!file.exists(path)) return(NA_character_)
+  unname(as.character(tools::md5sum(path)))
+}
+
+git_blob_sha <- function(path) {
+  if (!file.exists(path) || Sys.which("git") == "") return(NA_character_)
+  out <- tryCatch(
+    system2("git", c("hash-object", path), stdout = TRUE, stderr = FALSE),
+    error = function(e) NA_character_
+  )
+  if (length(out) < 1L || is.na(out[[1L]]) || !nzchar(out[[1L]])) return(NA_character_)
+  out[[1L]]
+}
 
 # ============================================================
 #  INPUT — parse the legacy JS artifact
@@ -271,11 +289,35 @@ build_caveats <- function() {
     ),
     list(
       caveat_id        = "dfm-parameters-frozen-at-refit",
-      severity         = "info",
+      severity         = "warning",
       message          = "State-space parameters (C, A, Q, R, means, sdevs) are produced by an offline EM refit (legacy export_dfm_for_web.R, not in this repository) and are not re-estimated by this export. The nightly export regenerates the consumer JSON from those frozen parameters; a refit is a separate modelling event.",
       affected_metrics = I(c("gdp_growth")),
       affected_models  = I(c("DFM")),
       source           = "dfm_nowcast/dfm_data.js header comment"
+    ),
+    list(
+      caveat_id        = "dfm-source-refit-not-automated",
+      severity         = "warning",
+      message          = "The local source-model bundle is reference material for model review. This export does not read the source workbook or rerun the R EM estimator, so workbook updates require a separate reviewed refit/export step before public dfm.json changes.",
+      affected_metrics = I(c("gdp_growth", "factor_path", "indicator_contributions")),
+      affected_models  = I(c("DFM")),
+      source           = "model sources/Fore+Nowcast/DFM/main.R; scripts/export_dfm.R"
+    ),
+    list(
+      caveat_id        = "dfm-transform-map-needed",
+      severity         = "warning",
+      message          = "The audited source R workflow applies generic log-growth transformations. A production refit needs a per-series transform map for rates, ratios, levels, weekly series, negative values, and already-growth-rate indicators.",
+      affected_metrics = I(c("gdp_growth", "indicator_contributions")),
+      affected_models  = I(c("DFM")),
+      source           = "model sources/Fore+Nowcast/DFM/functions/calculate_growth.R"
+    ),
+    list(
+      caveat_id        = "dfm-backtest-missing",
+      severity         = "warning",
+      message          = "No source-controlled historical vintage backtest or fit report is published with this artifact. Treat the nowcast as an internal-preview bridge until rolling-origin errors and diagnostics are added.",
+      affected_metrics = I(c("gdp_growth", "uncertainty_bands")),
+      affected_models  = I(c("DFM")),
+      source           = "docs/data-bridge/dfm-model-readiness-note.md"
     )
   )
 }
@@ -302,10 +344,29 @@ build_attribution <- function() {
 build_metadata <- function(d) {
   list(
     exported_at                 = utc_now(),
-    source_script_sha           = NA,
+    source_script_sha           = git_blob_sha(EXPORT_SCRIPT),
     solver_version              = SOLVER_VERSION,
     source_artifact             = SOURCE_ARTIFACT,
-    source_artifact_exported_at = d$meta$exported_at
+    source_artifact_md5         = hash_file(SOURCE_ARTIFACT),
+    source_artifact_exported_at = d$meta$exported_at,
+    export_script               = EXPORT_SCRIPT,
+    export_script_md5           = hash_file(EXPORT_SCRIPT),
+    export_mode                 = "frozen_state_space_bridge",
+    source_model_reference      = list(
+      status = "reference_only_not_public_export_input",
+      path = SOURCE_MODEL_BUNDLE,
+      data_workbook = SOURCE_MODEL_WORKBOOK,
+      source_workbook_updates_require_refit = TRUE,
+      public_export_reads_source_workbook = FALSE
+    ),
+    readiness_status            = list(
+      public_status = "internal_preview_bridge",
+      source_refit_in_ci = "not_available",
+      per_series_transform_map = "not_available",
+      historical_backtest = "not_available",
+      diagnostics_audit = "not_available",
+      economist_signoff = "not_available"
+    )
   )
 }
 

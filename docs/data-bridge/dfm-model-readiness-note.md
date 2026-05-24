@@ -16,6 +16,16 @@ That artifact is the public output of the DFM refit/export lane. It
 contains the current-quarter GDP nowcast, uncertainty bands, latent-factor
 diagnostics, indicator loadings, indicator contributions, and caveats.
 
+Current tracked export mode:
+
+```text
+metadata.export_mode = "frozen_state_space_bridge"
+```
+
+That means the public bridge export reads the frozen checked-in
+`dfm_nowcast/dfm_data.js` state-space artifact. It does not yet read
+`data_uzbekistan.xlsx` or rerun the R EM estimator in CI.
+
 ## Source model bundle
 
 The local source bundle contains the full R-side nowcasting workflow:
@@ -85,24 +95,53 @@ Current public artifact checks:
 - public row count: `36`
 - latent factor count: `1`
 - public forward horizon: `0 quarters`
+- export mode: `frozen_state_space_bridge`
+- public status: `internal_preview_bridge`
+- source refit in CI: `not_available`
+- per-series transform map: `not_available`
+- historical backtest: `not_available`
+- diagnostics audit: `not_available`
+- economist sign-off: `not_available`
 
 This is enough for an internal-preview DFM nowcast lane. It is not enough
 to claim a final production-grade nowcasting system.
 
+## Source audit findings
+
+The local source bundle is useful, but it is not production-hardened yet:
+
+- `calculate_growth.R` applies generic log growth to all series. Rates,
+  ratios, balances, negative/zero-valued series, and already-growth-rate
+  indicators need explicit per-series transformations.
+- `postprocess_gdp.R` depends on the global `df` object and should take
+  all required inputs explicitly before it is used in a reproducible
+  export path.
+- `growth decomposition.R` rescales factor contributions to sum to a
+  chosen GDP growth number and drops negative contributors. It should not
+  be treated as a public GDP percentage-point decomposition.
+- `diagnostics_dfm.R` needs review before its residual diagnostics are
+  used as validation evidence.
+- The current one-factor setting may be reasonable for a preview, but
+  should be tested against alternative factor counts and block structures.
+
 ## Remaining work
 
-- Run the R refit/export lane directly from the source workbook and compare
-  it against the checked-in `dfm.json`.
-- Add real-time vintage backtesting: what would the model have predicted
-  before official GDP releases?
-- Add a reproducible validation report covering historical fit, forecast
-  errors, and indicator news contributions.
-- Decide whether one factor is enough or whether category-specific factors
-  are needed.
-- Upgrade public frequency metadata if weekly/daily source series are kept
-  separately instead of harmonized into monthly bridge rows.
-- Add a source-controlled release note each time the DFM source workbook or
-  refit output changes.
+1. Rebuild the source-to-public pipeline so `dfm.json` can be generated
+   directly from the source workbook and R refit output.
+2. Add a per-series transform map in the source workbook metadata and
+   block refits when a series lacks an accepted transformation.
+3. Add data integrity checks: duplicate dates, metadata/order mismatch,
+   coercion-created missing values, failed seasonal adjustment, stationarity
+   warnings, and EM non-convergence.
+4. Fix GDP postprocessing and diagnostics.
+5. Add real-time vintage backtesting: what would the model have predicted
+   before official GDP releases?
+6. Add a reproducible validation report covering historical fit, forecast
+   errors, factor stability, and indicator news contributions.
+7. Decide whether one factor is enough or whether category-specific factors
+   are needed.
+8. Add a source-controlled release note each time the DFM source workbook
+   or refit output changes.
 
 ## Safe wording
 

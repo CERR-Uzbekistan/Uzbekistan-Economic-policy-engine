@@ -70,7 +70,13 @@ export type DfmAdapterMeta = {
   source_script_sha: string | null
   solver_version: string
   source_artifact: string
+  source_artifact_md5: string | null
   source_artifact_exported_at: string
+  export_script: string
+  export_script_md5: string | null
+  export_mode: DfmMetadata['export_mode']
+  source_model_reference: DfmMetadata['source_model_reference']
+  readiness_status: DfmMetadata['readiness_status']
 }
 
 export type DfmAdapterOutput = {
@@ -151,7 +157,13 @@ function toMeta(metadata: DfmMetadata): DfmAdapterMeta {
     source_script_sha: metadata.source_script_sha,
     solver_version: metadata.solver_version,
     source_artifact: metadata.source_artifact,
+    source_artifact_md5: metadata.source_artifact_md5,
     source_artifact_exported_at: metadata.source_artifact_exported_at,
+    export_script: metadata.export_script,
+    export_script_md5: metadata.export_script_md5,
+    export_mode: metadata.export_mode,
+    source_model_reference: { ...metadata.source_model_reference },
+    readiness_status: { ...metadata.readiness_status },
   }
 }
 

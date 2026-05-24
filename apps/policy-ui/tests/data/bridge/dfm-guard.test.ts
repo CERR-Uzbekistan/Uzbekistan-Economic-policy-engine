@@ -237,4 +237,50 @@ describe('dfm bridge guard', () => {
       true,
     )
   })
+
+  it('requires explicit frozen-export provenance and source-model status', () => {
+    const payload = clonePayload(buildValidDfmPayload())
+    delete (payload.metadata as { export_mode?: string }).export_mode
+
+    const validation = validateDfmBridgePayload(payload)
+
+    assert.equal(validation.ok, false)
+    assert.equal(
+      validation.issues.some((issue) => issue.path === 'metadata.export_mode'),
+      true,
+    )
+  })
+
+  it('rejects public metadata that claims the source workbook is read by the bridge export', () => {
+    const payload = clonePayload(buildValidDfmPayload())
+    payload.metadata.source_model_reference.public_export_reads_source_workbook = true
+
+    const validation = validateDfmBridgePayload(payload)
+
+    assert.equal(validation.ok, false)
+    assert.equal(
+      validation.issues.some(
+        (issue) =>
+          issue.path ===
+          'metadata.source_model_reference.public_export_reads_source_workbook',
+      ),
+      true,
+    )
+  })
+
+  it('requires source-model readiness gaps to be explicit', () => {
+    const payload = clonePayload(buildValidDfmPayload())
+    ;(payload.metadata.readiness_status as unknown as { historical_backtest: string }).historical_backtest =
+      'pending'
+
+    const validation = validateDfmBridgePayload(payload)
+
+    assert.equal(validation.ok, false)
+    assert.equal(
+      validation.issues.some(
+        (issue) => issue.path === 'metadata.readiness_status.historical_backtest',
+      ),
+      true,
+    )
+  })
 })

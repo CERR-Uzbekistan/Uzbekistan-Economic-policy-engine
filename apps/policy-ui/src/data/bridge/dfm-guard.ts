@@ -585,6 +585,126 @@ function parseCaveat(
   return out
 }
 
+function parseSourceModelReference(
+  value: unknown,
+  issues: DfmValidationIssue[],
+): DfmMetadata['source_model_reference'] | null {
+  if (!isRecord(value)) {
+    pushError(issues, 'metadata.source_model_reference', 'Expected an object.')
+    return null
+  }
+
+  const status = value.status
+  const path = value.path
+  const dataWorkbook = value.data_workbook
+  const sourceWorkbookUpdatesRequireRefit = value.source_workbook_updates_require_refit
+  const publicExportReadsSourceWorkbook = value.public_export_reads_source_workbook
+  let ok = true
+
+  if (status !== 'reference_only_not_public_export_input') {
+    pushError(
+      issues,
+      'metadata.source_model_reference.status',
+      'Expected reference_only_not_public_export_input.',
+    )
+    ok = false
+  }
+  if (typeof path !== 'string' || path.length === 0) {
+    pushError(issues, 'metadata.source_model_reference.path', 'Expected a non-empty string.')
+    ok = false
+  }
+  if (typeof dataWorkbook !== 'string' || dataWorkbook.length === 0) {
+    pushError(
+      issues,
+      'metadata.source_model_reference.data_workbook',
+      'Expected a non-empty string.',
+    )
+    ok = false
+  }
+  if (sourceWorkbookUpdatesRequireRefit !== true) {
+    pushError(
+      issues,
+      'metadata.source_model_reference.source_workbook_updates_require_refit',
+      'Expected true because the public export does not refit from the source workbook.',
+    )
+    ok = false
+  }
+  if (publicExportReadsSourceWorkbook !== false) {
+    pushError(
+      issues,
+      'metadata.source_model_reference.public_export_reads_source_workbook',
+      'Expected false until the public export is rewired to run the source-model refit.',
+    )
+    ok = false
+  }
+
+  if (!ok) return null
+  return {
+    status: 'reference_only_not_public_export_input',
+    path: path as string,
+    data_workbook: dataWorkbook as string,
+    source_workbook_updates_require_refit: true,
+    public_export_reads_source_workbook: false,
+  }
+}
+
+function parseReadinessStatus(
+  value: unknown,
+  issues: DfmValidationIssue[],
+): DfmMetadata['readiness_status'] | null {
+  if (!isRecord(value)) {
+    pushError(issues, 'metadata.readiness_status', 'Expected an object.')
+    return null
+  }
+
+  const allowedAvailability = new Set(['not_available', 'available'])
+  const publicStatus = value.public_status
+  const sourceRefitInCi = value.source_refit_in_ci
+  const perSeriesTransformMap = value.per_series_transform_map
+  const historicalBacktest = value.historical_backtest
+  const diagnosticsAudit = value.diagnostics_audit
+  const economistSignoff = value.economist_signoff
+  let ok = true
+
+  if (publicStatus !== 'internal_preview_bridge') {
+    pushError(
+      issues,
+      'metadata.readiness_status.public_status',
+      'Expected internal_preview_bridge.',
+    )
+    ok = false
+  }
+
+  const fields = [
+    ['source_refit_in_ci', sourceRefitInCi],
+    ['per_series_transform_map', perSeriesTransformMap],
+    ['historical_backtest', historicalBacktest],
+    ['diagnostics_audit', diagnosticsAudit],
+    ['economist_signoff', economistSignoff],
+  ] as const
+
+  for (const [field, raw] of fields) {
+    if (typeof raw !== 'string' || !allowedAvailability.has(raw)) {
+      pushError(
+        issues,
+        `metadata.readiness_status.${field}`,
+        'Expected available or not_available.',
+      )
+      ok = false
+    }
+  }
+
+  if (!ok) return null
+  return {
+    public_status: 'internal_preview_bridge',
+    source_refit_in_ci: sourceRefitInCi as DfmMetadata['readiness_status']['source_refit_in_ci'],
+    per_series_transform_map: perSeriesTransformMap as DfmMetadata['readiness_status']['per_series_transform_map'],
+    historical_backtest: historicalBacktest as DfmMetadata['readiness_status']['historical_backtest'],
+    diagnostics_audit: diagnosticsAudit as DfmMetadata['readiness_status']['diagnostics_audit'],
+    economist_signoff: economistSignoff as DfmMetadata['readiness_status']['economist_signoff'],
+  }
+}
+
 function parseMetadata(value: unknown, issues: DfmValidationIssue[]): DfmMetadata | null {
   if (!isRecord(value)) {
     pushError(issues, 'metadata', 'Expected an object.')
@@ -594,7 +714,13 @@ function parseMetadata(value: unknown, issues: DfmValidationIssue[]): DfmMetadat
   const sourceScriptSha = value.source_script_sha
   const solverVersion = value.solver_version
   const sourceArtifact = value.source_artifact
+  const sourceArtifactMd5 = value.source_artifact_md5
   const sourceArtifactExportedAt = value.source_artifact_exported_at
+  const exportScript = value.export_script
+  const exportScriptMd5 = value.export_script_md5
+  const exportMode = value.export_mode
+  const sourceModelReference = parseSourceModelReference(value.source_model_reference, issues)
+  const readinessStatus = parseReadinessStatus(value.readiness_status, issues)
 
   let ok = true
   if (typeof exportedAt !== 'string' || exportedAt.length === 0) {
@@ -613,6 +739,10 @@ function parseMetadata(value: unknown, issues: DfmValidationIssue[]): DfmMetadat
     pushError(issues, 'metadata.source_artifact', 'Expected a non-empty string.')
     ok = false
   }
+  if (!(sourceArtifactMd5 === null || typeof sourceArtifactMd5 === 'string')) {
+    pushError(issues, 'metadata.source_artifact_md5', 'Expected a string or null.')
+    ok = false
+  }
   if (typeof sourceArtifactExportedAt !== 'string' || sourceArtifactExportedAt.length === 0) {
     pushError(
       issues,
@@ -621,13 +751,32 @@ function parseMetadata(value: unknown, issues: DfmValidationIssue[]): DfmMetadat
     )
     ok = false
   }
-  if (!ok) return null
+  if (typeof exportScript !== 'string' || exportScript.length === 0) {
+    pushError(issues, 'metadata.export_script', 'Expected a non-empty string.')
+    ok = false
+  }
+  if (!(exportScriptMd5 === null || typeof exportScriptMd5 === 'string')) {
+    pushError(issues, 'metadata.export_script_md5', 'Expected a string or null.')
+    ok = false
+  }
+  if (exportMode !== 'frozen_state_space_bridge') {
+    pushError(issues, 'metadata.export_mode', 'Expected frozen_state_space_bridge.')
+    ok = false
+  }
+  if (!sourceModelReference || !readinessStatus) ok = false
+  if (!ok || !sourceModelReference || !readinessStatus) return null
   return {
     exported_at: exportedAt as string,
     source_script_sha: (sourceScriptSha ?? null) as string | null,
     solver_version: solverVersion as string,
     source_artifact: sourceArtifact as string,
+    source_artifact_md5: (sourceArtifactMd5 ?? null) as string | null,
     source_artifact_exported_at: sourceArtifactExportedAt as string,
+    export_script: exportScript as string,
+    export_script_md5: (exportScriptMd5 ?? null) as string | null,
+    export_mode: 'frozen_state_space_bridge',
+    source_model_reference: sourceModelReference,
+    readiness_status: readinessStatus,
   }
 }
 
