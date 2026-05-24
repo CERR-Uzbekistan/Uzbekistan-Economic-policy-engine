@@ -160,11 +160,14 @@ export function buildValidDfmPayload(): DfmBridgePayload {
         saved_model_objects: ['.RData', 'output/results.RData'],
       },
       transformation_map: {
-        status: 'available_with_review_flags',
+        status: 'available_with_owner_review_decisions',
         json_artifact: 'docs/data-bridge/dfm-transformation-map.json',
         csv_artifact: 'docs/data-bridge/dfm-transformation-map.csv',
         public_indicator_coverage: '36_of_36',
-        reviewed_blockers: ['rates_ratios_and_already_growth_series_need_economist_review'],
+        reviewed_blockers: [
+          'four_rows_blocked_for_model_owner_decision_before_production_refit',
+          'public_contributions_remain_factor_signals_not_gdp_percentage_point_effects',
+        ],
       },
       refit_status: {
         status: 'available',

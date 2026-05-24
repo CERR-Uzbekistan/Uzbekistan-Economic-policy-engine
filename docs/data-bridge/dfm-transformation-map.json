@@ -1,7 +1,7 @@
 {
   "artifact": {
     "id": "dfm-transformation-map",
-    "generated_at": "2026-05-24T10:49:21.507Z",
+    "generated_at": "2026-05-24T12:01:33.431Z",
     "source_workbook": "model sources/Fore+Nowcast/DFM/data/data_uzbekistan.xlsx",
     "source_workbook_md5": "42a1e478f39a77db3797c188cd841f78",
     "source_scripts": [
@@ -22,7 +22,13 @@
     "high_frequency_input_count": 35,
     "transformation_rule": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
     "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
-    "production_note": "This artifact documents the current source workflow and flags series that need economist review before a production refit. It is not a claim that every source transformation is economically final."
+    "transformation_status_counts": {
+      "approved_with_caveat": 14,
+      "approved": 18,
+      "blocked_needs_owner_decision": 4
+    },
+    "blocked_owner_decision_count": 4,
+    "production_note": "This artifact documents the current source workflow and proposes row-level owner-review decisions before a production refit. It is not a claim that every source transformation has model-owner sign-off."
   },
   "variables": [
     {
@@ -37,11 +43,20 @@
       "source": "",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "accepted_for_target_postprocess_review",
+      "transformation_status": "approved_with_caveat",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
       "recommended_transformation": "Quarterly GDP level -> log quarter-on-quarter growth for model input; postprocess predicted QoQ path into GDP levels and YoY percent.",
+      "rationale": "GDP is the quarterly target level, so log QoQ growth is economically meaningful for the state-space model; published YoY growth should come only from the GDP post-processing step.",
+      "risk_flags": [
+        "target_postprocess",
+        "seasonality"
+      ],
+      "model_owner_decision_status": "approved_with_caveat",
+      "public_display_allowed": false,
+      "public_display_guidance": "No as a top high-frequency contribution: GDP is the target row and should be excluded from indicator-contribution diagnostics.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "target_quarterly_gdp",
-      "contribution_guardrail": "GDP target row is excluded from top high-frequency contribution diagnostics."
+      "contribution_guardrail": "No as a top high-frequency contribution: GDP is the target row and should be excluded from indicator-contribution diagnostics."
     },
     {
       "source_sheet": "Request Monthly",
@@ -55,11 +70,17 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "By code",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use optional X-13 seasonal adjustment where flagged, then log-difference the positive level/count/currency series over non-missing observations.",
+      "rationale": "This row is a native level, count, or currency series, so log growth is a standard stationary activity signal for the DFM.",
+      "risk_flags": [],
+      "model_owner_decision_status": "approved",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -73,11 +94,21 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "needs_economist_review",
-      "recommended_transformation": "Do not blindly log-difference this source series. Confirm whether it is already a rate, ratio, balance, YoY/MoM growth, or index before production refit.",
+      "transformation_status": "approved_with_caveat",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Treat as an already year-on-year index: use log(index / 100) or index minus 100 as the growth signal; do not log-difference the index again.",
+      "rationale": "CPPY=100 means the observation already compares output with the corresponding period of the previous year. Differencing its log measures acceleration of the YoY rate, not industrial-output growth.",
+      "risk_flags": [
+        "index",
+        "already_growth_series",
+        "seasonality"
+      ],
+      "model_owner_decision_status": "approved_with_caveat",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Treat latest value and contribution as a standardized DFM signal, not a GDP-growth percentage-point effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -91,11 +122,17 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "By code",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use optional X-13 seasonal adjustment where flagged, then log-difference the positive level/count/currency series over non-missing observations.",
+      "rationale": "This row is a native level, count, or currency series, so log growth is a standard stationary activity signal for the DFM.",
+      "risk_flags": [],
+      "model_owner_decision_status": "approved",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -109,11 +146,17 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "By code",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use optional X-13 seasonal adjustment where flagged, then log-difference the positive level/count/currency series over non-missing observations.",
+      "rationale": "This row is a native level, count, or currency series, so log growth is a standard stationary activity signal for the DFM.",
+      "risk_flags": [],
+      "model_owner_decision_status": "approved",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -127,11 +170,17 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "By code",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use optional X-13 seasonal adjustment where flagged, then log-difference the positive level/count/currency series over non-missing observations.",
+      "rationale": "This row is a native level, count, or currency series, so log growth is a standard stationary activity signal for the DFM.",
+      "risk_flags": [],
+      "model_owner_decision_status": "approved",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -145,11 +194,17 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "By code",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use optional X-13 seasonal adjustment where flagged, then log-difference the positive level/count/currency series over non-missing observations.",
+      "rationale": "This row is a native level, count, or currency series, so log growth is a standard stationary activity signal for the DFM.",
+      "risk_flags": [],
+      "model_owner_decision_status": "approved",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -163,11 +218,17 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "By code",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use optional X-13 seasonal adjustment where flagged, then log-difference the positive level/count/currency series over non-missing observations.",
+      "rationale": "This row is a native level, count, or currency series, so log growth is a standard stationary activity signal for the DFM.",
+      "risk_flags": [],
+      "model_owner_decision_status": "approved",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -181,11 +242,19 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use log-difference of the positive PP=100 price index to measure monthly services inflation.",
+      "rationale": "A CPI index is a price level. Log-differencing a positive price index produces an inflation-rate signal suitable for a stationary DFM input.",
+      "risk_flags": [
+        "index"
+      ],
+      "model_owner_decision_status": "approved",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -199,11 +268,19 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use log-difference of the positive PP=100 price index to measure monthly goods inflation.",
+      "rationale": "A CPI index is a price level. Log-differencing a positive price index produces an inflation-rate signal suitable for a stationary DFM input.",
+      "risk_flags": [
+        "index"
+      ],
+      "model_owner_decision_status": "approved",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -217,11 +294,19 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use log-difference of the positive PP=100 producer-price index to measure monthly producer-price inflation.",
+      "rationale": "A producer-price index is a price level. Log-differencing a positive price index yields a producer inflation signal.",
+      "risk_flags": [
+        "index"
+      ],
+      "model_owner_decision_status": "approved",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -235,11 +320,17 @@
       "source": "Central Bank of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use optional X-13 seasonal adjustment where flagged, then log-difference the positive level/count/currency series over non-missing observations.",
+      "rationale": "This row is a native level, count, or currency series, so log growth is a standard stationary activity signal for the DFM.",
+      "risk_flags": [],
+      "model_owner_decision_status": "approved",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -253,11 +344,17 @@
       "source": "Central Bank of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use optional X-13 seasonal adjustment where flagged, then log-difference the positive level/count/currency series over non-missing observations.",
+      "rationale": "This row is a native level, count, or currency series, so log growth is a standard stationary activity signal for the DFM.",
+      "risk_flags": [],
+      "model_owner_decision_status": "approved",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -271,11 +368,20 @@
       "source": "Central Bank of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "needs_economist_review",
-      "recommended_transformation": "Do not blindly log-difference this source series. Confirm whether it is already a rate, ratio, balance, YoY/MoM growth, or index before production refit.",
+      "transformation_status": "blocked_needs_owner_decision",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use the NPL ratio in levels or first differences in percentage points; do not log-difference a percent ratio without model-owner sign-off.",
+      "rationale": "The nonperforming-loan share is a financial ratio, not a quantity level. A log change of the ratio is hard to explain economically and can overstate movements when the ratio is low.",
+      "risk_flags": [
+        "ratio",
+        "rate"
+      ],
+      "model_owner_decision_status": "blocked_needs_owner_decision",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Treat latest value and contribution as a standardized DFM signal, not a GDP-growth percentage-point effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -289,11 +395,20 @@
       "source": "Central Bank of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "needs_economist_review",
-      "recommended_transformation": "Do not blindly log-difference this source series. Confirm whether it is already a rate, ratio, balance, YoY/MoM growth, or index before production refit.",
+      "transformation_status": "blocked_needs_owner_decision",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use the interest-rate level or the month-to-month change in percentage points; do not log-difference the percent rate.",
+      "rationale": "Interest rates are already measured in percent per year. Monetary tightening is normally interpreted as a level or percentage-point change, not as the growth rate of the rate itself.",
+      "risk_flags": [
+        "rate",
+        "unit_mismatch"
+      ],
+      "model_owner_decision_status": "blocked_needs_owner_decision",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Treat latest value and contribution as a standardized DFM signal, not a GDP-growth percentage-point effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -307,11 +422,20 @@
       "source": "Central Bank of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "needs_economist_review",
-      "recommended_transformation": "Do not blindly log-difference this source series. Confirm whether it is already a rate, ratio, balance, YoY/MoM growth, or index before production refit.",
+      "transformation_status": "blocked_needs_owner_decision",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "First choose a monthly aggregation rule for the weekly FX series, then use log monthly depreciation/appreciation of UZS per USD.",
+      "rationale": "The exchange-rate level can be transformed with log changes, but the workbook frequency is weekly while the DFM panel is monthly. The monthly aggregation convention changes the timing of FX news.",
+      "risk_flags": [
+        "weekly_frequency",
+        "unit_mismatch"
+      ],
+      "model_owner_decision_status": "blocked_needs_owner_decision",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Treat latest value and contribution as a standardized DFM signal, not a GDP-growth percentage-point effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -325,11 +449,22 @@
       "source": "Kazakh Agency of Statistics",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "needs_economist_review",
-      "recommended_transformation": "Do not blindly log-difference this source series. Confirm whether it is already a rate, ratio, balance, YoY/MoM growth, or index before production refit.",
+      "transformation_status": "blocked_needs_owner_decision",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Treat as a YTD-over-previous-year index, likely log(index / 100) or index minus 100; confirm whether a YTD accumulation should enter a monthly DFM.",
+      "rationale": "The source is a change YTD PY=100 index, so it is already a cumulative growth comparison. Log-differencing it mixes monthly revisions with changes in the YTD comparison window.",
+      "risk_flags": [
+        "index",
+        "already_growth_series",
+        "seasonality",
+        "label_ambiguity"
+      ],
+      "model_owner_decision_status": "blocked_needs_owner_decision",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Treat latest value and contribution as a standardized DFM signal, not a GDP-growth percentage-point effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -343,11 +478,21 @@
       "source": "CERR",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "needs_economist_review",
-      "recommended_transformation": "Do not blindly log-difference this source series. Confirm whether it is already a rate, ratio, balance, YoY/MoM growth, or index before production refit.",
+      "transformation_status": "approved_with_caveat",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use the native YoY business-activity signal after owner confirmation of scaling; do not apply an additional log-difference.",
+      "rationale": "The label says year-on-year, so the series already represents a growth comparison. The unusually large index scale needs a documented scaling convention before production.",
+      "risk_flags": [
+        "already_growth_series",
+        "index",
+        "unit_mismatch"
+      ],
+      "model_owner_decision_status": "approved_with_caveat",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Treat latest value and contribution as a standardized DFM signal, not a GDP-growth percentage-point effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -361,11 +506,21 @@
       "source": "CERR",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "needs_economist_review",
-      "recommended_transformation": "Do not blindly log-difference this source series. Confirm whether it is already a rate, ratio, balance, YoY/MoM growth, or index before production refit.",
+      "transformation_status": "approved_with_caveat",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use the native MoM business-activity signal after owner confirmation of scaling; do not apply an additional log-difference.",
+      "rationale": "The label says month-on-month, so the series is already a short-run change indicator. Log-differencing it would turn the model input into a change in the change rate.",
+      "risk_flags": [
+        "already_growth_series",
+        "index",
+        "unit_mismatch"
+      ],
+      "model_owner_decision_status": "approved_with_caveat",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Treat latest value and contribution as a standardized DFM signal, not a GDP-growth percentage-point effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -379,11 +534,17 @@
       "source": "Central Bank of the Republic of Uzbekistan",
       "seasonal_adjustment": "By code",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use optional X-13 seasonal adjustment where flagged, then log-difference the positive level/count/currency series over non-missing observations.",
+      "rationale": "This row is a native level, count, or currency series, so log growth is a standard stationary activity signal for the DFM.",
+      "risk_flags": [],
+      "model_owner_decision_status": "approved",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -397,11 +558,17 @@
       "source": "CERR",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use optional X-13 seasonal adjustment where flagged, then log-difference the positive level/count/currency series over non-missing observations.",
+      "rationale": "This row is a native level, count, or currency series, so log growth is a standard stationary activity signal for the DFM.",
+      "risk_flags": [],
+      "model_owner_decision_status": "approved",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -415,11 +582,17 @@
       "source": "CERR",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use optional X-13 seasonal adjustment where flagged, then log-difference the positive level/count/currency series over non-missing observations.",
+      "rationale": "This row is a native level, count, or currency series, so log growth is a standard stationary activity signal for the DFM.",
+      "risk_flags": [],
+      "model_owner_decision_status": "approved",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -433,11 +606,20 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "needs_economist_review",
-      "recommended_transformation": "Do not blindly log-difference this source series. Confirm whether it is already a rate, ratio, balance, YoY/MoM growth, or index before production refit.",
+      "transformation_status": "approved_with_caveat",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use the growth-rate index directly as log(index / 100) or index minus 100; do not log-difference it again.",
+      "rationale": "Industrial production per capita is already supplied as a growth-rate index near 100. The economically relevant signal is the growth rate itself, not its month-to-month acceleration.",
+      "risk_flags": [
+        "already_growth_series",
+        "index"
+      ],
+      "model_owner_decision_status": "approved_with_caveat",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Treat latest value and contribution as a standardized DFM signal, not a GDP-growth percentage-point effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -451,11 +633,17 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "By code",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use optional X-13 seasonal adjustment where flagged, then log-difference the positive level/count/currency series over non-missing observations.",
+      "rationale": "This row is a native level, count, or currency series, so log growth is a standard stationary activity signal for the DFM.",
+      "risk_flags": [],
+      "model_owner_decision_status": "approved",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -469,11 +657,20 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "needs_economist_review",
-      "recommended_transformation": "Do not blindly log-difference this source series. Confirm whether it is already a rate, ratio, balance, YoY/MoM growth, or index before production refit.",
+      "transformation_status": "approved_with_caveat",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use the construction growth-rate index directly as log(index / 100) or index minus 100; do not log-difference it again.",
+      "rationale": "The construction row is labelled as a growth rate and has values around a PY=100 index. Differencing the log would measure acceleration rather than construction growth.",
+      "risk_flags": [
+        "already_growth_series",
+        "index"
+      ],
+      "model_owner_decision_status": "approved_with_caveat",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Treat latest value and contribution as a standardized DFM signal, not a GDP-growth percentage-point effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -487,11 +684,17 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "By code",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use optional X-13 seasonal adjustment where flagged, then log-difference the positive level/count/currency series over non-missing observations.",
+      "rationale": "This row is a native level, count, or currency series, so log growth is a standard stationary activity signal for the DFM.",
+      "risk_flags": [],
+      "model_owner_decision_status": "approved",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -505,11 +708,20 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "needs_economist_review",
-      "recommended_transformation": "Do not blindly log-difference this source series. Confirm whether it is already a rate, ratio, balance, YoY/MoM growth, or index before production refit.",
+      "transformation_status": "approved_with_caveat",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use the industry YoY index directly as log(index / 100) or index minus 100; do not log-difference it again.",
+      "rationale": "This row is explicitly year-on-year industry growth. A second log-difference would remove the level of YoY growth that the model owner likely wants as the activity signal.",
+      "risk_flags": [
+        "already_growth_series",
+        "index"
+      ],
+      "model_owner_decision_status": "approved_with_caveat",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Treat latest value and contribution as a standardized DFM signal, not a GDP-growth percentage-point effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -523,11 +735,20 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "needs_economist_review",
-      "recommended_transformation": "Do not blindly log-difference this source series. Confirm whether it is already a rate, ratio, balance, YoY/MoM growth, or index before production refit.",
+      "transformation_status": "approved_with_caveat",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use the wholesale-trade growth-rate index directly as log(index / 100) or index minus 100; do not log-difference it again.",
+      "rationale": "The source is a trade growth indicator, so the model input should preserve that growth signal. Log-differencing would convert it to a change in the reported growth rate.",
+      "risk_flags": [
+        "already_growth_series",
+        "index"
+      ],
+      "model_owner_decision_status": "approved_with_caveat",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Treat latest value and contribution as a standardized DFM signal, not a GDP-growth percentage-point effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -541,11 +762,21 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "needs_economist_review",
-      "recommended_transformation": "Do not blindly log-difference this source series. Confirm whether it is already a rate, ratio, balance, YoY/MoM growth, or index before production refit.",
+      "transformation_status": "approved_with_caveat",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use the retail-trade growth-rate index directly as log(index / 100) or index minus 100; do not log-difference it again.",
+      "rationale": "The row already reports retail trade growth. The DFM should standardize that growth signal rather than model the growth rate acceleration created by log-differencing.",
+      "risk_flags": [
+        "already_growth_series",
+        "index",
+        "label_ambiguity"
+      ],
+      "model_owner_decision_status": "approved_with_caveat",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Treat latest value and contribution as a standardized DFM signal, not a GDP-growth percentage-point effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -559,11 +790,17 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "By code",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use optional X-13 seasonal adjustment where flagged, then log-difference the positive level/count/currency series over non-missing observations.",
+      "rationale": "This row is a native level, count, or currency series, so log growth is a standard stationary activity signal for the DFM.",
+      "risk_flags": [],
+      "model_owner_decision_status": "approved",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -577,11 +814,20 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "needs_economist_review",
-      "recommended_transformation": "Do not blindly log-difference this source series. Confirm whether it is already a rate, ratio, balance, YoY/MoM growth, or index before production refit.",
+      "transformation_status": "approved_with_caveat",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use the services growth-rate index directly as log(index / 100) or index minus 100; do not log-difference it again.",
+      "rationale": "The source is a services growth indicator. Keeping the growth rate is easier to interpret and avoids turning the signal into a second difference.",
+      "risk_flags": [
+        "already_growth_series",
+        "index"
+      ],
+      "model_owner_decision_status": "approved_with_caveat",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Treat latest value and contribution as a standardized DFM signal, not a GDP-growth percentage-point effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -595,11 +841,20 @@
       "source": "CERR",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved_with_caveat",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use the business-climate index in levels or first differences after owner confirmation of the survey scale; avoid treating it as a physical quantity level.",
+      "rationale": "Survey climate indexes are sentiment measures. They can help the factor, but the scale and zero point should be documented before a production refit.",
+      "risk_flags": [
+        "index",
+        "label_ambiguity"
+      ],
+      "model_owner_decision_status": "approved_with_caveat",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -613,11 +868,20 @@
       "source": "CERR",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved_with_caveat",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use the business-climate expectations index in levels or first differences after owner confirmation of the survey scale; avoid treating it as a physical quantity level.",
+      "rationale": "Expectations indexes are survey signals. Their economic interpretation depends on the survey scale, so production use needs the owner to document level versus change treatment.",
+      "risk_flags": [
+        "index",
+        "label_ambiguity"
+      ],
+      "model_owner_decision_status": "approved_with_caveat",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -631,11 +895,17 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "By code",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use optional X-13 seasonal adjustment where flagged, then log-difference the positive level/count/currency series over non-missing observations.",
+      "rationale": "This row is a native level, count, or currency series, so log growth is a standard stationary activity signal for the DFM.",
+      "risk_flags": [],
+      "model_owner_decision_status": "approved",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -649,11 +919,20 @@
       "source": "Statistics Agency under the President of the Republic of Uzbekistan",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "needs_economist_review",
-      "recommended_transformation": "Do not blindly log-difference this source series. Confirm whether it is already a rate, ratio, balance, YoY/MoM growth, or index before production refit.",
+      "transformation_status": "approved_with_caveat",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Use the manufacturing YoY index directly as log(index / 100) or index minus 100; do not log-difference it again.",
+      "rationale": "This row is explicitly year-on-year manufacturing growth. The recommended transformation keeps the production-growth signal in the DFM instead of differencing it away.",
+      "risk_flags": [
+        "already_growth_series",
+        "index"
+      ],
+      "model_owner_decision_status": "approved_with_caveat",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Treat latest value and contribution as a standardized DFM signal, not a GDP-growth percentage-point effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     },
     {
       "source_sheet": "Request Monthly",
@@ -667,11 +946,20 @@
       "source": "CERR",
       "seasonal_adjustment": "None",
       "transformation": "Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.",
-      "transformation_status": "provisionally_accepted",
-      "recommended_transformation": "Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.",
+      "transformation_status": "approved_with_caveat",
+      "source_workflow_confirmation": "Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.",
+      "recommended_transformation": "Treat as a transaction-count level and use log-difference after confirming the unit should be Number, not Index.",
+      "rationale": "The label says number of stock-market deals while the metadata says Index. The log-growth transformation is plausible for a count, but the unit mismatch should be corrected.",
+      "risk_flags": [
+        "unit_mismatch",
+        "label_ambiguity"
+      ],
+      "model_owner_decision_status": "approved_with_caveat",
+      "public_display_allowed": true,
+      "public_display_guidance": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.",
       "missing_value_rule": "Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.",
       "model_role": "high_frequency_indicator",
-      "contribution_guardrail": "Contribution is a standardized common-factor signal, not a direct growth effect."
+      "contribution_guardrail": "Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect."
     }
   ]
 }

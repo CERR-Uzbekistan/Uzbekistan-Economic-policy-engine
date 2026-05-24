@@ -102,7 +102,7 @@ export type DfmMetadata = {
     saved_model_objects: string[]
   }
   transformation_map: {
-    status: 'available_with_review_flags'
+    status: 'available_with_review_flags' | 'available_with_owner_review_decisions'
     json_artifact: string
     csv_artifact: string
     public_indicator_coverage: string

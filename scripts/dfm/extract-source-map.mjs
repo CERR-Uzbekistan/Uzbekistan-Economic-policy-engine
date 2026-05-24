@@ -14,6 +14,184 @@ const MODEL_INPUT_RULE =
   'Source R workflow: optional X-13 seasonal adjustment when flagged, then log-difference over non-missing observations; first three rows are dropped so the estimation sample starts at settings.R start_date.'
 const MISSING_RULE =
   'Missing observations are retained as NA in the ragged-edge panel. Growth is computed only across non-missing observations, then written back to the original positions; leading/ending all-NA rows are removed before EM estimation and the Kalman filter smooths remaining gaps.'
+const SOURCE_WORKFLOW_CONFIRMATION =
+  'Confirmed in main.R -> prepare_data.R -> calculate_growth.R: the current source workflow applies the same log-difference rule to every variable after optional X-13 seasonal adjustment.'
+const DEFAULT_PUBLIC_DISPLAY =
+  'Yes for internal preview: contribution is a standardized common-factor signal and must not be read as a GDP percentage-point effect.'
+
+const REVIEW_DECISIONS = {
+  gdp: {
+    status: 'approved_with_caveat',
+    recommendedTransformation:
+      'Quarterly GDP level -> log quarter-on-quarter growth for model input; postprocess predicted QoQ path into GDP levels and YoY percent.',
+    rationale:
+      'GDP is the quarterly target level, so log QoQ growth is economically meaningful for the state-space model; published YoY growth should come only from the GDP post-processing step.',
+    riskFlags: ['target_postprocess', 'seasonality'],
+    publicDisplayAllowed: false,
+    publicDisplayGuidance:
+      'No as a top high-frequency contribution: GDP is the target row and should be excluded from indicator-contribution diagnostics.',
+  },
+  ip_cppy: {
+    status: 'approved_with_caveat',
+    recommendedTransformation:
+      'Treat as an already year-on-year index: use log(index / 100) or index minus 100 as the growth signal; do not log-difference the index again.',
+    rationale:
+      'CPPY=100 means the observation already compares output with the corresponding period of the previous year. Differencing its log measures acceleration of the YoY rate, not industrial-output growth.',
+    riskFlags: ['index', 'already_growth_series', 'seasonality'],
+  },
+  financial_sound: {
+    status: 'blocked_needs_owner_decision',
+    recommendedTransformation:
+      'Use the NPL ratio in levels or first differences in percentage points; do not log-difference a percent ratio without model-owner sign-off.',
+    rationale:
+      'The nonperforming-loan share is a financial ratio, not a quantity level. A log change of the ratio is hard to explain economically and can overstate movements when the ratio is low.',
+    riskFlags: ['ratio', 'rate'],
+  },
+  rate_1y: {
+    status: 'blocked_needs_owner_decision',
+    recommendedTransformation:
+      'Use the interest-rate level or the month-to-month change in percentage points; do not log-difference the percent rate.',
+    rationale:
+      'Interest rates are already measured in percent per year. Monetary tightening is normally interpreted as a level or percentage-point change, not as the growth rate of the rate itself.',
+    riskFlags: ['rate', 'unit_mismatch'],
+  },
+  uzs_usd: {
+    status: 'blocked_needs_owner_decision',
+    recommendedTransformation:
+      'First choose a monthly aggregation rule for the weekly FX series, then use log monthly depreciation/appreciation of UZS per USD.',
+    rationale:
+      'The exchange-rate level can be transformed with log changes, but the workbook frequency is weekly while the DFM panel is monthly. The monthly aggregation convention changes the timing of FX news.',
+    riskFlags: ['weekly_frequency', 'unit_mismatch'],
+  },
+  kazakh_leadind: {
+    status: 'blocked_needs_owner_decision',
+    recommendedTransformation:
+      'Treat as a YTD-over-previous-year index, likely log(index / 100) or index minus 100; confirm whether a YTD accumulation should enter a monthly DFM.',
+    rationale:
+      'The source is a change YTD PY=100 index, so it is already a cumulative growth comparison. Log-differencing it mixes monthly revisions with changes in the YTD comparison window.',
+    riskFlags: ['index', 'already_growth_series', 'seasonality', 'label_ambiguity'],
+  },
+  IDA_yoy: {
+    status: 'approved_with_caveat',
+    recommendedTransformation:
+      'Use the native YoY business-activity signal after owner confirmation of scaling; do not apply an additional log-difference.',
+    rationale:
+      'The label says year-on-year, so the series already represents a growth comparison. The unusually large index scale needs a documented scaling convention before production.',
+    riskFlags: ['already_growth_series', 'index', 'unit_mismatch'],
+  },
+  IDA_mom: {
+    status: 'approved_with_caveat',
+    recommendedTransformation:
+      'Use the native MoM business-activity signal after owner confirmation of scaling; do not apply an additional log-difference.',
+    rationale:
+      'The label says month-on-month, so the series is already a short-run change indicator. Log-differencing it would turn the model input into a change in the change rate.',
+    riskFlags: ['already_growth_series', 'index', 'unit_mismatch'],
+  },
+  ind_percap_grwth: {
+    status: 'approved_with_caveat',
+    recommendedTransformation:
+      'Use the growth-rate index directly as log(index / 100) or index minus 100; do not log-difference it again.',
+    rationale:
+      'Industrial production per capita is already supplied as a growth-rate index near 100. The economically relevant signal is the growth rate itself, not its month-to-month acceleration.',
+    riskFlags: ['already_growth_series', 'index'],
+  },
+  const_grwth: {
+    status: 'approved_with_caveat',
+    recommendedTransformation:
+      'Use the construction growth-rate index directly as log(index / 100) or index minus 100; do not log-difference it again.',
+    rationale:
+      'The construction row is labelled as a growth rate and has values around a PY=100 index. Differencing the log would measure acceleration rather than construction growth.',
+    riskFlags: ['already_growth_series', 'index'],
+  },
+  IND_YOY: {
+    status: 'approved_with_caveat',
+    recommendedTransformation:
+      'Use the industry YoY index directly as log(index / 100) or index minus 100; do not log-difference it again.',
+    rationale:
+      'This row is explicitly year-on-year industry growth. A second log-difference would remove the level of YoY growth that the model owner likely wants as the activity signal.',
+    riskFlags: ['already_growth_series', 'index'],
+  },
+  wholesale_trade_grwth: {
+    status: 'approved_with_caveat',
+    recommendedTransformation:
+      'Use the wholesale-trade growth-rate index directly as log(index / 100) or index minus 100; do not log-difference it again.',
+    rationale:
+      'The source is a trade growth indicator, so the model input should preserve that growth signal. Log-differencing would convert it to a change in the reported growth rate.',
+    riskFlags: ['already_growth_series', 'index'],
+  },
+  retail_trade_grwth: {
+    status: 'approved_with_caveat',
+    recommendedTransformation:
+      'Use the retail-trade growth-rate index directly as log(index / 100) or index minus 100; do not log-difference it again.',
+    rationale:
+      'The row already reports retail trade growth. The DFM should standardize that growth signal rather than model the growth rate acceleration created by log-differencing.',
+    riskFlags: ['already_growth_series', 'index', 'label_ambiguity'],
+  },
+  services_grwth: {
+    status: 'approved_with_caveat',
+    recommendedTransformation:
+      'Use the services growth-rate index directly as log(index / 100) or index minus 100; do not log-difference it again.',
+    rationale:
+      'The source is a services growth indicator. Keeping the growth rate is easier to interpret and avoids turning the signal into a second difference.',
+    riskFlags: ['already_growth_series', 'index'],
+  },
+  manf_YOY: {
+    status: 'approved_with_caveat',
+    recommendedTransformation:
+      'Use the manufacturing YoY index directly as log(index / 100) or index minus 100; do not log-difference it again.',
+    rationale:
+      'This row is explicitly year-on-year manufacturing growth. The recommended transformation keeps the production-growth signal in the DFM instead of differencing it away.',
+    riskFlags: ['already_growth_series', 'index'],
+  },
+  cpi_services: {
+    status: 'approved',
+    recommendedTransformation:
+      'Use log-difference of the positive PP=100 price index to measure monthly services inflation.',
+    rationale:
+      'A CPI index is a price level. Log-differencing a positive price index produces an inflation-rate signal suitable for a stationary DFM input.',
+    riskFlags: ['index'],
+  },
+  cpi_goods: {
+    status: 'approved',
+    recommendedTransformation:
+      'Use log-difference of the positive PP=100 price index to measure monthly goods inflation.',
+    rationale:
+      'A CPI index is a price level. Log-differencing a positive price index produces an inflation-rate signal suitable for a stationary DFM input.',
+    riskFlags: ['index'],
+  },
+  ppi: {
+    status: 'approved',
+    recommendedTransformation:
+      'Use log-difference of the positive PP=100 producer-price index to measure monthly producer-price inflation.',
+    rationale:
+      'A producer-price index is a price level. Log-differencing a positive price index yields a producer inflation signal.',
+    riskFlags: ['index'],
+  },
+  bus_clim: {
+    status: 'approved_with_caveat',
+    recommendedTransformation:
+      'Use the business-climate index in levels or first differences after owner confirmation of the survey scale; avoid treating it as a physical quantity level.',
+    rationale:
+      'Survey climate indexes are sentiment measures. They can help the factor, but the scale and zero point should be documented before a production refit.',
+    riskFlags: ['index', 'label_ambiguity'],
+  },
+  bus_clim_exp: {
+    status: 'approved_with_caveat',
+    recommendedTransformation:
+      'Use the business-climate expectations index in levels or first differences after owner confirmation of the survey scale; avoid treating it as a physical quantity level.',
+    rationale:
+      'Expectations indexes are survey signals. Their economic interpretation depends on the survey scale, so production use needs the owner to document level versus change treatment.',
+    riskFlags: ['index', 'label_ambiguity'],
+  },
+  stock_deals: {
+    status: 'approved_with_caveat',
+    recommendedTransformation:
+      'Treat as a transaction-count level and use log-difference after confirming the unit should be Number, not Index.',
+    rationale:
+      'The label says number of stock-market deals while the metadata says Index. The log-growth transformation is plausible for a count, but the unit mismatch should be corrected.',
+    riskFlags: ['unit_mismatch', 'label_ambiguity'],
+  },
+}
 
 function readUInt(buffer, offset, length) {
   if (length === 2) return buffer.readUInt16LE(offset)
@@ -200,25 +378,27 @@ function modelRole(row) {
 
 function transformationReview(row) {
   const id = row['Code key']
-  const text = `${id} ${row['Series description']} ${row['Category']} ${row['Unit']}`.toLowerCase()
-  if (id === 'gdp') {
+  const decision = REVIEW_DECISIONS[id]
+  if (decision) {
     return {
-      status: 'accepted_for_target_postprocess_review',
-      recommendedTransformation: 'Quarterly GDP level -> log quarter-on-quarter growth for model input; postprocess predicted QoQ path into GDP levels and YoY percent.',
-      contributionGuardrail: 'GDP target row is excluded from top high-frequency contribution diagnostics.',
-    }
-  }
-  if (/yoy|mom|grwth|growth|ppy=100|ppy|change ytd|rate|nonperforming|npl|business climate/.test(text)) {
-    return {
-      status: 'needs_economist_review',
-      recommendedTransformation: 'Do not blindly log-difference this source series. Confirm whether it is already a rate, ratio, balance, YoY/MoM growth, or index before production refit.',
-      contributionGuardrail: 'Treat latest value and contribution as a standardized DFM signal, not a GDP-growth percentage-point effect.',
+      contributionGuardrail:
+        decision.publicDisplayGuidance ??
+        (decision.publicDisplayAllowed === false
+          ? 'No public indicator-contribution display until model-owner sign-off.'
+          : DEFAULT_PUBLIC_DISPLAY),
+      publicDisplayAllowed: decision.publicDisplayAllowed ?? true,
+      ...decision,
     }
   }
   return {
-    status: 'provisionally_accepted',
-    recommendedTransformation: 'Level or index source series can use log-difference after seasonal adjustment, subject to non-positive value checks.',
-    contributionGuardrail: 'Contribution is a standardized common-factor signal, not a direct growth effect.',
+    status: 'approved',
+    recommendedTransformation:
+      'Use optional X-13 seasonal adjustment where flagged, then log-difference the positive level/count/currency series over non-missing observations.',
+    rationale:
+      'This row is a native level, count, or currency series, so log growth is a standard stationary activity signal for the DFM.',
+    riskFlags: [],
+    publicDisplayAllowed: true,
+    contributionGuardrail: DEFAULT_PUBLIC_DISPLAY,
   }
 }
 
@@ -242,13 +422,24 @@ function writeCsv(path, rows) {
     'unit',
     'seasonal_adjustment',
     'transformation',
+    'source_workflow_confirmation',
+    'recommended_transformation',
+    'rationale',
+    'risk_flags',
+    'model_owner_decision_status',
+    'public_display_allowed',
+    'public_display_guidance',
     'missing_value_rule',
     'model_role',
     'transformation_status',
   ]
   const lines = [fields.join(',')]
   for (const row of rows) {
-    lines.push(fields.map((field) => csvEscape(row[field])).join(','))
+    lines.push(
+      fields
+        .map((field) => csvEscape(Array.isArray(row[field]) ? row[field].join('; ') : row[field]))
+        .join(','),
+    )
   }
   mkdirSync(dirname(path), { recursive: true })
   writeFileSync(path, `${lines.join('\n')}\n`)
@@ -291,12 +482,22 @@ function buildMap() {
       seasonal_adjustment: row['Seasonal adjustment'] || 'None',
       transformation: MODEL_INPUT_RULE,
       transformation_status: review.status,
+      source_workflow_confirmation: SOURCE_WORKFLOW_CONFIRMATION,
       recommended_transformation: review.recommendedTransformation,
+      rationale: review.rationale,
+      risk_flags: review.riskFlags,
+      model_owner_decision_status: review.status,
+      public_display_allowed: review.publicDisplayAllowed,
+      public_display_guidance: review.contributionGuardrail,
       missing_value_rule: MISSING_RULE,
       model_role: modelRole(row),
       contribution_guardrail: review.contributionGuardrail,
     }
   })
+  const statusCounts = variables.reduce((counts, row) => {
+    counts[row.transformation_status] = (counts[row.transformation_status] ?? 0) + 1
+    return counts
+  }, {})
 
   return {
     artifact: {
@@ -318,8 +519,10 @@ function buildMap() {
       high_frequency_input_count: variables.filter((row) => row.model_role === 'high_frequency_indicator').length,
       transformation_rule: MODEL_INPUT_RULE,
       missing_value_rule: MISSING_RULE,
+      transformation_status_counts: statusCounts,
+      blocked_owner_decision_count: statusCounts.blocked_needs_owner_decision ?? 0,
       production_note:
-        'This artifact documents the current source workflow and flags series that need economist review before a production refit. It is not a claim that every source transformation is economically final.',
+        'This artifact documents the current source workflow and proposes row-level owner-review decisions before a production refit. It is not a claim that every source transformation has model-owner sign-off.',
     },
     variables,
   }

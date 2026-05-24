@@ -108,7 +108,7 @@ the series (YoY is undefined before t+4 observations).
 | `metadata.export_mode` | enum | `"frozen_state_space_bridge"` until the exporter is rewired to run a source-model refit. |
 | `metadata.source_model_reference` | object | Points to the local source-model bundle and records that the public export does not read the source workbook. |
 | `metadata.source_audit` | object | Local source-folder/workbook/script/object audit status. The raw source folder remains untracked. |
-| `metadata.transformation_map` | object | Points to `docs/data-bridge/dfm-transformation-map.json` and CSV; records 36-of-36 public indicator coverage and review blockers. |
+| `metadata.transformation_map` | object | Points to `docs/data-bridge/dfm-transformation-map.json` and CSV; records 36-of-36 public indicator coverage, row-level owner-review decisions, and remaining blockers. |
 | `metadata.refit_status` | object | Current source-refit automation status and remaining blockers. Local source refit now runs through data prep, EM estimation, prediction, and GDP postprocessing via `scripts/dfm/run-source-refit.R`; the public export still publishes the frozen bridge until that source-refit output is reconciled and signed off. |
 | `metadata.backtest_status` | object | Points to `docs/data-bridge/dfm-validation-summary.json` and `dfm-validation-report.md`; true DFM vintage backtesting is blocked by missing historical vintages. |
 | `metadata.uncertainty_range` | object | Current illustrative uncertainty metadata, including sigma base, method, calibration source, and official-forecast flag. |
@@ -139,8 +139,9 @@ The source-workbook transformation map is committed in two forms:
 - `docs/data-bridge/dfm-transformation-map.json`
 - `docs/data-bridge/dfm-transformation-map.csv`
 
-It maps `source_sheet` / `source_column` to `variable_id`, transformation
-rule, unit, frequency, missing-value rule, and model role. The map is
+It maps `source_sheet` / `source_column` to `variable_id`, current source
+transformation, recommended transformation, rationale, risk flags,
+owner-decision status, public-display guidance, missing-value rule, and model role. The map is
 generated from the local source workbook by:
 
 ```text
@@ -149,9 +150,9 @@ node scripts/dfm/extract-source-map.mjs
 
 The current source R workflow still applies generic log differences after
 optional seasonal adjustment. The map therefore distinguishes documented
-coverage from economist acceptance: rates, ratios, weekly FX,
-already-growth variables, and some index/balance series remain flagged
-for review before a production refit.
+coverage from economist acceptance: 18 rows are approved, 14 are
+approved with caveats, and 4 are blocked pending model-owner choices
+before a production refit.
 
 ## Source Refit Status
 

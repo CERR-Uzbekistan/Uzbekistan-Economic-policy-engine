@@ -75,9 +75,10 @@ node scripts/dfm/extract-source-map.mjs
 ```
 
 The map records `source_sheet`, `source_column`, variable id,
-transformation, unit, frequency, missing-value rule, and model role for
-all 36 current public DFM rows. The raw workbook remains outside source
-control.
+current source transformation, recommended transformation, rationale,
+risk flags, owner-decision status, public-display guidance,
+missing-value rule, and model role for all 36 current public DFM rows.
+The raw workbook remains outside source control.
 
 ## How the model works
 
@@ -133,6 +134,8 @@ Current public artifact checks:
 - economist sign-off: `not_available`
 - source workbook status: `available_locally_untracked`
 - transform coverage: `36_of_36`
+- transformation-map decision status: 18 `approved`, 14
+  `approved_with_caveat`, and 4 `blocked_needs_owner_decision`
 - refit status: `available` for the local source runner; public export still uses the frozen bridge
 - validation/backtest status: `proxy_validation_available`
 - uncertainty range status: `available_illustrative`
@@ -173,10 +176,11 @@ forecast interval.
 
 The local source bundle is useful, but it is not production-hardened yet:
 
-- `calculate_growth.R` applies generic log growth to all series. Rates,
-  ratios, balances, negative/zero-valued series, and already-growth-rate
-  indicators are now visible in the transform map, but many still need
-  economist review before a production refit.
+- `calculate_growth.R` applies generic log growth to all series. The
+  transformation map now records recommended row-level decisions and
+  plain-language rationales. Four rows remain blocked for model-owner
+  choice before production refit: `financial_sound`, `rate_1y`,
+  `uzs_usd`, and `kazakh_leadind`.
 - `postprocess_gdp.R` depends on the global `df` object and should take
   all required inputs explicitly before it is used in a reproducible
   export path.
@@ -195,8 +199,9 @@ The local source bundle is useful, but it is not production-hardened yet:
   Pandoc is not available; CI also still needs a reproducible R
   dependency setup.
 - The source workbook includes a weekly UZS/USD row while the public DFM
-  schema exposes monthly/quarterly frequencies. That harmonization needs
-  model-owner sign-off before production.
+  schema exposes monthly/quarterly frequencies. The transform map blocks
+  production refit until the model owner chooses the weekly-to-monthly
+  aggregation convention.
 - Some public labels and source workbook descriptions need owner review
   before the app treats them as final economic names.
 
@@ -209,7 +214,8 @@ The local source bundle is useful, but it is not production-hardened yet:
 2. Rebuild the source-to-public pipeline so `dfm.json` can be generated
    directly from the source workbook and R refit output.
 3. Move the transform map into reviewed source metadata and block refits
-   when a series lacks an accepted transformation.
+   when a series lacks an accepted transformation or has
+   `blocked_needs_owner_decision`.
 4. Add data integrity checks: duplicate dates, metadata/order mismatch,
    coercion-created missing values, failed seasonal adjustment, stationarity
    warnings, and EM non-convergence.

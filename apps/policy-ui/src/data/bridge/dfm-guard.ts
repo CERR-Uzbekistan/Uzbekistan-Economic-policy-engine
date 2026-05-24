@@ -718,11 +718,11 @@ function parseTransformationMap(
     'metadata.transformation_map.reviewed_blockers',
   )
   let ok = true
-  if (status !== 'available_with_review_flags') {
+  if (status !== 'available_with_review_flags' && status !== 'available_with_owner_review_decisions') {
     pushError(
       issues,
       'metadata.transformation_map.status',
-      'Expected available_with_review_flags.',
+      'Expected available_with_review_flags or available_with_owner_review_decisions.',
     )
     ok = false
   }
@@ -739,7 +739,7 @@ function parseTransformationMap(
   if (!reviewedBlockers) ok = false
   if (!ok || !reviewedBlockers) return null
   return {
-    status: 'available_with_review_flags',
+    status: status as DfmMetadata['transformation_map']['status'],
     json_artifact: jsonArtifact as string,
     csv_artifact: csvArtifact as string,
     public_indicator_coverage: publicIndicatorCoverage as string,
