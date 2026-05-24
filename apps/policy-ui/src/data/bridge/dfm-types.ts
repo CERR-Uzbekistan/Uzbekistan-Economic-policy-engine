@@ -94,6 +94,46 @@ export type DfmMetadata = {
     source_workbook_updates_require_refit: boolean
     public_export_reads_source_workbook: boolean
   }
+  source_audit: {
+    source_folder_status: 'available_locally_untracked' | 'not_available'
+    workbook_status: 'available_locally_untracked' | 'not_available'
+    workbook_md5: string | null
+    source_scripts: string[]
+    saved_model_objects: string[]
+  }
+  transformation_map: {
+    status: 'available_with_review_flags'
+    json_artifact: string
+    csv_artifact: string
+    public_indicator_coverage: string
+    reviewed_blockers: string[]
+  }
+  refit_status: {
+    status: 'blocked_in_current_environment' | 'available'
+    public_export_reads_source_workbook: boolean
+    blocker: string
+    source_logic_status: string
+  }
+  backtest_status: {
+    status: 'proxy_validation_available' | 'available' | 'not_available'
+    validation_artifact: string
+    validation_report: string
+    vintage_backtest: string
+    benchmark: string
+    rmse_pp: number
+  }
+  uncertainty_range: {
+    status: 'available_illustrative' | 'available'
+    sigma_base_pp: number
+    method: string
+    calibration_source: string
+    is_official_forecast_interval: boolean
+  }
+  contribution_diagnostics: {
+    status: 'guarded_factor_signal_only' | 'available'
+    top_contribution_audit: string
+    not_percentage_point_gdp_effects: boolean
+  }
   readiness_status: {
     public_status: 'internal_preview_bridge'
     source_refit_in_ci: 'not_available' | 'available'

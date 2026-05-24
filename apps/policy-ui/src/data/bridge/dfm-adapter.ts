@@ -76,6 +76,12 @@ export type DfmAdapterMeta = {
   export_script_md5: string | null
   export_mode: DfmMetadata['export_mode']
   source_model_reference: DfmMetadata['source_model_reference']
+  source_audit: DfmMetadata['source_audit']
+  transformation_map: DfmMetadata['transformation_map']
+  refit_status: DfmMetadata['refit_status']
+  backtest_status: DfmMetadata['backtest_status']
+  uncertainty_range: DfmMetadata['uncertainty_range']
+  contribution_diagnostics: DfmMetadata['contribution_diagnostics']
   readiness_status: DfmMetadata['readiness_status']
 }
 
@@ -163,6 +169,19 @@ function toMeta(metadata: DfmMetadata): DfmAdapterMeta {
     export_script_md5: metadata.export_script_md5,
     export_mode: metadata.export_mode,
     source_model_reference: { ...metadata.source_model_reference },
+    source_audit: {
+      ...metadata.source_audit,
+      source_scripts: metadata.source_audit.source_scripts.slice(),
+      saved_model_objects: metadata.source_audit.saved_model_objects.slice(),
+    },
+    transformation_map: {
+      ...metadata.transformation_map,
+      reviewed_blockers: metadata.transformation_map.reviewed_blockers.slice(),
+    },
+    refit_status: { ...metadata.refit_status },
+    backtest_status: { ...metadata.backtest_status },
+    uncertainty_range: { ...metadata.uncertainty_range },
+    contribution_diagnostics: { ...metadata.contribution_diagnostics },
     readiness_status: { ...metadata.readiness_status },
   }
 }

@@ -16,7 +16,7 @@ function payloadWithForecast(): DfmBridgePayload {
     horizon_quarters: 2,
     uncertainty: {
       methodology_label: base.nowcast.current_quarter.uncertainty.methodology_label,
-      is_illustrative: false,
+      is_illustrative: true,
       bands: [
         { confidence_level: 0.5, lower_pct: 6.0, upper_pct: 7.0 },
         { confidence_level: 0.7, lower_pct: 5.7, upper_pct: 7.3 },
@@ -112,7 +112,7 @@ describe('composeDfmNowcastChart', () => {
     const levels = chart.uncertainty.map((band) => band.confidence_level)
     assert.deepEqual(levels, [50, 70, 90])
     for (const band of chart.uncertainty) {
-      assert.equal(band.is_illustrative, false)
+      assert.equal(band.is_illustrative, true)
       assert.equal(band.series_id, 'gdp_nowcast_yoy')
       assert.equal(band.lower.length, chart.x.values.length)
       assert.equal(band.upper.length, chart.x.values.length)

@@ -1,0 +1,61 @@
+{
+  "artifact": {
+    "id": "dfm-validation-summary",
+    "generated_at": "2026-05-24T10:52:27.814Z",
+    "source_artifact": "apps/policy-ui/public/data/dfm.json",
+    "public_artifact_data_version": "2026Q1",
+    "public_artifact_exported_at": "2026-05-24T10:49:21Z",
+    "validation_scope": "Historical GDP YoY benchmark validation from the public bridge history. True DFM vintage backtesting is blocked until historical source-workbook vintages or saved pre-release DFM outputs are available.",
+    "vintage_backtest_status": "blocked_no_historical_vintages",
+    "source_refit_status": "blocked_rscript_unavailable_in_current_environment",
+    "uncertainty_calibration_status": "proxy_from_best_historical_gdp_benchmark"
+  },
+  "history_sample": {
+    "first_period": "2018Q1",
+    "last_period": "2025Q4",
+    "observations": 32
+  },
+  "benchmarks": [
+    {
+      "benchmark_id": "last_observed_yoy",
+      "metrics": {
+        "n": 31,
+        "mae": 2.9871,
+        "rmse": 3.7855,
+        "mean_error": -0.0498
+      }
+    },
+    {
+      "benchmark_id": "same_quarter_previous_year_yoy",
+      "metrics": {
+        "n": 28,
+        "mae": 4.1445,
+        "rmse": 5.0061,
+        "mean_error": -0.0278
+      }
+    },
+    {
+      "benchmark_id": "four_quarter_trailing_average_yoy",
+      "metrics": {
+        "n": 28,
+        "mae": 2.8261,
+        "rmse": 3.3867,
+        "mean_error": 0.1125
+      }
+    }
+  ],
+  "selected_uncertainty_proxy": {
+    "benchmark_id": "four_quarter_trailing_average_yoy",
+    "sigma_base_pp": 3.3867,
+    "mae_pp": 2.8261,
+    "observations": 28,
+    "is_dfm_vintage_backtest": false,
+    "use_in_public_artifact": "Use as an illustrative nowcast range until a real DFM vintage backtest supersedes it."
+  },
+  "limitations": [
+    "No historical vintages are available, so this report cannot estimate true real-time DFM nowcast errors.",
+    "The validation uses actual GDP YoY history already in dfm.json and simple benchmark forecasts only.",
+    "The current R refit cannot be executed in this environment because Rscript is not on PATH.",
+    "The uncertainty proxy should be treated as a conservative internal-preview range, not an official forecast interval."
+  ]
+}

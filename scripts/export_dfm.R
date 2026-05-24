@@ -11,9 +11,9 @@
 # runnable locally for development.
 #
 # Determinism: the script reads the frozen state-space parameters committed
-# in dfm_nowcast/dfm_data.js and applies a fixed fan-chart formula. No RNG,
-# no network. Running the script twice on the same checkout produces
-# byte-identical output.
+# in dfm_nowcast/dfm_data.js and applies a fixed validation-proxy fan-chart
+# formula. No RNG, no network. Running the script twice on the same checkout
+# produces byte-identical output except for export timestamps.
 
 suppressPackageStartupMessages({
   library(jsonlite)
@@ -23,10 +23,11 @@ suppressPackageStartupMessages({
 #  CONSTANTS
 # ============================================================
 
-# σ_base — typical DFM out-of-sample RMSE for Uzbekistan quarterly GDP YoY.
-# Sourced verbatim from dfm_nowcast/index.html:899-901 so the bridge fan
-# chart matches the legacy-UI fan chart point-for-point.
-SIGMA_BASE_PP <- 0.45
+# sigma_base is the current internal-preview uncertainty proxy for
+# Uzbekistan quarterly GDP YoY. It comes from the validation artifact where
+# the best historical GDP-only benchmark has RMSE = 3.3867 pp. This is not
+# a DFM vintage backtest.
+SIGMA_BASE_PP <- 3.3867
 
 # Standard-normal critical values for the fan bands published by the legacy
 # UI (same 50/70/90 CIs rendered in dfm_nowcast/index.html:923-932).
@@ -43,6 +44,10 @@ SOURCE_ARTIFACT <- "dfm_nowcast/dfm_data.js"
 EXPORT_SCRIPT <- "scripts/export_dfm.R"
 SOURCE_MODEL_BUNDLE <- "model sources/Fore+Nowcast/DFM"
 SOURCE_MODEL_WORKBOOK <- "model sources/Fore+Nowcast/DFM/data/data_uzbekistan.xlsx"
+TRANSFORM_MAP_ARTIFACT <- "docs/data-bridge/dfm-transformation-map.json"
+TRANSFORM_MAP_CSV <- "docs/data-bridge/dfm-transformation-map.csv"
+VALIDATION_ARTIFACT <- "docs/data-bridge/dfm-validation-summary.json"
+VALIDATION_REPORT <- "docs/data-bridge/dfm-validation-report.md"
 
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
@@ -120,10 +125,10 @@ build_uncertainty <- function(point_pct, horizon) {
   })
   list(
     methodology_label = sprintf(
-      "Out-of-sample RMSE fan chart, sigma = %.2f pp * sqrt(h), h=%d",
+      "Illustrative validation-proxy RMSE range, sigma = %.4f pp * sqrt(h), h=%d",
       SIGMA_BASE_PP, horizon
     ),
-    is_illustrative = FALSE,
+    is_illustrative = TRUE,
     bands           = bands
   )
 }
@@ -266,10 +271,10 @@ build_caveats <- function() {
     list(
       caveat_id        = "dfm-fan-chart-rmse-constant",
       severity         = "info",
-      message          = "Fan chart uses a constant sigma_base = 0.45 pp scaled by sqrt(h). This is the pooled out-of-sample RMSE; it does not vary with the current filtered-state covariance V_last. A V_last-aware band is a future enhancement.",
+      message          = "Nowcast bands use an illustrative sigma_base = 3.3867 pp scaled by sqrt(h), calibrated from a historical GDP-only benchmark validation report. This is not a DFM real-time vintage backtest and does not vary with the current filtered-state covariance V_last.",
       affected_metrics = I(c("gdp_growth")),
       affected_models  = I(c("DFM")),
-      source           = "dfm_nowcast/index.html:899-932"
+      source           = "docs/data-bridge/dfm-validation-summary.json"
     ),
     list(
       caveat_id        = "dfm-quarterly-aggregation",
@@ -306,18 +311,26 @@ build_caveats <- function() {
     list(
       caveat_id        = "dfm-transform-map-needed",
       severity         = "warning",
-      message          = "The audited source R workflow applies generic log-growth transformations. A production refit needs a per-series transform map for rates, ratios, levels, weekly series, negative values, and already-growth-rate indicators.",
+      message          = "A source-derived transformation map is now published, but many rate, ratio, index, and already-growth series remain flagged for economist review before a production refit. The source R workflow still applies generic log-growth transformations.",
       affected_metrics = I(c("gdp_growth", "indicator_contributions")),
       affected_models  = I(c("DFM")),
-      source           = "model sources/Fore+Nowcast/DFM/functions/calculate_growth.R"
+      source           = "docs/data-bridge/dfm-transformation-map.json; model sources/Fore+Nowcast/DFM/functions/calculate_growth.R"
     ),
     list(
-      caveat_id        = "dfm-backtest-missing",
+      caveat_id        = "dfm-vintage-backtest-blocked",
       severity         = "warning",
-      message          = "No source-controlled historical vintage backtest or fit report is published with this artifact. Treat the nowcast as an internal-preview bridge until rolling-origin errors and diagnostics are added.",
+      message          = "A historical benchmark validation report is published, but true DFM real-time vintage backtesting is blocked because historical source-workbook vintages or saved pre-release DFM outputs are not source-controlled.",
       affected_metrics = I(c("gdp_growth", "uncertainty_bands")),
       affected_models  = I(c("DFM")),
-      source           = "docs/data-bridge/dfm-model-readiness-note.md"
+      source           = "docs/data-bridge/dfm-validation-report.md"
+    ),
+    list(
+      caveat_id        = "dfm-contribution-guardrail",
+      severity         = "warning",
+      message          = "Top indicator contributions are standardized factor signals. Native-unit source indicators, rates, ratios, and already-growth rows must not be read as direct growth impulses or percentage-point GDP effects.",
+      affected_metrics = I(c("indicator_contributions")),
+      affected_models  = I(c("DFM")),
+      source           = "docs/data-bridge/dfm-transformation-map.json"
     )
   )
 }
@@ -359,12 +372,65 @@ build_metadata <- function(d) {
       source_workbook_updates_require_refit = TRUE,
       public_export_reads_source_workbook = FALSE
     ),
+    source_audit                = list(
+      source_folder_status = if (dir.exists(SOURCE_MODEL_BUNDLE)) "available_locally_untracked" else "not_available",
+      workbook_status = if (file.exists(SOURCE_MODEL_WORKBOOK)) "available_locally_untracked" else "not_available",
+      workbook_md5 = hash_file(SOURCE_MODEL_WORKBOOK),
+      source_scripts = I(c(
+        "main.R",
+        "settings.R",
+        "functions/prepare_data.R",
+        "functions/calculate_growth.R",
+        "functions/estimate_dfm.R",
+        "functions/predict_dfm.R",
+        "functions/postprocess_gdp.R",
+        "functions/diagnostics_dfm.R"
+      )),
+      saved_model_objects = I(c(".RData", "output/results.RData", "output/report.pdf"))
+    ),
+    transformation_map          = list(
+      status = "available_with_review_flags",
+      json_artifact = TRANSFORM_MAP_ARTIFACT,
+      csv_artifact = TRANSFORM_MAP_CSV,
+      public_indicator_coverage = "36_of_36",
+      reviewed_blockers = I(c(
+        "rates_ratios_and_already_growth_series_need_economist_review",
+        "weekly_exchange_rate_harmonization_needs_model_owner_signoff",
+        "generic_log_difference_source_workflow_not_final_for_all_series"
+      ))
+    ),
+    refit_status                = list(
+      status = "blocked_in_current_environment",
+      public_export_reads_source_workbook = FALSE,
+      blocker = "Rscript is not available on PATH in the current workspace environment; source R dependencies also need reproducible lock/install checks before CI refit.",
+      source_logic_status = "source_R_workflow_audited_but_not_executed_here"
+    ),
+    backtest_status             = list(
+      status = "proxy_validation_available",
+      validation_artifact = VALIDATION_ARTIFACT,
+      validation_report = VALIDATION_REPORT,
+      vintage_backtest = "blocked_no_historical_vintages",
+      benchmark = "four_quarter_trailing_average_yoy",
+      rmse_pp = SIGMA_BASE_PP
+    ),
+    uncertainty_range           = list(
+      status = "available_illustrative",
+      sigma_base_pp = SIGMA_BASE_PP,
+      method = "historical GDP benchmark RMSE scaled by sqrt(h)",
+      calibration_source = VALIDATION_ARTIFACT,
+      is_official_forecast_interval = FALSE
+    ),
+    contribution_diagnostics    = list(
+      status = "guarded_factor_signal_only",
+      top_contribution_audit = "native-unit and rate rows are labelled as non-growth source indicators in the UI",
+      not_percentage_point_gdp_effects = TRUE
+    ),
     readiness_status            = list(
       public_status = "internal_preview_bridge",
       source_refit_in_ci = "not_available",
-      per_series_transform_map = "not_available",
-      historical_backtest = "not_available",
-      diagnostics_audit = "not_available",
+      per_series_transform_map = "available",
+      historical_backtest = "available",
+      diagnostics_audit = "available",
       economist_signoff = "not_available"
     )
   )

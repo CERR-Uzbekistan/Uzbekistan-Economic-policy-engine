@@ -688,6 +688,13 @@ body:has(.overview-page) {
   flex: 0 0 auto;
 }
 
+.overview-nowcast-range {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  margin: calc(-1 * var(--space-sm)) 0 var(--space-md);
+}
+
 .overview-nowcast-legend {
   align-items: center;
   display: flex;

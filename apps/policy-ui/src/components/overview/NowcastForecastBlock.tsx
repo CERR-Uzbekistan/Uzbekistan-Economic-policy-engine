@@ -244,6 +244,23 @@ export function NowcastForecastBlock({
         <div className="overview-nowcast-status">{statusSlot}</div>
       ) : null}
 
+      {fanInset ? (
+        <p className="overview-nowcast-range" data-nowcast-range="true">
+          {t('overview.nowcast.range', {
+            defaultValue: '{{period}} illustrative range: {{lower}} to {{upper}} (not an official forecast).',
+            period: formatQuarterLabel(fanInset.currentPeriod, locale),
+            lower: formatValueWithUnit(fanInset.lower, fanInset.unit, locale, {
+              maximumFractionDigits: 1,
+              minimumFractionDigits: 1,
+            }),
+            upper: formatValueWithUnit(fanInset.upper, fanInset.unit, locale, {
+              maximumFractionDigits: 1,
+              minimumFractionDigits: 1,
+            }),
+          })}
+        </p>
+      ) : null}
+
       <div className="overview-nowcast-legend" aria-label={t('overview.nowcast.legendAria')}>
         <span className="overview-nowcast-legend__token overview-nowcast-legend__token--actual">
           {t('overview.nowcast.legend.actual')}

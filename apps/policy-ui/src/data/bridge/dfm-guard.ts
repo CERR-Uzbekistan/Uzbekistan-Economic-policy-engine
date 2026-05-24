@@ -648,6 +648,290 @@ function parseSourceModelReference(
   }
 }
 
+function parseSourceAudit(
+  value: unknown,
+  issues: DfmValidationIssue[],
+): DfmMetadata['source_audit'] | null {
+  if (!isRecord(value)) {
+    pushError(issues, 'metadata.source_audit', 'Expected an object.')
+    return null
+  }
+  const sourceFolderStatus = value.source_folder_status
+  const workbookStatus = value.workbook_status
+  const workbookMd5 = value.workbook_md5
+  const sourceScripts = parseStringArray(
+    value.source_scripts,
+    issues,
+    'metadata.source_audit.source_scripts',
+  )
+  const savedModelObjects = parseStringArray(
+    value.saved_model_objects,
+    issues,
+    'metadata.source_audit.saved_model_objects',
+  )
+  let ok = true
+
+  for (const [field, raw] of [
+    ['source_folder_status', sourceFolderStatus],
+    ['workbook_status', workbookStatus],
+  ] as const) {
+    if (raw !== 'available_locally_untracked' && raw !== 'not_available') {
+      pushError(
+        issues,
+        `metadata.source_audit.${field}`,
+        'Expected available_locally_untracked or not_available.',
+      )
+      ok = false
+    }
+  }
+  if (!(workbookMd5 === null || typeof workbookMd5 === 'string')) {
+    pushError(issues, 'metadata.source_audit.workbook_md5', 'Expected a string or null.')
+    ok = false
+  }
+  if (!sourceScripts || !savedModelObjects) ok = false
+  if (!ok || !sourceScripts || !savedModelObjects) return null
+
+  return {
+    source_folder_status: sourceFolderStatus as DfmMetadata['source_audit']['source_folder_status'],
+    workbook_status: workbookStatus as DfmMetadata['source_audit']['workbook_status'],
+    workbook_md5: (workbookMd5 ?? null) as string | null,
+    source_scripts: sourceScripts,
+    saved_model_objects: savedModelObjects,
+  }
+}
+
+function parseTransformationMap(
+  value: unknown,
+  issues: DfmValidationIssue[],
+): DfmMetadata['transformation_map'] | null {
+  if (!isRecord(value)) {
+    pushError(issues, 'metadata.transformation_map', 'Expected an object.')
+    return null
+  }
+  const status = value.status
+  const jsonArtifact = value.json_artifact
+  const csvArtifact = value.csv_artifact
+  const publicIndicatorCoverage = value.public_indicator_coverage
+  const reviewedBlockers = parseStringArray(
+    value.reviewed_blockers,
+    issues,
+    'metadata.transformation_map.reviewed_blockers',
+  )
+  let ok = true
+  if (status !== 'available_with_review_flags') {
+    pushError(
+      issues,
+      'metadata.transformation_map.status',
+      'Expected available_with_review_flags.',
+    )
+    ok = false
+  }
+  for (const [field, raw] of [
+    ['json_artifact', jsonArtifact],
+    ['csv_artifact', csvArtifact],
+    ['public_indicator_coverage', publicIndicatorCoverage],
+  ] as const) {
+    if (typeof raw !== 'string' || raw.length === 0) {
+      pushError(issues, `metadata.transformation_map.${field}`, 'Expected a non-empty string.')
+      ok = false
+    }
+  }
+  if (!reviewedBlockers) ok = false
+  if (!ok || !reviewedBlockers) return null
+  return {
+    status: 'available_with_review_flags',
+    json_artifact: jsonArtifact as string,
+    csv_artifact: csvArtifact as string,
+    public_indicator_coverage: publicIndicatorCoverage as string,
+    reviewed_blockers: reviewedBlockers,
+  }
+}
+
+function parseRefitStatus(
+  value: unknown,
+  issues: DfmValidationIssue[],
+): DfmMetadata['refit_status'] | null {
+  if (!isRecord(value)) {
+    pushError(issues, 'metadata.refit_status', 'Expected an object.')
+    return null
+  }
+  const status = value.status
+  const publicExportReadsSourceWorkbook = value.public_export_reads_source_workbook
+  const blocker = value.blocker
+  const sourceLogicStatus = value.source_logic_status
+  let ok = true
+  if (status !== 'blocked_in_current_environment' && status !== 'available') {
+    pushError(issues, 'metadata.refit_status.status', 'Expected blocked_in_current_environment or available.')
+    ok = false
+  }
+  if (typeof publicExportReadsSourceWorkbook !== 'boolean') {
+    pushError(
+      issues,
+      'metadata.refit_status.public_export_reads_source_workbook',
+      'Expected a boolean.',
+    )
+    ok = false
+  }
+  for (const [field, raw] of [
+    ['blocker', blocker],
+    ['source_logic_status', sourceLogicStatus],
+  ] as const) {
+    if (typeof raw !== 'string' || raw.length === 0) {
+      pushError(issues, `metadata.refit_status.${field}`, 'Expected a non-empty string.')
+      ok = false
+    }
+  }
+  if (!ok) return null
+  return {
+    status: status as DfmMetadata['refit_status']['status'],
+    public_export_reads_source_workbook: publicExportReadsSourceWorkbook as boolean,
+    blocker: blocker as string,
+    source_logic_status: sourceLogicStatus as string,
+  }
+}
+
+function parseBacktestStatus(
+  value: unknown,
+  issues: DfmValidationIssue[],
+): DfmMetadata['backtest_status'] | null {
+  if (!isRecord(value)) {
+    pushError(issues, 'metadata.backtest_status', 'Expected an object.')
+    return null
+  }
+  const status = value.status
+  const validationArtifact = value.validation_artifact
+  const validationReport = value.validation_report
+  const vintageBacktest = value.vintage_backtest
+  const benchmark = value.benchmark
+  const rmsePp = value.rmse_pp
+  let ok = true
+  if (!(status === 'proxy_validation_available' || status === 'available' || status === 'not_available')) {
+    pushError(
+      issues,
+      'metadata.backtest_status.status',
+      'Expected proxy_validation_available, available, or not_available.',
+    )
+    ok = false
+  }
+  for (const [field, raw] of [
+    ['validation_artifact', validationArtifact],
+    ['validation_report', validationReport],
+    ['vintage_backtest', vintageBacktest],
+    ['benchmark', benchmark],
+  ] as const) {
+    if (typeof raw !== 'string' || raw.length === 0) {
+      pushError(issues, `metadata.backtest_status.${field}`, 'Expected a non-empty string.')
+      ok = false
+    }
+  }
+  if (!isFiniteNumber(rmsePp) || rmsePp <= 0) {
+    pushError(issues, 'metadata.backtest_status.rmse_pp', 'Expected a positive finite number.')
+    ok = false
+  }
+  if (!ok) return null
+  return {
+    status: status as DfmMetadata['backtest_status']['status'],
+    validation_artifact: validationArtifact as string,
+    validation_report: validationReport as string,
+    vintage_backtest: vintageBacktest as string,
+    benchmark: benchmark as string,
+    rmse_pp: rmsePp as number,
+  }
+}
+
+function parseUncertaintyRange(
+  value: unknown,
+  issues: DfmValidationIssue[],
+): DfmMetadata['uncertainty_range'] | null {
+  if (!isRecord(value)) {
+    pushError(issues, 'metadata.uncertainty_range', 'Expected an object.')
+    return null
+  }
+  const status = value.status
+  const sigmaBasePp = value.sigma_base_pp
+  const method = value.method
+  const calibrationSource = value.calibration_source
+  const isOfficialForecastInterval = value.is_official_forecast_interval
+  let ok = true
+  if (status !== 'available_illustrative' && status !== 'available') {
+    pushError(issues, 'metadata.uncertainty_range.status', 'Expected available_illustrative or available.')
+    ok = false
+  }
+  if (!isFiniteNumber(sigmaBasePp) || sigmaBasePp <= 0) {
+    pushError(issues, 'metadata.uncertainty_range.sigma_base_pp', 'Expected a positive finite number.')
+    ok = false
+  }
+  for (const [field, raw] of [
+    ['method', method],
+    ['calibration_source', calibrationSource],
+  ] as const) {
+    if (typeof raw !== 'string' || raw.length === 0) {
+      pushError(issues, `metadata.uncertainty_range.${field}`, 'Expected a non-empty string.')
+      ok = false
+    }
+  }
+  if (typeof isOfficialForecastInterval !== 'boolean') {
+    pushError(
+      issues,
+      'metadata.uncertainty_range.is_official_forecast_interval',
+      'Expected a boolean.',
+    )
+    ok = false
+  }
+  if (!ok) return null
+  return {
+    status: status as DfmMetadata['uncertainty_range']['status'],
+    sigma_base_pp: sigmaBasePp as number,
+    method: method as string,
+    calibration_source: calibrationSource as string,
+    is_official_forecast_interval: isOfficialForecastInterval as boolean,
+  }
+}
+
+function parseContributionDiagnostics(
+  value: unknown,
+  issues: DfmValidationIssue[],
+): DfmMetadata['contribution_diagnostics'] | null {
+  if (!isRecord(value)) {
+    pushError(issues, 'metadata.contribution_diagnostics', 'Expected an object.')
+    return null
+  }
+  const status = value.status
+  const topContributionAudit = value.top_contribution_audit
+  const notPercentagePointGdpEffects = value.not_percentage_point_gdp_effects
+  let ok = true
+  if (status !== 'guarded_factor_signal_only' && status !== 'available') {
+    pushError(
+      issues,
+      'metadata.contribution_diagnostics.status',
+      'Expected guarded_factor_signal_only or available.',
+    )
+    ok = false
+  }
+  if (typeof topContributionAudit !== 'string' || topContributionAudit.length === 0) {
+    pushError(
+      issues,
+      'metadata.contribution_diagnostics.top_contribution_audit',
+      'Expected a non-empty string.',
+    )
+    ok = false
+  }
+  if (notPercentagePointGdpEffects !== true) {
+    pushError(
+      issues,
+      'metadata.contribution_diagnostics.not_percentage_point_gdp_effects',
+      'Expected true.',
+    )
+    ok = false
+  }
+  if (!ok) return null
+  return {
+    status: status as DfmMetadata['contribution_diagnostics']['status'],
+    top_contribution_audit: topContributionAudit as string,
+    not_percentage_point_gdp_effects: true,
+  }
+}
+
 function parseReadinessStatus(
   value: unknown,
   issues: DfmValidationIssue[],
@@ -720,6 +1004,15 @@ function parseMetadata(value: unknown, issues: DfmValidationIssue[]): DfmMetadat
   const exportScriptMd5 = value.export_script_md5
   const exportMode = value.export_mode
   const sourceModelReference = parseSourceModelReference(value.source_model_reference, issues)
+  const sourceAudit = parseSourceAudit(value.source_audit, issues)
+  const transformationMap = parseTransformationMap(value.transformation_map, issues)
+  const refitStatus = parseRefitStatus(value.refit_status, issues)
+  const backtestStatus = parseBacktestStatus(value.backtest_status, issues)
+  const uncertaintyRange = parseUncertaintyRange(value.uncertainty_range, issues)
+  const contributionDiagnostics = parseContributionDiagnostics(
+    value.contribution_diagnostics,
+    issues,
+  )
   const readinessStatus = parseReadinessStatus(value.readiness_status, issues)
 
   let ok = true
@@ -763,8 +1056,31 @@ function parseMetadata(value: unknown, issues: DfmValidationIssue[]): DfmMetadat
     pushError(issues, 'metadata.export_mode', 'Expected frozen_state_space_bridge.')
     ok = false
   }
-  if (!sourceModelReference || !readinessStatus) ok = false
-  if (!ok || !sourceModelReference || !readinessStatus) return null
+  if (
+    !sourceModelReference ||
+    !sourceAudit ||
+    !transformationMap ||
+    !refitStatus ||
+    !backtestStatus ||
+    !uncertaintyRange ||
+    !contributionDiagnostics ||
+    !readinessStatus
+  ) {
+    ok = false
+  }
+  if (
+    !ok ||
+    !sourceModelReference ||
+    !sourceAudit ||
+    !transformationMap ||
+    !refitStatus ||
+    !backtestStatus ||
+    !uncertaintyRange ||
+    !contributionDiagnostics ||
+    !readinessStatus
+  ) {
+    return null
+  }
   return {
     exported_at: exportedAt as string,
     source_script_sha: (sourceScriptSha ?? null) as string | null,
@@ -776,6 +1092,12 @@ function parseMetadata(value: unknown, issues: DfmValidationIssue[]): DfmMetadat
     export_script_md5: (exportScriptMd5 ?? null) as string | null,
     export_mode: 'frozen_state_space_bridge',
     source_model_reference: sourceModelReference,
+    source_audit: sourceAudit,
+    transformation_map: transformationMap,
+    refit_status: refitStatus,
+    backtest_status: backtestStatus,
+    uncertainty_range: uncertaintyRange,
+    contribution_diagnostics: contributionDiagnostics,
     readiness_status: readinessStatus,
   }
 }

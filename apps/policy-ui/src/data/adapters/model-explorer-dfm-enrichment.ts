@@ -14,6 +14,8 @@ const DFM_CAVEAT_TITLES: Record<string, string> = {
   'dfm-quarterly-aggregation': 'Quarterly GDP aggregation',
   'dfm-statoffice-latency': 'Official GDP publication lag',
   'dfm-parameters-frozen-at-refit': 'Parameters frozen at refit',
+  'dfm-vintage-backtest-blocked': 'Vintage backtest blocked',
+  'dfm-contribution-guardrail': 'Contribution guardrail',
 }
 
 function toIsoDateLabel(value: string): string {
@@ -67,6 +69,14 @@ export function toModelExplorerDfmBridgeEvidence(payload: DfmBridgePayload): Mod
       { label: 'Forward horizon', value: forecastHorizonLabel(payload) },
       { label: 'Export mode', value: payload.metadata.export_mode },
       { label: 'Public status', value: payload.metadata.readiness_status.public_status },
+      { label: 'Source data status', value: payload.metadata.source_audit.workbook_status },
+      { label: 'Transform coverage', value: payload.metadata.transformation_map.public_indicator_coverage },
+      { label: 'Refit status', value: payload.metadata.refit_status.status },
+      { label: 'Backtest status', value: payload.metadata.backtest_status.status },
+      {
+        label: 'Uncertainty range',
+        value: `${payload.metadata.uncertainty_range.status} (${formatNumber(payload.metadata.uncertainty_range.sigma_base_pp, 2)} pp)`,
+      },
     ],
     caveats: payload.caveats.map((caveat) => caveat.message),
   }
@@ -118,6 +128,12 @@ function withDfmBridge(entry: ModelCatalogEntry, payload: DfmBridgePayload): Mod
         value: String(uncertaintyBands),
         range: current.uncertainty.methodology_label,
       },
+      {
+        symbol: 'sigma',
+        name: 'Uncertainty sigma',
+        value: `${formatNumber(payload.metadata.uncertainty_range.sigma_base_pp, 2)} pp`,
+        range: payload.metadata.uncertainty_range.method,
+      },
     ],
     caveats: payload.caveats.map((caveat, index) => ({
       id: caveat.caveat_id,
@@ -147,13 +163,27 @@ function withDfmBridge(entry: ModelCatalogEntry, payload: DfmBridgePayload): Mod
         description: `${payload.metadata.source_model_reference.path}; source workbook is reference-only until a reviewed refit path is wired`,
         vintage_label: payload.metadata.source_model_reference.status,
       },
+      {
+        institution: 'DFM transformation map',
+        description: `${payload.metadata.transformation_map.json_artifact}; coverage ${payload.metadata.transformation_map.public_indicator_coverage}`,
+        vintage_label: payload.metadata.transformation_map.status,
+      },
+      {
+        institution: 'DFM validation report',
+        description: `${payload.metadata.backtest_status.validation_report}; benchmark ${payload.metadata.backtest_status.benchmark}`,
+        vintage_label: payload.metadata.backtest_status.vintage_backtest,
+      },
     ],
     validation_summary: [
       `Public dfm.json validates against the DFM bridge schema and exposes ${rows.label}, ${payload.factor.n_factors} latent factor, and current quarter ${current.period}.`,
       `The artifact carries ${forecastHorizonLabel(payload)} forward horizon; Overview only uses the DFM chart when its current quarter is ahead of the accepted actual and not older than the Overview nowcast period.`,
       'Frontend validation checks shape, units, periods, factor state, rows, caveats, and metadata; it does not validate model economics or official GDP publication status.',
       'Indicator contribution values are standardized DFM factor signals, not percentage-point GDP-growth effects.',
-      'The public export uses frozen state-space parameters and does not yet rerun the source workbook refit in CI; a per-series transform map, historical backtest, diagnostics audit, and economist sign-off remain unavailable.',
+      `Source workbook status is ${payload.metadata.source_audit.workbook_status}; transform coverage is ${payload.metadata.transformation_map.public_indicator_coverage}, with economist-review blockers retained in the map.`,
+      `Refit status is ${payload.metadata.refit_status.status}; ${payload.metadata.refit_status.blocker}`,
+      `Validation/backtest status is ${payload.metadata.backtest_status.status}; true DFM vintage backtesting remains ${payload.metadata.backtest_status.vintage_backtest}.`,
+      `Uncertainty range is ${payload.metadata.uncertainty_range.status}; it is not an official forecast interval.`,
+      'Economist/model-owner sign-off remains unavailable.',
     ],
     bridge_evidence: toModelExplorerDfmBridgeEvidence(payload),
   }

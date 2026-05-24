@@ -57,7 +57,7 @@ describe('dfm adapter', () => {
     for (const band of bands) {
       assert.ok(band.lower_pct <= band.upper_pct)
     }
-    assert.equal(output.nowcast.current.uncertainty.is_illustrative, false)
+    assert.equal(output.nowcast.current.uncertainty.is_illustrative, true)
   })
 
   it('preserves the methodology_label verbatim (ASCII) in the transform output', () => {
@@ -95,6 +95,10 @@ describe('dfm adapter', () => {
     assert.equal(output.meta.source_script_sha, payload.metadata.source_script_sha)
     assert.equal(output.meta.export_mode, 'frozen_state_space_bridge')
     assert.equal(output.meta.source_model_reference.public_export_reads_source_workbook, false)
-    assert.equal(output.meta.readiness_status.historical_backtest, 'not_available')
+    assert.equal(output.meta.readiness_status.historical_backtest, 'available')
+    assert.equal(output.meta.transformation_map.public_indicator_coverage, '36_of_36')
+    assert.equal(output.meta.refit_status.status, 'blocked_in_current_environment')
+    assert.equal(output.meta.backtest_status.status, 'proxy_validation_available')
+    assert.equal(output.meta.uncertainty_range.is_official_forecast_interval, false)
   })
 })

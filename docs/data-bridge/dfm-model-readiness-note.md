@@ -26,6 +26,19 @@ That means the public bridge export reads the frozen checked-in
 `dfm_nowcast/dfm_data.js` state-space artifact. It does not yet read
 `data_uzbekistan.xlsx` or rerun the R EM estimator in CI.
 
+The current public artifact now also carries explicit readiness metadata:
+
+- `metadata.source_audit`
+- `metadata.transformation_map`
+- `metadata.refit_status`
+- `metadata.backtest_status`
+- `metadata.uncertainty_range`
+- `metadata.contribution_diagnostics`
+
+These fields expose the source-data status, transform-map coverage, refit
+blocker, validation proxy, uncertainty range, and contribution guardrails
+directly to Model Explorer.
+
 ## Source model bundle
 
 The local source bundle contains the full R-side nowcasting workflow:
@@ -49,6 +62,22 @@ The source workbook has 36 series rows:
 - 1 quarterly GDP target row
 - one source exchange-rate series is weekly in the workbook and is
   harmonized into the high-frequency public bridge row set
+
+The derived source map is committed here:
+
+- `docs/data-bridge/dfm-transformation-map.json`
+- `docs/data-bridge/dfm-transformation-map.csv`
+
+It is generated with:
+
+```text
+node scripts/dfm/extract-source-map.mjs
+```
+
+The map records `source_sheet`, `source_column`, variable id,
+transformation, unit, frequency, missing-value rule, and model role for
+all 36 current public DFM rows. The raw workbook remains outside source
+control.
 
 ## How the model works
 
@@ -98,13 +127,47 @@ Current public artifact checks:
 - export mode: `frozen_state_space_bridge`
 - public status: `internal_preview_bridge`
 - source refit in CI: `not_available`
-- per-series transform map: `not_available`
-- historical backtest: `not_available`
-- diagnostics audit: `not_available`
+- per-series transform map: `available`
+- historical backtest/validation: `available` as a proxy report, not true DFM vintages
+- diagnostics audit: `available` as contribution guardrails, not model-owner sign-off
 - economist sign-off: `not_available`
+- source workbook status: `available_locally_untracked`
+- transform coverage: `36_of_36`
+- refit status: `blocked_in_current_environment`
+- validation/backtest status: `proxy_validation_available`
+- uncertainty range status: `available_illustrative`
 
 This is enough for an internal-preview DFM nowcast lane. It is not enough
 to claim a final production-grade nowcasting system.
+
+## Validation and uncertainty
+
+The validation artifacts are:
+
+- `docs/data-bridge/dfm-validation-summary.json`
+- `docs/data-bridge/dfm-validation-report.md`
+
+The report computes simple historical GDP YoY benchmark errors from the
+public bridge history because true DFM vintages are unavailable. Current
+benchmark results:
+
+| Benchmark | Observations | MAE (pp) | RMSE (pp) |
+|---|---:|---:|---:|
+| last observed YoY | 31 | 2.9871 | 3.7855 |
+| same quarter previous year YoY | 28 | 4.1445 | 5.0061 |
+| four-quarter trailing average YoY | 28 | 2.8261 | 3.3867 |
+
+The public nowcast bands use the lowest-RMSE benchmark as an illustrative
+sigma base:
+
+```text
+sigma_base = 3.3867 pp
+sigma(h) = sigma_base * sqrt(h)
+```
+
+This is intentionally conservative and must be described as an internal
+validation proxy. It is not a DFM real-time backtest and not an official
+forecast interval.
 
 ## Source audit findings
 
@@ -112,7 +175,8 @@ The local source bundle is useful, but it is not production-hardened yet:
 
 - `calculate_growth.R` applies generic log growth to all series. Rates,
   ratios, balances, negative/zero-valued series, and already-growth-rate
-  indicators need explicit per-series transformations.
+  indicators are now visible in the transform map, but many still need
+  economist review before a production refit.
 - `postprocess_gdp.R` depends on the global `df` object and should take
   all required inputs explicitly before it is used in a reproducible
   export path.
@@ -123,24 +187,37 @@ The local source bundle is useful, but it is not production-hardened yet:
   used as validation evidence.
 - The current one-factor setting may be reasonable for a preview, but
   should be tested against alternative factor counts and block structures.
+- `Rscript` is not available on PATH in the current workspace, so the
+  source R refit could not be executed here. A reproducible R runtime and
+  package-lock/install story are required before CI refit automation.
+- The source workbook includes a weekly UZS/USD row while the public DFM
+  schema exposes monthly/quarterly frequencies. That harmonization needs
+  model-owner sign-off before production.
+- Some public labels and source workbook descriptions need owner review
+  before the app treats them as final economic names.
 
 ## Remaining work
 
-1. Rebuild the source-to-public pipeline so `dfm.json` can be generated
+1. Configure a reproducible R runtime (`Rscript` plus packages:
+   `readxl`, `dplyr`, `pracma`, `Matrix`, `zoo`, `purrr`, `lubridate`,
+   `tidyr`, `signal`, `seasonal`, `urca`, `rmarkdown`, `ggplot2`) and
+   rerun the source workflow from a clean checkout.
+2. Rebuild the source-to-public pipeline so `dfm.json` can be generated
    directly from the source workbook and R refit output.
-2. Add a per-series transform map in the source workbook metadata and
-   block refits when a series lacks an accepted transformation.
-3. Add data integrity checks: duplicate dates, metadata/order mismatch,
+3. Move the transform map into reviewed source metadata and block refits
+   when a series lacks an accepted transformation.
+4. Add data integrity checks: duplicate dates, metadata/order mismatch,
    coercion-created missing values, failed seasonal adjustment, stationarity
    warnings, and EM non-convergence.
-4. Fix GDP postprocessing and diagnostics.
-5. Add real-time vintage backtesting: what would the model have predicted
+5. Fix GDP postprocessing and diagnostics.
+6. Add real-time vintage backtesting: what would the model have predicted
    before official GDP releases?
-6. Add a reproducible validation report covering historical fit, forecast
-   errors, factor stability, and indicator news contributions.
-7. Decide whether one factor is enough or whether category-specific factors
+7. Replace the GDP-only benchmark proxy with a reproducible validation
+   report covering DFM vintage forecast errors, factor stability, residual
+   diagnostics, and indicator news contributions.
+8. Decide whether one factor is enough or whether category-specific factors
    are needed.
-8. Add a source-controlled release note each time the DFM source workbook
+9. Add a source-controlled release note each time the DFM source workbook
    or refit output changes.
 
 ## Safe wording
