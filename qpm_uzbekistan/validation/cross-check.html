@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QPM Validation — HTML vs MATLAB IRIS</title>
+<style>
+  :root{
+    --bg:#f6f8fa; --card:#fff; --txt:#0f172a; --muted:#64748b;
+    --line:#e2e8f0; --ok:#16a34a; --warn:#d97706; --err:#dc2626;
+    --accent:#1a3a5c;
+  }
+  html,body{margin:0;background:var(--bg);color:var(--txt);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.55}
+  h1{font-size:22px;margin:0 0 4px}
+  h2{font-size:16px;margin:24px 0 8px;color:var(--accent)}
+  .wrap{max-width:1280px;margin:0 auto;padding:24px}
+  .sub{color:var(--muted);font-size:13px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px;margin:16px 0}
+  .toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+  .toolbar label{font-size:13px;color:var(--muted)}
+  .toolbar input[type=number]{width:70px;padding:4px 6px;border:1px solid var(--line);border-radius:4px;font-family:inherit}
+  button{padding:7px 14px;border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:5px;cursor:pointer;font-family:inherit}
+  button.ghost{background:#fff;color:var(--accent)}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .chart{background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px}
+  .chart h3{margin:0 0 6px;font-size:13px;font-weight:600;color:var(--accent)}
+  canvas{max-height:240px}
+  table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+  th,td{padding:6px 10px;border-bottom:1px solid var(--line);text-align:right}
+  th:first-child,td:first-child{text-align:left;font-weight:600}
+  th{background:#f1f5f9;font-weight:600;color:var(--accent)}
+  .verdict{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:600}
+  .verdict.pass{background:#dcfce7;color:#166534}
+  .verdict.warn{background:#fef3c7;color:#92400e}
+  .verdict.fail{background:#fee2e2;color:#991b1b}
+  .legend{font-size:12px;color:var(--muted);margin-top:8px}
+  code{background:#f1f5f9;padding:1px 5px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:12px}
+  .meta{font-size:12px;color:var(--muted)}
+  .meta a{color:var(--accent)}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+<h1>QPM Validation — HTML vs MATLAB IRIS</h1>
+<div class="sub">
+  Cross-checks the JS impulse-response solver in <code>qpm_uzbekistan/index.html</code>
+  against the canonical IRIS Toolbox implementation in
+  <a href="data/Uzbekistan.model">data/Uzbekistan.model</a> /
+  <a href="data/readmodel_uzb.m">data/readmodel_uzb.m</a>.
+  Benchmark IRFs come from <code>a07_validate_vs_html.m</code> in the CERR MATLAB pack
+  (see <a href="data/matlab_irf_benchmark.csv">data/matlab_irf_benchmark.csv</a>).
+</div>
+
+<div class="card">
+  <div class="toolbar">
+    <label>Horizon (Q): <input type="number" id="hzn" value="12" min="4" max="20"></label>
+    <label>Shock size (pp): <input type="number" id="size" value="1.0" step="0.1" min="0.1" max="3.0"></label>
+    <label>
+      <input type="checkbox" id="zeroA4" checked>
+      Set <code>a₄ = 0</code> (match MATLAB Phillips curve)
+    </label>
+    <button onclick="runCrossCheck()">▶ Run cross-check</button>
+    <button class="ghost" onclick="downloadDeltas()">⬇ Download delta CSV</button>
+  </div>
+  <div class="meta" id="meta">Status: ready. Loading benchmark…</div>
+</div>
+
+<div id="results"></div>
+
+<div class="card">
+  <h2>Methodology</h2>
+  <ul style="margin:0;padding-left:18px;line-height:1.7">
+    <li><strong>Both engines run in pure deviation form</strong> — pre-shock state = 0; all trends set to steady state.</li>
+    <li><strong>Shock applied at Q0</strong> with size 1 pp; horizon 12 quarters; same as <code>a07_validate_vs_html.m</code>.</li>
+    <li><strong>Parameter set</strong>: HTML defaults from the slider DOM (<code>P()</code>) — these are intentionally calibrated to match <code>readmodel_uzb.m</code> point-for-point.</li>
+    <li><strong>Phillips-curve note</strong>: the HTML model has an extra direct import-price term <code>a₄·Δs</code> that is not present in the MATLAB model. Tick the "<code>a₄ = 0</code>" box to make the equations exactly comparable. Untick to see the effect of the direct-pass-through extension.</li>
+    <li><strong>Tolerance bands</strong>: pass &lt; 0.05 pp max abs delta · warn &lt; 0.15 pp · fail ≥ 0.15 pp.</li>
+  </ul>
+</div>
+
+<script>
+//=========================================================================
+// QPM SOLVER — verbatim copy of qpm_uzbekistan/index.html:571–724 (Phase 1).
+// Kept inline so the cross-check tool is self-contained and additive.
+// If the main solver changes, refresh this copy and re-run validation.
+//=========================================================================
+function solveIRF(p, shockType, shockSize, T) {
+  const ST = 1;
+  const N  = T + ST + 10;
+  const z = () => new Float64Array(N);
+  let gap=z(), pi=z(), pi4=z(), rs=z(), rr_gap=z(), mci=z();
+  let rmc=z(), s=z(), l_cpi=z(), l_z_gap=z(), d4l_s=z(), dpm=z();
+  const shk_gap=z(), shk_pi=z(), shk_s=z(), shk_rs=z(), shk_rho=z();
+  if (shockType === 'demand')    shk_gap[ST] = shockSize;
+  if (shockType === 'inflation') shk_pi[ST]  = shockSize;
+  if (shockType === 'exchange')  shk_s[ST]   = shockSize;
+  if (shockType === 'monetary')  shk_rs[ST]  = shockSize;
+  const gap_star = z();
+  const { b1, b2, b3, b4, a1, a2, a3, a4, g1, g2, g3, e1 } = p;
+  const G = (arr, t) => (t >= 0 && t < N) ? arr[t] : 0;
+  for (let iter = 0; iter < 600; iter++) {
+    const pi0  = pi.slice(), s0 = s.slice(), gap0 = gap.slice();
+    for (let t = N - 2; t >= ST; t--) {
+      s[t] = (1-e1)*G(s,t+1) + e1*G(s,t-1) - (rs[t] - shk_rho[t])/4 + shk_s[t];
+    }
+    for (let t = ST; t < N - 1; t++) {
+      l_cpi[t]   = l_cpi[t-1] + G(pi, t-1) / 4;
+      l_z_gap[t] = G(s,t) - l_cpi[t];
+      dpm[t]     = G(s,t) - G(s,t-1);
+      rmc[t]     = a3 * G(gap,t-1) + (1-a3) * l_z_gap[t];
+      pi[t]      = a1*G(pi,t-1) + (1-a1)*G(pi,t+1) + a2*rmc[t] + a4*dpm[t] + shk_pi[t];
+      l_cpi[t]   = l_cpi[t-1] + pi[t] / 4;
+      l_z_gap[t] = G(s,t) - l_cpi[t];
+      pi4[t]     = (G(pi,t)+G(pi,t-1)+G(pi,t-2)+G(pi,t-3)) / 4;
+      rs[t]      = g1*G(rs,t-1) + (1-g1)*(G(pi,t+1) + g2*G(pi4,t+4) + g3*G(gap,t-1)) + shk_rs[t];
+      rr_gap[t]  = rs[t] - G(pi,t+1);
+      mci[t]     = b4*rr_gap[t] - (1-b4)*l_z_gap[t];
+      gap[t]     = b1*G(gap,t-1) - b2*mci[t] + b3*gap_star[t] + shk_gap[t];
+      rmc[t]     = a3*gap[t] + (1-a3)*l_z_gap[t];
+      pi[t]      = a1*G(pi,t-1) + (1-a1)*G(pi,t+1) + a2*rmc[t] + a4*dpm[t] + shk_pi[t];
+      l_cpi[t]   = l_cpi[t-1] + pi[t] / 4;
+      l_z_gap[t] = G(s,t) - l_cpi[t];
+      pi4[t]     = (G(pi,t)+G(pi,t-1)+G(pi,t-2)+G(pi,t-3)) / 4;
+      rs[t]      = g1*G(rs,t-1) + (1-g1)*(G(pi,t+1) + g2*G(pi4,t+4) + g3*gap[t]) + shk_rs[t];
+      rr_gap[t]  = rs[t] - G(pi,t+1);
+      mci[t]     = b4*rr_gap[t] - (1-b4)*l_z_gap[t];
+    }
+    for (let t = 0; t < N; t++) d4l_s[t] = G(s,t) - G(s,t-4);
+    let diff = 0;
+    for (let t = ST; t < N; t++) {
+      diff = Math.max(diff, Math.abs(pi[t]-pi0[t]), Math.abs(s[t]-s0[t]), Math.abs(gap[t]-gap0[t]));
+    }
+    if (iter > 3 && diff < 1e-10) break;
+  }
+  const sl = arr => { const out = []; for (let i = 0; i <= T; i++) out.push(arr[ST+i] ?? 0); return out; };
+  return { gap: sl(gap), pi4: sl(pi4), rs: sl(rs), d4l_s: sl(d4l_s), l_z_gap: sl(l_z_gap), mci: sl(mci) };
+}
+
+//=========================================================================
+// Default parameter set — mirrors qpm_uzbekistan/index.html DOM defaults
+// and matches readmodel_uzb.m exactly.
+//=========================================================================
+const DEFAULT_PARAMS = {
+  b1:0.7, b2:0.2, b3:0.3, b4:0.6,
+  a1:0.6, a2:0.20, a3:0.65, a4:0.12,
+  g1:0.8, g2:1.5, g3:0.5, e1:0.7,
+};
+
+const SHOCKS = [
+  { id: 'demand',    matlabLabel: 'Aggregate Demand',     title: 'Aggregate Demand (SHK_L_GDP_GAP)' },
+  { id: 'inflation', matlabLabel: 'Cost-Push Inflation',  title: 'Cost-Push Inflation (SHK_DLA_CPI)' },
+  { id: 'exchange',  matlabLabel: 'UZS Depreciation',     title: 'UZS Depreciation (SHK_L_S)' },
+  { id: 'monetary',  matlabLabel: 'Monetary Tightening',  title: 'Monetary Tightening (SHK_RS)' },
+];
+
+const PANELS = [
+  { key:'pi4',     matlabKey:'D4L_CPI',   title:'CPI Inflation YoY (D4L_CPI)' },
+  { key:'gap',     matlabKey:'L_GDP_GAP', title:'Output Gap (L_GDP_GAP)' },
+  { key:'rs',      matlabKey:'RS',        title:'Policy Rate (RS)' },
+  { key:'d4l_s',   matlabKey:'D4L_S',     title:'NER Depreciation YoY (D4L_S)' },
+  { key:'l_z_gap', matlabKey:'L_Z_GAP',   title:'Real Exchange Rate Gap (L_Z_GAP)' },
+  { key:'mci',     matlabKey:'MCI',       title:'Monetary Conditions Index (MCI)' },
+];
+
+//=========================================================================
+// Load MATLAB benchmark
+//=========================================================================
+let MATLAB_DATA = null;
+async function loadMatlabBenchmark() {
+  const r = await fetch('data/matlab_irf_benchmark.csv');
+  const txt = await r.text();
+  const lines = txt.trim().split('\n');
+  const header = lines[0].split(',');
+  const idx = c => header.indexOf(c);
+  const data = {};
+  SHOCKS.forEach(s => data[s.matlabLabel] = {});
+  for (let i = 1; i < lines.length; i++) {
+    const row = lines[i].split(',');
+    const q = parseInt(row[idx('Quarter')].replace('Q',''),10);
+    const shock = row[idx('Shock')];
+    if (!data[shock]) continue;
+    PANELS.forEach(p => {
+      data[shock][p.matlabKey] ??= [];
+      data[shock][p.matlabKey][q] = parseFloat(row[idx(p.matlabKey)]);
+    });
+  }
+  MATLAB_DATA = data;
+}
+
+//=========================================================================
+// Stats helpers
+//=========================================================================
+const rmse = (a,b) => {
+  let s=0,n=0;
+  for (let i=0;i<a.length;i++){ const d=a[i]-b[i]; s+=d*d; n++; }
+  return Math.sqrt(s/n);
+};
+const maxAbsDelta = (a,b) => {
+  let m=0;
+  for (let i=0;i<a.length;i++) m = Math.max(m, Math.abs(a[i]-b[i]));
+  return m;
+};
+const verdictClass = d => d < 0.05 ? 'pass' : d < 0.15 ? 'warn' : 'fail';
+const verdictLabel = d => d < 0.05 ? 'PASS' : d < 0.15 ? 'WARN' : 'FAIL';
+
+//=========================================================================
+// Charting
+//=========================================================================
+const charts = [];
+function destroyCharts(){ charts.forEach(c=>c.destroy()); charts.length=0; }
+
+function makeChart(canvas, title, qAxis, jsSeries, mlSeries) {
+  const c = new Chart(canvas, {
+    type:'line',
+    data:{
+      labels: qAxis.map(q => 'Q'+q),
+      datasets:[
+        { label:'HTML (JS)',   data: jsSeries, borderColor:'#1a3a5c', backgroundColor:'rgba(26,58,92,.08)',
+          borderWidth:2, fill:false, tension:0.25, pointRadius:2.5 },
+        { label:'MATLAB IRIS', data: mlSeries, borderColor:'#dc2626', backgroundColor:'rgba(220,38,38,.08)',
+          borderWidth:2, borderDash:[5,4], fill:false, tension:0.25, pointRadius:2.5 },
+      ],
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ display:true, position:'bottom', labels:{font:{size:10}, boxWidth:14}} },
+      scales:{
+        y:{ grid:{color:'#eef2f7'}, ticks:{font:{size:10}} },
+        x:{ grid:{display:false}, ticks:{font:{size:10}} }
+      }
+    }
+  });
+  charts.push(c);
+}
+
+//=========================================================================
+// Main
+//=========================================================================
+let DELTA_LOG = [];
+
+async function runCrossCheck() {
+  if (!MATLAB_DATA) { document.getElementById('meta').textContent = 'Benchmark not loaded.'; return; }
+  destroyCharts();
+  DELTA_LOG = [];
+  const T = parseInt(document.getElementById('hzn').value, 10);
+  const size = parseFloat(document.getElementById('size').value);
+  const zeroA4 = document.getElementById('zeroA4').checked;
+
+  const p = { ...DEFAULT_PARAMS };
+  if (zeroA4) p.a4 = 0;
+
+  const out = document.getElementById('results');
+  out.innerHTML = '';
+
+  for (const sk of SHOCKS) {
+    const res = solveIRF(p, sk.id, size, T);
+    const qAxis = Array.from({length: T+1}, (_,i)=>i);
+    const section = document.createElement('div');
+    section.className = 'card';
+    section.innerHTML = `
+      <h2>${sk.title}</h2>
+      <div class="grid" id="grid-${sk.id}"></div>
+      <h2 style="font-size:14px;margin-top:18px">Fit statistics — ${sk.title}</h2>
+      <table>
+        <thead><tr><th>Panel</th><th>Max |Δ| (pp)</th><th>RMSE (pp)</th><th>Verdict</th></tr></thead>
+        <tbody id="tbl-${sk.id}"></tbody>
+      </table>
+    `;
+    out.appendChild(section);
+
+    const grid = document.getElementById('grid-'+sk.id);
+    const tbody = document.getElementById('tbl-'+sk.id);
+
+    for (const panel of PANELS) {
+      const jsArr = res[panel.key];
+      const mlArr = MATLAB_DATA[sk.matlabLabel][panel.matlabKey].slice(0, T+1);
+      const md = maxAbsDelta(jsArr, mlArr);
+      const r  = rmse(jsArr, mlArr);
+
+      // Chart
+      const wrap = document.createElement('div');
+      wrap.className = 'chart';
+      const canvasId = `c-${sk.id}-${panel.key}`;
+      wrap.innerHTML = `<h3>${panel.title}</h3><canvas id="${canvasId}"></canvas>`;
+      grid.appendChild(wrap);
+      makeChart(document.getElementById(canvasId), panel.title, qAxis, jsArr, mlArr);
+
+      // Row
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${panel.title}</td>
+        <td>${md.toFixed(4)}</td>
+        <td>${r.toFixed(4)}</td>
+        <td><span class="verdict ${verdictClass(md)}">${verdictLabel(md)}</span></td>
+      `;
+      tbody.appendChild(tr);
+
+      // Log
+      for (let q = 0; q <= T; q++) {
+        DELTA_LOG.push({ shock: sk.matlabLabel, panel: panel.matlabKey, quarter:q,
+                         js: jsArr[q], matlab: mlArr[q], delta: jsArr[q]-mlArr[q] });
+      }
+    }
+  }
+
+  // Headline summary
+  const allDeltas = DELTA_LOG.map(r => Math.abs(r.delta));
+  const headlineMax = Math.max(...allDeltas);
+  const headlineRMSE = Math.sqrt(allDeltas.reduce((a,b)=>a+b*b,0)/allDeltas.length);
+  const meta = document.getElementById('meta');
+  meta.innerHTML = `
+    Cross-check complete · ${SHOCKS.length} shocks × ${PANELS.length} panels × ${T+1} quarters
+    · max |Δ| = <strong>${headlineMax.toFixed(4)} pp</strong>
+    · pooled RMSE = <strong>${headlineRMSE.toFixed(4)} pp</strong>
+    · <span class="verdict ${verdictClass(headlineMax)}">${verdictLabel(headlineMax)}</span>
+    ${zeroA4 ? '' : ' · <em>a₄ pass-through enabled — exchange-rate-shock deltas expected to widen</em>'}
+  `;
+}
+
+function downloadDeltas() {
+  if (!DELTA_LOG.length) return;
+  const lines = ['shock,panel,quarter,js,matlab,delta'];
+  DELTA_LOG.forEach(r => lines.push(`${r.shock},${r.panel},${r.quarter},${r.js.toFixed(6)},${r.matlab.toFixed(6)},${r.delta.toFixed(6)}`));
+  const blob = new Blob([lines.join('\n')], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'qpm_html_vs_matlab_deltas.csv';
+  a.click();
+}
+
+// Boot
+loadMatlabBenchmark().then(() => {
+  document.getElementById('meta').textContent = 'Benchmark loaded. Click "Run cross-check" to compare.';
+  runCrossCheck();
+}).catch(e => {
+  document.getElementById('meta').innerHTML = `<span style="color:var(--err)">Failed to load benchmark: ${e.message}</span>`;
+});
+</script>
+
+</div>
+</body>
+</html>
