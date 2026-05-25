@@ -1,10 +1,10 @@
 {
   "artifact": {
     "id": "dfm-validation-summary",
-    "generated_at": "2026-05-24T13:10:43.803Z",
+    "generated_at": "2026-05-24T13:42:51.050Z",
     "source_artifact": "apps/policy-ui/public/data/dfm.json",
     "public_artifact_data_version": "2026Q1",
-    "public_artifact_exported_at": "2026-05-24T13:10:43Z",
+    "public_artifact_exported_at": "2026-05-24T13:42:50Z",
     "validation_scope": "Historical GDP YoY benchmark validation from the public bridge history. True DFM vintage backtesting is blocked until historical source-workbook vintages or saved pre-release DFM outputs are available.",
     "vintage_backtest_status": "blocked_no_historical_vintages",
     "source_refit_status": "local_source_refit_completed_without_pdf_report",
@@ -13,7 +13,7 @@
   },
   "source_refit": {
     "status": "completed_without_pdf_report",
-    "generated_at": "2026-05-24T13:10:43Z",
+    "generated_at": "2026-05-24T13:42:50Z",
     "r_version": "4.5.2",
     "iterations": 155,
     "converged": true,

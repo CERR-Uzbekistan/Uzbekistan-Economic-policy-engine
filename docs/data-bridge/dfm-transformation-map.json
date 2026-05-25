@@ -1,7 +1,7 @@
 {
   "artifact": {
     "id": "dfm-transformation-map",
-    "generated_at": "2026-05-24T13:08:13.486Z",
+    "generated_at": "2026-05-24T13:40:04.026Z",
     "source_workbook": "model sources/Fore+Nowcast/DFM/data/data_uzbekistan.xlsx",
     "source_workbook_md5": "42a1e478f39a77db3797c188cd841f78",
     "source_scripts": [

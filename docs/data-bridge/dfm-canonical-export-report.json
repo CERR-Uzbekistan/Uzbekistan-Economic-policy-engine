@@ -1,15 +1,26 @@
 {
   "artifact": {
     "id": "dfm-canonical-export-report",
-    "generated_at": "2026-05-24T13:10:43.814Z"
+    "generated_at": "2026-05-24T13:42:51.062Z"
   },
-  "generated_at": "2026-05-24T13:10:43.815Z",
+  "generated_at": "2026-05-24T13:42:51.063Z",
   "command": "node scripts/dfm/export-canonical.mjs",
   "source_workbook": "model sources/Fore+Nowcast/DFM/data/data_uzbekistan.xlsx",
   "source_workbook_status": "available_locally_untracked",
   "source_refit": {
     "status": "completed_without_pdf_report",
     "artifact": "docs/data-bridge/dfm-source-refit-summary.json",
+    "skipped": false
+  },
+  "source_coverage": {
+    "status": "not_ready_for_target_nowcast_refit",
+    "artifact": "docs/data-bridge/dfm-source-coverage.json",
+    "target_quarter": "2026Q2",
+    "required_monthly_data_through": "2026-04-01",
+    "monthly_ready_count": 0,
+    "monthly_total_count": 35,
+    "previous_gdp_ready": false,
+    "publish_gate": "Do not publish a DFM target-quarter nowcast from this source bundle until the missing GDP/monthly coverage is filled.",
     "skipped": false
   },
   "public_export": {

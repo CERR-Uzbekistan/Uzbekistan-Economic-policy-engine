@@ -1,14 +1,14 @@
 {
   "artifact": {
     "id": "dfm-source-refit-summary",
-    "generated_at": "2026-05-24T13:10:43Z",
+    "generated_at": "2026-05-24T13:42:50Z",
     "status": "completed_without_pdf_report",
     "source_folder": "model sources/Fore+Nowcast/DFM",
     "source_workbook": "model sources/Fore+Nowcast/DFM/data/data_uzbekistan.xlsx",
     "source_workbook_md5": "42a1e478f39a77db3797c188cd841f78",
     "runner": "scripts/dfm/run-source-refit.R",
     "r_version": "4.5.2",
-    "elapsed_seconds": 148.17
+    "elapsed_seconds": 164.25
   },
   "runtime": {
     "start_date": "2016-01-01",

@@ -91,14 +91,26 @@ node scripts/dfm/export-canonical.mjs
 ```
 
 It refreshes the transformation map, runs the source refit, regenerates
-the public `dfm.json`, rebuilds the validation report, and writes:
+the public `dfm.json`, rebuilds the validation report, audits source
+coverage for the target-quarter nowcast, and writes:
 
+- `docs/data-bridge/dfm-source-coverage.json`
+- `docs/data-bridge/dfm-source-coverage.md`
 - `docs/data-bridge/dfm-canonical-export-report.json`
 - `docs/data-bridge/dfm-canonical-export-report.md`
 
 The latest report shows that the source refit and public bridge both
 produce `2026Q1` GDP growth of `7.0078%` YoY and `1.4398%` QoQ, with
 zero source-minus-public difference.
+
+The source coverage audit is the publication gate for a Q2 DFM nowcast.
+For `2026Q2`, it requires the previous-quarter GDP target (`2026Q1`) and
+high-frequency monthly indicators through at least April 2026. The current
+local workbook is not Q2-ready: quarterly GDP ends at `2025Q4`, and all
+35 high-frequency inputs end at `2025-12`. The audit classifies the
+needed refresh channels as 18 licensed/Macrobond-or-equivalent exports,
+10 official Statistics Agency feeds, 7 internal CERR feeds, and 1
+owner-supplied GDP target/manual source.
 
 ## How the model works
 
@@ -157,6 +169,7 @@ Current public artifact checks:
 - transformation-map decision status: 18 `approved`, 18
   `approved_with_caveat`, and 0 `blocked_needs_owner_decision`
 - refit status: `available` for the local source runner; public export is reconciled to the source refit through the canonical local command
+- source coverage for 2026Q2: `not_ready_for_target_nowcast_refit`
 - validation/backtest status: `proxy_validation_available`
 - uncertainty range status: `available_illustrative`
 
@@ -233,22 +246,25 @@ The local source bundle is useful, but it is not production-hardened yet:
    `readxl`, `dplyr`, `pracma`, `Matrix`, `zoo`, `purrr`, `lubridate`,
    `tidyr`, `signal`, `seasonal`, `urca`, `rmarkdown`, and `ggplot2`;
    install Pandoc if the PDF report is required.
-2. Replace bridge publication with direct source-refit output after the
+2. Automate the DFM source panel refresh: quarterly real GDP in 2021
+   constant prices, licensed/Macrobond-equivalent monthly exports,
+   official Statistics Agency monthly feeds, and internal CERR feeds.
+3. Replace bridge publication with direct source-refit output after the
    source-output contract is reviewed and signed off.
-3. Move the transform map into reviewed source metadata and block refits
+4. Move the transform map into reviewed source metadata and block refits
    when a series lacks an accepted transformation decision.
-4. Add data integrity checks: duplicate dates, metadata/order mismatch,
+5. Add data integrity checks: duplicate dates, metadata/order mismatch,
    coercion-created missing values, failed seasonal adjustment, stationarity
    warnings, and EM non-convergence.
-5. Fix GDP postprocessing and diagnostics.
-6. Add real-time vintage backtesting: what would the model have predicted
+6. Fix GDP postprocessing and diagnostics.
+7. Add real-time vintage backtesting: what would the model have predicted
    before official GDP releases?
-7. Replace the GDP-only benchmark proxy with a reproducible validation
+8. Replace the GDP-only benchmark proxy with a reproducible validation
    report covering DFM vintage forecast errors, factor stability, residual
    diagnostics, and indicator news contributions.
-8. Decide whether one factor is enough or whether category-specific factors
+9. Decide whether one factor is enough or whether category-specific factors
    are needed.
-9. Add a source-controlled release note each time the DFM source workbook
+10. Add a source-controlled release note each time the DFM source workbook
    or refit output changes.
 
 ## Safe wording

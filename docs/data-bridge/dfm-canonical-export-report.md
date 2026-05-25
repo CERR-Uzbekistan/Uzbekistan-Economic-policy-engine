@@ -1,8 +1,9 @@
 # DFM canonical export report
 
-Generated: 2026-05-24T13:10:43.815Z
+Generated: 2026-05-24T13:42:51.063Z
 
 - Source workbook status: available_locally_untracked
+- Source coverage status: not_ready_for_target_nowcast_refit
 - Source refit status: completed_without_pdf_report
 - Public export status: completed
 - Validation status: completed
@@ -11,6 +12,15 @@ Generated: 2026-05-24T13:10:43.815Z
 ## Reconciliation
 
 The local source refit reproduces the public bridge nowcast, so the public artifact is source-reconciled.
+
+## Source coverage
+
+Do not publish a DFM target-quarter nowcast from this source bundle until the missing GDP/monthly coverage is filled.
+
+- Target quarter: 2026Q2
+- Required monthly data through: 2026-04-01
+- Previous-quarter GDP ready: false
+- Monthly indicators ready: 0 / 35
 
 | Field | Source refit | Public artifact | Difference |
 |---|---:|---:|---:|

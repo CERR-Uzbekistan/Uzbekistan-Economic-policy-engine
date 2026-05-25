@@ -5,6 +5,7 @@ import { spawnSync } from 'node:child_process'
 const SOURCE_WORKBOOK = 'model sources/Fore+Nowcast/DFM/data/data_uzbekistan.xlsx'
 const PUBLIC_DFM_JSON = 'apps/policy-ui/public/data/dfm.json'
 const SOURCE_REFIT_JSON = 'docs/data-bridge/dfm-source-refit-summary.json'
+const SOURCE_COVERAGE_JSON = 'docs/data-bridge/dfm-source-coverage.json'
 const VALIDATION_JSON = 'docs/data-bridge/dfm-validation-summary.json'
 const REPORT_JSON = 'docs/data-bridge/dfm-canonical-export-report.json'
 const REPORT_MD = 'docs/data-bridge/dfm-canonical-export-report.md'
@@ -99,6 +100,7 @@ function writeReport(report) {
     `Generated: ${report.generated_at}`,
     '',
     `- Source workbook status: ${report.source_workbook_status}`,
+    `- Source coverage status: ${report.source_coverage.status}`,
     `- Source refit status: ${report.source_refit.status}`,
     `- Public export status: ${report.public_export.status}`,
     `- Validation status: ${report.validation.status}`,
@@ -107,6 +109,17 @@ function writeReport(report) {
     '## Reconciliation',
     '',
     report.reconciliation.message,
+    '',
+    '## Source coverage',
+    '',
+    report.source_coverage.skipped
+      ? 'Source coverage was skipped because the source workbook was unavailable or the source refit was skipped.'
+      : report.source_coverage.publish_gate,
+    '',
+    `- Target quarter: ${report.source_coverage.target_quarter ?? 'n/a'}`,
+    `- Required monthly data through: ${report.source_coverage.required_monthly_data_through ?? 'n/a'}`,
+    `- Previous-quarter GDP ready: ${report.source_coverage.previous_gdp_ready ?? 'n/a'}`,
+    `- Monthly indicators ready: ${report.source_coverage.monthly_ready_count ?? 'n/a'} / ${report.source_coverage.monthly_total_count ?? 'n/a'}`,
     '',
     '| Field | Source refit | Public artifact | Difference |',
     '|---|---:|---:|---:|',
@@ -133,14 +146,20 @@ if (!sourceAvailable && !allowMissingSource) {
 const rscript = findRscript()
 let sourceRefit = null
 let sourceRefitStatus = 'skipped_source_not_available'
+let sourceCoverage = null
+let sourceCoverageStatus = 'skipped_source_not_available'
 
 if (sourceAvailable && !skipSourceRefit) {
   run('refresh transformation map', 'node', ['scripts/dfm/extract-source-map.mjs'])
+  run('audit source coverage', rscript, ['scripts/dfm/audit-source-coverage.R', process.cwd()])
+  sourceCoverage = readJson(SOURCE_COVERAGE_JSON)
+  sourceCoverageStatus = sourceCoverage?.readiness?.status ?? 'unknown'
   run('run source refit', rscript, ['scripts/dfm/run-source-refit.R'])
   sourceRefit = readJson(SOURCE_REFIT_JSON)
   sourceRefitStatus = sourceRefit?.artifact?.status ?? 'unknown'
 } else if (sourceAvailable && skipSourceRefit) {
   sourceRefitStatus = 'skipped_by_flag'
+  sourceCoverageStatus = 'skipped_by_flag'
 }
 
 run('export public DFM artifact', rscript, ['scripts/export_dfm.R'])
@@ -166,6 +185,17 @@ const report = {
   source_refit: {
     status: sourceRefitStatus,
     artifact: sourceAvailable && !skipSourceRefit ? SOURCE_REFIT_JSON : null,
+    skipped: !sourceAvailable || skipSourceRefit,
+  },
+  source_coverage: {
+    status: sourceCoverageStatus,
+    artifact: sourceAvailable && !skipSourceRefit ? SOURCE_COVERAGE_JSON : null,
+    target_quarter: sourceCoverage?.artifact?.target_quarter ?? null,
+    required_monthly_data_through: sourceCoverage?.readiness?.required_monthly_data_through ?? null,
+    monthly_ready_count: sourceCoverage?.readiness?.monthly_ready_count ?? null,
+    monthly_total_count: sourceCoverage?.readiness?.monthly_total_count ?? null,
+    previous_gdp_ready: sourceCoverage?.readiness?.previous_gdp_ready ?? null,
+    publish_gate: sourceCoverage?.readiness?.publish_gate ?? null,
     skipped: !sourceAvailable || skipSourceRefit,
   },
   public_export: {

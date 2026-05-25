@@ -33,7 +33,7 @@ jobs:
 
       - name: Install R packages
         run: |
-          Rscript -e 'install.packages("jsonlite", repos = "https://cloud.r-project.org")'
+          Rscript -e 'install.packages(c("jsonlite", "readxl", "lubridate"), repos = "https://cloud.r-project.org")'
 
       - name: Run QPM export
         run: Rscript scripts/export_qpm.R
