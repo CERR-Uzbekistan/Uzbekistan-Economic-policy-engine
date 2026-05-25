@@ -122,18 +122,21 @@ A second artefact, [data/matlab_kalman_filter.csv](data/matlab_kalman_filter.csv
 
 ---
 
-## 4. Backtesting — Phase 1 results
+## 4. Backtesting — Phase 1 (cross-engine) + Phase 2 (historical)
 
-### 4.1 What was done
+Two complementary tests:
 
-A pseudo-real-time historical backtest of the JS QPM was **not** built in Phase 1. Instead, the JS solver was cross-checked against the IRIS solver on the four canonical 1-pp shock IRFs (Aggregate Demand, Cost-Push, UZS Depreciation, Monetary Tightening), 12-quarter horizon, using identical parameters and the Phillips extension disabled (`a4 = 0`).
+- **§4.1–4.4 — Phase 1**: JS solver cross-checked against IRIS impulse responses. Answers *"does the JS engine reproduce the canonical model?"*.
+- **§4.5–4.8 — Phase 2**: rolling 1–4Q-ahead forecasts scored against actual Uzbek outcomes 2018Q1–2025Q3. Answers *"does the model forecast Uzbekistan?"*.
+
+### 4.1 Phase 1 — JS vs IRIS impulse responses
+
+The JS solver was cross-checked against the IRIS solver on the four canonical 1-pp shock IRFs (Aggregate Demand, Cost-Push, UZS Depreciation, Monetary Tightening), 12-quarter horizon, using identical parameters and the Phillips extension disabled (`a4 = 0`).
 
 Run live: [cross-check.html](cross-check.html).
 Raw data: [data/html_vs_matlab_deltas.csv](data/html_vs_matlab_deltas.csv), [data/matlab_irf_benchmark.csv](data/matlab_irf_benchmark.csv).
 
-A proper rolling/pseudo-real-time backtest with 1–4Q-ahead RMSE on GDP / CPI / RS is deferred to **Phase 2** — it requires implementing a JS-side Kalman filter or porting the IRIS filter outputs into the JS engine.
-
-### 4.2 Fit statistics — JS vs IRIS, pooled across 4 shocks × 13 quarters (n=52 per panel)
+### 4.2 Phase 1 fit — JS vs IRIS, pooled across 4 shocks × 13 quarters (n=52 per panel)
 
 | Variable | Panel | Max \|Δ\| (pp) | RMSE (pp) | Verdict |
 |---|---|---|---|---|
@@ -146,7 +149,7 @@ A proper rolling/pseudo-real-time backtest with 1–4Q-ahead RMSE on GDP / CPI /
 
 Tolerance bands: PASS &lt; 0.05 pp · WARN &lt; 0.15 pp · FAIL ≥ 0.15 pp.
 
-### 4.3 Per-shock max |Δ| (worst panel reported)
+### 4.3 Phase 1 per-shock max |Δ| (worst panel reported)
 
 | Shock | Worst panel | Max \|Δ\| (pp) |
 |---|---|---|
@@ -155,7 +158,7 @@ Tolerance bands: PASS &lt; 0.05 pp · WARN &lt; 0.15 pp · FAIL ≥ 0.15 pp.
 | UZS Depreciation | NER Depr | 0.150 |
 | Monetary Tightening | NER Depr | 0.148 |
 
-### 4.4 Interpretation
+### 4.4 Phase 1 interpretation
 
 - **Core gauges (GDP gap, CPI YoY, policy rate) reproduce IRIS impulse responses to within ~0.05–0.15 pp** at every horizon and for every shock. This is the meaningful test for a reference scenario tool. Verdict: **JS solver is faithful on the variables that drive Scenario Lab KPIs and Advisor briefs.**
 - **Exchange-rate-linked paths (NER YoY, RER gap, MCI) show larger deviations**, up to ~0.30 pp on the cost-push shock. Three drivers, in order of significance:
@@ -164,12 +167,66 @@ Tolerance bands: PASS &lt; 0.05 pp · WARN &lt; 0.15 pp · FAIL ≥ 0.15 pp.
   3. **Foreign block stubs.** Both engines run with foreign deviations = 0, but the IRIS solver applies its trend AR(1) processes (`rho_DLA_CPI_RW = 0.8`, etc.) with steady-state values built in; the HTML solver simply zero-fills. For the deviation-only IRFs run here this does not bite, but it is an outstanding source of disagreement once non-zero foreign shocks are introduced.
 - **No directional errors.** Across all 312 cells, the sign of the JS path matches IRIS — i.e. the JS engine never says "rate up" when IRIS says "rate down" or vice versa. The disagreement is in magnitude only.
 
-### 4.5 What Phase 2 backtesting must add
+### 4.5 Phase 2 — Historical rolling backtest
 
-- Rolling 1-, 2-, 3-, 4-quarter-ahead forecasts starting from each quarter in 2018Q1 – 2024Q4, conditional on actual exogenous variables.
-- RMSE, MAE, and directional accuracy on GDP growth, headline CPI YoY, and the policy rate.
-- Fit charts (actual vs forecast) with shaded forecast windows.
-- Identification of model failures (e.g. 2022 commodity shock — does the QPM predict the inflation spike with a non-zero `b3`?).
+A rolling pseudo-real-time backtest scores the JS QPM against actual Uzbek outcomes. **26 forecast origins (2018Q1 – 2024Q3), 4 horizons (1Q – 4Q ahead), 3 target variables** = 312 forecast cells.
+
+Run live: [backtest.html](backtest.html).
+Raw data: [data/backtest_forecasts.csv](data/backtest_forecasts.csv).
+
+**Methodology** (deterministic conditional forecast):
+
+1. Read the IRIS Kalman-smoothed historical state from [data/matlab_kalman_filter.csv](data/matlab_kalman_filter.csv).
+2. At each origin `t₀`, extract the deviation state: `gap₀ = L_GDP_GAP(t₀)`, `π₀ = D4L_CPI(t₀) − D4L_CPI_TAR(t₀)`, `rs₀ = RS(t₀) − RSNEUTRAL(t₀)`.
+3. Call `solveIRF(p, null, 0, 4, initConds)` — no shock, deterministic forward projection in deviation form.
+4. Reconstruct level forecasts using smoothed trends at the forecast date:
+   - `D4L_CPI_pred(h) = D4L_CPI_TAR(t₀+h) + π_pred(h)`
+   - `RS_pred(h) = RSNEUTRAL(t₀+h) + rs_pred(h)`
+   - `D4L_GDP_pred(h) = DLA_GDP_BAR(t₀+h) + (gap_pred(h) − gap_lag4)`
+5. Score against `OBS_*` actuals at `t₀+h`.
+
+**Caveat — Kalman-smoothed look-ahead.** Historical state at each origin uses the *full-sample* IRIS smoother, not a re-filtered estimate at `t₀`. This isolates the QPM's gap-forecasting dynamics from the separate problem of real-time trend estimation. A future Phase 3 could re-filter at each origin for a true pseudo-real-time test.
+
+### 4.6 Phase 2 fit — pooled across all horizons (n=104 per variable)
+
+| Variable | N | RMSE (pp) | MAE (pp) | Directional accuracy | Verdict |
+|---|---|---|---|---|---|
+| CPI Inflation YoY (`D4L_CPI`) | 104 | **4.06** | 3.53 | 71.2 % | **FAIL** |
+| Policy Rate (`RS`) | 104 | **1.72** | 1.40 | 76.9 % | WARN |
+| Real GDP YoY (`D4L_GDP`) | 104 | **1.74** | 1.33 | 85.6 % | WARN |
+
+Tolerance bands (variable-specific, based on natural variation):
+
+| | PASS &lt; | WARN &lt; | FAIL ≥ |
+|---|---|---|---|
+| `D4L_CPI` | 1.5 pp | 3.0 pp | 3.0 pp |
+| `RS` | 1.0 pp | 2.5 pp | 2.5 pp |
+| `D4L_GDP` | 1.5 pp | 3.0 pp | 3.0 pp |
+
+### 4.7 Phase 2 fit by horizon
+
+| Variable | 1Q | 2Q | 3Q | 4Q |
+|---|---|---|---|---|
+| `D4L_CPI` RMSE (pp) | 1.53 | 2.89 | 4.56 | 5.88 |
+| `D4L_CPI` MAE (pp)  | 1.42 | 2.73 | 4.35 | 5.62 |
+| `D4L_CPI` DA        | 69.2 % | 69.2 % | 69.2 % | 76.9 % |
+| `RS` RMSE (pp)      | 1.38 | 1.54 | 1.79 | 2.10 |
+| `RS` MAE (pp)       | 1.12 | 1.30 | 1.47 | 1.72 |
+| `RS` DA             | 72.7 % | 66.7 % | 83.3 % | 81.0 % |
+| `D4L_GDP` RMSE (pp) | 1.38 | 1.73 | 2.01 | 1.79 |
+| `D4L_GDP` MAE (pp)  | 1.08 | 1.31 | 1.53 | 1.42 |
+| `D4L_GDP` DA        | 84.6 % | 84.6 % | 88.5 % | 84.6 % |
+
+### 4.8 Phase 2 interpretation
+
+- **GDP forecasts are the best of the three.** RMSE 1.4–2.0 pp across all horizons, directional accuracy ~85 %. The IS curve's strong autoregressive structure (`b1 = 0.70`) and the natural smoothness of GDP growth combine well — the model correctly anticipates the *direction* of activity changes ~85 % of the time, with magnitude errors of 1–2 pp.
+- **Policy-rate forecasts are decent.** RMSE 1.4–2.1 pp, DA 67–83 %. The Taylor rule's heavy smoothing (`g1 = 0.80`) means the QPM tracks slow CBU rate moves well but misses sharp pivots (e.g. the 2022 Q1 hike from 14 % to 17 %).
+- **Inflation forecasts fail outright at 3- and 4-quarter horizons.** RMSE explodes from 1.5 pp at 1Q to 5.9 pp at 4Q. Two structural reasons:
+  1. **Mean-reversion to target.** The Phillips curve pulls inflation toward `π* = 5 %`, so multi-quarter forecasts in 2018–2022 all aggressively under-predict the actual 10–17 % CPI YoY. Almost every error in this window is negative (predicted &lt; actual).
+  2. **No food / commodity / FX-passthrough block.** The 2022 commodity-shock-driven inflation spike has no structural mechanism in the model — it cannot be predicted from QPM dynamics alone, only from the unobserved residual `SHK_DLA_CPI` that the model assumes is zero at the forecast origin.
+- **Directional accuracy is high even when magnitudes are wrong.** 71–86 % directional accuracy across all three variables means the model usually gets the *direction* of macro change correct. For the Advisor's "is inflation going up or down?" briefs this is acceptable. For magnitude statements ("by how much?") it is not.
+- **Best/worst periods.** Errors concentrate in 2018Q1–2020Q4 (the post-FX-liberalisation high-inflation era) and 2022Q1–2022Q4 (commodity shock). From 2023Q1 onwards, 1-quarter-ahead CPI errors fall below 1 pp; from 2023Q3 onwards, all 1-quarter errors are within sane bounds.
+- **The backtest confirms — and quantifies — the "reference scenarios only" verdict.** The model does not have a structural mechanism to predict commodity shocks, FX shocks, or step-changes in monetary regime. Conditional on no shocks, it forecasts mean reversion. That is exactly what Scenario Lab's "what does a 100bp hike do?" use case asks for; it is not a forecast model.
 
 ---
 
@@ -207,12 +264,13 @@ What the QPM **does not** capture today, and which should be treated as known ab
 
 Ordered by value-per-effort:
 
-1. **Phase 2 backtest engine** (issue #141 §3). Pseudo-real-time rolling forecast in JS, RMSE/MAE on GDP, CPI, RS. ~400 lines of JS + a results page. Highest-value next step.
-2. **Estimate the simple AR(1) parameters from data** (`b1`, `a1`, `g1`, `e1`). Even simple least-squares on the historical series would replace 4 "calibrated" labels with "estimated" labels. ~1 day of analyst work.
-3. **Port the foreign block stubs into the JS engine** so external shocks behave the same way in both engines.
-4. **Rich inflation block** (food / admin / import / expectations) — separate issue, larger scope.
-5. **Managed-float / reserves block** — separate issue, larger scope.
-6. **Fan charts** via parameter-uncertainty Monte Carlo (already partially exist on the IRF page) plus shock-uncertainty draws.
+1. ~~**Phase 2 backtest engine** (issue #141 §3). Pseudo-real-time rolling forecast in JS, RMSE/MAE on GDP, CPI, RS.~~ ✅ **Delivered** — see [backtest.html](backtest.html) and §4.5–4.8.
+2. **Re-filter at each origin (Phase 3)** to remove the Kalman-smoother look-ahead from §4.5. Either implement a JS-side filter or run the IRIS filter at each origin and store outputs. Would convert the current "deterministic conditional forecast" backtest into a true pseudo-real-time test.
+3. **Estimate the simple AR(1) parameters from data** (`b1`, `a1`, `g1`, `e1`). Even simple least-squares on the historical series would replace 4 "calibrated" labels with "estimated" labels. ~1 day of analyst work.
+4. **Rich inflation block** (food / admin / import / expectations) — the single biggest source of forecast error per §4.8. Separate issue, larger scope.
+5. **Port the foreign block stubs into the JS engine** so external shocks behave the same way in both engines.
+6. **Managed-float / reserves block** — separate issue, larger scope.
+7. **Fan charts** via parameter-uncertainty Monte Carlo (already partially exist on the IRF page) plus shock-uncertainty draws.
 
 ---
 
@@ -242,12 +300,14 @@ This approval should be revisited after Phase 2 (historical backtest with RMSE/M
 |---|---|
 | [validation-note.md](validation-note.md) | This document. |
 | [parameter-table.md](parameter-table.md) | Full parameter-by-parameter review. |
-| [cross-check.html](cross-check.html) | Interactive JS-vs-MATLAB IRF comparison tool. |
+| [cross-check.html](cross-check.html) | Phase 1 — interactive JS-vs-MATLAB IRF comparison tool. |
+| [backtest.html](backtest.html) | Phase 2 — interactive rolling backtest scoring tool. |
 | [data/README.md](data/README.md) | Provenance & transformation pipeline. |
 | [data/data_q.csv](data/data_q.csv) | Quarterly Uzbek macro series 2016Q1–2025Q3. |
 | [data/data_m.csv](data/data_m.csv) | Monthly Uzbek macro series 2016M01–2025M09. |
 | [data/matlab_irf_benchmark.csv](data/matlab_irf_benchmark.csv) | IRIS impulse responses for 4 shocks × 6 panels × 13 quarters. |
 | [data/matlab_kalman_filter.csv](data/matlab_kalman_filter.csv) | IRIS Kalman-smoothed historical estimates of all latent variables. |
-| [data/html_vs_matlab_deltas.csv](data/html_vs_matlab_deltas.csv) | Tabulated JS-vs-IRIS differences, ready for spreadsheet review. |
+| [data/html_vs_matlab_deltas.csv](data/html_vs_matlab_deltas.csv) | Phase 1 — tabulated JS-vs-IRIS IRF differences, ready for spreadsheet review. |
+| [data/backtest_forecasts.csv](data/backtest_forecasts.csv) | Phase 2 — all 312 forecast cells with predicted, actual, baseline, error. |
 | [data/Uzbekistan.model](data/Uzbekistan.model) | Canonical IRIS model spec (reference). |
 | [data/readmodel_uzb.m](data/readmodel_uzb.m) | Canonical parameter assignments (reference). |

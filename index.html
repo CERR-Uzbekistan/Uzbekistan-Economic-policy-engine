@@ -1003,10 +1003,10 @@ details[open] > .tracker-summary .tracker-chevron { transform: rotate(90deg); }
           <div class="model-card" onclick="navigate('qpm')">
             <div class="mc-top">
               <div class="mc-icon qpm">📈</div>
-              <span class="mc-status ready">✓ Available</span>
+              <span class="mc-status ready">✓ Available · v1 validated 2026-05-25</span>
             </div>
             <div class="mc-name" data-i18n="mc_qpm_name">Quarterly Projection Model (QPM)</div>
-            <div class="mc-desc">New-Keynesian small open-economy DSGE model. Simulate monetary policy shocks, aggregate demand, exchange rate movements, and cost-push inflation. Full impulse response functions with 20-quarter horizon.</div>
+            <div class="mc-desc">New-Keynesian small open-economy DSGE model. Simulate monetary policy shocks, aggregate demand, exchange rate movements, and cost-push inflation. Full impulse response functions with 20-quarter horizon. <a href="qpm_uzbekistan/validation/validation-note.md" target="_blank" onclick="event.stopPropagation()" style="color:var(--accent,#1a3a5c);font-weight:600">Reference scenarios only — see validation pack ↗</a></div>
             <div class="mc-tags">
               <span class="mc-tag">Monetary Policy</span>
               <span class="mc-tag">Inflation</span>
@@ -1519,6 +1519,16 @@ details[open] > .tracker-summary .tracker-chevron { transform: rotate(90deg); }
           <code>a₁ = 0.60</code> (inflation inertia), <code>a₂ = 0.20</code> (marginal cost pass-through),
           <code>g₂ = 1.50</code> (Taylor rule inflation response).
           Steady-state: inflation target 5%, potential growth 6%, neutral real rate 3.5%.
+        </p>
+        <p style="background:#fffbeb;border-left:3px solid #d97706;padding:10px 14px;font-size:13px">
+          <strong>Validation status (v1, 2026-05-25):</strong> approved for reference scenarios only — not for official forecasting.
+          The JS solver reproduces the canonical IRIS implementation on impulse responses to within ~0.05–0.15 pp on the core gauges
+          (GDP gap, CPI YoY, policy rate). Rolling 1–4Q-ahead backtests 2018Q1–2025Q3 give RMSE 1.7 pp on policy rate
+          (DA 77 %), 1.7 pp on GDP YoY (DA 86 %), and 4.1 pp on CPI YoY (DA 71 %, struggles on 2022 commodity shock).
+          All structural parameters are calibrated, none estimated from Uzbek data.
+          Full results: <a href="qpm_uzbekistan/validation/validation-note.md" target="_blank">validation note</a> ·
+          <a href="qpm_uzbekistan/validation/cross-check.html" target="_blank">JS-vs-IRIS cross-check</a> ·
+          <a href="qpm_uzbekistan/validation/backtest.html" target="_blank">historical backtest</a>.
         </p>
 
         <h3>DFM — Dynamic Factor Model</h3>
