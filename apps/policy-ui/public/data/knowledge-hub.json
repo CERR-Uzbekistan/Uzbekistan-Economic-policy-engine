@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-05-25T06:52:54.055Z",
+  "generated_at": "2026-05-26T06:31:48.905Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -304,10 +304,10 @@
       "parser": "lexuz-official-search",
       "fetch_url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
       "ok": true,
-      "candidate_count": 12,
-      "excluded_count": 0,
+      "candidate_count": 11,
+      "excluded_count": 1,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-25T06:52:54.055Z"
+      "fetched_at": "2026-05-26T06:31:48.905Z"
     },
     {
       "id": "president-reform-news",
@@ -319,7 +319,7 @@
       "candidate_count": 2,
       "excluded_count": 10,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-25T06:52:54.055Z"
+      "fetched_at": "2026-05-26T06:31:48.905Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-25T06:52:54.055Z"
+      "fetched_at": "2026-05-26T06:31:48.905Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-25T06:52:54.055Z"
+      "fetched_at": "2026-05-26T06:31:48.905Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-25T06:52:54.055Z"
+      "fetched_at": "2026-05-26T06:31:48.905Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-25T06:52:54.055Z"
+      "fetched_at": "2026-05-26T06:31:48.905Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 347,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-25T06:52:54.055Z"
+      "fetched_at": "2026-05-26T06:31:48.905Z"
     },
     {
       "id": "customs-committee-news",
@@ -391,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-25T06:52:54.055Z"
+      "fetched_at": "2026-05-26T06:31:48.905Z"
     },
     {
       "id": "mef-policy-news",
@@ -400,10 +400,10 @@
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
       "ok": true,
-      "candidate_count": 1,
-      "excluded_count": 11,
+      "candidate_count": 0,
+      "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-25T06:52:54.055Z"
+      "fetched_at": "2026-05-26T06:31:48.905Z"
     },
     {
       "id": "tax-committee-news",
@@ -415,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-25T06:52:54.055Z"
+      "fetched_at": "2026-05-26T06:31:48.905Z"
     },
     {
       "id": "energy-ministry-news",
@@ -427,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-25T06:52:54.055Z"
+      "fetched_at": "2026-05-26T06:31:48.905Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -439,7 +439,7 @@
       "candidate_count": 1,
       "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-25T06:52:54.055Z"
+      "fetched_at": "2026-05-26T06:31:48.905Z"
     },
     {
       "id": "justice-ministry-news",
@@ -451,7 +451,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-05-25T06:52:54.055Z"
+      "fetched_at": "2026-05-26T06:31:48.905Z"
     }
   ],
   "reform_packages": [
@@ -668,7 +668,7 @@
       "responsible_institutions": [
         "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
       ],
-      "legal_basis": "Verified official source events: PF-95-сон 19.05.2026. Soliq organlari faoliyatini institutsional jihatdan takomillashtirish va soliq maʼmuriyatchiligida zamonaviy yondashuvlarni joriy etish chora-tadbirlari toʻgʻrisida; 266 21.05.2026 Bojxona hududida qayta ishlangan tayyor mahsulotlarni erkin muomalaga chiqarishda tovarlarning bojxona qiymatini belgilash va ular bo‘yicha bojxona to‘lovlarini hisoblash tartibi to‘g‘risidagi nizomni tasdiqlash haqida; PQ-193 21.05.2026 Fitosanitariya tartib-taomillarini soddalashtirish hamda meva-sabzavot va oziq-ovqat mahsulotlarini eksport qilish jarayonlarini takomillashtirishga doir qo‘shimcha chora-tadbirlar to‘g‘risida.",
+      "legal_basis": "Verified official source events: PF-95-сон 19.05.2026. Soliq organlari faoliyatini institutsional jihatdan takomillashtirish va soliq maʼmuriyatchiligida zamonaviy yondashuvlarni joriy etish chora-tadbirlari toʻgʻrisida; 266-сон 21.05.2026. Bojxona hududida qayta ishlangan tayyor mahsulotlarni erkin muomalaga chiqarishda tovarlarning bojxona qiymatini belgilash va ular boʻyicha bojxona toʻlovlarini hisoblash tartibi toʻgʻrisidagi nizomni tasdiqlash haqida.",
       "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
       "short_summary": "Customs clearance, declaration, and border-process measures are updated.",
       "parameters_or_amounts": [
@@ -676,7 +676,7 @@
         "Clearance and declaration processes are updated."
       ],
       "source_confidence": "high",
-      "why_tracked": "The package is assembled from 3 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "why_tracked": "The package is assembled from 2 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
       "model_relevance": [
         "Trade flows",
         "Import costs",
@@ -697,11 +697,6 @@
           "id": "customs-clearance-digitalization-measure-2",
           "label": "Customs and trade-facilitation procedures were updated",
           "status": "approved"
-        },
-        {
-          "id": "customs-clearance-digitalization-measure-3",
-          "label": "Customs and trade-facilitation procedures were updated",
-          "status": "source verified"
         }
       ],
       "implementation_milestones": [
