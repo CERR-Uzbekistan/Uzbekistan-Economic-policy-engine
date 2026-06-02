@@ -124,8 +124,8 @@ h2 {
 
 .app-shell__nav-badge {
   background: var(--color-warn-soft);
-  border: 1px solid #e7d5a7;
-  border-radius: 99px;
+  border: 1px solid var(--color-warn-border);
+  border-radius: var(--radius-pill);
   color: var(--color-warn);
   flex: 0 0 auto;
   font-family: var(--font-mono);
@@ -159,7 +159,7 @@ h2 {
 }
 
 .app-shell__topbar {
-  background: rgba(255, 255, 255, 0.9);
+  background: color-mix(in srgb, var(--color-surface) 90%, transparent);
   border-bottom: 1px solid var(--color-border);
   position: sticky;
   top: 0;
@@ -197,7 +197,7 @@ h2 {
 
 .freshness .dot {
   background: var(--color-upside);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   display: inline-block;
   height: 0.45rem;
   width: 0.45rem;
@@ -317,7 +317,7 @@ h2 {
 .ui-chip {
   align-items: center;
   border: 1px solid var(--color-border);
-  border-radius: 99px;
+  border-radius: var(--radius-pill);
   color: var(--color-text);
   display: inline-flex;
   font-size: 0.73rem;
@@ -343,7 +343,7 @@ h2 {
 
 .ui-chip--warn {
   background: var(--color-warn-soft);
-  border-color: #e7d5a7;
+  border-color: var(--color-warn-border);
   color: var(--color-warn);
 }
 
@@ -375,7 +375,7 @@ h2 {
 .trust-state-label {
   align-items: center;
   border: 1px solid var(--color-border);
-  border-radius: 99px;
+  border-radius: var(--radius-pill);
   display: inline-flex;
   font-family: var(--font-mono);
   font-size: 0.66rem;
@@ -402,13 +402,13 @@ h2 {
 
 .trust-state-label--success {
   background: var(--color-success-soft);
-  border-color: #bed6c7;
+  border-color: var(--color-success-border);
   color: var(--color-success);
 }
 
 .trust-state-label--warn {
   background: var(--color-warn-soft);
-  border-color: #e7d5a7;
+  border-color: var(--color-warn-border);
   color: var(--color-warn);
 }
 
@@ -474,8 +474,8 @@ h2 {
 .pending-surface__label {
   align-items: center;
   background: var(--color-warn-soft);
-  border: 1px solid #e7d5a7;
-  border-radius: 99px;
+  border: 1px solid var(--color-warn-border);
+  border-radius: var(--radius-pill);
   color: var(--color-warn);
   display: inline-flex;
   font-family: var(--font-mono);

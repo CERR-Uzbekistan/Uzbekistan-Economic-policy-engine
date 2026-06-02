@@ -801,7 +801,7 @@
 }
 
 .io-shock__sensitivity-bar.is-negative span {
-  background: #9a4f2f;
+  background: var(--color-danger);
 }
 
 .io-shock__sensitivity-row dl {
@@ -1037,11 +1037,11 @@
 }
 
 .pe-shock__tradeoff-item--benefit {
-  border-color: color-mix(in srgb, var(--color-success, #3e6b45) 28%, var(--color-border));
+  border-color: color-mix(in srgb, var(--color-success) 28%, var(--color-border));
 }
 
 .pe-shock__tradeoff-item--cost {
-  border-color: color-mix(in srgb, #a66b1f 34%, var(--color-border));
+  border-color: color-mix(in srgb, var(--color-cost) 34%, var(--color-border));
 }
 
 .io-shock__kpis {
@@ -1285,7 +1285,7 @@
 }
 
 .pe-shock__bar-cell--revenue .io-shock__bar-cell-fill {
-  background: #a66b1f;
+  background: var(--color-cost);
 }
 
 .io-shock__caveats {
@@ -1579,23 +1579,23 @@
 
 .pe-shock__metric-card--trade,
 .pe-shock__metric-card--benefit {
-  background: color-mix(in srgb, var(--color-success-soft, #e8f3ec) 58%, var(--color-surface));
-  border-color: color-mix(in srgb, var(--color-success, #3e6b45) 24%, var(--color-border));
+  background: color-mix(in srgb, var(--color-success-soft) 58%, var(--color-surface));
+  border-color: color-mix(in srgb, var(--color-success) 24%, var(--color-border));
 }
 
 .pe-shock__metric-card--cost {
-  background: color-mix(in srgb, #f7ead7 60%, var(--color-surface));
-  border-color: color-mix(in srgb, #a66b1f 32%, var(--color-border));
+  background: color-mix(in srgb, var(--color-cost-soft) 60%, var(--color-surface));
+  border-color: color-mix(in srgb, var(--color-cost) 32%, var(--color-border));
 }
 
 .pe-shock__metric-card.is-negative {
-  background: color-mix(in srgb, #fff1e8 68%, var(--color-surface));
-  border-color: color-mix(in srgb, #b15b2b 34%, var(--color-border));
+  background: color-mix(in srgb, var(--color-danger-soft) 68%, var(--color-surface));
+  border-color: color-mix(in srgb, var(--color-danger) 34%, var(--color-border));
 }
 
 .pe-shock__metric-card.is-positive {
-  background: color-mix(in srgb, var(--color-success-soft, #e8f3ec) 58%, var(--color-surface));
-  border-color: color-mix(in srgb, var(--color-success, #3e6b45) 24%, var(--color-border));
+  background: color-mix(in srgb, var(--color-success-soft) 58%, var(--color-surface));
+  border-color: color-mix(in srgb, var(--color-success) 24%, var(--color-border));
 }
 
 .pe-shock__sensitivity {
@@ -1785,7 +1785,7 @@
 }
 
 .pe-shock__bar-fill {
-  background: var(--color-success, #3e6b45);
+  background: var(--color-success);
   display: block;
   height: 100%;
   opacity: 0.72;
@@ -1793,7 +1793,7 @@
 }
 
 .pe-shock__ranked-bars li.is-negative .pe-shock__impact-row:first-child .pe-shock__bar-fill {
-  background: #b15b2b;
+  background: var(--color-danger);
 }
 
 .pe-shock__impact-stack {
@@ -2945,9 +2945,9 @@
 }
 
 .ai-attribution {
-  background: #fff7e9;
-  border: 1px solid #e7d7b8;
-  color: #7a5d2a;
+  background: color-mix(in srgb, var(--color-warn-soft) 72%, var(--color-surface));
+  border: 1px solid var(--color-warn-border);
+  color: var(--color-warn);
   display: grid;
   gap: 0.35rem;
   margin-top: var(--space-sm);
@@ -2968,9 +2968,9 @@
 }
 
 .ai-attribution--reviewed {
-  background: var(--color-success-soft, #e8f3ec);
-  border: 1px solid #b8d5bf;
-  color: var(--color-success, #3e6b45);
+  background: var(--color-success-soft);
+  border: 1px solid var(--color-success-border);
+  color: var(--color-success);
 }
 
 @media (max-width: 1280px) {
@@ -3158,7 +3158,7 @@
 .scenario-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(23, 37, 59, 0.45);
+  background: var(--color-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3174,7 +3174,7 @@
   width: min(100%, 36rem);
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 12px 24px rgba(23, 37, 59, 0.18);
+  box-shadow: var(--shadow-modal);
 }
 
 .scenario-modal__head {

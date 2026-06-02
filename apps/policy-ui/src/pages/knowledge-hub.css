@@ -1,13 +1,13 @@
 .knowledge-hub-page {
-  --hub-paper: #fbfaf6;
-  --hub-ink: #082552;
-  --hub-muted: #5b6880;
-  --hub-line: #d6dbe3;
-  --hub-soft-line: #e6e9ef;
-  --hub-panel: #fffefa;
-  --hub-blue: #0a4f93;
-  --hub-green: #197243;
-  --hub-amber: #a06a00;
+  --hub-paper: var(--color-bg);
+  --hub-ink: var(--color-brand);
+  --hub-muted: var(--color-text-muted);
+  --hub-line: var(--color-border);
+  --hub-soft-line: color-mix(in srgb, var(--color-border) 58%, var(--color-surface));
+  --hub-panel: var(--color-surface);
+  --hub-blue: var(--color-link);
+  --hub-green: var(--color-success);
+  --hub-amber: var(--color-warn);
   background: var(--hub-paper);
 }
 
@@ -200,7 +200,7 @@
 
 .hub-detail-panel__head h2 {
   color: var(--hub-ink);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-display);
   line-height: 1.25;
   margin: 0;
 }
@@ -229,7 +229,7 @@
 .archive-body h3,
 .research-update-row h3 {
   color: var(--hub-ink);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-display);
   line-height: 1.25;
   margin: 0;
 }
@@ -528,7 +528,7 @@
   background: var(--hub-panel);
   border: 1px solid var(--hub-line);
   border-radius: var(--radius-sm);
-  box-shadow: 0 12px 28px color-mix(in srgb, var(--hub-ink) 10%, transparent);
+  box-shadow: var(--shadow-elevated);
   display: grid;
   gap: var(--space-sm);
   min-width: min(42rem, calc(100vw - 3rem));
@@ -614,7 +614,7 @@
 
 .archive-summary__title {
   color: var(--hub-ink);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-display);
   font-size: 1rem;
   font-weight: 750;
   line-height: 1.25;
@@ -778,7 +778,7 @@
 
 .upcoming-date-row h3 {
   color: var(--hub-ink);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-display);
   font-size: 1rem;
   line-height: 1.25;
   margin: 0;

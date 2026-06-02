@@ -10,15 +10,30 @@
   --color-text-muted: #4d5d74;
   --color-brand: #1f3658;
   --color-brand-soft: #e7edf6;
+  --color-link: #0a4f93;
+  --color-info: var(--color-brand);
+  --color-info-soft: var(--color-brand-soft);
+  --color-info-border: var(--color-border-strong);
   --color-baseline: #1f3658;
   --color-alternative: #2f7b8a;
   --color-downside: #9b3b2e;
   --color-upside: #3e6b45;
   --color-success: #3e6b45;
   --color-success-soft: #e8f3ec;
+  --color-success-border: #bed6c7;
   --color-warn: #8c5a00;
   --color-warn-soft: #f4e8d0;
+  --color-warn-border: #e7d5a7;
+  --color-danger: var(--color-downside);
+  --color-danger-soft: #f5dfd6;
+  --color-danger-border: #e2b8a9;
+  --color-cost: #a66b1f;
+  --color-cost-soft: #f7ead7;
+  --color-cost-border: #e7d7b8;
   --color-crit-soft: #f5dfd6;
+  --color-overlay: rgba(23, 37, 59, 0.45);
+  --shadow-elevated: 0 12px 28px rgba(23, 37, 59, 0.1);
+  --shadow-modal: 0 12px 24px rgba(23, 37, 59, 0.18);
   --accent-growth: #3b5b86;
   --accent-inflation: #8c5a00;
   --accent-trade: #2f7b8a;
@@ -32,6 +47,7 @@
   --color-uncertainty: rgba(77, 93, 116, 0.25);
 
   --font-sans: "Source Sans 3", "Noto Sans", "Helvetica Neue", sans-serif;
+  --font-body: var(--font-sans);
   --font-display: "IBM Plex Serif", "Times New Roman", serif;
   --font-mono: "IBM Plex Mono", "SF Mono", Menlo, monospace;
 
@@ -46,6 +62,7 @@
   --radius-sm: 0.375rem;
   --radius-md: 0.625rem;
   --radius-lg: 0.875rem;
+  --radius-pill: 999px;
 
   --sidebar-width: clamp(14rem, 19vw, 16.5rem);
   --content-max-width: 84rem;
