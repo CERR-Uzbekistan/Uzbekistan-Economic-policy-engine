@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-06-04T07:07:15.841Z",
+  "generated_at": "2026-06-06T06:07:59.490Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -303,12 +303,11 @@
       "url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
       "parser": "lexuz-official-search",
       "fetch_url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
-      "ok": false,
-      "candidate_count": 0,
+      "ok": true,
+      "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-04T07:07:15.841Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-06-06T06:07:59.490Z"
     },
     {
       "id": "president-reform-news",
@@ -316,12 +315,11 @@
       "url": "https://president.uz/en/lists/news",
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
-      "ok": false,
-      "candidate_count": 0,
-      "excluded_count": 0,
+      "ok": true,
+      "candidate_count": 7,
+      "excluded_count": 5,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-04T07:07:15.841Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-06-06T06:07:59.490Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -333,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-04T07:07:15.841Z"
+      "fetched_at": "2026-06-06T06:07:59.490Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -345,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-04T07:07:15.841Z"
+      "fetched_at": "2026-06-06T06:07:59.490Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -357,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-04T07:07:15.841Z"
+      "fetched_at": "2026-06-06T06:07:59.490Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -369,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-04T07:07:15.841Z"
+      "fetched_at": "2026-06-06T06:07:59.490Z"
     },
     {
       "id": "cbu-policy-news",
@@ -377,11 +375,12 @@
       "url": "https://cbu.uz/en/press_center/news/",
       "parser": "html-articles",
       "fetch_url": "https://cbu.uz/en/press_center/news/",
-      "ok": true,
+      "ok": false,
       "candidate_count": 0,
-      "excluded_count": 347,
+      "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-04T07:07:15.841Z"
+      "fetched_at": "2026-06-06T06:07:59.490Z",
+      "error": "TypeError: fetch failed"
     },
     {
       "id": "customs-committee-news",
@@ -393,7 +392,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-04T07:07:15.841Z"
+      "fetched_at": "2026-06-06T06:07:59.490Z"
     },
     {
       "id": "mef-policy-news",
@@ -402,10 +401,10 @@
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
       "ok": true,
-      "candidate_count": 0,
-      "excluded_count": 12,
+      "candidate_count": 1,
+      "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-04T07:07:15.841Z"
+      "fetched_at": "2026-06-06T06:07:59.490Z"
     },
     {
       "id": "tax-committee-news",
@@ -413,12 +412,11 @@
       "url": "https://gov.uz/en/soliq/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": false,
+      "ok": true,
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-04T07:07:15.841Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-06-06T06:07:59.490Z"
     },
     {
       "id": "energy-ministry-news",
@@ -426,12 +424,11 @@
       "url": "https://gov.uz/en/minenergy/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": false,
+      "ok": true,
       "candidate_count": 0,
-      "excluded_count": 0,
+      "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-04T07:07:15.841Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-06-06T06:07:59.490Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -439,12 +436,11 @@
       "url": "https://gov.uz/en/miit/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": false,
-      "candidate_count": 0,
-      "excluded_count": 0,
+      "ok": true,
+      "candidate_count": 1,
+      "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-04T07:07:15.841Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-06-06T06:07:59.490Z"
     },
     {
       "id": "justice-ministry-news",
@@ -452,15 +448,134 @@
       "url": "https://gov.uz/en/adliya/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": false,
+      "ok": true,
       "candidate_count": 0,
-      "excluded_count": 0,
+      "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-04T07:07:15.841Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-06-06T06:07:59.490Z"
     }
   ],
   "reform_packages": [
+    {
+      "package_id": "pkg-energy-tariff-compensation-2026-06-04",
+      "title": "Energy tariff adjustment and compensation reform",
+      "policy_area": "Energy tariffs, household compensation, and fiscal monitoring",
+      "reform_category": "energy_tariffs",
+      "current_stage": "Implementation started",
+      "current_stage_date": "2026-06-04",
+      "next_milestone": "No future milestone published in verified source",
+      "next_milestone_date": "2026-06-04",
+      "responsible_institutions": [
+        "Official website of the President of the Republic of Uzbekistan"
+      ],
+      "legal_basis": "Verified official source event: Presidents of Uzbekistan and Russia launch construction of the first power unit of a nuclear power plant in Uzbekistan.",
+      "official_basis": "Official website of the President of the Republic of Uzbekistan",
+      "short_summary": "The cited official document updates energy tariffs, household compensation, and fiscal monitoring rules or procedures.",
+      "parameters_or_amounts": [
+        "verified official measure"
+      ],
+      "source_confidence": "high",
+      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "model_relevance": [
+        "Inflation",
+        "Household income",
+        "Fiscal costs"
+      ],
+      "policy_channels": [
+        "Inflation",
+        "Household income",
+        "Fiscal costs"
+      ],
+      "measure_tracks": [
+        {
+          "id": "energy-tariff-compensation-measure-1",
+          "label": "verified official measure",
+          "status": "source verified"
+        }
+      ],
+      "implementation_milestones": [
+        {
+          "id": "energy-tariff-compensation-implementation_milestone-2026-06-04",
+          "label": "implementation measure recorded",
+          "date": "2026-06-04",
+          "date_precision": "day",
+          "event_type": "implementation_milestone",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-06-04-presidents-of-uzbekistan-and-russia-launch-construction-of-the-first-"
+          ],
+          "confidence": "high"
+        }
+      ],
+      "official_source_events": [
+        {
+          "id": "source-event-2026-06-04-presidents-of-uzbekistan-and-russia-launch-construction-of-the-first-",
+          "title": "Presidents of Uzbekistan and Russia launch construction of the first power unit of a nuclear power plant in Uzbekistan",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9282",
+          "source_published_at": "2026-06-04",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "implementation_milestone",
+          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-06-06T06:07:59.490Z",
+          "localized": {
+            "title": {
+              "en": "Presidents of Uzbekistan and Russia launch construction of the first power unit of a nuclear power plant in Uzbekistan",
+              "ru": "Президенты Узбекистана и России дали старт строительству первого энергоблока АЭС в Узбекистане",
+              "uz": "Ўзбекистон ва Россия Президентлари мамлакатимизда АЭСнинг биринчи энергия блоки қурилишига старт бердилар"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "Отдельно поблагодарил специалистов Узбекистана и России, принимающих участие в создании первой атомной электростанции в нашей стране за совместную работу и высокий профессионализм."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9282",
+              "ru": "https://president.uz/ru/lists/view/9282",
+              "uz": "https://president.uz/uz/lists/view/9282"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        }
+      ],
+      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
+      "digest": {
+        "changed": "verified official measure",
+        "applies_to": "Energy tariffs, household compensation, and fiscal monitoring",
+        "effective_status": "Implementation started (2026-06-04)",
+        "document": "Presidents of Uzbekistan and Russia launch construction of the first power unit of a nuclear power plant in Uzbekistan"
+      },
+      "localized": {
+        "title": {
+          "ru": "Президенты Узбекистана и России дали старт строительству первого энергоблока АЭС в Узбекистане",
+          "uz": "Ўзбекистон ва Россия Президентлари мамлакатимизда АЭСнинг биринчи энергия блоки қурилишига старт бердилар"
+        },
+        "short_summary": {
+          "ru": "Отдельно поблагодарил специалистов Узбекистана и России, принимающих участие в создании первой атомной электростанции в нашей стране за совместную работу и высокий профессионализм."
+        },
+        "parameters_or_amounts": {
+          "ru": [
+            "Отдельно поблагодарил специалистов Узбекистана и России, принимающих участие в создании первой атомной электростанции в нашей стране за совместную работу и высокий профессионализм."
+          ]
+        },
+        "digest": {
+          "ru": {
+            "changed": "Отдельно поблагодарил специалистов Узбекистана и России, принимающих участие в создании первой атомной электростанции в нашей стране за совместную работу и высокий профессионализм.",
+            "document": "Президенты Узбекистана и России дали старт строительству первого энергоблока АЭС в Узбекистане"
+          },
+          "uz": {
+            "document": "Ўзбекистон ва Россия Президентлари мамлакатимизда АЭСнинг биринчи энергия блоки қурилишига старт бердилар"
+          }
+        }
+      }
+    },
     {
       "package_id": "pkg-customs-clearance-digitalization-2026-06-02",
       "title": "Risk-based customs clearance and electronic declaration reform",
@@ -3098,6 +3213,38 @@
       }
     ],
     "package_links": [
+      {
+        "package_id": "pkg-energy-tariff-compensation-2026-06-04",
+        "active_lenses": [
+          {
+            "model_id": "QPM",
+            "channel": "Macro-financial and inflation transmission context.",
+            "caveat": "Possible lens only."
+          }
+        ],
+        "gated_lenses": [
+          {
+            "model_id": "CGE",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "FPP",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "HFI",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "Synthesis",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          }
+        ]
+      },
       {
         "package_id": "pkg-customs-clearance-digitalization-2026-06-02",
         "active_lenses": [
