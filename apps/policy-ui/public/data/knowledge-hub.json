@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-06-08T07:13:50.890Z",
+  "generated_at": "2026-06-09T06:32:46.895Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -307,7 +307,7 @@
       "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-08T07:13:50.890Z"
+      "fetched_at": "2026-06-09T06:32:46.895Z"
     },
     {
       "id": "president-reform-news",
@@ -316,10 +316,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 7,
-      "excluded_count": 5,
+      "candidate_count": 6,
+      "excluded_count": 6,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-08T07:13:50.890Z"
+      "fetched_at": "2026-06-09T06:32:46.895Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-08T07:13:50.890Z"
+      "fetched_at": "2026-06-09T06:32:46.895Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-08T07:13:50.890Z"
+      "fetched_at": "2026-06-09T06:32:46.895Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-08T07:13:50.890Z"
+      "fetched_at": "2026-06-09T06:32:46.895Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-08T07:13:50.890Z"
+      "fetched_at": "2026-06-09T06:32:46.895Z"
     },
     {
       "id": "cbu-policy-news",
@@ -375,12 +375,11 @@
       "url": "https://cbu.uz/en/press_center/news/",
       "parser": "html-articles",
       "fetch_url": "https://cbu.uz/en/press_center/news/",
-      "ok": false,
+      "ok": true,
       "candidate_count": 0,
-      "excluded_count": 0,
+      "excluded_count": 347,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-08T07:13:50.890Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-06-09T06:32:46.895Z"
     },
     {
       "id": "customs-committee-news",
@@ -392,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-08T07:13:50.890Z"
+      "fetched_at": "2026-06-09T06:32:46.895Z"
     },
     {
       "id": "mef-policy-news",
@@ -404,7 +403,7 @@
       "candidate_count": 1,
       "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-08T07:13:50.890Z"
+      "fetched_at": "2026-06-09T06:32:46.895Z"
     },
     {
       "id": "tax-committee-news",
@@ -416,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-08T07:13:50.890Z"
+      "fetched_at": "2026-06-09T06:32:46.895Z"
     },
     {
       "id": "energy-ministry-news",
@@ -428,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-08T07:13:50.890Z"
+      "fetched_at": "2026-06-09T06:32:46.895Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -436,11 +435,12 @@
       "url": "https://gov.uz/en/miit/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": true,
-      "candidate_count": 1,
-      "excluded_count": 11,
+      "ok": false,
+      "candidate_count": 0,
+      "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-08T07:13:50.890Z"
+      "fetched_at": "2026-06-09T06:32:46.895Z",
+      "error": "TypeError: fetch failed"
     },
     {
       "id": "justice-ministry-news",
@@ -448,11 +448,12 @@
       "url": "https://gov.uz/en/adliya/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": true,
+      "ok": false,
       "candidate_count": 0,
-      "excluded_count": 12,
+      "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-08T07:13:50.890Z"
+      "fetched_at": "2026-06-09T06:32:46.895Z",
+      "error": "TypeError: fetch failed"
     }
   ],
   "reform_packages": [
