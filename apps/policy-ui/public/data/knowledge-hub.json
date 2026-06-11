@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-06-10T06:48:58.796Z",
+  "generated_at": "2026-06-11T07:15:25.586Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -307,7 +307,7 @@
       "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-10T06:48:58.796Z"
+      "fetched_at": "2026-06-11T07:15:25.586Z"
     },
     {
       "id": "president-reform-news",
@@ -319,7 +319,7 @@
       "candidate_count": 6,
       "excluded_count": 6,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-10T06:48:58.796Z"
+      "fetched_at": "2026-06-11T07:15:25.586Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-10T06:48:58.796Z"
+      "fetched_at": "2026-06-11T07:15:25.586Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-10T06:48:58.796Z"
+      "fetched_at": "2026-06-11T07:15:25.586Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-10T06:48:58.796Z"
+      "fetched_at": "2026-06-11T07:15:25.586Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-10T06:48:58.796Z"
+      "fetched_at": "2026-06-11T07:15:25.586Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 347,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-10T06:48:58.796Z"
+      "fetched_at": "2026-06-11T07:15:25.586Z"
     },
     {
       "id": "customs-committee-news",
@@ -391,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-10T06:48:58.796Z"
+      "fetched_at": "2026-06-11T07:15:25.586Z"
     },
     {
       "id": "mef-policy-news",
@@ -403,7 +403,7 @@
       "candidate_count": 1,
       "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-10T06:48:58.796Z"
+      "fetched_at": "2026-06-11T07:15:25.586Z"
     },
     {
       "id": "tax-committee-news",
@@ -415,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-10T06:48:58.796Z"
+      "fetched_at": "2026-06-11T07:15:25.586Z"
     },
     {
       "id": "energy-ministry-news",
@@ -427,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-10T06:48:58.796Z"
+      "fetched_at": "2026-06-11T07:15:25.586Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -439,7 +439,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-10T06:48:58.796Z"
+      "fetched_at": "2026-06-11T07:15:25.586Z"
     },
     {
       "id": "justice-ministry-news",
@@ -451,7 +451,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-10T06:48:58.796Z"
+      "fetched_at": "2026-06-11T07:15:25.586Z"
     }
   ],
   "reform_packages": [
