@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-06-11T07:15:25.586Z",
+  "generated_at": "2026-06-12T07:05:16.350Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -304,10 +304,10 @@
       "parser": "lexuz-official-search",
       "fetch_url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
       "ok": true,
-      "candidate_count": 12,
-      "excluded_count": 0,
+      "candidate_count": 10,
+      "excluded_count": 2,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-11T07:15:25.586Z"
+      "fetched_at": "2026-06-12T07:05:16.350Z"
     },
     {
       "id": "president-reform-news",
@@ -319,7 +319,7 @@
       "candidate_count": 6,
       "excluded_count": 6,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-11T07:15:25.586Z"
+      "fetched_at": "2026-06-12T07:05:16.350Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-11T07:15:25.586Z"
+      "fetched_at": "2026-06-12T07:05:16.350Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-11T07:15:25.586Z"
+      "fetched_at": "2026-06-12T07:05:16.350Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-11T07:15:25.586Z"
+      "fetched_at": "2026-06-12T07:05:16.350Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-11T07:15:25.586Z"
+      "fetched_at": "2026-06-12T07:05:16.350Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 347,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-11T07:15:25.586Z"
+      "fetched_at": "2026-06-12T07:05:16.350Z"
     },
     {
       "id": "customs-committee-news",
@@ -391,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-11T07:15:25.586Z"
+      "fetched_at": "2026-06-12T07:05:16.350Z"
     },
     {
       "id": "mef-policy-news",
@@ -400,10 +400,10 @@
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
       "ok": true,
-      "candidate_count": 1,
-      "excluded_count": 11,
+      "candidate_count": 3,
+      "excluded_count": 9,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-11T07:15:25.586Z"
+      "fetched_at": "2026-06-12T07:05:16.350Z"
     },
     {
       "id": "tax-committee-news",
@@ -415,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-11T07:15:25.586Z"
+      "fetched_at": "2026-06-12T07:05:16.350Z"
     },
     {
       "id": "energy-ministry-news",
@@ -427,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-11T07:15:25.586Z"
+      "fetched_at": "2026-06-12T07:05:16.350Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -439,7 +439,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-11T07:15:25.586Z"
+      "fetched_at": "2026-06-12T07:05:16.350Z"
     },
     {
       "id": "justice-ministry-news",
@@ -451,10 +451,200 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-11T07:15:25.586Z"
+      "fetched_at": "2026-06-12T07:05:16.350Z"
     }
   ],
   "reform_packages": [
+    {
+      "package_id": "pkg-food-safety-veterinary-agrologistics-2026-06-11",
+      "title": "Food safety, veterinary, and agrologistics reform",
+      "policy_area": "Food safety, veterinary services, agrologistics, and agricultural exports",
+      "reform_category": "agriculture",
+      "current_stage": "Instructions issued",
+      "current_stage_date": "2026-06-11",
+      "next_milestone": "No future milestone published in verified source",
+      "next_milestone_date": "2026-06-11",
+      "responsible_institutions": [
+        "Official website of the President of the Republic of Uzbekistan"
+      ],
+      "legal_basis": "Verified official source event: Fishery industry development measures discussed.",
+      "official_basis": "Official website of the President of the Republic of Uzbekistan",
+      "short_summary": "Food-safety, veterinary, export-logistics, livestock, and digital field-control measures are set out.",
+      "parameters_or_amounts": [
+        "From 2027, six state functions are to be transferred gradually to the private sector, including laboratory tests, animal vaccination, disinfection, and identification.",
+        "By 2027-03-01, a unified food-safety information system is to launch and integrate with the border-control single window.",
+        "From 2029-01-01, fruit and vegetable exports are to move through agrologistics centers.",
+        "Food-industry enterprises are to move toward HACCP and Codex Alimentarius standards; full transition is targeted by 2032.",
+        "Agroko‘makchi gets an electronic Field Diary, and AI tools will forecast pests and advise farmers."
+      ],
+      "source_confidence": "high",
+      "why_tracked": "The official source sets dated food-safety, veterinary, export-logistics, and digital agriculture measures.",
+      "model_relevance": [
+        "Agricultural output",
+        "Food prices",
+        "Export logistics"
+      ],
+      "policy_channels": [
+        "Food-safety administration",
+        "Veterinary and livestock services",
+        "Agrologistics and export controls",
+        "Digital field monitoring"
+      ],
+      "measure_tracks": [
+        {
+          "id": "food-safety-veterinary-agrologistics-measure-1",
+          "label": "Food-safety and agrologistics measures were set out",
+          "status": "source verified"
+        }
+      ],
+      "implementation_milestones": [
+        {
+          "id": "food-safety-veterinary-agrologistics-instructions_issued-2026-05-12",
+          "label": "official measure recorded",
+          "date": "2026-05-12",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-05-12-priority-tasks-identified-for-food-security-and-livestock-development"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "food-safety-veterinary-agrologistics-instructions_issued-2026-06-11",
+          "label": "official measure recorded",
+          "date": "2026-06-11",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-06-11-fishery-industry-development-measures-discussed"
+          ],
+          "confidence": "high"
+        }
+      ],
+      "official_source_events": [
+        {
+          "id": "source-event-2026-05-12-priority-tasks-identified-for-food-security-and-livestock-development",
+          "title": "Priority tasks identified for food security and livestock development",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9198",
+          "source_published_at": "2026-05-12",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Priority tasks identified for food security and livestock development",
+          "source_url_status": "verified",
+          "extracted_at": "2026-05-15T09:00:00.000Z",
+          "localized": {
+            "title": {
+              "en": "Priority tasks identified for food security and livestock development",
+              "ru": "Определены приоритетные задачи по обеспечению продовольственной безопасности и развитию животноводства",
+              "uz": "Озиқ-овқат хавфсизлиги ва чорвачилик соҳасини ривожлантириш бўйича устувор вазифалар белгиланди"
+            },
+            "summary": {
+              "ru": "Так, будет создан Комитет по безопасности пищевой продукции, который охватит все надзорные процессы на основе принципа «от поля до стола». Он будет сформирован на базе Агентства по карантину и защите растений, Комитета по развитию ветеринарии и ответственного за безопасность пищевой продукции направления Комитета санитарно-эпидемиологического благополучия.",
+              "uz": "Унга мувофиқ, “даладан дастурхонгача” тамойили асосида барча назорат жараёнларини қамраб оладиган Озиқ-овқат маҳсулоти хавфсизлиги қўмитаси ташкил этилади. Озиқ-овқат маҳсулотларини мажбурий сертификатлаш бекор қилиниб, унинг ўрнига хавфга асосланган назорат ва текширув тартиби жорий этилади."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9198",
+              "ru": "https://president.uz/ru/lists/view/9198",
+              "uz": "https://president.uz/uz/lists/view/9198"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-06-11-fishery-industry-development-measures-discussed",
+          "title": "Fishery industry development measures discussed",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9298",
+          "source_published_at": "2026-06-11",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-06-12T07:05:16.350Z",
+          "localized": {
+            "title": {
+              "en": "Fishery industry development measures discussed",
+              "ru": "Обсуждены меры по развитию рыбной отрасли",
+              "uz": "Балиқчилик тармоғини ривожлантириш чоралари муҳокама қилинди"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+              "ru": "На презентации отмечена необходимость внедрения новой прозрачной системы предоставления в аренду 329 естественных водоемов и водохранилищ, а также прилегающих к ним 163 тысяч гектаров площадей, гарантированного водоснабжения интенсивных рыбоводческих и племенных хозяйств. Будут внедрены механизмы выделения кредитов рыбоводческим хозяйствам, а также частичного покрытия процентных расходов по кредитам в национальной и иностранной валюте.",
+              "uz": "Балиқчилик хўжаликларига кредитлар ажратиш, миллий ва хорижий валютадаги кредитлар бўйича фоиз харажатларини қисман қоплаш механизмлари жорий этилади. Келгуси йилдан тоғ олди ҳудудларида йилига форель ва осётр балиғи етиштириш қувватларини яратиш режалаштирилган."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9298",
+              "ru": "https://president.uz/ru/lists/view/9298",
+              "uz": "https://president.uz/uz/lists/view/9298"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        }
+      ],
+      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
+      "digest": {
+        "changed": "From 2027, six state functions are to be transferred gradually to the private sector, including laboratory tests, animal vaccination, disinfection, and identification.",
+        "applies_to": "Food safety, veterinary services, agrologistics, and agricultural exports",
+        "effective_status": "Instructions issued (2026-06-11)",
+        "document": "Fishery industry development measures discussed"
+      },
+      "localized": {
+        "title": {
+          "ru": "Обсуждены меры по развитию рыбной отрасли",
+          "uz": "Балиқчилик тармоғини ривожлантириш чоралари муҳокама қилинди"
+        },
+        "short_summary": {
+          "ru": "На презентации отмечена необходимость внедрения новой прозрачной системы предоставления в аренду 329 естественных водоемов и водохранилищ, а также прилегающих к ним 163 тысяч гектаров площадей, гарантированного водоснабжения интенсивных рыбоводческих и племенных хозяйств.",
+          "uz": "Балиқчилик хўжаликларига кредитлар ажратиш, миллий ва хорижий валютадаги кредитлар бўйича фоиз харажатларини қисман қоплаш механизмлари жорий этилади."
+        },
+        "parameters_or_amounts": {
+          "ru": [
+            "На презентации отмечена необходимость внедрения новой прозрачной системы предоставления в аренду 329 естественных водоемов и водохранилищ, а также прилегающих к ним 163 тысяч гектаров площадей, гарантированного водоснабжения интенсивных рыбоводческих и племенных хозяйств.",
+            "Будут внедрены механизмы выделения кредитов рыбоводческим хозяйствам, а также частичного покрытия процентных расходов по кредитам в национальной и иностранной валюте.",
+            "В этой связи будет организована работа по улучшению пород карпа, сома, форели и осетра, а также адаптации новых видов к местным климатическим условиям.",
+            "Со следующего года в предгорных районах планируется создать мощности для производства форели и осетра.",
+            "Для Научно-исследовательского института рыбоводства будет создана опытно-экспериментальная площадка на берегу реки Ахангаран.",
+            "Предложено создать единую электронную платформу, объединяющую данные об использовании воды, земельных участках, незаконном вылове рыбы, налоговых платежах и объемах выловленной рыбной продукции.",
+            "Ответственным лицам даны поручения по развитию рыбоводческой отрасли на основе современных технологий, научного подхода и эффективного управления, созданию благоприятных условий для предпринимателей, рациональному использованию водных ресурсов, а также обеспечению населения доступной и качественной рыбной продукцией."
+          ],
+          "uz": [
+            "Балиқчилик хўжаликларига кредитлар ажратиш, миллий ва хорижий валютадаги кредитлар бўйича фоиз харажатларини қисман қоплаш механизмлари жорий этилади.",
+            "Келгуси йилдан тоғ олди ҳудудларида йилига форель ва осётр балиғи етиштириш қувватларини яратиш режалаштирилган.",
+            "Балиқчилик илмий-тадқиқот институти учун Оҳангарон дарёси бўйида тажриба-синов майдони ташкил этилади.",
+            "Балиқчилик тармоғини рақамлаштириш масаласига алоҳида тўхталиб ўтилди.",
+            "Сувдан фойдаланиш ҳолати, ер майдонлари, ноқонуний балиқ овлаш, солиқ тўловлари, овланган балиқ маҳсулотлари тўғрисидаги маълумотларни бирлаштирган ягона электрон платформани яратиш таклиф қилинди.",
+            "Президентимиз таклифларни маъқуллаб, соҳани қўллаб-қувватлаш чораларини янада кенгайтириш зарурлигини қайд этди."
+          ]
+        },
+        "digest": {
+          "ru": {
+            "changed": "На презентации отмечена необходимость внедрения новой прозрачной системы предоставления в аренду 329 естественных водоемов и водохранилищ, а также прилегающих к ним 163 тысяч гектаров площадей, гарантированного водоснабжения интенсивных рыбоводческих и племенных хозяйств.",
+            "document": "Обсуждены меры по развитию рыбной отрасли"
+          },
+          "uz": {
+            "changed": "Балиқчилик хўжаликларига кредитлар ажратиш, миллий ва хорижий валютадаги кредитлар бўйича фоиз харажатларини қисман қоплаш механизмлари жорий этилади.",
+            "document": "Балиқчилик тармоғини ривожлантириш чоралари муҳокама қилинди"
+          }
+        }
+      }
+    },
     {
       "package_id": "pkg-public-services-digital-legal-2026-06-09",
       "title": "Digital public service and legal process reform",
@@ -1795,150 +1985,6 @@
       }
     },
     {
-      "package_id": "pkg-food-safety-veterinary-agrologistics-2026-05-12",
-      "title": "Food safety, veterinary, and agrologistics reform",
-      "policy_area": "Food safety, veterinary services, agrologistics, and agricultural exports",
-      "reform_category": "agriculture",
-      "current_stage": "Instructions issued",
-      "current_stage_date": "2026-05-12",
-      "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-05-12",
-      "responsible_institutions": [
-        "Official website of the President of the Republic of Uzbekistan"
-      ],
-      "legal_basis": "Verified official source event: Priority tasks identified for food security and livestock development.",
-      "official_basis": "Official website of the President of the Republic of Uzbekistan",
-      "short_summary": "Food-safety, veterinary, export-logistics, livestock, and digital field-control measures are set out.",
-      "parameters_or_amounts": [
-        "From 2027, six state functions are to be transferred gradually to the private sector, including laboratory tests, animal vaccination, disinfection, and identification.",
-        "By 2027-03-01, a unified food-safety information system is to launch and integrate with the border-control single window.",
-        "From 2029-01-01, fruit and vegetable exports are to move through agrologistics centers.",
-        "Food-industry enterprises are to move toward HACCP and Codex Alimentarius standards; full transition is targeted by 2032.",
-        "Agroko‘makchi gets an electronic Field Diary, and AI tools will forecast pests and advise farmers."
-      ],
-      "source_confidence": "high",
-      "why_tracked": "The official source sets dated food-safety, veterinary, export-logistics, and digital agriculture measures.",
-      "model_relevance": [
-        "Agricultural output",
-        "Food prices",
-        "Export logistics"
-      ],
-      "policy_channels": [
-        "Food-safety administration",
-        "Veterinary and livestock services",
-        "Agrologistics and export controls",
-        "Digital field monitoring"
-      ],
-      "measure_tracks": [
-        {
-          "id": "food-safety-veterinary-agrologistics-measure-1",
-          "label": "Food-safety and agrologistics measures were set out",
-          "status": "source verified"
-        }
-      ],
-      "implementation_milestones": [
-        {
-          "id": "food-safety-veterinary-agrologistics-instructions_issued-2026-05-12",
-          "label": "official measure recorded",
-          "date": "2026-05-12",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-05-12-priority-tasks-identified-for-food-security-and-livestock-development"
-          ],
-          "confidence": "high"
-        }
-      ],
-      "official_source_events": [
-        {
-          "id": "source-event-2026-05-12-priority-tasks-identified-for-food-security-and-livestock-development",
-          "title": "Priority tasks identified for food security and livestock development",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9198",
-          "source_published_at": "2026-05-12",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Priority tasks identified for food security and livestock development",
-          "source_url_status": "verified",
-          "extracted_at": "2026-05-15T09:00:00.000Z",
-          "localized": {
-            "title": {
-              "en": "Priority tasks identified for food security and livestock development",
-              "ru": "Определены приоритетные задачи по обеспечению продовольственной безопасности и развитию животноводства",
-              "uz": "Озиқ-овқат хавфсизлиги ва чорвачилик соҳасини ривожлантириш бўйича устувор вазифалар белгиланди"
-            },
-            "summary": {
-              "ru": "Так, будет создан Комитет по безопасности пищевой продукции, который охватит все надзорные процессы на основе принципа «от поля до стола». Он будет сформирован на базе Агентства по карантину и защите растений, Комитета по развитию ветеринарии и ответственного за безопасность пищевой продукции направления Комитета санитарно-эпидемиологического благополучия.",
-              "uz": "Унга мувофиқ, “даладан дастурхонгача” тамойили асосида барча назорат жараёнларини қамраб оладиган Озиқ-овқат маҳсулоти хавфсизлиги қўмитаси ташкил этилади. Озиқ-овқат маҳсулотларини мажбурий сертификатлаш бекор қилиниб, унинг ўрнига хавфга асосланган назорат ва текширув тартиби жорий этилади."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9198",
-              "ru": "https://president.uz/ru/lists/view/9198",
-              "uz": "https://president.uz/uz/lists/view/9198"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        }
-      ],
-      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
-      "digest": {
-        "changed": "From 2027, six state functions are to be transferred gradually to the private sector, including laboratory tests, animal vaccination, disinfection, and identification.",
-        "applies_to": "Food safety, veterinary services, agrologistics, and agricultural exports",
-        "effective_status": "Instructions issued (2026-05-12)",
-        "document": "Priority tasks identified for food security and livestock development"
-      },
-      "localized": {
-        "title": {
-          "ru": "Определены приоритетные задачи по обеспечению продовольственной безопасности и развитию животноводства",
-          "uz": "Озиқ-овқат хавфсизлиги ва чорвачилик соҳасини ривожлантириш бўйича устувор вазифалар белгиланди"
-        },
-        "short_summary": {
-          "ru": "Так, будет создан Комитет по безопасности пищевой продукции, который охватит все надзорные процессы на основе принципа «от поля до стола».",
-          "uz": "Унга мувофиқ, “даладан дастурхонгача” тамойили асосида барча назорат жараёнларини қамраб оладиган Озиқ-овқат маҳсулоти хавфсизлиги қўмитаси ташкил этилади."
-        },
-        "parameters_or_amounts": {
-          "ru": [
-            "Так, будет создан Комитет по безопасности пищевой продукции, который охватит все надзорные процессы на основе принципа «от поля до стола».",
-            "Он будет сформирован на базе Агентства по карантину и защите растений, Комитета по развитию ветеринарии и ответственного за безопасность пищевой продукции направления Комитета санитарно-эпидемиологического благополучия.",
-            "Будет отменена обязательная сертификация продуктов питания, вместо нее внедрят порядок контроля и проверок, основанный на оценке рисков.",
-            "В дальнейшем будет создана электронная система по оперативному оповещению об опасной продукции и ее отзыву из обращения.",
-            "С 1 января 2029 года экспорт плодоовощной продукции будет осуществляться только через агрологистические центры.",
-            "Будет разработана программа по переводу крупных предприятий пищевой промышленности с высоким экспортным потенциалом на международные стандарты анализа рисков и нормы Кодекса Алиментариус.",
-            "Планируется довести этот показатель до 20 процентов к 2028 году, до 60 процентов – к 2030 году и до 100 процентов – к 2032 году.",
-            "В 20 районах, специализирующихся на плодоовощеводстве, будет налажена деятельность общественных инспекторов, оказывающих содействие в оформлении внутренних фитосанитарных сертификатов."
-          ],
-          "uz": [
-            "Унга мувофиқ, “даладан дастурхонгача” тамойили асосида барча назорат жараёнларини қамраб оладиган Озиқ-овқат маҳсулоти хавфсизлиги қўмитаси ташкил этилади.",
-            "Озиқ-овқат маҳсулотларини мажбурий сертификатлаш бекор қилиниб, унинг ўрнига хавфга асосланган назорат ва текширув тартиби жорий этилади.",
-            "Ҳар бир маҳсулот бўйича онлайн кузатиш тизими йўлга қўйилади.",
-            "Фермер ва деҳқонлар учун “Агро кўмакчи” мобил иловасида электрон “Дала дафтари” тизими жорий этилади.",
-            "2027 йил 1 мартгача озиқ-овқат маҳсулотлари хавфсизлиги бўйича ягона автоматлашган ахборот платформаси ишга туширилади.",
-            "Янги тизим орқали импортда назорат вақти 9 кундан 2 кунга, экспортда эса 3 кундан 1 кунгача қисқартирилиши белгиланди.",
-            "Шу боис, Қишлоқ хўжалиги вазирлиги ҳузурида Чорвачилик ва яйлов хўжалигини ривожлантириш агентлиги ташкил этилади.",
-            "Шунингдек, гўшт ва сутни қайта ишлаш даражасини 50 фоизга, наслдор қорамоллар улушини 90 фоизга етказиш, озуқабоп экин майдонларини эса 1,5 баробар кўпайтириш белгиланди."
-          ]
-        },
-        "digest": {
-          "ru": {
-            "changed": "Так, будет создан Комитет по безопасности пищевой продукции, который охватит все надзорные процессы на основе принципа «от поля до стола».",
-            "document": "Определены приоритетные задачи по обеспечению продовольственной безопасности и развитию животноводства"
-          },
-          "uz": {
-            "changed": "Унга мувофиқ, “даладан дастурхонгача” тамойили асосида барча назорат жараёнларини қамраб оладиган Озиқ-овқат маҳсулоти хавфсизлиги қўмитаси ташкил этилади.",
-            "document": "Озиқ-овқат хавфсизлиги ва чорвачилик соҳасини ривожлантириш бўйича устувор вазифалар белгиланди"
-          }
-        }
-      }
-    },
-    {
       "package_id": "pkg-aml-cft-financial-control-2026-05-08",
       "title": "Financial-sector AML/CFT internal control rules reform",
       "policy_area": "AML/CFT controls for banks, nonbank lenders, payments, and e-money institutions",
@@ -2873,7 +2919,7 @@
       "package_ids": [
         "pkg-customs-clearance-digitalization-2026-06-03",
         "pkg-public-transport-system-2026-05-13",
-        "pkg-agriculture-subsidy-financing-digital-delivery-2026"
+        "pkg-food-safety-veterinary-agrologistics-2026-06-11"
       ],
       "policy_channels": [
         "Macro monitoring",
@@ -2889,7 +2935,7 @@
       "source_event_ids": [
         "source-event-2026-05-19-pf-95-19-05-2026-soliq-organlari-faoliyatini-institutsional-jihatdan-",
         "source-event-2026-05-13-proposals-to-improve-efficiency-of-tashkent-metro-reviewed",
-        "source-event-2025-12-09-financing-and-subsidy-plans-for-the-agricultural-sector-reviewed"
+        "source-event-2026-05-12-priority-tasks-identified-for-food-security-and-livestock-development"
       ],
       "as_of_date": "2026-05-13",
       "publication_state": "internal_preview",
@@ -2905,7 +2951,7 @@
       "summary": "Internal package-routing note retained for non-public workflow compatibility.",
       "package_ids": [
         "pkg-public-transport-system-2026-05-13",
-        "pkg-agriculture-subsidy-financing-digital-delivery-2026"
+        "pkg-food-safety-veterinary-agrologistics-2026-06-11"
       ],
       "policy_channels": [
         "Infrastructure delivery",
@@ -2919,7 +2965,7 @@
       ],
       "source_event_ids": [
         "source-event-2026-05-13-proposals-to-improve-efficiency-of-tashkent-metro-reviewed",
-        "source-event-2025-12-09-financing-and-subsidy-plans-for-the-agricultural-sector-reviewed"
+        "source-event-2026-05-12-priority-tasks-identified-for-food-security-and-livestock-development"
       ],
       "as_of_date": "2026-05-13",
       "publication_state": "internal_preview",
@@ -3040,6 +3086,25 @@
       "why_relevant": "Useful as a literature watch item while FPP remains gated in public outputs."
     },
     {
+      "id": "research-imf-working-papers-repec-2026-leveraging-non-traditional-data-for-macroeconomic-nowcasting-the-case-of-mo",
+      "title": "Leveraging Non-traditional Data for Macroeconomic Nowcasting: The Case of Morocco",
+      "topic": "Nowcasting and high-frequency monitoring",
+      "summary": "Nowcasting and high-frequency monitoring. Included as a source-linked methods update for DFM; it is not a platform model result.",
+      "model_ids": [
+        "DFM"
+      ],
+      "methods": [
+        "Dynamic factor model",
+        "nowcasting",
+        "forecast evaluation"
+      ],
+      "source_title": "Leveraging Non-traditional Data for Macroeconomic Nowcasting: The Case of Morocco",
+      "source_institution": "International Monetary Fund",
+      "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-108.html",
+      "published_at": "2026",
+      "why_relevant": "Useful for comparing nowcast methods and indicator use around the DFM lane."
+    },
+    {
       "id": "research-imf-working-papers-repec-2026-nowcasting-country-level-trade-estimates-using-imf-portwatch",
       "title": "Nowcasting Country-Level Trade Estimates Using IMF PortWatch",
       "topic": "Nowcasting and high-frequency monitoring",
@@ -3116,6 +3181,25 @@
       "why_relevant": "Useful for comparing nowcast methods and indicator use around the DFM lane."
     },
     {
+      "id": "research-imf-working-papers-repec-2026-nowcasting-low-income-countries-through-global-linkages",
+      "title": "Nowcasting Low-Income Countries Through Global Linkages",
+      "topic": "Nowcasting and high-frequency monitoring",
+      "summary": "Nowcasting and high-frequency monitoring. Included as a source-linked methods update for DFM; it is not a platform model result.",
+      "model_ids": [
+        "DFM"
+      ],
+      "methods": [
+        "Dynamic factor model",
+        "nowcasting",
+        "forecast evaluation"
+      ],
+      "source_title": "Nowcasting Low-Income Countries Through Global Linkages",
+      "source_institution": "International Monetary Fund",
+      "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-107.html",
+      "published_at": "2026",
+      "why_relevant": "Useful for comparing nowcast methods and indicator use around the DFM lane."
+    },
+    {
       "id": "research-imf-working-papers-repec-2026-nowcasting-world-trade-with-a-multi-region-factor-model",
       "title": "Nowcasting World Trade with a Multi-Region Factor Model",
       "topic": "Nowcasting and high-frequency monitoring",
@@ -3152,43 +3236,6 @@
       "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-042.html",
       "published_at": "2026",
       "why_relevant": "Useful as a literature watch item while FPP remains gated in public outputs."
-    },
-    {
-      "id": "research-imf-working-papers-repec-2026-still-packing-a-punch-monetary-policy-transmission-in-a-new-cross-country-h",
-      "title": "Still Packing a Punch: Monetary Policy Transmission in a New Cross-Country High-Frequency Dataset",
-      "topic": "High-frequency indicator monitoring",
-      "summary": "by Ece Ozge Emeksiz & Mr. Güneş Kamber & Ms. Julia Otten & Gurnain Kaur",
-      "model_ids": [
-        "HFI"
-      ],
-      "methods": [
-        "High-frequency indicators",
-        "real-time monitoring"
-      ],
-      "source_title": "Still Packing a Punch: Monetary Policy Transmission in a New Cross-Country High-Frequency Dataset",
-      "source_institution": "International Monetary Fund",
-      "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-018.html",
-      "published_at": "2026",
-      "why_relevant": "Useful as a literature watch item while HFI remains gated in public outputs."
-    },
-    {
-      "id": "research-imf-working-papers-repec-2026-the-integration-of-global-value-chain-in-the-eu-stylized-facts-and-drivers",
-      "title": "The Integration of Global Value Chain in the EU: Stylized Facts and Drivers",
-      "topic": "Input-output linkages and value-added trade",
-      "summary": "Input-output linkages and value-added trade. Included as a source-linked methods update for I-O; it is not a platform model result.",
-      "model_ids": [
-        "I-O"
-      ],
-      "methods": [
-        "Input-output tables",
-        "sector linkages",
-        "value-added trade"
-      ],
-      "source_title": "The Integration of Global Value Chain in the EU: Stylized Facts and Drivers",
-      "source_institution": "International Monetary Fund",
-      "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-002.html",
-      "published_at": "2026",
-      "why_relevant": "Useful for benchmarking sector-linkage and trade-exposure assumptions in the I-O lane."
     }
   ],
   "literature_items": [
@@ -3298,6 +3345,48 @@
       }
     ],
     "package_links": [
+      {
+        "package_id": "pkg-food-safety-veterinary-agrologistics-2026-06-11",
+        "active_lenses": [
+          {
+            "model_id": "DFM",
+            "channel": "High-frequency monitoring context.",
+            "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "I-O",
+            "channel": "Sector-linkage and final-demand propagation context.",
+            "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "PE",
+            "channel": "Direct tariff-incidence and trade-flow context.",
+            "caveat": "Possible lens only."
+          }
+        ],
+        "gated_lenses": [
+          {
+            "model_id": "CGE",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "FPP",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "HFI",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "Synthesis",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          }
+        ]
+      },
       {
         "package_id": "pkg-public-services-digital-legal-2026-06-09",
         "active_lenses": [
@@ -3527,48 +3616,6 @@
       },
       {
         "package_id": "pkg-pasture-dryland-use-incentives-2026-05-12",
-        "active_lenses": [
-          {
-            "model_id": "DFM",
-            "channel": "High-frequency monitoring context.",
-            "caveat": "Possible lens only."
-          },
-          {
-            "model_id": "I-O",
-            "channel": "Sector-linkage and final-demand propagation context.",
-            "caveat": "Possible lens only."
-          },
-          {
-            "model_id": "PE",
-            "channel": "Direct tariff-incidence and trade-flow context.",
-            "caveat": "Possible lens only."
-          }
-        ],
-        "gated_lenses": [
-          {
-            "model_id": "CGE",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "FPP",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "HFI",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "Synthesis",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          }
-        ]
-      },
-      {
-        "package_id": "pkg-food-safety-veterinary-agrologistics-2026-05-12",
         "active_lenses": [
           {
             "model_id": "DFM",
