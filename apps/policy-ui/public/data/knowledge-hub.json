@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-06-12T07:05:16.350Z",
+  "generated_at": "2026-06-13T06:38:19.285Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -303,11 +303,12 @@
       "url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
       "parser": "lexuz-official-search",
       "fetch_url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
-      "ok": true,
-      "candidate_count": 10,
-      "excluded_count": 2,
+      "ok": false,
+      "candidate_count": 0,
+      "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-12T07:05:16.350Z"
+      "fetched_at": "2026-06-13T06:38:19.285Z",
+      "error": "TypeError: fetch failed"
     },
     {
       "id": "president-reform-news",
@@ -315,11 +316,12 @@
       "url": "https://president.uz/en/lists/news",
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
-      "ok": true,
-      "candidate_count": 6,
-      "excluded_count": 6,
+      "ok": false,
+      "candidate_count": 0,
+      "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-12T07:05:16.350Z"
+      "fetched_at": "2026-06-13T06:38:19.285Z",
+      "error": "TypeError: fetch failed"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +333,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-12T07:05:16.350Z"
+      "fetched_at": "2026-06-13T06:38:19.285Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +345,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-12T07:05:16.350Z"
+      "fetched_at": "2026-06-13T06:38:19.285Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +357,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-12T07:05:16.350Z"
+      "fetched_at": "2026-06-13T06:38:19.285Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +369,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-12T07:05:16.350Z"
+      "fetched_at": "2026-06-13T06:38:19.285Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +381,7 @@
       "candidate_count": 0,
       "excluded_count": 347,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-12T07:05:16.350Z"
+      "fetched_at": "2026-06-13T06:38:19.285Z"
     },
     {
       "id": "customs-committee-news",
@@ -387,11 +389,12 @@
       "url": "https://www.customs.uz/en",
       "parser": "html-articles",
       "fetch_url": "https://www.customs.uz/en",
-      "ok": true,
+      "ok": false,
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-12T07:05:16.350Z"
+      "fetched_at": "2026-06-13T06:38:19.285Z",
+      "error": "TypeError: fetch failed"
     },
     {
       "id": "mef-policy-news",
@@ -399,11 +402,12 @@
       "url": "https://gov.uz/en/imv/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": true,
-      "candidate_count": 3,
-      "excluded_count": 9,
+      "ok": false,
+      "candidate_count": 0,
+      "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-12T07:05:16.350Z"
+      "fetched_at": "2026-06-13T06:38:19.285Z",
+      "error": "TypeError: fetch failed"
     },
     {
       "id": "tax-committee-news",
@@ -411,11 +415,12 @@
       "url": "https://gov.uz/en/soliq/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": true,
+      "ok": false,
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-12T07:05:16.350Z"
+      "fetched_at": "2026-06-13T06:38:19.285Z",
+      "error": "TypeError: fetch failed"
     },
     {
       "id": "energy-ministry-news",
@@ -423,11 +428,12 @@
       "url": "https://gov.uz/en/minenergy/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": true,
+      "ok": false,
       "candidate_count": 0,
-      "excluded_count": 12,
+      "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-12T07:05:16.350Z"
+      "fetched_at": "2026-06-13T06:38:19.285Z",
+      "error": "TypeError: fetch failed"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -435,11 +441,12 @@
       "url": "https://gov.uz/en/miit/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": true,
+      "ok": false,
       "candidate_count": 0,
-      "excluded_count": 12,
+      "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-12T07:05:16.350Z"
+      "fetched_at": "2026-06-13T06:38:19.285Z",
+      "error": "TypeError: fetch failed"
     },
     {
       "id": "justice-ministry-news",
@@ -447,11 +454,12 @@
       "url": "https://gov.uz/en/adliya/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": true,
+      "ok": false,
       "candidate_count": 0,
-      "excluded_count": 12,
+      "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-12T07:05:16.350Z"
+      "fetched_at": "2026-06-13T06:38:19.285Z",
+      "error": "TypeError: fetch failed"
     }
   ],
   "reform_packages": [
@@ -3889,6 +3897,7 @@
     "This is a deterministic official-source reform package artifact.",
     "Generated from configured source URLs at artifact build time.",
     "Public packages are assembled only from source events whose official links passed validation.",
-    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser."
+    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser.",
+    "One or more configured sources failed during this automatic refresh; previous verified packages were carried forward when needed to avoid deleting reforms during a temporary source outage."
   ]
 }
