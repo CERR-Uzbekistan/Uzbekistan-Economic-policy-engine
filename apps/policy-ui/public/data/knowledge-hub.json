@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-06-15T08:37:04.272Z",
+  "generated_at": "2026-06-16T08:29:14.323Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -307,7 +307,7 @@
       "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-15T08:37:04.272Z"
+      "fetched_at": "2026-06-16T08:29:14.323Z"
     },
     {
       "id": "president-reform-news",
@@ -316,10 +316,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 6,
-      "excluded_count": 6,
+      "candidate_count": 7,
+      "excluded_count": 5,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-15T08:37:04.272Z"
+      "fetched_at": "2026-06-16T08:29:14.323Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-15T08:37:04.272Z"
+      "fetched_at": "2026-06-16T08:29:14.323Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-15T08:37:04.272Z"
+      "fetched_at": "2026-06-16T08:29:14.323Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-15T08:37:04.272Z"
+      "fetched_at": "2026-06-16T08:29:14.323Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-15T08:37:04.272Z"
+      "fetched_at": "2026-06-16T08:29:14.323Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 347,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-15T08:37:04.272Z"
+      "fetched_at": "2026-06-16T08:29:14.323Z"
     },
     {
       "id": "customs-committee-news",
@@ -391,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-15T08:37:04.272Z"
+      "fetched_at": "2026-06-16T08:29:14.323Z"
     },
     {
       "id": "mef-policy-news",
@@ -400,10 +400,10 @@
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
       "ok": true,
-      "candidate_count": 3,
-      "excluded_count": 9,
+      "candidate_count": 2,
+      "excluded_count": 10,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-15T08:37:04.272Z"
+      "fetched_at": "2026-06-16T08:29:14.323Z"
     },
     {
       "id": "tax-committee-news",
@@ -415,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-15T08:37:04.272Z"
+      "fetched_at": "2026-06-16T08:29:14.323Z"
     },
     {
       "id": "energy-ministry-news",
@@ -427,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-15T08:37:04.272Z"
+      "fetched_at": "2026-06-16T08:29:14.323Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -439,7 +439,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-15T08:37:04.272Z"
+      "fetched_at": "2026-06-16T08:29:14.323Z"
     },
     {
       "id": "justice-ministry-news",
@@ -451,10 +451,193 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-15T08:37:04.272Z"
+      "fetched_at": "2026-06-16T08:29:14.323Z"
     }
   ],
   "reform_packages": [
+    {
+      "package_id": "pkg-energy-tariff-compensation-2026-06-15",
+      "title": "Energy tariff adjustment and compensation reform",
+      "policy_area": "Energy tariffs, household compensation, and fiscal monitoring",
+      "reform_category": "energy_tariffs",
+      "current_stage": "Instructions issued",
+      "current_stage_date": "2026-06-15",
+      "next_milestone": "No future milestone published in verified source",
+      "next_milestone_date": "2026-06-15",
+      "responsible_institutions": [
+        "Official website of the President of the Republic of Uzbekistan"
+      ],
+      "legal_basis": "Verified official source event: Critical minerals raw material base to be expanded, production of high value-added products to be established.",
+      "official_basis": "Official website of the President of the Republic of Uzbekistan",
+      "short_summary": "The cited official document updates energy tariffs, household compensation, and fiscal monitoring rules or procedures.",
+      "parameters_or_amounts": [
+        "expanded incentives"
+      ],
+      "source_confidence": "high",
+      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "model_relevance": [
+        "Inflation",
+        "Household income",
+        "Fiscal costs"
+      ],
+      "policy_channels": [
+        "Inflation",
+        "Household income",
+        "Fiscal costs"
+      ],
+      "measure_tracks": [
+        {
+          "id": "energy-tariff-compensation-measure-1",
+          "label": "expanded incentives",
+          "status": "source verified"
+        }
+      ],
+      "implementation_milestones": [
+        {
+          "id": "energy-tariff-compensation-implementation_milestone-2026-06-04",
+          "label": "implementation measure recorded",
+          "date": "2026-06-04",
+          "date_precision": "day",
+          "event_type": "implementation_milestone",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-06-04-presidents-of-uzbekistan-and-russia-launch-construction-of-the-first-"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "energy-tariff-compensation-instructions_issued-2026-06-15",
+          "label": "official measure recorded",
+          "date": "2026-06-15",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-06-15-critical-minerals-raw-material-base-to-be-expanded-production-of-high"
+          ],
+          "confidence": "high"
+        }
+      ],
+      "official_source_events": [
+        {
+          "id": "source-event-2026-06-04-presidents-of-uzbekistan-and-russia-launch-construction-of-the-first-",
+          "title": "Presidents of Uzbekistan and Russia launch construction of the first power unit of a nuclear power plant in Uzbekistan",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9282",
+          "source_published_at": "2026-06-04",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "implementation_milestone",
+          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-06-06T06:07:59.490Z",
+          "localized": {
+            "title": {
+              "en": "Presidents of Uzbekistan and Russia launch construction of the first power unit of a nuclear power plant in Uzbekistan",
+              "ru": "Президенты Узбекистана и России дали старт строительству первого энергоблока АЭС в Узбекистане",
+              "uz": "Ўзбекистон ва Россия Президентлари мамлакатимизда АЭСнинг биринчи энергия блоки қурилишига старт бердилар"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "Отдельно поблагодарил специалистов Узбекистана и России, принимающих участие в создании первой атомной электростанции в нашей стране за совместную работу и высокий профессионализм."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9282",
+              "ru": "https://president.uz/ru/lists/view/9282",
+              "uz": "https://president.uz/uz/lists/view/9282"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-06-15-critical-minerals-raw-material-base-to-be-expanded-production-of-high",
+          "title": "Critical minerals raw material base to be expanded, production of high value-added products to be established",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9304",
+          "source_published_at": "2026-06-15",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-06-16T08:29:14.323Z",
+          "localized": {
+            "title": {
+              "en": "Critical minerals raw material base to be expanded, production of high value-added products to be established",
+              "ru": "Будет расширена сырьевая база критически важных минералов и налажено производство продукции с высокой добавленной стоимостью",
+              "uz": "Муҳим минераллар хомашё базаси кенгайтирилиб, юқори қўшилган қийматли маҳсулотлар ишлаб чиқарилади"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "Кроме того, за счет ввода новых производственных мощностей будут созданы сотни рабочих мест, увеличатся поступления в бюджет и расширятся экспортные возможности. Там будут созданы необходимые условия для коммерциализации научных разработок, поддержки стартап-проектов, а также производства высокочистых металлов и инновационной продукции.",
+              "uz": "Жорий йилнинг ўзида 166 миллион долларлик 12 та лойиҳани ишга тушириш режалаштирилган. Чирчиқ шаҳрида ташкил этилаётган нанотаҳлил лабораторияси геология, кончилик ва металлургия лойиҳалари учун замонавий таҳлил хизматларини кўрсатади."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9304",
+              "ru": "https://president.uz/ru/lists/view/9304",
+              "uz": "https://president.uz/uz/lists/view/9304"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        }
+      ],
+      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
+      "digest": {
+        "changed": "expanded incentives",
+        "applies_to": "Energy tariffs, household compensation, and fiscal monitoring",
+        "effective_status": "Instructions issued (2026-06-15)",
+        "document": "Critical minerals raw material base to be expanded, production of high value-added products to be established"
+      },
+      "localized": {
+        "title": {
+          "ru": "Будет расширена сырьевая база критически важных минералов и налажено производство продукции с высокой добавленной стоимостью",
+          "uz": "Муҳим минераллар хомашё базаси кенгайтирилиб, юқори қўшилган қийматли маҳсулотлар ишлаб чиқарилади"
+        },
+        "short_summary": {
+          "ru": "Кроме того, за счет ввода новых производственных мощностей будут созданы сотни рабочих мест, увеличатся поступления в бюджет и расширятся экспортные возможности.",
+          "uz": "Жорий йилнинг ўзида 166 миллион долларлик 12 та лойиҳани ишга тушириш режалаштирилган."
+        },
+        "parameters_or_amounts": {
+          "ru": [
+            "Кроме того, за счет ввода новых производственных мощностей будут созданы сотни рабочих мест, увеличатся поступления в бюджет и расширятся экспортные возможности.",
+            "Там будут созданы необходимые условия для коммерциализации научных разработок, поддержки стартап-проектов, а также производства высокочистых металлов и инновационной продукции.",
+            "Также был рассмотрен вопрос создания единственного в Центральной Азии научно-исследовательского и технологического центра по критическим минералам.",
+            "Создаваемая в городе Чирчике лаборатория наноанализа будет оказывать современные аналитические услуги для проектов в сфере геологии, горнодобывающей промышленности и металлургии.",
+            "Вместе с тем подчеркнута необходимость цифровизации и внедрения технологий искусственного интеллекта.",
+            "Совместно с Ташкентским государственным техническим университетом внедрена система дуального образования и на базе Комбината технологических металлов открыты 2 кафедры по направлениям металлургии и материаловедения.",
+            "Глава нашего государства подчеркнул, что сфера критических минералов играет важную роль в формировании новых отраслей промышленности, увеличении экспорта, обеспечении технологической независимости и создании высококвалифицированных рабочих мест."
+          ],
+          "uz": [
+            "Жорий йилнинг ўзида 166 миллион долларлик 12 та лойиҳани ишга тушириш режалаштирилган.",
+            "Чирчиқ шаҳрида ташкил этилаётган нанотаҳлил лабораторияси геология, кончилик ва металлургия лойиҳалари учун замонавий таҳлил хизматларини кўрсатади.",
+            "Геологик маълумотларни ягона рақамли базага жамлаш, қидирув ишларини 3D моделлаштириш, ишлаб чиқариш жараёнларини реал вақт режимида назорат қилиш, бозор таҳлили ва лойиҳалар бошқарувини замонавий платформалар орқали ташкил этиш вазифалари белгиланди.",
+            "Тошкент давлат техника университети билан дуал таълим тизими йўлга қўйилиб, Технологик металлар комбинатида металлургия ва материалшунослик бўйича 2 та кафедра очилган."
+          ]
+        },
+        "digest": {
+          "ru": {
+            "changed": "Кроме того, за счет ввода новых производственных мощностей будут созданы сотни рабочих мест, увеличатся поступления в бюджет и расширятся экспортные возможности.",
+            "document": "Будет расширена сырьевая база критически важных минералов и налажено производство продукции с высокой добавленной стоимостью"
+          },
+          "uz": {
+            "changed": "Жорий йилнинг ўзида 166 миллион долларлик 12 та лойиҳани ишга тушириш режалаштирилган.",
+            "document": "Муҳим минераллар хомашё базаси кенгайтирилиб, юқори қўшилган қийматли маҳсулотлар ишлаб чиқарилади"
+          }
+        }
+      }
+    },
     {
       "package_id": "pkg-food-safety-veterinary-agrologistics-2026-06-11",
       "title": "Food safety, veterinary, and agrologistics reform",
@@ -883,126 +1066,6 @@
           "uz": {
             "changed": "Шунингдек, “Геомониторинг” ахборот тизими жорий қилиниб, 2 мингдан ортиқ қазилма участкаларига оид маълумотлар рақамлаштирилган.",
             "document": "Тоғ-кон саноати ва геология соҳасида рақамли технологияларни кенг жорий этиш чоралари кўриб чиқилди"
-          }
-        }
-      }
-    },
-    {
-      "package_id": "pkg-energy-tariff-compensation-2026-06-04",
-      "title": "Energy tariff adjustment and compensation reform",
-      "policy_area": "Energy tariffs, household compensation, and fiscal monitoring",
-      "reform_category": "energy_tariffs",
-      "current_stage": "Implementation started",
-      "current_stage_date": "2026-06-04",
-      "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-06-04",
-      "responsible_institutions": [
-        "Official website of the President of the Republic of Uzbekistan"
-      ],
-      "legal_basis": "Verified official source event: Presidents of Uzbekistan and Russia launch construction of the first power unit of a nuclear power plant in Uzbekistan.",
-      "official_basis": "Official website of the President of the Republic of Uzbekistan",
-      "short_summary": "The cited official document updates energy tariffs, household compensation, and fiscal monitoring rules or procedures.",
-      "parameters_or_amounts": [
-        "verified official measure"
-      ],
-      "source_confidence": "high",
-      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
-      "model_relevance": [
-        "Inflation",
-        "Household income",
-        "Fiscal costs"
-      ],
-      "policy_channels": [
-        "Inflation",
-        "Household income",
-        "Fiscal costs"
-      ],
-      "measure_tracks": [
-        {
-          "id": "energy-tariff-compensation-measure-1",
-          "label": "verified official measure",
-          "status": "source verified"
-        }
-      ],
-      "implementation_milestones": [
-        {
-          "id": "energy-tariff-compensation-implementation_milestone-2026-06-04",
-          "label": "implementation measure recorded",
-          "date": "2026-06-04",
-          "date_precision": "day",
-          "event_type": "implementation_milestone",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-06-04-presidents-of-uzbekistan-and-russia-launch-construction-of-the-first-"
-          ],
-          "confidence": "high"
-        }
-      ],
-      "official_source_events": [
-        {
-          "id": "source-event-2026-06-04-presidents-of-uzbekistan-and-russia-launch-construction-of-the-first-",
-          "title": "Presidents of Uzbekistan and Russia launch construction of the first power unit of a nuclear power plant in Uzbekistan",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9282",
-          "source_published_at": "2026-06-04",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "implementation_milestone",
-          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-06-06T06:07:59.490Z",
-          "localized": {
-            "title": {
-              "en": "Presidents of Uzbekistan and Russia launch construction of the first power unit of a nuclear power plant in Uzbekistan",
-              "ru": "Президенты Узбекистана и России дали старт строительству первого энергоблока АЭС в Узбекистане",
-              "uz": "Ўзбекистон ва Россия Президентлари мамлакатимизда АЭСнинг биринчи энергия блоки қурилишига старт бердилар"
-            },
-            "summary": {
-              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
-              "ru": "Отдельно поблагодарил специалистов Узбекистана и России, принимающих участие в создании первой атомной электростанции в нашей стране за совместную работу и высокий профессионализм."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9282",
-              "ru": "https://president.uz/ru/lists/view/9282",
-              "uz": "https://president.uz/uz/lists/view/9282"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        }
-      ],
-      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
-      "digest": {
-        "changed": "verified official measure",
-        "applies_to": "Energy tariffs, household compensation, and fiscal monitoring",
-        "effective_status": "Implementation started (2026-06-04)",
-        "document": "Presidents of Uzbekistan and Russia launch construction of the first power unit of a nuclear power plant in Uzbekistan"
-      },
-      "localized": {
-        "title": {
-          "ru": "Президенты Узбекистана и России дали старт строительству первого энергоблока АЭС в Узбекистане",
-          "uz": "Ўзбекистон ва Россия Президентлари мамлакатимизда АЭСнинг биринчи энергия блоки қурилишига старт бердилар"
-        },
-        "short_summary": {
-          "ru": "Отдельно поблагодарил специалистов Узбекистана и России, принимающих участие в создании первой атомной электростанции в нашей стране за совместную работу и высокий профессионализм."
-        },
-        "parameters_or_amounts": {
-          "ru": [
-            "Отдельно поблагодарил специалистов Узбекистана и России, принимающих участие в создании первой атомной электростанции в нашей стране за совместную работу и высокий профессионализм."
-          ]
-        },
-        "digest": {
-          "ru": {
-            "changed": "Отдельно поблагодарил специалистов Узбекистана и России, принимающих участие в создании первой атомной электростанции в нашей стране за совместную работу и высокий профессионализм.",
-            "document": "Президенты Узбекистана и России дали старт строительству первого энергоблока АЭС в Узбекистане"
-          },
-          "uz": {
-            "document": "Ўзбекистон ва Россия Президентлари мамлакатимизда АЭСнинг биринчи энергия блоки қурилишига старт бердилар"
           }
         }
       }
@@ -3346,6 +3409,38 @@
     ],
     "package_links": [
       {
+        "package_id": "pkg-energy-tariff-compensation-2026-06-15",
+        "active_lenses": [
+          {
+            "model_id": "QPM",
+            "channel": "Macro-financial and inflation transmission context.",
+            "caveat": "Possible lens only."
+          }
+        ],
+        "gated_lenses": [
+          {
+            "model_id": "CGE",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "FPP",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "HFI",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "Synthesis",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          }
+        ]
+      },
+      {
         "package_id": "pkg-food-safety-veterinary-agrologistics-2026-06-11",
         "active_lenses": [
           {
@@ -3393,38 +3488,6 @@
           {
             "model_id": "DFM",
             "channel": "General monitoring context.",
-            "caveat": "Possible lens only."
-          }
-        ],
-        "gated_lenses": [
-          {
-            "model_id": "CGE",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "FPP",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "HFI",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "Synthesis",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          }
-        ]
-      },
-      {
-        "package_id": "pkg-energy-tariff-compensation-2026-06-04",
-        "active_lenses": [
-          {
-            "model_id": "QPM",
-            "channel": "Macro-financial and inflation transmission context.",
             "caveat": "Possible lens only."
           }
         ],
