@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-06-18T07:16:43.590Z",
+  "generated_at": "2026-07-03T06:09:10.444Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -307,7 +307,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-18T07:16:43.590Z",
+      "fetched_at": "2026-07-03T06:09:10.444Z",
       "error": "TypeError: fetch failed"
     },
     {
@@ -317,10 +317,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 8,
-      "excluded_count": 4,
+      "candidate_count": 2,
+      "excluded_count": 10,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-18T07:16:43.590Z"
+      "fetched_at": "2026-07-03T06:09:10.444Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -332,7 +332,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-18T07:16:43.590Z"
+      "fetched_at": "2026-07-03T06:09:10.444Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -344,7 +344,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-18T07:16:43.590Z"
+      "fetched_at": "2026-07-03T06:09:10.444Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -356,7 +356,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-18T07:16:43.590Z"
+      "fetched_at": "2026-07-03T06:09:10.444Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -368,7 +368,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-18T07:16:43.590Z"
+      "fetched_at": "2026-07-03T06:09:10.444Z"
     },
     {
       "id": "cbu-policy-news",
@@ -378,9 +378,9 @@
       "fetch_url": "https://cbu.uz/en/press_center/news/",
       "ok": true,
       "candidate_count": 0,
-      "excluded_count": 347,
+      "excluded_count": 352,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-18T07:16:43.590Z"
+      "fetched_at": "2026-07-03T06:09:10.444Z"
     },
     {
       "id": "customs-committee-news",
@@ -392,7 +392,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-18T07:16:43.590Z"
+      "fetched_at": "2026-07-03T06:09:10.444Z"
     },
     {
       "id": "mef-policy-news",
@@ -401,10 +401,10 @@
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
       "ok": true,
-      "candidate_count": 0,
-      "excluded_count": 12,
+      "candidate_count": 1,
+      "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-18T07:16:43.590Z"
+      "fetched_at": "2026-07-03T06:09:10.444Z"
     },
     {
       "id": "tax-committee-news",
@@ -416,7 +416,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-18T07:16:43.590Z"
+      "fetched_at": "2026-07-03T06:09:10.444Z"
     },
     {
       "id": "energy-ministry-news",
@@ -424,12 +424,11 @@
       "url": "https://gov.uz/en/minenergy/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": false,
+      "ok": true,
       "candidate_count": 0,
-      "excluded_count": 0,
+      "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-18T07:16:43.590Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-07-03T06:09:10.444Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -441,7 +440,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-18T07:16:43.590Z"
+      "fetched_at": "2026-07-03T06:09:10.444Z"
     },
     {
       "id": "justice-ministry-news",
@@ -453,10 +452,137 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-06-18T07:16:43.590Z"
+      "fetched_at": "2026-07-03T06:09:10.444Z"
     }
   ],
   "reform_packages": [
+    {
+      "package_id": "pkg-monetary-prudential-parameters-2026-06-29",
+      "title": "Monetary and financial-sector parameter reform",
+      "policy_area": "Monetary policy and prudential regulation",
+      "reform_category": "monetary_policy",
+      "current_stage": "Instructions issued",
+      "current_stage_date": "2026-06-29",
+      "next_milestone": "No future milestone published in verified source",
+      "next_milestone_date": "2026-06-29",
+      "responsible_institutions": [
+        "Official website of the President of the Republic of Uzbekistan"
+      ],
+      "legal_basis": "Verified official source event: President of Uzbekistan discusses further development of partnership with the World Bank.",
+      "official_basis": "Official website of the President of the Republic of Uzbekistan",
+      "short_summary": "The cited official document updates monetary policy and prudential regulation rules or procedures.",
+      "parameters_or_amounts": [
+        "verified official measure"
+      ],
+      "source_confidence": "medium",
+      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "model_relevance": [
+        "Inflation",
+        "Credit conditions",
+        "Financial stability"
+      ],
+      "policy_channels": [
+        "Inflation",
+        "Credit conditions",
+        "Financial stability"
+      ],
+      "measure_tracks": [
+        {
+          "id": "monetary-prudential-parameters-measure-1",
+          "label": "verified official measure",
+          "status": "source verified"
+        }
+      ],
+      "implementation_milestones": [
+        {
+          "id": "monetary-prudential-parameters-instructions_issued-2026-06-29",
+          "label": "official measure recorded",
+          "date": "2026-06-29",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-06-29-president-of-uzbekistan-discusses-further-development-of-partnership-"
+          ],
+          "confidence": "medium"
+        }
+      ],
+      "official_source_events": [
+        {
+          "id": "source-event-2026-06-29-president-of-uzbekistan-discusses-further-development-of-partnership-",
+          "title": "President of Uzbekistan discusses further development of partnership with the World Bank",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9364",
+          "source_published_at": "2026-06-29",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-07-03T06:09:10.444Z",
+          "localized": {
+            "title": {
+              "en": "President of Uzbekistan discusses further development of partnership with the World Bank",
+              "ru": "Президент Узбекистана обсудил дальнейшее развитие партнёрства со Всемирным банком",
+              "uz": "Ўзбекистон Президенти Жаҳон банки билан шерикликни янада ривожлантириш масалаларини муҳокама қилди"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "Эффективно внедряются новые инструменты финансирования. Особое внимание уделено расширению использования инструментов Группы Банка по поддержке развития малого и среднего предпринимательства, реализации мер по сокращению бедности, совместному продвижению программ приватизации государственных предприятий, внедрению искусственного интеллекта в секторах экономики.",
+              "uz": "Молиялаштиришнинг янги механизмлари самарали жорий этилмоқда."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9364",
+              "ru": "https://president.uz/ru/lists/view/9364",
+              "uz": "https://president.uz/uz/lists/view/9364"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        }
+      ],
+      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
+      "digest": {
+        "changed": "verified official measure",
+        "applies_to": "Monetary policy and prudential regulation",
+        "effective_status": "Instructions issued (2026-06-29)",
+        "document": "President of Uzbekistan discusses further development of partnership with the World Bank"
+      },
+      "localized": {
+        "title": {
+          "ru": "Президент Узбекистана обсудил дальнейшее развитие партнёрства со Всемирным банком",
+          "uz": "Ўзбекистон Президенти Жаҳон банки билан шерикликни янада ривожлантириш масалаларини муҳокама қилди"
+        },
+        "short_summary": {
+          "ru": "Эффективно внедряются новые инструменты финансирования.",
+          "uz": "Молиялаштиришнинг янги механизмлари самарали жорий этилмоқда."
+        },
+        "parameters_or_amounts": {
+          "ru": [
+            "Эффективно внедряются новые инструменты финансирования.",
+            "Особое внимание уделено расширению использования инструментов Группы Банка по поддержке развития малого и среднего предпринимательства, реализации мер по сокращению бедности, совместному продвижению программ приватизации государственных предприятий, внедрению искусственного интеллекта в секторах экономики."
+          ],
+          "uz": [
+            "Молиялаштиришнинг янги механизмлари самарали жорий этилмоқда."
+          ]
+        },
+        "digest": {
+          "ru": {
+            "changed": "Эффективно внедряются новые инструменты финансирования.",
+            "document": "Президент Узбекистана обсудил дальнейшее развитие партнёрства со Всемирным банком"
+          },
+          "uz": {
+            "changed": "Молиялаштиришнинг янги механизмлари самарали жорий этилмоқда.",
+            "document": "Ўзбекистон Президенти Жаҳон банки билан шерикликни янада ривожлантириш масалаларини муҳокама қилди"
+          }
+        }
+      }
+    },
     {
       "package_id": "pkg-customs-clearance-digitalization-2026-06-17",
       "title": "Risk-based customs clearance and electronic declaration reform",
@@ -3474,6 +3600,38 @@
       }
     ],
     "package_links": [
+      {
+        "package_id": "pkg-monetary-prudential-parameters-2026-06-29",
+        "active_lenses": [
+          {
+            "model_id": "QPM",
+            "channel": "Macro-financial and inflation transmission context.",
+            "caveat": "Possible lens only."
+          }
+        ],
+        "gated_lenses": [
+          {
+            "model_id": "CGE",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "FPP",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "HFI",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "Synthesis",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          }
+        ]
+      },
       {
         "package_id": "pkg-customs-clearance-digitalization-2026-06-17",
         "active_lenses": [
