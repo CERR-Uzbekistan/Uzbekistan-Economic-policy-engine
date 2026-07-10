@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-07-04T05:59:23.134Z",
+  "generated_at": "2026-07-10T06:26:03.248Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -303,12 +303,11 @@
       "url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
       "parser": "lexuz-official-search",
       "fetch_url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
-      "ok": false,
-      "candidate_count": 0,
+      "ok": true,
+      "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-04T05:59:23.134Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-07-10T06:26:03.248Z"
     },
     {
       "id": "president-reform-news",
@@ -317,10 +316,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 0,
-      "excluded_count": 12,
-      "link_invalid_count": 2,
-      "fetched_at": "2026-07-04T05:59:23.134Z"
+      "candidate_count": 5,
+      "excluded_count": 7,
+      "link_invalid_count": 0,
+      "fetched_at": "2026-07-10T06:26:03.248Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -332,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-04T05:59:23.134Z"
+      "fetched_at": "2026-07-10T06:26:03.248Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -344,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-04T05:59:23.134Z"
+      "fetched_at": "2026-07-10T06:26:03.248Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -356,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-04T05:59:23.134Z"
+      "fetched_at": "2026-07-10T06:26:03.248Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -368,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-04T05:59:23.134Z"
+      "fetched_at": "2026-07-10T06:26:03.248Z"
     },
     {
       "id": "cbu-policy-news",
@@ -380,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 352,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-04T05:59:23.134Z"
+      "fetched_at": "2026-07-10T06:26:03.248Z"
     },
     {
       "id": "customs-committee-news",
@@ -392,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-04T05:59:23.134Z"
+      "fetched_at": "2026-07-10T06:26:03.248Z"
     },
     {
       "id": "mef-policy-news",
@@ -401,10 +400,10 @@
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
       "ok": true,
-      "candidate_count": 3,
-      "excluded_count": 9,
+      "candidate_count": 1,
+      "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-04T05:59:23.134Z"
+      "fetched_at": "2026-07-10T06:26:03.248Z"
     },
     {
       "id": "tax-committee-news",
@@ -416,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-04T05:59:23.134Z"
+      "fetched_at": "2026-07-10T06:26:03.248Z"
     },
     {
       "id": "energy-ministry-news",
@@ -428,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-04T05:59:23.134Z"
+      "fetched_at": "2026-07-10T06:26:03.248Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -436,12 +435,11 @@
       "url": "https://gov.uz/en/miit/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": false,
+      "ok": true,
       "candidate_count": 0,
-      "excluded_count": 0,
+      "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-04T05:59:23.134Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-07-10T06:26:03.248Z"
     },
     {
       "id": "justice-ministry-news",
@@ -453,10 +451,459 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-04T05:59:23.134Z"
+      "fetched_at": "2026-07-10T06:26:03.248Z"
     }
   ],
   "reform_packages": [
+    {
+      "package_id": "pkg-large-investment-integrity-competition-review-2026-07-09",
+      "title": "Large investment project integrity and competition review reform",
+      "policy_area": "Investment project anti-corruption review and competition impact assessment",
+      "reform_category": "business_environment",
+      "current_stage": "Regulation approved",
+      "current_stage_date": "2026-07-09",
+      "next_milestone": "No future milestone published in verified source",
+      "next_milestone_date": "2026-07-09",
+      "responsible_institutions": [
+        "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+      ],
+      "legal_basis": "Verified official source event: 3894 09.07.2026 Davlat organi yoki tashkilotida mehnat shartnomasi tugatilgan yoki xizmatdan boʻshatilgan xodimni oʻzi nazoratni amalga oshirgan tashkilotlarga ishga qabul qilishda korrupsiyaga qarshi ichki nazorat bo‘linmasidan xulosa olish tartibi to‘g‘risidagi nizomni tasdiqlash haqida.",
+      "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+      "short_summary": "Large investment projects get anti-corruption review and competition-impact assessment procedures.",
+      "parameters_or_amounts": [
+        "Anti-corruption expert review procedure for large investment projects is approved.",
+        "Competition-environment impact assessment procedure is approved."
+      ],
+      "source_confidence": "medium",
+      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "model_relevance": [
+        "Private investment",
+        "Market structure",
+        "Governance quality"
+      ],
+      "policy_channels": [
+        "Investment project appraisal",
+        "Anti-corruption screening",
+        "Competition impact assessment"
+      ],
+      "measure_tracks": [
+        {
+          "id": "large-investment-integrity-competition-review-measure-1",
+          "label": "Investment integrity and competition review procedures were approved",
+          "status": "approved"
+        }
+      ],
+      "implementation_milestones": [
+        {
+          "id": "large-investment-integrity-competition-review-approved-2026-05-08",
+          "label": "official measure approved",
+          "date": "2026-05-08",
+          "date_precision": "day",
+          "event_type": "approved",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-05-08-3833-08-05-2026-yirik-investitsiya-loyihalarini-korrupsiyaga-qarshi-e"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "large-investment-integrity-competition-review-approved-2026-07-09",
+          "label": "official measure approved",
+          "date": "2026-07-09",
+          "date_precision": "day",
+          "event_type": "approved",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-07-09-3894-09-07-2026-davlat-organi-yoki-tashkilotida-mehnat-shartnomasi-tu"
+          ],
+          "confidence": "medium"
+        }
+      ],
+      "official_source_events": [
+        {
+          "id": "source-event-2026-05-08-3833-08-05-2026-yirik-investitsiya-loyihalarini-korrupsiyaga-qarshi-e",
+          "title": "3833 08.05.2026 Yirik investitsiya loyihalarini korrupsiyaga qarshi ekspertizadan o‘tkazish va ularning raqobat muhitiga ta’sirini baholash tartibi to‘g‘risidagi yo‘riqnomani tasdiqlash haqida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/8184103",
+          "source_published_at": "2026-05-08",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "approved",
+          "summary": "3833 08.05.2026 Yirik investitsiya loyihalarini korrupsiyaga qarshi ekspertizadan o‘tkazish va ularning raqobat muhitiga ta’sirini baholash tartibi to‘g‘risidagi yo‘riqnomani tasdiqlash haqida",
+          "source_url_status": "verified",
+          "extracted_at": "2026-05-15T09:00:00.000Z",
+          "localized": {
+            "title": {
+              "uz": "3833 08.05.2026 Yirik investitsiya loyihalarini korrupsiyaga qarshi ekspertizadan o‘tkazish va ularning raqobat muhitiga ta’sirini baholash tartibi to‘g‘risidagi yo‘riqnomani tasdiqlash haqida"
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/8184103",
+              "uz": "https://lex.uz/uz/docs/8184103"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-07-09-3894-09-07-2026-davlat-organi-yoki-tashkilotida-mehnat-shartnomasi-tu",
+          "title": "3894 09.07.2026 Davlat organi yoki tashkilotida mehnat shartnomasi tugatilgan yoki xizmatdan boʻshatilgan xodimni oʻzi nazoratni amalga oshirgan tashkilotlarga ishga qabul qilishda korrupsiyaga qarshi ichki nazorat bo‘linmasidan xulosa olish tartibi to‘g‘risidagi nizomni tasdiqlash haqida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/8315536",
+          "source_published_at": "2026-07-09",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "approved",
+          "summary": "Included by Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-07-10T06:26:03.248Z",
+          "localized": {
+            "title": {
+              "uz": "3894 09.07.2026 Davlat organi yoki tashkilotida mehnat shartnomasi tugatilgan yoki xizmatdan boʻshatilgan xodimni oʻzi nazoratni amalga oshirgan tashkilotlarga ishga qabul qilishda korrupsiyaga qarshi ichki nazorat bo‘linmasidan xulosa olish tartibi to‘g‘risidagi nizomni tasdiqlash haqida"
+            },
+            "summary": {
+              "uz": "Included by Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: official_policy_announcement, implementation_program."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/8315536",
+              "uz": "https://lex.uz/uz/docs/8315536"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        }
+      ],
+      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
+      "digest": {
+        "changed": "Anti-corruption expert review procedure for large investment projects is approved.",
+        "applies_to": "Investment project anti-corruption review and competition impact assessment",
+        "effective_status": "Regulation approved (2026-07-09)",
+        "document": "3894 09.07.2026 Davlat organi yoki tashkilotida mehnat shartnomasi tugatilgan yoki xizmatdan boʻshatilgan xodimni oʻzi nazoratni amalga oshirgan tashkilotlarga ishga qabul qilishda korrupsiyaga qarshi ichki nazorat bo‘linmasidan xulosa olish tartibi to‘g‘risidagi nizomni tasdiqlash haqida"
+      },
+      "localized": {
+        "title": {
+          "uz": "3894 09.07.2026 Davlat organi yoki tashkilotida mehnat shartnomasi tugatilgan yoki xizmatdan boʻshatilgan xodimni oʻzi nazoratni amalga oshirgan tashkilotlarga ishga qabul qilishda korrupsiyaga qarshi ichki nazorat bo‘linmasidan xulosa olish tartibi to‘g‘risidagi nizomni tasdiqlash haqida"
+        },
+        "short_summary": {
+          "uz": "Included by Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: official_policy_announcement, implementation_program."
+        },
+        "parameters_or_amounts": {
+          "uz": [
+            "Included by Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: official_policy_announcement, implementation_program."
+          ]
+        },
+        "digest": {
+          "uz": {
+            "changed": "Included by Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+            "document": "3894 09.07.2026 Davlat organi yoki tashkilotida mehnat shartnomasi tugatilgan yoki xizmatdan boʻshatilgan xodimni oʻzi nazoratni amalga oshirgan tashkilotlarga ishga qabul qilishda korrupsiyaga qarshi ichki nazorat bo‘linmasidan xulosa olish tartibi to‘g‘risidagi nizomni tasdiqlash haqida"
+          }
+        }
+      }
+    },
+    {
+      "package_id": "pkg-public-services-digital-legal-2026-07-07",
+      "title": "Digital public service and legal process reform",
+      "policy_area": "Digital public administration and legal services",
+      "reform_category": "digital_public_admin",
+      "current_stage": "Instructions issued",
+      "current_stage_date": "2026-07-07",
+      "next_milestone": "No future milestone published in verified source",
+      "next_milestone_date": "2026-07-07",
+      "responsible_institutions": [
+        "Official website of the President of the Republic of Uzbekistan"
+      ],
+      "legal_basis": "Verified official source event: Measures to implement a unified digital platform in public administration considered.",
+      "official_basis": "Official website of the President of the Republic of Uzbekistan",
+      "short_summary": "Bureaucracy-reduction measures set targets to cut state functions, simplify services, and move more delivery online.",
+      "parameters_or_amounts": [
+        "The “Eliminating Bureaucracy – 2030” program targets a 30 percent reduction in state-body functions.",
+        "Business requirements are to be optimized by up to 20 percent.",
+        "The share of electronic public services is targeted to exceed 90 percent.",
+        "The “zero bureaucracy” principle is proposed for 783 public services.",
+        "550 public services are to be converted to electronic format, with service stages halved.",
+        "80 services are planned for proactive and composite delivery formats.",
+        "Another 80 services are to be shortened from an average 13 days to 6 days.",
+        "Fees for 25 service types are to be reduced, with estimated annual savings of up to 851 billion soums.",
+        "10 services are planned for transfer to the private sector.",
+        "15 certificate and document types are to be digitized, removing repeat requests across more than 270 services.",
+        "State functions, mandatory requirements, and public services are to be maintained on reestr.gov.uz."
+      ],
+      "source_confidence": "high",
+      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "model_relevance": [
+        "Public administration",
+        "Transaction costs",
+        "Productivity"
+      ],
+      "policy_channels": [
+        "Public service delivery",
+        "Administrative burden",
+        "Digital public administration"
+      ],
+      "measure_tracks": [
+        {
+          "id": "public-services-digital-legal-measure-1",
+          "label": "Bureaucracy-reduction targets and public-service simplification measures were published",
+          "status": "source verified"
+        }
+      ],
+      "implementation_milestones": [
+        {
+          "id": "public-services-digital-legal-instructions_issued-2026-05-12",
+          "label": "official measure recorded",
+          "date": "2026-05-12",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-05-12-measures-to-reduce-bureaucracy-in-public-service-delivery-reviewed"
+          ],
+          "confidence": "medium",
+          "related_next_milestone_ids": [
+            "public-services-digital-legal-instructions_issued-2026-05-14"
+          ]
+        },
+        {
+          "id": "public-services-digital-legal-instructions_issued-2026-05-14",
+          "label": "official measure recorded",
+          "date": "2026-05-14",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-05-14-president-of-uzbekistan-to-pay-working-visit-to-kazakhstan"
+          ],
+          "confidence": "medium"
+        },
+        {
+          "id": "public-services-digital-legal-instructions_issued-2026-06-09",
+          "label": "official measure recorded",
+          "date": "2026-06-09",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-06-09-measures-presented-for-the-widespread-adoption-of-digital-technologie"
+          ],
+          "confidence": "medium"
+        },
+        {
+          "id": "public-services-digital-legal-instructions_issued-2026-07-07",
+          "label": "official measure recorded",
+          "date": "2026-07-07",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-07-07-measures-to-implement-a-unified-digital-platform-in-public-administra"
+          ],
+          "confidence": "high"
+        }
+      ],
+      "official_source_events": [
+        {
+          "id": "source-event-2026-05-12-measures-to-reduce-bureaucracy-in-public-service-delivery-reviewed",
+          "title": "Measures to reduce bureaucracy in public service delivery reviewed",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9197",
+          "source_published_at": "2026-05-12",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Measures to reduce bureaucracy in public service delivery reviewed",
+          "source_url_status": "verified",
+          "extracted_at": "2026-05-15T09:00:00.000Z",
+          "localized": {
+            "title": {
+              "en": "Measures to reduce bureaucracy in public service delivery reviewed",
+              "ru": "Рассмотрены меры по сокращению бюрократии при оказании государственных услуг",
+              "uz": "Давлат хизматларини кўрсатишда бюрократияни қисқартириш чоралари кўриб чиқилди"
+            },
+            "summary": {
+              "ru": "При Агентстве стратегического развития и реформ создан отдельный проектный офис. В частности, предложено внедрить принцип «нулевой бюрократии» в 783 видах государственных услуг.",
+              "uz": "Стратегик ривожланиш ва ислоҳотлар агентлиги ҳузурида алоҳида лойиҳа офиси ташкил этилган. Хусусан, 783 та давлат хизматига “ноль бюрократия” тамойилини жорий этиш таклиф қилинди."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9197",
+              "ru": "https://president.uz/ru/lists/view/9197",
+              "uz": "https://president.uz/uz/lists/view/9197"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-05-14-president-of-uzbekistan-to-pay-working-visit-to-kazakhstan",
+          "title": "President of Uzbekistan to pay working visit to Kazakhstan",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9207",
+          "source_published_at": "2026-05-14",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "President of Uzbekistan to pay working visit to Kazakhstan",
+          "source_url_status": "verified",
+          "extracted_at": "2026-05-17T06:01:40.660Z",
+          "localized": {
+            "title": {
+              "en": "President of Uzbekistan to pay working visit to Kazakhstan",
+              "ru": "Президент Узбекистана посетит Казахстан с рабочим визитом",
+              "uz": "Ўзбекистон Президенти амалий ташриф билан Қозоғистонда бўлади"
+            },
+            "summary": {
+              "uz": "Тадбир давомида кўп томонлама ҳамкорликни, биринчи навбатда, савдо-иқтисодиёт, инвестиция, транспорт-коммуникация ва экология соҳаларида ҳамда рақамли инфратузилмани ривожлантириш, инновацион технологияларни жорий этиш ва сунъий интеллектни амалда қўллаш борасида янада кенгайтириш хусусида сўз юритилади."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9207",
+              "ru": "https://president.uz/ru/lists/view/9207",
+              "uz": "https://president.uz/uz/lists/view/9207"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-06-09-measures-presented-for-the-widespread-adoption-of-digital-technologie",
+          "title": "Measures presented for the widespread adoption of digital technologies in the mining and geology sector",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9294",
+          "source_published_at": "2026-06-09",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-06-10T06:48:58.796Z",
+          "localized": {
+            "title": {
+              "en": "Measures presented for the widespread adoption of digital technologies in the mining and geology sector",
+              "ru": "Рассмотрены меры по широкому внедрению цифровых технологий в горной промышленности и геологии",
+              "uz": "Тоғ-кон саноати ва геология соҳасида рақамли технологияларни кенг жорий этиш чоралари кўриб чиқилди"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "Также внедрена информационная система «Геомониторинг», оцифрованы данные по более чем 2 тысячам месторождений. В этих целях планируется внедрить решения на основе искусственного интеллекта на всех этапах геологоразведочного процесса.",
+              "uz": "Шунингдек, “Геомониторинг” ахборот тизими жорий қилиниб, 2 мингдан ортиқ қазилма участкаларига оид маълумотлар рақамлаштирилган. Шу мақсадда геология-қидирув жараёнларининг барча босқичларига сунъий интеллект ечимларини жорий этиш режалаштирилган."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9294",
+              "ru": "https://president.uz/ru/lists/view/9294",
+              "uz": "https://president.uz/uz/lists/view/9294"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-07-07-measures-to-implement-a-unified-digital-platform-in-public-administra",
+          "title": "Measures to implement a unified digital platform in public administration considered",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9391",
+          "source_published_at": "2026-07-07",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, parameter_change, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-07-10T06:26:03.248Z",
+          "localized": {
+            "title": {
+              "en": "Measures to implement a unified digital platform in public administration considered",
+              "ru": "Рассмотрены меры по внедрению единой цифровой платформы в государственном управлении",
+              "uz": "Давлат бошқарувида ягона рақамли платформани жорий этиш чоралари кўриб чиқилди"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, parameter_change, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "За последние годы в нашей стране проведена широкомасштабная работа по расширению цифровых государственных услуг, внедрению современных информационных систем в деятельность государственных органов, а также повышению удобств для населения и субъектов предпринимательства. Благодаря этому Узбекистан поднялся на 24 позиции в рейтинге ООН по развитию электронного правительства.",
+              "uz": "Сўнгги йилларда мамлакатимизда рақамли давлат хизматларини кенгайтириш, давлат идоралари фаолиятига замонавий ахборот тизимларини жорий этиш, аҳоли ва тадбиркорлар учун қулайликларни ошириш бўйича кенг кўламли ишлар амалга оширилди. Жорий йилда рақамли хизматлар сони 880 тага, улардан фойдаланувчилар сони эса 15,5 миллион нафарга етиши кутилмоқда."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9391",
+              "ru": "https://president.uz/ru/lists/view/9391",
+              "uz": "https://president.uz/uz/lists/view/9391"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        }
+      ],
+      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
+      "digest": {
+        "changed": "The “Eliminating Bureaucracy – 2030” program targets a 30 percent reduction in state-body functions.",
+        "applies_to": "Digital public administration and legal services",
+        "effective_status": "Instructions issued (2026-07-07)",
+        "document": "Measures to implement a unified digital platform in public administration considered"
+      },
+      "localized": {
+        "title": {
+          "ru": "Рассмотрены меры по внедрению единой цифровой платформы в государственном управлении",
+          "uz": "Давлат бошқарувида ягона рақамли платформани жорий этиш чоралари кўриб чиқилди"
+        },
+        "short_summary": {
+          "ru": "За последние годы в нашей стране проведена широкомасштабная работа по расширению цифровых государственных услуг, внедрению современных информационных систем в деятельность государственных органов, а также повышению удобств для населения и субъектов предпринимательства.",
+          "uz": "Сўнгги йилларда мамлакатимизда рақамли давлат хизматларини кенгайтириш, давлат идоралари фаолиятига замонавий ахборот тизимларини жорий этиш, аҳоли ва тадбиркорлар учун қулайликларни ошириш бўйича кенг кўламли ишлар амалга оширилди."
+        },
+        "parameters_or_amounts": {
+          "ru": [
+            "За последние годы в нашей стране проведена широкомасштабная работа по расширению цифровых государственных услуг, внедрению современных информационных систем в деятельность государственных органов, а также повышению удобств для населения и субъектов предпринимательства.",
+            "Благодаря этому Узбекистан поднялся на 24 позиции в рейтинге ООН по развитию электронного правительства.",
+            "В этой связи предложено поэтапно внедрить единую интегрированную цифровую платформу государственного управления.",
+            "Платформа позволит с использованием технологий искусственного интеллекта анализировать данные, заблаговременно выявлять проблемы в разрезе регионов, осуществлять мониторинг исполнения принятых решений, эффективно распределять ресурсы и повысить качество государственного управления.",
+            "Глава нашего государства подчеркнул, что данную цифровую систему управления необходимо внедрить в этом году в столице, а начиная со следующего года – во всех регионах страны.",
+            "Внедрение единой национальной системы классификации позволит сократить излишние бюрократические процедуры для субъектов предпринимательства, упростить обмен данными между государственными органами и повысить точность статистической отчетности.",
+            "Представлена также инициатива по созданию национальной навигационной системы.",
+            "До 2030 года намечено довести объем экспорта IT-услуг до 5 миллиардов долларов, создать 5 тысяч действующих стартапов и привлечь инвестиции в объеме 2 миллиардов долларов."
+          ],
+          "uz": [
+            "Сўнгги йилларда мамлакатимизда рақамли давлат хизматларини кенгайтириш, давлат идоралари фаолиятига замонавий ахборот тизимларини жорий этиш, аҳоли ва тадбиркорлар учун қулайликларни ошириш бўйича кенг кўламли ишлар амалга оширилди.",
+            "Жорий йилда рақамли хизматлар сони 880 тага, улардан фойдаланувчилар сони эса 15,5 миллион нафарга етиши кутилмоқда.",
+            "Шу боис, давлат бошқарувининг ягона интеграциялашган рақамли платформасини босқичма-босқич жорий этиш таклиф қилинди.",
+            "Платформа сунъий интеллект технологиялари асосида маълумотларни таҳлил қилиш, ҳудудлар кесимида муаммоларни барвақт аниқлаш, қарорлар ижросини мониторинг қилиш, ресурсларни тўғри йўналтириш ва бошқарув самарадорлигини ошириш имконини беради.",
+            "Давлатимиз раҳбари жорий йилда ушбу рақамли бошқарув тизимини пойтахтда, келгуси йилдан эса барча ҳудудларда жорий қилиш зарурлигини таъкидлади.",
+            "Ягона миллий таснифлаш тизими жорий этилса, тадбиркорлар учун ортиқча бюрократик жараёнлар қисқаради, давлат идоралари ўртасида маълумот алмашинуви соддалашади, статистик ҳисоботларнинг аниқлиги ошади.",
+            "Шунингдек, миллий навигация тизимини яратиш таклифи билдирилди.",
+            "Миллий навигация тизими геомаълумотларни ягона стандарт асосида шакллантириш, транспорт, логистика, тезкор хизматлар, шаҳарсозлик ва давлат хизматларини сифатли ташкил этишга хизмат қилади."
+          ]
+        },
+        "digest": {
+          "ru": {
+            "changed": "За последние годы в нашей стране проведена широкомасштабная работа по расширению цифровых государственных услуг, внедрению современных информационных систем в деятельность государственных органов, а также повышению удобств для населения и субъектов предпринимательства.",
+            "document": "Рассмотрены меры по внедрению единой цифровой платформы в государственном управлении"
+          },
+          "uz": {
+            "changed": "Сўнгги йилларда мамлакатимизда рақамли давлат хизматларини кенгайтириш, давлат идоралари фаолиятига замонавий ахборот тизимларини жорий этиш, аҳоли ва тадбиркорлар учун қулайликларни ошириш бўйича кенг кўламли ишлар амалга оширилди.",
+            "document": "Давлат бошқарувида ягона рақамли платформани жорий этиш чоралари кўриб чиқилди"
+          }
+        }
+      }
+    },
     {
       "package_id": "pkg-customs-clearance-digitalization-2026-07-03",
       "title": "Risk-based customs clearance and electronic declaration reform",
@@ -1363,248 +1810,6 @@
       }
     },
     {
-      "package_id": "pkg-public-services-digital-legal-2026-06-09",
-      "title": "Digital public service and legal process reform",
-      "policy_area": "Digital public administration and legal services",
-      "reform_category": "digital_public_admin",
-      "current_stage": "Instructions issued",
-      "current_stage_date": "2026-06-09",
-      "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-06-09",
-      "responsible_institutions": [
-        "Official website of the President of the Republic of Uzbekistan"
-      ],
-      "legal_basis": "Verified official source event: Measures presented for the widespread adoption of digital technologies in the mining and geology sector.",
-      "official_basis": "Official website of the President of the Republic of Uzbekistan",
-      "short_summary": "Bureaucracy-reduction measures set targets to cut state functions, simplify services, and move more delivery online.",
-      "parameters_or_amounts": [
-        "The “Eliminating Bureaucracy – 2030” program targets a 30 percent reduction in state-body functions.",
-        "Business requirements are to be optimized by up to 20 percent.",
-        "The share of electronic public services is targeted to exceed 90 percent.",
-        "The “zero bureaucracy” principle is proposed for 783 public services.",
-        "550 public services are to be converted to electronic format, with service stages halved.",
-        "80 services are planned for proactive and composite delivery formats.",
-        "Another 80 services are to be shortened from an average 13 days to 6 days.",
-        "Fees for 25 service types are to be reduced, with estimated annual savings of up to 851 billion soums.",
-        "10 services are planned for transfer to the private sector.",
-        "15 certificate and document types are to be digitized, removing repeat requests across more than 270 services.",
-        "State functions, mandatory requirements, and public services are to be maintained on reestr.gov.uz."
-      ],
-      "source_confidence": "medium",
-      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
-      "model_relevance": [
-        "Public administration",
-        "Transaction costs",
-        "Productivity"
-      ],
-      "policy_channels": [
-        "Public service delivery",
-        "Administrative burden",
-        "Digital public administration"
-      ],
-      "measure_tracks": [
-        {
-          "id": "public-services-digital-legal-measure-1",
-          "label": "Bureaucracy-reduction targets and public-service simplification measures were published",
-          "status": "source verified"
-        }
-      ],
-      "implementation_milestones": [
-        {
-          "id": "public-services-digital-legal-instructions_issued-2026-05-12",
-          "label": "official measure recorded",
-          "date": "2026-05-12",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-05-12-measures-to-reduce-bureaucracy-in-public-service-delivery-reviewed"
-          ],
-          "confidence": "medium",
-          "related_next_milestone_ids": [
-            "public-services-digital-legal-instructions_issued-2026-05-14"
-          ]
-        },
-        {
-          "id": "public-services-digital-legal-instructions_issued-2026-05-14",
-          "label": "official measure recorded",
-          "date": "2026-05-14",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-05-14-president-of-uzbekistan-to-pay-working-visit-to-kazakhstan"
-          ],
-          "confidence": "medium"
-        },
-        {
-          "id": "public-services-digital-legal-instructions_issued-2026-06-09",
-          "label": "official measure recorded",
-          "date": "2026-06-09",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-06-09-measures-presented-for-the-widespread-adoption-of-digital-technologie"
-          ],
-          "confidence": "medium"
-        }
-      ],
-      "official_source_events": [
-        {
-          "id": "source-event-2026-05-12-measures-to-reduce-bureaucracy-in-public-service-delivery-reviewed",
-          "title": "Measures to reduce bureaucracy in public service delivery reviewed",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9197",
-          "source_published_at": "2026-05-12",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Measures to reduce bureaucracy in public service delivery reviewed",
-          "source_url_status": "verified",
-          "extracted_at": "2026-05-15T09:00:00.000Z",
-          "localized": {
-            "title": {
-              "en": "Measures to reduce bureaucracy in public service delivery reviewed",
-              "ru": "Рассмотрены меры по сокращению бюрократии при оказании государственных услуг",
-              "uz": "Давлат хизматларини кўрсатишда бюрократияни қисқартириш чоралари кўриб чиқилди"
-            },
-            "summary": {
-              "ru": "При Агентстве стратегического развития и реформ создан отдельный проектный офис. В частности, предложено внедрить принцип «нулевой бюрократии» в 783 видах государственных услуг.",
-              "uz": "Стратегик ривожланиш ва ислоҳотлар агентлиги ҳузурида алоҳида лойиҳа офиси ташкил этилган. Хусусан, 783 та давлат хизматига “ноль бюрократия” тамойилини жорий этиш таклиф қилинди."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9197",
-              "ru": "https://president.uz/ru/lists/view/9197",
-              "uz": "https://president.uz/uz/lists/view/9197"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-05-14-president-of-uzbekistan-to-pay-working-visit-to-kazakhstan",
-          "title": "President of Uzbekistan to pay working visit to Kazakhstan",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9207",
-          "source_published_at": "2026-05-14",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "President of Uzbekistan to pay working visit to Kazakhstan",
-          "source_url_status": "verified",
-          "extracted_at": "2026-05-17T06:01:40.660Z",
-          "localized": {
-            "title": {
-              "en": "President of Uzbekistan to pay working visit to Kazakhstan",
-              "ru": "Президент Узбекистана посетит Казахстан с рабочим визитом",
-              "uz": "Ўзбекистон Президенти амалий ташриф билан Қозоғистонда бўлади"
-            },
-            "summary": {
-              "uz": "Тадбир давомида кўп томонлама ҳамкорликни, биринчи навбатда, савдо-иқтисодиёт, инвестиция, транспорт-коммуникация ва экология соҳаларида ҳамда рақамли инфратузилмани ривожлантириш, инновацион технологияларни жорий этиш ва сунъий интеллектни амалда қўллаш борасида янада кенгайтириш хусусида сўз юритилади."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9207",
-              "ru": "https://president.uz/ru/lists/view/9207",
-              "uz": "https://president.uz/uz/lists/view/9207"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-06-09-measures-presented-for-the-widespread-adoption-of-digital-technologie",
-          "title": "Measures presented for the widespread adoption of digital technologies in the mining and geology sector",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9294",
-          "source_published_at": "2026-06-09",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-06-10T06:48:58.796Z",
-          "localized": {
-            "title": {
-              "en": "Measures presented for the widespread adoption of digital technologies in the mining and geology sector",
-              "ru": "Рассмотрены меры по широкому внедрению цифровых технологий в горной промышленности и геологии",
-              "uz": "Тоғ-кон саноати ва геология соҳасида рақамли технологияларни кенг жорий этиш чоралари кўриб чиқилди"
-            },
-            "summary": {
-              "en": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
-              "ru": "Также внедрена информационная система «Геомониторинг», оцифрованы данные по более чем 2 тысячам месторождений. В этих целях планируется внедрить решения на основе искусственного интеллекта на всех этапах геологоразведочного процесса.",
-              "uz": "Шунингдек, “Геомониторинг” ахборот тизими жорий қилиниб, 2 мингдан ортиқ қазилма участкаларига оид маълумотлар рақамлаштирилган. Шу мақсадда геология-қидирув жараёнларининг барча босқичларига сунъий интеллект ечимларини жорий этиш режалаштирилган."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9294",
-              "ru": "https://president.uz/ru/lists/view/9294",
-              "uz": "https://president.uz/uz/lists/view/9294"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        }
-      ],
-      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
-      "digest": {
-        "changed": "The “Eliminating Bureaucracy – 2030” program targets a 30 percent reduction in state-body functions.",
-        "applies_to": "Digital public administration and legal services",
-        "effective_status": "Instructions issued (2026-06-09)",
-        "document": "Measures presented for the widespread adoption of digital technologies in the mining and geology sector"
-      },
-      "localized": {
-        "title": {
-          "ru": "Рассмотрены меры по широкому внедрению цифровых технологий в горной промышленности и геологии",
-          "uz": "Тоғ-кон саноати ва геология соҳасида рақамли технологияларни кенг жорий этиш чоралари кўриб чиқилди"
-        },
-        "short_summary": {
-          "ru": "Также внедрена информационная система «Геомониторинг», оцифрованы данные по более чем 2 тысячам месторождений.",
-          "uz": "Шунингдек, “Геомониторинг” ахборот тизими жорий қилиниб, 2 мингдан ортиқ қазилма участкаларига оид маълумотлар рақамлаштирилган."
-        },
-        "parameters_or_amounts": {
-          "ru": [
-            "Также внедрена информационная система «Геомониторинг», оцифрованы данные по более чем 2 тысячам месторождений.",
-            "В этих целях планируется внедрить решения на основе искусственного интеллекта на всех этапах геологоразведочного процесса.",
-            "В этой связи предложено создать Национальную базу геологических данных.",
-            "В рамках этого процесса будет создан Центр технологической трансформации, более 36 тысяч отчетов и первичных данных будут переведены в цифровой формат.",
-            "Эти проекты охватывают пять основных направлений: автоматизацию производственных процессов, цифровизацию корпоративного управления, внедрение технологий искусственного интеллекта, обеспечение трудовой и промышленной безопасности, а также цифровую трансформацию геологоразведочных работ."
-          ],
-          "uz": [
-            "Шунингдек, “Геомониторинг” ахборот тизими жорий қилиниб, 2 мингдан ортиқ қазилма участкаларига оид маълумотлар рақамлаштирилган.",
-            "Шу мақсадда геология-қидирув жараёнларининг барча босқичларига сунъий интеллект ечимларини жорий этиш режалаштирилган.",
-            "Шу муносабат билан Геологик маълумотлар миллий базасини яратиш таклиф қилинди.",
-            "Мазкур жараёнда “Технологик трансформация маркази” ташкил этилиб, мавжуд 36 мингдан ортиқ ҳисоботлар ва бирламчи маълумотлар рақамли кўринишга ўтказилади.",
-            "Ушбу лойиҳалар беш асосий йўналишни қамраб олади: ишлаб чиқариш жараёнларини автоматлаштириш, корпоратив бошқарувни рақамлаштириш, сунъий интеллект технологияларини жорий этиш, меҳнат ва саноат хавфсизлигини таъминлаш ҳамда кон-геология ишларини рақамли трансформация қилиш."
-          ]
-        },
-        "digest": {
-          "ru": {
-            "changed": "Также внедрена информационная система «Геомониторинг», оцифрованы данные по более чем 2 тысячам месторождений.",
-            "document": "Рассмотрены меры по широкому внедрению цифровых технологий в горной промышленности и геологии"
-          },
-          "uz": {
-            "changed": "Шунингдек, “Геомониторинг” ахборот тизими жорий қилиниб, 2 мингдан ортиқ қазилма участкаларига оид маълумотлар рақамлаштирилган.",
-            "document": "Тоғ-кон саноати ва геология соҳасида рақамли технологияларни кенг жорий этиш чоралари кўриб чиқилди"
-          }
-        }
-      }
-    },
-    {
       "package_id": "pkg-tax-administration-incentives-2026-05-22",
       "title": "Tax administration and investment incentive reform",
       "policy_area": "Tax administration and fiscal incentives",
@@ -2442,106 +2647,6 @@
         "digest": {
           "uz": {
             "document": "3266-5 08.05.2026 Toʻlov tizimlari operatorlari, elektron pullar tizimlari operatorlari va toʻlov tashkilotlarida jinoiy faoliyatdan olingan daromadlarni legallashtirishga, terrorizmni moliyalashtirishga va ommaviy qirgʻin qurolini tarqatishni moliyalashtirishga qarshi kurashish boʻyicha ichki nazorat qoidalariga oʻzgartirish va qoʻshimchalar kiritish haqida"
-          }
-        }
-      }
-    },
-    {
-      "package_id": "pkg-large-investment-integrity-competition-review-2026-05-08",
-      "title": "Large investment project integrity and competition review reform",
-      "policy_area": "Investment project anti-corruption review and competition impact assessment",
-      "reform_category": "business_environment",
-      "current_stage": "Regulation approved",
-      "current_stage_date": "2026-05-08",
-      "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-05-08",
-      "responsible_institutions": [
-        "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-      ],
-      "legal_basis": "Verified official source event: 3833 08.05.2026 Yirik investitsiya loyihalarini korrupsiyaga qarshi ekspertizadan o‘tkazish va ularning raqobat muhitiga ta’sirini baholash tartibi to‘g‘risidagi yo‘riqnomani tasdiqlash haqida.",
-      "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-      "short_summary": "Large investment projects get anti-corruption review and competition-impact assessment procedures.",
-      "parameters_or_amounts": [
-        "Anti-corruption expert review procedure for large investment projects is approved.",
-        "Competition-environment impact assessment procedure is approved."
-      ],
-      "source_confidence": "high",
-      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
-      "model_relevance": [
-        "Private investment",
-        "Market structure",
-        "Governance quality"
-      ],
-      "policy_channels": [
-        "Investment project appraisal",
-        "Anti-corruption screening",
-        "Competition impact assessment"
-      ],
-      "measure_tracks": [
-        {
-          "id": "large-investment-integrity-competition-review-measure-1",
-          "label": "Investment integrity and competition review procedures were approved",
-          "status": "approved"
-        }
-      ],
-      "implementation_milestones": [
-        {
-          "id": "large-investment-integrity-competition-review-approved-2026-05-08",
-          "label": "official measure approved",
-          "date": "2026-05-08",
-          "date_precision": "day",
-          "event_type": "approved",
-          "responsible_institutions": [
-            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-05-08-3833-08-05-2026-yirik-investitsiya-loyihalarini-korrupsiyaga-qarshi-e"
-          ],
-          "confidence": "high"
-        }
-      ],
-      "official_source_events": [
-        {
-          "id": "source-event-2026-05-08-3833-08-05-2026-yirik-investitsiya-loyihalarini-korrupsiyaga-qarshi-e",
-          "title": "3833 08.05.2026 Yirik investitsiya loyihalarini korrupsiyaga qarshi ekspertizadan o‘tkazish va ularning raqobat muhitiga ta’sirini baholash tartibi to‘g‘risidagi yo‘riqnomani tasdiqlash haqida",
-          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-          "source_url": "https://lex.uz/uz/docs/8184103",
-          "source_published_at": "2026-05-08",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "approved",
-          "summary": "3833 08.05.2026 Yirik investitsiya loyihalarini korrupsiyaga qarshi ekspertizadan o‘tkazish va ularning raqobat muhitiga ta’sirini baholash tartibi to‘g‘risidagi yo‘riqnomani tasdiqlash haqida",
-          "source_url_status": "verified",
-          "extracted_at": "2026-05-15T09:00:00.000Z",
-          "localized": {
-            "title": {
-              "uz": "3833 08.05.2026 Yirik investitsiya loyihalarini korrupsiyaga qarshi ekspertizadan o‘tkazish va ularning raqobat muhitiga ta’sirini baholash tartibi to‘g‘risidagi yo‘riqnomani tasdiqlash haqida"
-            },
-            "source_url": {
-              "ru": "https://lex.uz/ru/docs/8184103",
-              "uz": "https://lex.uz/uz/docs/8184103"
-            },
-            "source_url_status": {
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        }
-      ],
-      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
-      "digest": {
-        "changed": "Anti-corruption expert review procedure for large investment projects is approved.",
-        "applies_to": "Investment project anti-corruption review and competition impact assessment",
-        "effective_status": "Regulation approved (2026-05-08)",
-        "document": "3833 08.05.2026 Yirik investitsiya loyihalarini korrupsiyaga qarshi ekspertizadan o‘tkazish va ularning raqobat muhitiga ta’sirini baholash tartibi to‘g‘risidagi yo‘riqnomani tasdiqlash haqida"
-      },
-      "localized": {
-        "title": {
-          "uz": "3833 08.05.2026 Yirik investitsiya loyihalarini korrupsiyaga qarshi ekspertizadan o‘tkazish va ularning raqobat muhitiga ta’sirini baholash tartibi to‘g‘risidagi yo‘riqnomani tasdiqlash haqida"
-        },
-        "digest": {
-          "uz": {
-            "document": "3833 08.05.2026 Yirik investitsiya loyihalarini korrupsiyaga qarshi ekspertizadan o‘tkazish va ularning raqobat muhitiga ta’sirini baholash tartibi to‘g‘risidagi yo‘riqnomani tasdiqlash haqida"
           }
         }
       }
@@ -3646,6 +3751,80 @@
     ],
     "package_links": [
       {
+        "package_id": "pkg-large-investment-integrity-competition-review-2026-07-09",
+        "active_lenses": [
+          {
+            "model_id": "DFM",
+            "channel": "High-frequency monitoring context.",
+            "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "I-O",
+            "channel": "Sector-linkage and final-demand propagation context.",
+            "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "PE",
+            "channel": "Direct tariff-incidence and trade-flow context.",
+            "caveat": "Possible lens only."
+          }
+        ],
+        "gated_lenses": [
+          {
+            "model_id": "CGE",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "FPP",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "HFI",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "Synthesis",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          }
+        ]
+      },
+      {
+        "package_id": "pkg-public-services-digital-legal-2026-07-07",
+        "active_lenses": [
+          {
+            "model_id": "DFM",
+            "channel": "General monitoring context.",
+            "caveat": "Possible lens only."
+          }
+        ],
+        "gated_lenses": [
+          {
+            "model_id": "CGE",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "FPP",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "HFI",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "Synthesis",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          }
+        ]
+      },
+      {
         "package_id": "pkg-customs-clearance-digitalization-2026-07-03",
         "active_lenses": [
           {
@@ -3767,38 +3946,6 @@
           {
             "model_id": "PE",
             "channel": "Direct tariff-incidence and trade-flow context.",
-            "caveat": "Possible lens only."
-          }
-        ],
-        "gated_lenses": [
-          {
-            "model_id": "CGE",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "FPP",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "HFI",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "Synthesis",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          }
-        ]
-      },
-      {
-        "package_id": "pkg-public-services-digital-legal-2026-06-09",
-        "active_lenses": [
-          {
-            "model_id": "DFM",
-            "channel": "General monitoring context.",
             "caveat": "Possible lens only."
           }
         ],
@@ -4021,48 +4168,6 @@
         ]
       },
       {
-        "package_id": "pkg-large-investment-integrity-competition-review-2026-05-08",
-        "active_lenses": [
-          {
-            "model_id": "DFM",
-            "channel": "High-frequency monitoring context.",
-            "caveat": "Possible lens only."
-          },
-          {
-            "model_id": "I-O",
-            "channel": "Sector-linkage and final-demand propagation context.",
-            "caveat": "Possible lens only."
-          },
-          {
-            "model_id": "PE",
-            "channel": "Direct tariff-incidence and trade-flow context.",
-            "caveat": "Possible lens only."
-          }
-        ],
-        "gated_lenses": [
-          {
-            "model_id": "CGE",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "FPP",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "HFI",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "Synthesis",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          }
-        ]
-      },
-      {
         "package_id": "pkg-market-fee-rent-collection-2026-05-08",
         "active_lenses": [
           {
@@ -4221,7 +4326,6 @@
     "This is a deterministic official-source reform package artifact.",
     "Generated from configured source URLs at artifact build time.",
     "Public packages are assembled only from source events whose official links passed validation.",
-    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser.",
-    "One or more configured sources failed during this automatic refresh; previous verified packages were carried forward when needed to avoid deleting reforms during a temporary source outage."
+    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser."
   ]
 }
