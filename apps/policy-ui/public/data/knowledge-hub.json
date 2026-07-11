@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-07-10T06:26:03.248Z",
+  "generated_at": "2026-07-11T05:26:25.000Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -303,11 +303,12 @@
       "url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
       "parser": "lexuz-official-search",
       "fetch_url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
-      "ok": true,
-      "candidate_count": 12,
+      "ok": false,
+      "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-10T06:26:03.248Z"
+      "fetched_at": "2026-07-11T05:26:25.000Z",
+      "error": "TypeError: fetch failed"
     },
     {
       "id": "president-reform-news",
@@ -316,10 +317,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 5,
-      "excluded_count": 7,
+      "candidate_count": 4,
+      "excluded_count": 8,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-10T06:26:03.248Z"
+      "fetched_at": "2026-07-11T05:26:25.000Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +332,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-10T06:26:03.248Z"
+      "fetched_at": "2026-07-11T05:26:25.000Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +344,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-10T06:26:03.248Z"
+      "fetched_at": "2026-07-11T05:26:25.000Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +356,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-10T06:26:03.248Z"
+      "fetched_at": "2026-07-11T05:26:25.000Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +368,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-10T06:26:03.248Z"
+      "fetched_at": "2026-07-11T05:26:25.000Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +380,7 @@
       "candidate_count": 0,
       "excluded_count": 352,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-10T06:26:03.248Z"
+      "fetched_at": "2026-07-11T05:26:25.000Z"
     },
     {
       "id": "customs-committee-news",
@@ -391,7 +392,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-10T06:26:03.248Z"
+      "fetched_at": "2026-07-11T05:26:25.000Z"
     },
     {
       "id": "mef-policy-news",
@@ -403,7 +404,7 @@
       "candidate_count": 1,
       "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-10T06:26:03.248Z"
+      "fetched_at": "2026-07-11T05:26:25.000Z"
     },
     {
       "id": "tax-committee-news",
@@ -415,7 +416,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-10T06:26:03.248Z"
+      "fetched_at": "2026-07-11T05:26:25.000Z"
     },
     {
       "id": "energy-ministry-news",
@@ -427,7 +428,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-10T06:26:03.248Z"
+      "fetched_at": "2026-07-11T05:26:25.000Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -439,7 +440,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-10T06:26:03.248Z"
+      "fetched_at": "2026-07-11T05:26:25.000Z"
     },
     {
       "id": "justice-ministry-news",
@@ -447,11 +448,12 @@
       "url": "https://gov.uz/en/adliya/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": true,
+      "ok": false,
       "candidate_count": 0,
-      "excluded_count": 12,
+      "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-10T06:26:03.248Z"
+      "fetched_at": "2026-07-11T05:26:25.000Z",
+      "error": "TypeError: fetch failed"
     }
   ],
   "reform_packages": [
@@ -4326,6 +4328,7 @@
     "This is a deterministic official-source reform package artifact.",
     "Generated from configured source URLs at artifact build time.",
     "Public packages are assembled only from source events whose official links passed validation.",
-    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser."
+    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser.",
+    "One or more configured sources failed during this automatic refresh; previous verified packages were carried forward when needed to avoid deleting reforms during a temporary source outage."
   ]
 }
