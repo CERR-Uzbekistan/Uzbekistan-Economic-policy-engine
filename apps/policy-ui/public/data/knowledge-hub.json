@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-07-14T05:14:20.000Z",
+  "generated_at": "2026-07-15T05:15:08.450Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -307,7 +307,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-14T05:14:20.000Z",
+      "fetched_at": "2026-07-15T05:15:08.450Z",
       "error": "TypeError: fetch failed"
     },
     {
@@ -320,7 +320,7 @@
       "candidate_count": 6,
       "excluded_count": 6,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-14T05:14:20.000Z"
+      "fetched_at": "2026-07-15T05:15:08.450Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -332,7 +332,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-14T05:14:20.000Z"
+      "fetched_at": "2026-07-15T05:15:08.450Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -344,7 +344,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-14T05:14:20.000Z"
+      "fetched_at": "2026-07-15T05:15:08.450Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -356,7 +356,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-14T05:14:20.000Z"
+      "fetched_at": "2026-07-15T05:15:08.450Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -368,7 +368,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-14T05:14:20.000Z"
+      "fetched_at": "2026-07-15T05:15:08.450Z"
     },
     {
       "id": "cbu-policy-news",
@@ -380,7 +380,7 @@
       "candidate_count": 0,
       "excluded_count": 352,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-14T05:14:20.000Z"
+      "fetched_at": "2026-07-15T05:15:08.450Z"
     },
     {
       "id": "customs-committee-news",
@@ -392,7 +392,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-14T05:14:20.000Z"
+      "fetched_at": "2026-07-15T05:15:08.450Z"
     },
     {
       "id": "mef-policy-news",
@@ -401,10 +401,10 @@
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
       "ok": true,
-      "candidate_count": 0,
-      "excluded_count": 12,
-      "link_invalid_count": 1,
-      "fetched_at": "2026-07-14T05:14:20.000Z"
+      "candidate_count": 1,
+      "excluded_count": 11,
+      "link_invalid_count": 0,
+      "fetched_at": "2026-07-15T05:15:08.450Z"
     },
     {
       "id": "tax-committee-news",
@@ -416,7 +416,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-14T05:14:20.000Z"
+      "fetched_at": "2026-07-15T05:15:08.450Z"
     },
     {
       "id": "energy-ministry-news",
@@ -428,7 +428,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-14T05:14:20.000Z"
+      "fetched_at": "2026-07-15T05:15:08.450Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -440,7 +440,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-14T05:14:20.000Z"
+      "fetched_at": "2026-07-15T05:15:08.450Z"
     },
     {
       "id": "justice-ministry-news",
@@ -452,7 +452,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-14T05:14:20.000Z"
+      "fetched_at": "2026-07-15T05:15:08.450Z"
     }
   ],
   "reform_packages": [
@@ -666,7 +666,7 @@
             "Вместе с тем указано на зависимость от импорта, высокие себестоимость и энергопотребление, а также низкую результативность работы по цифровизации и внедрению технологий искусственного интеллекта.",
             "В следующие пять лет будут введены в эксплуатацию новые производственные мощности общей стоимостью 180 миллиардов долларов, реализованы инфраструктурные проекты на сумму 27 миллиардов долларов, а также построены многоквартирные жилые дома, рассчитанные на 800 тысяч семей.",
             "Для обеспечения в отрасли здоровой конкурентной среды и стабильности цен, внедрения действенных механизмов контроля в Правительстве будет создан отдельный проектный офис.",
-            "Кроме того, указано на необходимость создания возможностей для ежегодного производства до 1 миллиона тонн стали за счнт реализации проекта по освоению месторождения «Тебинбулак», а также ускорить оформление соглашения о поставках 700 тысяч тонн железорудного сырья в год с металлургического комбината Таджикистана.",
+            "Кроме того, указано на необходимость создания возможностей для ежегодного производства до 1 миллиона тонн стали за счет реализации проекта по освоению месторождения «Тебинбулак», а также ускорить оформление соглашения о поставках 700 тысяч тонн железорудного сырья в год с металлургического комбината Таджикистана.",
             "Подчеркнув, что крупные частные предприятия готовы организовать полный технологический цикл – от проведения геологоразведочных работ и добычи сырья на месторождениях до выпуска готовой продукции, подчеркнута необходимость создания для них благоприятных условий.",
             "Для стабильного снабжения их сырьем будет создана отдельная компания, которая займется централизованным импортом сырья."
           ],
