@@ -2,9 +2,9 @@
   "source_snapshot_version": "overview-source.v1",
   "status": "source_verified_for_public_artifact",
   "snapshot_note": "Owner-accepted Overview V1 source snapshot. REER remains warning-status with CERR owner-supplied value and source URL pending; replace with automated HFI-backed source when accepted.",
-  "value_hash": "22abd253424ccbeb61007fc0ed2fb3afe4070168a9c04e032e795de5b9cee20f",
+  "value_hash": "855cf2a90655f76ac61c7b56bb1e8b96b9ab1af3cca603363c266cdcdf49d8fd",
   "source_verified_by": "github-actions[bot]",
-  "source_verified_at": "2026-05-21T08:09:42Z",
+  "source_verified_at": "2026-07-16T11:44:22Z",
   "metrics": [
     {
       "metric_id": "real_gdp_growth_annual_yoy",
@@ -86,22 +86,22 @@
     {
       "metric_id": "cpi_mom",
       "value": 0.6,
-      "previous_value": 0.6,
+      "previous_value": 0.2,
       "source_label": "Statistics Agency SIAT CPI data, calculated MoM",
-      "source_period": "April 2026",
+      "source_period": "June 2026",
       "source_url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json",
-      "observed_at": "2026-05-05T00:00:00Z",
+      "observed_at": "2026-07-05T00:00:00Z",
       "claim_type": "observed",
       "unit": "percent MoM",
       "frequency": "monthly",
       "validation_status": "valid",
       "caveats": [
         "Monthly inflation can be volatile; do not present as trend alone.",
-        "previous_value 0.6 is March 2026 SIAT 4585 aggregate index 100.6 minus 100."
+        "previous_value 0.2 is May 2026 SIAT 4585 aggregate index 100.2 minus 100."
       ],
       "warnings": [],
-      "source_reference": "Calculated from SIAT sdmx_data_4585 aggregate CPI previous-month index for April 2026: 100.6 minus 100. Previous value uses March 2026 aggregate index 100.6 minus 100.",
-      "extracted_at": "2026-05-18T15:43:20.610Z"
+      "source_reference": "Calculated from SIAT sdmx_data_4585 aggregate CPI previous-month index for June 2026: 100.6 minus 100. Previous value uses May 2026 aggregate index 100.2 minus 100.",
+      "extracted_at": "2026-07-16T11:44:43.789Z"
     },
     {
       "metric_id": "food_cpi_yoy",
@@ -123,56 +123,56 @@
     },
     {
       "metric_id": "exports_yoy",
-      "value": -28.34,
+      "value": -14.7,
       "previous_value": null,
       "source_label": "Statistics Agency SIAT trade data, calculated YoY",
-      "source_period": "January-March 2026",
+      "source_period": "January-May 2026",
       "source_url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json",
-      "observed_at": "2026-05-04T00:00:00Z",
+      "observed_at": "2026-07-02T00:00:00Z",
       "claim_type": "observed",
       "unit": "percent YoY",
       "frequency": "monthly or quarterly",
       "validation_status": "warning",
       "caveats": [
         "Trade values can be revised; show latest-vintage status.",
-        "YoY rate calculated from official SIAT cumulative monthly export levels: USD 5,809.2 million for January-March 2026 versus USD 8,106.8 million for January-March 2025."
+        "YoY rate calculated from official SIAT cumulative monthly export levels: USD 12,638.1 million for January-May 2026 versus USD 14,816.4 million for January-May 2025."
       ],
       "warnings": [
         "Owner approved calculated YoY from official observed SIAT levels; current lock still classifies this metric as observed pending later cleanup."
       ],
-      "source_reference": "Calculated from SIAT sdmx_data_2407 cumulative monthly export levels for January-March 2026: USD 5,809.2 million versus USD 8,106.8 million for January-March 2025.",
-      "extracted_at": "2026-05-19T05:58:45.628Z"
+      "source_reference": "Calculated from SIAT sdmx_data_2407 cumulative monthly export levels for January-May 2026: USD 12,638.1 million versus USD 14,816.4 million for January-May 2025.",
+      "extracted_at": "2026-07-16T11:44:30.931Z"
     },
     {
       "metric_id": "imports_yoy",
-      "value": 32.83,
+      "value": 22.03,
       "previous_value": null,
       "source_label": "Statistics Agency SIAT trade data, calculated YoY",
-      "source_period": "January-March 2026",
+      "source_period": "January-May 2026",
       "source_url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2414.json",
-      "observed_at": "2026-05-04T00:00:00Z",
+      "observed_at": "2026-07-02T00:00:00Z",
       "claim_type": "observed",
       "unit": "percent YoY",
       "frequency": "monthly or quarterly",
       "validation_status": "warning",
       "caveats": [
         "Trade values can be revised; show latest-vintage status.",
-        "YoY rate calculated from official SIAT cumulative monthly import levels: USD 12,213.8 million for January-March 2026 versus USD 9,194.8 million for January-March 2025."
+        "YoY rate calculated from official SIAT cumulative monthly import levels: USD 20,127.4 million for January-May 2026 versus USD 16,494 million for January-May 2025."
       ],
       "warnings": [
         "Owner approved calculated YoY from official observed SIAT levels; current lock still classifies this metric as observed pending later cleanup."
       ],
-      "source_reference": "Calculated from SIAT sdmx_data_2414 cumulative monthly import levels for January-March 2026: USD 12,213.8 million versus USD 9,194.8 million for January-March 2025.",
-      "extracted_at": "2026-05-19T05:58:45.628Z"
+      "source_reference": "Calculated from SIAT sdmx_data_2414 cumulative monthly import levels for January-May 2026: USD 20,127.4 million versus USD 16,494 million for January-May 2025.",
+      "extracted_at": "2026-07-16T11:44:30.931Z"
     },
     {
       "metric_id": "trade_balance",
-      "value": -6.4,
+      "value": -7.49,
       "previous_value": null,
       "source_label": "Statistics Agency SIAT trade data, calculated",
-      "source_period": "January-March 2026",
-      "source_reference": "Calculated from SIAT cumulative monthly goods trade levels for January-March 2026: exports USD 5,809.2 million from sdmx_data_2407, imports USD 12,213.8 million from sdmx_data_2414. Source URLs: https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json; https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2414.json.",
-      "extracted_at": "2026-05-19T05:58:45.628Z",
+      "source_period": "January-May 2026",
+      "source_reference": "Calculated from SIAT cumulative monthly goods trade levels for January-May 2026: exports USD 12,638.1 million from sdmx_data_2407, imports USD 20,127.4 million from sdmx_data_2414. Source URLs: https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json; https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2414.json.",
+      "extracted_at": "2026-07-16T11:44:30.931Z",
       "claim_type": "observed",
       "unit": "USD million or USD billion",
       "frequency": "monthly or quarterly",
@@ -204,39 +204,39 @@
     },
     {
       "metric_id": "usd_uzs_level",
-      "value": 12076.18,
-      "previous_value": 12097.33,
+      "value": 12088.98,
+      "previous_value": 11979.83,
       "source_label": "Central Bank of Uzbekistan exchange rate",
-      "source_period": "2026-05-21",
-      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-05-21/",
-      "observed_at": "2026-05-21T00:00:00Z",
+      "source_period": "2026-07-16",
+      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-07-16/",
+      "observed_at": "2026-07-16T00:00:00Z",
       "claim_type": "observed",
       "unit": "UZS per USD",
       "frequency": "daily",
       "validation_status": "valid",
       "caveats": [
         "Official/reference rate, not transaction-weighted market average.",
-        "Latest observation: requested 2026-05-21; actual CBU date/rate 2026-05-21, 12076.18 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-04-21; actual CBU date/rate 2026-04-21, 12097.33 UZS per USD."
+        "Latest observation: requested 2026-07-16; actual CBU date/rate 2026-07-16, 12088.98 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-06-16; actual CBU date/rate 2026-06-16, 11979.83 UZS per USD."
       ],
       "warnings": []
     },
     {
       "metric_id": "usd_uzs_mom_change",
-      "value": -0.17,
+      "value": 0.91,
       "previous_value": null,
       "source_label": "CBU exchange rate, calculated",
-      "source_period": "2026-05-21 vs 2026-04-21",
-      "source_reference": "Calculated from CBU official USD rates: 12076.18 on 2026-05-21 and 12097.33 on 2026-04-21. Requested dates: latest 2026-05-21, prior-month 2026-04-21.",
-      "extracted_at": "2026-05-21T08:09:42.493Z",
+      "source_period": "2026-07-16 vs 2026-06-16",
+      "source_reference": "Calculated from CBU official USD rates: 12088.98 on 2026-07-16 and 11979.83 on 2026-06-16. Requested dates: latest 2026-07-16, prior-month 2026-06-16.",
+      "extracted_at": "2026-07-16T11:44:22.569Z",
       "claim_type": "calculated_identity",
       "unit": "percent MoM",
       "frequency": "monthly from daily observations",
       "validation_status": "valid",
       "caveats": [
-        "Latest observation: requested 2026-05-21; actual CBU date/rate 2026-05-21, 12076.18 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-04-21; actual CBU date/rate 2026-04-21, 12097.33 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-05-21; actual CBU date/rate 2025-05-21, 12892.91 UZS per USD.",
+        "Latest observation: requested 2026-07-16; actual CBU date/rate 2026-07-16, 12088.98 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-06-16; actual CBU date/rate 2026-06-16, 11979.83 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-07-16; actual CBU date/rate 2025-07-16, 12778.12 UZS per USD.",
         "Formula: ((latest - comparison) / comparison) * 100.",
         "Rounded to 2 decimal places.",
         "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
@@ -245,20 +245,20 @@
     },
     {
       "metric_id": "usd_uzs_yoy_change",
-      "value": -6.33,
+      "value": -5.39,
       "previous_value": null,
       "source_label": "CBU exchange rate, calculated",
-      "source_period": "2026-05-21 vs 2025-05-21",
-      "source_reference": "Calculated from CBU official USD rates: 12076.18 on 2026-05-21 and 12892.91 on 2025-05-21. Requested dates: latest 2026-05-21, prior-year 2025-05-21.",
-      "extracted_at": "2026-05-21T08:09:42.493Z",
+      "source_period": "2026-07-16 vs 2025-07-16",
+      "source_reference": "Calculated from CBU official USD rates: 12088.98 on 2026-07-16 and 12778.12 on 2025-07-16. Requested dates: latest 2026-07-16, prior-year 2025-07-16.",
+      "extracted_at": "2026-07-16T11:44:22.569Z",
       "claim_type": "calculated_identity",
       "unit": "percent YoY",
       "frequency": "monthly from daily observations",
       "validation_status": "valid",
       "caveats": [
-        "Latest observation: requested 2026-05-21; actual CBU date/rate 2026-05-21, 12076.18 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-04-21; actual CBU date/rate 2026-04-21, 12097.33 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-05-21; actual CBU date/rate 2025-05-21, 12892.91 UZS per USD.",
+        "Latest observation: requested 2026-07-16; actual CBU date/rate 2026-07-16, 12088.98 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-06-16; actual CBU date/rate 2026-06-16, 11979.83 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-07-16; actual CBU date/rate 2025-07-16, 12778.12 UZS per USD.",
         "Formula: ((latest - comparison) / comparison) * 100.",
         "Rounded to 2 decimal places.",
         "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
