@@ -1,4 +1,4 @@
-"""Tests for CGE 1-2-3 solver."""
+"""Tests for the workbook-reconciled CGE 1-2-3 solver."""
 
 import math
 import sys
@@ -6,70 +6,106 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from helpers.validation import CGE_DEFAULTS
+from helpers.validation import CGE_BASE_ENDOGENOUS, CGE_DEFAULTS
 from models.cge import solve_cge
 
 
-def test_cge_base_calibration():
-    """The no-shock run should be the exact comparison baseline."""
+def test_cge_base_reproduces_formula_derived_workbook_equilibrium():
     result = solve_cge(CGE_DEFAULTS)
+
     assert result["error"] is False
     assert result["solver"]["converged"] is True
-    assert abs(result["results"]["Er"] - 1.0) < 0.01
-    assert all(abs(value) < 1e-9 for value in result["changes_from_base"].values())
     assert result["results"] == result["comparison_baseline"]
+    assert all(abs(value) < 1e-9 for value in result["changes_from_base"].values())
+    for key, workbook_value in CGE_BASE_ENDOGENOUS.items():
+        assert math.isclose(
+            result["results"][key],
+            workbook_value,
+            rel_tol=0,
+            abs_tol=6e-7,
+        )
 
 
-def test_cge_reports_rounded_calibration_gaps():
-    """Rounded legacy base constants must not be presented as an exact fit."""
-    result = solve_cge(CGE_DEFAULTS)
-    diagnostics = result["calibration_diagnostics"]
+def test_cge_reports_formula_reconciled_calibration():
+    diagnostics = solve_cge(CGE_DEFAULTS)["calibration_diagnostics"]
 
-    assert diagnostics["status"] == "review_required"
-    assert diagnostics["source_workbook_status"] == "legacy_xls_requires_reconciliation"
-    assert {"TAX", "S", "Z"}.issubset(diagnostics["material_gaps_pct"])
-    assert diagnostics["max_abs_gap_pct"] > 5
+    assert diagnostics["status"] == "formula_reconciled"
+    assert diagnostics["material_gaps_pct"] == {}
+    assert diagnostics["max_abs_gap_pct"] < diagnostics["tolerance_pct"]
+    assert diagnostics["source_workbook_status"] == (
+        "formula_reconciled_stale_saved_scenarios_excluded"
+    )
 
 
 def test_cge_core_identities_and_finite_outputs():
-    """The solved equilibrium should satisfy BoP and accounting identities."""
     result = solve_cge(CGE_DEFAULTS)
     values = result["results"]
-    params = result["parameters_used"]
 
     assert all(math.isfinite(value) for value in values.values())
-    bop_residual = (
-        values["Pm"] * values["M"]
-        - values["Pe"] * values["E"]
-        - params["B"]
-        - params["re"]
-        - params["ft"]
+    assert max(abs(value) for value in result["accounting_residuals"].values()) < 1e-8
+    assert math.isclose(values["Dd"], values["Ds"], abs_tol=1e-6)
+    assert math.isclose(values["Qd"], values["Qs"], abs_tol=1e-6)
+    assert math.isclose(values["Z"], values["S"] / values["Pt"], abs_tol=2e-6)
+    assert math.isclose(
+        values["TB"],
+        values["Pe"] * values["E"] - values["Pm"] * values["M"],
+        abs_tol=2e-6,
     )
-    assert abs(bop_residual) < 5e-6
-    assert abs(values["TB"] - (values["Pe"] * values["E"] - values["Pm"] * values["M"])) < 5e-6
-    assert values["S"] == values["Z"]
 
 
-def test_cge_tariff_increase():
-    """Doubling tariff should depreciate exchange rate and reduce imports."""
+def test_cge_reproduces_2021_energy_workbook_scenario_under_equivalent_numeraire():
+    """The 21 Dec 2023 workbook experiment raises the world import price."""
     params = dict(CGE_DEFAULTS)
-    params["tm"] = 0.04  # double from 2% to 4%
+    params["wm"] = 1.0656990348951294
     result = solve_cge(params)
+    values = result["results"]
+
     assert result["error"] is False
-    # Higher tariff → higher import price → less imports
+    # Real quantities are invariant to the workbook/Python numeraire choice.
+    expected_real = {
+        "E": 0.2585946117155831,
+        "M": 0.40859123022377525,
+        "Ds": 0.741378414154912,
+        "Q": 1.1490381719416976,
+        "Cn": 0.5936977509908844,
+        "Z": 0.3795563340779064,
+    }
+    for key, workbook_value in expected_real.items():
+        assert math.isclose(values[key], workbook_value, abs_tol=2e-6)
+
+    # The workbook fixes Er=1 and solves Pd=0.9800963751. This port fixes Pd=1.
+    workbook_pd = 0.9800963751035009
+    expected_normalized_prices = {
+        "Er": 1 / workbook_pd,
+        "Pm": 1.0829193023255812 / workbook_pd,
+        "Pe": 1 / workbook_pd,
+        "Pt": 1.083306280497243 / workbook_pd,
+        "Pq": 1.0174542621014149 / workbook_pd,
+        "Px": 0.9852166186710815 / workbook_pd,
+    }
+    for key, workbook_value in expected_normalized_prices.items():
+        assert math.isclose(values[key], workbook_value, abs_tol=2e-6)
+
+
+def test_cge_tariff_increase_reduces_imports():
+    params = dict(CGE_DEFAULTS)
+    params["tm"] *= 2
+    result = solve_cge(params)
+
+    assert result["error"] is False
     assert result["results"]["M"] < result["comparison_baseline"]["M"]
     assert result["changes_from_base"]["M_pct_change"] < 0
 
 
-def test_cge_remittance_shock():
-    """Halving remittances should depreciate exchange rate."""
+def test_cge_remittance_shock_raises_normalized_exchange_rate():
     params = dict(CGE_DEFAULTS)
-    params["re"] = 0.07  # half of 0.14
+    params["re"] *= 0.5
     result = solve_cge(params)
+
     assert result["error"] is False
-    # Less inflow → BoP pressure → depreciation
     assert result["results"]["Er"] > 1.0
     assert result["changes_from_base"]["Er_pct_change"] > 0
+    assert result["closure"]["adjusting_price"] == "normalized_exchange_rate_index_Er"
 
 
 def test_cge_rejects_invalid_world_import_price():
@@ -90,27 +126,28 @@ def test_cge_rejects_zero_transformation_exponent():
     assert "rho_q" in result["message"]
 
 
-def test_cge_reports_structural_parameters_used():
+def test_cge_rejects_inactive_productivity_parameter():
+    params = dict(CGE_DEFAULTS)
+    params["Pf"] = 1.05
+    result = solve_cge(params)
+
+    assert result["error"] is True
+    assert "not used by the accepted CGE equations" in result["message"]
+
+
+def test_cge_rejects_inconsistent_elasticity_transformation_pair():
     params = dict(CGE_DEFAULTS)
     params["sig_q"] = 0.8
     result = solve_cge(params)
 
-    assert result["error"] is False
-    assert result["parameters_used"]["sig_q"] == 0.8
+    assert result["error"] is True
+    assert "rho_q_consistency" in result["message"]
 
 
 def test_cge_changes_from_base():
-    """Changes from base should be computed correctly."""
     params = dict(CGE_DEFAULTS)
     params["tm"] = 0.05
     result = solve_cge(params)
+
     assert "changes_from_base" in result
     assert "Er_pct_change" in result["changes_from_base"]
-
-
-if __name__ == "__main__":
-    test_cge_base_calibration()
-    test_cge_tariff_increase()
-    test_cge_remittance_shock()
-    test_cge_changes_from_base()
-    print("All CGE tests passed!")

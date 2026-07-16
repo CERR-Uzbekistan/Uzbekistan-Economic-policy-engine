@@ -84,8 +84,8 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
                     "type": "Computable General Equilibrium",
                     "description": (
                         "Devarajan-Go 1-2-3 CGE with CET export supply, CES Armington imports, "
-                        "and BoP closure. Simulates tariff, tax, fiscal, and external shocks "
-                        "on the whole economy. Calibrated to 2021 Uzbekistan SAM."
+                        "and current-account closure under normalized relative prices. Formula-reconciled "
+                        "to the legacy 2021 workbook; model-owner source approval remains pending."
                     ),
                     "tools": ["cge_simulate"],
                     "key_outputs": [
@@ -265,39 +265,41 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
 
     @mcp.tool()
     async def cge_simulate(
-        import_tariff_pct: float = 2.0,
+        import_tariff_pct: float = 1.6158659121002623,
         export_tax_pct: float = 0.0,
-        sales_tax_pct: float = 6.0,
-        income_tax_pct: float = 3.0,
-        savings_rate_pct: float = 38.0,
-        govt_spending: float = 0.18,
-        world_import_price: float = 0.98,
+        sales_tax_pct: float = 6.472233775029143,
+        income_tax_pct: float = 2.978092234143587,
+        savings_rate_pct: float = 37.80099228932178,
+        govt_spending: float = 0.17578408687290673,
+        world_import_price: float = 0.9840982911714002,
         world_export_price: float = 1.00,
-        foreign_borrowing: float = 0.04,
-        remittances: float = 0.14,
-        foreign_transfers: float = 0.00,
+        foreign_borrowing: float = 0.03894920311694469,
+        remittances: float = 0.13738252291489128,
+        foreign_transfers: float = 0.0005089419695851494,
         total_output: float = 1.00,
         productivity_factor: float = 1.00,
     ) -> dict:
         """Run a CGE 1-2-3 general equilibrium simulation for Uzbekistan.
 
-        Devarajan-Go model with CET export supply, CES Armington imports, and
-        BoP closure via flexible exchange rate. Calibrated to 2021 Uzbekistan SAM.
+        Formula-reconciled Devarajan-Go model with CET export supply, CES
+        Armington imports, and fixed-foreign-saving current-account closure. The
+        workbook fixes Er=1 and solves Pd; this port uses the equivalent Pd=1
+        normalization. Er is a relative-price index, not observed UZS/USD.
 
         Args:
-            import_tariff_pct: Import tariff rate (%). Base: 2%.
+            import_tariff_pct: Import tariff rate (%). Workbook base: 1.6159%.
             export_tax_pct: Export tax rate (%). Base: 0%.
-            sales_tax_pct: Sales/VAT tax rate (%). Base: 6%.
-            income_tax_pct: Income tax rate (%). Base: 3%.
-            savings_rate_pct: Household savings rate (%). Base: 38%.
-            govt_spending: Government consumption (base=0.18, share of GDP).
-            world_import_price: World import price index (base=0.98).
+            sales_tax_pct: Indirect tax rate (%). Workbook base: 6.4722%.
+            income_tax_pct: Direct tax rate (%). Workbook base: 2.9781%.
+            savings_rate_pct: Savings rate (%). Workbook base: 37.8010%.
+            govt_spending: Normalized government consumption (base=0.175784).
+            world_import_price: World import price index (base=0.984098).
             world_export_price: World export price index (base=1.00).
-            foreign_borrowing: Foreign borrowing (base=0.04).
-            remittances: Remittance inflows (base=0.14).
-            foreign_transfers: Foreign aid transfers (base=0.00).
+            foreign_borrowing: Fixed foreign saving (base=0.038949).
+            remittances: Net private remittance inflows (base=0.137383).
+            foreign_transfers: Foreign grants (base=0.000509).
             total_output: Total domestic output (base=1.00).
-            productivity_factor: TFP factor (base=1.00).
+            productivity_factor: Inactive legacy label; must remain 1.00.
         """
         from models.cge import solve_cge
 
@@ -315,7 +317,7 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
             "ft": foreign_transfers,
             "X": total_output,
             "Pf": productivity_factor,
-            "tr": -0.04,  # fixed net transfers
+            "tr": -0.03594210180831692,  # workbook government transfers
         }
         return solve_cge(params)
 
