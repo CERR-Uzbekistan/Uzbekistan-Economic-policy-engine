@@ -6,7 +6,7 @@
     "version": "0.1.0",
     "run_id": "dfm-nightly-2026-07-16",
     "data_version": "2026Q1",
-    "timestamp": "2026-07-16T09:42:27Z"
+    "timestamp": "2026-07-16T22:02:17Z"
   },
   "nowcast": {
     "last_observed_date": "2025-12-01",
@@ -714,14 +714,14 @@
     }
   ],
   "metadata": {
-    "exported_at": "2026-07-16T09:42:27Z",
+    "exported_at": "2026-07-16T22:02:17Z",
     "source_script_sha": "f61c0ec9a8addd8cc09e59dccc5ca2edd685878b",
     "solver_version": "0.1.0",
     "source_artifact": "dfm_nowcast/dfm_data.js",
-    "source_artifact_md5": "ec91be3922a6c4ba6e0b67d7a271aacb",
+    "source_artifact_md5": "142df598232bbfe40c1364ba427ba4c3",
     "source_artifact_exported_at": "2026-04-08 10:09:12",
     "export_script": "scripts/export_dfm.R",
-    "export_script_md5": "99d228717bc3c2ea1ebe0b018dfa12ad",
+    "export_script_md5": "0b53d059bd933afe73c6367a89597284",
     "export_mode": "source_reconciled_bridge",
     "source_model_reference": {
       "status": "source_refit_reconciled_not_direct_public_input",
@@ -731,9 +731,9 @@
       "public_export_reads_source_workbook": false
     },
     "source_audit": {
-      "source_folder_status": "available_locally_untracked",
-      "workbook_status": "available_locally_untracked",
-      "workbook_md5": "42a1e478f39a77db3797c188cd841f78",
+      "source_folder_status": "not_available",
+      "workbook_status": "not_available",
+      "workbook_md5": null,
       "source_scripts": ["main.R", "settings.R", "functions/prepare_data.R", "functions/calculate_growth.R", "functions/estimate_dfm.R", "functions/predict_dfm.R", "functions/postprocess_gdp.R", "functions/diagnostics_dfm.R"],
       "saved_model_objects": [".RData", "output/results.RData", "output/report.pdf"]
     },
