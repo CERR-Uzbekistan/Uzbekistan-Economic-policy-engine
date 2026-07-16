@@ -528,11 +528,11 @@
       },
       "cge": {
         "title": "CGE Reform Shock",
-        "description": "Economy-wide reform analysis is not active yet.",
+        "description": "The aggregate 1-2-3 calculation engine is workbook-reconciled; public scenario runs remain disabled.",
         "items": {
-          "inputs": "Expected inputs: productivity, tax, tariff, energy, labor, capital, and closure assumptions.",
-          "outputs": "Expected outputs: welfare, real GDP, sector reallocation, prices, and distributional indicators where supported.",
-          "boundary": "Boundary: general-equilibrium results require a calibrated SAM and model-owner approval before activation."
+          "inputs": "Validated inputs: world import/export prices, trade and domestic tax rates, government demand, transfers, remittances, and fixed foreign saving.",
+          "outputs": "Validated outputs: aggregate exports, imports, domestic and composite goods, consumption, investment, taxes, saving, and a normalized relative-price index.",
+          "boundary": "Boundary: no sector, labor, household distribution, dynamic forecast, or nominal UZS/USD result. Model-owner approval and two more benchmarks are required before activation."
         }
       },
       "fpp": {

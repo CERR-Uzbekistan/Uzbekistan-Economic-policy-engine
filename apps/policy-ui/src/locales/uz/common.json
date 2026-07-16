@@ -528,11 +528,11 @@
       },
       "cge": {
         "title": "CGE islohot shoki",
-        "description": "Butun iqtisodiyot bo'yicha islohot tahlili hozircha faol emas.",
+        "description": "Agregat 1-2-3 hisoblash mexanizmi manba ish kitobi bilan muvofiqlashtirilgan; ommaviy stsenariylar hozircha o'chirilgan.",
         "items": {
-          "inputs": "Kutiladigan kirishlar: unumdorlik, soliqlar, tariflar, energiya, mehnat, kapital va yopilish taxminlari.",
-          "outputs": "Kutiladigan chiqishlar: farovonlik, real YaIM, sektorlar qayta taqsimoti, narxlar va mavjud bo'lsa taqsimot ko'rsatkichlari.",
-          "boundary": "Chegara: umumiy muvozanat natijalari kalibrlangan SAM va model egasi tasdig'ini talab qiladi."
+          "inputs": "Tekshirilgan kirishlar: jahon import va eksport narxlari, savdo va ichki soliqlar, davlat talabi, transfertlar, pul o'tkazmalari va qat'iy xorijiy jamg'arma.",
+          "outputs": "Tekshirilgan chiqishlar: jami eksport, import, ichki va kompozit tovarlar, iste'mol, investitsiya, soliqlar, jamg'arma va normallashtirilgan nisbiy narx indeksi.",
+          "boundary": "Chegara: sektor, mehnat, uy xo'jaliklari taqsimoti, dinamik prognoz yoki nominal UZS/USD natijasi yo'q. Faollashtirishdan oldin model egasi tasdig'i va yana ikki benchmark kerak."
         }
       },
       "fpp": {

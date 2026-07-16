@@ -47,26 +47,39 @@ const ioEquations: Record<string, ReactNode> = {
 const cgeEquations: Record<string, ReactNode> = {
   cge_armington: (
     <>
-      <em>Q</em>
-      <sub>i</sub> = <em>A</em>
-      <sub>i</sub>·[δ<sub>i</sub>·<em>D</em>
-      <sub>i</sub>
-      <sup>ρ</sup> + (1−δ<sub>i</sub>)·<em>M</em>
-      <sub>i</sub>
-      <sup>ρ</sup>]
-      <sup>1/ρ</sup>
+      <em>Q</em> = <em>a</em>
+      <sub>q</sub>·[<em>b</em>
+      <sub>q</sub>·<em>M</em>
+      <sup>−ρq</sup> + (1−<em>b</em>
+      <sub>q</sub>)·<em>D</em>
+      <sup>−ρq</sup>]
+      <sup>−1/ρq</sup>
     </>
   ),
   cge_cet: (
     <>
-      <em>X</em>
-      <sub>i</sub> = <em>B</em>
-      <sub>i</sub>·[γ<sub>i</sub>·<em>E</em>
-      <sub>i</sub>
-      <sup>ω</sup> + (1−γ<sub>i</sub>)·<em>D</em>
-      <sub>i</sub>
-      <sup>ω</sup>]
-      <sup>1/ω</sup>
+      <em>X</em> = <em>a</em>
+      <sub>t</sub>·[<em>b</em>
+      <sub>t</sub>·<em>E</em>
+      <sup>ρt</sup> + (1−<em>b</em>
+      <sub>t</sub>)·<em>D</em>
+      <sup>ρt</sup>]
+      <sup>1/ρt</sup>
+    </>
+  ),
+  cge_current_account: (
+    <>
+      <em>w</em>
+      <sub>m</sub>·<em>M</em> − <em>w</em>
+      <sub>e</sub>·<em>E</em> − <em>ft</em> − <em>re</em> = <em>B</em>
+    </>
+  ),
+  cge_savings_investment: (
+    <>
+      <em>S</em> = <em>s</em>
+      <sub>y</sub>·<em>Y</em> + <em>Er</em>·<em>B</em> + <em>S</em>
+      <sub>g</sub>; <em>Z</em> = <em>S</em>/<em>P</em>
+      <sub>t</sub>
     </>
   ),
 }

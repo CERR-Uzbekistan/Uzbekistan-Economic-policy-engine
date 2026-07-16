@@ -104,21 +104,33 @@ describe('model catalog mock', () => {
     assert.equal(modelCatalogMeta.open_methodology_issues, 6)
   })
 
-  it('keeps planned CGE and FPP models behind production activation requirements', () => {
-    const planned = modelCatalogEntries.filter((entry) => entry.status.severity !== 'ok')
+  it('exposes reconciled CGE evidence without activating the public scenario lane', () => {
+    const cge = modelCatalogEntries.find((entry) => entry.id === 'cge-model')!
 
-    assert.deepEqual(
-      planned.map((entry) => entry.title),
-      ['CGE', 'FPP'],
+    assert.deepEqual(cge.status, { label: 'Not active', severity: 'warn' })
+    assert.equal(cge.stats[0].value, '2021')
+    assert.equal(cge.stats[1].value, '<0.001%')
+    assert.equal(cge.stats[2].value, '1')
+    assert.match(cge.description, /Formula-reconciled/)
+    assert.match(cge.purpose, /no sector, labor, household-distribution, or time-path block/)
+    assert.equal(cge.parameters.find((parameter) => parameter.symbol === 'σq')?.value, '0.70')
+    assert.equal(cge.parameters.find((parameter) => parameter.symbol === 'σt')?.value, '0.70')
+    assert.match(cge.model_note?.items.map((item) => item.value).join(' ') ?? '', /normalized relative-price index, not UZS\/USD/)
+    assert.equal(cge.validation_checks?.filter((check) => check.status === 'pass').length, 3)
+    assert.equal(cge.validation_checks?.filter((check) => check.status === 'needs_review').length, 2)
+    assert.equal(cge.bridge_evidence?.evidence_metrics?.find((metric) => metric.label === 'Accounting residuals')?.value, '<1e-8')
+    assert.equal(cge.activation_requirements?.length, 3)
+  })
+
+  it('keeps FPP behind production activation requirements', () => {
+    const fpp = modelCatalogEntries.find((entry) => entry.id === 'fpp-fiscal')!
+
+    assert.deepEqual(fpp.status, { label: 'Not active', severity: 'warn' })
+    assert.equal(fpp.activation_requirements?.length, 3)
+    assert.match(fpp.description, /Planned/)
+    assert.equal(
+      fpp.stats.some((stat) => /Missing|Needed|Gated|review/i.test(stat.value)),
+      true,
     )
-    for (const entry of planned) {
-      assert.equal(entry.activation_requirements?.length, 3, `${entry.title} should list activation gates`)
-      assert.match(entry.description, /Planned|Requires/)
-      assert.equal(
-        entry.stats.some((stat) => /Missing|Needed|Gated|review/i.test(stat.value)),
-        true,
-        `${entry.title} should not present production-style stats`,
-      )
-    }
   })
 })

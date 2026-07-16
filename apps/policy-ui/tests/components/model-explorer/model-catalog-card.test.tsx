@@ -132,7 +132,12 @@ describe('Model Explorer catalog cards', () => {
     assert.match(markup, /Reference only/)
     assert.match(markup, /not connected to Scenario Lab runs/)
     assert.match(markup, /Required before activation/)
-    assert.match(markup, /Economist-approved SAM/)
+    assert.match(markup, /Approve the 2021 source workbook/)
+    assert.match(markup, /CGE readiness note/)
+    assert.match(markup, /Formula-reconciled · gated/)
+    assert.match(markup, /Energy-price benchmark/)
+    assert.match(markup, /normalized relative-price index, not UZS\/USD/)
+    assert.doesNotMatch(markup, /Expected outputs: welfare/)
   })
 
   it('renders the QPM model note with Scenario Lab boundaries', async () => {

@@ -71,11 +71,11 @@ async function createTestI18n() {
               },
               cge: {
                 title: 'CGE Reform Shock',
-                description: 'Economy-wide reform analysis is not active yet.',
+                description: 'The aggregate 1-2-3 calculation engine is workbook-reconciled; public scenario runs remain disabled.',
                 items: {
-                  inputs: 'Expected inputs: productivity and tax assumptions.',
-                  outputs: 'Expected outputs: welfare and sector reallocation.',
-                  boundary: 'Boundary: model-owner approval required before activation.',
+                  inputs: 'Validated inputs: world prices, tax rates, government demand, remittances, and fixed foreign saving.',
+                  outputs: 'Validated outputs: aggregate exports, imports, consumption, investment, taxes, and saving.',
+                  boundary: 'Boundary: no sector, labor, distribution, dynamic forecast, or UZS/USD result. Model-owner approval and two more benchmarks are required before activation.',
                 },
               },
               fpp: {
@@ -181,7 +181,7 @@ describe('ScenarioLabModelTabs', () => {
     assert.match(peMarkup, /Inputs: tariff cut/)
     assert.match(peMarkup, /direct trade-channel evidence only/)
     assert.match(cgeMarkup, /Not active/)
-    assert.match(cgeMarkup, /model-owner approval required before activation/)
+    assert.match(cgeMarkup, /Model-owner approval and two more benchmarks are required before activation/)
     assert.match(fppMarkup, /Not active/)
     assert.match(fppMarkup, /fiscal sustainability evidence only/)
   })
