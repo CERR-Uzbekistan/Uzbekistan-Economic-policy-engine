@@ -77,6 +77,32 @@ export type DfmIndicator = {
   latest_value: number | null
 }
 
+export type DfmSourceGdpHistoryAuditQuarter = {
+  period: string
+  quarter_end_date: string
+  raw_gdp_level: number | null
+  raw_gdp_growth_yoy_pct: number | null
+  model_adjusted_gdp_level: number | null
+  model_adjusted_gdp_growth_yoy_pct: number | null
+  model_adjusted_minus_raw_yoy_pp: number | null
+}
+
+export type DfmSourceGdpHistoryAudit = {
+  status: 'review_only_unverified' | 'not_available' | 'blocked_missing_quarterly_gdp' | 'blocked_no_yoy_history'
+  source_series_label?: string
+  source_provenance?: string | null
+  latest_observed_period?: string
+  latest_observed_quarter_end_date?: string
+  raw_gdp_level?: number | null
+  raw_gdp_growth_yoy_pct?: number | null
+  model_adjusted_gdp_level?: number | null
+  model_adjusted_gdp_growth_yoy_pct?: number | null
+  model_adjusted_minus_raw_yoy_pp?: number | null
+  display_rule: string
+  interpretation?: string
+  recent_quarters?: DfmSourceGdpHistoryAuditQuarter[]
+}
+
 export type DfmMetadata = {
   exported_at: string
   source_script_sha: string | null
@@ -115,6 +141,7 @@ export type DfmMetadata = {
     source_logic_status: string
     reconciliation_status?: 'matched_public_artifact' | 'not_reconciled'
     canonical_export_report?: string | null
+    source_gdp_history_audit: DfmSourceGdpHistoryAudit
   }
   backtest_status: {
     status: 'proxy_validation_available' | 'available' | 'not_available'

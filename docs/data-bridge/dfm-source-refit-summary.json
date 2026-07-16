@@ -1,14 +1,14 @@
 {
   "artifact": {
     "id": "dfm-source-refit-summary",
-    "generated_at": "2026-05-24T13:42:50Z",
+    "generated_at": "2026-07-16T09:39:35Z",
     "status": "completed_without_pdf_report",
     "source_folder": "model sources/Fore+Nowcast/DFM",
     "source_workbook": "model sources/Fore+Nowcast/DFM/data/data_uzbekistan.xlsx",
     "source_workbook_md5": "42a1e478f39a77db3797c188cd841f78",
     "runner": "scripts/dfm/run-source-refit.R",
     "r_version": "4.5.2",
-    "elapsed_seconds": 164.25
+    "elapsed_seconds": 174.17
   },
   "runtime": {
     "start_date": "2016-01-01",
@@ -53,12 +53,101 @@
   },
   "current_nowcast": {
     "source_period": "2026Q1",
+    "source_series_basis": "seasonally_adjusted_model_input_and_projection",
     "source_gdp_growth_yoy_pct": 7.0078,
     "source_gdp_growth_qoq_pct": 1.4398,
     "public_period": "2026Q1",
     "public_gdp_growth_yoy_pct": 7.0078,
     "yoy_difference_source_minus_public_pp": 0
   },
+  "source_gdp_history_audit": {
+    "status": "review_only_unverified",
+    "source_series_label": "Uzbekistan, Gross Domestic Product, Total, Constant Prices, volume 2021, UZS",
+    "source_provenance": null,
+    "latest_observed_period": "2025Q4",
+    "latest_observed_quarter_end_date": "2025-12-01",
+    "raw_gdp_level": 317688.7,
+    "raw_gdp_growth_yoy_pct": 8.5455,
+    "model_adjusted_gdp_level": 282979.5,
+    "model_adjusted_gdp_growth_yoy_pct": 8.7027,
+    "model_adjusted_minus_raw_yoy_pp": 0.1572,
+    "display_rule": "Source-workbook GDP history is audit-only until source provenance and series continuity are verified; seasonally adjusted GDP is model input, not an official release.",
+    "interpretation": "The comparison diagnoses how seasonal adjustment changes the GDP input. It must not be presented as official history until the workbook source and series continuity are verified.",
+    "recent_quarters": [
+      {
+        "period": "2024Q1",
+        "quarter_end_date": "2024-03-01",
+        "raw_gdp_level": 198218.6,
+        "raw_gdp_growth_yoy_pct": 7.2416,
+        "model_adjusted_gdp_level": 254529.1,
+        "model_adjusted_gdp_growth_yoy_pct": 8.5113,
+        "model_adjusted_minus_raw_yoy_pp": 1.2697
+      },
+      {
+        "period": "2024Q2",
+        "quarter_end_date": "2024-06-01",
+        "raw_gdp_level": 269923.5,
+        "raw_gdp_growth_yoy_pct": 14.2956,
+        "model_adjusted_gdp_level": 259534,
+        "model_adjusted_gdp_growth_yoy_pct": 6.6449,
+        "model_adjusted_minus_raw_yoy_pp": -7.6507
+      },
+      {
+        "period": "2024Q3",
+        "quarter_end_date": "2024-09-01",
+        "raw_gdp_level": 275520.2,
+        "raw_gdp_growth_yoy_pct": 13.7263,
+        "model_adjusted_gdp_level": 263979.3,
+        "model_adjusted_gdp_growth_yoy_pct": 10.2295,
+        "model_adjusted_minus_raw_yoy_pp": -3.4968
+      },
+      {
+        "period": "2024Q4",
+        "quarter_end_date": "2024-12-01",
+        "raw_gdp_level": 292677.9,
+        "raw_gdp_growth_yoy_pct": -4.9756,
+        "model_adjusted_gdp_level": 260324.3,
+        "model_adjusted_gdp_growth_yoy_pct": 1.6241,
+        "model_adjusted_minus_raw_yoy_pp": 6.5998
+      },
+      {
+        "period": "2025Q1",
+        "quarter_end_date": "2025-03-01",
+        "raw_gdp_level": 207673.9,
+        "raw_gdp_growth_yoy_pct": 4.7701,
+        "model_adjusted_gdp_level": 268255.2,
+        "model_adjusted_gdp_growth_yoy_pct": 5.3927,
+        "model_adjusted_minus_raw_yoy_pp": 0.6226
+      },
+      {
+        "period": "2025Q2",
+        "quarter_end_date": "2025-06-01",
+        "raw_gdp_level": 286529.4,
+        "raw_gdp_growth_yoy_pct": 6.1521,
+        "model_adjusted_gdp_level": 273495,
+        "model_adjusted_gdp_growth_yoy_pct": 5.3793,
+        "model_adjusted_minus_raw_yoy_pp": -0.7728
+      },
+      {
+        "period": "2025Q3",
+        "quarter_end_date": "2025-09-01",
+        "raw_gdp_level": 293933.6,
+        "raw_gdp_growth_yoy_pct": 6.6832,
+        "model_adjusted_gdp_level": 277701.8,
+        "model_adjusted_gdp_growth_yoy_pct": 5.1983,
+        "model_adjusted_minus_raw_yoy_pp": -1.4848
+      },
+      {
+        "period": "2025Q4",
+        "quarter_end_date": "2025-12-01",
+        "raw_gdp_level": 317688.7,
+        "raw_gdp_growth_yoy_pct": 8.5455,
+        "model_adjusted_gdp_level": 282979.5,
+        "model_adjusted_gdp_growth_yoy_pct": 8.7027,
+        "model_adjusted_minus_raw_yoy_pp": 0.1572
+      }
+    ]
+  },
   "warnings": [],
-  "limitations": ["This runner proves the local source workbook and R estimator can execute without the PDF report step.", "The public dfm.json export still publishes the frozen dfm_nowcast/dfm_data.js bridge until source-refit output is reconciled and signed off.", "True vintage backtesting still requires historical source-workbook vintages or saved pre-release DFM outputs."]
+  "limitations": ["This runner proves the local source workbook and R estimator can execute without the PDF report step.", "Source-workbook GDP history remains audit-only until source provenance and series continuity are verified; seasonally adjusted GDP levels are model inputs, not official releases.", "The public dfm.json export still publishes the frozen dfm_nowcast/dfm_data.js bridge until source-refit output is reconciled and signed off.", "True vintage backtesting still requires historical source-workbook vintages or saved pre-release DFM outputs."]
 }

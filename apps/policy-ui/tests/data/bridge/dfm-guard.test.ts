@@ -283,4 +283,35 @@ describe('dfm bridge guard', () => {
       true,
     )
   })
+
+  it('requires GDP source-history audit metadata on the source refit status', () => {
+    const payload = clonePayload(buildValidDfmPayload())
+    delete (payload.metadata.refit_status as { source_gdp_history_audit?: unknown }).source_gdp_history_audit
+
+    const validation = validateDfmBridgePayload(payload)
+
+    assert.equal(validation.ok, false)
+    assert.equal(
+      validation.issues.some(
+        (issue) => issue.path === 'metadata.refit_status.source_gdp_history_audit',
+      ),
+      true,
+    )
+  })
+
+  it('rejects GDP source-history audit metadata that hides the audit-only display rule', () => {
+    const payload = clonePayload(buildValidDfmPayload())
+    payload.metadata.refit_status.source_gdp_history_audit.display_rule =
+      'Observed GDP history is available from the model output.'
+
+    const validation = validateDfmBridgePayload(payload)
+
+    assert.equal(validation.ok, false)
+    assert.equal(
+      validation.issues.some(
+        (issue) => issue.path === 'metadata.refit_status.source_gdp_history_audit.display_rule',
+      ),
+      true,
+    )
+  })
 })

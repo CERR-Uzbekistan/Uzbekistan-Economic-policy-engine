@@ -103,6 +103,14 @@ The latest report shows that the source refit and public bridge both
 produce `2026Q1` GDP growth of `7.0078%` YoY and `1.4398%` QoQ, with
 zero source-minus-public difference.
 
+The source refit summary also records a GDP source-history audit. The R source
+workflow seasonally adjusts GDP before estimation, so historical growth
+calculated from the model input can differ from growth calculated from the
+unadjusted workbook row. The public artifact carries
+metadata.refit_status.source_gdp_history_audit, but the comparison is
+review-only: the workbook Source field is blank and continuity is unresolved.
+Neither series may be described as official GDP history.
+
 The source coverage audit is the publication gate for a Q2 DFM nowcast.
 For `2026Q2`, it requires the previous-quarter GDP target (`2026Q1`) and
 high-frequency monthly indicators through at least April 2026. The current
@@ -127,7 +135,8 @@ owner-supplied GDP target/manual source.
    quarterly GDP nowcast.
 5. Post-processing converts the model's quarterly GDP path into GDP levels
    and YoY growth.
-6. The bridge export writes the public `dfm.json` artifact consumed by
+6. For audit purposes, the source runner compares growth from the unadjusted workbook GDP row with growth from the seasonally adjusted model input; the comparison is not an official-history release.
+7. The bridge export writes the public `dfm.json` artifact consumed by
    Overview and Model Explorer.
 
 ## How to read the indicator table
@@ -219,6 +228,9 @@ The local source bundle is useful, but it is not production-hardened yet:
 - `postprocess_gdp.R` depends on the global `df` object and should take
   all required inputs explicitly before it is used in a reproducible
   export path.
+- `postprocess_gdp.R` operates on the GDP level series after seasonal
+  adjustment. That is acceptable for model estimation/projection, but it
+  is not a verified source for official historical GDP displayed to users. The runner records the raw-versus-adjusted comparison as audit-only metadata.
 - `growth decomposition.R` rescales factor contributions to sum to a
   chosen GDP growth number and drops negative contributors. It should not
   be treated as a public GDP percentage-point decomposition.
@@ -240,6 +252,59 @@ The local source bundle is useful, but it is not production-hardened yet:
 - Some public labels and source workbook descriptions need owner review
   before the app treats them as final economic names.
 
+## 2026Q1 owner-supplied source check
+
+An owner-supplied folder outside the repository can be audited without copying raw files into the repository:
+
+```text
+Rscript scripts/dfm/run-source-refit.R . --source-dir="<external DFM folder>" --output="tmp/dfm-2026q1-source-refit-summary.json"
+```
+
+On the local Windows machine, `Rscript` is installed at
+`C:\Program Files\R\R-4.5.2\bin\Rscript.exe` but is not on PATH. Use the
+absolute executable path when running these commands locally.
+
+That run completed locally with R 4.5.2, converged in 187 EM iterations,
+and produced a review-only 2026Q2 model nowcast of 7.9840% YoY. For 2026Q1,
+the unadjusted workbook row implies 8.7615% YoY while the seasonally adjusted
+model input implies 7.8578% YoY. This discrepancy is a source and
+transformation warning. Neither value is an approved official-history display
+basis until provenance, vintage, and continuity are verified.
+
+The follow-up source-output and robustness artifacts are:
+
+- `docs/data-bridge/dfm-source-output-review.md`
+- `docs/data-bridge/dfm-source-output-review.json`
+- `docs/data-bridge/dfm-2026q2-robustness-review.md`
+- `docs/data-bridge/dfm-2026q2-robustness-review.json`
+- `docs/data-bridge/dfm-gdp-seasonal-adjustment-audit.md`
+- `docs/data-bridge/dfm-gdp-seasonal-adjustment-audit.json`
+- `docs/data-bridge/dfm-transformation-robustness-review.md`
+- `docs/data-bridge/dfm-transformation-robustness-review.json`
+
+The robustness review shows that the baseline `2026Q2` source nowcast is
+stable to removing May 2026 high-frequency observations (`+0.0590 pp`)
+and dropping the top three absolute driver rows (`+0.0270 pp`). It is
+not stable to skipping GDP seasonal adjustment (`-3.2527 pp`). The GDP
+seasonal-adjustment audit resolves the interpretation: raw GDP QoQ is
+dominated by quarter seasonality (raw QoQ SD `24.701 pp` versus adjusted
+QoQ SD `1.2091 pp`), so seasonally adjusted GDP should remain the model estimation input while the raw-versus-adjusted comparison remains audit-only.
+
+The transformation robustness review applies transformation-map alternatives
+to the approved-with-caveat rows and also drops those caveated rows entirely.
+The headline `2026Q2` YoY nowcast moves by only `+0.0315 pp` in the reviewed
+transformation case with `DFM_MAX_ITER=1000`, and `-0.1719 pp` when caveated
+high-frequency rows are dropped. This is encouraging for the headline, but not
+a clean pass: the reviewed-transformation case still did not converge before
+the EM iteration cap, so it remains a diagnostic stress test rather than an
+accepted replacement specification.
+
+The longer transformation-isolation and final model-robustness stages did not
+complete within the bounded July 2026 rerun. Older June outputs are not treated
+as current evidence and are excluded from this validated bundle. Reproducing
+those stages with explicit per-case runtime limits remains required before
+their conclusions can support a publication decision.
+
 ## Remaining work
 
 1. Add CI/runtime dependency management for `Rscript` plus packages:
@@ -249,22 +314,26 @@ The local source bundle is useful, but it is not production-hardened yet:
 2. Automate the DFM source panel refresh: quarterly real GDP in 2021
    constant prices, licensed/Macrobond-equivalent monthly exports,
    official Statistics Agency monthly feeds, and internal CERR feeds.
-3. Replace bridge publication with direct source-refit output after the
-   source-output contract is reviewed and signed off.
-4. Move the transform map into reviewed source metadata and block refits
+3. Decide whether the review-only source output can become the publication
+   contract, or keep it as an internal model-review artifact until owner
+   sign-off.
+4. Reproduce the transformation-isolation and final robustness stages with per-case runtime limits; the bounded July 2026 combined rerun did not complete.
+5. Resolve the nonconverged reviewed-transformation stress case before
+   treating alternative transformations as a final specification.
+6. Move the transform map into reviewed source metadata and block refits
    when a series lacks an accepted transformation decision.
-5. Add data integrity checks: duplicate dates, metadata/order mismatch,
+7. Add data integrity checks: duplicate dates, metadata/order mismatch,
    coercion-created missing values, failed seasonal adjustment, stationarity
    warnings, and EM non-convergence.
-6. Fix GDP postprocessing and diagnostics.
-7. Add real-time vintage backtesting: what would the model have predicted
+8. Fix GDP postprocessing and diagnostics.
+9. Add real-time vintage backtesting: what would the model have predicted
    before official GDP releases?
-8. Replace the GDP-only benchmark proxy with a reproducible validation
+10. Replace the GDP-only benchmark proxy with a reproducible validation
    report covering DFM vintage forecast errors, factor stability, residual
    diagnostics, and indicator news contributions.
-9. Decide whether one factor is enough or whether category-specific factors
+10. Decide whether one factor is enough or whether category-specific factors
    are needed.
-10. Add a source-controlled release note each time the DFM source workbook
+11. Add a source-controlled release note each time the DFM source workbook
    or refit output changes.
 
 ## Safe wording

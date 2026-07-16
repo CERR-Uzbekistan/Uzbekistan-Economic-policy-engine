@@ -178,6 +178,34 @@ export function buildValidDfmPayload(): DfmBridgePayload {
           'local_source_refit_completed_without_pdf_report; artifact=docs/data-bridge/dfm-source-refit-summary.json; iterations=155; converged=TRUE; source_public_yoy_diff_pp=0',
         reconciliation_status: 'matched_public_artifact',
         canonical_export_report: 'docs/data-bridge/dfm-canonical-export-report.json',
+        source_gdp_history_audit: {
+          status: 'review_only_unverified',
+          source_series_label:
+            'Uzbekistan, Gross Domestic Product, Total, Constant Prices, volume 2021, UZS',
+          source_provenance: null,
+          latest_observed_period: '2025Q4',
+          latest_observed_quarter_end_date: '2025-12-01',
+          raw_gdp_level: 317688.7,
+          raw_gdp_growth_yoy_pct: 8.5455,
+          model_adjusted_gdp_level: 282979.5,
+          model_adjusted_gdp_growth_yoy_pct: 8.7027,
+          model_adjusted_minus_raw_yoy_pp: 0.1572,
+          display_rule:
+            'Source-workbook GDP history is audit-only until source provenance and series continuity are verified; seasonally adjusted GDP is model input, not an official release.',
+          interpretation:
+            'The comparison diagnoses how seasonal adjustment changes the GDP input. It must not be presented as official history until the workbook source and series continuity are verified.',
+          recent_quarters: [
+            {
+              period: '2025Q4',
+              quarter_end_date: '2025-12-01',
+              raw_gdp_level: 317688.7,
+              raw_gdp_growth_yoy_pct: 8.5455,
+              model_adjusted_gdp_level: 282979.5,
+              model_adjusted_gdp_growth_yoy_pct: 8.7027,
+              model_adjusted_minus_raw_yoy_pp: 0.1572,
+            },
+          ],
+        },
       },
       backtest_status: {
         status: 'proxy_validation_available',

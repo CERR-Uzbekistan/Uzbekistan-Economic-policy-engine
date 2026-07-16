@@ -118,6 +118,18 @@ the series (YoY is undefined before t+4 observations).
 percentage-point effect. It is a standardized DFM factor signal used to
 explain what moved the nowcast.
 
+The refit runner records a GDP source-history audit under
+metadata.refit_status.source_gdp_history_audit in dfm.json and
+source_gdp_history_audit in the refit summary. This compares the workbook's
+unadjusted GDP row with the seasonally adjusted GDP input used by the model.
+
+The comparison is audit-only. The workbook labels the row as real GDP at
+constant 2021 prices, but its Source metadata is blank and the series contains
+unresolved continuity breaks. Consumers must not present either the raw
+workbook growth rates or the adjusted model-input history as an official GDP
+release. Official historical GDP must come from a separately verified,
+source-owned release series.
+
 The source workbook contains one weekly exchange-rate series. The
 checked-in legacy bridge harmonizes non-quarterly inputs into the public
 high-frequency row set exposed as monthly/quarterly in `dfm.json`; the
@@ -178,6 +190,69 @@ and writes the canonical comparison report. The latest run converged in
 1.4398% QoQ, with 0 pp source/public differences. The remaining local
 report issue is Pandoc availability for `rmarkdown::render()`, not R
 availability.
+
+The same runner compares the raw workbook GDP row with the seasonally adjusted
+model-input history. In the current local workbook, the latest comparison is
+2025Q4: 8.5455% YoY from the raw workbook row versus 8.7027% YoY from the
+adjusted model input. Because the workbook source field is blank and continuity
+has not been signed off, this is a diagnostic comparison, not official history
+and not a nowcast.
+
+For an owner-supplied 2026 nowcasting folder outside the repository,
+the runner can be pointed at the external source without copying it into
+git:
+
+```text
+Rscript scripts/dfm/run-source-refit.R . --source-dir="<external DFM folder>" --output="tmp/dfm-2026q1-source-refit-summary.json"
+```
+
+On this Windows machine, `Rscript` is installed but not on PATH. Use
+`C:\Program Files\R\R-4.5.2\bin\Rscript.exe` in place of `Rscript` when
+running the commands locally.
+
+The external audit likewise finds 8.7615% YoY from the unadjusted workbook row
+and 7.8578% YoY from the seasonally adjusted model input for 2026Q1. That gap
+shows why estimation inputs and published history must remain separate. Neither
+number is an approved official-history display value until the source series,
+vintage, and continuity are verified by the model owner.
+
+The source-output, robustness, GDP seasonal-adjustment, and
+transformation-sensitivity review scripts are:
+
+```text
+Rscript scripts/dfm/export-source-output-review.R . --source-dir="<external DFM folder>"
+Rscript scripts/dfm/review-source-nowcast.R . --source-dir="<external DFM folder>"
+Rscript scripts/dfm/audit-gdp-seasonal-adjustment.R . --source-dir="<external DFM folder>"
+Rscript scripts/dfm/review-transformation-robustness.R . --source-dir="<external DFM folder>"
+```
+
+They write:
+
+- `docs/data-bridge/dfm-source-output-review.json`
+- `docs/data-bridge/dfm-source-output-review.md`
+- `docs/data-bridge/dfm-2026q2-robustness-review.json`
+- `docs/data-bridge/dfm-2026q2-robustness-review.md`
+- `docs/data-bridge/dfm-gdp-seasonal-adjustment-audit.json`
+- `docs/data-bridge/dfm-gdp-seasonal-adjustment-audit.md`
+- `docs/data-bridge/dfm-transformation-robustness-review.json`
+- `docs/data-bridge/dfm-transformation-robustness-review.md`
+
+Current decision from these artifacts: keep seasonally adjusted GDP for
+DFM model estimation and projection, and keep the raw-versus-adjusted history comparison audit-only until source provenance and continuity are verified. The unadjusted-GDP sensitivity is not a
+preferred alternative forecast; it is a diagnostic showing that raw GDP
+QoQ seasonality is too large for the DFM state equation. The
+transformation stress test currently shows small headline movement
+against the baseline (`+0.0315 pp` for reviewed caveated transformations
+with `DFM_MAX_ITER=1000`, and `-0.1719 pp` when caveated high-frequency
+rows are dropped), but the reviewed-transformations case still hit the EM
+iteration cap and must remain a diagnostic, not a replacement model
+specification.
+
+The longer transformation-isolation and final model-robustness stages did not
+complete within the bounded July 2026 rerun. Older June outputs are not treated
+as current evidence and are excluded from this validated bundle. Reproducing
+those stages with explicit per-case runtime limits remains required before
+their conclusions can support a publication decision.
 
 ## Source Coverage Gate
 

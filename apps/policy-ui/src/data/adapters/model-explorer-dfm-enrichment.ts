@@ -16,6 +16,7 @@ const DFM_CAVEAT_TITLES: Record<string, string> = {
   'dfm-parameters-frozen-at-refit': 'Parameters frozen at refit',
   'dfm-vintage-backtest-blocked': 'Vintage backtest blocked',
   'dfm-contribution-guardrail': 'Contribution guardrail',
+  'dfm-source-gdp-history-audit': 'GDP source-history audit guardrail',
 }
 
 function toIsoDateLabel(value: string): string {
@@ -50,6 +51,21 @@ function dfmRowSummary(payload: DfmBridgePayload) {
   }
 }
 
+function sourceGdpHistoryAuditLabel(payload: DfmBridgePayload): string {
+  const history = payload.metadata.refit_status.source_gdp_history_audit
+  if (history.status !== 'review_only_unverified') return history.status.replaceAll('_', ' ')
+  const raw = typeof history.raw_gdp_growth_yoy_pct === 'number' ? formatNumber(history.raw_gdp_growth_yoy_pct, 2) : 'n/a'
+  const adjusted =
+    typeof history.model_adjusted_gdp_growth_yoy_pct === 'number'
+      ? formatNumber(history.model_adjusted_gdp_growth_yoy_pct, 2)
+      : 'n/a'
+  const diff =
+    typeof history.model_adjusted_minus_raw_yoy_pp === 'number'
+      ? `${formatNumber(history.model_adjusted_minus_raw_yoy_pp, 2)} pp`
+      : 'n/a'
+  return `Review only - ${history.latest_observed_period ?? 'latest'}: workbook raw ${raw}% vs adjusted model input ${adjusted}% (${diff})`
+}
+
 export function toModelExplorerDfmBridgeEvidence(payload: DfmBridgePayload): ModelBridgeEvidence {
   const rows = dfmRowSummary(payload)
 
@@ -72,6 +88,7 @@ export function toModelExplorerDfmBridgeEvidence(payload: DfmBridgePayload): Mod
       { label: 'Source data status', value: payload.metadata.source_audit.workbook_status },
       { label: 'Transform coverage', value: payload.metadata.transformation_map.public_indicator_coverage },
       { label: 'Refit status', value: payload.metadata.refit_status.status },
+      { label: 'GDP history audit', value: sourceGdpHistoryAuditLabel(payload) },
       { label: 'Backtest status', value: payload.metadata.backtest_status.status },
       {
         label: 'Uncertainty range',
@@ -173,6 +190,11 @@ function withDfmBridge(entry: ModelCatalogEntry, payload: DfmBridgePayload): Mod
         description: `${payload.metadata.backtest_status.validation_report}; benchmark ${payload.metadata.backtest_status.benchmark}`,
         vintage_label: payload.metadata.backtest_status.vintage_backtest,
       },
+      {
+        institution: 'GDP source-history audit',
+        description: payload.metadata.refit_status.source_gdp_history_audit.display_rule,
+        vintage_label: sourceGdpHistoryAuditLabel(payload),
+      },
     ],
     validation_summary: [
       `Public dfm.json validates against the DFM bridge schema and exposes ${rows.label}, ${payload.factor.n_factors} latent factor, and current quarter ${current.period}.`,
@@ -181,6 +203,7 @@ function withDfmBridge(entry: ModelCatalogEntry, payload: DfmBridgePayload): Mod
       'Indicator contribution values are standardized DFM factor signals, not percentage-point GDP-growth effects.',
       `Source workbook status is ${payload.metadata.source_audit.workbook_status}; transform coverage is ${payload.metadata.transformation_map.public_indicator_coverage}, with economist-review blockers retained in the map.`,
       `Refit status is ${payload.metadata.refit_status.status}; ${payload.metadata.refit_status.blocker}`,
+      `GDP source-history audit: ${payload.metadata.refit_status.source_gdp_history_audit.display_rule} Latest comparison: ${sourceGdpHistoryAuditLabel(payload)}.`,
       `Validation/backtest status is ${payload.metadata.backtest_status.status}; true DFM vintage backtesting remains ${payload.metadata.backtest_status.vintage_backtest}.`,
       `Uncertainty range is ${payload.metadata.uncertainty_range.status}; it is not an official forecast interval.`,
       'Economist/model-owner sign-off remains unavailable.',

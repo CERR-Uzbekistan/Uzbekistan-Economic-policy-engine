@@ -750,6 +750,182 @@ function parseTransformationMap(
   }
 }
 
+function parseSourceGdpHistoryAuditQuarter(
+  value: unknown,
+  index: number,
+  issues: DfmValidationIssue[],
+): NonNullable<DfmMetadata['refit_status']['source_gdp_history_audit']['recent_quarters']>[number] | null {
+  const basePath = `metadata.refit_status.source_gdp_history_audit.recent_quarters[${index}]`
+  if (!isRecord(value)) {
+    pushError(issues, basePath, 'Expected an object.')
+    return null
+  }
+  const period = value.period
+  const quarterEndDate = value.quarter_end_date
+  let ok = true
+  if (typeof period !== 'string' || !PERIOD_RE.test(period)) {
+    pushError(issues, `${basePath}.period`, 'Expected period like "YYYYQN" (e.g. "2026Q1").')
+    ok = false
+  }
+  if (typeof quarterEndDate !== 'string' || quarterEndDate.length === 0) {
+    pushError(issues, `${basePath}.quarter_end_date`, 'Expected a non-empty string.')
+    ok = false
+  }
+
+  const numericFields = [
+    'raw_gdp_level',
+    'raw_gdp_growth_yoy_pct',
+    'model_adjusted_gdp_level',
+    'model_adjusted_gdp_growth_yoy_pct',
+    'model_adjusted_minus_raw_yoy_pp',
+  ] as const
+  for (const field of numericFields) {
+    const raw = value[field]
+    if (raw !== null && !isFiniteNumber(raw)) {
+      pushError(issues, `${basePath}.${field}`, 'Expected a finite number or null.')
+      ok = false
+    }
+  }
+  if (!ok || typeof period !== 'string' || typeof quarterEndDate !== 'string') return null
+  return {
+    period,
+    quarter_end_date: quarterEndDate,
+    raw_gdp_level: isFiniteNumber(value.raw_gdp_level) ? value.raw_gdp_level : null,
+    raw_gdp_growth_yoy_pct: isFiniteNumber(value.raw_gdp_growth_yoy_pct)
+      ? value.raw_gdp_growth_yoy_pct
+      : null,
+    model_adjusted_gdp_level: isFiniteNumber(value.model_adjusted_gdp_level)
+      ? value.model_adjusted_gdp_level
+      : null,
+    model_adjusted_gdp_growth_yoy_pct: isFiniteNumber(value.model_adjusted_gdp_growth_yoy_pct)
+      ? value.model_adjusted_gdp_growth_yoy_pct
+      : null,
+    model_adjusted_minus_raw_yoy_pp: isFiniteNumber(value.model_adjusted_minus_raw_yoy_pp)
+      ? value.model_adjusted_minus_raw_yoy_pp
+      : null,
+  }
+}
+
+function parseSourceGdpHistoryAudit(
+  value: unknown,
+  issues: DfmValidationIssue[],
+): DfmMetadata['refit_status']['source_gdp_history_audit'] | null {
+  if (!isRecord(value)) {
+    pushError(issues, 'metadata.refit_status.source_gdp_history_audit', 'Expected an object.')
+    return null
+  }
+
+  const status = value.status
+  const displayRule = value.display_rule
+  const interpretation = value.interpretation
+  let ok = true
+  if (
+    status !== 'review_only_unverified' &&
+    status !== 'not_available' &&
+    status !== 'blocked_missing_quarterly_gdp' &&
+    status !== 'blocked_no_yoy_history'
+  ) {
+    pushError(
+      issues,
+      'metadata.refit_status.source_gdp_history_audit.status',
+      'Expected review_only_unverified, not_available, blocked_missing_quarterly_gdp, or blocked_no_yoy_history.',
+    )
+    ok = false
+  }
+  if (
+    typeof displayRule !== 'string' ||
+    !displayRule.includes('audit-only') ||
+    !displayRule.includes('seasonally adjusted GDP is model input')
+  ) {
+    pushError(
+      issues,
+      'metadata.refit_status.source_gdp_history_audit.display_rule',
+      'Expected the audit-only source-history versus seasonally adjusted model-input display rule.',
+    )
+    ok = false
+  }
+  if (interpretation !== undefined && typeof interpretation !== 'string') {
+    pushError(issues, 'metadata.refit_status.source_gdp_history_audit.interpretation', 'Expected a string when present.')
+    ok = false
+  }
+
+  const output: DfmMetadata['refit_status']['source_gdp_history_audit'] = {
+    status: status as DfmMetadata['refit_status']['source_gdp_history_audit']['status'],
+    display_rule: typeof displayRule === 'string' ? displayRule : '',
+    ...(typeof interpretation === 'string' ? { interpretation } : {}),
+  }
+
+  if (status === 'review_only_unverified') {
+    const requiredStringFields = ['latest_observed_period', 'latest_observed_quarter_end_date'] as const
+    for (const field of requiredStringFields) {
+      if (typeof value[field] !== 'string' || value[field].length === 0) {
+        pushError(issues, `metadata.refit_status.source_gdp_history_audit.${field}`, 'Expected a non-empty string.')
+        ok = false
+      }
+    }
+    if (typeof value.latest_observed_period === 'string' && !PERIOD_RE.test(value.latest_observed_period)) {
+      pushError(
+        issues,
+        'metadata.refit_status.source_gdp_history_audit.latest_observed_period',
+        'Expected period like "YYYYQN" (e.g. "2026Q1").',
+      )
+      ok = false
+    }
+    const requiredNumericFields = [
+      'raw_gdp_level',
+      'raw_gdp_growth_yoy_pct',
+      'model_adjusted_gdp_level',
+      'model_adjusted_gdp_growth_yoy_pct',
+      'model_adjusted_minus_raw_yoy_pp',
+    ] as const
+    for (const field of requiredNumericFields) {
+      if (!isFiniteNumber(value[field])) {
+        pushError(issues, `metadata.refit_status.source_gdp_history_audit.${field}`, 'Expected a finite number.')
+        ok = false
+      }
+    }
+    Object.assign(output, {
+      latest_observed_period: typeof value.latest_observed_period === 'string' ? value.latest_observed_period : undefined,
+      latest_observed_quarter_end_date:
+        typeof value.latest_observed_quarter_end_date === 'string'
+          ? value.latest_observed_quarter_end_date
+          : undefined,
+      raw_gdp_level: isFiniteNumber(value.raw_gdp_level) ? value.raw_gdp_level : null,
+      raw_gdp_growth_yoy_pct: isFiniteNumber(value.raw_gdp_growth_yoy_pct)
+        ? value.raw_gdp_growth_yoy_pct
+        : null,
+      model_adjusted_gdp_level: isFiniteNumber(value.model_adjusted_gdp_level)
+        ? value.model_adjusted_gdp_level
+        : null,
+      model_adjusted_gdp_growth_yoy_pct: isFiniteNumber(value.model_adjusted_gdp_growth_yoy_pct)
+        ? value.model_adjusted_gdp_growth_yoy_pct
+        : null,
+      model_adjusted_minus_raw_yoy_pp: isFiniteNumber(value.model_adjusted_minus_raw_yoy_pp)
+        ? value.model_adjusted_minus_raw_yoy_pp
+        : null,
+    })
+  }
+
+  if (value.recent_quarters !== undefined) {
+    if (!Array.isArray(value.recent_quarters)) {
+      pushError(issues, 'metadata.refit_status.source_gdp_history_audit.recent_quarters', 'Expected an array.')
+      ok = false
+    } else {
+      const recentQuarters: NonNullable<
+        DfmMetadata['refit_status']['source_gdp_history_audit']['recent_quarters']
+      > = []
+      for (let index = 0; index < value.recent_quarters.length; index += 1) {
+        const row = parseSourceGdpHistoryAuditQuarter(value.recent_quarters[index], index, issues)
+        if (row) recentQuarters.push(row)
+        else ok = false
+      }
+      output.recent_quarters = recentQuarters
+    }
+  }
+
+  return ok ? output : null
+}
+
 function parseRefitStatus(
   value: unknown,
   issues: DfmValidationIssue[],
@@ -764,6 +940,7 @@ function parseRefitStatus(
   const sourceLogicStatus = value.source_logic_status
   const reconciliationStatus = value.reconciliation_status
   const canonicalExportReport = value.canonical_export_report
+  const sourceGdpHistoryAudit = parseSourceGdpHistoryAudit(value.source_gdp_history_audit, issues)
   let ok = true
   if (status !== 'blocked_in_current_environment' && status !== 'available') {
     pushError(issues, 'metadata.refit_status.status', 'Expected blocked_in_current_environment or available.')
@@ -807,6 +984,7 @@ function parseRefitStatus(
     ok = false
   }
   if (!ok) return null
+  if (!sourceGdpHistoryAudit) return null
   return {
     status: status as DfmMetadata['refit_status']['status'],
     public_export_reads_source_workbook: publicExportReadsSourceWorkbook as boolean,
@@ -821,6 +999,7 @@ function parseRefitStatus(
     ...(canonicalExportReport === undefined
       ? {}
       : { canonical_export_report: (canonicalExportReport ?? null) as string | null }),
+    source_gdp_history_audit: sourceGdpHistoryAudit,
   }
 }
 

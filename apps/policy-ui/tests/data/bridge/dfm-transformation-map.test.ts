@@ -138,10 +138,20 @@ describe('DFM transformation map', () => {
       estimation: { status: string; converged: boolean; iterations: number }
       current_nowcast: {
         source_period: string
+        source_series_basis: string
         public_period: string
         source_gdp_growth_yoy_pct: number
         public_gdp_growth_yoy_pct: number
         yoy_difference_source_minus_public_pp: number
+      }
+      source_gdp_history_audit: {
+        status: string
+        latest_observed_period: string
+        raw_gdp_growth_yoy_pct: number
+        model_adjusted_gdp_growth_yoy_pct: number
+        model_adjusted_minus_raw_yoy_pp: number
+        display_rule: string
+        recent_quarters: Array<{ period: string }>
       }
     }
 
@@ -151,9 +161,50 @@ describe('DFM transformation map', () => {
     assert.equal(refit.estimation.converged, true)
     assert.equal(refit.estimation.iterations, 155)
     assert.equal(refit.current_nowcast.source_period, refit.current_nowcast.public_period)
+    assert.equal(refit.current_nowcast.source_series_basis, 'seasonally_adjusted_model_input_and_projection')
     assert.equal(refit.current_nowcast.source_gdp_growth_yoy_pct, refit.current_nowcast.public_gdp_growth_yoy_pct)
     assert.equal(refit.current_nowcast.yoy_difference_source_minus_public_pp, 0)
+    assert.equal(refit.source_gdp_history_audit.status, 'review_only_unverified')
+    assert.match(refit.source_gdp_history_audit.latest_observed_period, /^\d{4}Q[1-4]$/)
+    assert.equal(typeof refit.source_gdp_history_audit.raw_gdp_growth_yoy_pct, 'number')
+    assert.equal(typeof refit.source_gdp_history_audit.model_adjusted_gdp_growth_yoy_pct, 'number')
+    assert.equal(typeof refit.source_gdp_history_audit.model_adjusted_minus_raw_yoy_pp, 'number')
+    assert.ok(refit.source_gdp_history_audit.display_rule.includes('audit-only'))
+    assert.ok(refit.source_gdp_history_audit.display_rule.includes('seasonally adjusted GDP is model input'))
+    assert.ok(refit.source_gdp_history_audit.recent_quarters.length > 0)
     assert.equal(refit.runtime.report_render_status, 'skipped_by_runner_pandoc_not_available')
+  })
+
+  it('publishes the review-only GDP source-history audit guardrail in dfm.json metadata and caveats', () => {
+    const payload = JSON.parse(readFileSync(DFM_PUBLIC_ARTIFACT_PATH, 'utf8')) as {
+      caveats: Array<{ caveat_id: string; message: string }>
+      metadata: {
+        refit_status: {
+          source_gdp_history_audit: {
+            status: string
+            latest_observed_period: string
+            raw_gdp_growth_yoy_pct: number
+            model_adjusted_gdp_growth_yoy_pct: number
+            display_rule: string
+          }
+        }
+      }
+    }
+
+    const sourceHistoryAudit = payload.metadata.refit_status.source_gdp_history_audit
+    assert.equal(sourceHistoryAudit.status, 'review_only_unverified')
+    assert.match(sourceHistoryAudit.latest_observed_period, /^\d{4}Q[1-4]$/)
+    assert.equal(typeof sourceHistoryAudit.raw_gdp_growth_yoy_pct, 'number')
+    assert.equal(typeof sourceHistoryAudit.model_adjusted_gdp_growth_yoy_pct, 'number')
+    assert.ok(sourceHistoryAudit.display_rule.includes('audit-only'))
+    assert.ok(sourceHistoryAudit.display_rule.includes('seasonally adjusted GDP is model input'))
+    assert.ok(
+      payload.caveats.some(
+        (caveat) =>
+          caveat.caveat_id === 'dfm-source-gdp-history-audit' &&
+          caveat.message.includes('audit-only'),
+      ),
+    )
   })
 
   it('records canonical source reconciliation against the public bridge artifact', () => {

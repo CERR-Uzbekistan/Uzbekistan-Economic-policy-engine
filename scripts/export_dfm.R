@@ -347,6 +347,14 @@ build_caveats <- function() {
       affected_metrics = I(c("indicator_contributions")),
       affected_models  = I(c("DFM")),
       source           = "docs/data-bridge/dfm-transformation-map.json"
+    ),
+    list(
+      caveat_id        = "dfm-source-gdp-history-audit",
+      severity         = "warning",
+      message          = "Source-workbook GDP history is audit-only until provenance and series continuity are verified. The source R workflow seasonally adjusts GDP for model estimation; neither workbook-derived history nor adjusted model-input history should be presented as an official release.",
+      affected_metrics = I(c("gdp_growth", "nowcast_history")),
+      affected_models  = I(c("DFM")),
+      source           = "docs/data-bridge/dfm-source-refit-summary.json"
     )
   )
 }
@@ -408,6 +416,14 @@ build_metadata <- function(d) {
   } else {
     "Source refit summary is not available. Run scripts/dfm/run-source-refit.R with a configured R runtime and required packages, then review output before replacing the frozen public bridge."
   }
+  source_gdp_history_audit <- source_refit$source_gdp_history_audit %||% list(
+    status = "not_available",
+    display_rule = "Source-workbook GDP history is audit-only until source provenance and series continuity are verified; seasonally adjusted GDP is model input, not an official release.",
+    interpretation = "Run scripts/dfm/run-source-refit.R to regenerate the source-workbook raw versus seasonally adjusted model-input comparison."
+  )
+  if (is.null(source_gdp_history_audit$source_provenance)) {
+    source_gdp_history_audit$source_provenance <- NA_character_
+  }
 
   list(
     exported_at                 = utc_now(),
@@ -460,7 +476,8 @@ build_metadata <- function(d) {
       blocker = source_refit_blocker,
       source_logic_status = source_refit_status,
       reconciliation_status = if (source_refit_reconciled) "matched_public_artifact" else "not_reconciled",
-      canonical_export_report = if (canonical_report_available) CANONICAL_EXPORT_REPORT else NULL
+      canonical_export_report = if (canonical_report_available) CANONICAL_EXPORT_REPORT else NULL,
+      source_gdp_history_audit = source_gdp_history_audit
     ),
     backtest_status             = list(
       status = "proxy_validation_available",
