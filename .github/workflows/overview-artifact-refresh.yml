@@ -156,12 +156,30 @@ jobs:
           git commit -m "chore(overview): refresh public artifact"
           git push origin HEAD:main
           echo "artifact_committed=true" >> "$GITHUB_OUTPUT"
+          echo "artifact_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Dispatch Pages deploy for refreshed artifact
         if: steps.commit_overview_artifact.outputs.artifact_committed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run pages.yml --ref main
+          ARTIFACT_SHA: ${{ steps.commit_overview_artifact.outputs.artifact_sha }}
+        run: |
+          remote_sha=""
+          for attempt in {1..12}; do
+            remote_sha=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq '.object.sha')
+            if [ "$remote_sha" = "$ARTIFACT_SHA" ]; then
+              break
+            fi
+            echo "Waiting for main to expose refreshed artifact commit ($attempt/12)..."
+            sleep 5
+          done
+
+          if [ "$remote_sha" != "$ARTIFACT_SHA" ]; then
+            echo "::error::main resolved to $remote_sha instead of refreshed artifact $ARTIFACT_SHA."
+            exit 1
+          fi
+
+          gh workflow run pages.yml --ref main
 
       - name: Write workflow summary
         if: always()
