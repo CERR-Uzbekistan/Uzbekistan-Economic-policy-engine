@@ -2,7 +2,7 @@
 
 ## Decision
 
-The Python CGE solver is now **formula-reconciled with the primary 2021 source workbook**, including one independently saved 2021 energy-price experiment. It is still **not approved for the public Scenario Lab**. The remaining gates are model-owner decisions about the accepted source vintage, closure interpretation, and policy benchmark set.
+The CGE solver is **formula-reconciled with the primary 2021 source workbook** and now powers a bounded public Scenario Lab reference lane. Two source-workbook checks are reproducible: the energy-price experiment and a gold-workbook calibration variant. The lane remains **experimental and not model-owner approved**.
 
 ## Source material inspected
 
@@ -21,6 +21,8 @@ Source fingerprints:
 
 - primary workbook SHA-256: `8F2B5D75E19D89318FA73EB8E84136DFD9F8DCB0D896B57718F81E9073482904`;
 - energy benchmark SHA-256: `EF0096EBE52C90EC268CB7E75A498EE6A2BECD281387275B4D683F1F70B869EC`.
+- gold variant SHA-256: 573E19D6FD49B72D8DF0520D70888C205A51001D9004E775EF6B472AF460950E;
+- investment workbook SHA-256: 55A5652452AB5D804976DE298244F1E8C3D627C95C8F81BF0C4C8B8242F94F26.
 
 The legacy files were converted to formula-preserving `.xlsx` working copies for inspection. The conversions are audit intermediates only; source workbooks were not modified or committed.
 
@@ -114,25 +116,32 @@ The 21 December 2023 energy workbook raises the world import-price index from `0
 
 The workbook's `Price Effect (Pf)` label is not referenced by any accepted equation. The API retains it only for compatibility and rejects values other than `1.0` rather than implying a false productivity channel.
 
+## Gold workbook variant
+
+The gold workbook is exactly reproducible only after applying its own alternative Armington calibration (sig_q=0.85, with corresponding rho_q, aq, and bq) and its export-price input. It is therefore recorded as a **calibration-variant benchmark**, not as a clean isolated gold-price shock. The public controls do not expose it as a normal preset.
+
+## Excluded investment workbook
+
+The investment workbook is not accepted as CGE benchmark evidence. Its saved outputs move while the displayed exogenous inputs do not, and the accompanying report states that the calculations used an input-output method. It remains in the audit trail as an excluded source rather than being used to validate CGE.
+
 ## What is now working
 
 - Exact structural and exogenous calibration values replace rounded approximations.
 - No-shock changes are exactly zero relative to the solver baseline.
 - Formula-derived base accounts reconcile.
-- A consistent workbook scenario is locked by an automated benchmark test.
+- Two workbook checks are locked by automated benchmark tests.
 - Solver output states the closure and numeraire.
 - Invalid domains, inactive `Pf` shocks, missing brackets, and false convergence are rejected.
 - Accounting residuals are returned and tested.
 
-## Remaining activation gates
+## Remaining production gates
 
 1. A model owner must approve the primary 2021 workbook as the accepted vintage.
 2. A model owner must approve the fixed-foreign-saving, savings-driven closure and the equivalent Python numeraire.
-3. Government transfer sign and foreign inflow definitions must be confirmed against source documentation.
-4. At least two additional policy scenarios must be selected from internally consistent workbooks and accepted as benchmarks.
-5. The public product must describe `Er` as a relative-price index, never as a nominal UZS/USD forecast.
-6. Only after these decisions should the team generate a checked-in `cge.json` artifact and activate CGE in Model Explorer or Scenario Lab.
+3. Government transfer signs and foreign-inflow definitions must be confirmed against source documentation.
+4. The energy benchmark and gold-workbook calibration variant need explicit owner acceptance for official use.
+5. The four bounded public controls need policy-interpretation sign-off before promotion beyond experimental reference status.
 
 ## Public-use boundary
 
-Until the activation gates pass, CGE remains **planned / methodology only** in the public application. MCP results are experimental comparative-static calculations, not reviewed economy-wide policy estimates or forecasts.
+apps/policy-ui/public/data/cge.json is checked in and guard-validated. Scenario Lab may show only bounded aggregate comparative-static percentage changes for exports, imports, composite supply, consumption, investment, taxes, government saving, and the normalized relative-price index. It must not claim GDP forecasts, sector effects, employment, distribution, time paths, or nominal UZS/USD results. These calculations are experimental references, not reviewed economy-wide policy estimates or forecasts.

@@ -492,7 +492,7 @@
         "macroQpm": "Macro scenario simulation",
         "ioSectorShock": "Sector linkage analysis",
         "peTradeShock": "Direct tariff incidence",
-        "cgeReformShock": "General equilibrium reform analysis, not active",
+        "cgeReformShock": "Bounded aggregate equilibrium reference",
         "fppFiscalPath": "Fiscal consistency, not active",
         "savedRuns": "Saved analytical runs",
         "synthesisPreview": "Cross-model synthesis, not active"
@@ -502,6 +502,7 @@
         "next": "Next",
         "bridgePilot": "Active data",
         "shell": "Local",
+        "reference": "Reference",
         "planned": "Not active"
       }
     },
@@ -1237,7 +1238,77 @@
         }
       }
     },
-    "saved": {
+    "cgeShock": {
+      "loading": "Loading CGE reference data...",
+      "eyebrow": "Experimental reference",
+      "title": "CGE Reform Shock",
+      "description": "Test bounded aggregate shocks against the reconciled 2021 equilibrium.",
+      "status": "Not model-owner approved",
+      "setup": "Policy setup",
+      "presets": "CGE reference presets",
+      "preset": {
+        "baseline": {
+          "title": "Calibrated base",
+          "description": "No additional shock."
+        },
+        "world_import_price_benchmark": {
+          "title": "World import-price benchmark",
+          "description": "Reproduces the verified source-workbook experiment."
+        },
+        "tariff_removal_sensitivity": {
+          "title": "Tariff removal sensitivity",
+          "description": "Removes the aggregate import tariff in the reference equations."
+        },
+        "remittance_decline_sensitivity": {
+          "title": "Remittance decline sensitivity",
+          "description": "Tests lower household foreign-transfer income."
+        }
+      },
+      "controls": {
+        "world_import_price_change_pct": "World import-price change",
+        "import_tariff_change_pp": "Import tariff change",
+        "government_consumption_change_pct": "Government consumption change",
+        "remittances_change_pct": "Remittances change"
+      },
+      "boundary": "Comparative-static aggregate effects only. No GDP forecast, sector, labor, distribution, or nominal UZS/USD result.",
+      "decisionView": "Decision view",
+      "resultTitle": "Change from the calibrated base",
+      "resultDescription": "Percent change from the {{year}} equilibrium; this is not a time forecast.",
+      "outputs": {
+        "exports": "Exports",
+        "imports": "Imports",
+        "compositeSupply": "Composite supply",
+        "consumption": "Consumption",
+        "investment": "Investment",
+        "taxRevenue": "Tax revenue",
+        "governmentSaving": "Government saving",
+        "relativePriceIndex": "Relative-price index"
+      },
+      "effectsTitle": "Aggregate transmission",
+      "effectsDescription": "Bars compare magnitude around the zero line; direction is shown by sign.",
+      "evidenceTitle": "Validation evidence",
+      "evidenceDescription": "Two source workbooks are reproduced within tolerance.",
+      "exactMatch": "Exact workbook match",
+      "caveats": "Method and source caveats",
+      "excludedSources": "Excluded from benchmark evidence",
+      "benchmark": {
+        "energy_world_import_price": { "title": "21 December 2023 world import-price experiment", "note": "Exact real-quantity match under the equivalent Python numeraire." },
+        "gold_export_price_variant": { "title": "Gold export-price workbook variant", "note": "Exact match requires the workbook's alternative Armington elasticity; this is not an isolated gold-price effect." }
+      },
+      "caveat": {
+        "0": "Experimental comparative-static reference, not a forecast or model-owner-approved policy estimate.",
+        "1": "The relative-price index is normalized; it is not the nominal UZS/USD exchange rate.",
+        "2": "The aggregate model has no sector, labor, household-distribution, debt, or time-path block.",
+        "3": "Government consumption and remittance controls are solver sensitivities without accepted source-workbook benchmarks."
+      },
+      "excluded": {
+        "0": "Saved outputs move without displayed exogenous-input changes; not accepted as a CGE benchmark.",
+        "1": "The accompanying note states that the calculation used an input-output method, not this CGE 1-2-3 model."
+      },
+      "errors": {
+        "failed": "The selected controls did not produce a valid equilibrium."
+      }
+    },    "saved": {
       "title": "Saved scenarios",
       "empty": "No saved scenarios yet.",
       "load": "Load",

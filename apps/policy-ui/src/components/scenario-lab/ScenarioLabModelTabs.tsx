@@ -38,6 +38,12 @@ const ACTIVE_SCENARIO_LAB_MODEL_TABS: ScenarioLabModelTabDefinition[] = [
     statusKey: 'scenarioLab.modelTabs.status.bridgePilot',
   },
   {
+    id: 'cge_reform_shock',
+    labelKey: 'scenarioLab.modelTabs.cgeReformShock',
+    subtitleKey: 'scenarioLab.modelTabs.subtitle.cgeReformShock',
+    statusKey: 'scenarioLab.modelTabs.status.reference',
+  },
+  {
     id: 'saved_runs',
     labelKey: 'scenarioLab.modelTabs.savedRuns',
     subtitleKey: 'scenarioLab.modelTabs.subtitle.savedRuns',
@@ -46,12 +52,6 @@ const ACTIVE_SCENARIO_LAB_MODEL_TABS: ScenarioLabModelTabDefinition[] = [
 ]
 
 const PLANNED_SCENARIO_LAB_MODEL_LANES: ScenarioLabModelTabDefinition[] = [
-  {
-    id: 'cge_reform_shock',
-    labelKey: 'scenarioLab.modelTabs.cgeReformShock',
-    subtitleKey: 'scenarioLab.modelTabs.subtitle.cgeReformShock',
-    statusKey: 'scenarioLab.modelTabs.status.planned',
-  },
   {
     id: 'fpp_fiscal_path',
     labelKey: 'scenarioLab.modelTabs.fppFiscalPath',

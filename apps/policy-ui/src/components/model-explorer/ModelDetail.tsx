@@ -109,7 +109,7 @@ function ValidationCheckList({ checks }: { checks?: ModelValidationCheck[] }) {
 
 export function ModelDetail({ entry, activeTab, onTabChange }: ModelDetailProps) {
   const { t } = useTranslation()
-  const isActiveModel = entry.status.severity === 'ok'
+  const isActiveModel = entry.status.severity === 'ok' || entry.status.label === 'Experimental reference'
 
   function focusTab(tab: ModelExplorerTab) {
     window.requestAnimationFrame(() => {

@@ -4,7 +4,7 @@ import type {
 } from '../../contracts/data-contract.js'
 
 // Six-model methodology catalog. QPM, DFM, PE, and I-O are active bridge-backed
-// lanes; CGE and FPP remain visible as not-active methodology lanes.
+// lanes; CGE is a bounded experimental reference, while FPP remains inactive.
 
 export const modelCatalogEntries: ModelCatalogEntry[] = [
   {
@@ -351,24 +351,24 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
     id: 'cge-model',
     title: 'CGE',
     full_title: 'CGE — 1-2-3 Model',
-    lifecycle_label: 'Computable General Equilibrium · Reconciled, not active',
-    status: { label: 'Not active', severity: 'warn' },
+    lifecycle_label: 'Computable General Equilibrium · Experimental reference',
+    status: { label: 'Experimental reference', severity: 'warn' },
     model_type: 'CGE',
     frequency: 'Annual',
     methodology_signature: 'Aggregate 1-2-3 · CET/CES · 2021',
     description:
-      'Formula-reconciled aggregate 1-2-3 solver. The calculation engine is validated against its 2021 source workbook but remains gated from public scenarios.',
+      'Formula-reconciled aggregate 1-2-3 solver with a bounded public reference lane. It is not model-owner approved or an official forecast.',
     stats: [
       { value: '2021', label: 'Source year' },
       { value: '<0.001%', label: 'Base gap' },
-      { value: '1', label: 'Benchmark' },
+      { value: '2', label: 'Benchmarks' },
     ],
     purpose:
       'Aggregate comparative-static analysis of how import prices, trade taxes, government demand, transfers, remittances, and foreign saving change exports, imports, domestic sales, consumption, investment, tax revenue, and saving. This 1-2-3 model has no sector, labor, household-distribution, or time-path block.',
     model_note: {
       title: 'CGE readiness note',
       summary:
-        'The Python solver now reproduces the formula-derived 2021 workbook equilibrium and one independently saved energy-price experiment. It is validated as an experimental calculation engine, not approved as a public policy scenario model.',
+        'The public reference solver reproduces the formula-derived 2021 equilibrium, an energy-price experiment, and a documented gold-workbook calibration variant. It remains experimental and not model-owner approved.',
       items: [
         {
           label: 'Accepted source basis',
@@ -392,9 +392,9 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
         },
       ],
       boundaries: [
-        'No public cge.json artifact or Scenario Lab result contract is active.',
+        'The public cge.json and bounded Scenario Lab lane are active as experimental reference calculations only.',
         'The model is aggregate: it cannot report sector reallocation, employment, household distribution, or detailed welfare effects.',
-        'The 2021 source vintage, closure interpretation, transfer signs, and at least two additional policy benchmarks still require model-owner approval.',
+        'The 2021 source vintage, closure interpretation, transfer signs, and gold-workbook calibration variant still require model-owner approval.',
       ],
     },
     equations: [
@@ -456,6 +456,10 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
         institution: 'Independent workbook benchmark',
         description: 'CGE123_2021_21.12.2023.xls; saved world-import-price experiment',
         vintage_label: '21 Dec 2023',
+      },      {
+        institution: 'Calibration-variant workbook benchmark',
+        description: 'CGE123_2021_gold_price.xls; exact only with its alternative Armington calibration',
+        vintage_label: 'Source workbook variant',
       },
       {
         institution: 'Python calculation service',
@@ -466,8 +470,8 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
     validation_summary: [
       'The no-shock Python solution reproduces the formula-derived 2021 workbook base within 0.001%, with no material calibration gaps.',
       'Domestic-market, composite-market, current-account, and government-budget residuals are below 1e-8.',
-      'One independent energy-price workbook experiment is reproduced within 0.000002 for six real quantities.',
-      'Public scenario activation remains gated because source-vintage and closure decisions plus two additional accepted benchmarks are still outstanding.',
+      'Two source-workbook checks are reproduced within tolerance: the energy-price experiment and a gold-workbook alternative Armington calibration variant.',
+      'The bounded public lane is experimental; official-use status remains gated on source-vintage, closure, transfer-sign, and calibration-variant decisions.',
     ],
     validation_checks: [
       {
@@ -486,9 +490,9 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
         detail: 'The independently saved 21 Dec 2023 import-price experiment is reproduced within 0.000002 for six real quantities.',
       },
       {
-        label: 'Additional policy benchmarks',
-        status: 'needs_review',
-        detail: 'At least two more internally consistent workbook scenarios must be selected and accepted before public scenario activation.',
+        label: 'Gold-workbook calibration variant',
+        status: 'pass',
+        detail: 'The gold workbook is reproduced only with its documented alternative Armington calibration and is not presented as a pure isolated gold-price shock.',
       },
       {
         label: 'Model-owner decisions',
@@ -497,7 +501,7 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
       },
     ],
     bridge_evidence: {
-      status_label: 'Formula-reconciled · gated',
+      status_label: 'Experimental reference · formula-reconciled',
       source_artifact: 'CGE123(2021)_UZ_IMF_MAIN.xls',
       data_version: '2021 formula-derived equilibrium',
       exported_at: '2026-07-16',
@@ -508,17 +512,17 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
         { label: 'Maximum base gap', value: '<0.001%' },
         { label: 'Accounting residuals', value: '<1e-8' },
         { label: 'Benchmark tolerance', value: '0.000002' },
-        { label: 'Accepted benchmarks', value: '1' },
+        { label: 'Exact benchmarks', value: '2' },
       ],
       caveats: [
-        'This evidence describes the experimental calculation service; no public cge.json artifact is active.',
+        'The public cge.json powers a bounded experimental reference lane; it is not model-owner approved.',
         'Er is a normalized relative-price index, not a UZS/USD forecast.',
       ],
     },
     activation_requirements: [
       'Approve the 2021 source workbook, fixed-foreign-saving/savings-driven closure, transfer sign, and foreign inflow definitions.',
-      'Accept at least two additional internally consistent policy benchmarks and lock them in automated tests.',
-      'Generate a checked-in cge.json artifact with guard/adapter tests before enabling a bounded Scenario Lab lane.',
+      'Review and accept the energy benchmark and gold-workbook calibration variant for official use.',
+      'Approve public interpretation of the four bounded controls before promoting the lane beyond experimental reference status.',
     ],
   },
   {
@@ -587,7 +591,7 @@ export const modelCatalogEntries: ModelCatalogEntry[] = [
 
 export const modelCatalogMeta: ModelExplorerMeta = {
   models_total: modelCatalogEntries.length,
-  models_live: 4,
+  models_live: 5,
   last_calibration_audit_label: 'Apr 2026',
   open_methodology_issues: 6,
 }

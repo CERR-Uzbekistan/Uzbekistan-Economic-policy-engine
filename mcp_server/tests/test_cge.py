@@ -151,3 +151,30 @@ def test_cge_changes_from_base():
 
     assert "changes_from_base" in result
     assert "Er_pct_change" in result["changes_from_base"]
+
+
+def test_cge_reproduces_gold_workbook_calibration_variant():
+    """The gold workbook is a calibration variant, not an isolated price shock."""
+    params = dict(CGE_DEFAULTS)
+    params.update(
+        {
+            "we": 0.9475169014017701,
+            "sig_q": 0.85,
+            "rho_q": 0.17647058823529416,
+            "aq": 1.9233641055541322,
+            "bq": 0.35005943384368887,
+        }
+    )
+    result = solve_cge(params)
+
+    assert result["error"] is False
+    expected_real = {
+        "E": 0.25447989843050894,
+        "M": 0.4247184215042827,
+        "Ds": 0.7455123566456383,
+        "Q": 1.1700151581694114,
+        "Cn": 0.6043733370900031,
+        "Z": 0.3898577342065014,
+    }
+    for key, workbook_value in expected_real.items():
+        assert math.isclose(result["results"][key], workbook_value, abs_tol=2e-6)

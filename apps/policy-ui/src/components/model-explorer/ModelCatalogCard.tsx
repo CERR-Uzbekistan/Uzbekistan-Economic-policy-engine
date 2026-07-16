@@ -9,7 +9,7 @@ type ModelCatalogCardProps = {
 
 export function ModelCatalogCard({ entry, isActive, onSelect }: ModelCatalogCardProps) {
   const { t } = useTranslation()
-  const isActiveModel = entry.status.severity === 'ok'
+  const isActiveModel = entry.status.severity === 'ok' || entry.status.label === 'Experimental reference'
   const statusLabel = isActiveModel
     ? t('modelExplorer.status.active')
     : t('modelExplorer.status.notActive')

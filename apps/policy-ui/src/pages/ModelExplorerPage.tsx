@@ -18,7 +18,7 @@ function getCatalogEntries(workspace: ModelExplorerWorkspace): ModelCatalogEntry
 }
 
 function isActiveModel(entry: ModelCatalogEntry): boolean {
-  return entry.status.severity === 'ok'
+  return entry.status.severity === 'ok' || entry.status.label === 'Experimental reference'
 }
 
 export function ModelExplorerPage() {

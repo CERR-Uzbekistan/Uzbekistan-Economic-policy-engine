@@ -35,7 +35,7 @@ async function createTestI18n() {
               macroQpm: 'Macro scenario simulation',
               ioSectorShock: 'Sector linkage analysis',
                 peTradeShock: 'Direct tariff incidence',
-                cgeReformShock: 'General equilibrium reform analysis, not active',
+                cgeReformShock: 'Bounded aggregate equilibrium reference',
                 fppFiscalPath: 'Fiscal consistency, not active',
                 savedRuns: 'Saved analytical runs',
                 synthesisPreview: 'Cross-model synthesis, not active',
@@ -45,6 +45,7 @@ async function createTestI18n() {
                 next: 'Next',
                 bridgePilot: 'Active data',
                 shell: 'Local',
+                reference: 'Reference',
                 planned: 'Not active',
               },
             },
@@ -137,12 +138,14 @@ describe('ScenarioLabModelTabs', () => {
     assert.match(markup, /Active data/)
     assert.doesNotMatch(markup, /scenario-model-tabs__status">Next/)
     assert.match(markup, /Direct tariff incidence/)
-    assert.match(markup, /General equilibrium reform analysis, not active/)
+    assert.match(markup, /Bounded aggregate equilibrium reference/)
     assert.match(markup, /Fiscal consistency, not active/)
     assert.match(markup, /aria-selected="true"[^>]*><span>Macro \/ QPM<\/span>/)
     assert.match(markup, /Synthesis/)
-    assert.equal(markup.match(/role="tab"/g)?.length, 4)
+    assert.equal(markup.match(/role="tab"/g)?.length, 5)
     assert.match(markup, /id="scenario-model-tab-pe_trade_shock"/)
+    assert.match(markup, /id="scenario-model-tab-cge_reform_shock"/)
+    assert.match(markup, /scenario-model-tabs__status">Reference/)
     assert.doesNotMatch(markup, /id="scenario-model-tab-synthesis_preview"/)
   })
 
@@ -159,16 +162,11 @@ describe('ScenarioLabModelTabs', () => {
     assert.match(markup, /not a macro forecast/)
   })
 
-  it('renders active PE shell and planned CGE/FPP placeholders without implying active computation', async () => {
+  it('renders active PE guidance and keeps FPP as a planned placeholder', async () => {
     const i18n = await createTestI18n()
     const peMarkup = renderToStaticMarkup(
       <I18nextProvider i18n={i18n}>
         <ScenarioLabTabShell tab="pe_trade_shock" />
-      </I18nextProvider>,
-    )
-    const cgeMarkup = renderToStaticMarkup(
-      <I18nextProvider i18n={i18n}>
-        <ScenarioLabTabShell tab="cge_reform_shock" />
       </I18nextProvider>,
     )
     const fppMarkup = renderToStaticMarkup(
@@ -180,8 +178,6 @@ describe('ScenarioLabModelTabs', () => {
     assert.doesNotMatch(peMarkup, /Not active/)
     assert.match(peMarkup, /Inputs: tariff cut/)
     assert.match(peMarkup, /direct trade-channel evidence only/)
-    assert.match(cgeMarkup, /Not active/)
-    assert.match(cgeMarkup, /Model-owner approval and two more benchmarks are required before activation/)
     assert.match(fppMarkup, /Not active/)
     assert.match(fppMarkup, /fiscal sustainability evidence only/)
   })

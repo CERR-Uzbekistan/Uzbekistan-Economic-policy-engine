@@ -68,7 +68,7 @@ describe('model explorer source live integration flow', () => {
       catalogEntries.map((entry) => entry.id),
       modelCatalogEntries.map((entry) => entry.id),
     )
-    assert.equal(readyState.workspace?.meta?.models_live, 4)
+    assert.equal(readyState.workspace?.meta?.models_live, 5)
   })
 
   it('enriches the I-O and PE entries with bridge evidence when public artifacts are valid', async () => {

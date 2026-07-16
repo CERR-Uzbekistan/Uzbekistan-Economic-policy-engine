@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'reac
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 import { AssumptionsPanel } from '../components/scenario-lab/AssumptionsPanel'
+import { CgeReformShockPanel } from '../components/scenario-lab/CgeReformShockPanel'
 import { IoSectorShockPanel } from '../components/scenario-lab/IoSectorShockPanel'
 import { InterpretationPanel } from '../components/scenario-lab/InterpretationPanel'
 import { PeTradeShockPanel } from '../components/scenario-lab/PeTradeShockPanel'
@@ -40,6 +41,10 @@ import {
   getInitialScenarioLabSourceState,
   loadScenarioLabSourceState,
 } from '../data/scenario-lab/source'
+import {
+  getInitialScenarioLabCgeState,
+  loadScenarioLabCgeState,
+} from '../data/scenario-lab/cge-analytics-source'
 import {
   getInitialScenarioLabIoAnalyticsState,
   loadScenarioLabIoAnalyticsState,
@@ -158,6 +163,7 @@ export function ScenarioLabPage() {
   const [sourceState, setSourceState] = useState(getInitialScenarioLabSourceState)
   const [ioAnalyticsState, setIoAnalyticsState] = useState(getInitialScenarioLabIoAnalyticsState)
   const [peAnalyticsState, setPeAnalyticsState] = useState(getInitialScenarioLabPeAnalyticsState)
+  const [cgeState, setCgeState] = useState(getInitialScenarioLabCgeState)
   const initialPresetId = resolveDefaultPresetId(scenarioLabWorkspaceMock)
   const initialPreset = findPreset(scenarioLabWorkspaceMock, initialPresetId)
   const [selectedPresetId, setSelectedPresetId] = useState(initialPresetId)
@@ -245,6 +251,16 @@ export function ScenarioLabPage() {
       if (!cancelled) {
         setPeAnalyticsState(state)
       }
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    loadScenarioLabCgeState().then((state) => {
+      if (!cancelled) setCgeState(state)
     })
     return () => {
       cancelled = true
@@ -699,6 +715,11 @@ export function ScenarioLabPage() {
     setPeAnalyticsState(nextState)
   }
 
+  async function handleRetryCge() {
+    setCgeState(getInitialScenarioLabCgeState())
+    setCgeState(await loadScenarioLabCgeState())
+  }
+
   const hasReadyRun = sourceState.status === 'ready' || sourceState.results !== null
   const hasPendingEdits =
     hasReadyRun &&
@@ -791,6 +812,15 @@ export function ScenarioLabPage() {
               ...(currentScenarioId && !hasPendingEdits ? (['localBrowserDraft'] as const) : []),
             ] satisfies TrustStateLabelId[],
           }
+        : activeModelTab === 'cge_reform_shock'
+          ? {
+              lane: t('scenarioLab.context.lane.macroScenario'),
+              model: t('scenarioLab.context.model.cge'),
+              runName: t('scenarioLab.modelTabs.cgeReformShock'),
+              dataVintage: cgeState.payload?.attribution.data_version ?? dataDateLabel,
+              saveState: t('scenarioLab.context.saveState.unsaved'),
+              stateLabels: ['artifactGuardChecked', 'sourceVintage'] satisfies TrustStateLabelId[],
+            }
         : activeModelTab === 'saved_runs'
           ? {
               lane: t('scenarioLab.context.lane.macroScenario'),
@@ -957,6 +987,13 @@ export function ScenarioLabPage() {
           }}
           onSaveRun={handleSavePeTradeShock}
           saveStatus={peSaveStatus}
+        />
+      ) : activeModelTab === 'cge_reform_shock' ? (
+        <CgeReformShockPanel
+          state={cgeState}
+          onRetry={() => {
+            void handleRetryCge()
+          }}
         />
       ) : activeModelTab === 'saved_runs' ? (
         <ScenarioLabSavedRunsPanel

@@ -106,7 +106,7 @@ describe('Model Explorer catalog cards', () => {
   })
 
   it('labels inactive model cards as methodology-only reference lanes', async () => {
-    const peEntry = modelCatalogEntries.find((entry) => entry.id === 'cge-model')!
+    const peEntry = modelCatalogEntries.find((entry) => entry.id === 'fpp-fiscal')!
     const i18n = await createTestI18n()
 
     const markup = renderToStaticMarkup(
@@ -119,7 +119,7 @@ describe('Model Explorer catalog cards', () => {
     assert.match(markup, /Methodology only/)
   })
 
-  it('renders a reference-only boundary when an inactive model is inspected', async () => {
+  it('renders the experimental-reference boundary when CGE is inspected', async () => {
     const cgeEntry = modelCatalogEntries.find((entry) => entry.id === 'cge-model')!
     const i18n = await createTestI18n()
 
@@ -129,12 +129,12 @@ describe('Model Explorer catalog cards', () => {
       </I18nextProvider>,
     )
 
-    assert.match(markup, /Reference only/)
-    assert.match(markup, /not connected to Scenario Lab runs/)
-    assert.match(markup, /Required before activation/)
-    assert.match(markup, /Approve the 2021 source workbook/)
+    assert.match(markup, /Experimental reference/)
+    assert.doesNotMatch(markup, /Reference only/)
+    assert.doesNotMatch(markup, /not connected to Scenario Lab runs/)
+    assert.match(markup, /Source vintage awaits approval/)
     assert.match(markup, /CGE readiness note/)
-    assert.match(markup, /Formula-reconciled · gated/)
+    assert.match(markup, /Experimental reference · formula-reconciled/)
     assert.match(markup, /Energy-price benchmark/)
     assert.match(markup, /normalized relative-price index, not UZS\/USD/)
     assert.doesNotMatch(markup, /Expected outputs: welfare/)

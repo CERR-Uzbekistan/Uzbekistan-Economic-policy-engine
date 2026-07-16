@@ -1,11 +1,13 @@
 import type { CaveatSeverity } from '../../contracts/data-contract.js'
+import { CgeValidationError, fetchCgeBridgePayload } from '../bridge/cge-client.js'
+import type { CgeBridgePayload } from '../bridge/cge-types.js'
 import {
   DfmTransportError,
   DfmValidationError,
   fetchDfmBridgePayload,
 } from '../bridge/dfm-client.js'
 import type { DfmBridgePayload } from '../bridge/dfm-types.js'
-import type { FetchLike } from '../bridge/bridge-fetch.js'
+import { BridgeFetchError, type FetchLike } from '../bridge/bridge-fetch.js'
 import {
   IoTransportError,
   IoValidationError,
@@ -40,8 +42,8 @@ import {
 export type RegistryStatus = 'valid' | 'warning' | 'failed' | 'missing' | 'unavailable' | 'planned'
 export type RegistryRecordKind = 'source_series' | 'model_input' | 'bridge_output' | 'planned_artifact'
 export type RegistryFilter = 'all' | 'active' | 'warnings' | 'planned' | 'missingUnavailable'
-export type ImplementedModelId = 'overview' | 'qpm' | 'dfm' | 'io' | 'pe'
-export type PlannedModelId = 'hfi' | 'cge' | 'fpp'
+export type ImplementedModelId = 'overview' | 'qpm' | 'dfm' | 'io' | 'pe' | 'cge'
+export type PlannedModelId = 'hfi' | 'fpp'
 export type RegistryModelId = ImplementedModelId | PlannedModelId
 
 export type RegistryIssue = {
@@ -127,7 +129,7 @@ export const REGISTRY_FILTERS: RegistryFilter[] = [
 ]
 
 type LoadedArtifact =
-  | { status: 'loaded'; payload: QpmBridgePayload | DfmBridgePayload | IoBridgePayload | PeBridgePayload | OverviewArtifact }
+  | { status: 'loaded'; payload: QpmBridgePayload | DfmBridgePayload | IoBridgePayload | PeBridgePayload | CgeBridgePayload | OverviewArtifact }
   | { status: 'failed' | 'missing' | 'unavailable'; detail: string; issues: RegistryIssue[] }
 
 const DASH = 'Not carried in public artifact'
@@ -150,19 +152,21 @@ export function getInitialDataRegistry(): DataRegistry {
     dfm: { status: 'unavailable', detail: 'Loading /data/dfm.json.', issues: [] },
     io: { status: 'unavailable', detail: 'Loading /data/io.json.', issues: [] },
     pe: { status: 'unavailable', detail: 'Loading /data/pe.json.', issues: [] },
+    cge: { status: 'unavailable', detail: 'Loading /data/cge.json.', issues: [] },
     now: new Date(),
     metadataSource: 'static-fallback',
   })
 }
 
 export async function loadDataRegistry(fetchImpl: FetchLike = fetch, now = new Date()): Promise<DataRegistry> {
-  const [apiMetadata, overview, qpm, dfm, io, pe] = await Promise.all([
+  const [apiMetadata, overview, qpm, dfm, io, pe, cge] = await Promise.all([
     loadRegistryApiMetadata(fetchImpl),
     loadOverviewArtifact(fetchImpl),
     loadQpmArtifact(fetchImpl),
     loadDfmArtifact(fetchImpl),
     loadIoArtifact(fetchImpl),
     loadPeArtifact(fetchImpl),
+    loadCgeArtifact(fetchImpl),
   ])
 
   return buildDataRegistry({
@@ -171,6 +175,7 @@ export async function loadDataRegistry(fetchImpl: FetchLike = fetch, now = new D
     dfm,
     io,
     pe,
+    cge,
     now,
     apiMetadata,
     metadataSource: apiMetadata ? 'api' : 'static-fallback',
@@ -183,6 +188,7 @@ export function buildDataRegistry(options: {
   dfm: LoadedArtifact
   io: LoadedArtifact
   pe: LoadedArtifact
+  cge?: LoadedArtifact
   now: Date
   apiMetadata?: RegistryApiArtifact[] | null
   metadataSource?: DataRegistry['metadataSource']
@@ -197,6 +203,7 @@ export function buildDataRegistry(options: {
     buildDfmArtifact(options.dfm, options.now),
     buildIoArtifact(options.io),
     buildPeArtifact(options.pe),
+    buildCgeArtifact(options.cge ?? { status: 'missing', detail: 'The public /data/cge.json reference artifact is absent.', issues: [] }),
   ], options.apiMetadata ?? null)
 
   return assembleDataRegistry({
@@ -400,13 +407,21 @@ async function loadPeArtifact(fetchImpl: FetchLike): Promise<LoadedArtifact> {
     return mapBridgeError(error, 'PE')
   }
 }
+async function loadCgeArtifact(fetchImpl: FetchLike): Promise<LoadedArtifact> {
+  try {
+    return { status: 'loaded', payload: await fetchCgeBridgePayload(fetchImpl) }
+  } catch (error) {
+    return mapBridgeError(error, 'CGE')
+  }
+}
 
 function mapBridgeError(error: unknown, label: string): LoadedArtifact {
   if (
     error instanceof QpmValidationError ||
     error instanceof DfmValidationError ||
     error instanceof IoValidationError ||
-    error instanceof PeValidationError
+    error instanceof PeValidationError ||
+    error instanceof CgeValidationError
   ) {
     return {
       status: 'failed',
@@ -423,7 +438,8 @@ function mapBridgeError(error: unknown, label: string): LoadedArtifact {
     error instanceof QpmTransportError ||
     error instanceof DfmTransportError ||
     error instanceof IoTransportError ||
-    error instanceof PeTransportError
+    error instanceof PeTransportError ||
+    error instanceof BridgeFetchError
   ) {
     const isMissing = error.kind === 'http' && error.status === 404
     return {
@@ -684,6 +700,49 @@ function buildPeArtifact(result: LoadedArtifact): RegistryArtifact {
   }
 }
 
+function buildCgeArtifact(result: LoadedArtifact): RegistryArtifact {
+  const base = createArtifactBase('cge', '/data/cge.json', 'CGE aggregate reform reference')
+  if (result.status !== 'loaded') return artifactFromFailure(base, result)
+  const payload = result.payload as CgeBridgePayload
+
+  return {
+    ...base,
+    status: 'warning',
+    statusDetail: 'Experimental reference artifact passed format checks and workbook benchmark checks; this is not economic or model validation, and model-owner approval remains outstanding.',
+    owner: 'CERR model owner approval pending',
+    sourceSystem: payload.metadata.framework,
+    dataVintage: payload.attribution.data_version,
+    exportTimestamp: payload.metadata.exported_at,
+    sourceArtifact: payload.metadata.source_artifact,
+    sourceVintage: '2021 formula-derived equilibrium',
+    solverVersion: payload.metadata.solver_version,
+    caveatCount: payload.caveats.length,
+    highestCaveatSeverity: 'warning',
+    validationScope:
+      'Frontend guard checks the aggregate CGE boundary, bounded controls, formula-reconciled calibration, two exact workbook benchmarks, exclusions, and caveats.',
+    freshnessRule:
+      'Static 2021 calibration until a model owner approves a newer source vintage; this reference is not treated as a current forecast.',
+    caveatsSummary: payload.caveats.join(' '),
+    sourceExportExplanation:
+      'The source vintage is the 2021 workbook equilibrium; the export timestamp records deterministic cge.json generation.',
+    facts: [
+      { label: 'Controls', value: String(payload.controls.length) },
+      { label: 'Exact benchmarks', value: String(payload.benchmarks.length) },
+      { label: 'Maximum base gap', value: payload.calibration.diagnostics.max_abs_gap_pct.toFixed(6) + '%' },
+      { label: 'Approval', value: 'Not model-owner approved' },
+    ],
+    consumers: [
+      CONSUMER_LINKS.scenarioLab,
+      CONSUMER_LINKS.modelExplorer,
+      CONSUMER_LINKS.dataRegistry,
+    ],
+    issues: payload.caveats.map((message, index) => ({
+      path: 'caveats[' + index + ']',
+      message,
+      severity: 'warning' as const,
+    })),
+  }
+}
 function createArtifactBase(
   id: ImplementedModelId,
   artifactPath: string,
@@ -743,24 +802,6 @@ function buildPlannedRows(): RegistryRow[] {
       freshnessRule: 'Freshness rules will be defined in the future HFI contract; this registry does not refresh data.',
       caveats: 'Unavailable by design, not a failed artifact.',
       sourceExportExplanation: 'A future HFI source vintage will differ from a future frontend artifact export timestamp.',
-      modelExplorerHref: '/model-explorer',
-    },
-    {
-      id: 'cge',
-      registryType: 'planned_artifact',
-      label: 'CGE Reform Shock',
-      domain: 'CGE SAM / reform inputs',
-      status: 'planned',
-      dataVintage: '2021 source workbook; owner acceptance pending',
-      exportTimestamp: 'No public cge.json artifact',
-      source: 'CGE123(2021)_UZ_IMF_MAIN.xls',
-      owner: 'Model owner approval pending',
-      sourceSystem: 'Workbook-reconciled Python CGE 1-2-3 solver',
-      notes: 'The experimental solver reproduces the formula-derived base and one energy-price benchmark. Public scenario computation remains disabled.',
-      validationScope: 'Base-equilibrium reconciliation, four accounting residuals, parameter domains, convergence, and one independent workbook benchmark.',
-      freshnessRule: 'Static 2021 calibration until the model owner accepts a newer source vintage and a public artifact contract.',
-      caveats: 'Planned public artifact; solver evidence is experimental and aggregate, with no sector, labor, distribution, or dynamic forecast block.',
-      sourceExportExplanation: 'The 2021 workbook is the solver source vintage. A separate cge.json export timestamp will be added only after activation gates pass.',
       modelExplorerHref: '/model-explorer',
     },
     {

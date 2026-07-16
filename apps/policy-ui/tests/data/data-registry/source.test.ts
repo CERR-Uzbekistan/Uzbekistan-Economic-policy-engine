@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { afterEach, describe, it } from 'node:test'
 import { fileURLToPath } from 'node:url'
+import type { CgeBridgePayload } from '../../../src/data/bridge/cge-types.js'
 import type { IoBridgePayload } from '../../../src/data/bridge/io-types.js'
 import type { PeBridgePayload } from '../../../src/data/bridge/pe-types.js'
 import {
@@ -13,6 +14,7 @@ import { buildValidDfmPayload } from '../bridge/dfm-fixture.js'
 import { buildValidQpmPayload } from '../bridge/qpm-fixture.js'
 import { buildValidOverviewArtifact } from '../overview/overview-artifact-fixture.js'
 
+const CGE_PUBLIC_ARTIFACT_PATH = fileURLToPath(new URL('../../../../public/data/cge.json', import.meta.url))
 const IO_PUBLIC_ARTIFACT_PATH = fileURLToPath(new URL('../../../../public/data/io.json', import.meta.url))
 const PE_PUBLIC_ARTIFACT_PATH = fileURLToPath(new URL('../../../../public/data/pe.json', import.meta.url))
 const NOW = new Date('2026-04-25T12:00:00Z')
@@ -25,6 +27,10 @@ afterEach(() => {
     process.env.VITE_REGISTRY_API_URL = ORIGINAL_REGISTRY_API_URL
   }
 })
+
+function loadPublicCgePayload(): CgeBridgePayload {
+  return JSON.parse(readFileSync(CGE_PUBLIC_ARTIFACT_PATH, 'utf8')) as CgeBridgePayload
+}
 
 function loadPublicIoPayload(): IoBridgePayload {
   return JSON.parse(readFileSync(IO_PUBLIC_ARTIFACT_PATH, 'utf8')) as IoBridgePayload
@@ -48,6 +54,7 @@ function bridgeFetch(payloads: {
   dfm?: unknown | Response
   io?: unknown | Response
   pe?: unknown | Response
+  cge?: unknown | Response
 }) {
   return (input: RequestInfo | URL) => {
     const url = String(input)
@@ -67,6 +74,8 @@ function bridgeFetch(payloads: {
       value = payloads.io
     } else if (url.includes('pe.json')) {
       value = payloads.pe
+    } else if (url.includes('cge.json')) {
+      value = payloads.cge ?? loadPublicCgePayload()
     }
     if (value instanceof Response) {
       return Promise.resolve(value)
@@ -184,7 +193,7 @@ describe('data registry source', () => {
     assert.equal(registry.metadataSource, 'static-fallback')
     assert.deepEqual(registryApiCalls, [])
     assert.ok(registry.dataSources.some((row) => row.id === 'pe' && (row.status === 'valid' || row.status === 'warning')))
-    assert.ok(registry.dataSources.some((row) => row.label === 'CGE Reform Shock' && row.status === 'planned'))
+    assert.ok(registry.dataSources.some((row) => row.id === 'cge' && row.status === 'warning'))
     assert.ok(registry.dataSources.some((row) => row.label === 'FPP Fiscal Path' && row.status === 'planned'))
     assert.ok(registry.dataSources.some((row) => row.label === 'High-frequency indicators' && row.status === 'planned'))
   })
@@ -233,7 +242,7 @@ describe('data registry source', () => {
     assert.equal(qpmArtifact?.dataVintage, '2026Q1')
   })
 
-  it('renders QPM, DFM, I-O, and PE rows from current metadata and keeps planned rows honest', async () => {
+  it('renders implemented artifact rows and keeps only unavailable lanes planned', async () => {
     const registry = await loadDataRegistry(
       bridgeFetch({
         qpm: buildValidQpmPayload(),
@@ -244,16 +253,17 @@ describe('data registry source', () => {
       NOW,
     )
 
-    assert.equal(registry.artifacts.length, 5)
+    assert.equal(registry.artifacts.length, 6)
     assert.ok(registry.artifacts.some((artifact) => artifact.artifactPath === '/data/overview.json'))
     assert.ok(registry.artifacts.some((artifact) => artifact.artifactPath === '/data/qpm.json'))
     assert.ok(registry.artifacts.some((artifact) => artifact.artifactPath === '/data/dfm.json'))
     assert.ok(registry.artifacts.some((artifact) => artifact.artifactPath === '/data/io.json'))
     assert.ok(registry.artifacts.some((artifact) => artifact.artifactPath === '/data/pe.json'))
+    assert.ok(registry.artifacts.some((artifact) => artifact.artifactPath === '/data/cge.json' && artifact.status === 'warning'))
     assert.ok(registry.plannedArtifacts.some((row) => row.label === 'High-frequency indicators'))
     assert.ok(registry.dataSources.some((row) => row.label === 'High-frequency indicators' && row.status === 'planned'))
     assert.ok(registry.dataSources.some((row) => row.id === 'pe' && (row.status === 'valid' || row.status === 'warning')))
-    assert.ok(registry.dataSources.some((row) => row.label === 'CGE Reform Shock' && row.status === 'planned'))
+    assert.ok(registry.dataSources.some((row) => row.id === 'cge' && row.status === 'warning'))
     assert.ok(registry.dataSources.some((row) => row.label === 'FPP Fiscal Path' && row.status === 'planned'))
     assert.equal(registry.dataSources.some((row) => row.id === 'pe' && row.status === 'missing'), false)
     assert.equal(registry.dataSources.some((row) => row.id === 'hfi' && row.status === 'missing'), false)
@@ -315,7 +325,6 @@ describe('data registry source', () => {
     assert.ok(active.artifacts.every((artifact) => artifact.status === 'valid' || artifact.status === 'warning'))
     assert.ok(warnings.artifacts.every((artifact) => artifact.status === 'warning'))
     assert.ok(planned.plannedArtifacts.some((row) => row.id === 'hfi'))
-    assert.ok(planned.plannedArtifacts.some((row) => row.id === 'cge'))
     assert.ok(planned.plannedArtifacts.some((row) => row.id === 'fpp'))
     assert.equal(planned.plannedArtifacts.some((row) => row.id === 'pe'), false)
     assert.ok(missingUnavailable.artifacts.some((artifact) => artifact.id === 'qpm' && artifact.status === 'missing'))

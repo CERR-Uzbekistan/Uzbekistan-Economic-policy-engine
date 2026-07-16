@@ -492,7 +492,7 @@
         "macroQpm": "Makro stsenariy simulyatsiyasi",
         "ioSectorShock": "Sektor bog'lanishi tahlili",
         "peTradeShock": "Bevosita tarif ta'siri",
-        "cgeReformShock": "Umumiy muvozanat islohot tahlili, faol emas",
+        "cgeReformShock": "Cheklangan agregat muvozanat hisobi",
         "fppFiscalPath": "Fiskal moslik, faol emas",
         "savedRuns": "Saqlangan analitik ishlar",
         "synthesisPreview": "Kross-model sintez, faol emas"
@@ -502,6 +502,7 @@
         "next": "Keyingi",
         "bridgePilot": "Joriy ma'lumot",
         "shell": "Lokal",
+        "reference": "Ma'lumotnoma",
         "planned": "Faol emas"
       }
     },
@@ -1237,7 +1238,77 @@
         }
       }
     },
-    "saved": {
+    "cgeShock": {
+      "loading": "CGE ma'lumotlari yuklanmoqda...",
+      "eyebrow": "Eksperimental hisob",
+      "title": "CGE islohot shoki",
+      "description": "Cheklangan agregat shoklarni 2021 yilgi muvofiqlashtirilgan muvozanatga nisbatan tekshiring.",
+      "status": "Model egasi tomonidan tasdiqlanmagan",
+      "setup": "Siyosat sozlamalari",
+      "presets": "CGE tayyor ssenariylari",
+      "preset": {
+        "baseline": {
+          "title": "Kalibrlangan baza",
+          "description": "Qo'shimcha shoksiz."
+        },
+        "world_import_price_benchmark": {
+          "title": "Jahon import narxi",
+          "description": "Tekshirilgan manba kitobidagi tajribani takrorlaydi."
+        },
+        "tariff_removal_sensitivity": {
+          "title": "Tarifni bekor qilish sezgirligi",
+          "description": "Ma'lumotnoma tenglamalarida agregat import tarifini nolga tushiradi."
+        },
+        "remittance_decline_sensitivity": {
+          "title": "Pul o'tkazmalari pasayishi",
+          "description": "Uy xo'jaliklarining xorijiy transfertlari kamayishini tekshiradi."
+        }
+      },
+      "controls": {
+        "world_import_price_change_pct": "Jahon import narxi o'zgarishi",
+        "import_tariff_change_pp": "Import tarifi o'zgarishi",
+        "government_consumption_change_pct": "Davlat xaridlari o'zgarishi",
+        "remittances_change_pct": "Pul o'tkazmalari o'zgarishi"
+      },
+      "boundary": "Faqat agregat qiyosiy-statik ta'sirlar. YaIM prognozi, sektorlar, bandlik, taqsimot yoki nominal UZS/USD natijasi yo'q.",
+      "decisionView": "Natija",
+      "resultTitle": "Kalibrlangan bazaga nisbatan o'zgarish",
+      "resultDescription": "{{year}} yilgi muvozanatga nisbatan foiz o'zgarishi; bu vaqt prognozi emas.",
+      "outputs": {
+        "exports": "Eksport",
+        "imports": "Import",
+        "compositeSupply": "Yig'ma taklif",
+        "consumption": "Iste'mol",
+        "investment": "Investitsiya",
+        "taxRevenue": "Soliq tushumlari",
+        "governmentSaving": "Davlat jamg'armasi",
+        "relativePriceIndex": "Nisbiy narx indeksi"
+      },
+      "effectsTitle": "Agregat uzatish",
+      "effectsDescription": "Ustunlar nolga nisbatan kattalikni, ishora esa yo'nalishni ko'rsatadi.",
+      "evidenceTitle": "Hisobni tekshirish",
+      "evidenceDescription": "Ikki manba kitobi belgilangan aniqlikda takrorlanadi.",
+      "exactMatch": "Manba kitobiga aniq mos",
+      "caveats": "Usul va manba cheklovlari",
+      "excludedSources": "Tekshiruvga kiritilmagan",
+      "benchmark": {
+        "energy_world_import_price": { "title": "2023 yil 21 dekabrdagi jahon import narxi tajribasi", "note": "Python hisobidagi ekvivalent numeraire sharoitida real miqdorlar aniq mos keladi." },
+        "gold_export_price_variant": { "title": "Oltin eksport narxi bo'yicha ish kitobi varianti", "note": "Aniq moslik uchun ushbu kitobdagi muqobil Armington elastikligi kerak; bu oltin narxining alohida ta'siri emas." }
+      },
+      "caveat": {
+        "0": "Eksperimental qiyosiy-statik hisob; prognoz yoki model egasi tasdiqlagan siyosat bahosi emas.",
+        "1": "Nisbiy narx indeksi normallashtirilgan; u nominal UZS/USD kursi emas.",
+        "2": "Agregat modelda sektorlar, mehnat, uy xo'jaliklari taqsimoti, qarz yoki vaqt trayektoriyasi mavjud emas.",
+        "3": "Davlat iste'moli va pul o'tkazmalari nazoratlari qabul qilingan manba benchmarklarisiz sezgirlik testlaridir."
+      },
+      "excluded": {
+        "0": "Saqlangan natijalar ko'rsatilgan ekzogen parametrlar o'zgarmasdan siljiydi; CGE benchmarki sifatida qabul qilinmagan.",
+        "1": "Ilova xatida hisob ushbu CGE 1-2-3 modeli emas, xarajatlar-ishlab chiqarish usuli bilan bajarilgani aytilgan."
+      },
+      "errors": {
+        "failed": "Tanlangan parametrlar to'g'ri muvozanat bermadi."
+      }
+    },    "saved": {
       "title": "Saqlangan stsenariylar",
       "empty": "Hozircha saqlangan stsenariy yo'q.",
       "load": "Yuklash",
