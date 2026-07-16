@@ -1,0 +1,43 @@
+none:
+  description: No discretionary mitigation package.
+  household_transfer_usd: 0
+  public_works_jobs: 0
+  wage_subsidy_rate: 0
+  fx_reserve_use_usd: 0
+  ifi_financing_usd: 0
+  china_swap_cny: 0
+  fuel_reserve_release: 0
+  source_note: Zero-policy comparator.
+
+minimal:
+  description: Small illustrative mitigation package.
+  household_transfer_usd: 300000000
+  public_works_jobs: 50000
+  wage_subsidy_rate: 0.05
+  fx_reserve_use_usd: 1000000000
+  ifi_financing_usd: 0
+  china_swap_cny: 0
+  fuel_reserve_release: 0.05
+  source_note: Placeholder policy package; configurable, not official.
+
+stabilization:
+  description: Medium illustrative stabilization package.
+  household_transfer_usd: 1000000000
+  public_works_jobs: 200000
+  wage_subsidy_rate: 0.15
+  fx_reserve_use_usd: 3000000000
+  ifi_financing_usd: 2000000000
+  china_swap_cny: 10000000000
+  fuel_reserve_release: 0.15
+  source_note: Placeholder policy package; configurable, not official.
+
+full_crisis:
+  description: Large illustrative crisis-response package.
+  household_transfer_usd: 2500000000
+  public_works_jobs: 500000
+  wage_subsidy_rate: 0.25
+  fx_reserve_use_usd: 5000000000
+  ifi_financing_usd: 5000000000
+  china_swap_cny: 20000000000
+  fuel_reserve_release: 0.30
+  source_note: Placeholder policy package; configurable, not official.

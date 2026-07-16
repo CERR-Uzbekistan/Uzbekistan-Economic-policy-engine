@@ -1,0 +1,71 @@
+baseline:
+  description: No additional Russia shock beyond the current baseline.
+  russia_real_gdp_growth_deviation_pp: 0.0
+  russia_real_wage_shock_pct: 0.0
+  ruble_depreciation_pct: 0.0
+  migrant_labor_market_stress: 0.0
+  sector_export_demand_stress: 0.0
+  fuel_disruption_index: 0.0
+  payment_restriction_index: 0.0
+  ifi_support_index: 0.0
+  source_note: Driver-based baseline; see russia_shock_stress_driver_evidence.yaml.
+
+stagnation:
+  description: Mild Russia stagnation stress, calibrated from macro and corridor drivers.
+  russia_real_gdp_growth_deviation_pp: -1.0
+  russia_real_wage_shock_pct: -3.0
+  ruble_depreciation_pct: 5.0
+  migrant_labor_market_stress: 0.04
+  sector_export_demand_stress: 0.03
+  fuel_disruption_index: 0.15
+  payment_restriction_index: 0.10
+  ifi_support_index: 0.0
+  source_note: Mild stress drivers; evidence quality documented in russia_shock_stress_driver_evidence.yaml.
+
+recession:
+  description: Central Russia recession stress derived from macro, wage, ruble, migration, fuel, and payment drivers.
+  russia_real_gdp_growth_deviation_pp: -3.0
+  russia_real_wage_shock_pct: -8.0
+  ruble_depreciation_pct: 12.0
+  migrant_labor_market_stress: 0.10
+  sector_export_demand_stress: 0.06
+  fuel_disruption_index: 0.30
+  payment_restriction_index: 0.28
+  ifi_support_index: 0.0
+  source_note: Central stress drivers; evidence quality documented in russia_shock_stress_driver_evidence.yaml.
+
+combined_shock:
+  description: Severe combined stress with macro, remittance, fuel, payment, and risk channels all active.
+  russia_real_gdp_growth_deviation_pp: -5.0
+  russia_real_wage_shock_pct: -15.0
+  ruble_depreciation_pct: 25.0
+  migrant_labor_market_stress: 0.20
+  sector_export_demand_stress: 0.15
+  fuel_disruption_index: 0.65
+  payment_restriction_index: 0.70
+  ifi_support_index: 0.0
+  source_note: Tail stress drivers; evidence quality documented in russia_shock_stress_driver_evidence.yaml.
+
+payment_disruption:
+  description: Payment and sanctions-friction scenario with moderate real-side spillovers.
+  russia_real_gdp_growth_deviation_pp: -2.0
+  russia_real_wage_shock_pct: -6.0
+  ruble_depreciation_pct: 15.0
+  migrant_labor_market_stress: 0.08
+  sector_export_demand_stress: 0.04
+  fuel_disruption_index: 0.20
+  payment_restriction_index: 0.75
+  ifi_support_index: 0.0
+  source_note: Payment-channel stress drivers; evidence quality documented in russia_shock_stress_driver_evidence.yaml.
+
+fuel_supply_disruption:
+  description: Fuel and import-supply disruption scenario with moderate demand spillovers.
+  russia_real_gdp_growth_deviation_pp: -1.5
+  russia_real_wage_shock_pct: -4.0
+  ruble_depreciation_pct: 8.0
+  migrant_labor_market_stress: 0.05
+  sector_export_demand_stress: 0.03
+  fuel_disruption_index: 0.85
+  payment_restriction_index: 0.25
+  ifi_support_index: 0.0
+  source_note: Fuel-channel stress drivers; evidence quality documented in russia_shock_stress_driver_evidence.yaml.
