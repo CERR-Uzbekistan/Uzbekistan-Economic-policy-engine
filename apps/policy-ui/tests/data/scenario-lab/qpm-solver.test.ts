@@ -26,6 +26,14 @@ function loadQpmArtifactScenario(scenarioId: string): QpmArtifactScenario {
   return scenario
 }
 
+function subtractPath(path: number[], baseline: number[]): number[] {
+  return path.map((value, index) => value - baseline[index])
+}
+
+function percentageDeviation(path: number[], baseline: number[]): number[] {
+  return path.map((value, index) => ((value / baseline[index]) - 1) * 100)
+}
+
 function assertClosePath(actual: number[], expected: number[], tolerance = 0.01) {
   assert.equal(actual.length, expected.length)
   actual.forEach((actualValue, index) => {
@@ -41,24 +49,50 @@ function average(values: number[]): number {
 }
 
 describe('Scenario Lab canonical QPM solver', () => {
-  it('matches the public QPM artifact for the exchange-rate shock preset', () => {
+  it('matches public QPM shock effects when the Overview baseline level moves', () => {
+    const artifactBaseline = loadQpmArtifactScenario('baseline')
     const artifactScenario = loadQpmArtifactScenario('exchange-rate-shock')
     const run = solveScenarioLabQpm(applyPresetToState('exchange-rate-shock'), 8)
 
-    assertClosePath(run.scenario.gdpGrowth, artifactScenario.paths.gdp_growth)
-    assertClosePath(run.scenario.inflation, artifactScenario.paths.inflation)
-    assertClosePath(run.scenario.policyRate, artifactScenario.paths.policy_rate)
-    assertClosePath(run.scenario.exchangeRate, artifactScenario.paths.exchange_rate, 1)
+    assertClosePath(
+      run.deltas.gdpGrowth,
+      subtractPath(artifactScenario.paths.gdp_growth, artifactBaseline.paths.gdp_growth),
+    )
+    assertClosePath(
+      run.deltas.inflation,
+      subtractPath(artifactScenario.paths.inflation, artifactBaseline.paths.inflation),
+    )
+    assertClosePath(
+      run.deltas.policyRate,
+      subtractPath(artifactScenario.paths.policy_rate, artifactBaseline.paths.policy_rate),
+    )
+    assertClosePath(
+      percentageDeviation(run.scenario.exchangeRate, run.baseline.exchangeRate),
+      percentageDeviation(
+        artifactScenario.paths.exchange_rate,
+        artifactBaseline.paths.exchange_rate,
+      ),
+      0.02,
+    )
   })
 
   it('matches the public QPM artifact for the monetary and external-demand presets', () => {
+    const artifactBaseline = loadQpmArtifactScenario('baseline')
+    const artifactRateHike = loadQpmArtifactScenario('rate-hike-100bp')
+    const artifactExternalSlowdown = loadQpmArtifactScenario('remittance-downside')
     const rateHike = solveScenarioLabQpm(applyPresetToState('rate-hike-100bp'), 8)
     const externalSlowdown = solveScenarioLabQpm(applyPresetToState('external-slowdown'), 8)
 
-    assertClosePath(rateHike.scenario.inflation, loadQpmArtifactScenario('rate-hike-100bp').paths.inflation)
     assertClosePath(
-      externalSlowdown.scenario.gdpGrowth,
-      loadQpmArtifactScenario('remittance-downside').paths.gdp_growth,
+      rateHike.deltas.inflation,
+      subtractPath(artifactRateHike.paths.inflation, artifactBaseline.paths.inflation),
+    )
+    assertClosePath(
+      externalSlowdown.deltas.gdpGrowth,
+      subtractPath(
+        artifactExternalSlowdown.paths.gdp_growth,
+        artifactBaseline.paths.gdp_growth,
+      ),
     )
   })
 
