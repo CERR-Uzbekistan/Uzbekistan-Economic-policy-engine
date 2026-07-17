@@ -7,6 +7,8 @@ ENV PORT=8001
 WORKDIR /app
 
 COPY mcp_server /app/mcp_server
+RUN test -s /app/mcp_server/data/dfm_data.json \
+    && test -s /app/mcp_server/data/io_data.json
 RUN pip install --no-cache-dir /app/mcp_server
 
 RUN useradd --system --uid 10001 --create-home policy-chat \

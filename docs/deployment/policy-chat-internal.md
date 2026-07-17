@@ -18,8 +18,11 @@ The reverse proxy is the authentication boundary. It must authenticate the user,
 From the repository root:
 
 ```bash
+python mcp_server/data/convert_js_data.py
 docker build -f Dockerfile.policy-chat -t uz-policy-chat:local .
 ```
+
+The generated model JSON files are intentionally gitignored. The Dockerfile fails closed when the required DFM or I-O artifact is absent, and CI regenerates both from the tracked JavaScript sources before building the image.
 
 The image contains no credentials. Supply configuration through the deployment platform's secret manager.
 
