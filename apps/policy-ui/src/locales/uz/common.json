@@ -96,6 +96,7 @@
   "nav": {
     "overview": "Umumiy ko'rinish",
     "scenarioLab": "Stsenariy simulyatori",
+    "policyChat": "Siyosat muloqoti",
     "comparison": "Stsenariylarni solishtirish",
     "modelExplorer": "Model katalogi",
     "dataRegistry": "Ma'lumot manbalari",
@@ -110,6 +111,10 @@
     "scenarioLab": {
       "title": "Stsenariy simulyatori",
       "description": "Taxminlarni sozlab siyosat stsenariylarini tuzing, keyin ta'sirlar va talqinni bitta ish maydonida ko'rib chiqing."
+    },
+    "policyChat": {
+      "title": "Siyosat muloqoti",
+      "description": "Siyosat savolini tekshiriladigan model taxminlariga aylantiring, so'ng tasdiqlangan stsenariyni ishga tushiring."
     },
     "comparison": {
       "title": "Stsenariylarni solishtirish",
@@ -2017,7 +2022,42 @@
       "caveats": "Cheklovlar"
     }
   },
-  "states": {
+  "policyChat": {
+    "meta": { "scope": "Faol modellar", "qpm": "QPM · DFM · I-O", "control": "Ishga tushirish", "confirmation": "Tasdiq talab qilinadi" },
+    "threadAria": "Siyosat muloqoti", "you": "Savolingiz",
+    "empty": { "kicker": "Muloqotli stsenariy ish maydoni", "title": "Modeldan so'rang. Har bir taxminni tekshiring.", "description": "QPM makroshoki, tasdiqlangan DFM joriy bahosi yoki I-O yakuniy talab ssenariysi haqida so'rang. Tizim hisoblashdan oldin model va barcha farazlarni ko'rsatadi.", "startersAria": "Tavsiya etilgan savollar" },
+    "starters": { "monetary": "Siyosat stavkasini 16 chorak uchun 2 foiz punktga oshirish", "demand": "YAIMning so'nggi joriy bahosi va noaniqlik oralig'i qanday?", "external": "5 trln so'mlik infratuzilma investitsiyasining ta'sirini baholash" },
+    "status": { "interpreting": "Savol talqin qilinmoqda va taxminlar tayyorlanmoqda..." },
+    "proposal": { "label": "Taklif etilgan hisob", "title": "Taxminlarni tekshiring", "dirty": "Modelni ishga tushirishdan oldin o'zgartirilgan qiymatlarni tekshiring." },
+    "parameters": { "shock_type": "Shok kanali", "shock_size": "Shok hajmi", "horizon": "Tahlil gorizonti", "retrieval": "So'rov", "artifact": "Tasdiqlangan artefakt", "demand_bucket": "Yakuniy talab kanali", "amount_bln_uzs": "Talab shoki", "distribution": "Taqsimot", "sector_code": "Tarmoq", "base_year": "I-O bazaviy yili" },
+    "origins": { "user_stated": "Savolda ko'rsatilgan", "inferred": "Savoldan talqin qilingan", "model_default": "Modelning standart qiymati" },
+    "units": { "shock_size": "foiz punkt", "horizon": "chorak", "amount_bln_uzs": "mlrd so'm", "base_year": "yil" },
+    "values": { "monetary": "Pul-kredit", "demand": "Talab", "inflation": "Inflyatsiya", "exchange": "Valyuta kursi", "risk": "Risk mukofoti", "external_demand": "Tashqi talab", "latest_nowcast": "So'nggi joriy baho", "investment": "Investitsiya", "government": "Davlat xarajatlari", "consumption": "Iste'mol", "exports": "Eksport", "output": "Ishlab chiqarish ulushlari", "all_sectors": "Barcha tarmoqlar" },
+    "caveat": "QPM natijalari bazadan kalibrlangan og'ishlardir, rasmiy prognoz emas.",
+    "actions": { "update": "O'zgarishlarni tekshirish", "updating": "O'zgarishlar tekshirilmoqda...", "run": "Tasdiqlangan modelni ishga tushirish", "running": "Tasdiqlangan model hisoblanmoqda...",
+      "save": "Ssenariyni saqlash",
+      "saved": "Ssenariy saqlandi",
+      "openLab": "Ssenariylar laboratoriyasida ochish" },
+    "results": { "label": "Model natijasi", "title": "model natijasi", "chartTitle": "Javob trayektoriyalari", "chartSubtitle": "Tanlangan gorizont bo'yicha foiz punktdagi og'ishlar", "chartDescription": "Chiziqlar ishlab chiqarish tafovuti, inflyatsiya va siyosat stavkasi og'ishlarini choraklar bo'yicha ko'rsatadi.", "legendAria": "Grafik qatorlari", "viewTable": "Ma'lumotlar jadvalini ko'rish", "quarter": "Chorak", "interpretation": "Talqin", "limitations": "Cheklovlar",
+      "latestNowcast": "YAIMning so'nggi joriy bahosi",
+      "yearOnYear": "yillik",
+      "forecastHorizon": "Yaqin muddatli prognoz va noaniqlik",
+      "horizon": "Oy oldinga",
+      "estimate": "Baho",
+      "ci90": "90% oraliq",
+      "aggregateEffects": "Jami ta'sirlar",
+      "output": "Ishlab chiqarish",
+      "valueAdded": "Qo'shilgan qiymat",
+      "employment": "Bandlik",
+      "multiplier": "Multiplikator",
+      "billionUzs": "mlrd so'm",
+      "persons": "kishi",
+      "topSectors": "Eng ko'p ta'sirlangan tarmoqlar",
+      "sector": "Tarmoq", "series": { "output_gap": "Ishlab chiqarish tafovuti", "inflation_yoy": "Inflyatsiya", "policy_rate": "Siyosat stavkasi" } },
+    "composer": { "label": "Siyosat savoli", "placeholder": "Masalan: stavkani 16 chorak uchun 2 foiz punktga oshirish", "notice": "Ichki ko'rib chiqish. Cheklangan yoki shaxsiy ma'lumot kiritmang.", "action": "Savolni talqin qilish" },
+    "ledger": { "kicker": "Hisob nazorati", "title": "Taxminlar reyestri", "model": "Model", "state": "Holat", "confirmation": "Tasdiq", "data": "Kalibrlash", "notSelected": "Tanlanmagan", "waiting": "Savol kutilmoqda", "review": "Tekshirishga tayyor", "edited": "O'zgartirildi — tekshiruv kerak", "complete": "Hisob yakunlandi", "required": "Ishga tushirishdan oldin kerak", "confirmed": "Tasdiqlangan", "pending": "Ishga tushirgandan keyin", "disclosure": "Har bir hisob ko'rsatilgan taxminlarga bog'langan. Ularni o'zgartirish oldingi tasdiqni bekor qiladi." },
+    "errors": { "title": "Muloqotni davom ettirib bo'lmadi", "request_failed": "So'rov bajarilmadi. Xizmatni tekshirib, qayta urinib ko'ring.", "network": "Xizmatga ulanib bo'lmadi. Mahalliy xizmatni ishga tushiring yoki ulanishni tekshiring.", "timeout": "Model so'rovi vaqti tugadi. Qayta urinib ko'ring.", "policy_chat_disabled": "Bu muhitda funksiya o'chirilgan.", "identity_not_configured": "Ichki identifikatsiya sozlanmagan.", "authentication_required": "Muloqotdan foydalanish uchun tizimga kiring.", "unsupported_scenario": "QPM makroshoklari, tasdiqlangan DFM joriy bahosi va I-O yakuniy talab shoklari qo'llab-quvvatlanadi.", "invalid_horizon": "8 dan 32 chorakkacha gorizont kiriting.", "invalid_shock_size": "-20 dan 20 foiz punktgacha shok kiriting.", "parameter_out_of_range": "Taxminlardan biri ruxsat etilgan oraliqdan tashqarida.", "stale_proposal": "Tasdiqdan keyin taxminlar o'zgardi. Ularni tekshirib, qayta ishga tushiring." }
+  },  "states": {
     "loading": {
       "overview": "So'nggi sharh holati yuklanmoqda...",
       "comparison": "Solishtirish ish maydoni yuklanmoqda...",

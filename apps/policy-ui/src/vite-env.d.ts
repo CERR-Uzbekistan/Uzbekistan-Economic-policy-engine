@@ -19,6 +19,10 @@ interface ImportMetaEnv {
   readonly VITE_DFM_TIMEOUT_MS?: string
   readonly VITE_IO_DATA_URL?: string
   readonly VITE_IO_TIMEOUT_MS?: string
+  readonly VITE_POLICY_CHAT_ENABLED?: 'true' | 'false'
+  readonly VITE_POLICY_CHAT_API_URL?: string
+  readonly VITE_POLICY_CHAT_TIMEOUT_MS?: string
+  readonly VITE_POLICY_CHAT_DEV_USER?: string
 }
 
 interface ImportMeta {

@@ -229,3 +229,17 @@ mcp_server/
 - Central Bank of Uzbekistan
 - WITS (World Integrated Trade Solution)
 - CAEM (Central Asian Economic Model)
+
+## Policy Chat API
+
+Policy Chat is a separate, secure-by-default FastAPI service. It exposes only QPM impulse responses, read-only DFM nowcasts, and I-O final-demand shocks. All operations use a visible proposal hash and require explicit confirmation.
+
+Local development (PowerShell):
+
+```powershell
+$env:POLICY_CHAT_ENABLED='true'
+$env:POLICY_CHAT_AUTH_MODE='dev_header'
+python -m uvicorn api.policy_chat_app:app --app-dir mcp_server --host 127.0.0.1 --port 8001
+```
+
+Production must use `POLICY_CHAT_AUTH_MODE=trusted_proxy`, set `POLICY_CHAT_PROXY_SECRET` from the backend secret manager, and place the service behind an authenticated internal reverse proxy that strips client-supplied identity headers before injecting `X-Policy-Chat-User` and `X-Policy-Chat-Proxy-Secret`. The feature remains disabled when identity is not configured.

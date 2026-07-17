@@ -8,6 +8,7 @@ import { AppShell } from './shell/AppShell'
 
 const OverviewPage = lazy(() => import('../pages/OverviewPage').then((m) => ({ default: m.OverviewPage })))
 const ScenarioLabPage = lazy(() => import('../pages/ScenarioLabPage').then((m) => ({ default: m.ScenarioLabPage })))
+const PolicyChatPage = lazy(() => import('../pages/PolicyChatPage').then((m) => ({ default: m.PolicyChatPage })))
 const ComparisonPage = lazy(() => import('../pages/ComparisonPage').then((m) => ({ default: m.ComparisonPage })))
 const ModelExplorerPage = lazy(() =>
   import('../pages/ModelExplorerPage').then((m) => ({ default: m.ModelExplorerPage })),
@@ -62,6 +63,14 @@ export const appRoutes = [
           titleKey: 'pages.scenarioLab.title',
           descriptionKey: 'pages.scenarioLab.description',
           loadingKey: 'states.loading.scenarioLabRun',
+        }),
+      },
+      {
+        path: 'policy-chat',
+        element: lazyRoute(<PolicyChatPage />, {
+          titleKey: 'pages.policyChat.title',
+          descriptionKey: 'pages.policyChat.description',
+          loadingKey: 'policyChat.status.interpreting',
         }),
       },
       {
