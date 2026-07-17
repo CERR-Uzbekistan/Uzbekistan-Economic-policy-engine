@@ -7,6 +7,7 @@ import type {
   MacroSnapshot,
   ModelAttribution,
   OverviewIndicatorGroup,
+  OverviewSourceReference,
 } from '../../contracts/data-contract.js'
 import {
   getClaimLabelKey,
@@ -28,8 +29,10 @@ function toDirection(deltaAbs: number | null): Direction {
   return 'flat'
 }
 
-function toConfidence(status: OverviewArtifactMetric['validation_status']): Confidence {
-  return status === 'warning' ? 'medium' : 'high'
+function toConfidence(metric: OverviewArtifactMetric): Confidence {
+  if (metric.freshness.status === 'unavailable') return 'low'
+  if (metric.freshness.status === 'stale' || metric.validation_status === 'warning') return 'medium'
+  return 'high'
 }
 
 function toDisplayUnit(metric: OverviewArtifactMetric): string {
@@ -51,7 +54,7 @@ function toModelAttribution(metric: OverviewArtifactMetric, artifact: OverviewAr
       version: artifact.schema_version,
       run_id: 'overview-artifact',
       data_version: metric.source_period,
-      timestamp: metric.exported_at,
+      timestamp: metric.freshness.as_of,
     },
   ]
 }
@@ -157,10 +160,10 @@ function toHeadlineMetric(metric: OverviewArtifactMetric, artifact: OverviewArti
     delta_basis: deltaBasis,
     delta_pct: deltaPct,
     direction: toDirection(deltaAbs),
-    confidence: toConfidence(metric.validation_status),
-    last_updated: metric.exported_at,
+    confidence: toConfidence(metric),
+    last_updated: metric.freshness.as_of,
     model_attribution: toModelAttribution(metric, artifact),
-    context_note: `${metric.claim_type} · ${metric.source_label}`,
+    context_note: `${metric.output_class} · ${metric.source_label}`,
     delta_label: deltaAbs === null ? undefined : undefined,
     source_label: metric.source_label,
     source_period: metric.source_period,
@@ -172,16 +175,32 @@ function toHeadlineMetric(metric: OverviewArtifactMetric, artifact: OverviewArti
     warnings: metric.warnings,
     caveats: metric.caveats,
     citation_label: definition?.citation_label,
+    source_url: metric.source_url,
+    source_reference: metric.source_reference,
+    observed_at: metric.observed_at,
+    output_class: metric.output_class,
+    freshness_status: metric.freshness.status,
+    freshness_age_days: metric.freshness.age_days,
+    freshness_max_age_days: metric.freshness.max_age_days,
+    freshness_reason: metric.freshness.reason,
   }
 }
 
 function selectTopCardMetrics(metrics: OverviewArtifactMetric[]): OverviewArtifactMetric[] {
   const byId = new Map(metrics.map((metric) => [metric.id, metric]))
-  const explicit = metrics.filter((metric) => metric.top_card === true)
+  const explicit = metrics.filter(
+    (metric) =>
+      metric.top_card === true &&
+      metric.validation_status === 'valid' &&
+      metric.freshness.status === 'current',
+  )
   const selected = explicit.length > 0
     ? explicit
     : OVERVIEW_TOP_CARD_METRIC_IDS.map((id) => byId.get(id)).filter(
-        (metric): metric is OverviewArtifactMetric => metric !== undefined,
+        (metric): metric is OverviewArtifactMetric =>
+          metric !== undefined &&
+          metric.validation_status === 'valid' &&
+          metric.freshness.status === 'current',
       )
 
   const defaultOrder = new Map<OverviewMetricId, number>(
@@ -205,6 +224,15 @@ function toMetricCaveats(metric: OverviewArtifactMetric): Caveat[] {
     affected_metrics: [metric.id],
     affected_models: ['overview_artifact'],
   }))
+  const freshnessCaveats: Caveat[] = metric.freshness.status === 'current'
+    ? []
+    : [{
+        caveat_id: `${metric.id}-freshness`,
+        severity: 'warning',
+        message: `${metric.label} is ${metric.freshness.status}: ${metric.freshness.reason} (source as of ${metric.freshness.as_of}; threshold ${metric.freshness.max_age_days} days).`,
+        affected_metrics: [metric.id],
+        affected_models: ['overview_artifact'],
+      }]
   const caveats: Caveat[] = metric.caveats.map((message, index) => ({
     caveat_id: `${metric.id}-caveat-${index + 1}`,
     severity: 'info',
@@ -212,7 +240,7 @@ function toMetricCaveats(metric: OverviewArtifactMetric): Caveat[] {
     affected_metrics: [metric.id],
     affected_models: ['overview_artifact'],
   }))
-  return [...warningCaveats, ...caveats]
+  return [...freshnessCaveats, ...warningCaveats, ...caveats]
 }
 
 function unique(values: string[]): string[] {
@@ -298,18 +326,18 @@ function toArtifactSummaryMetrics(artifact: OverviewArtifact): HeadlineMetric[] 
   return SUMMARY_METRIC_IDS.map((id) => metricsById.get(id))
     .filter(
       (metric): metric is OverviewArtifactMetric =>
-        metric !== undefined && metric.validation_status !== 'failed',
+        metric !== undefined &&
+        metric.validation_status === 'valid' &&
+        metric.freshness.status === 'current',
     )
     .map((metric) => toHeadlineMetric(metric, artifact))
 }
 
 function buildArtifactDataRefreshes(artifact: OverviewArtifact): DataRefresh[] {
-  const warningCount = artifact.metrics.filter(
-    (metric) => metric.validation_status === 'warning' || metric.warnings.length > 0,
-  ).length
-  const summary = warningCount > 0
-    ? `${artifact.metrics.length} Overview source metrics refreshed; ${warningCount} carry source caveats.`
-    : `${artifact.metrics.length} Overview source metrics refreshed from the public artifact.`
+  const currentCount = artifact.metrics.filter((metric) => metric.freshness.status === 'current').length
+  const staleCount = artifact.metrics.filter((metric) => metric.freshness.status === 'stale').length
+  const unavailableCount = artifact.metrics.filter((metric) => metric.freshness.status === 'unavailable').length
+  const summary = `${artifact.metrics.length} metrics loaded: ${currentCount} current, ${staleCount} stale, ${unavailableCount} unavailable.`
 
   return [
     {
@@ -341,12 +369,20 @@ export function overviewArtifactToMacroSnapshot(artifact: OverviewArtifact): Mac
     affected_models: ['overview_artifact'],
   }))
   const metricCaveats = artifact.metrics.flatMap(toMetricCaveats)
-  const references = unique(
-    artifact.metrics.map((metric) => {
-      const definition = OVERVIEW_LOCKED_METRIC_BY_ID.get(metric.id)
-      return `${definition?.citation_label ?? metric.source_label} · ${metric.source_period}`
-    }),
-  )
+  const referenceByKey = new Map<string, OverviewSourceReference>()
+  for (const metric of artifact.metrics) {
+    const definition = OVERVIEW_LOCKED_METRIC_BY_ID.get(metric.id)
+    const reference: OverviewSourceReference = {
+      label: definition?.citation_label ?? metric.source_label,
+      period: metric.source_period,
+      url: metric.source_url ?? undefined,
+      observed_at: metric.observed_at,
+      transformation: metric.source_reference,
+    }
+    const key = `${reference.url ?? reference.label}|${reference.period}`
+    if (!referenceByKey.has(key)) referenceByKey.set(key, reference)
+  }
+  const references = [...referenceByKey.values()]
 
   return {
     ...overviewV1Data,

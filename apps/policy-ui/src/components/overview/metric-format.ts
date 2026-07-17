@@ -43,6 +43,10 @@ export function formatOverviewMetricValueWithUnit(
   locale: string,
   t: Translate,
 ): string {
+  if (metric.freshness_status === 'unavailable') {
+    return t('overview.kpi.notAvailable')
+  }
+
   if (metric.metric_id === 'trade_balance') {
     if (metric.value === 0) {
       return t('overview.tradeBalance.balanced')
@@ -58,6 +62,7 @@ export function formatOverviewMetricValueWithUnit(
 }
 
 export function formatOverviewDelta(metric: HeadlineMetric, locale: string): string | null {
+  if (metric.freshness_status === 'unavailable') return null
   const deltaValue = metric.delta_value ?? metric.delta_abs
   if (deltaValue === null || deltaValue === undefined) {
     return null
@@ -87,6 +92,7 @@ export function formatOverviewDeltaWithUnit(
   locale: string,
   t?: Translate,
 ): string | null {
+  if (metric.freshness_status === 'unavailable') return null
   const semantics = getMetricSemantics(metric.metric_id)
   if (semantics?.sign_interpretation === 'usd_uzs' && t) {
     return formatFxDelta(metric, locale, t)

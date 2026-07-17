@@ -57,6 +57,12 @@ async function createTestI18n() {
                 reference: 'Reference',
                 draft: 'Draft',
               },
+              outputClass: {
+                accounting_calculation: 'Accounting calculation',
+                nowcast: 'Nowcast',
+                forecast: 'Forecast',
+                static_reference: 'Static reference',
+              },
               direction: { up: 'higher', down: 'lower', flat: 'unchanged' },
             },
             comparisonBasis: {
@@ -126,6 +132,23 @@ describe('KpiStrip', () => {
     assert.match(markup, /70% band · 5\.2 – 6\.4%/)
     assert.match(markup, /title="70% band · 5\.2 – 6\.4%"/)
     assert.doesNotMatch(markup, /ui-chip--warn/)
+  })
+
+  it('renders a localized output class without exposing the raw schema token', async () => {
+    const i18n = await createTestI18n()
+    const metric = buildMetric({
+      output_class: 'accounting_calculation',
+      source_label: 'Statistics Agency trade release',
+      context_note: 'accounting_calculation | Statistics Agency trade release',
+    })
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <KpiStrip metrics={[metric]} />
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /Accounting calculation[^<]*Statistics Agency trade release/)
+    assert.doesNotMatch(markup, /accounting_calculation/)
   })
 
   it('keeps warning status in the KPI top meta area', async () => {

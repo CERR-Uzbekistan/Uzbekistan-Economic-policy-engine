@@ -183,6 +183,11 @@
       "reference": "Ma'lumotnoma",
       "forecast": "Prognoz"
     },
+    "freshness": {
+      "current": "Joriy",
+      "stale": "Manba eskirgan",
+      "unavailable": "Mavjud emas"
+    },
     "macroPulse": {
       "gdp": "YaIM",
       "cpi": "CPI",
@@ -200,7 +205,7 @@
       "analysisAria": "Nowcast va stsenariy testlari"
     },
     "topbar": {
-      "freshness": "Ma'lumotlar · {{days}} kun oldin"
+      "freshness": "Asosiy ko'rsatkichlardagi eng eski manba · {{days}} kun"
     },
     "meta": {
       "eyebrow": "Umumiy kesim",
@@ -220,7 +225,7 @@
       "sourceNotesBelow": "{{count}} ko'rsatkich manbasi quyida",
       "modelSource": "model manbasi: {{models}}",
       "artifactBrief": {
-        "summary": "O'sish joriy chorak nowcast trayektoriyasidan yuqorida; inflyatsiya va tashqi kanal asosiy kuzatuv nuqtalari bo'lib qolmoqda."
+        "summary": "Quyida manbaga tayangan o'sish, inflyatsiya, savdo va valyuta kursining so'nggi ko'rsatkichlari berilgan; mavjud bo'lmagan model natijalari asosiy ko'rsatkichlardan chiqarilgan."
       },
       "summary": {
         "template": "{{items}}.",
@@ -253,6 +258,12 @@
         "scenario": "Stsenariy",
         "reference": "Ma'lumotnoma",
         "draft": "Qoralama"
+      },
+      "outputClass": {
+        "accounting_calculation": "Balans ayniyati bo'yicha hisob",
+        "nowcast": "Tezkor baho",
+        "forecast": "Prognoz",
+        "static_reference": "Statik ma'lumotnoma"
       },
       "direction": {
         "up": "yuqoriroq",
@@ -371,7 +382,13 @@
       "banner": {
         "title": "Tezkor baholash mavjud emas",
         "subtitle": "Ma'lumotnoma ko'rsatilmoqda",
-        "retry": "Qayta urinish"
+        "retry": "Qayta urinish",
+        "freshnessDetail": "DFM natijasi joriy davr, manba yangiligi, CI takrorlanuvchanligi va iqtisodchi tasdig'i mezonlaridan o'tmaydi.",
+        "detailLabels": {
+          "transport": "Ulanish",
+          "validation": "Tekshiruv",
+          "freshness": "Tayyorlik"
+        }
       }
     },
     "dfmContributionDetail": {
@@ -423,7 +440,8 @@
     },
     "references": {
       "title": "Manbalar va havolalar",
-      "summary": "{{count}} manba · yangilangan {{date}}"
+      "summary": "{{count}} manba · yangilangan {{date}}",
+      "sourceDate": "Manba sanasi: {{date}}"
     }
   },
   "buttons": {
@@ -1916,9 +1934,9 @@
       "meta": {
         "modelsLabel": "Modellar",
         "modelsLive": "{{count}} faol",
-        "bridgeBackedLabel": "Joriy ma'lumotli modellar",
+        "bridgeBackedLabel": "Joriy siyosat tahlili uchun mavjud",
         "bridgeBackedModels": "QPM, DFM, PE, I-O",
-        "plannedLimitedLabel": "Faol emas",
+        "plannedLimitedLabel": "Mavjud emas yoki faqat ma'lumot uchun",
         "plannedLimitedModels": "CGE, FPP",
         "lastAuditLabel": "Oxirgi kalibrlash auditi",
         "openIssuesLabel": "Ochiq ishlab chiqarish shartlari"

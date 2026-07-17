@@ -23,7 +23,7 @@ describe('model explorer DFM bridge enrichment', () => {
     const payload = loadValidDfmPayload()
     const evidence = toModelExplorerDfmBridgeEvidence(payload)
 
-    assert.equal(evidence.status_label, 'Validated')
+    assert.equal(evidence.status_label, 'Unavailable for current policy use')
     assert.equal(evidence.source_artifact, 'apps/policy-ui/public/data/dfm.json')
     assert.equal(evidence.data_version, payload.attribution.data_version)
     assert.equal(evidence.exported_at, payload.metadata.exported_at.slice(0, 10))
@@ -47,6 +47,10 @@ describe('model explorer DFM bridge enrichment', () => {
     assert.equal(
       evidence.evidence_metrics?.find((metric) => metric.label === 'Public status')?.value,
       'internal_preview_bridge',
+    )
+    assert.equal(
+      evidence.evidence_metrics?.find((metric) => metric.label === 'Operational availability')?.value,
+      'unavailable',
     )
     assert.equal(
       evidence.evidence_metrics?.find((metric) => metric.label === 'Transform coverage')?.value,
@@ -74,6 +78,12 @@ describe('model explorer DFM bridge enrichment', () => {
     assert.ok(dfmEntry)
     assert.equal(dfmEntry.stats[0].value, String(payload.indicators.length - 1))
     assert.equal(dfmEntry.stats[2].value, payload.nowcast.current_quarter.period)
+    assert.deepEqual(dfmEntry.status, {
+      label: 'Unavailable for current policy use',
+      severity: 'warn',
+    })
+    assert.equal(enriched.models.find((model) => model.model_id === 'dfm-nowcast')?.status, 'paused')
+    assert.equal(enriched.meta?.models_live, 3)
     assert.equal(dfmEntry.parameters.some((parameter) => parameter.symbol === 'h' && parameter.value === '0 quarters'), true)
     assert.equal(dfmEntry.caveats.some((caveat) => caveat.id === 'dfm-parameters-frozen-at-refit'), true)
     assert.match(dfmEntry.validation_summary.join(' '), /does not validate model economics/)

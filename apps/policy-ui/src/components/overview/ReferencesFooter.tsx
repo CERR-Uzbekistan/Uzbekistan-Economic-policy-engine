@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next'
+import type { OverviewSourceReference } from '../../contracts/data-contract.js'
 
 type ReferencesFooterProps = {
-  references: string[]
+  references: Array<string | OverviewSourceReference>
   exportedAt?: string
 }
 
@@ -43,11 +44,34 @@ export function ReferencesFooter({ references, exportedAt }: ReferencesFooterPro
           })}
         </summary>
         <ul className="overview-references__list">
-          {references.map((reference) => (
-            <li key={reference} className="overview-references__item">
-              {reference}
-            </li>
-          ))}
+          {references.map((reference) => {
+            if (typeof reference === 'string') {
+              return <li key={reference} className="overview-references__item">{reference}</li>
+            }
+            const key = `${reference.url ?? reference.label}|${reference.period}`
+            return (
+              <li key={key} className="overview-references__item">
+                <div>
+                  {reference.url ? (
+                    <a href={reference.url} target="_blank" rel="noopener noreferrer">
+                      {reference.label}
+                    </a>
+                  ) : (
+                    reference.label
+                  )}
+                  {' · '}{reference.period}
+                </div>
+                {reference.observed_at ? (
+                  <span className="overview-references__meta">
+                    {t('overview.references.sourceDate', { date: formatDate(reference.observed_at, locale) })}
+                  </span>
+                ) : null}
+                {reference.transformation ? (
+                  <span className="overview-references__meta">{reference.transformation}</span>
+                ) : null}
+              </li>
+            )
+          })}
         </ul>
       </details>
     </footer>

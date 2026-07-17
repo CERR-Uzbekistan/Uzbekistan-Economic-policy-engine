@@ -44,6 +44,19 @@ function StatusChip({ metric }: { metric: HeadlineMetric }) {
   )
 }
 
+function FreshnessChip({ metric }: { metric: HeadlineMetric }) {
+  const { t } = useTranslation()
+  if (!metric.freshness_status || metric.freshness_status === 'current') return null
+  return (
+    <span
+      className="overview-indicator-row__status ui-chip ui-chip--warn"
+      title={metric.freshness_reason}
+    >
+      {t(`overview.freshness.${metric.freshness_status}`)}
+    </span>
+  )
+}
+
 function orderedGroupMetrics(group: OverviewIndicatorGroup): HeadlineMetric[] {
   const metricOrder = GROUP_METRIC_ORDER[group.group_id]
   if (!metricOrder) {
@@ -81,10 +94,8 @@ function getRowSourceLabel(metric: HeadlineMetric): string | null {
 function getRowProvenanceLabel(metric: HeadlineMetric, middleDot: string): string | null {
   const sourcePeriod = getRowSourcePeriod(metric)
   const sourceLabel = getRowSourceLabel(metric)
-  if (sourcePeriod && sourceLabel) {
-    return `${sourcePeriod} ${middleDot} ${sourceLabel}`
-  }
-  return sourcePeriod ?? sourceLabel
+  const sourceDate = metric.observed_at ? metric.observed_at.slice(0, 10) : null
+  return [sourcePeriod, sourceLabel, sourceDate].filter(Boolean).join(` ${middleDot} `) || null
 }
 
 function shouldShowSubhead(groupId: string, metricId: string): string | null {
@@ -181,13 +192,26 @@ export function IndicatorPanelGrid({ groups = [] }: IndicatorPanelGridProps) {
                       <div className="overview-indicator-row__label">
                         <p>{metric.label}</p>
                         {sourcePeriod ? (
-                          <span
-                            className="overview-indicator-row__source-period"
-                            aria-label={provenanceLabel ?? sourcePeriod}
-                            title={provenanceLabel ?? sourcePeriod}
-                          >
-                            {sourcePeriod}
-                          </span>
+                          metric.source_url ? (
+                            <a
+                              className="overview-indicator-row__source-period"
+                              href={metric.source_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={provenanceLabel ?? sourcePeriod}
+                              title={provenanceLabel ?? sourcePeriod}
+                            >
+                              {sourcePeriod}
+                            </a>
+                          ) : (
+                            <span
+                              className="overview-indicator-row__source-period"
+                              aria-label={provenanceLabel ?? sourcePeriod}
+                              title={provenanceLabel ?? sourcePeriod}
+                            >
+                              {sourcePeriod}
+                            </span>
+                          )
                         ) : null}
                         {rowKind === 'forecast' ? (
                           <span className="overview-indicator-row__kind">
@@ -208,6 +232,7 @@ export function IndicatorPanelGrid({ groups = [] }: IndicatorPanelGridProps) {
                           {claimLabel ? (
                             <span className="overview-indicator-row__claim-label">{claimLabel}</span>
                           ) : null}
+                          <FreshnessChip metric={metric} />
                           <StatusChip metric={metric} />
                         </div>
                       </div>

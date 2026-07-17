@@ -1,7 +1,9 @@
 import type { OverviewArtifact, OverviewArtifactMetric } from '../../../src/data/overview/artifact-types.js'
 import {
   OVERVIEW_ARTIFACT_SCHEMA_VERSION,
+  OVERVIEW_FRESHNESS_MAX_AGE_DAYS_BY_ID,
   OVERVIEW_LOCKED_METRICS,
+  OVERVIEW_OUTPUT_CLASS_BY_ID,
   OVERVIEW_TOP_CARD_METRIC_IDS,
 } from '../../../src/data/overview/artifact-types.js'
 
@@ -27,6 +29,22 @@ const VALUE_BY_ID: Record<string, number> = {
   gold_price_forecast: 2400,
 }
 
+function sourcePeriod(metricId: string): string {
+  if (metricId === 'real_gdp_growth_annual_yoy') return '2025'
+  if (metricId === 'real_gdp_growth_quarter_yoy') return '2026 Q1'
+  if (metricId === 'gdp_nowcast_current_quarter') return '2026 Q2 nowcast'
+  if (metricId.startsWith('usd_uzs')) return '2026-04-26'
+  return 'March 2026'
+}
+
+function sourceAsOf(metricId: string): string {
+  if (metricId === 'real_gdp_growth_annual_yoy') return '2026-01-27T00:00:00Z'
+  if (metricId === 'real_gdp_growth_quarter_yoy') return '2026-04-20T00:00:00Z'
+  if (metricId === 'gdp_nowcast_current_quarter') return '2026-04-25T00:00:00Z'
+  if (metricId.startsWith('usd_uzs')) return '2026-04-26T00:00:00Z'
+  return '2026-04-05T00:00:00Z'
+}
+
 export function buildValidOverviewArtifact(): OverviewArtifact {
   const exportedAt = '2026-04-26T08:00:00Z'
   const topCardOrder: ReadonlyMap<string, number> = new Map(
@@ -42,7 +60,19 @@ export function buildValidOverviewArtifact(): OverviewArtifact {
     value: VALUE_BY_ID[definition.id] ?? 1,
     previous_value: definition.id === 'usd_uzs_level' ? 12500 : (VALUE_BY_ID[definition.id] ?? 1) - 0.2,
     source_label: definition.citation_label,
-    source_period: definition.frequency.includes('quarter') ? '2026 Q1' : 'March 2026',
+    source_period: sourcePeriod(definition.id),
+    source_url: `https://example.test/source/${definition.id}`,
+    source_reference: `Fixture transformation for ${definition.id}`,
+    observed_at: sourceAsOf(definition.id),
+    extracted_at: null,
+    output_class: OVERVIEW_OUTPUT_CLASS_BY_ID[definition.id],
+    freshness: {
+      status: 'current',
+      as_of: sourceAsOf(definition.id),
+      age_days: Math.floor((Date.parse(exportedAt) - Date.parse(sourceAsOf(definition.id))) / 86_400_000),
+      max_age_days: OVERVIEW_FRESHNESS_MAX_AGE_DAYS_BY_ID[definition.id],
+      reason: 'within_threshold',
+    },
     exported_at: exportedAt,
     validation_status: 'valid',
     caveats: [],

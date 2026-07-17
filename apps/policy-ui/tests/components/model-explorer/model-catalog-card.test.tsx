@@ -119,6 +119,21 @@ describe('Model Explorer catalog cards', () => {
     assert.match(markup, /Methodology only/)
   })
 
+  it('does not promote an experimental CGE reference to current app use', async () => {
+    const cgeEntry = modelCatalogEntries.find((entry) => entry.id === 'cge-model')!
+    const i18n = await createTestI18n()
+
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <ModelCatalogCard entry={cgeEntry} isActive={false} onSelect={() => undefined} />
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /Not active/)
+    assert.match(markup, /Methodology only/)
+    assert.doesNotMatch(markup, /Current app use/)
+  })
+
   it('renders the experimental-reference boundary when CGE is inspected', async () => {
     const cgeEntry = modelCatalogEntries.find((entry) => entry.id === 'cge-model')!
     const i18n = await createTestI18n()

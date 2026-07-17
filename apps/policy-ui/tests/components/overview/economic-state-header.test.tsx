@@ -33,7 +33,7 @@ async function createTestI18n() {
               sourceNotesBelow: '{{count}} metric sources listed below',
               modelSource: 'model source: {{models}}',
               artifactBrief: {
-                summary: 'Growth is above the current nowcast path; inflation and external indicators remain on watch.',
+                summary: 'Latest source-backed indicators are shown below; unavailable model outputs are excluded.',
               },
               summary: {
                 template: '{{items}}.',
@@ -98,6 +98,11 @@ describe('EconomicStateHeader', () => {
               updatedAt="2026-04-17T09:05:00+05:00"
               modelIds={['dfm_nowcast', 'qpm_uzbekistan']}
               isArtifactMode
+              provenance={{
+                drafted_from: 'legacy mock',
+                ai_assisted: false,
+                reviewed_at: '16 Apr',
+              }}
               artifactSummaryMetrics={[
                 {
                   metric_id: 'real_gdp_growth_quarter_yoy',
@@ -136,8 +141,9 @@ describe('EconomicStateHeader', () => {
       </I18nextProvider>,
     )
 
-    assert.match(markup, /Growth is above the current nowcast path/)
+    assert.match(markup, /Latest source-backed indicators/)
     assert.match(markup, /Data note: updated/)
+    assert.doesNotMatch(markup, /Data note: reviewed 16 Apr/)
     assert.match(markup, /2 metric sources listed below/)
     assert.doesNotMatch(markup, /What changed:/)
     assert.doesNotMatch(markup, /Test next:/)
@@ -168,7 +174,7 @@ describe('EconomicStateHeader', () => {
       </I18nextProvider>,
     )
 
-    assert.match(markup, /Growth is above the current nowcast path/)
+    assert.match(markup, /Latest source-backed indicators/)
     assert.doesNotMatch(markup, /GDP[\s\S]*8\.7 %/)
     assert.doesNotMatch(markup, /CPI[\s\S]*7\.1 % YoY \/ 0\.6 % MoM/)
     assert.doesNotMatch(markup, /Trade balance[\s\S]*USD 4\.51bn deficit/)

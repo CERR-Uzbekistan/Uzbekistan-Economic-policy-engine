@@ -6,6 +6,7 @@ import {
   DfmValidationError,
   fetchDfmBridgePayload,
 } from '../bridge/dfm-client.js'
+import { assessDfmReadiness, type DfmReadinessAssessment } from '../bridge/dfm-readiness.js'
 import { composeDfmNowcastChart } from './dfm-composition.js'
 import {
   composeDfmContributionDetails,
@@ -15,6 +16,7 @@ import {
 export type DfmNowcastState =
   | { status: 'loading' }
   | { status: 'bridge'; chart: ChartSpec; contributionDetails: DfmContributionDetail[] }
+  | { status: 'unavailable'; assessment: DfmReadinessAssessment }
   | { status: 'degraded'; error: DfmTransportError | DfmValidationError }
 
 export type DfmNowcastHookResult = {
@@ -24,7 +26,7 @@ export type DfmNowcastHookResult = {
 
 type FetchLike = Parameters<typeof fetchDfmBridgePayload>[0]
 
-export function useDfmNowcast(fetchImpl?: FetchLike): DfmNowcastHookResult {
+export function useDfmNowcast(fetchImpl?: FetchLike, now?: Date): DfmNowcastHookResult {
   const [state, setState] = useState<DfmNowcastState>({ status: 'loading' })
   const [nonce, setNonce] = useState(0)
 
@@ -40,6 +42,11 @@ export function useDfmNowcast(fetchImpl?: FetchLike): DfmNowcastHookResult {
       try {
         const payload = await fetchDfmBridgePayload(fetchImpl)
         if (cancelled) return
+        const assessment = assessDfmReadiness(payload, now ?? new Date())
+        if (assessment.status === 'unavailable') {
+          setState({ status: 'unavailable', assessment })
+          return
+        }
         const adapter = toDfmAdapterOutput(payload)
         const chart = composeDfmNowcastChart(adapter)
         const contributionDetails = composeDfmContributionDetails(adapter)
@@ -62,7 +69,7 @@ export function useDfmNowcast(fetchImpl?: FetchLike): DfmNowcastHookResult {
     return () => {
       cancelled = true
     }
-  }, [fetchImpl, nonce])
+  }, [fetchImpl, nonce, now])
 
   return { state, refetch }
 }

@@ -183,6 +183,11 @@
       "reference": "Reference",
       "forecast": "Forecast"
     },
+    "freshness": {
+      "current": "Current",
+      "stale": "Stale source",
+      "unavailable": "Unavailable"
+    },
     "macroPulse": {
       "gdp": "GDP",
       "cpi": "CPI",
@@ -200,7 +205,7 @@
       "analysisAria": "Nowcast and scenario tests"
     },
     "topbar": {
-      "freshness": "Data · {{days}}d ago"
+      "freshness": "Oldest headline source · {{days}}d old"
     },
     "meta": {
       "eyebrow": "Overview snapshot",
@@ -220,7 +225,7 @@
       "sourceNotesBelow": "{{count}} metric sources listed below",
       "modelSource": "model source: {{models}}",
       "artifactBrief": {
-        "summary": "Growth is above the current-quarter nowcast path, while inflation and the external channel remain the main watch points."
+        "summary": "Latest source-backed growth, inflation, trade, and exchange-rate indicators are shown below; unavailable model outputs are excluded from headline indicators."
       },
       "summary": {
         "template": "{{items}}.",
@@ -253,6 +258,12 @@
         "scenario": "Scenario",
         "reference": "Reference",
         "draft": "Draft"
+      },
+      "outputClass": {
+        "accounting_calculation": "Accounting calculation",
+        "nowcast": "Nowcast",
+        "forecast": "Forecast",
+        "static_reference": "Static reference"
       },
       "direction": {
         "up": "higher",
@@ -371,7 +382,13 @@
       "banner": {
         "title": "Live nowcast unavailable",
         "subtitle": "Showing reference data",
-        "retry": "Retry"
+        "retry": "Retry",
+        "freshnessDetail": "The DFM output does not pass the current-period, source-freshness, CI-reproducibility, and economist-approval gates.",
+        "detailLabels": {
+          "transport": "Connection",
+          "validation": "Validation",
+          "freshness": "Readiness"
+        }
       }
     },
     "dfmContributionDetail": {
@@ -423,7 +440,8 @@
     },
     "references": {
       "title": "Sources and references",
-      "summary": "{{count}} sources · updated {{date}}"
+      "summary": "{{count}} sources · updated {{date}}",
+      "sourceDate": "Source date: {{date}}"
     }
   },
   "buttons": {
@@ -1916,9 +1934,9 @@
       "meta": {
         "modelsLabel": "Models",
         "modelsLive": "{{count}} live",
-        "bridgeBackedLabel": "Live data models",
+        "bridgeBackedLabel": "Available for current policy use",
         "bridgeBackedModels": "QPM, DFM, PE, I-O",
-        "plannedLimitedLabel": "Not active",
+        "plannedLimitedLabel": "Unavailable or reference only",
         "plannedLimitedModels": "CGE, FPP",
         "lastAuditLabel": "Last calibration audit",
         "openIssuesLabel": "Open production gates"

@@ -44,10 +44,6 @@ function dfmErrorDetail(error: DfmTransportError | DfmValidationError): string |
   return undefined
 }
 
-function toEpoch(timestamp: string): number {
-  const parsed = Date.parse(timestamp)
-  return Number.isFinite(parsed) ? parsed : Number.NEGATIVE_INFINITY
-}
 
 function formatDate(value: string, locale: string): string {
   const parsed = Date.parse(value)
@@ -88,29 +84,25 @@ export function OverviewPage() {
     setSourceState(nextState)
   }
 
-  const latestAttributionTimestamp = useMemo(() => {
-    const timestamps = headlineMetrics.flatMap((metric) =>
-      metric.model_attribution.map((attribution) => attribution.timestamp),
-    )
-    if (timestamps.length === 0) {
-      return null
-    }
-    return timestamps.reduce((latest, current) => (toEpoch(current) > toEpoch(latest) ? current : latest))
+  const headlineFreshnessAge = useMemo(() => {
+    const ages = headlineMetrics
+      .map((metric) => metric.freshness_age_days)
+      .filter((age): age is number => typeof age === 'number' && Number.isFinite(age))
+    return ages.length > 0 ? Math.max(...ages) : null
   }, [headlineMetrics])
 
   useEffect(() => {
-    if (sourceState.status !== 'ready' || !overviewData || !latestAttributionTimestamp) {
+    if (sourceState.status !== 'ready' || !overviewData || headlineFreshnessAge === null) {
       setPageFreshness(null)
       return () => {
         setPageFreshness(null)
       }
     }
-    const ageInDays = Math.max(0, Math.floor((Date.now() - Date.parse(latestAttributionTimestamp)) / 86_400_000))
-    setPageFreshness({ ageInDays })
+    setPageFreshness({ ageInDays: headlineFreshnessAge })
     return () => {
       setPageFreshness(null)
     }
-  }, [latestAttributionTimestamp, overviewData, sourceState.status])
+  }, [headlineFreshnessAge, overviewData, sourceState.status])
 
   if (sourceState.status === 'loading') {
     return (
@@ -162,8 +154,13 @@ export function OverviewPage() {
   const artifactAlignedNowcastChart = buildArtifactAlignedNowcastChart(overviewNowcastMetrics)
   const useLiveDfmNowcastChart =
     dfmState.status === 'bridge' && shouldUseDfmNowcastChart(dfmState.chart, overviewNowcastMetrics)
-  const displayedNowcastChart =
-    useLiveDfmNowcastChart ? dfmState.chart : artifactAlignedNowcastChart ?? nowcast_forecast
+  const displayedNowcastChart = useLiveDfmNowcastChart
+    ? dfmState.chart
+    : artifactAlignedNowcastChart ??
+      (sourceState.sourceKind === 'overview-artifact' ? null : nowcast_forecast)
+  const hasIntegrityWarnings = (indicator_groups ?? []).some((group) =>
+    group.metrics.some((metric) => metric.freshness_status !== 'current'),
+  )
   const displayedNowcastTrustId = useLiveDfmNowcastChart
     ? 'liveBridgeJson'
     : sourceState.sourceKind === 'overview-artifact'
@@ -180,7 +177,13 @@ export function OverviewPage() {
               ? 'staticOverviewFallback'
               : 'liveBridgeJson'
         }
-        tone={sourceState.sourceKind === 'overview-artifact' ? 'success' : 'neutral'}
+        tone={
+          sourceState.sourceKind === 'overview-artifact'
+            ? hasIntegrityWarnings
+              ? 'warn'
+              : 'success'
+            : 'neutral'
+        }
       />
       <span>
         <strong>{t('overview.meta.vintageLabel')}</strong> {t('overview.common.middleDot')}{' '}
@@ -225,27 +228,35 @@ export function OverviewPage() {
                 onRetry={refetchDfm}
               />
             ) : null}
-            <NowcastForecastBlock
-              chart={displayedNowcastChart}
-              contributionDetails={
-                useLiveDfmNowcastChart && dfmState.status === 'bridge'
-                  ? dfmState.contributionDetails
-                  : undefined
-              }
-              headerSlot={
-                <TrustStateLabel
-                  id={displayedNowcastTrustId}
-                  tone={useLiveDfmNowcastChart ? 'success' : 'warn'}
-                />
-              }
-              statusSlot={
-                dfmState.status === 'loading' ? (
-                  <p className="overview-nowcast-refreshing" role="status" aria-live="polite">
-                    {t('overview.nowcast.refreshing')}
-                  </p>
-                ) : null
-              }
-            />
+            {dfmState.status === 'unavailable' ? (
+              <NowcastBanner
+                errorKind="freshness"
+                errorDetail={t('overview.nowcast.banner.freshnessDetail')}
+              />
+            ) : null}
+            {displayedNowcastChart ? (
+              <NowcastForecastBlock
+                chart={displayedNowcastChart}
+                contributionDetails={
+                  useLiveDfmNowcastChart && dfmState.status === 'bridge'
+                    ? dfmState.contributionDetails
+                    : undefined
+                }
+                headerSlot={
+                  <TrustStateLabel
+                    id={displayedNowcastTrustId}
+                    tone={useLiveDfmNowcastChart ? 'success' : 'warn'}
+                  />
+                }
+                statusSlot={
+                  dfmState.status === 'loading' ? (
+                    <p className="overview-nowcast-refreshing" role="status" aria-live="polite">
+                      {t('overview.nowcast.refreshing')}
+                    </p>
+                  ) : null
+                }
+              />
+            ) : null}
           </div>
         ) : null}
 

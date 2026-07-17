@@ -6,6 +6,7 @@ import {
   DfmValidationError,
   fetchDfmBridgePayload,
 } from '../bridge/dfm-client.js'
+import { assessDfmReadiness } from '../bridge/dfm-readiness.js'
 import type { DfmBridgePayload } from '../bridge/dfm-types.js'
 import { BridgeFetchError, type FetchLike } from '../bridge/bridge-fetch.js'
 import {
@@ -32,7 +33,6 @@ import {
   OverviewArtifactValidationError,
 } from '../overview/artifact-client.js'
 import type { OverviewArtifact } from '../overview/artifact-types.js'
-import { OVERVIEW_TOP_CARD_METRIC_IDS } from '../overview/artifact-types.js'
 import {
   fetchRegistryApiMetadata,
   isRegistryApiEnabled,
@@ -133,9 +133,7 @@ type LoadedArtifact =
   | { status: 'failed' | 'missing' | 'unavailable'; detail: string; issues: RegistryIssue[] }
 
 const DASH = 'Not carried in public artifact'
-const DFM_STALE_WARNING_HOURS = 48
-const DFM_STALE_CRITICAL_HOURS = 24 * 7
-const OVERVIEW_TOP_CARD_METRIC_ID_SET: ReadonlySet<string> = new Set(OVERVIEW_TOP_CARD_METRIC_IDS)
+
 
 const CONSUMER_LINKS = {
   overview: { label: 'Overview', href: '/overview' },
@@ -499,12 +497,18 @@ function buildOverviewArtifact(result: LoadedArtifact): RegistryArtifact {
       severity: 'warning' as const,
     })),
   )
-  const issues = [...issueWarnings, ...caveatIssues, ...metricWarningIssues]
+  const freshnessIssues = payload.metrics
+    .filter((metric) => metric.freshness.status !== 'current')
+    .map((metric) => ({
+      path: `${metric.id}.freshness`,
+      message: `${metric.label} is ${metric.freshness.status}: ${metric.freshness.reason}; upstream as of ${metric.freshness.as_of}.`,
+      severity: 'warning' as const,
+    }))
+  const issues = [...issueWarnings, ...caveatIssues, ...metricWarningIssues, ...freshnessIssues]
   const status = payload.validation_status === 'warning' || issues.length > 0 ? 'warning' : 'valid'
   const sourceLabels = Array.from(new Set(payload.metrics.map((metric) => metric.source_label))).slice(0, 3)
-  const topCardCount = payload.metrics.filter((metric) =>
-    metric.top_card === true || OVERVIEW_TOP_CARD_METRIC_ID_SET.has(metric.id),
-  ).length
+  const topCardCount = payload.metrics.filter((metric) => metric.top_card === true).length
+
 
   return {
     ...base,
@@ -522,7 +526,7 @@ function buildOverviewArtifact(result: LoadedArtifact): RegistryArtifact {
     validationScope:
       'Frontend guard checks schema version, all 17 locked metric ids, claim type, unit, frequency, source labels, source periods, top-card ordering, and validation status.',
     freshnessRule:
-      'Metric-level stale rules are carried as warnings from the artifact; the frontend does not crawl sources or refresh the artifact.',
+      'Uses each metric upstream observation/extraction date and its locked threshold; artifact export time is not treated as source freshness.',
     caveatsSummary:
       issues.length > 0
         ? `${issues.length} artifact warning(s) or caveat(s) are carried.`
@@ -531,7 +535,8 @@ function buildOverviewArtifact(result: LoadedArtifact): RegistryArtifact {
       'Source period identifies each published metric period; artifact export is the generated overview.json timestamp consumed by the UI.',
     facts: [
       { label: 'Locked metrics', value: String(payload.metrics.length) },
-      { label: 'Top-card candidates', value: String(Math.min(topCardCount, 8)) },
+      { label: 'Current headline metrics', value: String(Math.min(topCardCount, 8)) },
+      { label: 'Stale / unavailable', value: String(freshnessIssues.length) },
       { label: 'Source labels', value: sourceLabels.join(', ') || DASH },
     ],
     consumers: [CONSUMER_LINKS.overview, CONSUMER_LINKS.dataRegistry],
@@ -582,14 +587,19 @@ function buildDfmArtifact(result: LoadedArtifact, now: Date): RegistryArtifact {
   const base = createArtifactBase('dfm', '/data/dfm.json', 'DFM nowcast')
   if (result.status !== 'loaded') return artifactFromFailure(base, result)
   const payload = result.payload as DfmBridgePayload
-  const staleIssue = getDfmStaleIssue(payload.metadata.exported_at, now)
+  const readiness = assessDfmReadiness(payload, now)
+  const readinessIssues: RegistryIssue[] = readiness.reasons.map((reason) => ({
+    path: `readiness.${reason.code}`,
+    message: reason.message,
+    severity: 'error',
+  }))
   const caveatIssues = caveatsToIssues(payload.caveats)
   const highestSeverity = getHighestCaveatSeverity(payload.caveats)
-  const issues = staleIssue ? [staleIssue, ...caveatIssues] : caveatIssues
+  const issues = [...readinessIssues, ...caveatIssues]
 
   return {
     ...base,
-    status: issues.length > 0 ? 'warning' : 'valid',
+    status: readiness.status === 'available' ? (caveatIssues.length > 0 ? 'warning' : 'valid') : 'unavailable',
     statusDetail: 'File loaded and passed format checks; this is not economic or model validation.',
     owner: 'CERR nowcasting team',
     sourceSystem: payload.attribution.module,
@@ -599,13 +609,17 @@ function buildDfmArtifact(result: LoadedArtifact, now: Date): RegistryArtifact {
     sourceVintage: payload.metadata.source_artifact_exported_at,
     solverVersion: payload.metadata.solver_version,
     caveatCount: payload.caveats.length,
-    highestCaveatSeverity: staleIssue?.severity === 'error' ? 'critical' : highestSeverity,
+    highestCaveatSeverity: readiness.status === 'unavailable' ? 'critical' : highestSeverity,
     validationScope: 'Frontend guard checks DFM attribution, nowcast periods, factor state, indicators, caveats, and metadata shape.',
-    freshnessRule: 'DFM JSON export older than 48 hours is a warning; older than 7 days is escalated. Upstream refit timestamp is separate.',
-    caveatsSummary: summarizeCaveats(payload.caveats, staleIssue),
+    freshnessRule: 'Current-quarter match, upstream source age <=45 days, factor-data age <=62 days, CI refit, forecast horizon, and economist sign-off must all pass.',
+    caveatsSummary: readiness.status === 'available'
+      ? summarizeCaveats(payload.caveats)
+      : `${readiness.reasons.length} operational readiness gate(s) failed; artifact remains internal preview.`,
     sourceExportExplanation: 'Source artifact timestamp is the upstream DFM data/refit vintage; artifact export is the generated public JSON.',
     facts: [
+      { label: 'Operational availability', value: readiness.status },
       { label: 'Current quarter', value: payload.nowcast.current_quarter.period },
+      { label: 'Expected quarter', value: readiness.expected_quarter },
       { label: 'Indicators', value: String(payload.indicators.length) },
       { label: 'Factor convergence', value: payload.factor.converged ? 'Converged' : 'Not converged' },
     ],
@@ -1057,32 +1071,4 @@ function caveatsToIssues(caveats: Array<{ severity: CaveatSeverity; caveat_id: s
       message: caveat.message,
       severity: caveat.severity === 'critical' ? 'error' : 'warning',
     }))
-}
-
-function getDfmStaleIssue(exportedAt: string, now: Date): RegistryIssue | null {
-  const exportedTime = new Date(exportedAt).getTime()
-  if (!Number.isFinite(exportedTime)) {
-    return {
-      path: 'metadata.exported_at',
-      message: 'DFM export timestamp is invalid; freshness cannot be assessed.',
-      severity: 'warning',
-    }
-  }
-
-  const ageHours = (now.getTime() - exportedTime) / (1000 * 60 * 60)
-  if (ageHours >= DFM_STALE_CRITICAL_HOURS) {
-    return {
-      path: 'metadata.exported_at',
-      message: 'DFM JSON export is older than 7 days.',
-      severity: 'error',
-    }
-  }
-  if (ageHours >= DFM_STALE_WARNING_HOURS) {
-    return {
-      path: 'metadata.exported_at',
-      message: 'DFM JSON export is older than 48 hours.',
-      severity: 'warning',
-    }
-  }
-  return null
 }

@@ -335,11 +335,12 @@ describe('IndicatorPanelGrid', () => {
 
     assert.match(
       markup,
-      /data-metric-id="exports_yoy"[\s\S]*overview-indicator-row__source-period" aria-label="2026 Q1 · Statistics Agency foreign trade" title="2026 Q1 · Statistics Agency foreign trade"[^>]*>2026 Q1</,
+      /data-metric-id="exports_yoy"[\s\S]*<a class="overview-indicator-row__source-period" href="https:\/\/example\.test\/source\/exports_yoy"[\s\S]*aria-label="March 2026 · Statistics Agency foreign trade · 2026-04-05"[\s\S]*>March 2026<\/a>/,
     )
+    assert.match(markup, /target="_blank" rel="noopener noreferrer"/)
     assert.doesNotMatch(
       markup,
-      /data-metric-id="exports_yoy"[\s\S]*overview-indicator-row__source-period[^>]*>2026 Q1 · Statistics Agency foreign trade</,
+      /overview-indicator-row__source-period[^>]*>March 2026 · Statistics Agency foreign trade</,
     )
   })
 })

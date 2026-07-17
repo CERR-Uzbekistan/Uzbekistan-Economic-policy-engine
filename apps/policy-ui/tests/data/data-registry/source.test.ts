@@ -330,9 +330,10 @@ describe('data registry source', () => {
     assert.ok(missingUnavailable.artifacts.some((artifact) => artifact.id === 'qpm' && artifact.status === 'missing'))
   })
 
-  it('warns when DFM export is older than 48 hours and escalates after 7 days', async () => {
+  it('uses upstream readiness gates rather than a recent DFM JSON export timestamp', () => {
     const dfm = buildValidDfmPayload()
     dfm.caveats = []
+    dfm.metadata.exported_at = '2026-04-25T11:59:00Z'
     const registry = buildDataRegistry({
       qpm: { status: 'loaded', payload: buildValidQpmPayload() },
       dfm: { status: 'loaded', payload: dfm },
@@ -342,19 +343,13 @@ describe('data registry source', () => {
     })
 
     const dfmArtifact = registry.artifacts.find((artifact) => artifact.id === 'dfm')
-    assert.equal(dfmArtifact?.status, 'warning')
-    assert.ok(dfmArtifact?.issues.some((issue) => issue.message.includes('48 hours')))
-
-    dfm.metadata.exported_at = '2026-04-10T00:00:00Z'
-    const staleRegistry = buildDataRegistry({
-      qpm: { status: 'loaded', payload: buildValidQpmPayload() },
-      dfm: { status: 'loaded', payload: dfm },
-      io: { status: 'loaded', payload: loadPublicIoPayload() },
-      pe: { status: 'loaded', payload: loadPublicPePayload() },
-      now: NOW,
-    })
-    const staleDfmArtifact = staleRegistry.artifacts.find((artifact) => artifact.id === 'dfm')
-    assert.ok(staleDfmArtifact?.issues.some((issue) => issue.message.includes('7 days')))
+    assert.equal(dfmArtifact?.status, 'unavailable')
+    assert.ok(dfmArtifact?.issues.some((issue) => issue.path.includes('current_quarter_mismatch')))
+    assert.ok(dfmArtifact?.issues.some((issue) => issue.path.includes('economist_signoff_missing')))
+    assert.equal(
+      dfmArtifact?.facts.find((fact) => fact.label === 'Operational availability')?.value,
+      'unavailable',
+    )
   })
 
   it('shows validation failure without breaking the registry page model', async () => {

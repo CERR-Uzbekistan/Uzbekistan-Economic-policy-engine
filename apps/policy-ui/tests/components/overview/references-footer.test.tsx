@@ -20,6 +20,7 @@ async function createTestI18n() {
             references: {
               title: 'Sources and references',
               summary: '{{count}} sources · exported {{date}}',
+              sourceDate: 'Source date: {{date}}',
             },
           },
         },
@@ -49,5 +50,29 @@ describe('ReferencesFooter', () => {
     assert.match(markup, /2 sources · exported/)
     assert.match(markup, /State Statistics Agency: national accounts release/)
     assert.match(markup, /Central Bank of Uzbekistan: official reference rate and policy setting/)
+  })
+  it('renders structured source provenance as a safe external link', async () => {
+    const i18n = await createTestI18n()
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <ReferencesFooter
+          exportedAt="2026-07-16T00:00:00Z"
+          references={[
+            {
+              label: 'Statistics Agency CPI',
+              period: 'June 2026',
+              url: 'https://stat.uz/cpi.pdf',
+              observed_at: '2026-07-05T00:00:00Z',
+              transformation: 'Official annual index minus 100.',
+            },
+          ]}
+        />
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /href="https:\/\/stat\.uz\/cpi\.pdf"/)
+    assert.match(markup, /target="_blank" rel="noopener noreferrer"/)
+    assert.match(markup, /Source date:/)
+    assert.match(markup, /Official annual index minus 100/)
   })
 })

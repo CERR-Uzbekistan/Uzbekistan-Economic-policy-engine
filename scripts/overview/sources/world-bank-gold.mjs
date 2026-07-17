@@ -197,10 +197,21 @@ function formatPeriodLabel(period) {
 
 function findGoldColumn(rows) {
   const codeRow = rows.find((row) => [...row.cells.values()].some((value) => value === GOLD_CODE))
-  if (!codeRow) manualRequired('world_bank_gold_code_row_missing')
-  const matches = [...codeRow.cells.entries()].filter(([, value]) => value === GOLD_CODE)
-  if (matches.length !== 1) manualRequired('world_bank_gold_code_column_match_count', { matches: matches.length })
-  return matches[0][0]
+  if (codeRow) {
+    const matches = [...codeRow.cells.entries()].filter(([, value]) => value === GOLD_CODE)
+    if (matches.length !== 1) manualRequired('world_bank_gold_code_column_match_count', { matches: matches.length })
+    return matches[0][0]
+  }
+
+  // The July 2026 workbook removed the commodity-code row. Fall back to the
+  // unique human-readable Gold header, while retaining an ambiguity guard.
+  const labelMatches = rows.flatMap((row) =>
+    [...row.cells.entries()].filter(([, value]) => String(value ?? '').trim().toLowerCase() === 'gold'),
+  )
+  if (labelMatches.length !== 1) {
+    manualRequired('world_bank_gold_header_column_match_count', { matches: labelMatches.length })
+  }
+  return labelMatches[0][0]
 }
 
 function asStrictNumber(value, path) {
@@ -325,14 +336,14 @@ function buildGoldLevelUpdate(sourceUrl, dataset, extractedAt) {
   }
 }
 
-function buildGoldChangeUpdate(dataset, extractedAt) {
+function buildGoldChangeUpdate(sourceUrl, dataset, extractedAt) {
   return {
     metric_id: 'gold_price_change',
     value: percentChange(dataset.current.value, dataset.previous.value, 2),
     previous_value: null,
     source_label: 'World Bank Pink Sheet gold price, calculated',
     source_period: `${dataset.current.periodLabel} vs ${dataset.previous.periodLabel}`,
-    source_url: null,
+    source_url: sourceUrl,
     source_reference: `Calculated from World Bank Pink Sheet monthly gold prices: ${roundTo(dataset.current.value, 2)} for ${dataset.current.periodLabel} and ${roundTo(dataset.previous.value, 2)} for ${dataset.previous.periodLabel}`,
     observed_at: dataset.observedAt,
     extracted_at: extractedAt,
@@ -350,5 +361,5 @@ export async function buildWorldBankGoldMetricUpdates(options = {}) {
     http: options.http,
   })
   validateNotOlderThanSnapshot(dataset, options.snapshot)
-  return [buildGoldLevelUpdate(sourceUrl, dataset, extractedAt), buildGoldChangeUpdate(dataset, extractedAt)]
+  return [buildGoldLevelUpdate(sourceUrl, dataset, extractedAt), buildGoldChangeUpdate(sourceUrl, dataset, extractedAt)]
 }

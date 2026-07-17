@@ -77,9 +77,11 @@ export function EconomicStateHeader({
 
   const draftedFrom = provenance?.drafted_from ?? modelList
   const reviewDate = provenance?.reviewed_at ?? ''
-  const dataNote = reviewDate
-    ? t('overview.header.dataNoteReviewed', { date: reviewDate })
-    : t('overview.header.dataNoteUpdated', { date: formattedUpdatedAt })
+  const dataNote = isArtifactMode
+    ? t('overview.header.dataNoteUpdated', { date: formattedUpdatedAt })
+    : reviewDate
+      ? t('overview.header.dataNoteReviewed', { date: reviewDate })
+      : t('overview.header.dataNoteUpdated', { date: formattedUpdatedAt })
   const summaryText = isArtifactMode
     ? t('overview.header.artifactBrief.summary')
     : renderSummary(summary)

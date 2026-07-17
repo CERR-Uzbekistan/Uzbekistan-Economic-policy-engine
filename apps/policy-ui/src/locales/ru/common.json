@@ -183,6 +183,11 @@
       "reference": "Справочное",
       "forecast": "Прогноз"
     },
+    "freshness": {
+      "current": "Актуально",
+      "stale": "Источник устарел",
+      "unavailable": "Недоступно"
+    },
     "macroPulse": {
       "gdp": "ВВП",
       "cpi": "ИПЦ",
@@ -200,7 +205,7 @@
       "analysisAria": "Наукаст и сценарные тесты"
     },
     "topbar": {
-      "freshness": "Данные · {{days}}д назад"
+      "freshness": "Самый старый источник ключевых показателей · {{days}}д"
     },
     "meta": {
       "eyebrow": "Снимок обзора",
@@ -220,7 +225,7 @@
       "sourceNotesBelow": "{{count}} источников показателей ниже",
       "modelSource": "модельный источник: {{models}}",
       "artifactBrief": {
-        "summary": "Рост выше траектории nowcast на текущий квартал; инфляция и внешний канал остаются главными зонами внимания."
+        "summary": "Ниже показаны последние обеспеченные источниками показатели роста, инфляции, торговли и валютного курса; недоступные модельные результаты исключены из ключевых показателей."
       },
       "summary": {
         "template": "{{items}}.",
@@ -253,6 +258,12 @@
         "scenario": "Сценарий",
         "reference": "Справочное",
         "draft": "Черновик"
+      },
+      "outputClass": {
+        "accounting_calculation": "Расчёт по балансовому тождеству",
+        "nowcast": "Оперативная оценка",
+        "forecast": "Прогноз",
+        "static_reference": "Статическая справка"
       },
       "direction": {
         "up": "выше",
@@ -371,7 +382,13 @@
       "banner": {
         "title": "Оперативная оценка недоступна",
         "subtitle": "Показаны справочные данные",
-        "retry": "Повторить"
+        "retry": "Повторить",
+        "freshnessDetail": "Результат DFM не проходит проверки актуального периода, свежести источника, воспроизводимости в CI и одобрения экономиста.",
+        "detailLabels": {
+          "transport": "Соединение",
+          "validation": "Проверка",
+          "freshness": "Готовность"
+        }
       }
     },
     "dfmContributionDetail": {
@@ -423,7 +440,8 @@
     },
     "references": {
       "title": "Источники и ссылки",
-      "summary": "{{count}} источников · обновлено {{date}}"
+      "summary": "{{count}} источников · обновлено {{date}}",
+      "sourceDate": "Дата источника: {{date}}"
     }
   },
   "buttons": {
@@ -1916,9 +1934,9 @@
       "meta": {
         "modelsLabel": "Моделей",
         "modelsLive": "{{count}} активно",
-        "bridgeBackedLabel": "Модели с актуальными данными",
+        "bridgeBackedLabel": "Доступно для текущего анализа политики",
         "bridgeBackedModels": "QPM, DFM, PE, I-O",
-        "plannedLimitedLabel": "Не активно",
+        "plannedLimitedLabel": "Недоступно или только справочно",
         "plannedLimitedModels": "CGE, FPP",
         "lastAuditLabel": "Последний аудит калибровки",
         "openIssuesLabel": "Открытых производственных условий"

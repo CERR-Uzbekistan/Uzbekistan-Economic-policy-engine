@@ -48,6 +48,12 @@ export function KpiStrip({ metrics, headingId = 'overview-kpi-title', title, var
           const contextNote = metric.context_note
           const contextIsSentinel = contextNote === SME_CONTENT_PENDING
           const claimLabel = metric.claim_label_key ? t(metric.claim_label_key) : null
+          const outputClassLabel = metric.output_class
+            ? t(`overview.kpi.outputClass.${metric.output_class}`)
+            : null
+          const displayedContext = metric.output_class
+            ? [outputClassLabel, metric.source_label].filter(Boolean).join(` ${t('overview.common.middleDot')} `)
+            : contextNote
 
           return (
             <article key={metric.metric_id} className="kpi overview-kpi-card" data-metric-id={metric.metric_id}>
@@ -92,8 +98,8 @@ export function KpiStrip({ metrics, headingId = 'overview-kpi-title', title, var
                   >
                     {t('overview.kpi.smePendingChip')}
                   </span>
-                ) : contextNote ? (
-                  <span className="overview-kpi-card__context-note" title={contextNote}>{contextNote}</span>
+                ) : displayedContext ? (
+                  <span className="overview-kpi-card__context-note" title={displayedContext}>{displayedContext}</span>
                 ) : null}
               </div>
             </article>

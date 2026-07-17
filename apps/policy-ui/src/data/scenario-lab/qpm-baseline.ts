@@ -67,7 +67,12 @@ function metricById(artifact: OverviewArtifact, id: OverviewMetricId): OverviewA
 
 function usableMetric(artifact: OverviewArtifact, id: OverviewMetricId): OverviewArtifactMetric | null {
   const metric = metricById(artifact, id)
-  if (!metric || metric.validation_status === 'failed' || !Number.isFinite(metric.value)) {
+  if (
+    !metric ||
+    metric.validation_status !== 'valid' ||
+    metric.freshness.status !== 'current' ||
+    !Number.isFinite(metric.value)
+  ) {
     return null
   }
   return metric
@@ -101,6 +106,24 @@ function nextQuarter(quarter: { year: number; quarter: number }): { year: number
   return { year: quarter.year + 1, quarter: 1 }
 }
 
+function quarterFromTimestamp(value: string): { year: number; quarter: number } | null {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return null
+  return {
+    year: date.getUTCFullYear(),
+    quarter: Math.floor(date.getUTCMonth() / 3) + 1,
+  }
+}
+
+function laterQuarter(
+  first: { year: number; quarter: number },
+  second: { year: number; quarter: number },
+): { year: number; quarter: number } {
+  const firstIndex = first.year * 4 + first.quarter
+  const secondIndex = second.year * 4 + second.quarter
+  return firstIndex >= secondIndex ? first : second
+}
+
 function toDateLabel(value: string): string {
   const date = new Date(value)
   return Number.isNaN(date.getTime()) ? value : date.toISOString().slice(0, 10)
@@ -126,7 +149,9 @@ function buildOverviewBaseline(artifact: OverviewArtifact): QpmBaselineLevels | 
       year: QPM_FALLBACK_BASELINE.startYear,
       quarter: QPM_FALLBACK_BASELINE.startQuarter,
     }
-  const firstProjectionQuarter = nextQuarter(quarter)
+  const nextObservedQuarter = nextQuarter(quarter)
+  const artifactQuarter = quarterFromTimestamp(artifact.exported_at)
+  const firstProjectionQuarter = artifactQuarter ? laterQuarter(nextObservedQuarter, artifactQuarter) : nextObservedQuarter
   const metrics = [
     inflation,
     policyRate,
@@ -152,7 +177,7 @@ function buildOverviewBaseline(artifact: OverviewArtifact): QpmBaselineLevels | 
       data_version: `Overview ${toDateLabel(artifact.exported_at)}`,
       status_label: 'Overview artifact baseline',
       note:
-        'Scenario Lab anchors the visible QPM baseline path to the latest approved Overview values where mapped, then applies QPM shock deviations around that path. Warning-status trade metrics are retained as context but are not allowed to mechanically drive the baseline external-demand gap.',
+        'Scenario Lab anchors the visible QPM baseline path to current, valid Overview values where mapped, then applies QPM shock deviations around that path. Metrics that fail validity or freshness gates remain contextual and cannot seed the baseline.',
       metrics,
     },
   }

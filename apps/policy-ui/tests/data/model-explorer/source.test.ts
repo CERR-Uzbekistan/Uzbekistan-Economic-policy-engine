@@ -68,7 +68,11 @@ describe('model explorer source live integration flow', () => {
       catalogEntries.map((entry) => entry.id),
       modelCatalogEntries.map((entry) => entry.id),
     )
-    assert.equal(readyState.workspace?.meta?.models_live, 5)
+    assert.equal(readyState.workspace?.meta?.models_live, 3)
+    assert.deepEqual(
+      readyState.workspace?.catalog_entries_by_model_id?.['dfm-nowcast']?.status,
+      { label: 'Unavailable for current policy use', severity: 'warn' },
+    )
   })
 
   it('enriches the I-O and PE entries with bridge evidence when public artifacts are valid', async () => {
@@ -120,6 +124,11 @@ describe('model explorer source live integration flow', () => {
     assert.equal(readyState.status, 'ready')
     assert.equal(qpmEntry?.bridge_evidence?.source_artifact, 'apps/policy-ui/public/data/qpm.json')
     assert.equal(dfmEntry?.bridge_evidence?.source_artifact, 'apps/policy-ui/public/data/dfm.json')
+    assert.deepEqual(dfmEntry?.status, {
+      label: 'Unavailable for current policy use',
+      severity: 'warn',
+    })
+    assert.equal(readyState.workspace?.meta?.models_live, 3)
     assert.equal(
       ioEntry?.bridge_evidence?.source_artifact,
       'io_model/io_data.json + io_model/io_employment.json + io_model/io_data.js labels',

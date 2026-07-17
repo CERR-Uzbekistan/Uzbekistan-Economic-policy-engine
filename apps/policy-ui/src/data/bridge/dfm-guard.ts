@@ -1169,11 +1169,11 @@ function parseReadinessStatus(
   const economistSignoff = value.economist_signoff
   let ok = true
 
-  if (publicStatus !== 'internal_preview_bridge') {
+  if (publicStatus !== 'internal_preview_bridge' && publicStatus !== 'operational') {
     pushError(
       issues,
       'metadata.readiness_status.public_status',
-      'Expected internal_preview_bridge.',
+      'Expected internal_preview_bridge or operational.',
     )
     ok = false
   }
@@ -1200,7 +1200,7 @@ function parseReadinessStatus(
 
   if (!ok) return null
   return {
-    public_status: 'internal_preview_bridge',
+    public_status: publicStatus as DfmMetadata['readiness_status']['public_status'],
     source_refit_in_ci: sourceRefitInCi as DfmMetadata['readiness_status']['source_refit_in_ci'],
     per_series_transform_map: perSeriesTransformMap as DfmMetadata['readiness_status']['per_series_transform_map'],
     historical_backtest: historicalBacktest as DfmMetadata['readiness_status']['historical_backtest'],
