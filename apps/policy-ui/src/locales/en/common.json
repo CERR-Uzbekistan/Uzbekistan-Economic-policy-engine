@@ -1643,6 +1643,7 @@
         "noTimeline": "No dated milestones are available.",
         "modelLenses": "Model lenses",
         "possibleLenses": "Possible lenses",
+        "experimentalReference": "experimental",
         "plannedLenses": "Planned lenses",
         "noActiveLens": "No active lens",
         "source": "Source",

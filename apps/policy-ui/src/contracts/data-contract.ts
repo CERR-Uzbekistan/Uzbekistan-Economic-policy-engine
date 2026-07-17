@@ -876,8 +876,8 @@ export type ResearchBrief = {
 
 export type KnowledgeHubPreviewCitationPermission = 'internal_only'
 export type KnowledgeHubPolicyBriefState = 'internal_preview'
-export type KnowledgeHubActiveModelLensId = 'QPM' | 'DFM' | 'I-O' | 'PE'
-export type KnowledgeHubGatedModelLensId = 'CGE' | 'FPP' | 'HFI' | 'Synthesis'
+export type KnowledgeHubActiveModelLensId = 'QPM' | 'DFM' | 'I-O' | 'PE' | 'CGE'
+export type KnowledgeHubGatedModelLensId = 'FPP' | 'HFI' | 'Synthesis'
 export type KnowledgeHubContentLanguage = 'en' | 'ru' | 'uz'
 export type KnowledgeHubLocalizedText = Partial<Record<KnowledgeHubContentLanguage, string>>
 export type KnowledgeHubLocalizedList = Partial<Record<KnowledgeHubContentLanguage, string[]>>
@@ -928,7 +928,7 @@ export type KnowledgeHubLiteratureItem = {
 export type KnowledgeHubModelLens = {
   id: KnowledgeHubActiveModelLensId | KnowledgeHubGatedModelLensId
   label: string
-  status: 'possible_lens' | 'planned_gated'
+  status: 'possible_lens' | 'experimental_reference' | 'planned_gated'
   caveat: string
 }
 
