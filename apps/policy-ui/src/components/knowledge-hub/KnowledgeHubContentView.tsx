@@ -7,6 +7,7 @@ import type {
   KnowledgeHubContent,
   KnowledgeHubGatedModelLensId,
   KnowledgeHubLiteratureItem,
+  KnowledgeHubModelImpactLink,
   ReformPackage,
   ReformPackageDigest,
   ReformPackageMilestone,
@@ -416,11 +417,13 @@ function sourceDiagnosticsSummary(content: KnowledgeHubContent) {
   }
 }
 
-function modelLensMap(content: KnowledgeHubContent): Map<string, KnowledgeHubActiveModelLensId[]> {
+function modelLensMap(content: KnowledgeHubContent): Map<string, KnowledgeHubModelImpactLink[]> {
   return new Map(
     (content.model_impact_map?.package_links ?? []).map((link) => [
       link.package_id,
-      uniqueSorted(link.active_lenses.map((lens) => lens.model_id)) as KnowledgeHubActiveModelLensId[],
+      link.active_lenses.filter(
+        (lens, index, lenses) => lenses.findIndex((candidate) => candidate.model_id === lens.model_id) === index,
+      ),
     ]),
   )
 }
@@ -765,7 +768,7 @@ function ModelLensChips({
   activeLenses,
   plannedLenses,
 }: {
-  activeLenses: KnowledgeHubActiveModelLensId[]
+  activeLenses: KnowledgeHubModelImpactLink[]
   plannedLenses: KnowledgeHubGatedModelLensId[]
 }) {
   const { t } = useTranslation()
@@ -777,8 +780,15 @@ function ModelLensChips({
         <div className="chip-row">
           {activeLenses.length > 0 ? (
             activeLenses.map((lens) => (
-              <span key={lens} className="model-chip model-chip--active">
-                {lens}
+              <span
+                key={lens.model_id}
+                className={lens.model_id === 'CGE' ? 'model-chip model-chip--experimental' : 'model-chip model-chip--active'}
+                title={lens.caveat}
+              >
+                {lens.model_id}
+                {lens.model_id === 'CGE' ? (
+                  <small className="model-chip__status">{t('knowledgeHub.reformTracker.archive.experimentalReference')}</small>
+                ) : null}
               </span>
             ))
           ) : (

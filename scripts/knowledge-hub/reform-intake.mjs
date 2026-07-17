@@ -267,10 +267,15 @@ const MODEL_IMPACT_ACTIVE_LENSES = [
     status: 'possible_lens',
     caveat: 'Use for direct tariff-incidence and trade-flow framing only.',
   },
+  {
+    id: 'CGE',
+    label: 'Computable general equilibrium',
+    status: 'experimental_reference',
+    caveat: 'Experimental comparative-static reference only; not a forecast or model-owner-approved estimate.',
+  },
 ]
 
 const MODEL_IMPACT_GATED_LENSES = [
-  { id: 'CGE', label: 'Computable general equilibrium', status: 'planned_gated', caveat: 'Not active in public outputs.' },
   { id: 'FPP', label: 'Fiscal programming', status: 'planned_gated', caveat: 'Not active in public outputs.' },
   { id: 'HFI', label: 'High-frequency indicators', status: 'planned_gated', caveat: 'Not active in public outputs.' },
   { id: 'Synthesis', label: 'Cross-model synthesis', status: 'planned_gated', caveat: 'Not active in public outputs.' },
@@ -327,7 +332,7 @@ const RESEARCH_MODEL_RULES = [
     methods: ['Computable general equilibrium', 'policy simulation'],
     topic: 'CGE policy-simulation methods',
     why_relevant:
-      'Useful as a literature watch item while CGE remains gated in public outputs.',
+      'Useful for interpreting the bounded experimental CGE reference lane without treating it as a forecast or approved estimate.',
     patterns: [/\bcge\b/i, /\bcomputable general equilibrium\b/i],
   },
   {
@@ -335,7 +340,7 @@ const RESEARCH_MODEL_RULES = [
     methods: ['Partial-equilibrium model', 'trade policy simulation'],
     topic: 'Partial-equilibrium trade policy methods',
     why_relevant:
-      'Useful as a literature watch item while PE remains gated in public outputs.',
+      'Useful for interpreting the active direct tariff-incidence and trade-flow lens.',
     patterns: [/\bpartial[-\s]?equilibrium\b/i, /\btrade policy simulation\b/i],
   },
   {
@@ -3556,6 +3561,13 @@ function buildModelImpactMap(reformPackages) {
           : []),
         ...(text.match(/\b(trade|customs|tariff|import|export|investment)\b/)
           ? [{ model_id: 'PE', channel: 'Direct tariff-incidence and trade-flow context.', caveat: 'Possible lens only.' }]
+          : []),
+        ...(text.match(/\b(trade|customs|tariff|import|export|investment|government|consumption|fiscal)\b/)
+          ? [{
+              model_id: 'CGE',
+              channel: 'Experimental economy-wide comparative-static reference.',
+              caveat: 'Experimental reference only; not a forecast or model-owner-approved estimate.',
+            }]
           : []),
       ]
 

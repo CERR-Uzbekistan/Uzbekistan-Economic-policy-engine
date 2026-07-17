@@ -236,9 +236,8 @@ const REFORM_MILESTONE_EVENT_TYPE_VALUES: ReformMilestoneEventType[] = [
 
 const REFORM_SOURCE_CONFIDENCE_VALUES: ReformSourceConfidence[] = ['high', 'medium', 'low']
 
-const KNOWLEDGE_HUB_ACTIVE_MODEL_LENS_VALUES: KnowledgeHubActiveModelLensId[] = ['QPM', 'DFM', 'I-O', 'PE']
+const KNOWLEDGE_HUB_ACTIVE_MODEL_LENS_VALUES: KnowledgeHubActiveModelLensId[] = ['QPM', 'DFM', 'I-O', 'PE', 'CGE']
 const KNOWLEDGE_HUB_GATED_MODEL_LENS_VALUES: KnowledgeHubGatedModelLensId[] = [
-  'CGE',
   'FPP',
   'HFI',
   'Synthesis',
@@ -1000,9 +999,10 @@ function validateModelLens(
   }
 
   const allowed = kind === 'active' ? KNOWLEDGE_HUB_ACTIVE_MODEL_LENS_VALUES : KNOWLEDGE_HUB_GATED_MODEL_LENS_VALUES
-  const expectedStatus = kind === 'active' ? 'possible_lens' : 'planned_gated'
+  const id = requireEnum(value, 'id', path, allowed, issues)
+  const expectedStatus = kind === 'gated' ? 'planned_gated' : id === 'CGE' ? 'experimental_reference' : 'possible_lens'
   return {
-    id: requireEnum(value, 'id', path, allowed, issues),
+    id,
     label: requireString(value, 'label', path, issues),
     status: requireEnum(value, 'status', path, [expectedStatus], issues),
     caveat: requireString(value, 'caveat', path, issues),
@@ -1087,7 +1087,7 @@ function validateModelImpactMap(
   const activeIds = activeLenses.map((lens) => lens.id)
   const gatedIds = gatedLenses.map((lens) => lens.id)
   if (activeIds.length !== KNOWLEDGE_HUB_ACTIVE_MODEL_LENS_VALUES.length) {
-    issues.push({ path: `${path}.active_lenses`, message: 'Expected QPM, DFM, PE, and I-O as the only active analytical lenses.', severity: 'error' })
+    issues.push({ path: `${path}.active_lenses`, message: 'Expected QPM, DFM, PE, and I-O as possible lenses plus CGE as an experimental reference lens.', severity: 'error' })
   }
   for (const expected of KNOWLEDGE_HUB_ACTIVE_MODEL_LENS_VALUES) {
     if (!activeIds.includes(expected)) {

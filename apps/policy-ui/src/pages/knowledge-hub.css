@@ -728,13 +728,16 @@
 }
 
 .model-chip {
+  align-items: center;
   background: color-mix(in srgb, var(--hub-panel) 82%, var(--color-surface-muted));
   border: 1px solid var(--hub-line);
   border-radius: var(--radius-sm);
   color: var(--hub-muted);
+  display: inline-flex;
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 750;
+  gap: 0.3rem;
   padding: 0.25rem 0.45rem;
 }
 
@@ -742,6 +745,20 @@
   background: color-mix(in srgb, var(--hub-blue) 10%, var(--hub-panel));
   border-color: color-mix(in srgb, var(--hub-blue) 26%, var(--hub-line));
   color: var(--hub-blue);
+}
+
+.model-chip--experimental {
+  background: color-mix(in srgb, var(--color-warn) 9%, var(--hub-panel));
+  border-color: color-mix(in srgb, var(--color-warn) 34%, var(--hub-line));
+  color: var(--color-text);
+}
+
+.model-chip__status {
+  border-left: 1px solid currentColor;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 650;
+  padding-left: 0.3rem;
 }
 
 .model-chip--planned {
