@@ -96,6 +96,7 @@
   "nav": {
     "overview": "Overview",
     "scenarioLab": "Scenario Lab",
+    "policyChat": "Policy Chat",
     "comparison": "Comparison",
     "modelExplorer": "Model Explorer",
     "dataRegistry": "Data Sources",
@@ -110,6 +111,10 @@
     "scenarioLab": {
       "title": "Scenario Lab",
       "description": "Build policy scenarios by adjusting assumptions, then review impacts and interpretation in one analysis workspace."
+    },
+    "policyChat": {
+      "title": "Policy Chat",
+      "description": "Turn a policy question into reviewable model assumptions, then run the confirmed scenario."
     },
     "comparison": {
       "title": "Comparison",
@@ -2017,7 +2022,55 @@
       "caveats": "Limitations"
     }
   },
-  "states": {
+  "policyChat": {
+    "meta": { "scope": "Enabled models", "qpm": "QPM · DFM · I-O", "control": "Execution", "confirmation": "Confirmation required" },
+    "threadAria": "Policy Chat conversation",
+    "you": "Your question",
+    "empty": {
+      "kicker": "Conversational scenario workspace",
+      "title": "Ask the model. Inspect every assumption.",
+      "description": "Ask about a QPM macro shock, the approved DFM nowcast, or an I-O final-demand scenario. Policy Chat shows the selected model and every assumption before it calculates or retrieves anything.",
+      "startersAria": "Suggested scenario questions"
+    },
+    "starters": {
+      "monetary": "Raise the policy rate by 2 percentage points for 16 quarters",
+      "demand": "What is the latest GDP nowcast and uncertainty range?",
+      "external": "Estimate the output effect of UZS 5 trillion of infrastructure investment"
+    },
+    "status": { "interpreting": "Interpreting the question and preparing assumptions..." },
+    "proposal": { "label": "Proposed model run", "title": "Review assumptions", "dirty": "Review the edited values before running the model." },
+    "parameters": { "shock_type": "Shock channel", "shock_size": "Shock size", "horizon": "Analysis horizon", "retrieval": "Retrieval", "artifact": "Approved artifact", "demand_bucket": "Final-demand channel", "amount_bln_uzs": "Demand shock", "distribution": "Distribution", "sector_code": "Sector", "base_year": "I-O base year" },
+    "origins": { "user_stated": "Stated in your question", "inferred": "Interpreted from your question", "model_default": "Model default" },
+    "units": { "shock_size": "percentage points", "horizon": "quarters", "amount_bln_uzs": "billion UZS", "base_year": "year" },
+    "values": { "monetary": "Monetary", "demand": "Demand", "inflation": "Inflation", "exchange": "Exchange rate", "risk": "Risk premium", "external_demand": "External demand", "latest_nowcast": "Latest nowcast", "investment": "Investment", "government": "Government spending", "consumption": "Consumption", "exports": "Exports", "output": "Output shares", "all_sectors": "All sectors" },
+    "caveat": "QPM results are calibrated deviations from baseline, not an official forecast.",
+    "actions": { "update": "Review changes", "updating": "Reviewing changes...", "run": "Run confirmed model", "running": "Running approved model...",
+      "save": "Save scenario",
+      "saved": "Scenario saved",
+      "openLab": "Open in Scenario Lab" },
+    "results": {
+      "label": "Model result", "title": "model output", "chartTitle": "Response paths", "chartSubtitle": "Percentage-point deviations across the selected horizon", "chartDescription": "Lines show the output gap, inflation, and policy-rate deviations by quarter.", "legendAria": "Chart series", "viewTable": "View accessible data table", "quarter": "Quarter", "interpretation": "Interpretation", "limitations": "Limitations",
+      "latestNowcast": "Latest GDP nowcast",
+      "yearOnYear": "year on year",
+      "forecastHorizon": "Near-term forecast and uncertainty",
+      "horizon": "Months ahead",
+      "estimate": "Estimate",
+      "ci90": "90% interval",
+      "aggregateEffects": "Aggregate effects",
+      "output": "Output",
+      "valueAdded": "Value added",
+      "employment": "Employment",
+      "multiplier": "Multiplier",
+      "billionUzs": "billion UZS",
+      "persons": "persons",
+      "topSectors": "View top affected sectors",
+      "sector": "Sector",
+      "series": { "output_gap": "Output gap", "inflation_yoy": "Inflation", "policy_rate": "Policy rate" }
+    },
+    "composer": { "label": "Policy question", "placeholder": "Example: Raise the policy rate by 2 percentage points for 16 quarters", "notice": "Internal preview. Do not enter restricted or personal information.", "action": "Interpret question" },
+    "ledger": { "kicker": "Run control", "title": "Assumption ledger", "model": "Model", "state": "State", "confirmation": "Confirmation", "data": "Calibration", "notSelected": "Not selected", "waiting": "Waiting for a question", "review": "Ready for review", "edited": "Edited — review required", "complete": "Run complete", "required": "Required before execution", "confirmed": "Confirmed", "pending": "Available after run", "disclosure": "Each run is tied to the assumptions shown in the conversation. Editing them invalidates the prior confirmation." },
+    "errors": { "title": "Policy Chat could not continue", "request_failed": "The request failed. Check the service and try again.", "network": "The Policy Chat service could not be reached. Start the local service or check the connection.", "timeout": "The model request timed out. Try again.", "policy_chat_disabled": "Policy Chat is disabled in this environment.", "identity_not_configured": "Internal identity is not configured for this environment.", "authentication_required": "Sign in to use Policy Chat.", "unsupported_scenario": "Supported requests are QPM macro shocks, the approved DFM nowcast, and I-O final-demand shocks.", "invalid_horizon": "Use a horizon between 8 and 32 quarters.", "invalid_shock_size": "Use a shock between -20 and 20 percentage points.", "parameter_out_of_range": "One assumption is outside the allowed range.", "stale_proposal": "The assumptions changed after confirmation. Review them and run again." }
+  },  "states": {
     "loading": {
       "overview": "Loading latest overview snapshot...",
       "comparison": "Loading comparison workspace...",

@@ -220,6 +220,7 @@ describe('Data Registry page', () => {
     const expectedRouteOrder = [
       "path: 'overview'",
       "path: 'scenario-lab'",
+      "path: 'policy-chat'",
       "path: 'comparison'",
       "path: 'model-explorer'",
       "path: 'data-registry'",
@@ -235,6 +236,7 @@ describe('Data Registry page', () => {
     assert.deepEqual(PRIMARY_NAV_ITEMS.map((item) => item.path), [
       '/overview',
       '/scenario-lab',
+      '/policy-chat',
       '/comparison',
       '/model-explorer',
       '/data-registry',

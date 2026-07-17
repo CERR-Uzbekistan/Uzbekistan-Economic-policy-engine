@@ -103,3 +103,7 @@ The source modules use page-specific `VITE_*_DATA_MODE` keys:
 - The old frontend is intentionally untouched.
 - QPM and DFM are live via bridge JSON, and I-O is implemented within its accepted static/read-only scope. PE, CGE, and FPP remain deferred until their contracts/readiness gates clear.
 - Knowledge Hub remains pending-only in the operational preview. Active content, external citation/export, backend/API CRUD, live ingest, and content expansion are gated by the Knowledge Hub contract/readiness path.
+
+## Policy Chat
+
+The `/policy-chat` route is enabled by default in development and opt-in for production builds with `VITE_POLICY_CHAT_ENABLED=true`. Set `VITE_POLICY_CHAT_API_URL` when the API is not available at `http://127.0.0.1:8001/api/v1/policy-chat`. The page supports QPM, read-only DFM, and I-O requests, shows the parsed assumptions before execution, and can save a completed run into the existing local Scenario Lab store.
