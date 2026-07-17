@@ -1,0 +1,68 @@
+name: Policy Chat
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/policy-chat.yml"
+      - "Dockerfile.policy-chat"
+      - "apps/policy-ui/**"
+      - "docs/deployment/policy-chat-internal.md"
+      - "docs/operations/policy-chat-pilot.md"
+      - "mcp_server/api/policy_chat*.py"
+      - "mcp_server/tests/test_policy_chat*.py"
+      - "scripts/policy-chat/**"
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend governance contract
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mcp_server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Lint Policy Chat
+        run: python -m ruff check api/policy_chat*.py tests/test_policy_chat*.py
+      - name: Test Policy Chat and registry boundary
+        run: python -m unittest tests.test_policy_chat_api tests.test_policy_chat_store tests.test_registry_api
+
+  frontend:
+    name: Frontend contract
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/policy-ui
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: apps/policy-ui/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Test
+        run: npm run test
+      - name: Build
+        run: npm run build
+
+  container:
+    name: Container build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Policy Chat image
+        run: docker build -f Dockerfile.policy-chat -t uz-policy-chat:ci .
+      - name: Compile staging smoke client
+        run: python -m py_compile scripts/policy-chat/smoke.py

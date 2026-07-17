@@ -38,6 +38,14 @@ describe('Policy Chat page foundation', () => {
     assert.match(client, /proposal_hash: proposal\.proposal_hash/)
   })
 
+  it('keeps production identity at the proxy and makes execution retries idempotent', () => {
+    const client = readFileSync(CLIENT_PATH, 'utf8')
+    assert.match(client, /if \(readEnv\(\)\?\.PROD\) return \{\}/)
+    assert.match(
+      client,
+      /client_request_id: `run-\$\{proposal\.proposal_id\}-\$\{proposal\.proposal_hash\.slice\(-16\)\}`/,
+    )
+  })
   it('includes accessible chart semantics and a tabular alternative', () => {
     const page = readFileSync(PAGE_PATH, 'utf8')
     assert.match(page, /role="img"/)

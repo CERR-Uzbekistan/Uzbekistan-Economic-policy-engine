@@ -242,4 +242,4 @@ $env:POLICY_CHAT_AUTH_MODE='dev_header'
 python -m uvicorn api.policy_chat_app:app --app-dir mcp_server --host 127.0.0.1 --port 8001
 ```
 
-Production must use `POLICY_CHAT_AUTH_MODE=trusted_proxy`, set `POLICY_CHAT_PROXY_SECRET` from the backend secret manager, and place the service behind an authenticated internal reverse proxy that strips client-supplied identity headers before injecting `X-Policy-Chat-User` and `X-Policy-Chat-Proxy-Secret`. The feature remains disabled when identity is not configured.
+Production must use `POLICY_CHAT_AUTH_MODE=trusted_proxy`, set `POLICY_CHAT_PROXY_SECRET` from the backend secret manager, and place the service behind an authenticated internal reverse proxy that strips client-supplied identity headers before injecting `X-Policy-Chat-User` and `X-Policy-Chat-Proxy-Secret`. The feature remains disabled when identity is not configured. Set `POLICY_CHAT_STATE_PATH` to a volume-backed path for durable owner-scoped proposals, idempotent runs, and append-only audit events. `/health` is the liveness endpoint; `/ready` verifies authentication, enabled models, and storage.

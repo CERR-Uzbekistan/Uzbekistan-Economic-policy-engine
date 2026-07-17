@@ -30,6 +30,9 @@ POLICY_CHAT_ENABLED=true
 POLICY_CHAT_AUTH_MODE=trusted_proxy
 POLICY_CHAT_PROXY_SECRET=<secret-manager-reference>
 POLICY_CHAT_CORS_ORIGINS=https://policy.internal.example
+POLICY_CHAT_STATE_PATH=/var/lib/policy-chat/policy-chat.sqlite3
+POLICY_CHAT_ENABLED_MODELS=qpm,dfm,io
+POLICY_CHAT_MAX_RUNS_PER_MINUTE=10
 PORT=8001
 ```
 
@@ -41,9 +44,18 @@ Run a local container bound to loopback for an operator smoke test:
 docker run --rm \
   --name uz-policy-chat \
   --env-file /secure/path/policy-chat.env \
+  --mount type=volume,src=policy-chat-state,dst=/var/lib/policy-chat \
   -p 127.0.0.1:8001:8001 \
   uz-policy-chat:local
 ```
+
+## Durable governance state
+
+The service stores owner-scoped proposals, confirmed runs, idempotency keys, and append-only audit events in SQLite. Prompt bodies are not copied into audit-event metadata. Mount `/var/lib/policy-chat` on encrypted durable storage and include the database in the platform backup/restore schedule.
+
+Use one application replica with SQLite. Before scaling to multiple writers, migrate the store interface to the organization-approved PostgreSQL service and run concurrency/migration tests. Retention and deletion remain governance-owner decisions; do not delete append-only events ad hoc.
+
+The service-level `POLICY_CHAT_MAX_RUNS_PER_MINUTE` limit is a single-process safety backstop. Keep the reverse proxy's per-user and request-size limits as the outer control. Individual model lanes can be stopped without rebuilding by removing their identifier from `POLICY_CHAT_ENABLED_MODELS` and restarting the service.
 
 ## Reverse-proxy contract
 
@@ -76,6 +88,7 @@ Never set `VITE_POLICY_CHAT_DEV_USER` in a production build.
 
 ```bash
 curl --fail http://127.0.0.1:8001/health
+curl --fail http://127.0.0.1:8001/ready
 ```
 
 Direct API calls without the proxy secret must return `401`. Calls with a valid proxy secret but no verified user must also return `401`. The feature must return `404` when `POLICY_CHAT_ENABLED=false`.
@@ -87,7 +100,10 @@ Before pilot access, verify:
 - an edited proposal invalidates the earlier hash;
 - prompts and raw results are excluded from general proxy/application logs;
 - the kill switch works without rebuilding the frontend;
-- the deployment has an approved retention and audit-store policy.
+- `/ready` reports `storage.durable: true`;
+- the mounted database has a tested backup and restore procedure;
+- the deployment has an approved retention and audit-store policy;
+- `scripts/policy-chat/smoke.py` passes from an authorized operator host.
 
 ## Operational ownership still required
 

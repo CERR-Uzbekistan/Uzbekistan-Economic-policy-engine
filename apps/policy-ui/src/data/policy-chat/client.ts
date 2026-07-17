@@ -41,8 +41,11 @@ function resolveTimeout(): number {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULT_TIMEOUT_MS
 }
 
-function localUser(): string {
-  return envValue('VITE_POLICY_CHAT_DEV_USER') ?? 'local-analyst'
+function developmentIdentityHeader(): Record<string, string> {
+  if (readEnv()?.PROD) return {}
+  return {
+    'X-Policy-Chat-User': envValue('VITE_POLICY_CHAT_DEV_USER') ?? 'local-analyst',
+  }
 }
 
 async function requestJson<T>(
@@ -58,7 +61,7 @@ async function requestJson<T>(
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'X-Policy-Chat-User': localUser(),
+        ...developmentIdentityHeader(),
         ...init.headers,
       },
       signal: controller.signal,
@@ -113,7 +116,7 @@ export function executePolicyChatProposal(proposal: PolicyChatProposal): Promise
     body: JSON.stringify({
       proposal_hash: proposal.proposal_hash,
       confirmation: true,
-      client_request_id: globalThis.crypto.randomUUID(),
+      client_request_id: `run-${proposal.proposal_id}-${proposal.proposal_hash.slice(-16)}`,
     }),
   })
 }

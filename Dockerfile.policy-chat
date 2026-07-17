@@ -9,6 +9,13 @@ WORKDIR /app
 COPY mcp_server /app/mcp_server
 RUN pip install --no-cache-dir /app/mcp_server
 
+RUN useradd --system --uid 10001 --create-home policy-chat \
+    && mkdir -p /var/lib/policy-chat \
+    && chown -R policy-chat:policy-chat /var/lib/policy-chat
+
+USER policy-chat
+VOLUME ["/var/lib/policy-chat"]
+
 EXPOSE 8001
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
