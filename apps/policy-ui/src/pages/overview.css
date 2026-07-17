@@ -545,6 +545,26 @@ body:has(.overview-page) {
   overflow-wrap: anywhere;
 }
 
+.overview-indicator-row__source-period {
+  color: var(--color-text-muted);
+  display: block;
+  font-size: 0.76rem;
+  line-height: 1.35;
+  margin-top: 0.14rem;
+  overflow-wrap: anywhere;
+  text-underline-offset: 0.18em;
+}
+
+a.overview-indicator-row__source-period:hover {
+  color: var(--color-text);
+}
+
+a.overview-indicator-row__source-period:focus-visible,
+.overview-references__item a:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
 .overview-indicator-row__kind {
   color: color-mix(in srgb, var(--color-text-muted) 82%, var(--color-surface));
   font-size: 0.68rem;
@@ -1718,4 +1738,15 @@ body:has(.overview-page) {
   line-height: 1.5;
   overflow-wrap: anywhere;
   padding: 0 var(--space-md) var(--space-sm);
+}
+
+.overview-references__item a {
+  color: var(--color-text);
+  text-underline-offset: 0.18em;
+}
+
+.overview-references__meta {
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 0.2rem;
 }

@@ -17,10 +17,15 @@ const FLOW_LABEL = {
 }
 
 const CLAIM_TYPE_WARNING =
-  'Owner approved calculated YoY from official observed SIAT levels; current lock still classifies this metric as observed pending later cleanup.'
+  'Calculated from SIAT levels; keep out of headline use until reconciled to the corresponding official release vintage.'
 
 const TRADE_BALANCE_WARNING =
-  'Owner approved calculated trade balance from official observed SIAT export and import levels; current lock unit remains broad pending later cleanup.'
+  'Calculated from SIAT export and import levels; keep out of headline use until reconciled to the corresponding official release vintage.'
+
+const LIVE_SIAT_TRADE_URLS = {
+  exports: 'https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json',
+  imports: 'https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2414.json',
+}
 
 const LIVE_SIAT_TRADE_INDICATOR_CODES = {
   exports: '1.08.02.0003',
@@ -545,6 +550,7 @@ function buildTradeBalanceUpdate(exportsDataset, importsDataset, tradeBalance, e
     previous_value: null,
     source_label: 'Statistics Agency SIAT trade data, calculated',
     source_period: exportsDataset.current.periodLabel,
+    source_url: exportsDataset.sourceUrl,
     source_reference: `Calculated from SIAT cumulative monthly goods trade levels for ${exportsDataset.current.periodLabel}: exports USD ${formatUsdMillion(exportsDataset.current.value)} million from ${exportsDataset.datasetId}, imports USD ${formatUsdMillion(importsDataset.current.value)} million from ${importsDataset.datasetId}. Source URLs: ${exportsDataset.sourceUrl}; ${importsDataset.sourceUrl}.`,
     extracted_at: extractedAt,
     validation_status: 'warning',
@@ -560,13 +566,6 @@ function findMetric(snapshot, metricId) {
   return snapshot?.metrics?.find((metric) => metric.metric_id === metricId)
 }
 
-function seedUrlFromSnapshot(snapshot, metricId) {
-  const url = findMetric(snapshot, metricId)?.source_url
-  if (typeof url !== 'string' || url.trim().length === 0) {
-    manualRequired('siat_trade_missing_seed_url', { metricId })
-  }
-  return url
-}
 
 export async function fetchSiatTradeDataset(flow, options = {}) {
   const sourceUrl = options.sourceUrl
@@ -580,8 +579,8 @@ export async function fetchSiatTradeDataset(flow, options = {}) {
 export async function buildSiatTradeMetricUpdates(options = {}) {
   const snapshot = options.snapshot
   const extractedAt = options.extractedAt ?? new Date().toISOString()
-  const exportsUrl = options.exportsUrl ?? seedUrlFromSnapshot(snapshot, 'exports_yoy')
-  const importsUrl = options.importsUrl ?? seedUrlFromSnapshot(snapshot, 'imports_yoy')
+  const exportsUrl = options.exportsUrl ?? LIVE_SIAT_TRADE_URLS.exports
+  const importsUrl = options.importsUrl ?? LIVE_SIAT_TRADE_URLS.imports
   const exportsDataset = await fetchSiatTradeDataset('exports', {
     sourceUrl: exportsUrl,
     fetchJson: options.fetchJson,
@@ -593,6 +592,26 @@ export async function buildSiatTradeMetricUpdates(options = {}) {
     http: options.http,
   })
   const arithmetic = calculateSiatTradeMetrics(exportsDataset, importsDataset)
+  const candidateByMetric = new Map([
+    ['exports_yoy', arithmetic.exportsYoy],
+    ['imports_yoy', arithmetic.importsYoy],
+    ['trade_balance', arithmetic.tradeBalance],
+  ])
+  for (const [metricId, candidate] of candidateByMetric) {
+    const accepted = findMetric(snapshot, metricId)
+    if (
+      accepted?.validation_status === 'valid' &&
+      accepted.source_period === exportsDataset.current.periodLabel &&
+      Math.abs(Number(accepted.value) - candidate) > 0.05
+    ) {
+      manualRequired('siat_trade_conflicts_with_verified_release_vintage', {
+        metricId,
+        sourcePeriod: accepted.source_period,
+        verifiedValue: accepted.value,
+        siatCandidate: candidate,
+      })
+    }
+  }
 
   return [
     buildYoyUpdate(exportsDataset, arithmetic.exportsYoy, extractedAt),

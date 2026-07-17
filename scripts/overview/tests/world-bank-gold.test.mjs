@@ -201,6 +201,20 @@ test('parses World Bank Pink Sheet monthly gold values from workbook XML', () =>
   assert.equal(dataset.previous.value, 4855.54)
 })
 
+test('falls back to the unique Gold header when the workbook omits the code row', () => {
+  const entries = workbookEntries()
+  entries.set(
+    'xl/worksheets/sheet2.xml',
+    entries.get('xl/worksheets/sheet2.xml').replace(
+      `<row r="7">${inlineCell('C7', 'GOLD')}</row>`,
+      '',
+    ),
+  )
+
+  const dataset = parseWorldBankGoldWorkbook(entries)
+  assert.equal(dataset.current.periodLabel, 'April 2026')
+  assert.equal(dataset.current.value, 4721.42)
+})
 test('parses minimal XLSX ZIP and builds gold level/change updates', async () => {
   const snapshot = preMigrationSnapshot()
   const updates = await buildWorldBankGoldMetricUpdates({
@@ -218,6 +232,7 @@ test('parses minimal XLSX ZIP and builds gold level/change updates', async () =>
   assert.equal(level.source_url, WORLD_BANK_GOLD_SOURCE_URL)
   assert.equal(change.value, -2.76)
   assert.equal(change.source_period, 'April 2026 vs March 2026')
+  assert.equal(change.source_url, WORLD_BANK_GOLD_SOURCE_URL)
 
   const parsed = parseWorldBankGoldXlsx(createStoredZip(workbookEntries()))
   assert.equal(parsed.current.value, 4721.42)

@@ -60,12 +60,14 @@ function buildErrorState(
   mode: OverviewDataMode,
   error: string,
   warnings: OverviewSourceIssue[] = [],
+  sourceKind: OverviewSourceKind = mode === 'live' ? 'legacy-live-api' : 'overview-artifact',
+  fallbackReason: OverviewSourceState['fallbackReason'] = null,
 ): OverviewSourceState {
   return {
     ...createErrorSourceCore<OverviewDataMode, OverviewSourceIssue>(mode, error, warnings),
     snapshot: null,
-    sourceKind: mode === 'live' ? 'legacy-live-api' : 'static-fallback',
-    fallbackReason: null,
+    sourceKind,
+    fallbackReason,
   }
 }
 
@@ -97,14 +99,21 @@ export async function loadOverviewSourceState(): Promise<OverviewSourceState> {
     } catch (error) {
       if (error instanceof OverviewArtifactTransportError) {
         const fallbackReason = error.kind === 'http' && error.status === 404 ? 'missing' : 'invalid'
-        return buildReadyState(mode, overviewV1Data, [], 'static-fallback', fallbackReason)
+        return buildErrorState(mode, error.message, [], 'overview-artifact', fallbackReason)
       }
 
       if (error instanceof OverviewArtifactValidationError) {
-        return buildReadyState(mode, overviewV1Data, error.issues, 'static-fallback', 'invalid')
+        return buildErrorState(
+          mode,
+          'Overview artifact failed validation and no current-data fallback was used.',
+          error.issues,
+          'overview-artifact',
+          'invalid',
+        )
       }
 
-      return buildReadyState(mode, overviewV1Data, [], 'static-fallback', 'invalid')
+      const message = error instanceof Error ? error.message : 'Overview artifact could not be loaded.'
+      return buildErrorState(mode, message, [], 'overview-artifact', 'invalid')
     }
   }
 

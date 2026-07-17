@@ -90,7 +90,14 @@ function mergedAttribution(nowcast: HeadlineMetric, actual: HeadlineMetric): Mod
 export function buildArtifactAlignedNowcastChart(metrics: HeadlineMetric[]): ChartSpec | null {
   const actual = findMetric(metrics, ACTUAL_GDP_METRIC_ID)
   const nowcast = findMetric(metrics, CURRENT_NOWCAST_METRIC_ID)
-  if (!actual || !nowcast || !isFiniteNumber(actual.value) || !isFiniteNumber(nowcast.value)) {
+  if (
+    !actual ||
+    !nowcast ||
+    (actual.freshness_status !== undefined && actual.freshness_status !== 'current') ||
+    (nowcast.freshness_status !== undefined && nowcast.freshness_status !== 'current') ||
+    !isFiniteNumber(actual.value) ||
+    !isFiniteNumber(nowcast.value)
+  ) {
     return null
   }
 

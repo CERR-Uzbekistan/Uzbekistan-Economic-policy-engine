@@ -320,9 +320,9 @@ function verifyPublicExportReady(args) {
   }
   if (manualRequired.length > 0) {
     for (const result of manualRequired) {
-      console.warn(`${result.family}: ${result.manual_required?.reason ?? 'manual review required'}`)
+      console.error(`${result.family}: ${result.manual_required?.reason ?? 'manual review required'}`)
     }
-    console.warn('Manual-required families were skipped; unchanged metrics remain as previously verified or warned.')
+    fail('Overview public export blocked because at least one source family requires manual review.')
   }
 
   const snapshot = readJson(snapshotPath, {})

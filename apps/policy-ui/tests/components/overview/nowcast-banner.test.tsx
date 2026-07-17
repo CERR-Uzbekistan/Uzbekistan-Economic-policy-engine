@@ -23,6 +23,12 @@ async function createTestI18n() {
                 title: 'Live nowcast unavailable',
                 subtitle: 'Showing reference data',
                 retry: 'Retry',
+                freshnessDetail: 'DFM readiness gates failed.',
+                detailLabels: {
+                  transport: 'Connection',
+                  validation: 'Validation',
+                  freshness: 'Readiness',
+                },
               },
             },
           },
@@ -56,7 +62,7 @@ describe('NowcastBanner', () => {
     assert.equal(html.includes('Showing reference data'), true)
     assert.equal(html.includes('Retry'), true)
     assert.equal(html.includes('HTTP 503'), true)
-    assert.equal(html.includes('transport'), true)
+    assert.equal(html.includes('Connection'), true)
   })
 
   it('renders with validation error kind', async () => {
@@ -65,7 +71,7 @@ describe('NowcastBanner', () => {
       errorDetail: 'nowcast.current_quarter: invalid',
       onRetry: () => {},
     })
-    assert.equal(html.includes('validation'), true)
+    assert.equal(html.includes('Validation'), true)
     assert.equal(html.includes('invalid'), true)
   })
 
@@ -74,6 +80,15 @@ describe('NowcastBanner', () => {
       errorKind: 'transport',
       onRetry: () => {},
     })
-    assert.equal(html.includes('transport'), true)
+    assert.equal(html.includes('Connection'), true)
+  })
+  it('renders a non-retryable freshness boundary', async () => {
+    const html = await renderBanner({
+      errorKind: 'freshness',
+      errorDetail: 'Artifact quarter 2026Q1 does not match current quarter 2026Q3.',
+    })
+    assert.equal(html.includes('Readiness'), true)
+    assert.equal(html.includes('2026Q3'), true)
+    assert.equal(html.includes('Retry'), false)
   })
 })

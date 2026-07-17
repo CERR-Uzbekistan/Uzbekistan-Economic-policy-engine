@@ -16,7 +16,7 @@ function tempJson(name, value) {
   return path
 }
 
-test('automatic public export gate skips manual-required families without blocking safe updates', () => {
+test('automatic public export gate blocks promotion when any source family requires manual review', () => {
   const resultsPath = tempJson('family-results.json', [
     {
       family: 'siat-trade',
@@ -40,7 +40,8 @@ test('automatic public export gate skips manual-required families without blocki
     { cwd: repoRoot, encoding: 'utf8' },
   )
 
-  assert.equal(result.status, 0, result.stderr)
+  assert.notEqual(result.status, 0)
   assert.match(result.stderr, /siat_trade_missing_machine_readable_metadata/)
-  assert.match(result.stdout, /Overview public export ready/)
+  assert.match(result.stderr, /public export blocked/i)
+  assert.doesNotMatch(result.stdout, /Overview public export ready/)
 })

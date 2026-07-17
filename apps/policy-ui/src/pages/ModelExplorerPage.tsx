@@ -18,7 +18,7 @@ function getCatalogEntries(workspace: ModelExplorerWorkspace): ModelCatalogEntry
 }
 
 function isActiveModel(entry: ModelCatalogEntry): boolean {
-  return entry.status.severity === 'ok' || entry.status.label === 'Experimental reference'
+  return entry.status.severity === 'ok'
 }
 
 export function ModelExplorerPage() {
@@ -60,6 +60,8 @@ export function ModelExplorerPage() {
     modelCatalogEntries[0]
   const activeCatalogEntries = modelCatalogEntries.filter(isActiveModel)
   const referenceCatalogEntries = modelCatalogEntries.filter((entry) => !isActiveModel(entry))
+  const activeModelLabels = activeCatalogEntries.map((entry) => entry.title).join(', ')
+  const referenceModelLabels = referenceCatalogEntries.map((entry) => entry.title).join(', ')
   const modelCatalogMeta = workspace?.meta ?? {
     models_total: modelCatalogEntries.length,
     models_live: modelCatalogEntries.length,
@@ -73,12 +75,12 @@ export function ModelExplorerPage() {
       <TrustStateLabel id="liveBridgeJson" tone="success" />
       <span>
         {t('modelExplorer.header.meta.bridgeBackedLabel')} {t('overview.common.middleDot')}{' '}
-        <strong>{t('modelExplorer.header.meta.bridgeBackedModels')}</strong>
+        <strong>{activeModelLabels || t('format.notAvailable')}</strong>
       </span>
       <TrustStateLabel id="planned" tone="warn" />
       <span>
         {t('modelExplorer.header.meta.plannedLimitedLabel')} {t('overview.common.middleDot')}{' '}
-        <strong>{t('modelExplorer.header.meta.plannedLimitedModels')}</strong>
+        <strong>{referenceModelLabels || t('format.notAvailable')}</strong>
       </span>
       <span>
         {t('modelExplorer.header.meta.lastAuditLabel')} {t('overview.common.middleDot')}{' '}

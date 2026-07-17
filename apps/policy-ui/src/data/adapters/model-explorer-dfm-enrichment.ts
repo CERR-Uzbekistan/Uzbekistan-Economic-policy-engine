@@ -3,6 +3,7 @@ import type {
   ModelCatalogEntry,
   ModelExplorerWorkspace,
 } from '../../contracts/data-contract.js'
+import { assessDfmReadiness } from '../bridge/dfm-readiness.js'
 import type { DfmBridgePayload } from '../bridge/dfm-types.js'
 
 const DFM_MODEL_ID = 'dfm-nowcast'
@@ -68,9 +69,10 @@ function sourceGdpHistoryAuditLabel(payload: DfmBridgePayload): string {
 
 export function toModelExplorerDfmBridgeEvidence(payload: DfmBridgePayload): ModelBridgeEvidence {
   const rows = dfmRowSummary(payload)
+  const readiness = assessDfmReadiness(payload)
 
   return {
-    status_label: 'Validated',
+    status_label: readiness.status === 'available' ? 'Operational' : 'Unavailable for current policy use',
     source_artifact: DFM_SOURCE_ARTIFACT,
     data_version: payload.attribution.data_version,
     exported_at: toIsoDateLabel(payload.metadata.exported_at),
@@ -85,6 +87,8 @@ export function toModelExplorerDfmBridgeEvidence(payload: DfmBridgePayload): Mod
       { label: 'Forward horizon', value: forecastHorizonLabel(payload) },
       { label: 'Export mode', value: payload.metadata.export_mode },
       { label: 'Public status', value: payload.metadata.readiness_status.public_status },
+      { label: 'Operational availability', value: readiness.status },
+      { label: 'Failed readiness gates', value: readiness.reasons.map((reason) => reason.code).join(', ') || 'none' },
       { label: 'Source data status', value: payload.metadata.source_audit.workbook_status },
       { label: 'Transform coverage', value: payload.metadata.transformation_map.public_indicator_coverage },
       { label: 'Refit status', value: payload.metadata.refit_status.status },
@@ -103,9 +107,18 @@ function withDfmBridge(entry: ModelCatalogEntry, payload: DfmBridgePayload): Mod
   const current = payload.nowcast.current_quarter
   const uncertaintyBands = current.uncertainty.bands.length
   const rows = dfmRowSummary(payload)
+  const readiness = assessDfmReadiness(payload)
 
   return {
     ...entry,
+    lifecycle_label:
+      readiness.status === 'available'
+        ? 'Dynamic Factor - Active'
+        : 'Dynamic Factor - Unavailable for current policy use',
+    status:
+      readiness.status === 'available'
+        ? { label: 'Active', severity: 'ok' }
+        : { label: 'Unavailable for current policy use', severity: 'warn' },
     description: `GDP nowcast bridge artifact for ${current.period}; ${rows.label}, ${payload.factor.n_factors} latent factor, ${forecastHorizonLabel(payload)} forward horizon.`,
     stats: [
       { value: String(rows.highFrequencyRows), label: 'Inputs' },
@@ -206,9 +219,46 @@ function withDfmBridge(entry: ModelCatalogEntry, payload: DfmBridgePayload): Mod
       `GDP source-history audit: ${payload.metadata.refit_status.source_gdp_history_audit.display_rule} Latest comparison: ${sourceGdpHistoryAuditLabel(payload)}.`,
       `Validation/backtest status is ${payload.metadata.backtest_status.status}; true DFM vintage backtesting remains ${payload.metadata.backtest_status.vintage_backtest}.`,
       `Uncertainty range is ${payload.metadata.uncertainty_range.status}; it is not an official forecast interval.`,
+      `Operational availability is ${readiness.status}; failed gates: ${readiness.reasons.map((reason) => reason.code).join(', ') || 'none'}.`,
       'Economist/model-owner sign-off remains unavailable.',
     ],
     bridge_evidence: toModelExplorerDfmBridgeEvidence(payload),
+  }
+}
+
+function activeCatalogCount(catalogEntries: Record<string, ModelCatalogEntry>): number {
+  return Object.values(catalogEntries).filter((entry) => entry.status.severity === 'ok').length
+}
+
+export function markModelExplorerDfmUnavailable(
+  workspace: ModelExplorerWorkspace,
+): ModelExplorerWorkspace {
+  const catalogEntries = workspace.catalog_entries_by_model_id
+  const dfmEntry = catalogEntries?.[DFM_MODEL_ID]
+  const models = workspace.models.map((model) =>
+    model.model_id === DFM_MODEL_ID ? { ...model, status: 'paused' as const } : model,
+  )
+
+  if (!catalogEntries || !dfmEntry) {
+    return { ...workspace, models }
+  }
+
+  const nextCatalogEntries = {
+    ...catalogEntries,
+    [DFM_MODEL_ID]: {
+      ...dfmEntry,
+      lifecycle_label: 'Dynamic Factor - Unavailable for current policy use',
+      status: { label: 'Unavailable for current policy use', severity: 'warn' as const },
+    },
+  }
+
+  return {
+    ...workspace,
+    models,
+    catalog_entries_by_model_id: nextCatalogEntries,
+    meta: workspace.meta
+      ? { ...workspace.meta, models_live: activeCatalogCount(nextCatalogEntries) }
+      : workspace.meta,
   }
 }
 
@@ -220,11 +270,22 @@ export function enrichModelExplorerWorkspaceWithDfmBridge(
   const dfmEntry = catalogEntries?.[DFM_MODEL_ID]
   if (!catalogEntries || !dfmEntry) return workspace
 
+  const nextCatalogEntries = {
+    ...catalogEntries,
+    [DFM_MODEL_ID]: withDfmBridge(dfmEntry, payload),
+  }
+  const isAvailable = assessDfmReadiness(payload).status === 'available'
+
   return {
     ...workspace,
-    catalog_entries_by_model_id: {
-      ...catalogEntries,
-      [DFM_MODEL_ID]: withDfmBridge(dfmEntry, payload),
-    },
+    models: workspace.models.map((model) =>
+      model.model_id === DFM_MODEL_ID
+        ? { ...model, status: isAvailable ? ('active' as const) : ('paused' as const) }
+        : model,
+    ),
+    catalog_entries_by_model_id: nextCatalogEntries,
+    meta: workspace.meta
+      ? { ...workspace.meta, models_live: activeCatalogCount(nextCatalogEntries) }
+      : workspace.meta,
   }
 }

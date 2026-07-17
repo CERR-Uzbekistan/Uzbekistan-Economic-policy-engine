@@ -15,13 +15,11 @@ const repoRoot = resolve(process.cwd(), '..', '..')
 const exporterPath = join(repoRoot, 'scripts', 'overview', 'export-overview.mjs')
 const sourceSnapshotPath = join(repoRoot, 'scripts', 'overview', 'overview_source_snapshot.json')
 const publicOverviewArtifactPath = join(repoRoot, 'apps', 'policy-ui', 'public', 'data', 'overview.json')
-const fixedExportedAt = '2026-04-27T09:30:00Z'
-const warningMetricIds = [
+const fixedExportedAt = '2026-07-17T09:32:00Z'
+const freshnessWarningMetricIds = [
   'gdp_nowcast_current_quarter',
-  'exports_yoy',
-  'imports_yoy',
-  'trade_balance',
   'reer_level',
+  'gold_price_forecast',
 ]
 
 function tempPath(name: string): string {
@@ -186,31 +184,41 @@ describe('overview exporter', () => {
     assert.equal(result.status, 0, result.stderr)
 
     const artifact = readJson(result.outputPath) as OverviewArtifact
+    const eligibleTopCardIds = OVERVIEW_TOP_CARD_METRIC_IDS.filter((metricId) => {
+      const metric = artifact.metrics.find((entry) => entry.id === metricId)
+      return metric?.validation_status === 'valid' && metric.freshness.status === 'current'
+    })
+
     assert.deepEqual(
       artifact.metrics.filter((metric) => metric.top_card).map((metric) => metric.id),
-      [...OVERVIEW_TOP_CARD_METRIC_IDS],
+      eligibleTopCardIds,
     )
     assert.deepEqual(
       artifact.metrics
         .filter((metric) => metric.top_card)
         .map((metric) => metric.top_card_order),
-      [1, 2, 3, 4, 5, 6, 7, 8],
+      eligibleTopCardIds.map((_, index) => index + 1),
     )
   })
 
-  it('carries owner-approved fallback and unresolved source metrics as warnings in the public artifact', () => {
+  it('keeps unresolved or old metrics out of current headline use', () => {
     const result = runExporter({})
     assert.equal(result.status, 0, result.stderr)
 
     const artifact = readJson(result.outputPath) as OverviewArtifact
-    for (const metricId of warningMetricIds) {
+    for (const metricId of freshnessWarningMetricIds) {
       const metric = artifact.metrics.find((entry) => entry.id === metricId)
-      assert.equal(metric?.validation_status, 'warning')
-      assert.ok(metric?.warnings.length, `${metricId} should carry a warning`)
+      assert.notEqual(metric?.freshness.status, 'current')
+      assert.notEqual(metric?.top_card, true)
     }
+
+    const nowcast = artifact.metrics.find((entry) => entry.id === 'gdp_nowcast_current_quarter')
+    assert.equal(nowcast?.validation_status, 'warning')
+    assert.ok(nowcast?.warnings.length)
 
     const reer = artifact.metrics.find((entry) => entry.id === 'reer_level')
     assert.equal(reer?.source_label, 'CERR, REER')
+    assert.equal(reer?.validation_status, 'warning')
     assert.match(reer?.warnings.join(' '), /Source URL is pending/)
   })
 

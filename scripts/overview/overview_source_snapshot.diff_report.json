@@ -1,90 +1,11 @@
 {
-  "generated_at": "2026-07-17T06:41:13.279Z",
-  "family": "overview-source-refresh",
-  "families": [
-    {
-      "family": "cbu-fx",
-      "outcome": "changed",
-      "changed": true,
-      "status": "source_verified_for_public_artifact",
-      "value_hash": "46109a5d7c1933ca56f8a06fc8baed0dd2cb206c91394f21eb8dc7dcb3776091",
-      "manual_required": null,
-      "error": null,
-      "changed_fields": [
-        "usd_uzs_level.value",
-        "usd_uzs_level.previous_value",
-        "usd_uzs_level.source_period",
-        "usd_uzs_level.source_url",
-        "usd_uzs_level.observed_at",
-        "usd_uzs_level.caveats",
-        "usd_uzs_mom_change.value",
-        "usd_uzs_mom_change.source_period",
-        "usd_uzs_mom_change.source_reference",
-        "usd_uzs_mom_change.extracted_at",
-        "usd_uzs_mom_change.caveats",
-        "usd_uzs_yoy_change.value",
-        "usd_uzs_yoy_change.source_period",
-        "usd_uzs_yoy_change.source_reference",
-        "usd_uzs_yoy_change.extracted_at",
-        "usd_uzs_yoy_change.caveats"
-      ]
-    },
-    {
-      "family": "siat-trade",
-      "outcome": "no_change",
-      "changed": false,
-      "status": "source_verified_for_public_artifact",
-      "value_hash": "46109a5d7c1933ca56f8a06fc8baed0dd2cb206c91394f21eb8dc7dcb3776091",
-      "manual_required": null,
-      "error": null,
-      "changed_fields": []
-    },
-    {
-      "family": "siat-cpi",
-      "outcome": "no_change",
-      "changed": false,
-      "status": "source_verified_for_public_artifact",
-      "value_hash": "46109a5d7c1933ca56f8a06fc8baed0dd2cb206c91394f21eb8dc7dcb3776091",
-      "manual_required": null,
-      "error": null,
-      "changed_fields": []
-    },
-    {
-      "family": "siat-gdp-annual",
-      "outcome": "no_change",
-      "changed": false,
-      "status": "source_verified_for_public_artifact",
-      "value_hash": "46109a5d7c1933ca56f8a06fc8baed0dd2cb206c91394f21eb8dc7dcb3776091",
-      "manual_required": null,
-      "error": null,
-      "changed_fields": []
-    },
-    {
-      "family": "world-bank-gold",
-      "outcome": "manual_required",
-      "changed": false,
-      "status": "source_verified_for_public_artifact",
-      "value_hash": "46109a5d7c1933ca56f8a06fc8baed0dd2cb206c91394f21eb8dc7dcb3776091",
-      "manual_required": {
-        "reason": "world_bank_gold_code_row_missing",
-        "details": {}
-      },
-      "error": null,
-      "changed_fields": []
-    }
-  ],
-  "snapshot": "/home/runner/work/Uzbekistan-Economic-policy-engine/Uzbekistan-Economic-policy-engine/scripts/overview/overview_source_snapshot.json",
+  "generated_at": "2026-07-17T09:31:17.448Z",
+  "family": "cbu-fx",
+  "snapshot": "C:\\Users\\n.ortiqov\\Desktop\\Uzbekistan-Economic-policy-engine\\scripts\\overview\\overview_source_snapshot.json",
   "changed": true,
   "status": "source_verified_for_public_artifact",
-  "value_hash": "46109a5d7c1933ca56f8a06fc8baed0dd2cb206c91394f21eb8dc7dcb3776091",
-  "manual_required": [
-    {
-      "family": "world-bank-gold",
-      "reason": "world_bank_gold_code_row_missing",
-      "details": {}
-    }
-  ],
-  "family_errors": null,
+  "value_hash": "4e9cb73a97ddf3c51103cbd0281b7fea94413ed13b817ec0f8b30fea5e949b7e",
+  "manual_required": null,
   "diff": [
     {
       "metric_id": "usd_uzs_level",
@@ -144,6 +65,12 @@
     },
     {
       "metric_id": "usd_uzs_mom_change",
+      "field": "source_url",
+      "old_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-07-16/",
+      "new_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-07-17/"
+    },
+    {
+      "metric_id": "usd_uzs_mom_change",
       "field": "source_reference",
       "old_value": "Calculated from CBU official USD rates: 12088.98 on 2026-07-16 and 11979.83 on 2026-06-16. Requested dates: latest 2026-07-16, prior-month 2026-06-16.",
       "new_value": "Calculated from CBU official USD rates: 12093.35 on 2026-07-17 and 12012.12 on 2026-06-17. Requested dates: latest 2026-07-17, prior-month 2026-06-17."
@@ -152,7 +79,7 @@
       "metric_id": "usd_uzs_mom_change",
       "field": "extracted_at",
       "old_value": "2026-07-16T11:44:22.569Z",
-      "new_value": "2026-07-17T06:40:42.476Z"
+      "new_value": "2026-07-17T09:31:12.600Z"
     },
     {
       "metric_id": "usd_uzs_mom_change",
@@ -188,6 +115,12 @@
     },
     {
       "metric_id": "usd_uzs_yoy_change",
+      "field": "source_url",
+      "old_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-07-16/",
+      "new_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-07-17/"
+    },
+    {
+      "metric_id": "usd_uzs_yoy_change",
       "field": "source_reference",
       "old_value": "Calculated from CBU official USD rates: 12088.98 on 2026-07-16 and 12778.12 on 2025-07-16. Requested dates: latest 2026-07-16, prior-year 2025-07-16.",
       "new_value": "Calculated from CBU official USD rates: 12093.35 on 2026-07-17 and 12758.36 on 2025-07-17. Requested dates: latest 2026-07-17, prior-year 2025-07-17."
@@ -196,7 +129,7 @@
       "metric_id": "usd_uzs_yoy_change",
       "field": "extracted_at",
       "old_value": "2026-07-16T11:44:22.569Z",
-      "new_value": "2026-07-17T06:40:42.476Z"
+      "new_value": "2026-07-17T09:31:12.600Z"
     },
     {
       "metric_id": "usd_uzs_yoy_change",

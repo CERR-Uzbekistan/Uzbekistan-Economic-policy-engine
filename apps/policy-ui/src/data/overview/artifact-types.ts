@@ -1,4 +1,4 @@
-export const OVERVIEW_ARTIFACT_SCHEMA_VERSION = 'overview.v1' as const
+export const OVERVIEW_ARTIFACT_SCHEMA_VERSION = 'overview.v2' as const
 
 export const OVERVIEW_VALIDATION_STATUSES = ['valid', 'warning', 'failed'] as const
 
@@ -14,6 +14,22 @@ export type OverviewClaimType =
   | 'reference'
   | 'observed_market_price'
   | 'reference_forecast'
+
+export type OverviewOutputClass =
+  | 'accounting_calculation'
+  | 'nowcast'
+  | 'forecast'
+  | 'static_reference'
+
+export type OverviewFreshnessStatus = 'current' | 'stale' | 'unavailable'
+
+export type OverviewMetricFreshness = {
+  status: OverviewFreshnessStatus
+  as_of: string
+  age_days: number
+  max_age_days: number
+  reason: 'within_threshold' | 'source_too_old' | 'source_url_missing' | 'period_not_current' | 'validation_failed'
+}
 
 export type OverviewLockedMetricDefinition = {
   id: string
@@ -31,7 +47,7 @@ export const OVERVIEW_LOCKED_METRICS = [
     id: 'real_gdp_growth_annual_yoy',
     label: 'Real GDP growth, latest year',
     block: 'growth',
-    claim_type: 'observed',
+    claim_type: 'calculated_identity',
     unit: 'percent YoY',
     frequency: 'annual',
     citation_label: 'Statistics Agency national accounts',
@@ -71,7 +87,7 @@ export const OVERVIEW_LOCKED_METRICS = [
     id: 'cpi_mom',
     label: 'CPI inflation, monthly',
     block: 'inflation',
-    claim_type: 'observed',
+    claim_type: 'calculated_identity',
     unit: 'percent MoM',
     frequency: 'monthly',
     citation_label: 'Statistics Agency CPI',
@@ -91,7 +107,7 @@ export const OVERVIEW_LOCKED_METRICS = [
     id: 'exports_yoy',
     label: 'Exports growth, YoY',
     block: 'trade',
-    claim_type: 'observed',
+    claim_type: 'calculated_identity',
     unit: 'percent YoY',
     frequency: 'monthly or quarterly',
     citation_label: 'Statistics Agency foreign trade',
@@ -101,7 +117,7 @@ export const OVERVIEW_LOCKED_METRICS = [
     id: 'imports_yoy',
     label: 'Imports growth, YoY',
     block: 'trade',
-    claim_type: 'observed',
+    claim_type: 'calculated_identity',
     unit: 'percent YoY',
     frequency: 'monthly or quarterly',
     citation_label: 'Statistics Agency foreign trade',
@@ -111,7 +127,7 @@ export const OVERVIEW_LOCKED_METRICS = [
     id: 'trade_balance',
     label: 'Trade balance',
     block: 'trade',
-    claim_type: 'observed',
+    claim_type: 'calculated_identity',
     unit: 'USD million or USD billion',
     frequency: 'monthly or quarterly',
     citation_label: 'Statistics Agency foreign trade',
@@ -201,6 +217,46 @@ export const OVERVIEW_LOCKED_METRICS = [
 
 export type OverviewMetricId = (typeof OVERVIEW_LOCKED_METRICS)[number]['id']
 
+export const OVERVIEW_OUTPUT_CLASS_BY_ID: Readonly<Record<OverviewMetricId, OverviewOutputClass>> = {
+  real_gdp_growth_annual_yoy: 'accounting_calculation',
+  real_gdp_growth_quarter_yoy: 'static_reference',
+  gdp_nowcast_current_quarter: 'nowcast',
+  cpi_yoy: 'static_reference',
+  cpi_mom: 'accounting_calculation',
+  food_cpi_yoy: 'static_reference',
+  exports_yoy: 'accounting_calculation',
+  imports_yoy: 'accounting_calculation',
+  trade_balance: 'accounting_calculation',
+  policy_rate: 'static_reference',
+  usd_uzs_level: 'static_reference',
+  usd_uzs_mom_change: 'accounting_calculation',
+  usd_uzs_yoy_change: 'accounting_calculation',
+  reer_level: 'static_reference',
+  gold_price_level: 'static_reference',
+  gold_price_change: 'accounting_calculation',
+  gold_price_forecast: 'forecast',
+}
+
+export const OVERVIEW_FRESHNESS_MAX_AGE_DAYS_BY_ID: Readonly<Record<OverviewMetricId, number>> = {
+  real_gdp_growth_annual_yoy: 550,
+  real_gdp_growth_quarter_yoy: 150,
+  gdp_nowcast_current_quarter: 45,
+  cpi_yoy: 62,
+  cpi_mom: 62,
+  food_cpi_yoy: 62,
+  exports_yoy: 62,
+  imports_yoy: 62,
+  trade_balance: 62,
+  policy_rate: 75,
+  usd_uzs_level: 3,
+  usd_uzs_mom_change: 35,
+  usd_uzs_yoy_change: 35,
+  reer_level: 62,
+  gold_price_level: 62,
+  gold_price_change: 62,
+  gold_price_forecast: 210,
+}
+
 export const OVERVIEW_TOP_CARD_METRIC_IDS = [
   'real_gdp_growth_quarter_yoy',
   'gdp_nowcast_current_quarter',
@@ -227,6 +283,12 @@ export type OverviewArtifactMetric = {
   previous_value: number | null
   source_label: string
   source_period: string
+  source_url: string | null
+  source_reference: string | null
+  observed_at: string | null
+  extracted_at: string | null
+  output_class: OverviewOutputClass
+  freshness: OverviewMetricFreshness
   exported_at: string
   validation_status: OverviewArtifactValidationStatus
   caveats: string[]

@@ -151,7 +151,7 @@ describe('overview artifact adapter', () => {
     assert.equal(snapshot.activity_feed.data_refreshes.length, 1)
     assert.equal(snapshot.activity_feed.data_refreshes[0].model_id, 'overview_artifact')
     assert.equal(snapshot.activity_feed.data_refreshes[0].refreshed_at, '2026-05-18T05:00:00.000Z')
-    assert.match(snapshot.activity_feed.data_refreshes[0].summary ?? '', /Overview source metrics refreshed/)
+    assert.match(snapshot.activity_feed.data_refreshes[0].summary ?? '', /metrics loaded/)
     assert.equal(
       snapshot.activity_feed.data_refreshes.some((refresh) => refresh.refresh_id === 'dfm-refresh-2026-04'),
       false,

@@ -78,6 +78,14 @@ export type HeadlineMetric = {
   warnings?: string[]
   caveats?: string[]
   citation_label?: string
+  source_url?: string | null
+  source_reference?: string | null
+  observed_at?: string | null
+  output_class?: 'accounting_calculation' | 'nowcast' | 'forecast' | 'static_reference'
+  freshness_status?: 'current' | 'stale' | 'unavailable'
+  freshness_age_days?: number
+  freshness_max_age_days?: number
+  freshness_reason?: string
 }
 
 export type OverviewIndicatorGroup = {
@@ -213,6 +221,14 @@ export type OverviewActivityFeed = {
   saved_scenarios: SavedScenarioActivity[]
 }
 
+export type OverviewSourceReference = {
+  label: string
+  period: string
+  url?: string
+  observed_at?: string | null
+  transformation?: string | null
+}
+
 export type MacroSnapshot = {
   snapshot_id: string
   snapshot_name: string
@@ -227,7 +243,7 @@ export type MacroSnapshot = {
   analysis_actions: OverviewAnalysisAction[]
   output_action: OverviewOutputAction
   caveats: Caveat[]
-  references: string[]
+  references: Array<string | OverviewSourceReference>
   activity_feed: OverviewActivityFeed
   // Additive Overview artifact fields. Static fallback snapshots can omit these.
   indicator_groups?: OverviewIndicatorGroup[]

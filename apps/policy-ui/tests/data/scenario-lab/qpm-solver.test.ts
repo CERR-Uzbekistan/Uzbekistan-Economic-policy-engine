@@ -103,11 +103,16 @@ describe('Scenario Lab canonical QPM solver', () => {
     const qpmRun = solveScenarioLabQpm(applyPresetToState('exchange-rate-shock'), 8)
 
     assert.equal(results.headline_metrics[0].model_attribution[0].model_id, 'qpm-canonical-solver')
-    assertClosePath(macroChart.series[0].values, [6, 6, 6, 6])
-    assertClosePath(macroChart.series[1].values, [7.2464, 7.5952, 7.3505, 6.7948])
+    assertClosePath(macroChart.series[0].values, qpmRun.baseline.gdpGrowth.slice(0, 4))
+    assertClosePath(macroChart.series[1].values, qpmRun.scenario.gdpGrowth.slice(0, 4))
     assert.ok(impulseChart)
     assert.deepEqual(impulseChart.series[1].values.slice(0, 4), [1.11, 2.34, 3.48, 4.36])
-    assert.equal(qpmRun.scenario.periods[0], '2026 Q3')
+    const startMatch = qpmRun.scenario.periods[0].match(/^(20\d{2}) Q([1-4])$/)
+    assert.ok(startMatch)
+    const startIndex = Number(startMatch[1]) * 4 + Number(startMatch[2])
+    const exportDate = new Date(qpmRun.baselineSource.exported_at)
+    const exportQuarterIndex = exportDate.getUTCFullYear() * 4 + Math.floor(exportDate.getUTCMonth() / 3) + 1
+    assert.ok(startIndex >= exportQuarterIndex)
     assert.equal(results.baseline_source?.source, 'overview-artifact')
     assert.equal(results.baseline_source?.metrics.some((metric) => metric.metric_id === 'cpi_yoy'), true)
   })
@@ -115,11 +120,23 @@ describe('Scenario Lab canonical QPM solver', () => {
   it('anchors visible baseline levels to the current Overview snapshot instead of raw steady-state transition', () => {
     const run = solveScenarioLabQpm({}, 8)
 
-    assertClosePath(run.baseline.gdpGrowth.slice(0, 4), [6, 6, 6, 6])
-    assertClosePath(run.baseline.inflation.slice(0, 4), [7.1, 6.95, 6.8, 6.65])
-    assertClosePath(run.baseline.policyRate.slice(0, 4), [14, 13.75, 13.5, 13.25])
-    assert.ok(run.baseline.inflation[3] > 6)
-    assert.ok(run.baseline.policyRate[3] > 12)
+    const metricValue = (metricId: string) => {
+      const metric = run.baselineSource.metrics.find((entry) => entry.metric_id === metricId)
+      assert.ok(metric)
+      return metric.value
+    }
+
+    assertClosePath(run.baseline.gdpGrowth.slice(0, 1), [metricValue('real_gdp_growth_quarter_yoy')])
+    assertClosePath(run.baseline.inflation.slice(0, 1), [metricValue('cpi_yoy')])
+    assertClosePath(run.baseline.policyRate.slice(0, 1), [metricValue('policy_rate')])
+    assert.equal(
+      run.baselineSource.metrics.some((metric) => metric.metric_id === 'gdp_nowcast_current_quarter'),
+      false,
+    )
+    assert.equal(
+      run.baselineSource.metrics.some((metric) => metric.metric_id === 'real_gdp_growth_quarter_yoy'),
+      true,
+    )
   })
 
   it('keeps risk-premium shock signs consistent with depreciation stress', () => {

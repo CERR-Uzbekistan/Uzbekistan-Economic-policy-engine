@@ -12,7 +12,9 @@ const SOURCE_VERIFIED_SOURCE_STATUS = 'source_verified_for_public_artifact'
 const PUBLIC_EXPORT_SOURCE_STATUSES = new Set([OWNER_VERIFIED_SOURCE_STATUS, SOURCE_VERIFIED_SOURCE_STATUS])
 
 let OVERVIEW_ARTIFACT_SCHEMA_VERSION
+let OVERVIEW_FRESHNESS_MAX_AGE_DAYS_BY_ID
 let OVERVIEW_LOCKED_METRICS
+let OVERVIEW_OUTPUT_CLASS_BY_ID
 let OVERVIEW_TOP_CARD_METRIC_IDS
 let validateOverviewArtifact
 
@@ -105,6 +107,47 @@ function requireString(value, path) {
   return value
 }
 
+function requireHttpsUrl(value, path) {
+  const text = requireString(value, path)
+  let parsed
+  try {
+    parsed = new URL(text)
+  } catch {
+    fail(`Expected ${path} to be an absolute URL.`)
+  }
+  if (parsed.protocol !== 'https:') fail(`Expected ${path} to use HTTPS.`)
+  return text
+}
+
+function quarterLabel(timestamp) {
+  const date = new Date(timestamp)
+  return `${date.getUTCFullYear()} Q${Math.floor(date.getUTCMonth() / 3) + 1}`
+}
+
+function buildMetricFreshness(metric, exportedAt) {
+  const maxAgeDays = OVERVIEW_FRESHNESS_MAX_AGE_DAYS_BY_ID[metric.id]
+  const asOf = metric.observed_at ?? metric.extracted_at
+  const ageMilliseconds = Date.parse(exportedAt) - Date.parse(asOf)
+  if (ageMilliseconds < 0) {
+    fail(`Metric ${metric.id} has freshness timestamp ${asOf} after artifact export ${exportedAt}.`)
+  }
+  const ageDays = Math.floor(ageMilliseconds / 86_400_000)
+
+  if (metric.validation_status === 'failed') {
+    return { status: 'unavailable', as_of: asOf, age_days: ageDays, max_age_days: maxAgeDays, reason: 'validation_failed' }
+  }
+  if (!metric.source_url) {
+    return { status: 'unavailable', as_of: asOf, age_days: ageDays, max_age_days: maxAgeDays, reason: 'source_url_missing' }
+  }
+  if (metric.id === 'gdp_nowcast_current_quarter' && !metric.source_period.includes(quarterLabel(exportedAt))) {
+    return { status: 'unavailable', as_of: asOf, age_days: ageDays, max_age_days: maxAgeDays, reason: 'period_not_current' }
+  }
+  if (ageDays > maxAgeDays) {
+    return { status: 'stale', as_of: asOf, age_days: ageDays, max_age_days: maxAgeDays, reason: 'source_too_old' }
+  }
+  return { status: 'current', as_of: asOf, age_days: ageDays, max_age_days: maxAgeDays, reason: 'within_threshold' }
+}
+
 function requireNumber(value, path) {
   if (typeof value !== 'number' || !Number.isFinite(value)) {
     fail(`Expected ${path} to be a finite number.`)
@@ -156,6 +199,7 @@ function validateSourceMetric(rawMetric, index, definitionById) {
   }
   if (hasObservedAt) requireIso(metric.observed_at, `${path}.observed_at`)
   if (hasExtractedAt) requireIso(metric.extracted_at, `${path}.extracted_at`)
+  if (hasSourceUrl) requireHttpsUrl(metric.source_url, `${path}.source_url`)
 
   const claimType = requireString(metric.claim_type, `${path}.claim_type`)
   const unit = requireString(metric.unit, `${path}.unit`)
@@ -183,6 +227,10 @@ function validateSourceMetric(rawMetric, index, definitionById) {
     previous_value: optionalNumber(metric.previous_value, `${path}.previous_value`),
     source_label: requireString(metric.source_label, `${path}.source_label`),
     source_period: requireString(metric.source_period, `${path}.source_period`),
+    source_url: hasSourceUrl ? metric.source_url : null,
+    source_reference: hasSourceReference ? metric.source_reference : null,
+    observed_at: hasObservedAt ? metric.observed_at : null,
+    extracted_at: hasExtractedAt ? metric.extracted_at : null,
     validation_status: validationStatus,
     caveats: requireStringArray(metric.caveats, `${path}.caveats`),
     warnings: requireStringArray(metric.warnings, `${path}.warnings`),
@@ -262,14 +310,30 @@ function buildPanelGroups() {
 }
 
 function buildArtifact(sourceMetrics, exportedAt) {
-  const topCardOrder = new Map(OVERVIEW_TOP_CARD_METRIC_IDS.map((id, index) => [id, index + 1]))
-  const hasWarnings = sourceMetrics.some((metric) => metric.validation_status === 'warning' || metric.warnings.length > 0)
-  const metrics = sourceMetrics.map((metric) => ({
-    ...metric,
-    exported_at: exportedAt,
-    top_card: OVERVIEW_TOP_CARD_METRIC_IDS.includes(metric.id),
-    top_card_order: topCardOrder.get(metric.id),
-  }))
+  let nextTopCardOrder = 0
+  const metrics = sourceMetrics.map((metric) => {
+    const freshness = buildMetricFreshness(metric, exportedAt)
+    const topCardEligible =
+      OVERVIEW_TOP_CARD_METRIC_IDS.includes(metric.id) &&
+      metric.validation_status === 'valid' &&
+      freshness.status === 'current'
+    if (topCardEligible) nextTopCardOrder += 1
+    return {
+      ...metric,
+      output_class: OVERVIEW_OUTPUT_CLASS_BY_ID[metric.id],
+      freshness,
+      exported_at: exportedAt,
+      top_card: topCardEligible,
+      top_card_order: topCardEligible ? nextTopCardOrder : undefined,
+    }
+  })
+  const freshnessWarnings = metrics.filter((metric) => metric.freshness.status !== 'current')
+  const hasWarnings = metrics.some(
+    (metric) =>
+      metric.validation_status === 'warning' ||
+      metric.warnings.length > 0 ||
+      metric.freshness.status !== 'current',
+  )
 
   return {
     schema_version: OVERVIEW_ARTIFACT_SCHEMA_VERSION,
@@ -281,7 +345,10 @@ function buildArtifact(sourceMetrics, exportedAt) {
       'Source snapshot is exported only after strict Overview source validation.',
     ],
     warnings: hasWarnings
-      ? ['Provisional source metrics are present; top-level validation remains warning until TO CONFIRM sources are resolved.']
+      ? [
+          `${freshnessWarnings.length} metric(s) are stale or unavailable and are excluded from headline use.`,
+          'Provisional source metrics are present; top-level validation remains warning until source and freshness gates pass.',
+        ]
       : [],
     panel_groups: buildPanelGroups(),
   }
@@ -290,7 +357,9 @@ function buildArtifact(sourceMetrics, exportedAt) {
 async function main() {
   const modules = await loadOverviewModules()
   OVERVIEW_ARTIFACT_SCHEMA_VERSION = modules.types.OVERVIEW_ARTIFACT_SCHEMA_VERSION
+  OVERVIEW_FRESHNESS_MAX_AGE_DAYS_BY_ID = modules.types.OVERVIEW_FRESHNESS_MAX_AGE_DAYS_BY_ID
   OVERVIEW_LOCKED_METRICS = modules.types.OVERVIEW_LOCKED_METRICS
+  OVERVIEW_OUTPUT_CLASS_BY_ID = modules.types.OVERVIEW_OUTPUT_CLASS_BY_ID
   OVERVIEW_TOP_CARD_METRIC_IDS = modules.types.OVERVIEW_TOP_CARD_METRIC_IDS
   validateOverviewArtifact = modules.guard.validateOverviewArtifact
 

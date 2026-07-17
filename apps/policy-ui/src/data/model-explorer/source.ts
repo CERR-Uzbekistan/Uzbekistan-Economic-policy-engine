@@ -8,7 +8,10 @@ import {
   type IntegrationSourceCore,
 } from '../source-state.js'
 import { toModelExplorerWorkspace } from '../adapters/model-explorer.js'
-import { enrichModelExplorerWorkspaceWithDfmBridge } from '../adapters/model-explorer-dfm-enrichment.js'
+import {
+  enrichModelExplorerWorkspaceWithDfmBridge,
+  markModelExplorerDfmUnavailable,
+} from '../adapters/model-explorer-dfm-enrichment.js'
 import { enrichModelExplorerWorkspaceWithIoBridge } from '../adapters/model-explorer-io-enrichment.js'
 import { enrichModelExplorerWorkspaceWithPeBridge } from '../adapters/model-explorer-pe-enrichment.js'
 import { enrichModelExplorerWorkspaceWithQpmBridge } from '../adapters/model-explorer-qpm-enrichment.js'
@@ -68,7 +71,7 @@ function buildErrorState(
 async function enrichWithOptionalBridgeArtifacts(
   workspace: ModelExplorerWorkspace,
 ): Promise<ModelExplorerWorkspace> {
-  let enrichedWorkspace = workspace
+  let enrichedWorkspace = markModelExplorerDfmUnavailable(workspace)
   try {
     const qpmPayload = await fetchQpmBridgePayload()
     enrichedWorkspace = enrichModelExplorerWorkspaceWithQpmBridge(enrichedWorkspace, qpmPayload)

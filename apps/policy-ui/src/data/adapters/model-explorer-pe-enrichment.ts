@@ -149,16 +149,18 @@ export function enrichModelExplorerWorkspaceWithPeBridge(
   const meta = workspace.meta
   if (!catalogEntries || !peEntry || !meta) return workspace
 
+  const nextCatalogEntries = {
+    ...catalogEntries,
+    [PE_MODEL_ID]: withBridgeEvidence(peEntry, payload),
+  }
+
   return {
     ...workspace,
     meta: {
       ...meta,
-      models_live: Math.max(meta.models_live, 4),
+      models_live: Object.values(nextCatalogEntries).filter((entry) => entry.status.severity === 'ok').length,
       open_methodology_issues: Math.max(0, meta.open_methodology_issues - 3),
     },
-    catalog_entries_by_model_id: {
-      ...catalogEntries,
-      [PE_MODEL_ID]: withBridgeEvidence(peEntry, payload),
-    },
+    catalog_entries_by_model_id: nextCatalogEntries,
   }
 }

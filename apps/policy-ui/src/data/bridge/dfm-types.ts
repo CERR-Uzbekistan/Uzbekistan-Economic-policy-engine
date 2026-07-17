@@ -164,7 +164,7 @@ export type DfmMetadata = {
     not_percentage_point_gdp_effects: boolean
   }
   readiness_status: {
-    public_status: 'internal_preview_bridge'
+    public_status: 'internal_preview_bridge' | 'operational'
     source_refit_in_ci: 'not_available' | 'local_only_not_ci' | 'available'
     per_series_transform_map: 'not_available' | 'available'
     historical_backtest: 'not_available' | 'proxy_available' | 'available'

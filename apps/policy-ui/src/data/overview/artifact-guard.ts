@@ -4,13 +4,18 @@ import type {
   OverviewArtifactPanelGroup,
   OverviewArtifactValidationStatus,
   OverviewClaimType,
+  OverviewFreshnessStatus,
   OverviewMetricBlock,
+  OverviewMetricFreshness,
   OverviewMetricId,
+  OverviewOutputClass,
 } from './artifact-types.js'
 import {
   OVERVIEW_ARTIFACT_SCHEMA_VERSION,
+  OVERVIEW_FRESHNESS_MAX_AGE_DAYS_BY_ID,
   OVERVIEW_LOCKED_METRIC_BY_ID,
   OVERVIEW_LOCKED_METRICS,
+  OVERVIEW_OUTPUT_CLASS_BY_ID,
 } from './artifact-types.js'
 
 export type OverviewArtifactValidationIssue = {
@@ -65,6 +70,24 @@ function isIsoLike(value: string | null): value is string {
   return Number.isFinite(Date.parse(value))
 }
 
+function isHttpsUrl(value: string | null): value is string {
+  if (!value) return false
+  try {
+    return new URL(value).protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
+const FRESHNESS_STATUSES: ReadonlySet<string> = new Set(['current', 'stale', 'unavailable'])
+const FRESHNESS_REASONS: ReadonlySet<string> = new Set([
+  'within_threshold',
+  'source_too_old',
+  'source_url_missing',
+  'period_not_current',
+  'validation_failed',
+])
+
 function requireString(
   record: Record<string, unknown>,
   key: string,
@@ -114,6 +137,73 @@ function validateMetric(
     issues.push({ path: `${path}.frequency`, message: `Expected locked frequency ${definition.frequency}.`, severity: 'error' })
   }
 
+  const outputClass = stringValue(value.output_class)
+  const expectedOutputClass = OVERVIEW_OUTPUT_CLASS_BY_ID[id as OverviewMetricId]
+  if (outputClass !== expectedOutputClass) {
+    issues.push({ path: `${path}.output_class`, message: `Expected output class ${expectedOutputClass}.`, severity: 'error' })
+  }
+
+  const sourceUrl = stringValue(value.source_url)
+  const sourceReference = stringValue(value.source_reference)
+  if (!sourceUrl && !sourceReference) {
+    issues.push({ path: `${path}.source_url`, message: 'Expected a source URL or source reference.', severity: 'error' })
+  }
+  if (sourceUrl && !isHttpsUrl(sourceUrl)) {
+    issues.push({ path: `${path}.source_url`, message: 'Expected an absolute HTTPS source URL.', severity: 'error' })
+  }
+
+  const observedAt = stringValue(value.observed_at)
+  const extractedAt = stringValue(value.extracted_at)
+  if (!observedAt && !extractedAt) {
+    issues.push({ path: `${path}.observed_at`, message: 'Expected observed_at or extracted_at.', severity: 'error' })
+  }
+  if (observedAt && !isIsoLike(observedAt)) {
+    issues.push({ path: `${path}.observed_at`, message: 'Expected an ISO-like timestamp.', severity: 'error' })
+  }
+  if (extractedAt && !isIsoLike(extractedAt)) {
+    issues.push({ path: `${path}.extracted_at`, message: 'Expected an ISO-like timestamp.', severity: 'error' })
+  }
+
+  const expectedAsOf = observedAt ?? extractedAt ?? exportedAt
+  const freshnessRecord = isRecord(value.freshness) ? value.freshness : {}
+  if (!isRecord(value.freshness)) {
+    issues.push({ path: `${path}.freshness`, message: 'Expected a freshness object.', severity: 'error' })
+  }
+  const freshnessStatus = stringValue(freshnessRecord.status)
+  const freshnessAsOf = stringValue(freshnessRecord.as_of)
+  const freshnessAgeDays = numberValue(freshnessRecord.age_days)
+  const freshnessMaxAgeDays = numberValue(freshnessRecord.max_age_days)
+  const freshnessReason = stringValue(freshnessRecord.reason)
+  const expectedMaxAgeDays = OVERVIEW_FRESHNESS_MAX_AGE_DAYS_BY_ID[id as OverviewMetricId]
+  const expectedAgeMilliseconds = Date.parse(exportedAt) - Date.parse(expectedAsOf)
+  const expectedAgeDays =
+    Number.isFinite(expectedAgeMilliseconds) && expectedAgeMilliseconds >= 0
+      ? Math.floor(expectedAgeMilliseconds / 86_400_000)
+      : null
+  if (Number.isFinite(expectedAgeMilliseconds) && expectedAgeMilliseconds < 0) {
+    issues.push({ path: `${path}.freshness.as_of`, message: 'Upstream freshness timestamp cannot be later than artifact export.', severity: 'error' })
+  }
+  if (!freshnessStatus || !FRESHNESS_STATUSES.has(freshnessStatus)) {
+    issues.push({ path: `${path}.freshness.status`, message: 'Expected current, stale, or unavailable.', severity: 'error' })
+  }
+  if (!isIsoLike(freshnessAsOf) || freshnessAsOf !== expectedAsOf) {
+    issues.push({ path: `${path}.freshness.as_of`, message: 'Expected freshness as_of to match the upstream observation/extraction timestamp.', severity: 'error' })
+  }
+  if (freshnessAgeDays === null || !Number.isInteger(freshnessAgeDays) || freshnessAgeDays < 0) {
+    issues.push({ path: `${path}.freshness.age_days`, message: 'Expected a non-negative integer.', severity: 'error' })
+  } else if (expectedAgeDays !== null && freshnessAgeDays !== expectedAgeDays) {
+    issues.push({ path: `${path}.freshness.age_days`, message: `Expected recomputed age ${expectedAgeDays}.`, severity: 'error' })
+  }
+  if (freshnessMaxAgeDays !== expectedMaxAgeDays) {
+    issues.push({ path: `${path}.freshness.max_age_days`, message: `Expected locked threshold ${expectedMaxAgeDays}.`, severity: 'error' })
+  }
+  if (!freshnessReason || !FRESHNESS_REASONS.has(freshnessReason)) {
+    issues.push({ path: `${path}.freshness.reason`, message: 'Expected a recognized freshness reason.', severity: 'error' })
+  }
+  if (freshnessStatus === 'current' && (!sourceUrl || freshnessReason !== 'within_threshold')) {
+    issues.push({ path: `${path}.freshness`, message: 'Current metrics require an HTTPS source and within-threshold reason.', severity: 'error' })
+  }
+
   const valueNumber = numberValue(value.value)
   if (valueNumber === null) {
     issues.push({ path: `${path}.value`, message: 'Expected a finite number.', severity: 'error' })
@@ -138,6 +228,17 @@ function validateMetric(
   if (topCardOrder !== undefined && numberValue(topCardOrder) === null) {
     issues.push({ path: `${path}.top_card_order`, message: 'Expected a finite number.', severity: 'error' })
   }
+  if (topCard === true && (freshnessStatus !== 'current' || validationStatus !== 'valid')) {
+    issues.push({ path: `${path}.top_card`, message: 'Headline cards require current, valid source data.', severity: 'error' })
+  }
+
+  const freshness: OverviewMetricFreshness = {
+    status: (FRESHNESS_STATUSES.has(freshnessStatus ?? '') ? freshnessStatus : 'unavailable') as OverviewFreshnessStatus,
+    as_of: freshnessAsOf ?? expectedAsOf,
+    age_days: freshnessAgeDays ?? 0,
+    max_age_days: freshnessMaxAgeDays ?? expectedMaxAgeDays,
+    reason: (FRESHNESS_REASONS.has(freshnessReason ?? '') ? freshnessReason : 'validation_failed') as OverviewMetricFreshness['reason'],
+  }
 
   return {
     id: id as OverviewMetricId,
@@ -150,6 +251,12 @@ function validateMetric(
     previous_value: optionalNumberValue(value.previous_value),
     source_label: requireString(value, 'source_label', path, issues),
     source_period: requireString(value, 'source_period', path, issues),
+    source_url: sourceUrl,
+    source_reference: sourceReference,
+    observed_at: observedAt,
+    extracted_at: extractedAt,
+    output_class: (outputClass ?? expectedOutputClass) as OverviewOutputClass,
+    freshness,
     exported_at: metricExportedAt,
     validation_status: isValidationStatus(validationStatus) ? validationStatus : 'failed',
     caveats: stringArray(value.caveats, `${path}.caveats`, issues),
@@ -243,6 +350,26 @@ export function validateOverviewArtifact(input: unknown): OverviewArtifactValida
   for (const definition of OVERVIEW_LOCKED_METRICS) {
     if (!seen.has(definition.id)) {
       issues.push({ path: 'metrics', message: `Missing locked metric id ${definition.id}.`, severity: 'error' })
+    }
+  }
+
+  const expectedMetricOrder = OVERVIEW_LOCKED_METRICS.map((definition) => definition.id)
+  if (
+    metrics.length === expectedMetricOrder.length &&
+    metrics.some((metric, index) => metric.id !== expectedMetricOrder[index])
+  ) {
+    issues.push({ path: 'metrics', message: 'Metrics must follow the locked Overview order.', severity: 'error' })
+  }
+  const headlineMetrics = metrics.filter((metric) => metric.top_card === true)
+  headlineMetrics.forEach((metric, index) => {
+    const expectedOrder = index + 1
+    if (metric.top_card_order !== expectedOrder) {
+      issues.push({ path: `metrics.${metric.id}.top_card_order`, message: `Expected contiguous headline order ${expectedOrder}.`, severity: 'error' })
+    }
+  })
+  for (const metric of metrics) {
+    if (metric.top_card !== true && metric.top_card_order !== undefined) {
+      issues.push({ path: `metrics.${metric.id}.top_card_order`, message: 'Non-headline metrics cannot carry headline order.', severity: 'error' })
     }
   }
 
