@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-07-17T10:52:49.131Z",
+  "generated_at": "2026-07-18T05:09:07.754Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -307,7 +307,7 @@
       "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-17T10:52:49.131Z"
+      "fetched_at": "2026-07-18T05:09:07.754Z"
     },
     {
       "id": "president-reform-news",
@@ -316,10 +316,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 6,
-      "excluded_count": 6,
+      "candidate_count": 5,
+      "excluded_count": 7,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-17T10:52:49.131Z"
+      "fetched_at": "2026-07-18T05:09:07.754Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-17T10:52:49.131Z"
+      "fetched_at": "2026-07-18T05:09:07.754Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-17T10:52:49.131Z"
+      "fetched_at": "2026-07-18T05:09:07.754Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-17T10:52:49.131Z"
+      "fetched_at": "2026-07-18T05:09:07.754Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-17T10:52:49.131Z"
+      "fetched_at": "2026-07-18T05:09:07.754Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 352,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-17T10:52:49.131Z"
+      "fetched_at": "2026-07-18T05:09:07.754Z"
     },
     {
       "id": "customs-committee-news",
@@ -391,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-17T10:52:49.131Z"
+      "fetched_at": "2026-07-18T05:09:07.754Z"
     },
     {
       "id": "mef-policy-news",
@@ -403,7 +403,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-17T10:52:49.131Z"
+      "fetched_at": "2026-07-18T05:09:07.754Z"
     },
     {
       "id": "tax-committee-news",
@@ -415,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-17T10:52:49.131Z"
+      "fetched_at": "2026-07-18T05:09:07.754Z"
     },
     {
       "id": "energy-ministry-news",
@@ -427,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-17T10:52:49.131Z"
+      "fetched_at": "2026-07-18T05:09:07.754Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -439,7 +439,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-17T10:52:49.131Z"
+      "fetched_at": "2026-07-18T05:09:07.754Z"
     },
     {
       "id": "justice-ministry-news",
@@ -451,23 +451,242 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-17T10:52:49.131Z"
+      "fetched_at": "2026-07-18T05:09:07.754Z"
     }
   ],
   "reform_packages": [
+    {
+      "package_id": "pkg-monetary-prudential-parameters-2026-07-16",
+      "title": "Monetary and financial-sector parameter reform",
+      "policy_area": "Monetary policy and prudential regulation",
+      "reform_category": "monetary_policy",
+      "current_stage": "Rules amended",
+      "current_stage_date": "2026-07-16",
+      "next_milestone": "No future milestone published in verified source",
+      "next_milestone_date": "2026-07-16",
+      "responsible_institutions": [
+        "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+      ],
+      "legal_basis": "Verified official source events: 2634-10-сон 15.07.2026. Budjet tashkilotlari va budjet mablagʻlari oluvchilarning xarajatlar smetasi va shtat jadvallarini tuzish, tasdiqlash va roʻyxatdan oʻtkazish tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida; 3281-6-сон 16.07.2026. Oʻzbekiston Respublikasida valyuta operatsiyalarini amalga oshirish qoidalarining 28-bandiga oʻzgartirish kiritish haqida.",
+      "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+      "short_summary": "2 official measures update monetary policy and prudential regulation rules or procedures.",
+      "parameters_or_amounts": [
+        "amended rules"
+      ],
+      "source_confidence": "high",
+      "why_tracked": "The package is assembled from 2 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "model_relevance": [
+        "Inflation",
+        "Credit conditions",
+        "Financial stability"
+      ],
+      "policy_channels": [
+        "Inflation",
+        "Credit conditions",
+        "Financial stability"
+      ],
+      "measure_tracks": [
+        {
+          "id": "monetary-prudential-parameters-measure-1",
+          "label": "amended rules",
+          "status": "source verified"
+        },
+        {
+          "id": "monetary-prudential-parameters-measure-2",
+          "label": "amended rules",
+          "status": "source verified"
+        }
+      ],
+      "implementation_milestones": [
+        {
+          "id": "monetary-prudential-parameters-instructions_issued-2026-06-29",
+          "label": "official measure recorded",
+          "date": "2026-06-29",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-06-29-president-of-uzbekistan-discusses-further-development-of-partnership-"
+          ],
+          "confidence": "medium"
+        },
+        {
+          "id": "monetary-prudential-parameters-amended-2026-07-15",
+          "label": "rules amended",
+          "date": "2026-07-15",
+          "date_precision": "day",
+          "event_type": "amended",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-07-15-2634-10-15-07-2026-budjet-tashkilotlari-va-budjet-mablag-lari-oluvchi"
+          ],
+          "confidence": "high",
+          "related_next_milestone_ids": [
+            "monetary-prudential-parameters-amended-2026-07-16"
+          ]
+        },
+        {
+          "id": "monetary-prudential-parameters-amended-2026-07-16",
+          "label": "rules amended",
+          "date": "2026-07-16",
+          "date_precision": "day",
+          "event_type": "amended",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-07-16-3281-6-16-07-2026-o-zbekiston-respublikasida-valyuta-operatsiyalarini"
+          ],
+          "confidence": "high"
+        }
+      ],
+      "official_source_events": [
+        {
+          "id": "source-event-2026-06-29-president-of-uzbekistan-discusses-further-development-of-partnership-",
+          "title": "President of Uzbekistan discusses further development of partnership with the World Bank",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9364",
+          "source_published_at": "2026-06-29",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-07-03T06:09:10.444Z",
+          "localized": {
+            "title": {
+              "en": "President of Uzbekistan discusses further development of partnership with the World Bank",
+              "ru": "Президент Узбекистана обсудил дальнейшее развитие партнёрства со Всемирным банком",
+              "uz": "Ўзбекистон Президенти Жаҳон банки билан шерикликни янада ривожлантириш масалаларини муҳокама қилди"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "Эффективно внедряются новые инструменты финансирования. Особое внимание уделено расширению использования инструментов Группы Банка по поддержке развития малого и среднего предпринимательства, реализации мер по сокращению бедности, совместному продвижению программ приватизации государственных предприятий, внедрению искусственного интеллекта в секторах экономики.",
+              "uz": "Молиялаштиришнинг янги механизмлари самарали жорий этилмоқда."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9364",
+              "ru": "https://president.uz/ru/lists/view/9364",
+              "uz": "https://president.uz/uz/lists/view/9364"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-07-15-2634-10-15-07-2026-budjet-tashkilotlari-va-budjet-mablag-lari-oluvchi",
+          "title": "2634-10-сон 15.07.2026. Budjet tashkilotlari va budjet mablagʻlari oluvchilarning xarajatlar smetasi va shtat jadvallarini tuzish, tasdiqlash va roʻyxatdan oʻtkazish tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/8329190",
+          "source_published_at": "2026-07-15",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "amended",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-07-18T05:09:07.754Z",
+          "localized": {
+            "title": {
+              "uz": "2634-10-сон 15.07.2026. Budjet tashkilotlari va budjet mablagʻlari oluvchilarning xarajatlar smetasi va shtat jadvallarini tuzish, tasdiqlash va roʻyxatdan oʻtkazish tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/8329190",
+              "uz": "https://lex.uz/uz/docs/8329190"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-07-16-3281-6-16-07-2026-o-zbekiston-respublikasida-valyuta-operatsiyalarini",
+          "title": "3281-6-сон 16.07.2026. Oʻzbekiston Respublikasida valyuta operatsiyalarini amalga oshirish qoidalarining 28-bandiga oʻzgartirish kiritish haqida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/8335201",
+          "source_published_at": "2026-07-16",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "amended",
+          "summary": "Included by Legal or regulatory change, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-07-18T05:09:07.754Z",
+          "localized": {
+            "title": {
+              "uz": "3281-6-сон 16.07.2026. Oʻzbekiston Respublikasida valyuta operatsiyalarini amalga oshirish qoidalarining 28-bandiga oʻzgartirish kiritish haqida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/8335201",
+              "uz": "https://lex.uz/uz/docs/8335201"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        }
+      ],
+      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
+      "digest": {
+        "changed": "amended rules",
+        "applies_to": "Monetary policy and prudential regulation",
+        "effective_status": "Rules amended (2026-07-16)",
+        "document": "3281-6-сон 16.07.2026. Oʻzbekiston Respublikasida valyuta operatsiyalarini amalga oshirish qoidalarining 28-bandiga oʻzgartirish kiritish haqida"
+      },
+      "localized": {
+        "title": {
+          "uz": "3281-6-сон 16.07.2026. Oʻzbekiston Respublikasida valyuta operatsiyalarini amalga oshirish qoidalarining 28-bandiga oʻzgartirish kiritish haqida"
+        },
+        "short_summary": {
+          "ru": "Эффективно внедряются новые инструменты финансирования.",
+          "uz": "Included by Legal or regulatory change, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
+        },
+        "parameters_or_amounts": {
+          "ru": [
+            "Эффективно внедряются новые инструменты финансирования.",
+            "Особое внимание уделено расширению использования инструментов Группы Банка по поддержке развития малого и среднего предпринимательства, реализации мер по сокращению бедности, совместному продвижению программ приватизации государственных предприятий, внедрению искусственного интеллекта в секторах экономики."
+          ],
+          "uz": [
+            "Included by Legal or regulatory change, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
+          ]
+        },
+        "digest": {
+          "ru": {
+            "changed": "Эффективно внедряются новые инструменты финансирования."
+          },
+          "uz": {
+            "changed": "Included by Legal or regulatory change, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program.",
+            "document": "3281-6-сон 16.07.2026. Oʻzbekiston Respublikasida valyuta operatsiyalarini amalga oshirish qoidalarining 28-bandiga oʻzgartirish kiritish haqida"
+          }
+        }
+      }
+    },
     {
       "package_id": "pkg-aml-cft-financial-control-2026-07-15",
       "title": "Financial-sector AML/CFT internal control rules reform",
       "policy_area": "AML/CFT controls for banks, nonbank lenders, payments, and e-money institutions",
       "reform_category": "financial_sector",
-      "current_stage": "Multiple changes published",
+      "current_stage": "Rules amended",
       "current_stage_date": "2026-07-15",
       "next_milestone": "No future milestone published in verified source",
       "next_milestone_date": "2026-07-15",
       "responsible_institutions": [
         "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
       ],
-      "legal_basis": "Verified official source events: 3898 14.07.2026 Sug‘urtalovchilar (qayta sug‘urtalovchilar) va sugʻurta vositachilari uchun jinoiy faoliyatdan olingan daromadlarni legallashtirishga, terrorizmni moliyalashtirishga va ommaviy qirgʻin qurolini tarqatishni moliyalashtirishga qarshi kurashish boʻyicha ichki nazorat qoidalarini tasdiqlash to‘g‘risida; 3101-4 15.07.2026 Auditorlik tashkilotlari uchun jinoiy faoliyatdan olingan daromadlarni legallashtirishga, terrorizmni moliyalashtirishga va ommaviy qirgʻin qurolini tarqatishni moliyalashtirishga qarshi kurashish boʻyicha ichki nazorat qoidalariga o‘zgartirish va qo‘shimchalar kiritish to‘g‘risida.",
+      "legal_basis": "Verified official source event: 3101-4 15.07.2026 Auditorlik tashkilotlari uchun jinoiy faoliyatdan olingan daromadlarni legallashtirishga, terrorizmni moliyalashtirishga va ommaviy qirgʻin qurolini tarqatishni moliyalashtirishga qarshi kurashish boʻyicha ichki nazorat qoidalariga o‘zgartirish va qo‘shimchalar kiritish to‘g‘risida.",
       "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
       "short_summary": "AML/CFT internal-control rules change across banks, nonbank lenders, payments, and e-money institutions.",
       "parameters_or_amounts": [
@@ -491,11 +710,6 @@
       "measure_tracks": [
         {
           "id": "aml-cft-financial-control-measure-1",
-          "label": "AML/CFT internal-control rules were amended",
-          "status": "approved"
-        },
-        {
-          "id": "aml-cft-financial-control-measure-2",
           "label": "AML/CFT internal-control rules were amended",
           "status": "source verified"
         }
@@ -687,7 +901,7 @@
       "digest": {
         "changed": "Commercial-bank AML/CFT internal-control rules are amended.",
         "applies_to": "AML/CFT controls for banks, nonbank lenders, payments, and e-money institutions",
-        "effective_status": "Multiple changes published (2026-07-15)",
+        "effective_status": "Rules amended (2026-07-15)",
         "document": "3101-4 15.07.2026 Auditorlik tashkilotlari uchun jinoiy faoliyatdan olingan daromadlarni legallashtirishga, terrorizmni moliyalashtirishga va ommaviy qirgʻin qurolini tarqatishni moliyalashtirishga qarshi kurashish boʻyicha ichki nazorat qoidalariga o‘zgartirish va qo‘shimchalar kiritish to‘g‘risida"
       },
       "localized": {
@@ -1829,133 +2043,6 @@
           "uz": {
             "changed": "Сўнгги йилларда мамлакатимизда рақамли давлат хизматларини кенгайтириш, давлат идоралари фаолиятига замонавий ахборот тизимларини жорий этиш, аҳоли ва тадбиркорлар учун қулайликларни ошириш бўйича кенг кўламли ишлар амалга оширилди.",
             "document": "Давлат бошқарувида ягона рақамли платформани жорий этиш чоралари кўриб чиқилди"
-          }
-        }
-      }
-    },
-    {
-      "package_id": "pkg-monetary-prudential-parameters-2026-06-29",
-      "title": "Monetary and financial-sector parameter reform",
-      "policy_area": "Monetary policy and prudential regulation",
-      "reform_category": "monetary_policy",
-      "current_stage": "Instructions issued",
-      "current_stage_date": "2026-06-29",
-      "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-06-29",
-      "responsible_institutions": [
-        "Official website of the President of the Republic of Uzbekistan"
-      ],
-      "legal_basis": "Verified official source event: President of Uzbekistan discusses further development of partnership with the World Bank.",
-      "official_basis": "Official website of the President of the Republic of Uzbekistan",
-      "short_summary": "The cited official document updates monetary policy and prudential regulation rules or procedures.",
-      "parameters_or_amounts": [
-        "verified official measure"
-      ],
-      "source_confidence": "medium",
-      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
-      "model_relevance": [
-        "Inflation",
-        "Credit conditions",
-        "Financial stability"
-      ],
-      "policy_channels": [
-        "Inflation",
-        "Credit conditions",
-        "Financial stability"
-      ],
-      "measure_tracks": [
-        {
-          "id": "monetary-prudential-parameters-measure-1",
-          "label": "verified official measure",
-          "status": "source verified"
-        }
-      ],
-      "implementation_milestones": [
-        {
-          "id": "monetary-prudential-parameters-instructions_issued-2026-06-29",
-          "label": "official measure recorded",
-          "date": "2026-06-29",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-06-29-president-of-uzbekistan-discusses-further-development-of-partnership-"
-          ],
-          "confidence": "medium"
-        }
-      ],
-      "official_source_events": [
-        {
-          "id": "source-event-2026-06-29-president-of-uzbekistan-discusses-further-development-of-partnership-",
-          "title": "President of Uzbekistan discusses further development of partnership with the World Bank",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9364",
-          "source_published_at": "2026-06-29",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-07-03T06:09:10.444Z",
-          "localized": {
-            "title": {
-              "en": "President of Uzbekistan discusses further development of partnership with the World Bank",
-              "ru": "Президент Узбекистана обсудил дальнейшее развитие партнёрства со Всемирным банком",
-              "uz": "Ўзбекистон Президенти Жаҳон банки билан шерикликни янада ривожлантириш масалаларини муҳокама қилди"
-            },
-            "summary": {
-              "en": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
-              "ru": "Эффективно внедряются новые инструменты финансирования. Особое внимание уделено расширению использования инструментов Группы Банка по поддержке развития малого и среднего предпринимательства, реализации мер по сокращению бедности, совместному продвижению программ приватизации государственных предприятий, внедрению искусственного интеллекта в секторах экономики.",
-              "uz": "Молиялаштиришнинг янги механизмлари самарали жорий этилмоқда."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9364",
-              "ru": "https://president.uz/ru/lists/view/9364",
-              "uz": "https://president.uz/uz/lists/view/9364"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        }
-      ],
-      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
-      "digest": {
-        "changed": "verified official measure",
-        "applies_to": "Monetary policy and prudential regulation",
-        "effective_status": "Instructions issued (2026-06-29)",
-        "document": "President of Uzbekistan discusses further development of partnership with the World Bank"
-      },
-      "localized": {
-        "title": {
-          "ru": "Президент Узбекистана обсудил дальнейшее развитие партнёрства со Всемирным банком",
-          "uz": "Ўзбекистон Президенти Жаҳон банки билан шерикликни янада ривожлантириш масалаларини муҳокама қилди"
-        },
-        "short_summary": {
-          "ru": "Эффективно внедряются новые инструменты финансирования.",
-          "uz": "Молиялаштиришнинг янги механизмлари самарали жорий этилмоқда."
-        },
-        "parameters_or_amounts": {
-          "ru": [
-            "Эффективно внедряются новые инструменты финансирования.",
-            "Особое внимание уделено расширению использования инструментов Группы Банка по поддержке развития малого и среднего предпринимательства, реализации мер по сокращению бедности, совместному продвижению программ приватизации государственных предприятий, внедрению искусственного интеллекта в секторах экономики."
-          ],
-          "uz": [
-            "Молиялаштиришнинг янги механизмлари самарали жорий этилмоқда."
-          ]
-        },
-        "digest": {
-          "ru": {
-            "changed": "Эффективно внедряются новые инструменты финансирования.",
-            "document": "Президент Узбекистана обсудил дальнейшее развитие партнёрства со Всемирным банком"
-          },
-          "uz": {
-            "changed": "Молиялаштиришнинг янги механизмлари самарали жорий этилмоқда.",
-            "document": "Ўзбекистон Президенти Жаҳон банки билан шерикликни янада ривожлантириш масалаларини муҳокама қилди"
           }
         }
       }
@@ -3930,6 +4017,33 @@
     ],
     "package_links": [
       {
+        "package_id": "pkg-monetary-prudential-parameters-2026-07-16",
+        "active_lenses": [
+          {
+            "model_id": "QPM",
+            "channel": "Macro-financial and inflation transmission context.",
+            "caveat": "Possible lens only."
+          }
+        ],
+        "gated_lenses": [
+          {
+            "model_id": "FPP",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "HFI",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "Synthesis",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          }
+        ]
+      },
+      {
         "package_id": "pkg-aml-cft-financial-control-2026-07-15",
         "active_lenses": [
           {
@@ -4078,33 +4192,6 @@
           {
             "model_id": "DFM",
             "channel": "General monitoring context.",
-            "caveat": "Possible lens only."
-          }
-        ],
-        "gated_lenses": [
-          {
-            "model_id": "FPP",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "HFI",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "Synthesis",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          }
-        ]
-      },
-      {
-        "package_id": "pkg-monetary-prudential-parameters-2026-06-29",
-        "active_lenses": [
-          {
-            "model_id": "QPM",
-            "channel": "Macro-financial and inflation transmission context.",
             "caveat": "Possible lens only."
           }
         ],
