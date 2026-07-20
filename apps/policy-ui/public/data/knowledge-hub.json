@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-07-19T05:36:48.113Z",
+  "generated_at": "2026-07-20T05:53:36.314Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -303,12 +303,11 @@
       "url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
       "parser": "lexuz-official-search",
       "fetch_url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
-      "ok": false,
-      "candidate_count": 0,
+      "ok": true,
+      "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-19T05:36:48.113Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-07-20T05:53:36.314Z"
     },
     {
       "id": "president-reform-news",
@@ -320,7 +319,7 @@
       "candidate_count": 5,
       "excluded_count": 7,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-19T05:36:48.113Z"
+      "fetched_at": "2026-07-20T05:53:36.314Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -332,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-19T05:36:48.113Z"
+      "fetched_at": "2026-07-20T05:53:36.314Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -344,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-19T05:36:48.113Z"
+      "fetched_at": "2026-07-20T05:53:36.314Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -356,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-19T05:36:48.113Z"
+      "fetched_at": "2026-07-20T05:53:36.314Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -368,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-19T05:36:48.113Z"
+      "fetched_at": "2026-07-20T05:53:36.314Z"
     },
     {
       "id": "cbu-policy-news",
@@ -380,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 352,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-19T05:36:48.113Z"
+      "fetched_at": "2026-07-20T05:53:36.314Z"
     },
     {
       "id": "customs-committee-news",
@@ -392,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-19T05:36:48.113Z"
+      "fetched_at": "2026-07-20T05:53:36.314Z"
     },
     {
       "id": "mef-policy-news",
@@ -404,7 +403,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-19T05:36:48.113Z"
+      "fetched_at": "2026-07-20T05:53:36.314Z"
     },
     {
       "id": "tax-committee-news",
@@ -416,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-19T05:36:48.113Z"
+      "fetched_at": "2026-07-20T05:53:36.314Z"
     },
     {
       "id": "energy-ministry-news",
@@ -428,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-19T05:36:48.113Z"
+      "fetched_at": "2026-07-20T05:53:36.314Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -440,7 +439,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-19T05:36:48.113Z"
+      "fetched_at": "2026-07-20T05:53:36.314Z"
     },
     {
       "id": "justice-ministry-news",
@@ -452,7 +451,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-19T05:36:48.113Z"
+      "fetched_at": "2026-07-20T05:53:36.314Z"
     }
   ],
   "reform_packages": [
@@ -4568,7 +4567,6 @@
     "This is a deterministic official-source reform package artifact.",
     "Generated from configured source URLs at artifact build time.",
     "Public packages are assembled only from source events whose official links passed validation.",
-    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser.",
-    "One or more configured sources failed during this automatic refresh; previous verified packages were carried forward when needed to avoid deleting reforms during a temporary source outage."
+    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser."
   ]
 }
