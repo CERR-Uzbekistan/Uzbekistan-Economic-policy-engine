@@ -729,6 +729,49 @@ function runFPP() {
   renderConsistency(res);
   renderTable(res);
   renderCharts(res);
+
+  /* Auto-generate post-simulation policy brief (#15) */
+  try { fppAutoBrief(); } catch (e) { console.warn('fppAutoBrief failed', e); }
+}
+
+function _fppBuildPayload() {
+  if (!lastResults) return null;
+  const r = lastResults;
+  const rL = r[r.length-1];
+  const avg = a => r.reduce((s,x)=>s+x[a],0)/r.length;
+  return {
+    params: { baseYear: 2024, horizon: '2025-2027' },
+    results: { kpis: [
+      { label: 'Avg GDP Growth',         value: f1(avg('g')) + '%' },
+      { label: 'Inflation 2027',         value: f1(rL.pi) + '%' },
+      { label: 'Fiscal Balance 2027',    value: sgn(rL.fb_GDP) },
+      { label: 'Current Account 2027',   value: sgn(rL.CA_GDP) },
+      { label: 'Reserves 2027',          value: f0(rL.reserves) + ' mln USD' },
+      { label: 'Import Cover 2027',      value: f1(rL.import_cover) + ' months' }
+    ] }
+  };
+}
+
+function _fppEnsurePanel() {
+  let c = document.getElementById('fpp-ai-output');
+  if (!c) {
+    c = document.createElement('div');
+    c.id = 'fpp-ai-output';
+    c.style.margin = '20px 0';
+    const host = document.querySelector('.main') || document.querySelector('.main-area') || document.body;
+    host.appendChild(c);
+  }
+  return c;
+}
+
+/* Offline post-simulation policy brief (#15). */
+function fppAutoBrief() {
+  if (!window.PolicyAdvisor) return;
+  const payload = _fppBuildPayload();
+  if (!payload) return;
+  _fppEnsurePanel();
+  const analysis = PolicyAdvisor.briefSim('fpp', payload.params, payload.results);
+  PolicyAdvisor.renderAdvisorPanel('fpp-ai-output', analysis);
 }
 
 const f1 = v => (typeof v==='number') ? v.toFixed(1) : '—';
@@ -1068,23 +1111,12 @@ function fppSaveScenario() {
 async function fppAIAnalysis() {
   if(!lastResults){ Toast.show('Run projection first','warning'); return; }
   if(!window.PolicyAdvisor){ Toast.show('AI advisor not loaded','error'); return; }
-  const r=lastResults, rL=r[r.length-1];
-  const avg=a=>r.reduce((s,x)=>s+x[a],0)/r.length;
-  let c=document.getElementById('fpp-ai-output');
-  if(!c){c=document.createElement('div');c.id='fpp-ai-output';c.style.margin='20px 0';document.querySelector('.main-area')?.appendChild(c);}
-  c.innerHTML='<div style="padding:20px;color:#475569;">Analyzing...</div>';
-  const analysis=await PolicyAdvisor.analyzeSim('fpp',
-    {baseYear:2024,horizon:'2025-2027'},
-    {kpis:[
-      {label:'Avg GDP Growth',value:f1(avg('g'))+'%'},
-      {label:'Inflation 2027',value:f1(rL.pi)+'%'},
-      {label:'Fiscal Balance 2027',value:sgn(rL.fb_GDP)},
-      {label:'Current Account 2027',value:sgn(rL.CA_GDP)},
-      {label:'Reserves 2027',value:f0(rL.reserves)+' mln USD'},
-      {label:'Import Cover 2027',value:f1(rL.import_cover)+' months'}
-    ]}
-  );
-  PolicyAdvisor.renderAdvisorPanel('fpp-ai-output',analysis);
+  const payload = _fppBuildPayload();
+  const c = _fppEnsurePanel();
+  c.innerHTML='<div style="padding:20px;color:#475569;">Analyzing…</div>';
+  c.scrollIntoView({behavior:'smooth'});
+  const analysis = await PolicyAdvisor.analyzeSim('fpp', payload.params, payload.results);
+  PolicyAdvisor.renderAdvisorPanel('fpp-ai-output', analysis);
 }
 
 function applyFppRegistryOverrides() {
