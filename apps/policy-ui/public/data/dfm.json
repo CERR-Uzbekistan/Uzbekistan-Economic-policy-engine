@@ -4,9 +4,9 @@
     "model_name": "Dynamic Factor Model - GDP Nowcast (Uzbekistan)",
     "module": "dfm_nowcast",
     "version": "0.1.0",
-    "run_id": "dfm-nightly-2026-07-21",
+    "run_id": "dfm-nightly-2026-07-22",
     "data_version": "2026Q1",
-    "timestamp": "2026-07-21T22:02:51Z"
+    "timestamp": "2026-07-22T22:04:50Z"
   },
   "nowcast": {
     "last_observed_date": "2025-12-01",
@@ -714,7 +714,7 @@
     }
   ],
   "metadata": {
-    "exported_at": "2026-07-21T22:02:51Z",
+    "exported_at": "2026-07-22T22:04:50Z",
     "source_script_sha": "f61c0ec9a8addd8cc09e59dccc5ca2edd685878b",
     "solver_version": "0.1.0",
     "source_artifact": "dfm_nowcast/dfm_data.js",
