@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-07-20T05:53:36.314Z",
+  "generated_at": "2026-07-22T05:34:21.202Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -307,7 +307,7 @@
       "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-20T05:53:36.314Z"
+      "fetched_at": "2026-07-22T05:34:21.202Z"
     },
     {
       "id": "president-reform-news",
@@ -316,10 +316,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 5,
-      "excluded_count": 7,
+      "candidate_count": 6,
+      "excluded_count": 6,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-20T05:53:36.314Z"
+      "fetched_at": "2026-07-22T05:34:21.202Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-20T05:53:36.314Z"
+      "fetched_at": "2026-07-22T05:34:21.202Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-20T05:53:36.314Z"
+      "fetched_at": "2026-07-22T05:34:21.202Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-20T05:53:36.314Z"
+      "fetched_at": "2026-07-22T05:34:21.202Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-20T05:53:36.314Z"
+      "fetched_at": "2026-07-22T05:34:21.202Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 352,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-20T05:53:36.314Z"
+      "fetched_at": "2026-07-22T05:34:21.202Z"
     },
     {
       "id": "customs-committee-news",
@@ -391,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-20T05:53:36.314Z"
+      "fetched_at": "2026-07-22T05:34:21.202Z"
     },
     {
       "id": "mef-policy-news",
@@ -400,10 +400,10 @@
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
       "ok": true,
-      "candidate_count": 0,
-      "excluded_count": 12,
+      "candidate_count": 1,
+      "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-20T05:53:36.314Z"
+      "fetched_at": "2026-07-22T05:34:21.202Z"
     },
     {
       "id": "tax-committee-news",
@@ -415,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-20T05:53:36.314Z"
+      "fetched_at": "2026-07-22T05:34:21.202Z"
     },
     {
       "id": "energy-ministry-news",
@@ -427,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-20T05:53:36.314Z"
+      "fetched_at": "2026-07-22T05:34:21.202Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -439,7 +439,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-20T05:53:36.314Z"
+      "fetched_at": "2026-07-22T05:34:21.202Z"
     },
     {
       "id": "justice-ministry-news",
@@ -451,10 +451,748 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-07-20T05:53:36.314Z"
+      "fetched_at": "2026-07-22T05:34:21.202Z"
     }
   ],
   "reform_packages": [
+    {
+      "package_id": "pkg-customs-clearance-digitalization-2026-07-21",
+      "title": "Risk-based customs clearance and electronic declaration reform",
+      "policy_area": "Trade facilitation and customs digitalization",
+      "reform_category": "trade_customs",
+      "current_stage": "Instructions issued",
+      "current_stage_date": "2026-07-21",
+      "next_milestone": "No future milestone published in verified source",
+      "next_milestone_date": "2026-07-21",
+      "responsible_institutions": [
+        "Official website of the President of the Republic of Uzbekistan"
+      ],
+      "legal_basis": "Verified official source event: President outlines priorities to sustain high economic growth and improve living standards..",
+      "official_basis": "Official website of the President of the Republic of Uzbekistan",
+      "short_summary": "Customs clearance, declaration, and border-process measures are updated.",
+      "parameters_or_amounts": [
+        "Customs and trade-facilitation procedures are updated.",
+        "Clearance and declaration processes are updated."
+      ],
+      "source_confidence": "high",
+      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "model_relevance": [
+        "Trade flows",
+        "Import costs",
+        "Sector linkages"
+      ],
+      "policy_channels": [
+        "Customs clearance",
+        "Trade facilitation",
+        "Import and export transaction costs"
+      ],
+      "measure_tracks": [
+        {
+          "id": "customs-clearance-digitalization-measure-1",
+          "label": "Customs and trade-facilitation procedures were updated",
+          "status": "source verified"
+        }
+      ],
+      "implementation_milestones": [
+        {
+          "id": "customs-clearance-digitalization-implementation_milestone-2026-05-19",
+          "label": "implementation measure recorded",
+          "date": "2026-05-19",
+          "date_precision": "day",
+          "event_type": "implementation_milestone",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-05-19-pf-95-19-05-2026-soliq-organlari-faoliyatini-institutsional-jihatdan-"
+          ],
+          "confidence": "high",
+          "related_next_milestone_ids": [
+            "customs-clearance-digitalization-approved-2026-05-21"
+          ]
+        },
+        {
+          "id": "customs-clearance-digitalization-approved-2026-05-21",
+          "label": "official measure approved",
+          "date": "2026-05-21",
+          "date_precision": "day",
+          "event_type": "approved",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-05-21-266-21-05-2026-bojxona-hududida-qayta-ishlangan-tayyor-mahsulotlarni-"
+          ],
+          "confidence": "high",
+          "related_next_milestone_ids": [
+            "customs-clearance-digitalization-amended-2026-05-21"
+          ]
+        },
+        {
+          "id": "customs-clearance-digitalization-amended-2026-05-21",
+          "label": "rules amended",
+          "date": "2026-05-21",
+          "date_precision": "day",
+          "event_type": "amended",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-05-21-pq-193-21-05-2026-fitosanitariya-tartib-taomillarini-soddalashtirish-"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "customs-clearance-digitalization-implementation_milestone-2026-06-02",
+          "label": "implementation measure recorded",
+          "date": "2026-06-02",
+          "date_precision": "day",
+          "event_type": "implementation_milestone",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-06-02-president-reviews-operations-of-polymer-products-enterprise"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "customs-clearance-digitalization-instructions_issued-2026-06-03",
+          "label": "official measure recorded",
+          "date": "2026-06-03",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-06-03-277-03-06-2026-2026-2027-yillarda-hududlardagi-ijtimoiy-soha-muassasa"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "customs-clearance-digitalization-instructions_issued-2026-06-17",
+          "label": "official measure recorded",
+          "date": "2026-06-17",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-06-17-address-by-the-president-of-the-republic-uzbekistan-shavkat-mirziyoye"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "customs-clearance-digitalization-implementation_milestone-2026-07-03",
+          "label": "implementation measure recorded",
+          "date": "2026-07-03",
+          "date_precision": "day",
+          "event_type": "implementation_milestone",
+          "responsible_institutions": [
+            "Ministry of Economy and Finance of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-07-03-risk-based-electronic-assessment-system-introduced-for-audit-firms"
+          ],
+          "confidence": "medium"
+        },
+        {
+          "id": "customs-clearance-digitalization-instructions_issued-2026-07-13",
+          "label": "official measure recorded",
+          "date": "2026-07-13",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-07-13-o-rq-1158-13-07-2026-toshkent-xalqaro-moliya-markazi-to-g-risida"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "customs-clearance-digitalization-instructions_issued-2026-07-21",
+          "label": "official measure recorded",
+          "date": "2026-07-21",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-07-21-president-outlines-priorities-to-sustain-high-economic-growth-and-imp"
+          ],
+          "confidence": "high"
+        }
+      ],
+      "official_source_events": [
+        {
+          "id": "source-event-2026-05-19-pf-95-19-05-2026-soliq-organlari-faoliyatini-institutsional-jihatdan-",
+          "title": "PF-95-сон 19.05.2026. Soliq organlari faoliyatini institutsional jihatdan takomillashtirish va soliq maʼmuriyatchiligida zamonaviy yondashuvlarni joriy etish chora-tadbirlari toʻgʻrisida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/-8210422",
+          "source_published_at": "2026-05-19",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "implementation_milestone",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure, Trade or customs modernization, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-05-23T15:00:00.000Z",
+          "localized": {
+            "title": {
+              "uz": "PF-95-сон 19.05.2026. Soliq organlari faoliyatini institutsional jihatdan takomillashtirish va soliq maʼmuriyatchiligida zamonaviy yondashuvlarni joriy etish chora-tadbirlari toʻgʻrisida"
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/-8210422",
+              "uz": "https://lex.uz/uz/docs/-8210422"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-05-21-266-21-05-2026-bojxona-hududida-qayta-ishlangan-tayyor-mahsulotlarni-",
+          "title": "266 21.05.2026 Bojxona hududida qayta ishlangan tayyor mahsulotlarni erkin muomalaga chiqarishda tovarlarning bojxona qiymatini belgilash va ular bo‘yicha bojxona to‘lovlarini hisoblash tartibi to‘g‘risidagi nizomni tasdiqlash haqida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/-8215222",
+          "source_published_at": "2026-05-21",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "approved",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Trade or customs modernization with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-05-23T15:00:00.000Z",
+          "localized": {
+            "title": {
+              "uz": "266 21.05.2026 Bojxona hududida qayta ishlangan tayyor mahsulotlarni erkin muomalaga chiqarishda tovarlarning bojxona qiymatini belgilash va ular bo‘yicha bojxona to‘lovlarini hisoblash tartibi to‘g‘risidagi nizomni tasdiqlash haqida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Adopted policy measure, Trade or customs modernization with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/-8215222",
+              "uz": "https://lex.uz/uz/docs/-8215222"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-05-21-pq-193-21-05-2026-fitosanitariya-tartib-taomillarini-soddalashtirish-",
+          "title": "PQ-193 21.05.2026 Fitosanitariya tartib-taomillarini soddalashtirish hamda meva-sabzavot va oziq-ovqat mahsulotlarini eksport qilish jarayonlarini takomillashtirishga doir qo‘shimcha chora-tadbirlar to‘g‘risida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/-8214804",
+          "source_published_at": "2026-05-21",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "amended",
+          "summary": "Included by Legal or regulatory change, Trade or customs modernization with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-05-23T15:00:00.000Z",
+          "localized": {
+            "title": {
+              "uz": "PQ-193 21.05.2026 Fitosanitariya tartib-taomillarini soddalashtirish hamda meva-sabzavot va oziq-ovqat mahsulotlarini eksport qilish jarayonlarini takomillashtirishga doir qo‘shimcha chora-tadbirlar to‘g‘risida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Trade or customs modernization with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/-8214804",
+              "uz": "https://lex.uz/uz/docs/-8214804"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-06-02-president-reviews-operations-of-polymer-products-enterprise",
+          "title": "President reviews operations of polymer products enterprise",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9269",
+          "source_published_at": "2026-06-02",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "implementation_milestone",
+          "summary": "Included by Adopted policy measure, Trade or customs modernization, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-06-03T07:23:07.947Z",
+          "localized": {
+            "title": {
+              "en": "President reviews operations of polymer products enterprise",
+              "ru": "Президент нашей страны ознакомился с деятельностью предприятия полимерной продукции",
+              "uz": "Президентимиз полимер маҳсулотлар корхонаси билан танишди"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure, Trade or customs modernization, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "В рамках проекта создано 50 новых рабочих мест.",
+              "uz": "Россиянинг “Polymers” компанияси билан ҳамкорликда ташкил этилган мазкур лойиҳа махсус ва кенг ассортиментдаги полиэтилен плёнка маҳсулотлари ишлаб чиқаришга ихтисослашган."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9269",
+              "ru": "https://president.uz/ru/lists/view/9269",
+              "uz": "https://president.uz/uz/lists/view/9269"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-06-03-277-03-06-2026-2026-2027-yillarda-hududlardagi-ijtimoiy-soha-muassasa",
+          "title": "277-сон 03.06.2026. 2026-2027-yillarda hududlardagi ijtimoiy soha muassasalarida energiya samaradorligi loyihalari koʻlamini kengaytirish chora-tadbirlari toʻgʻrisida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/-8244376",
+          "source_published_at": "2026-06-03",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure, Trade or customs modernization, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-06-10T06:48:58.796Z",
+          "localized": {
+            "title": {
+              "uz": "277-сон 03.06.2026. 2026-2027-yillarda hududlardagi ijtimoiy soha muassasalarida energiya samaradorligi loyihalari koʻlamini kengaytirish chora-tadbirlari toʻgʻrisida"
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/-8244376",
+              "uz": "https://lex.uz/uz/docs/-8244376"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-06-17-address-by-the-president-of-the-republic-uzbekistan-shavkat-mirziyoye",
+          "title": "Address by the President of the Republic Uzbekistan Shavkat Mirziyoyev at the Fifth Tashkent International Investment Forum",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9317",
+          "source_published_at": "2026-06-17",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Address by the President of the Republic Uzbekistan Shavkat Mirziyoyev at the Fifth Tashkent International Investment Forum",
+          "source_url_status": "verified",
+          "extracted_at": "2026-06-18T07:16:43.590Z",
+          "localized": {
+            "title": {
+              "en": "Address by the President of the Republic Uzbekistan Shavkat Mirziyoyev at the Fifth Tashkent International Investment Forum",
+              "ru": "Выступление Президента Республики Узбекистан Шавката Мирзиёева на пятом Ташкентском международном инвестиционном форуме",
+              "uz": "Ўзбекистон Республикаси Президенти Шавкат Мирзиёевнинг бешинчи Тошкент халқаро инвестиция форумидаги нутқи"
+            },
+            "summary": {
+              "ru": "Также из года в год повышается международный кредитный рейтинг Узбекистана. В обеспечении прав инвесторов решающее значение имеет использование сильных институтов и признанных международных механизмов.",
+              "uz": "Жорий йилги форумда дунёнинг 100 дан ортиқ давлатидан 4 мингга яқин хорижий меҳмонлар қатнашаётгани ҳам анжуманимиз нуфузи юксалиб бораётганини яққол тасдиқлайди. Шу билан бирга, Ўзбекистоннинг халқаро кредит рейтинги йил сайин яхшиланиб бормоқда."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9317",
+              "ru": "https://president.uz/ru/lists/view/9317",
+              "uz": "https://president.uz/uz/lists/view/9317"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-07-03-risk-based-electronic-assessment-system-introduced-for-audit-firms",
+          "title": "Risk-based electronic assessment system introduced for audit firms",
+          "source_institution": "Ministry of Economy and Finance of Uzbekistan",
+          "source_url": "https://gov.uz/en/imv/news/view/187816",
+          "source_published_at": "2026-07-03",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "implementation_milestone",
+          "summary": "Official detail page did not expose a separate summary in the configured extraction block.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-07-04T05:59:23.134Z",
+          "localized": {
+            "title": {
+              "en": "Risk-based electronic assessment system introduced for audit firms",
+              "ru": "Министерство экономики и финансов Республики Узбекистан",
+              "uz": "Аудиторлик ташкилотлари фаолиятини хавфга асосланган электрон баҳолаш тизими жорий этилмоқда"
+            },
+            "source_url": {
+              "en": "https://gov.uz/en/imv/news/view/187816",
+              "ru": "https://gov.uz/ru/imv/news/view/187816",
+              "uz": "https://gov.uz/uz/imv/news/view/187816"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-07-13-o-rq-1158-13-07-2026-toshkent-xalqaro-moliya-markazi-to-g-risida",
+          "title": "O‘RQ-1158-сон 13.07.2026. Toshkent xalqaro moliya markazi toʻgʻrisida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/-8323797",
+          "source_published_at": "2026-07-13",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Trade or customs modernization, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-07-17T10:52:49.131Z",
+          "localized": {
+            "title": {
+              "uz": "O‘RQ-1158-сон 13.07.2026. Toshkent xalqaro moliya markazi toʻgʻrisida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Adopted policy measure, Trade or customs modernization, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/-8323797",
+              "uz": "https://lex.uz/uz/docs/-8323797"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-07-21-president-outlines-priorities-to-sustain-high-economic-growth-and-imp",
+          "title": "President outlines priorities to sustain high economic growth and improve living standards.",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9426",
+          "source_published_at": "2026-07-21",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Legal or regulatory change, Fiscal, tax, budget, subsidy, or tariff measure, Trade or customs modernization, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, parameter_change, named_implementation_update; source evidence: legal_text, official_policy_announcement, budget_tax_measure, regulatory_parameter_change, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-07-22T05:34:21.202Z",
+          "localized": {
+            "title": {
+              "en": "President outlines priorities to sustain high economic growth and improve living standards.",
+              "ru": "Определены приоритетные задачи по обеспечению высоких темпов экономического роста и повышению благосостояния населения",
+              "uz": "Иқтисодиётда юқори ўсишни таъминлаш ва аҳоли фаровонлигини ошириш бўйича устувор вазифалар белгиланди"
+            },
+            "summary": {
+              "ru": "В связи с этим на основе принципиально нового подхода будет организована работа на местах по развитию инфраструктуры, обеспечению занятости, поддержке предпринимательства и повышению доходов населения. В этом направлении объявлена «ударная сорокадневка», начата работа по внедрению новой системы в 2 тысячах махаллей, находящихся в тяжелом положении.",
+              "uz": "Ойлик, чораклик ва йиллик режаларни бажармаган раҳбарларга нисбатан масъулият кучайтирилиши белгиланди. Шу боис, жойларда инфратузилма, бандлик, тадбиркорлик ва аҳоли даромадини ошириш бўйича ишлар мутлақо янги ёндашув асосида ташкил этилади."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9426",
+              "ru": "https://president.uz/ru/lists/view/9426",
+              "uz": "https://president.uz/uz/lists/view/9426"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        }
+      ],
+      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
+      "digest": {
+        "changed": "Customs and trade-facilitation procedures are updated.",
+        "applies_to": "Trade facilitation and customs digitalization",
+        "effective_status": "Instructions issued (2026-07-21)",
+        "document": "President outlines priorities to sustain high economic growth and improve living standards."
+      },
+      "localized": {
+        "title": {
+          "ru": "Определены приоритетные задачи по обеспечению высоких темпов экономического роста и повышению благосостояния населения",
+          "uz": "Иқтисодиётда юқори ўсишни таъминлаш ва аҳоли фаровонлигини ошириш бўйича устувор вазифалар белгиланди"
+        },
+        "short_summary": {
+          "ru": "В связи с этим на основе принципиально нового подхода будет организована работа на местах по развитию инфраструктуры, обеспечению занятости, поддержке предпринимательства и повышению доходов населения.",
+          "uz": "Ойлик, чораклик ва йиллик режаларни бажармаган раҳбарларга нисбатан масъулият кучайтирилиши белгиланди."
+        },
+        "parameters_or_amounts": {
+          "ru": [
+            "В связи с этим на основе принципиально нового подхода будет организована работа на местах по развитию инфраструктуры, обеспечению занятости, поддержке предпринимательства и повышению доходов населения.",
+            "В этом направлении объявлена «ударная сорокадневка», начата работа по внедрению новой системы в 2 тысячах махаллей, находящихся в тяжелом положении.",
+            "Премьер-министру поручено рассмотреть деятельность не добившихся результатов хокимов и при отсутствии положительных изменений по итогам девяти месяцев принять в отношении ответственных руководителей строгие меры.",
+            "В этой связи будет разработана программа по продвижению национальных брендов на зарубежных рынках, их защите от демпинга и контрафактной продукции.",
+            "Отныне исполнение этих «дорожных карт» будет находиться под строгим контролем Счетной палаты и Министерства иностранных дел.",
+            "До конца года поставлена задача импортировать 100 тысяч голов крупного рогатого скота и 150 тысяч голов овец и коз.",
+            "До конца года поставлена задача ввести в эксплуатацию 340 холодильных складов общей мощностью хранения 87 тысяч тонн.",
+            "Макроэкономические параметры, бюджет, а также программы инвестиций и экспорта на 2027 год будут разработаны на основе нового подхода – «мобилизационного сценария»."
+          ],
+          "uz": [
+            "Ойлик, чораклик ва йиллик режаларни бажармаган раҳбарларга нисбатан масъулият кучайтирилиши белгиланди.",
+            "Шу боис, жойларда инфратузилма, бандлик, тадбиркорлик ва аҳоли даромадини ошириш бўйича ишлар мутлақо янги ёндашув асосида ташкил этилади.",
+            "Бандлик тизими эҳтиёжманд аҳолини ўқитиш, ишга жойлаштириш ва даромадини ошириш бўйича ҳудудма-ҳудуд ишлайди.",
+            "Барча вазирлик ва идораларга тизимидаги бюрократия, жарима, тўлов ва йиғимларни қисқартириш, бизнес муҳитини янада яхшилаш бўйича таклифлар киритиш топширилди.",
+            "Шунингдек, янги хусусийлаштириш дастури доирасида 100 триллион сўмлик кўчмас мулк, ер майдонлари ва давлат улушларини савдога чиқариш, давлат активларини олган тадбиркорлар учун тўлов шартларини енгиллаштириш белгиланди.",
+            "Тармоқ ва ҳудудларга бириктирилган “ақл марказлари” билан бирга 15 августгача илмий асосланган таклифлар ишлаб чиқилади.",
+            "Ушбу таклифлар “ресурс – инфратузилма – лойиҳа – ишлаб чиқариш – бюджетга тушум – экспорт” занжирини ўзаро боғлиқ ҳолда ривожлантиришга қаратилган бўлади.",
+            "Йиғилишда вазирлар, тармоқ раҳбарлари ва ҳокимларнинг ҳисоботлари, белгиланган топшириқлар ижросини жойларда ташкил этиш бўйича режалари тингланди."
+          ]
+        },
+        "digest": {
+          "ru": {
+            "changed": "В связи с этим на основе принципиально нового подхода будет организована работа на местах по развитию инфраструктуры, обеспечению занятости, поддержке предпринимательства и повышению доходов населения.",
+            "document": "Определены приоритетные задачи по обеспечению высоких темпов экономического роста и повышению благосостояния населения"
+          },
+          "uz": {
+            "changed": "Ойлик, чораклик ва йиллик режаларни бажармаган раҳбарларга нисбатан масъулият кучайтирилиши белгиланди.",
+            "document": "Иқтисодиётда юқори ўсишни таъминлаш ва аҳоли фаровонлигини ошириш бўйича устувор вазифалар белгиланди"
+          }
+        }
+      }
+    },
+    {
+      "package_id": "pkg-tax-administration-incentives-2026-07-20",
+      "title": "Tax administration and investment incentive reform",
+      "policy_area": "Tax administration and fiscal incentives",
+      "reform_category": "fiscal_tax",
+      "current_stage": "Rules amended",
+      "current_stage_date": "2026-07-20",
+      "next_milestone": "No future milestone published in verified source",
+      "next_milestone_date": "2026-07-20",
+      "responsible_institutions": [
+        "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+      ],
+      "legal_basis": "Verified official source event: 2111-1 20.07.2026 Oʻzbekiston Respublikasi Xalq bankidagi fuqarolarning shaxsiy jamgʻarib boriladigan pensiya hisobvaraqlariga ixtiyoriy ravishda yoʻnaltiriladigan mablagʻlarga jismoniy shaxslardan olinadigan daromad soligʻi boʻyicha imtiyozni qoʻllash tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida.",
+      "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+      "short_summary": "The cited official document updates tax administration and fiscal incentives rules or procedures.",
+      "parameters_or_amounts": [
+        "amended rules"
+      ],
+      "source_confidence": "medium",
+      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "model_relevance": [
+        "Fiscal balance",
+        "Investment",
+        "Business costs"
+      ],
+      "policy_channels": [
+        "Fiscal balance",
+        "Investment",
+        "Business costs"
+      ],
+      "measure_tracks": [
+        {
+          "id": "tax-administration-incentives-measure-1",
+          "label": "amended rules",
+          "status": "source verified"
+        }
+      ],
+      "implementation_milestones": [
+        {
+          "id": "tax-administration-incentives-financing_allocated-2026-04-14",
+          "label": "tax incentive source event recorded",
+          "date": "2026-04-14",
+          "date_precision": "day",
+          "event_type": "financing_allocated",
+          "responsible_institutions": [
+            "Ministry of Investment, Industry and Trade of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-04-14-uzbekistan-expands-tax-incentives-for-investors-financing-infrastruct"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "tax-administration-incentives-financing_allocated-2026-05-12",
+          "label": "tax incentive source event recorded",
+          "date": "2026-05-12",
+          "date_precision": "day",
+          "event_type": "financing_allocated",
+          "responsible_institutions": [
+            "Ministry of Economy and Finance of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-05-12-information-on-work-completed-during-the-1st-quarter-of-2026-on-the-d"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "tax-administration-incentives-approved-2026-05-22",
+          "label": "official measure approved",
+          "date": "2026-05-22",
+          "date_precision": "day",
+          "event_type": "approved",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-05-22-270-22-05-2026-chet-el-fuqarolariga-maxsus-soliq-rejimini-taqdim-etis"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "tax-administration-incentives-amended-2026-07-20",
+          "label": "rules amended",
+          "date": "2026-07-20",
+          "date_precision": "day",
+          "event_type": "amended",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-07-20-2111-1-20-07-2026-o-zbekiston-respublikasi-xalq-bankidagi-fuqarolarni"
+          ],
+          "confidence": "medium"
+        }
+      ],
+      "official_source_events": [
+        {
+          "id": "source-event-2026-04-14-uzbekistan-expands-tax-incentives-for-investors-financing-infrastruct",
+          "title": "Uzbekistan Expands Tax Incentives for Investors Financing Infrastructure Projects",
+          "source_institution": "Ministry of Investment, Industry and Trade of the Republic of Uzbekistan",
+          "source_url": "https://gov.uz/en/miit/news/view/153388",
+          "source_published_at": "2026-04-14",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "financing_allocated",
+          "summary": "Official detail page did not expose a separate summary in the configured extraction block.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-05-18T12:45:00.000Z",
+          "localized": {
+            "title": {
+              "en": "Uzbekistan Expands Tax Incentives for Investors Financing Infrastructure Projects",
+              "ru": "В Узбекистане расширены налоговые льготы для инвесторов, финансирующих инфраструктурные проекты",
+              "uz": "Ўзбекистон Республикаси Инвестициялар, саноат ва савдо вазирлиги"
+            },
+            "source_url": {
+              "en": "https://gov.uz/en/miit/news/view/153388",
+              "ru": "https://gov.uz/ru/miit/news/view/153388",
+              "uz": "https://gov.uz/uz/miit/news/view/153388"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-05-12-information-on-work-completed-during-the-1st-quarter-of-2026-on-the-d",
+          "title": "Information on work completed during the 1st quarter of 2026 on the development of information systems and artificial intelligence technologies",
+          "source_institution": "Ministry of Economy and Finance of Uzbekistan",
+          "source_url": "https://gov.uz/en/imv/news/view/164666",
+          "source_published_at": "2026-05-12",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "financing_allocated",
+          "summary": "Information on work completed during the 1st quarter of 2026 on the development of information systems and artificial intelligence technologies",
+          "source_url_status": "verified",
+          "extracted_at": "2026-05-15T09:00:00.000Z",
+          "localized": {
+            "title": {
+              "en": "Information on work completed during the 1st quarter of 2026 on the development of information systems and artificial intelligence technologies",
+              "ru": "Министерство экономики и финансов Республики Узбекистан",
+              "uz": "Ахборот тизимлари ва сунъий интеллект технологияларини ривожлантириш юзасидан 2026 йил 1-чораги давомида бажарилган ишлар бўйича маълумот"
+            },
+            "source_url": {
+              "en": "https://gov.uz/en/imv/news/view/164666",
+              "ru": "https://gov.uz/ru/imv/news/view/164666",
+              "uz": "https://gov.uz/uz/imv/news/view/164666"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-05-22-270-22-05-2026-chet-el-fuqarolariga-maxsus-soliq-rejimini-taqdim-etis",
+          "title": "270 22.05.2026 Chet el fuqarolariga maxsus soliq rejimini taqdim etish bo‘yicha ma’muriy reglamentni tasdiqlash to‘g‘risida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/-8218139",
+          "source_published_at": "2026-05-22",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "approved",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-05-23T15:00:00.000Z",
+          "localized": {
+            "title": {
+              "uz": "270 22.05.2026 Chet el fuqarolariga maxsus soliq rejimini taqdim etish bo‘yicha ma’muriy reglamentni tasdiqlash to‘g‘risida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/-8218139",
+              "uz": "https://lex.uz/uz/docs/-8218139"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-07-20-2111-1-20-07-2026-o-zbekiston-respublikasi-xalq-bankidagi-fuqarolarni",
+          "title": "2111-1 20.07.2026 Oʻzbekiston Respublikasi Xalq bankidagi fuqarolarning shaxsiy jamgʻarib boriladigan pensiya hisobvaraqlariga ixtiyoriy ravishda yoʻnaltiriladigan mablagʻlarga jismoniy shaxslardan olinadigan daromad soligʻi boʻyicha imtiyozni qoʻllash tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/8338621",
+          "source_published_at": "2026-07-20",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "amended",
+          "summary": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-07-22T05:34:21.202Z",
+          "localized": {
+            "title": {
+              "uz": "2111-1 20.07.2026 Oʻzbekiston Respublikasi Xalq bankidagi fuqarolarning shaxsiy jamgʻarib boriladigan pensiya hisobvaraqlariga ixtiyoriy ravishda yoʻnaltiriladigan mablagʻlarga jismoniy shaxslardan olinadigan daromad soligʻi boʻyicha imtiyozni qoʻllash tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/8338621",
+              "uz": "https://lex.uz/uz/docs/8338621"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        }
+      ],
+      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
+      "digest": {
+        "changed": "amended rules",
+        "applies_to": "Tax administration and fiscal incentives",
+        "effective_status": "Rules amended (2026-07-20)",
+        "document": "2111-1 20.07.2026 Oʻzbekiston Respublikasi Xalq bankidagi fuqarolarning shaxsiy jamgʻarib boriladigan pensiya hisobvaraqlariga ixtiyoriy ravishda yoʻnaltiriladigan mablagʻlarga jismoniy shaxslardan olinadigan daromad soligʻi boʻyicha imtiyozni qoʻllash tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
+      },
+      "localized": {
+        "title": {
+          "uz": "2111-1 20.07.2026 Oʻzbekiston Respublikasi Xalq bankidagi fuqarolarning shaxsiy jamgʻarib boriladigan pensiya hisobvaraqlariga ixtiyoriy ravishda yoʻnaltiriladigan mablagʻlarga jismoniy shaxslardan olinadigan daromad soligʻi boʻyicha imtiyozni qoʻllash tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
+        },
+        "short_summary": {
+          "uz": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
+        },
+        "parameters_or_amounts": {
+          "uz": [
+            "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
+          ]
+        },
+        "digest": {
+          "uz": {
+            "changed": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement.",
+            "document": "2111-1 20.07.2026 Oʻzbekiston Respublikasi Xalq bankidagi fuqarolarning shaxsiy jamgʻarib boriladigan pensiya hisobvaraqlariga ixtiyoriy ravishda yoʻnaltiriladigan mablagʻlarga jismoniy shaxslardan olinadigan daromad soligʻi boʻyicha imtiyozni qoʻllash tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
+          }
+        }
+      }
+    },
     {
       "package_id": "pkg-monetary-prudential-parameters-2026-07-16",
       "title": "Monetary and financial-sector parameter reform",
@@ -1160,445 +1898,6 @@
       }
     },
     {
-      "package_id": "pkg-customs-clearance-digitalization-2026-07-13",
-      "title": "Risk-based customs clearance and electronic declaration reform",
-      "policy_area": "Trade facilitation and customs digitalization",
-      "reform_category": "trade_customs",
-      "current_stage": "Instructions issued",
-      "current_stage_date": "2026-07-13",
-      "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-07-13",
-      "responsible_institutions": [
-        "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-      ],
-      "legal_basis": "Verified official source event: O‘RQ-1158-сон 13.07.2026. Toshkent xalqaro moliya markazi toʻgʻrisida.",
-      "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-      "short_summary": "Customs clearance, declaration, and border-process measures are updated.",
-      "parameters_or_amounts": [
-        "Customs and trade-facilitation procedures are updated.",
-        "Clearance and declaration processes are updated."
-      ],
-      "source_confidence": "high",
-      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
-      "model_relevance": [
-        "Trade flows",
-        "Import costs",
-        "Sector linkages"
-      ],
-      "policy_channels": [
-        "Customs clearance",
-        "Trade facilitation",
-        "Import and export transaction costs"
-      ],
-      "measure_tracks": [
-        {
-          "id": "customs-clearance-digitalization-measure-1",
-          "label": "Customs and trade-facilitation procedures were updated",
-          "status": "source verified"
-        }
-      ],
-      "implementation_milestones": [
-        {
-          "id": "customs-clearance-digitalization-implementation_milestone-2026-05-19",
-          "label": "implementation measure recorded",
-          "date": "2026-05-19",
-          "date_precision": "day",
-          "event_type": "implementation_milestone",
-          "responsible_institutions": [
-            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-05-19-pf-95-19-05-2026-soliq-organlari-faoliyatini-institutsional-jihatdan-"
-          ],
-          "confidence": "high",
-          "related_next_milestone_ids": [
-            "customs-clearance-digitalization-approved-2026-05-21"
-          ]
-        },
-        {
-          "id": "customs-clearance-digitalization-approved-2026-05-21",
-          "label": "official measure approved",
-          "date": "2026-05-21",
-          "date_precision": "day",
-          "event_type": "approved",
-          "responsible_institutions": [
-            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-05-21-266-21-05-2026-bojxona-hududida-qayta-ishlangan-tayyor-mahsulotlarni-"
-          ],
-          "confidence": "high",
-          "related_next_milestone_ids": [
-            "customs-clearance-digitalization-amended-2026-05-21"
-          ]
-        },
-        {
-          "id": "customs-clearance-digitalization-amended-2026-05-21",
-          "label": "rules amended",
-          "date": "2026-05-21",
-          "date_precision": "day",
-          "event_type": "amended",
-          "responsible_institutions": [
-            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-05-21-pq-193-21-05-2026-fitosanitariya-tartib-taomillarini-soddalashtirish-"
-          ],
-          "confidence": "high"
-        },
-        {
-          "id": "customs-clearance-digitalization-implementation_milestone-2026-06-02",
-          "label": "implementation measure recorded",
-          "date": "2026-06-02",
-          "date_precision": "day",
-          "event_type": "implementation_milestone",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-06-02-president-reviews-operations-of-polymer-products-enterprise"
-          ],
-          "confidence": "high"
-        },
-        {
-          "id": "customs-clearance-digitalization-instructions_issued-2026-06-03",
-          "label": "official measure recorded",
-          "date": "2026-06-03",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-06-03-277-03-06-2026-2026-2027-yillarda-hududlardagi-ijtimoiy-soha-muassasa"
-          ],
-          "confidence": "high"
-        },
-        {
-          "id": "customs-clearance-digitalization-instructions_issued-2026-06-17",
-          "label": "official measure recorded",
-          "date": "2026-06-17",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-06-17-address-by-the-president-of-the-republic-uzbekistan-shavkat-mirziyoye"
-          ],
-          "confidence": "high"
-        },
-        {
-          "id": "customs-clearance-digitalization-implementation_milestone-2026-07-03",
-          "label": "implementation measure recorded",
-          "date": "2026-07-03",
-          "date_precision": "day",
-          "event_type": "implementation_milestone",
-          "responsible_institutions": [
-            "Ministry of Economy and Finance of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-07-03-risk-based-electronic-assessment-system-introduced-for-audit-firms"
-          ],
-          "confidence": "medium"
-        },
-        {
-          "id": "customs-clearance-digitalization-instructions_issued-2026-07-13",
-          "label": "official measure recorded",
-          "date": "2026-07-13",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-07-13-o-rq-1158-13-07-2026-toshkent-xalqaro-moliya-markazi-to-g-risida"
-          ],
-          "confidence": "high"
-        }
-      ],
-      "official_source_events": [
-        {
-          "id": "source-event-2026-05-19-pf-95-19-05-2026-soliq-organlari-faoliyatini-institutsional-jihatdan-",
-          "title": "PF-95-сон 19.05.2026. Soliq organlari faoliyatini institutsional jihatdan takomillashtirish va soliq maʼmuriyatchiligida zamonaviy yondashuvlarni joriy etish chora-tadbirlari toʻgʻrisida",
-          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-          "source_url": "https://lex.uz/uz/docs/-8210422",
-          "source_published_at": "2026-05-19",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "implementation_milestone",
-          "summary": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure, Trade or customs modernization, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-05-23T15:00:00.000Z",
-          "localized": {
-            "title": {
-              "uz": "PF-95-сон 19.05.2026. Soliq organlari faoliyatini institutsional jihatdan takomillashtirish va soliq maʼmuriyatchiligida zamonaviy yondashuvlarni joriy etish chora-tadbirlari toʻgʻrisida"
-            },
-            "source_url": {
-              "ru": "https://lex.uz/ru/docs/-8210422",
-              "uz": "https://lex.uz/uz/docs/-8210422"
-            },
-            "source_url_status": {
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-05-21-266-21-05-2026-bojxona-hududida-qayta-ishlangan-tayyor-mahsulotlarni-",
-          "title": "266 21.05.2026 Bojxona hududida qayta ishlangan tayyor mahsulotlarni erkin muomalaga chiqarishda tovarlarning bojxona qiymatini belgilash va ular bo‘yicha bojxona to‘lovlarini hisoblash tartibi to‘g‘risidagi nizomni tasdiqlash haqida",
-          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-          "source_url": "https://lex.uz/uz/docs/-8215222",
-          "source_published_at": "2026-05-21",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "approved",
-          "summary": "Included by Legal or regulatory change, Adopted policy measure, Trade or customs modernization with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-05-23T15:00:00.000Z",
-          "localized": {
-            "title": {
-              "uz": "266 21.05.2026 Bojxona hududida qayta ishlangan tayyor mahsulotlarni erkin muomalaga chiqarishda tovarlarning bojxona qiymatini belgilash va ular bo‘yicha bojxona to‘lovlarini hisoblash tartibi to‘g‘risidagi nizomni tasdiqlash haqida"
-            },
-            "summary": {
-              "uz": "Included by Legal or regulatory change, Adopted policy measure, Trade or customs modernization with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program."
-            },
-            "source_url": {
-              "ru": "https://lex.uz/ru/docs/-8215222",
-              "uz": "https://lex.uz/uz/docs/-8215222"
-            },
-            "source_url_status": {
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-05-21-pq-193-21-05-2026-fitosanitariya-tartib-taomillarini-soddalashtirish-",
-          "title": "PQ-193 21.05.2026 Fitosanitariya tartib-taomillarini soddalashtirish hamda meva-sabzavot va oziq-ovqat mahsulotlarini eksport qilish jarayonlarini takomillashtirishga doir qo‘shimcha chora-tadbirlar to‘g‘risida",
-          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-          "source_url": "https://lex.uz/uz/docs/-8214804",
-          "source_published_at": "2026-05-21",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "amended",
-          "summary": "Included by Legal or regulatory change, Trade or customs modernization with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-05-23T15:00:00.000Z",
-          "localized": {
-            "title": {
-              "uz": "PQ-193 21.05.2026 Fitosanitariya tartib-taomillarini soddalashtirish hamda meva-sabzavot va oziq-ovqat mahsulotlarini eksport qilish jarayonlarini takomillashtirishga doir qo‘shimcha chora-tadbirlar to‘g‘risida"
-            },
-            "summary": {
-              "uz": "Included by Legal or regulatory change, Trade or customs modernization with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program."
-            },
-            "source_url": {
-              "ru": "https://lex.uz/ru/docs/-8214804",
-              "uz": "https://lex.uz/uz/docs/-8214804"
-            },
-            "source_url_status": {
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-06-02-president-reviews-operations-of-polymer-products-enterprise",
-          "title": "President reviews operations of polymer products enterprise",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9269",
-          "source_published_at": "2026-06-02",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "implementation_milestone",
-          "summary": "Included by Adopted policy measure, Trade or customs modernization, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-06-03T07:23:07.947Z",
-          "localized": {
-            "title": {
-              "en": "President reviews operations of polymer products enterprise",
-              "ru": "Президент нашей страны ознакомился с деятельностью предприятия полимерной продукции",
-              "uz": "Президентимиз полимер маҳсулотлар корхонаси билан танишди"
-            },
-            "summary": {
-              "en": "Included by Adopted policy measure, Trade or customs modernization, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
-              "ru": "В рамках проекта создано 50 новых рабочих мест.",
-              "uz": "Россиянинг “Polymers” компанияси билан ҳамкорликда ташкил этилган мазкур лойиҳа махсус ва кенг ассортиментдаги полиэтилен плёнка маҳсулотлари ишлаб чиқаришга ихтисослашган."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9269",
-              "ru": "https://president.uz/ru/lists/view/9269",
-              "uz": "https://president.uz/uz/lists/view/9269"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-06-03-277-03-06-2026-2026-2027-yillarda-hududlardagi-ijtimoiy-soha-muassasa",
-          "title": "277-сон 03.06.2026. 2026-2027-yillarda hududlardagi ijtimoiy soha muassasalarida energiya samaradorligi loyihalari koʻlamini kengaytirish chora-tadbirlari toʻgʻrisida",
-          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-          "source_url": "https://lex.uz/uz/docs/-8244376",
-          "source_published_at": "2026-06-03",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure, Trade or customs modernization, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-06-10T06:48:58.796Z",
-          "localized": {
-            "title": {
-              "uz": "277-сон 03.06.2026. 2026-2027-yillarda hududlardagi ijtimoiy soha muassasalarida energiya samaradorligi loyihalari koʻlamini kengaytirish chora-tadbirlari toʻgʻrisida"
-            },
-            "source_url": {
-              "ru": "https://lex.uz/ru/docs/-8244376",
-              "uz": "https://lex.uz/uz/docs/-8244376"
-            },
-            "source_url_status": {
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-06-17-address-by-the-president-of-the-republic-uzbekistan-shavkat-mirziyoye",
-          "title": "Address by the President of the Republic Uzbekistan Shavkat Mirziyoyev at the Fifth Tashkent International Investment Forum",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9317",
-          "source_published_at": "2026-06-17",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Address by the President of the Republic Uzbekistan Shavkat Mirziyoyev at the Fifth Tashkent International Investment Forum",
-          "source_url_status": "verified",
-          "extracted_at": "2026-06-18T07:16:43.590Z",
-          "localized": {
-            "title": {
-              "en": "Address by the President of the Republic Uzbekistan Shavkat Mirziyoyev at the Fifth Tashkent International Investment Forum",
-              "ru": "Выступление Президента Республики Узбекистан Шавката Мирзиёева на пятом Ташкентском международном инвестиционном форуме",
-              "uz": "Ўзбекистон Республикаси Президенти Шавкат Мирзиёевнинг бешинчи Тошкент халқаро инвестиция форумидаги нутқи"
-            },
-            "summary": {
-              "ru": "Также из года в год повышается международный кредитный рейтинг Узбекистана. В обеспечении прав инвесторов решающее значение имеет использование сильных институтов и признанных международных механизмов.",
-              "uz": "Жорий йилги форумда дунёнинг 100 дан ортиқ давлатидан 4 мингга яқин хорижий меҳмонлар қатнашаётгани ҳам анжуманимиз нуфузи юксалиб бораётганини яққол тасдиқлайди. Шу билан бирга, Ўзбекистоннинг халқаро кредит рейтинги йил сайин яхшиланиб бормоқда."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9317",
-              "ru": "https://president.uz/ru/lists/view/9317",
-              "uz": "https://president.uz/uz/lists/view/9317"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-07-03-risk-based-electronic-assessment-system-introduced-for-audit-firms",
-          "title": "Risk-based electronic assessment system introduced for audit firms",
-          "source_institution": "Ministry of Economy and Finance of Uzbekistan",
-          "source_url": "https://gov.uz/en/imv/news/view/187816",
-          "source_published_at": "2026-07-03",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "implementation_milestone",
-          "summary": "Official detail page did not expose a separate summary in the configured extraction block.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-07-04T05:59:23.134Z",
-          "localized": {
-            "title": {
-              "en": "Risk-based electronic assessment system introduced for audit firms",
-              "ru": "Министерство экономики и финансов Республики Узбекистан",
-              "uz": "Аудиторлик ташкилотлари фаолиятини хавфга асосланган электрон баҳолаш тизими жорий этилмоқда"
-            },
-            "source_url": {
-              "en": "https://gov.uz/en/imv/news/view/187816",
-              "ru": "https://gov.uz/ru/imv/news/view/187816",
-              "uz": "https://gov.uz/uz/imv/news/view/187816"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-07-13-o-rq-1158-13-07-2026-toshkent-xalqaro-moliya-markazi-to-g-risida",
-          "title": "O‘RQ-1158-сон 13.07.2026. Toshkent xalqaro moliya markazi toʻgʻrisida",
-          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-          "source_url": "https://lex.uz/uz/docs/-8323797",
-          "source_published_at": "2026-07-13",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Included by Legal or regulatory change, Adopted policy measure, Trade or customs modernization, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-07-17T10:52:49.131Z",
-          "localized": {
-            "title": {
-              "uz": "O‘RQ-1158-сон 13.07.2026. Toshkent xalqaro moliya markazi toʻgʻrisida"
-            },
-            "summary": {
-              "uz": "Included by Legal or regulatory change, Adopted policy measure, Trade or customs modernization, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
-            },
-            "source_url": {
-              "ru": "https://lex.uz/ru/docs/-8323797",
-              "uz": "https://lex.uz/uz/docs/-8323797"
-            },
-            "source_url_status": {
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        }
-      ],
-      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
-      "digest": {
-        "changed": "Customs and trade-facilitation procedures are updated.",
-        "applies_to": "Trade facilitation and customs digitalization",
-        "effective_status": "Instructions issued (2026-07-13)",
-        "document": "O‘RQ-1158-сон 13.07.2026. Toshkent xalqaro moliya markazi toʻgʻrisida"
-      },
-      "localized": {
-        "title": {
-          "uz": "O‘RQ-1158-сон 13.07.2026. Toshkent xalqaro moliya markazi toʻgʻrisida"
-        },
-        "short_summary": {
-          "ru": "Также из года в год повышается международный кредитный рейтинг Узбекистана.",
-          "uz": "Included by Legal or regulatory change, Adopted policy measure, Trade or customs modernization, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
-        },
-        "parameters_or_amounts": {
-          "ru": [
-            "Также из года в год повышается международный кредитный рейтинг Узбекистана.",
-            "В обеспечении прав инвесторов решающее значение имеет использование сильных институтов и признанных международных механизмов.",
-            "В связи с этим с марта мы начали работу по созданию Ташкентского международного финансового центра.",
-            "Для участников данного центра будет создана привлекательная налоговая система – налог на прибыль, на добавленную стоимость, на имущество и таможенные пошлины составят ноль процентов.",
-            "Будет создана современная система для использования финансовых технологий, цифровых активов и «зеленого» финансирования.",
-            "На начальном этапе срок действия таких льгот будет установлен на период в 50 лет.",
-            "В центре будут внедрены специальные процедуры и принципы, основанные на английском праве, создан независимый Ташкентский международный коммерческий суд.",
-            "Для укрепления правовой основы подобных реформ будут приняты законы «О рынке капитала» и «Об альтернативных инвестиционных фондах»."
-          ],
-          "uz": [
-            "Included by Legal or regulatory change, Adopted policy measure, Trade or customs modernization, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
-          ]
-        },
-        "digest": {
-          "ru": {
-            "changed": "Также из года в год повышается международный кредитный рейтинг Узбекистана."
-          },
-          "uz": {
-            "changed": "Included by Legal or regulatory change, Adopted policy measure, Trade or customs modernization, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program.",
-            "document": "O‘RQ-1158-сон 13.07.2026. Toshkent xalqaro moliya markazi toʻgʻrisida"
-          }
-        }
-      }
-    },
-    {
       "package_id": "pkg-large-investment-integrity-competition-review-2026-07-09",
       "title": "Large investment project integrity and competition review reform",
       "policy_area": "Investment project anti-corruption review and competition impact assessment",
@@ -2233,207 +2532,6 @@
           "uz": {
             "changed": "Балиқчилик хўжаликларига кредитлар ажратиш, миллий ва хорижий валютадаги кредитлар бўйича фоиз харажатларини қисман қоплаш механизмлари жорий этилади.",
             "document": "Балиқчилик тармоғини ривожлантириш чоралари муҳокама қилинди"
-          }
-        }
-      }
-    },
-    {
-      "package_id": "pkg-tax-administration-incentives-2026-05-22",
-      "title": "Tax administration and investment incentive reform",
-      "policy_area": "Tax administration and fiscal incentives",
-      "reform_category": "fiscal_tax",
-      "current_stage": "Regulation approved",
-      "current_stage_date": "2026-05-22",
-      "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-05-22",
-      "responsible_institutions": [
-        "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-      ],
-      "legal_basis": "Verified official source event: 270 22.05.2026 Chet el fuqarolariga maxsus soliq rejimini taqdim etish bo‘yicha ma’muriy reglamentni tasdiqlash to‘g‘risida.",
-      "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-      "short_summary": "Special tax-regime procedures for foreign citizens are approved.",
-      "parameters_or_amounts": [
-        "Administrative regulation for granting a special tax regime to foreign citizens is approved.",
-        "Tax-administration procedures are updated for the special-regime application process."
-      ],
-      "source_confidence": "high",
-      "why_tracked": "The verified legal act approves administrative regulation for granting a special tax regime to foreign citizens.",
-      "model_relevance": [
-        "Fiscal administration",
-        "Investment climate",
-        "Business costs"
-      ],
-      "policy_channels": [
-        "Tax administration",
-        "Foreign-resident fiscal treatment",
-        "Investment and talent attraction",
-        "Business compliance procedures"
-      ],
-      "measure_tracks": [
-        {
-          "id": "tax-administration-incentives-measure-1",
-          "label": "Special tax-regime administrative regulation was approved",
-          "status": "approved"
-        }
-      ],
-      "implementation_milestones": [
-        {
-          "id": "tax-administration-incentives-financing_allocated-2026-04-14",
-          "label": "tax incentive source event recorded",
-          "date": "2026-04-14",
-          "date_precision": "day",
-          "event_type": "financing_allocated",
-          "responsible_institutions": [
-            "Ministry of Investment, Industry and Trade of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-04-14-uzbekistan-expands-tax-incentives-for-investors-financing-infrastruct"
-          ],
-          "confidence": "high"
-        },
-        {
-          "id": "tax-administration-incentives-financing_allocated-2026-05-12",
-          "label": "tax incentive source event recorded",
-          "date": "2026-05-12",
-          "date_precision": "day",
-          "event_type": "financing_allocated",
-          "responsible_institutions": [
-            "Ministry of Economy and Finance of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-05-12-information-on-work-completed-during-the-1st-quarter-of-2026-on-the-d"
-          ],
-          "confidence": "high"
-        },
-        {
-          "id": "tax-administration-incentives-approved-2026-05-22",
-          "label": "official measure approved",
-          "date": "2026-05-22",
-          "date_precision": "day",
-          "event_type": "approved",
-          "responsible_institutions": [
-            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-05-22-270-22-05-2026-chet-el-fuqarolariga-maxsus-soliq-rejimini-taqdim-etis"
-          ],
-          "confidence": "high"
-        }
-      ],
-      "official_source_events": [
-        {
-          "id": "source-event-2026-04-14-uzbekistan-expands-tax-incentives-for-investors-financing-infrastruct",
-          "title": "Uzbekistan Expands Tax Incentives for Investors Financing Infrastructure Projects",
-          "source_institution": "Ministry of Investment, Industry and Trade of the Republic of Uzbekistan",
-          "source_url": "https://gov.uz/en/miit/news/view/153388",
-          "source_published_at": "2026-04-14",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "financing_allocated",
-          "summary": "Official detail page did not expose a separate summary in the configured extraction block.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-05-18T12:45:00.000Z",
-          "localized": {
-            "title": {
-              "en": "Uzbekistan Expands Tax Incentives for Investors Financing Infrastructure Projects",
-              "ru": "В Узбекистане расширены налоговые льготы для инвесторов, финансирующих инфраструктурные проекты",
-              "uz": "Ўзбекистон Республикаси Инвестициялар, саноат ва савдо вазирлиги"
-            },
-            "source_url": {
-              "en": "https://gov.uz/en/miit/news/view/153388",
-              "ru": "https://gov.uz/ru/miit/news/view/153388",
-              "uz": "https://gov.uz/uz/miit/news/view/153388"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-05-12-information-on-work-completed-during-the-1st-quarter-of-2026-on-the-d",
-          "title": "Information on work completed during the 1st quarter of 2026 on the development of information systems and artificial intelligence technologies",
-          "source_institution": "Ministry of Economy and Finance of Uzbekistan",
-          "source_url": "https://gov.uz/en/imv/news/view/164666",
-          "source_published_at": "2026-05-12",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "financing_allocated",
-          "summary": "Information on work completed during the 1st quarter of 2026 on the development of information systems and artificial intelligence technologies",
-          "source_url_status": "verified",
-          "extracted_at": "2026-05-15T09:00:00.000Z",
-          "localized": {
-            "title": {
-              "en": "Information on work completed during the 1st quarter of 2026 on the development of information systems and artificial intelligence technologies",
-              "ru": "Министерство экономики и финансов Республики Узбекистан",
-              "uz": "Ахборот тизимлари ва сунъий интеллект технологияларини ривожлантириш юзасидан 2026 йил 1-чораги давомида бажарилган ишлар бўйича маълумот"
-            },
-            "source_url": {
-              "en": "https://gov.uz/en/imv/news/view/164666",
-              "ru": "https://gov.uz/ru/imv/news/view/164666",
-              "uz": "https://gov.uz/uz/imv/news/view/164666"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-05-22-270-22-05-2026-chet-el-fuqarolariga-maxsus-soliq-rejimini-taqdim-etis",
-          "title": "270 22.05.2026 Chet el fuqarolariga maxsus soliq rejimini taqdim etish bo‘yicha ma’muriy reglamentni tasdiqlash to‘g‘risida",
-          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-          "source_url": "https://lex.uz/uz/docs/-8218139",
-          "source_published_at": "2026-05-22",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "approved",
-          "summary": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-05-23T15:00:00.000Z",
-          "localized": {
-            "title": {
-              "uz": "270 22.05.2026 Chet el fuqarolariga maxsus soliq rejimini taqdim etish bo‘yicha ma’muriy reglamentni tasdiqlash to‘g‘risida"
-            },
-            "summary": {
-              "uz": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change."
-            },
-            "source_url": {
-              "ru": "https://lex.uz/ru/docs/-8218139",
-              "uz": "https://lex.uz/uz/docs/-8218139"
-            },
-            "source_url_status": {
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        }
-      ],
-      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
-      "digest": {
-        "changed": "Administrative regulation for granting a special tax regime to foreign citizens is approved.",
-        "applies_to": "Tax administration and fiscal incentives",
-        "effective_status": "Regulation approved (2026-05-22)",
-        "document": "270 22.05.2026 Chet el fuqarolariga maxsus soliq rejimini taqdim etish bo‘yicha ma’muriy reglamentni tasdiqlash to‘g‘risida"
-      },
-      "localized": {
-        "title": {
-          "uz": "270 22.05.2026 Chet el fuqarolariga maxsus soliq rejimini taqdim etish bo‘yicha ma’muriy reglamentni tasdiqlash to‘g‘risida"
-        },
-        "short_summary": {
-          "uz": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change."
-        },
-        "parameters_or_amounts": {
-          "uz": [
-            "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change."
-          ]
-        },
-        "digest": {
-          "uz": {
-            "changed": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
-            "document": "270 22.05.2026 Chet el fuqarolariga maxsus soliq rejimini taqdim etish bo‘yicha ma’muriy reglamentni tasdiqlash to‘g‘risida"
           }
         }
       }
@@ -3588,7 +3686,7 @@
       "title": "Model routing notes for current reform packages",
       "summary": "Internal package-routing note retained for non-public workflow compatibility.",
       "package_ids": [
-        "pkg-customs-clearance-digitalization-2026-07-13",
+        "pkg-customs-clearance-digitalization-2026-07-21",
         "pkg-public-transport-system-2026-05-13",
         "pkg-food-safety-veterinary-agrologistics-2026-06-11"
       ],
@@ -4017,6 +4115,90 @@
     ],
     "package_links": [
       {
+        "package_id": "pkg-customs-clearance-digitalization-2026-07-21",
+        "active_lenses": [
+          {
+            "model_id": "DFM",
+            "channel": "High-frequency monitoring context.",
+            "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "I-O",
+            "channel": "Sector-linkage and final-demand propagation context.",
+            "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "PE",
+            "channel": "Direct tariff-incidence and trade-flow context.",
+            "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "CGE",
+            "channel": "Experimental economy-wide comparative-static reference.",
+            "caveat": "Experimental reference only; not a forecast or model-owner-approved estimate."
+          }
+        ],
+        "gated_lenses": [
+          {
+            "model_id": "FPP",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "HFI",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "Synthesis",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          }
+        ]
+      },
+      {
+        "package_id": "pkg-tax-administration-incentives-2026-07-20",
+        "active_lenses": [
+          {
+            "model_id": "DFM",
+            "channel": "High-frequency monitoring context.",
+            "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "I-O",
+            "channel": "Sector-linkage and final-demand propagation context.",
+            "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "PE",
+            "channel": "Direct tariff-incidence and trade-flow context.",
+            "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "CGE",
+            "channel": "Experimental economy-wide comparative-static reference.",
+            "caveat": "Experimental reference only; not a forecast or model-owner-approved estimate."
+          }
+        ],
+        "gated_lenses": [
+          {
+            "model_id": "FPP",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "HFI",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "Synthesis",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          }
+        ]
+      },
+      {
         "package_id": "pkg-monetary-prudential-parameters-2026-07-16",
         "active_lenses": [
           {
@@ -4076,48 +4258,6 @@
           {
             "model_id": "QPM",
             "channel": "Macro-financial and inflation transmission context.",
-            "caveat": "Possible lens only."
-          },
-          {
-            "model_id": "CGE",
-            "channel": "Experimental economy-wide comparative-static reference.",
-            "caveat": "Experimental reference only; not a forecast or model-owner-approved estimate."
-          }
-        ],
-        "gated_lenses": [
-          {
-            "model_id": "FPP",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "HFI",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "Synthesis",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          }
-        ]
-      },
-      {
-        "package_id": "pkg-customs-clearance-digitalization-2026-07-13",
-        "active_lenses": [
-          {
-            "model_id": "DFM",
-            "channel": "High-frequency monitoring context.",
-            "caveat": "Possible lens only."
-          },
-          {
-            "model_id": "I-O",
-            "channel": "Sector-linkage and final-demand propagation context.",
-            "caveat": "Possible lens only."
-          },
-          {
-            "model_id": "PE",
-            "channel": "Direct tariff-incidence and trade-flow context.",
             "caveat": "Possible lens only."
           },
           {
@@ -4215,48 +4355,6 @@
       },
       {
         "package_id": "pkg-food-safety-veterinary-agrologistics-2026-06-11",
-        "active_lenses": [
-          {
-            "model_id": "DFM",
-            "channel": "High-frequency monitoring context.",
-            "caveat": "Possible lens only."
-          },
-          {
-            "model_id": "I-O",
-            "channel": "Sector-linkage and final-demand propagation context.",
-            "caveat": "Possible lens only."
-          },
-          {
-            "model_id": "PE",
-            "channel": "Direct tariff-incidence and trade-flow context.",
-            "caveat": "Possible lens only."
-          },
-          {
-            "model_id": "CGE",
-            "channel": "Experimental economy-wide comparative-static reference.",
-            "caveat": "Experimental reference only; not a forecast or model-owner-approved estimate."
-          }
-        ],
-        "gated_lenses": [
-          {
-            "model_id": "FPP",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "HFI",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "Synthesis",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          }
-        ]
-      },
-      {
-        "package_id": "pkg-tax-administration-incentives-2026-05-22",
         "active_lenses": [
           {
             "model_id": "DFM",
