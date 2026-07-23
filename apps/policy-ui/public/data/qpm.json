@@ -4,7 +4,7 @@
     "model_name": "Quarterly Projection Model (Uzbekistan)",
     "module": "qpm",
     "version": "0.3.0",
-    "run_id": "qpm-nightly-2026-07-22",
+    "run_id": "qpm-nightly-2026-07-23",
     "data_version": "Overview 2026-07-17",
     "timestamp": "2026-07-17T09:31:21.521Z"
   },
@@ -344,7 +344,7 @@
     }
   ],
   "metadata": {
-    "exported_at": "2026-07-22T22:04:44Z",
+    "exported_at": "2026-07-23T22:03:33Z",
     "source_script_sha": null,
     "solver_version": "0.3.0",
     "baseline_source": {
