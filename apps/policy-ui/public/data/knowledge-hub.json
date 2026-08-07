@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-08-06T05:33:24.625Z",
+  "generated_at": "2026-08-07T04:36:13.833Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -307,7 +307,7 @@
       "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-06T05:33:24.625Z"
+      "fetched_at": "2026-08-07T04:36:13.833Z"
     },
     {
       "id": "president-reform-news",
@@ -316,10 +316,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 4,
-      "excluded_count": 8,
+      "candidate_count": 3,
+      "excluded_count": 9,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-06T05:33:24.625Z"
+      "fetched_at": "2026-08-07T04:36:13.833Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-06T05:33:24.625Z"
+      "fetched_at": "2026-08-07T04:36:13.833Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-06T05:33:24.625Z"
+      "fetched_at": "2026-08-07T04:36:13.833Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-06T05:33:24.625Z"
+      "fetched_at": "2026-08-07T04:36:13.833Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-06T05:33:24.625Z"
+      "fetched_at": "2026-08-07T04:36:13.833Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 353,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-06T05:33:24.625Z"
+      "fetched_at": "2026-08-07T04:36:13.833Z"
     },
     {
       "id": "customs-committee-news",
@@ -391,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-06T05:33:24.625Z"
+      "fetched_at": "2026-08-07T04:36:13.833Z"
     },
     {
       "id": "mef-policy-news",
@@ -400,10 +400,10 @@
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
       "ok": true,
-      "candidate_count": 2,
-      "excluded_count": 10,
+      "candidate_count": 1,
+      "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-06T05:33:24.625Z"
+      "fetched_at": "2026-08-07T04:36:13.833Z"
     },
     {
       "id": "tax-committee-news",
@@ -415,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-06T05:33:24.625Z"
+      "fetched_at": "2026-08-07T04:36:13.833Z"
     },
     {
       "id": "energy-ministry-news",
@@ -427,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-06T05:33:24.625Z"
+      "fetched_at": "2026-08-07T04:36:13.833Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -439,7 +439,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-06T05:33:24.625Z"
+      "fetched_at": "2026-08-07T04:36:13.833Z"
     },
     {
       "id": "justice-ministry-news",
@@ -451,7 +451,7 @@
       "candidate_count": 2,
       "excluded_count": 10,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-06T05:33:24.625Z"
+      "fetched_at": "2026-08-07T04:36:13.833Z"
     }
   ],
   "reform_packages": [
@@ -768,21 +768,23 @@
       "title": "Tax administration and investment incentive reform",
       "policy_area": "Tax administration and fiscal incentives",
       "reform_category": "fiscal_tax",
-      "current_stage": "Implementation started",
+      "current_stage": "Multiple changes published",
       "current_stage_date": "2026-08-04",
       "next_milestone": "No future milestone published in verified source",
       "next_milestone_date": "2026-08-04",
       "responsible_institutions": [
+        "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
         "Official website of the President of the Republic of Uzbekistan"
       ],
-      "legal_basis": "Verified official source event: President reviews proposals to improve the remuneration system for civil servants.",
-      "official_basis": "Official website of the President of the Republic of Uzbekistan",
-      "short_summary": "The cited official document updates tax administration and fiscal incentives rules or procedures.",
+      "legal_basis": "Verified official source events: PQ-289-сон 03.08.2026. Xavfli chiqindilarni boshqarish samaradorligini oshirish chora-tadbirlari toʻgʻrisida; PQ-292-сон 04.08.2026. Alohida taʼlimga ehtiyoji boʻlgan bolalarni taʼlim va ijtimoiy xizmatlar bilan qamrab olish tizimini takomillashtirish boʻyicha qoʻshimcha chora-tadbirlar toʻgʻrisida; President reviews proposals to improve the remuneration system for civil servants.",
+      "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz); Official website of the President of the Republic of Uzbekistan",
+      "short_summary": "3 official measures update tax administration and fiscal incentives rules or procedures.",
       "parameters_or_amounts": [
+        "approved measures",
         "verified official measure"
       ],
       "source_confidence": "high",
-      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "why_tracked": "The package is assembled from 3 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
       "model_relevance": [
         "Fiscal balance",
         "Investment",
@@ -796,6 +798,16 @@
       "measure_tracks": [
         {
           "id": "tax-administration-incentives-measure-1",
+          "label": "approved measures",
+          "status": "source verified"
+        },
+        {
+          "id": "tax-administration-incentives-measure-2",
+          "label": "approved measures",
+          "status": "source verified"
+        },
+        {
+          "id": "tax-administration-incentives-measure-3",
           "label": "verified official measure",
           "status": "source verified"
         }
@@ -928,6 +940,24 @@
           "confidence": "medium"
         },
         {
+          "id": "tax-administration-incentives-instructions_issued-2026-08-03",
+          "label": "official measure recorded",
+          "date": "2026-08-03",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-03-pq-289-03-08-2026-xavfli-chiqindilarni-boshqarish-samaradorligini-osh"
+          ],
+          "confidence": "high",
+          "related_next_milestone_ids": [
+            "tax-administration-incentives-amended-2026-08-04"
+          ]
+        },
+        {
           "id": "tax-administration-incentives-implementation_milestone-2026-08-04",
           "label": "implementation measure recorded",
           "date": "2026-08-04",
@@ -941,6 +971,24 @@
             "source-event-2026-08-04-president-reviews-proposals-to-improve-the-remuneration-system-for-ci"
           ],
           "confidence": "high"
+        },
+        {
+          "id": "tax-administration-incentives-amended-2026-08-04",
+          "label": "rules amended",
+          "date": "2026-08-04",
+          "date_precision": "day",
+          "event_type": "amended",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-04-pq-292-04-08-2026-alohida-ta-limga-ehtiyoji-bo-lgan-bolalarni-ta-lim-"
+          ],
+          "confidence": "high",
+          "related_next_milestone_ids": [
+            "tax-administration-incentives-implementation_milestone-2026-08-04"
+          ]
         }
       ],
       "official_source_events": [
@@ -1177,6 +1225,56 @@
           }
         },
         {
+          "id": "source-event-2026-08-03-pq-289-03-08-2026-xavfli-chiqindilarni-boshqarish-samaradorligini-osh",
+          "title": "PQ-289-сон 03.08.2026. Xavfli chiqindilarni boshqarish samaradorligini oshirish chora-tadbirlari toʻgʻrisida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/-8372025",
+          "source_published_at": "2026-08-03",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-07T04:36:13.833Z",
+          "localized": {
+            "title": {
+              "uz": "PQ-289-сон 03.08.2026. Xavfli chiqindilarni boshqarish samaradorligini oshirish chora-tadbirlari toʻgʻrisida"
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/-8372025",
+              "uz": "https://lex.uz/uz/docs/-8372025"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-08-04-pq-292-04-08-2026-alohida-ta-limga-ehtiyoji-bo-lgan-bolalarni-ta-lim-",
+          "title": "PQ-292-сон 04.08.2026. Alohida taʼlimga ehtiyoji boʻlgan bolalarni taʼlim va ijtimoiy xizmatlar bilan qamrab olish tizimini takomillashtirish boʻyicha qoʻshimcha chora-tadbirlar toʻgʻrisida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/-8375051",
+          "source_published_at": "2026-08-04",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "amended",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-07T04:36:13.833Z",
+          "localized": {
+            "title": {
+              "uz": "PQ-292-сон 04.08.2026. Alohida taʼlimga ehtiyoji boʻlgan bolalarni taʼlim va ijtimoiy xizmatlar bilan qamrab olish tizimini takomillashtirish boʻyicha qoʻshimcha chora-tadbirlar toʻgʻrisida"
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/-8375051",
+              "uz": "https://lex.uz/uz/docs/-8375051"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
           "id": "source-event-2026-08-04-president-reviews-proposals-to-improve-the-remuneration-system-for-ci",
           "title": "President reviews proposals to improve the remuneration system for civil servants",
           "source_institution": "Official website of the President of the Republic of Uzbekistan",
@@ -1213,9 +1311,9 @@
       ],
       "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
       "digest": {
-        "changed": "verified official measure",
+        "changed": "approved measures",
         "applies_to": "Tax administration and fiscal incentives",
-        "effective_status": "Implementation started (2026-08-04)",
+        "effective_status": "Multiple changes published (2026-08-04)",
         "document": "President reviews proposals to improve the remuneration system for civil servants"
       },
       "localized": {
