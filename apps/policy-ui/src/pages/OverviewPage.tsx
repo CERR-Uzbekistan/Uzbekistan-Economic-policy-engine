@@ -1,0 +1,275 @@
+import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { CaveatPanel } from '../components/overview/CaveatPanel'
+import { EconomicStateHeader } from '../components/overview/EconomicStateHeader'
+import { IndicatorPanelGrid } from '../components/overview/IndicatorPanelGrid'
+import { KpiStrip } from '../components/overview/KpiStrip'
+import { NowcastForecastBlock } from '../components/overview/NowcastForecastBlock'
+import { OverviewFeeds } from '../components/overview/OverviewFeeds'
+import { ReferencesFooter } from '../components/overview/ReferencesFooter'
+import { RiskPanel } from '../components/overview/RiskPanel'
+import { PageContainer } from '../components/layout/PageContainer'
+import { PageHeader } from '../components/layout/PageHeader'
+import { TrustStateLabel } from '../components/system/TrustStateLabel'
+import {
+  getInitialOverviewSourceState,
+  loadOverviewSourceState,
+} from '../data/overview/source'
+import {
+  buildArtifactAlignedNowcastChart,
+  shouldUseDfmNowcastChart,
+} from '../data/overview/nowcast-chart-selection'
+import { useDfmNowcast } from '../data/overview/useDfmNowcast'
+import { NowcastBanner, type NowcastBannerErrorKind } from '../components/overview/NowcastBanner'
+import { DfmTransportError, DfmValidationError } from '../data/bridge/dfm-client'
+import { beginRetry } from '../data/source-state'
+import { setPageFreshness } from '../state/pageFreshness'
+import './overview.css'
+
+function dfmErrorKind(error: DfmTransportError | DfmValidationError): NowcastBannerErrorKind {
+  return error instanceof DfmValidationError ? 'validation' : 'transport'
+}
+
+function dfmErrorDetail(error: DfmTransportError | DfmValidationError): string | undefined {
+  if (error instanceof DfmTransportError) {
+    if (error.kind === 'http' && error.status !== null) {
+      return `HTTP ${error.status}`
+    }
+    return error.kind
+  }
+  const issue = error.issues[0]
+  if (issue) {
+    return `${issue.path || 'payload'}: ${issue.message}`
+  }
+  return undefined
+}
+
+
+function formatDate(value: string, locale: string): string {
+  const parsed = Date.parse(value)
+  if (!Number.isFinite(parsed)) {
+    return value
+  }
+  return new Intl.DateTimeFormat(locale, {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  }).format(new Date(parsed))
+}
+
+export function OverviewPage() {
+  const { t, i18n } = useTranslation()
+  const locale = i18n.resolvedLanguage ?? 'en'
+  const [sourceState, setSourceState] = useState(getInitialOverviewSourceState)
+  const overviewData = sourceState.snapshot
+  const headlineMetrics = useMemo(() => overviewData?.headline_metrics ?? [], [overviewData])
+  const { state: dfmState, refetch: refetchDfm } = useDfmNowcast()
+
+  useEffect(() => {
+    let cancelled = false
+    loadOverviewSourceState().then((state) => {
+      if (!cancelled) {
+        setSourceState(state)
+      }
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  async function handleRetry() {
+    setSourceState((prev) => beginRetry(prev))
+    const nextState = await loadOverviewSourceState()
+    setSourceState(nextState)
+  }
+
+  const headlineFreshnessAge = useMemo(() => {
+    const ages = headlineMetrics
+      .map((metric) => metric.freshness_age_days)
+      .filter((age): age is number => typeof age === 'number' && Number.isFinite(age))
+    return ages.length > 0 ? Math.max(...ages) : null
+  }, [headlineMetrics])
+
+  useEffect(() => {
+    if (sourceState.status !== 'ready' || !overviewData || headlineFreshnessAge === null) {
+      setPageFreshness(null)
+      return () => {
+        setPageFreshness(null)
+      }
+    }
+    setPageFreshness({ ageInDays: headlineFreshnessAge })
+    return () => {
+      setPageFreshness(null)
+    }
+  }, [headlineFreshnessAge, overviewData, sourceState.status])
+
+  if (sourceState.status === 'loading') {
+    return (
+      <PageContainer className="overview-page">
+        <PageHeader title={t('pages.overview.title')} description={t('pages.overview.description')} />
+        <p className="empty-state" role="status" aria-live="polite">
+          {t('states.loading.overview')}
+        </p>
+      </PageContainer>
+    )
+  }
+
+  if (sourceState.status === 'error' || !overviewData) {
+    return (
+      <PageContainer className="overview-page">
+        <PageHeader title={t('pages.overview.title')} description={t('pages.overview.description')} />
+        <p className="empty-state" role="alert">
+          {sourceState.error ?? t('states.error.overviewUnavailable')}
+        </p>
+        {sourceState.canRetry ? (
+          <div>
+            <button type="button" className="ui-secondary-action" onClick={handleRetry}>
+              {t('buttons.retry')}
+            </button>
+          </div>
+        ) : null}
+      </PageContainer>
+    )
+  }
+
+  const {
+    summary,
+    generated_at,
+    model_ids,
+    headline_metrics,
+    nowcast_forecast,
+    top_risks,
+    analysis_actions,
+    caveats,
+    references,
+    activity_feed,
+    provenance,
+    indicator_groups,
+    artifact_summary_metrics,
+  } = overviewData
+
+  const overviewNowcastMetrics = [...(artifact_summary_metrics ?? []), ...headline_metrics]
+  const primaryHeadlineMetrics = headline_metrics.slice(0, 8)
+  const artifactAlignedNowcastChart = buildArtifactAlignedNowcastChart(overviewNowcastMetrics)
+  const useLiveDfmNowcastChart =
+    dfmState.status === 'bridge' && shouldUseDfmNowcastChart(dfmState.chart, overviewNowcastMetrics)
+  const displayedNowcastChart = useLiveDfmNowcastChart
+    ? dfmState.chart
+    : artifactAlignedNowcastChart ??
+      (sourceState.sourceKind === 'overview-artifact' ? null : nowcast_forecast)
+  const hasIntegrityWarnings = (indicator_groups ?? []).some((group) =>
+    group.metrics.some((metric) => metric.freshness_status !== 'current'),
+  )
+  const displayedNowcastTrustId = useLiveDfmNowcastChart
+    ? 'liveBridgeJson'
+    : sourceState.sourceKind === 'overview-artifact'
+      ? 'overviewArtifact'
+      : 'fallbackMock'
+
+  const pageHeaderMeta = (
+    <>
+      <TrustStateLabel
+        id={
+          sourceState.sourceKind === 'overview-artifact'
+            ? 'overviewArtifact'
+            : sourceState.sourceKind === 'static-fallback'
+              ? 'staticOverviewFallback'
+              : 'liveBridgeJson'
+        }
+        tone={
+          sourceState.sourceKind === 'overview-artifact'
+            ? hasIntegrityWarnings
+              ? 'warn'
+              : 'success'
+            : 'neutral'
+        }
+      />
+      <span>
+        <strong>{t('overview.meta.vintageLabel')}</strong> {t('overview.common.middleDot')}{' '}
+        {formatDate(generated_at, locale)}
+      </span>
+    </>
+  )
+
+  return (
+    <PageContainer className="overview-page">
+      <PageHeader title={t('pages.overview.title')} description={t('pages.overview.description')} meta={pageHeaderMeta} />
+
+      <section className="overview-snapshot" aria-labelledby="overview-snapshot-title">
+        <div className="overview-snapshot__state">
+          <EconomicStateHeader
+            summary={summary}
+            updatedAt={generated_at}
+            modelIds={model_ids}
+            provenance={provenance}
+            artifactSummaryMetrics={artifact_summary_metrics}
+            isArtifactMode={sourceState.sourceKind === 'overview-artifact'}
+          />
+        </div>
+
+        <div className="overview-snapshot__signals" aria-label={t('overview.briefing.primarySignalsAria')}>
+          <KpiStrip
+            metrics={primaryHeadlineMetrics}
+            headingId="overview-snapshot-title"
+            title={t('overview.briefing.primarySignalsTitle')}
+            variant="primary"
+          />
+        </div>
+      </section>
+
+      <section className="overview-analysis-grid" aria-label={t('overview.briefing.analysisAria')}>
+        {nowcast_forecast ? (
+          <div className="overview-analysis-grid__chart overview-nowcast-column">
+            {dfmState.status === 'degraded' ? (
+              <NowcastBanner
+                errorKind={dfmErrorKind(dfmState.error)}
+                errorDetail={dfmErrorDetail(dfmState.error)}
+                onRetry={refetchDfm}
+              />
+            ) : null}
+            {dfmState.status === 'unavailable' ? (
+              <NowcastBanner
+                errorKind="freshness"
+                errorDetail={t('overview.nowcast.banner.freshnessDetail')}
+              />
+            ) : null}
+            {displayedNowcastChart ? (
+              <NowcastForecastBlock
+                chart={displayedNowcastChart}
+                contributionDetails={
+                  useLiveDfmNowcastChart && dfmState.status === 'bridge'
+                    ? dfmState.contributionDetails
+                    : undefined
+                }
+                headerSlot={
+                  <TrustStateLabel
+                    id={displayedNowcastTrustId}
+                    tone={useLiveDfmNowcastChart ? 'success' : 'warn'}
+                  />
+                }
+                statusSlot={
+                  dfmState.status === 'loading' ? (
+                    <p className="overview-nowcast-refreshing" role="status" aria-live="polite">
+                      {t('overview.nowcast.refreshing')}
+                    </p>
+                  ) : null
+                }
+              />
+            ) : null}
+          </div>
+        ) : null}
+
+        <div className="overview-analysis-grid__tests">
+          <RiskPanel risks={top_risks} actions={analysis_actions} />
+        </div>
+      </section>
+
+      <IndicatorPanelGrid groups={indicator_groups} />
+
+      <CaveatPanel caveats={caveats} exportedAt={generated_at} />
+      <OverviewFeeds activityFeed={activity_feed} />
+      <ReferencesFooter references={references} exportedAt={generated_at} />
+    </PageContainer>
+  )
+}

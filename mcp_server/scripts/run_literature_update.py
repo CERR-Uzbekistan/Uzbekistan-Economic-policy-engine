@@ -36,7 +36,7 @@ async def run_full_pipeline():
         print(f"{'='*50}")
 
         # Step 1: Fetch candidates
-        print(f"  [1/3] Fetching papers from Semantic Scholar & OpenAlex...")
+        print("  [1/3] Fetching papers from Semantic Scholar & OpenAlex...")
         fetch_result = await fetch_papers(model_id=model_id, max_results=10)
 
         if "error" in fetch_result:
@@ -58,14 +58,14 @@ async def run_full_pipeline():
 
             if "error" in curate_result:
                 print(f"  WARNING: Curation failed — {curate_result['error']}")
-                print(f"  Falling back to top papers by citation count...")
+                print("  Falling back to top papers by citation count...")
                 accepted = candidates[:5]
             else:
                 accepted = curate_result.get("curated", [])
                 meta = curate_result.get("meta", {})
                 print(f"  Scored {meta.get('total_scored', 0)} papers, accepted {meta.get('accepted', 0)}")
         else:
-            print(f"  [2/3] No ANTHROPIC_API_KEY — skipping AI curation, using top 5 by citations...")
+            print("  [2/3] No ANTHROPIC_API_KEY — skipping AI curation, using top 5 by citations...")
             accepted = candidates[:5]
 
         if not accepted:
@@ -88,7 +88,7 @@ async def run_full_pipeline():
 
     # Summary
     print(f"\n{'='*50}")
-    print(f"  LITERATURE UPDATE COMPLETE")
+    print("  LITERATURE UPDATE COMPLETE")
     print(f"{'='*50}")
     print(f"  Total new papers added: {total_added}")
     for line in report:

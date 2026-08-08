@@ -43,6 +43,26 @@ def test_pe_larger_cut_larger_effect():
     assert r40["aggregate"]["total_trade_effect_usd"] > r20["aggregate"]["total_trade_effect_usd"]
 
 
+def test_pe_uses_section_elasticity_correction():
+    """High-elasticity HS sections should scale above the uniform source baseline."""
+    from models.pe import BASE_ELASTICITY, SECTION_ELASTICITIES, run_trade_simulation
+    data = _load_data()
+    if data is None:
+        return
+
+    result = run_trade_simulation(data, tariff_cut_pct=20.0, hs_section="XVII")
+    section = result["by_section"][0]
+    raw_section = next(section for section in data["sections"] if section["id"] == "XVII")
+    raw_effect = sum(
+        data["chapters"][str(chapter)]["tc"] + data["chapters"][str(chapter)]["td"]
+        for chapter in raw_section["chapters"]
+    )
+    expected_factor = SECTION_ELASTICITIES["XVII"] / BASE_ELASTICITY
+
+    assert section["elasticity"] == round(SECTION_ELASTICITIES["XVII"], 2)
+    assert section["trade_effect_usd"] == round(raw_effect * expected_factor, 2)
+
+
 def test_pe_trade_overview():
     """Overview should return top sections and partners."""
     from models.pe import get_trade_overview
@@ -59,5 +79,6 @@ def test_pe_trade_overview():
 if __name__ == "__main__":
     test_pe_trade_impact_default()
     test_pe_larger_cut_larger_effect()
+    test_pe_uses_section_elasticity_correction()
     test_pe_trade_overview()
     print("All PE tests passed!")

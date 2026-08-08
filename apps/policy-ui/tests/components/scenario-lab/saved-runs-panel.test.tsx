@@ -1,0 +1,281 @@
+import assert from 'node:assert/strict'
+import { describe, it } from 'node:test'
+import i18next from 'i18next'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { I18nextProvider, initReactI18next } from 'react-i18next'
+import { MemoryRouter } from 'react-router-dom'
+import { ScenarioLabSavedRunsPanel } from '../../../src/components/scenario-lab/ScenarioLabSavedRunsPanel.js'
+import { filterSavedScenarios } from '../../../src/components/scenario-lab/savedRunsFilters.js'
+import type { SavedScenarioRecord } from '../../../src/state/scenarioStore.js'
+
+async function createTestI18n() {
+  const instance = i18next.createInstance()
+  await instance.use(initReactI18next).init({
+    lng: 'en',
+    fallbackLng: 'en',
+    defaultNS: 'common',
+    ns: ['common'],
+    interpolation: { escapeValue: false },
+    resources: {
+      en: {
+        common: {
+          buttons: {
+            delete: 'Delete',
+            load: 'Load',
+          },
+          scenarioLab: {
+            ioShock: {
+              kpis: {
+                output: 'Output effect',
+                gdpContribution: 'GDP accounting contribution',
+                employment: 'Employment effect',
+              },
+            },
+            peShock: {
+              boundary: 'Direct tariff-incidence only.',
+              tariffCut: 'Change size',
+              section: 'HS section',
+              partnerScope: 'Partner scope',
+              direction: {
+                cut: 'Cut',
+                increase: 'Increase',
+              },
+              kpis: {
+                tradeEffect: 'Trade effect',
+                welfare: 'Welfare effect',
+                revenue: 'Revenue change',
+              },
+              fields: {
+                tariffCut: 'Tariff cut',
+                section: 'HS section',
+                partnerScope: 'Partner scope',
+                importShare: 'Import share',
+              },
+              units: {
+                usdThousand: 'USD thousand',
+              },
+            },
+            savedRuns: {
+              title: 'Saved Runs',
+              description: '{{count}} saved run(s).',
+              empty: 'Saved macro, I-O, and PE runs will appear here after you save them.',
+              filtersAria: 'Saved run filters',
+              openInComparison: 'Open in Comparison',
+              ioBoundary: 'Sector transmission evidence only.',
+              macroFallback: 'Saved QPM macro scenario.',
+              filters: {
+                all: 'All',
+                macro_qpm: 'Macro/QPM',
+                io: 'I-O',
+                pe: 'PE',
+              },
+              filteredEmpty: {
+                all: 'No saved runs match this filter.',
+                macro_qpm: 'No saved Macro/QPM runs yet.',
+                io: 'No saved I-O runs yet.',
+                pe: 'No saved PE runs yet.',
+              },
+              type: {
+                io: 'I-O sector shock',
+                pe: 'Tariff incidence',
+                macro: 'Macro/QPM',
+              },
+              fields: {
+                type: 'Type',
+                data: 'Source vintage',
+                source: 'Source vintage',
+                sourceVintage: 'Source vintage',
+                sourceArtifact: 'Source coverage',
+                ioSourceCoverage: 'I-O source tables and public data snapshot',
+                saved: 'Saved',
+              },
+            },
+            saved: {
+              localBrowserDisclosure: 'Saved runs are stored only in this browser.',
+            },
+          },
+        },
+      },
+    },
+  })
+  return instance
+}
+
+const macroRecord: SavedScenarioRecord = {
+  scenario_id: 'macro-1',
+  scenario_name: 'Macro saved run',
+  scenario_type: 'alternative',
+  tags: ['fiscal'],
+  description: 'Saved macro run.',
+  created_at: '2026-04-22T00:00:00Z',
+  updated_at: '2026-04-22T10:15:00Z',
+  created_by: 'session-test',
+  assumptions: [
+    {
+      key: 'policy_rate',
+      label: 'Policy rate',
+      value: 14,
+      unit: '%',
+      category: 'macro',
+      technical_variable: null,
+    },
+  ],
+  model_ids: ['qpm'],
+  data_version: '2026Q1',
+  stored_at: '2026-04-22T10:15:00Z',
+  run_saved_at: '2026-04-22T10:15:00Z',
+  run_attribution: [
+    {
+      model_id: 'qpm',
+      model_name: 'QPM',
+      module: 'qpm',
+      version: '1.0.0',
+      run_id: 'qpm-run-1',
+      data_version: '2026Q1-live',
+      timestamp: '2026-04-22T10:15:00Z',
+    },
+  ],
+}
+
+const ioRecord: SavedScenarioRecord = {
+  ...macroRecord,
+  scenario_id: 'io-1',
+  scenario_name: 'I-O export shock',
+  tags: ['io'],
+  description: 'Saved I-O run.',
+  model_ids: ['io-sector-shock'],
+  data_version: '2022',
+  io_sector_shock: {
+    model_type: 'io_sector_shock',
+    title: 'I-O export shock',
+    data_vintage: '2022',
+    source_artifact: 'io_model/io_data.json',
+    saved_at: '2026-04-22T10:20:00Z',
+    request: {
+      demand_bucket: 'export',
+      amount: 1000,
+      currency: 'bln_uzs',
+      distribution: 'output',
+    },
+    totals: {
+      input_shock: 1000,
+      input_currency: 'bln_uzs',
+      demand_shock_bln_uzs: 1000,
+      output_effect_bln_uzs: 1600,
+      import_content_effect_bln_uzs: 400,
+      domestic_resource_effect_bln_uzs: 1200,
+      weighted_import_share: 0.25,
+      value_added_effect_bln_uzs: 650,
+      gdp_accounting_contribution_bln_uzs: 650,
+      employment_effect_persons: 2400,
+      aggregate_output_multiplier: 1.6,
+    },
+    top_sectors: [],
+    caveats: ['Sector transmission only.'],
+  },
+}
+
+const peRecord: SavedScenarioRecord = {
+  ...macroRecord,
+  scenario_id: 'pe-1',
+  scenario_name: 'PE tariff shock',
+  tags: ['pe'],
+  description: 'Saved PE run.',
+  model_ids: ['pe-trade-shock'],
+  data_version: '2025',
+  pe_trade_shock: {
+    model_type: 'pe_trade_shock',
+    title: 'PE tariff shock',
+    data_vintage: '2025',
+    source_artifact: 'mcp_server/data/pe_data.json',
+    saved_at: '2026-05-19T10:20:00Z',
+    request: {
+      tariff_cut_pct: 20,
+      section_id: 'XVII',
+      regime: 'all',
+      partner_name: 'all',
+    },
+    totals: {
+      import_base_usd: 1000,
+      trade_creation_usd: 120,
+      trade_diversion_usd: 30,
+      trade_effect_usd: 150,
+      welfare_usd: 20,
+      revenue_change_usd: -40,
+      impact_pct: 15,
+      partner_import_share: 1,
+    },
+    top_sections: [],
+    sensitivity: [
+      {
+        id: 'base',
+        elasticity_multiplier: 1,
+        trade_effect_usd: 150,
+        welfare_usd: 20,
+      },
+    ],
+    caveats: ['Direct tariff-incidence only.'],
+  },
+}
+
+describe('ScenarioLabSavedRunsPanel', () => {
+  it('filters saved runs by All, Macro/QPM, I-O, and PE', () => {
+    const records = [macroRecord, ioRecord, peRecord]
+
+    assert.deepEqual(filterSavedScenarios(records, 'all'), records)
+    assert.deepEqual(filterSavedScenarios(records, 'macro_qpm'), [macroRecord])
+    assert.deepEqual(filterSavedScenarios(records, 'io'), [ioRecord])
+    assert.deepEqual(filterSavedScenarios(records, 'pe'), [peRecord])
+  })
+
+  it('renders model type, timestamp, vintage, key outputs, and comparison actions', async () => {
+    const i18n = await createTestI18n()
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <MemoryRouter>
+          <ScenarioLabSavedRunsPanel
+            savedScenarios={[macroRecord, ioRecord]}
+            onLoadScenario={() => {}}
+            onDeleteScenario={() => {}}
+          />
+        </MemoryRouter>
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /Macro\/QPM/)
+    assert.match(markup, /Saved runs are stored only in this browser/)
+    assert.match(markup, /aria-pressed="true" class="active"><span>All<\/span>/)
+    assert.doesNotMatch(markup, /role="tablist"/)
+    assert.match(markup, /I-O sector shock/)
+    assert.match(markup, /2026Q1/)
+    assert.match(markup, /2026Q1-live/)
+    assert.match(markup, /I-O source tables and public data snapshot/)
+    assert.match(markup, /Source coverage/)
+    assert.match(markup, /Output effect/)
+    assert.match(markup, /Open in Comparison/)
+    assert.match(markup, /Load/)
+    assert.match(markup, /Delete/)
+  })
+
+  it('renders saved PE trade-shock outputs separately from macro runs', async () => {
+    const i18n = await createTestI18n()
+    const markup = renderToStaticMarkup(
+      <I18nextProvider i18n={i18n}>
+        <MemoryRouter>
+          <ScenarioLabSavedRunsPanel
+            savedScenarios={[peRecord]}
+            onLoadScenario={() => {}}
+            onDeleteScenario={() => {}}
+          />
+        </MemoryRouter>
+      </I18nextProvider>,
+    )
+
+    assert.match(markup, /Tariff incidence/)
+    assert.match(markup, /Trade effect/)
+    assert.match(markup, /Revenue change/)
+    assert.match(markup, /Change size/)
+    assert.match(markup, /Cut 20.0%/)
+    assert.match(markup, /mcp_server\/data\/pe_data\.json/)
+  })
+})

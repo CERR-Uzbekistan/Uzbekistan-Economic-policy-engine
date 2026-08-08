@@ -1,0 +1,129 @@
+/* ═══════════════════════════════════════════════════════════════
+   Parameter registry — embedded JS fallback.
+   Mirrors shared/parameter-registry.json so pages loaded over
+   file:// (where fetch is blocked) still have access to the same
+   data. The loader prefers fetch() and falls back to this global.
+   Keep the two files in sync — JSON is the source of truth.
+   ═══════════════════════════════════════════════════════════════ */
+window.EPE_REGISTRY_DATA = {
+  "_meta": {
+    "version": "0.2.0",
+    "last_updated": "2026-04-17",
+    "description": "Canonical macro parameters shared across all EPE models. Update here once, all models reflect the change. Phase 1 demo registry — expand as models are wired in.",
+    "source_notes": {
+      "phillips_curve": "Harmonized from PR #36 (cross-model Phillips curve harmonization).",
+      "elasticities": "WITS elasticities merged with PE sector-specific values from issue #24.",
+      "io_multipliers": "Type-II multipliers from PR #38 (induced consumption)."
+    }
+  },
+  "country": "UZ",
+  "base_year": 2024,
+  "currency": "UZS",
+  "macro_baseline": {
+    "potential_gdp_growth": 0.055,
+    "nairu": 0.068,
+    "output_gap_2024": -0.006,
+    "headline_inflation_2024": 0.098,
+    "core_inflation_2024": 0.081,
+    "policy_rate_2024": 0.14,
+    "neutral_real_rate": 0.025,
+    "exchange_rate_pass_through": 0.34
+  },
+  "phillips_curve": {
+    "forward_weight": 0.45,
+    "backward_weight": 0.55,
+    "slope": 0.18,
+    "imported_inflation_weight": 0.22,
+    "uncertainty_band_pp": 0.6
+  },
+  "pe_structural": {
+    "_notes": "Partial Equilibrium — WITS SMART with Kee-Nicita-Olarreaga sector corrections.",
+    "base_import_elasticity": 1.27,
+    "default_supply_elasticity": 99,
+    "default_substitution_elasticity": 1.5
+  },
+  "cge_structural": {
+    "_notes": "Devarajan-Go-Lewis-Robinson-Sinko 1-2-3 CGE, Uzbekistan 2021 calibration.",
+    "armington_sigma_q": 0.70,
+    "cet_sigma_t": 0.70,
+    "cet_share_bt": 0.82,
+    "ces_share_bq": 0.32,
+    "import_tariff_rate": 0.02,
+    "savings_rate": 0.38
+  },
+  "fpp_structural": {
+    "_notes": "CAEM Sep 2025 Phillips curve, harmonized with QPM quarterly persistence.",
+    "phillips_l1_persistence": 0.13,
+    "phillips_l2_imported": 0.70,
+    "phillips_l3_output_gap": 0.40,
+    "phillips_omega_expectations": 0.50,
+    "potential_growth_pct": 5.8,
+    "import_share_gdp": 0.355,
+    "uip_kappa": 0.70
+  },
+  "qpm_structural": {
+    "_notes": "Quarterly Projection Model — New-Keynesian small open economy.",
+    "taylor_inflation": 1.50,
+    "taylor_output_gap": 0.50,
+    "taylor_smoothing": 0.70,
+    "inflation_target": 0.05,
+    "phillips_slope": 0.18,
+    "phillips_forward": 0.45,
+    "phillips_imported": 0.22
+  },
+  "trade_elasticities": {
+    "default_armington_wide": 2.5,
+    "by_hs_chapter": {
+      "28": { "import_demand": -2.8, "export_supply": 1.9 },
+      "29": { "import_demand": -3.1, "export_supply": 2.1 },
+      "30": { "import_demand": -1.4, "export_supply": 0.9 },
+      "31": { "import_demand": -2.2, "export_supply": 1.6 },
+      "32": { "import_demand": -2.6, "export_supply": 1.8 },
+      "33": { "import_demand": -2.9, "export_supply": 2.0 },
+      "34": { "import_demand": -2.5, "export_supply": 1.7 },
+      "35": { "import_demand": -2.3, "export_supply": 1.5 },
+      "36": { "import_demand": -1.8, "export_supply": 1.2 },
+      "37": { "import_demand": -2.0, "export_supply": 1.3 },
+      "38": { "import_demand": -2.7, "export_supply": 1.9 },
+      "39": { "import_demand": -3.2, "export_supply": 2.2 },
+      "40": { "import_demand": -3.0, "export_supply": 2.1 }
+    }
+  },
+  "io_summary": {
+    "n_sectors": 136,
+    "type_ii_avg_multiplier": 1.87,
+    "sector_share_gdp": {
+      "chemicals": 0.041,
+      "plastics_rubber": 0.028,
+      "pharma": 0.012,
+      "fertilizers": 0.019
+    }
+  },
+  "fiscal": {
+    "gdp_2024_bln_usd": 112.6,
+    "tax_revenue_to_gdp": 0.278,
+    "import_vat_rate": 0.12,
+    "avg_tariff_rate": 0.076,
+    "customs_collection_efficiency": 0.83
+  },
+  "monetary_policy_rule": {
+    "type": "Taylor",
+    "inflation_coef": 1.5,
+    "output_gap_coef": 0.5,
+    "smoothing": 0.7,
+    "inflation_target": 0.05
+  },
+  "synth_coefficients": {
+    "_notes": "Reduced-form coefficients used by the cross-model Synthesis page. HS 28–40 import share is the GDP share of chemicals/plastics/rubber imports (WITS 2022). PE→GDP welfare ratio approximates Harberger triangle; IO→GDP uses sectoral weight; FPP current-account sensitivity from CAEM BoP block. Horizon scaling is a linear ramp from 0.55 (4q) to 1.0 (12q).",
+    "hs28_40_import_share_gdp": 0.028,
+    "pe_welfare_to_gdp_ratio": 0.35,
+    "io_sectoral_to_gdp_ratio": 0.24,
+    "fpp_import_compression_to_ca_ratio": 0.55,
+    "fpp_revenue_to_gdp_passthrough": 0.30,
+    "horizon_ramp": {
+      "4": 0.55,
+      "8": 0.85,
+      "12": 1.0
+    }
+  }
+};

@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "0.1.0",
+    "version": "0.2.0",
     "last_updated": "2026-04-17",
     "description": "Canonical macro parameters shared across all EPE models. Update here once, all models reflect the change. Phase 1 demo registry — expand as models are wired in.",
     "source_notes": {
@@ -112,5 +112,19 @@
     "output_gap_coef": 0.5,
     "smoothing": 0.7,
     "inflation_target": 0.05
+  },
+
+  "synth_coefficients": {
+    "_notes": "Reduced-form coefficients used by the cross-model Synthesis page. HS 28–40 import share is the GDP share of chemicals/plastics/rubber imports (WITS 2022). PE→GDP welfare ratio approximates Harberger triangle; IO→GDP uses sectoral weight; FPP current-account sensitivity from CAEM BoP block. Horizon scaling is a linear ramp from 0.55 (4q) to 1.0 (12q).",
+    "hs28_40_import_share_gdp": 0.028,
+    "pe_welfare_to_gdp_ratio": 0.35,
+    "io_sectoral_to_gdp_ratio": 0.24,
+    "fpp_import_compression_to_ca_ratio": 0.55,
+    "fpp_revenue_to_gdp_passthrough": 0.30,
+    "horizon_ramp": {
+      "4": 0.55,
+      "8": 0.85,
+      "12": 1.0
+    }
   }
 }

@@ -1,0 +1,87 @@
+russia_real_gdp_growth_deviation_pp:
+  chosen_stagnation: -1.0
+  chosen_recession: -3.0
+  chosen_combined_shock: -5.0
+  unit: percentage_points_vs_recent_wartime_growth
+  evidence_strength: medium
+  evidence_basis: Russia moved from strong wartime growth around 2024-2025 toward IMF/World Bank-style forecasts near 0.6-1.0 percent growth; central -3pp approximates the fall from recent high growth to low-growth stagnation.
+  primary_source: IMF forecast context reported by Business Insider and Guardian; World Bank forecast context reported by WSJ.
+  source_url: https://www.businessinsider.com/russia-economy-imf-downgrade-gdp-growth-outlook-wartime-boom-fast-2025-7
+  current_status: evidence_informed_not_econometrically_estimated
+
+russia_real_wage_shock_pct:
+  chosen_stagnation: -3.0
+  chosen_recession: -8.0
+  chosen_combined_shock: -15.0
+  unit: percent
+  evidence_strength: low
+  evidence_basis: Reports point to cooling activity, high interest rates, job-loss risks, and wage pressure, but no Russia migrant-sector wage series is wired into the project.
+  primary_source: public reporting on Russia slowdown and falling wage/job-loss risks.
+  source_url: https://nypost.com/2026/07/01/world-news/putins-top-banker-begs-for-end-to-ukraine-war-in-stark-warning/
+  current_status: judgemental_placeholder_pending_rosstat_or_migrant_sector_wage_data
+
+ruble_depreciation_pct:
+  chosen_stagnation: 5.0
+  chosen_recession: 12.0
+  chosen_combined_shock: 25.0
+  unit: percent
+  evidence_strength: low
+  evidence_basis: Values are scenario assumptions for a ruble stress episode; historical RUB episodes should be used for proper calibration.
+  primary_source: not_yet_estimated
+  source_url: pending
+  current_status: judgemental_placeholder_pending_rub_usd_history
+
+migrant_labor_market_stress:
+  chosen_stagnation: 0.04
+  chosen_recession: 0.10
+  chosen_combined_shock: 0.20
+  unit: index_0_to_1
+  evidence_strength: low
+  evidence_basis: Index summarizes Russia migrant job-access deterioration; no migration registration, work permit, or return-flow series is wired yet.
+  primary_source: not_yet_estimated
+  source_url: pending
+  current_status: judgemental_placeholder_pending_migration_data
+
+sector_export_demand_stress:
+  chosen_stagnation: 0.03
+  chosen_recession: 0.06
+  chosen_combined_shock: 0.15
+  unit: index_0_to_1
+  evidence_strength: low
+  evidence_basis: Uzbekistan aggregate exports fell sharply YoY in the local Overview artifact, but Russia-specific sector exports are not yet mapped from customs/HS data.
+  primary_source: apps/policy-ui/public/data/overview.json exports_yoy metric
+  source_url: local_repo
+  current_status: aggregate_trade_context_only_pending_russia_sector_trade
+
+fuel_disruption_index:
+  chosen_stagnation: 0.15
+  chosen_recession: 0.30
+  chosen_combined_shock: 0.65
+  unit: index_0_to_1
+  evidence_strength: medium_low
+  evidence_basis: Reporting documents Russian refinery disruption, gasoline shortages, and export restrictions; Uzbekistan-specific HS fuel dependence is still memo-anchored.
+  primary_source: Le Monde fuel-shortage reporting plus earlier refinery/export-ban reporting.
+  source_url: https://www.lemonde.fr/en/international/article/2026/06/30/after-ukraine-strikes-refineries-putin-admits-to-a-certain-shortage-of-fuel_6755013_4.html
+  current_status: evidence_informed_index_pending_hs2710_customs_validation
+
+payment_restriction_index:
+  chosen_stagnation: 0.10
+  chosen_recession: 0.28
+  chosen_combined_shock: 0.70
+  unit: index_0_to_1
+  evidence_strength: low
+  evidence_basis: Index represents sanctions/payment-system friction; no Uzbekistan bank transaction failure, correspondent banking, or payment-cost dataset is wired yet.
+  primary_source: not_yet_estimated
+  source_url: pending
+  current_status: judgemental_placeholder_pending_payment_system_evidence
+
+ifi_support_index:
+  chosen_stagnation: 0.0
+  chosen_recession: 0.0
+  chosen_combined_shock: 0.0
+  unit: index_0_to_1
+  evidence_strength: medium
+  evidence_basis: Left at zero for scenario baseline. Actual IFI/reserve support is handled in policy packages, not the shock scenario.
+  primary_source: policy package YAML
+  source_url: local_repo
+  current_status: policy_assumption_not_stress_driver

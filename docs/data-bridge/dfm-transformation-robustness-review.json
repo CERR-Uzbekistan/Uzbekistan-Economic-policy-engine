@@ -1,0 +1,213 @@
+{
+  "artifact": {
+    "id": "dfm-transformation-robustness-review",
+    "generated_at": "2026-07-16T10:17:09Z",
+    "source_folder": "<DFM_SOURCE_DIR>",
+    "source_workbook": "<DFM_SOURCE_DIR>/data/data_uzbekistan.xlsx",
+    "source_workbook_md5": "42a1e478f39a77db3797c188cd841f78",
+    "transformation_map": "docs/data-bridge/dfm-transformation-map.json",
+    "runner": "scripts/dfm/review-transformation-robustness.R",
+    "r_version": "4.5.2",
+    "em_settings": {
+      "max_iter": 200,
+      "threshold": 1e-05
+    }
+  },
+  "baseline_reference": {
+    "status": "available_from_robustness_review",
+    "json_artifact": "docs/data-bridge/dfm-2026q2-robustness-review.json",
+    "nowcast_period": "2026Q1",
+    "gdp_growth_yoy_pct": 7.0078,
+    "gdp_growth_qoq_pct": 1.4398
+  },
+  "caveated_rows": {
+    "count": 17,
+    "variable_ids": [
+      "ip_cppy",
+      "financial_sound",
+      "rate_1y",
+      "uzs_usd",
+      "kazakh_leadind",
+      "IDA_yoy",
+      "IDA_mom",
+      "ind_percap_grwth",
+      "const_grwth",
+      "IND_YOY",
+      "wholesale_trade_grwth",
+      "retail_trade_grwth",
+      "services_grwth",
+      "bus_clim",
+      "bus_clim_exp",
+      "manf_YOY",
+      "stock_deals"
+    ],
+    "dropped_in_leave_out_case": [
+      "ip_cppy",
+      "financial_sound",
+      "rate_1y",
+      "uzs_usd",
+      "kazakh_leadind",
+      "IDA_yoy",
+      "IDA_mom",
+      "ind_percap_grwth",
+      "const_grwth",
+      "IND_YOY",
+      "wholesale_trade_grwth",
+      "retail_trade_grwth",
+      "services_grwth",
+      "bus_clim",
+      "bus_clim_exp",
+      "manf_YOY",
+      "stock_deals"
+    ],
+    "reviewed_transformation_decisions": [
+      {
+        "variable_id": "ip_cppy",
+        "mode": "native_growth_level_signal",
+        "replaced": true
+      },
+      {
+        "variable_id": "financial_sound",
+        "mode": "month_to_month_level_change",
+        "replaced": true
+      },
+      {
+        "variable_id": "rate_1y",
+        "mode": "month_to_month_level_change",
+        "replaced": true
+      },
+      {
+        "variable_id": "uzs_usd",
+        "mode": "source_log_difference",
+        "replaced": false
+      },
+      {
+        "variable_id": "kazakh_leadind",
+        "mode": "native_growth_level_signal",
+        "replaced": true
+      },
+      {
+        "variable_id": "IDA_yoy",
+        "mode": "native_growth_level_signal",
+        "replaced": true
+      },
+      {
+        "variable_id": "IDA_mom",
+        "mode": "native_growth_level_signal",
+        "replaced": true
+      },
+      {
+        "variable_id": "ind_percap_grwth",
+        "mode": "native_growth_level_signal",
+        "replaced": true
+      },
+      {
+        "variable_id": "const_grwth",
+        "mode": "native_growth_level_signal",
+        "replaced": true
+      },
+      {
+        "variable_id": "IND_YOY",
+        "mode": "native_growth_level_signal",
+        "replaced": true
+      },
+      {
+        "variable_id": "wholesale_trade_grwth",
+        "mode": "native_growth_level_signal",
+        "replaced": true
+      },
+      {
+        "variable_id": "retail_trade_grwth",
+        "mode": "native_growth_level_signal",
+        "replaced": true
+      },
+      {
+        "variable_id": "services_grwth",
+        "mode": "native_growth_level_signal",
+        "replaced": true
+      },
+      {
+        "variable_id": "bus_clim",
+        "mode": "month_to_month_level_change",
+        "replaced": true
+      },
+      {
+        "variable_id": "bus_clim_exp",
+        "mode": "month_to_month_level_change",
+        "replaced": true
+      },
+      {
+        "variable_id": "manf_YOY",
+        "mode": "native_growth_level_signal",
+        "replaced": true
+      },
+      {
+        "variable_id": "stock_deals",
+        "mode": "source_log_difference",
+        "replaced": false
+      }
+    ]
+  },
+  "cases": [
+    {
+      "case_id": "reviewed_caveat_transformations",
+      "label": "Apply transformation-map alternatives for caveated rows where possible",
+      "status": "completed",
+      "converged": false,
+      "iterations": 201,
+      "loglik": 2202.57977,
+      "variable_count": 36,
+      "last_growth_date": "2025-12-01",
+      "last_observed_gdp_date": "2025-12-01",
+      "nowcast_period": "2026Q1",
+      "gdp_growth_yoy_pct": 6.9989,
+      "gdp_growth_qoq_pct": 1.4314,
+      "gdp_level": 287030,
+      "elapsed_seconds": 203.55,
+      "warnings": []
+    },
+    {
+      "case_id": "drop_caveated_high_frequency_rows",
+      "label": "Drop approved-with-caveat high-frequency rows",
+      "status": "completed",
+      "converged": true,
+      "iterations": 84,
+      "loglik": 1993.489983,
+      "variable_count": 19,
+      "last_growth_date": "2025-12-01",
+      "last_observed_gdp_date": "2025-12-01",
+      "nowcast_period": "2026Q1",
+      "gdp_growth_yoy_pct": 7.0214,
+      "gdp_growth_qoq_pct": 1.4527,
+      "gdp_level": 287090.5,
+      "elapsed_seconds": 69.04,
+      "warnings": []
+    }
+  ],
+  "sensitivity": [
+    {
+      "case_id": "reviewed_caveat_transformations",
+      "yoy_difference_vs_baseline_pp": -0.0089,
+      "qoq_difference_vs_baseline_pp": -0.0084
+    },
+    {
+      "case_id": "drop_caveated_high_frequency_rows",
+      "yoy_difference_vs_baseline_pp": 0.0136,
+      "qoq_difference_vs_baseline_pp": 0.0129
+    }
+  ],
+  "reviewer_verdict": {
+    "status": "small_headline_sensitivity_with_convergence_caveat",
+    "max_abs_yoy_difference_pp": 0.0136,
+    "any_nonconverged_case": true,
+    "critical": [
+      "This test does not prove the recommended transformations are final; it only measures headline sensitivity to the current caveated rows.",
+      "Rows using native growth-level signals still require model-owner confirmation of scaling and source definitions."
+    ],
+    "warnings": [
+      "At least one transformation stress case did not converge before the iteration cap, so that case is a stress-test signal rather than a replacement specification.",
+      "If the reviewed-transformation variant moves materially, do not publish the baseline source nowcast without resolving transformation ownership.",
+      "If the caveated-row leave-out variant moves materially, the one-factor result depends too much on weakly documented rows."
+    ]
+  }
+}

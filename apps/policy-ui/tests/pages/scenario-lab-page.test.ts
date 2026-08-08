@@ -1,0 +1,33 @@
+import assert from 'node:assert/strict'
+import { describe, it } from 'node:test'
+import { scenarioLabWorkspaceMock } from '../../src/data/mock/scenario-lab.js'
+import { resolvePresetHydration } from '../../src/pages/scenario-lab-preset.js'
+
+describe('ScenarioLabPage preset hydration', () => {
+  it('hydrates external-demand slowdown preset from URL query', () => {
+    const result = resolvePresetHydration(scenarioLabWorkspaceMock, 'external-slowdown')
+
+    assert.equal(result.selectedPresetId, 'external-slowdown')
+    assert.equal(result.scenarioName, 'External slowdown')
+    assert.equal(result.assumptionValues.remittance_change, 0)
+    assert.equal(result.assumptionValues.export_demand_change, -0.5)
+    assert.equal(result.warningMessage, null)
+  })
+
+  it('keeps the old remittance-downside URL as an alias for external slowdown', () => {
+    const result = resolvePresetHydration(scenarioLabWorkspaceMock, 'remittance-downside')
+
+    assert.equal(result.selectedPresetId, 'external-slowdown')
+    assert.equal(result.scenarioName, 'External slowdown')
+    assert.equal(result.assumptionValues.export_demand_change, -0.5)
+    assert.equal(result.warningMessage, null)
+  })
+
+  it('falls back to baseline for unknown preset ids without throwing', () => {
+    const result = resolvePresetHydration(scenarioLabWorkspaceMock, 'nonsense')
+
+    assert.equal(result.selectedPresetId, 'baseline')
+    assert.equal(result.scenarioName, 'Baseline')
+    assert.ok(result.warningMessage?.includes('nonsense'))
+  })
+})

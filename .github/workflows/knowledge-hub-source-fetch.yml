@@ -1,0 +1,236 @@
+name: Knowledge Hub Official Source Intake
+
+on:
+  schedule:
+    # 02:30 UTC = 07:30 Asia/Tashkent. Daily official-source refresh.
+    - cron: '30 2 * * *'
+  workflow_dispatch:
+    inputs:
+      extracted_at:
+        description: Optional ISO timestamp to stamp into the generated artifact
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: knowledge-hub-official-source-intake
+  cancel-in-progress: false
+
+jobs:
+  publish-official-source-artifact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+      GENERATED_DIR: knowledge-hub-source-fetch-output
+      GENERATED_PUBLIC_PATH: knowledge-hub-source-fetch-output/apps/policy-ui/public/data/knowledge-hub.json
+      REPORT_PATH: knowledge-hub-source-fetch-output/source-fetch-report.json
+      SUMMARY_PATH: knowledge-hub-source-fetch-output/summary.md
+      CHANGE_SUMMARY_PATH: knowledge-hub-source-fetch-output/change-summary.json
+      DIFF_PATH: knowledge-hub-source-fetch-output/knowledge-hub-json.diff
+      PUBLIC_ARTIFACT_PATH: apps/policy-ui/public/data/knowledge-hub.json
+      INPUT_EXTRACTED_AT: ${{ inputs.extracted_at }}
+    steps:
+      - name: Check publication target
+        run: |
+          if [ "$GITHUB_REF_NAME" != "main" ]; then
+            echo "::error::Automatic Knowledge Hub source intake may publish only from main."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check Knowledge Hub intake scripts
+        run: |
+          node --check scripts/knowledge-hub/change-summary.mjs
+          node --check scripts/knowledge-hub/reform-intake.mjs
+          node --check scripts/knowledge-hub/generate-source-fetch-artifact.mjs
+          node --test scripts/knowledge-hub/tests/*.test.mjs
+
+      - name: Generate configured-source Knowledge Hub artifact
+        id: generate
+        run: |
+          mkdir -p "$(dirname "$GENERATED_PUBLIC_PATH")"
+
+          args=(
+            "scripts/knowledge-hub/generate-source-fetch-artifact.mjs"
+            "--output" "$GENERATED_PUBLIC_PATH"
+            "--previous" "$PUBLIC_ARTIFACT_PATH"
+            "--report" "$REPORT_PATH"
+            "--summary" "$SUMMARY_PATH"
+            "--change-summary" "$CHANGE_SUMMARY_PATH"
+          )
+
+          if [ -n "$INPUT_EXTRACTED_AT" ]; then
+            args+=("--extracted-at" "$INPUT_EXTRACTED_AT")
+          fi
+
+          set +e
+          node "${args[@]}"
+          status=$?
+          set -e
+
+          if [ -s "$SUMMARY_PATH" ]; then
+            cat "$SUMMARY_PATH" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          if [ "$status" -ne 0 ]; then
+            echo "::error::Knowledge Hub artifact generation failed. See uploaded report artifact."
+          fi
+
+      - name: Fail if artifact generation failed
+        run: |
+          if [ "${{ steps.generate.outputs.status }}" != "0" ]; then
+            echo "::error::Knowledge Hub artifact generation failed. Nothing will be published."
+            exit 1
+          fi
+
+      - name: Prepare public artifact diff
+        run: |
+          test -s "$GENERATED_PUBLIC_PATH"
+          node -e "JSON.parse(require('node:fs').readFileSync(process.env.GENERATED_PUBLIC_PATH, 'utf8'))"
+
+          cp "$GENERATED_PUBLIC_PATH" "$PUBLIC_ARTIFACT_PATH"
+          git diff -- "$PUBLIC_ARTIFACT_PATH" > "$DIFF_PATH"
+          if [ ! -s "$DIFF_PATH" ]; then
+            printf 'No diff against %s\n' "$PUBLIC_ARTIFACT_PATH" > "$DIFF_PATH"
+          fi
+
+          disallowed="$(
+            git status --porcelain --untracked-files=all |
+              awk '{print $2}' |
+              grep -Fvx "$PUBLIC_ARTIFACT_PATH" |
+              grep -v "^$GENERATED_DIR/" ||
+              true
+          )"
+          if [ -n "$disallowed" ]; then
+            echo "::error::Knowledge Hub source intake changed files outside $PUBLIC_ARTIFACT_PATH:"
+            echo "$disallowed"
+            exit 1
+          fi
+
+      - name: Install policy-ui dependencies
+        working-directory: apps/policy-ui
+        run: npm ci
+
+      - name: Validate generated artifact in policy-ui
+        working-directory: apps/policy-ui
+        run: |
+          npm run lint
+          npm test
+          npm run build
+
+      - name: Check whether Knowledge Hub artifact changed
+        id: diff
+        run: |
+          if git diff --quiet "$PUBLIC_ARTIFACT_PATH"; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "[knowledge-hub-intake] knowledge-hub.json unchanged; nothing to commit."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "[knowledge-hub-intake] knowledge-hub.json changed; will commit after final scope check."
+          fi
+
+      - name: Final publication scope check
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          changed_files="$(git diff --name-only)"
+          unexpected="$(
+            printf '%s\n' "$changed_files" |
+              grep -Fvx "$PUBLIC_ARTIFACT_PATH" ||
+              true
+          )"
+          if [ -n "$unexpected" ]; then
+            echo "::error::Refusing to publish because files outside $PUBLIC_ARTIFACT_PATH changed:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+      - name: Commit and publish Knowledge Hub artifact
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$PUBLIC_ARTIFACT_PATH"
+          git commit -m "data(knowledge-hub): official source intake $(date -u +%Y-%m-%d)"
+          git push
+
+      - name: Dispatch and verify post-publication workflows
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          published_sha="$(git rev-parse HEAD)"
+
+          find_run_id() {
+            workflow_file="$1"
+            for _ in $(seq 1 24); do
+              run_id="$(
+                gh run list \
+                  --workflow "$workflow_file" \
+                  --branch main \
+                  --event workflow_dispatch \
+                  --limit 25 \
+                  --json databaseId,headSha,createdAt \
+                  --jq "map(select(.headSha == \"$published_sha\")) | sort_by(.createdAt) | reverse | .[0].databaseId // empty"
+              )"
+              if [ -n "$run_id" ]; then
+                printf '%s\n' "$run_id"
+                return 0
+              fi
+              sleep 5
+            done
+            echo "::error::Could not find dispatched run for $workflow_file at $published_sha."
+            return 1
+          }
+
+          require_success() {
+            run_id="$1"
+            label="$2"
+            gh run watch "$run_id" --interval 10
+            conclusion="$(gh run view "$run_id" --json conclusion --jq '.conclusion')"
+            if [ "$conclusion" != "success" ]; then
+              echo "::error::$label concluded with $conclusion."
+              exit 1
+            fi
+          }
+
+          gh workflow run validate.yml --ref main
+          gh workflow run pages.yml --ref main
+
+          validate_run_id="$(find_run_id validate.yml)"
+          pages_run_id="$(find_run_id pages.yml)"
+
+          require_success "$validate_run_id" "Validate"
+          require_success "$pages_run_id" "Deploy Pages"
+
+          gh workflow run policy-ui-hosted-smoke.yml --ref main -f base_url=hosted
+          smoke_run_id="$(find_run_id policy-ui-hosted-smoke.yml)"
+          require_success "$smoke_run_id" "Policy UI Hosted Smoke"
+
+          gh workflow run policy-ui-client-hosted-smoke.yml --ref main -f base_url=hosted
+          client_smoke_run_id="$(find_run_id policy-ui-client-hosted-smoke.yml)"
+          require_success "$client_smoke_run_id" "Policy UI Client Hosted Smoke"
+
+      - name: Upload generated Knowledge Hub artifact bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: knowledge-hub-source-fetch-${{ github.run_id }}
+          if-no-files-found: error
+          path: |
+            ${{ env.GENERATED_PUBLIC_PATH }}
+            ${{ env.REPORT_PATH }}
+            ${{ env.SUMMARY_PATH }}
+            ${{ env.CHANGE_SUMMARY_PATH }}
+            ${{ env.DIFF_PATH }}
