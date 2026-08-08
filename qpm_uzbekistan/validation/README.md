@@ -11,7 +11,8 @@ Validation artefacts for the HTML QPM in [../index.html](../index.html), as requ
 |---|---|
 | Read the headline validation conclusions | [validation-note.md](validation-note.md) |
 | See the parameter-by-parameter review | [parameter-table.md](parameter-table.md) |
-| Run the interactive JS-vs-MATLAB IRF cross-check | [cross-check.html](cross-check.html) |
+| Run the interactive JS-vs-MATLAB IRF cross-check (Phase 1) | [cross-check.html](cross-check.html) |
+| Run the rolling pseudo-real-time backtest (Phase 2) | [backtest.html](backtest.html) |
 | Inspect the historical dataset and its provenance | [data/README.md](data/README.md) |
 | Open the canonical IRIS equation spec | [data/Uzbekistan.model](data/Uzbekistan.model) |
 | Inspect the IRIS Kalman-smoothed historical run | [data/matlab_kalman_filter.csv](data/matlab_kalman_filter.csv) |
@@ -37,9 +38,10 @@ In Claude Code, the launch config at `.claude/launch.json` is named **`qpm`** �
 | 1 | Historical dataset ported with provenance | ✅ |
 | 1 | MATLAB-vs-HTML IRF cross-check | ✅ |
 | 1 | Validation note with explicit approval statement | ✅ |
-| **2** | **Rolling pseudo-real-time backtest engine (JS-side)** | **TODO** |
-| **2** | **RMSE / MAE / directional accuracy on GDP, CPI, RS** | **TODO** |
+| 2 | Rolling pseudo-real-time backtest engine (JS-side) | ✅ |
+| 2 | RMSE / MAE / directional accuracy on GDP, CPI, RS | ✅ |
 | **2** | **Model Explorer + Scenario Lab metadata wiring** | **TODO** |
+| **3** | **Re-filter Kalman at each origin (remove smoother look-ahead)** | **TODO** |
 
 ## Maintenance
 
