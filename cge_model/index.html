@@ -196,6 +196,16 @@ tr:hover td { background: #f5f8ff; }
 }
 .export-btn:hover { background: var(--navy2); color: white; border-color: var(--navy2); }
 
+/* ── Language switcher ── */
+.lang-switcher { display:flex; gap:5px; margin-left:auto; }
+.lang-btn {
+  padding:4px 10px; border-radius:20px; font-size:11px; font-weight:700;
+  border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.1);
+  color:rgba(255,255,255,.75); cursor:pointer; transition:all .15s;
+}
+.lang-btn:hover { background:rgba(255,255,255,.22); color:#fff; }
+.lang-btn.active { background:rgba(255,255,255,.95); color:var(--navy2); border-color:transparent; }
+
 /* ── Responsive ── */
 @media (max-width: 900px) {
   .sim-layout { grid-template-columns: 1fr; }
@@ -210,17 +220,22 @@ tr:hover td { background: #f5f8ff; }
 <header>
   <div class="logo">⚙️</div>
   <div class="header-title">
-    <h1>CGE 1-2-3 Model — Uzbekistan 2021</h1>
-    <p>Policy Engine · Devarajan-Go-Lewis-Robinson-Sinko · CERR</p>
+    <h1 data-i18n="header-title">CGE 1-2-3 Model — Uzbekistan 2021</h1>
+    <p data-i18n="header-sub">Policy Engine · Devarajan-Go-Lewis-Robinson-Sinko · CERR</p>
+  </div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('ru')">RU</button>
+    <button class="lang-btn" onclick="setLang('uz')">UZ</button>
   </div>
   <div class="header-badge">CGE · 1-2-3</div>
 </header>
 
 <nav>
-  <button class="tab-btn active" onclick="showTab('simulator')">⚡ <span data-i18n="cge_tab_sim">Shock Simulator</span></button>
-  <button class="tab-btn" onclick="showTab('scenarios')">📋 <span data-i18n="cge_tab_scenarios">Scenario Analysis</span></button>
-  <button class="tab-btn" onclick="showTab('calibration')">🔢 <span data-i18n="cge_tab_calibration">Calibration &amp; Data</span></button>
-  <button class="tab-btn" onclick="showTab('documentation')">📖 <span data-i18n="cge_tab_docs">Model Documentation</span></button>
+  <button class="tab-btn active" onclick="showTab('simulator')" data-i18n="tab-simulator">⚡ Shock Simulator</button>
+  <button class="tab-btn" onclick="showTab('scenarios')" data-i18n="tab-scenarios">📋 Scenario Analysis</button>
+  <button class="tab-btn" onclick="showTab('calibration')" data-i18n="tab-calibration">🔢 Calibration &amp; Data</button>
+  <button class="tab-btn" onclick="showTab('documentation')" data-i18n="tab-documentation">📖 Model Documentation</button>
 </nav>
 
 <!-- ══════════════════════════════════════════
@@ -233,102 +248,102 @@ tr:hover td { background: #f5f8ff; }
     <div class="sim-sidebar">
 
       <div class="sec-block">
-        <div class="sec-hd" data-i18n="cge_world_prices">World Prices</div>
+        <div class="sec-hd" data-i18n="sec-world-prices">World Prices</div>
         <div class="prow">
-          <div class="plabel"><span class="pname">wm shock (%)</span><span class="pval" id="v-wm">0.0%</span></div>
-          <div class="pdesc" data-i18n="cge_wp_import">World import price — e.g. energy, food</div>
+          <div class="plabel"><span class="pname" data-i18n="sl-wm-name">wm shock (%)</span><span class="pval" id="v-wm">0.0%</span></div>
+          <div class="pdesc" data-i18n="sl-wm-desc">World import price — e.g. energy, food</div>
           <input type="range" id="sl-wm" min="-30" max="30" step="1" value="0" oninput="slPct(this,'v-wm')">
         </div>
         <div class="prow">
-          <div class="plabel"><span class="pname">we shock (%)</span><span class="pval" id="v-we">0.0%</span></div>
-          <div class="pdesc" data-i18n="cge_wp_export">World export price — e.g. gold, cotton</div>
+          <div class="plabel"><span class="pname" data-i18n="sl-we-name">we shock (%)</span><span class="pval" id="v-we">0.0%</span></div>
+          <div class="pdesc" data-i18n="sl-we-desc">World export price — e.g. gold, cotton</div>
           <input type="range" id="sl-we" min="-30" max="30" step="1" value="0" oninput="slPct(this,'v-we')">
         </div>
       </div>
 
       <div class="sec-block">
-        <div class="sec-hd" data-i18n="cge_trade_policy">Trade Policy</div>
+        <div class="sec-hd" data-i18n="sec-trade-policy">Trade Policy</div>
         <div class="prow">
-          <div class="plabel"><span class="pname">Import tariff tm (%)</span><span class="pval" id="v-tm">2.0%</span></div>
+          <div class="plabel"><span class="pname" data-i18n="sl-tm-name">Import tariff tm (%)</span><span class="pval" id="v-tm">2.0%</span></div>
           <input type="range" id="sl-tm" min="0" max="30" step="0.5" value="2" oninput="slPct(this,'v-tm')">
         </div>
         <div class="prow">
-          <div class="plabel"><span class="pname">Export duty te (%)</span><span class="pval" id="v-te">0.0%</span></div>
+          <div class="plabel"><span class="pname" data-i18n="sl-te-name">Export duty te (%)</span><span class="pval" id="v-te">0.0%</span></div>
           <input type="range" id="sl-te" min="0" max="10" step="0.5" value="0" oninput="slPct(this,'v-te')">
         </div>
       </div>
 
       <div class="sec-block">
-        <div class="sec-hd" data-i18n="cge_fiscal">Fiscal Policy</div>
+        <div class="sec-hd" data-i18n="sec-fiscal-policy">Fiscal Policy</div>
         <div class="prow">
-          <div class="plabel"><span class="pname">Indirect tax ts (%)</span><span class="pval" id="v-ts">6.0%</span></div>
+          <div class="plabel"><span class="pname" data-i18n="sl-ts-name">Indirect tax ts (%)</span><span class="pval" id="v-ts">6.0%</span></div>
           <input type="range" id="sl-ts" min="0" max="20" step="0.5" value="6" oninput="slPct(this,'v-ts')">
         </div>
         <div class="prow">
-          <div class="plabel"><span class="pname">Direct tax ty (%)</span><span class="pval" id="v-ty">3.0%</span></div>
+          <div class="plabel"><span class="pname" data-i18n="sl-ty-name">Direct tax ty (%)</span><span class="pval" id="v-ty">3.0%</span></div>
           <input type="range" id="sl-ty" min="0" max="20" step="0.5" value="3" oninput="slPct(this,'v-ty')">
         </div>
       </div>
 
       <div class="sec-block">
-        <div class="sec-hd" data-i18n="cge_macro">Macro / Fiscal</div>
+        <div class="sec-hd" data-i18n="sec-macro-fiscal">Macro / Fiscal</div>
         <div class="prow">
-          <div class="plabel"><span class="pname">Savings rate sy (%)</span><span class="pval" id="v-sy">38.0%</span></div>
+          <div class="plabel"><span class="pname" data-i18n="sl-sy-name">Savings rate sy (%)</span><span class="pval" id="v-sy">38.0%</span></div>
           <input type="range" id="sl-sy" min="20" max="60" step="0.5" value="38" oninput="slPct(this,'v-sy')">
         </div>
         <div class="prow">
-          <div class="plabel"><span class="pname">Govt spending G (% chg)</span><span class="pval" id="v-G">0.0%</span></div>
+          <div class="plabel"><span class="pname" data-i18n="sl-G-name">Govt spending G (% chg)</span><span class="pval" id="v-G">0.0%</span></div>
           <input type="range" id="sl-G" min="-40" max="40" step="1" value="0" oninput="slPct(this,'v-G')">
         </div>
       </div>
 
       <div class="sec-block">
-        <div class="sec-hd" data-i18n="cge_external">External</div>
+        <div class="sec-hd" data-i18n="sec-external">External</div>
         <div class="prow">
-          <div class="plabel"><span class="pname">Foreign savings B (% chg)</span><span class="pval" id="v-B">0.0%</span></div>
+          <div class="plabel"><span class="pname" data-i18n="sl-B-name">Foreign savings B (% chg)</span><span class="pval" id="v-B">0.0%</span></div>
           <input type="range" id="sl-B" min="-80" max="100" step="5" value="0" oninput="slPct(this,'v-B')">
         </div>
         <div class="prow">
-          <div class="plabel"><span class="pname">Remittances re (% chg)</span><span class="pval" id="v-re">0.0%</span></div>
+          <div class="plabel"><span class="pname" data-i18n="sl-re-name">Remittances re (% chg)</span><span class="pval" id="v-re">0.0%</span></div>
           <input type="range" id="sl-re" min="-50" max="100" step="5" value="0" oninput="slPct(this,'v-re')">
         </div>
       </div>
 
       <div class="sec-block">
-        <div class="sec-hd" data-i18n="cge_supply">Supply</div>
+        <div class="sec-hd" data-i18n="sec-supply">Supply</div>
         <div class="prow">
-          <div class="plabel"><span class="pname">Output X (% chg)</span><span class="pval" id="v-X">0.0%</span></div>
+          <div class="plabel"><span class="pname" data-i18n="sl-X-name">Output X (% chg)</span><span class="pval" id="v-X">0.0%</span></div>
           <input type="range" id="sl-X" min="-20" max="20" step="0.5" value="0" oninput="slPct(this,'v-X')">
         </div>
         <div class="prow">
-          <div class="plabel"><span class="pname">Price factor Pf</span><span class="pval" id="v-Pf">1.00</span></div>
+          <div class="plabel"><span class="pname" data-i18n="sl-Pf-name">Price factor Pf</span><span class="pval" id="v-Pf">1.00</span></div>
           <input type="range" id="sl-Pf" min="0.5" max="2.0" step="0.05" value="1.0" oninput="slRaw(this,'v-Pf')">
         </div>
       </div>
 
       <div class="sec-block">
-        <div class="sec-hd">🧑‍🏭 Labor Market</div>
+        <div class="sec-hd" data-i18n="sec-labor">🧑‍🏭 Labor Market</div>
         <div class="prow">
-          <div class="plabel"><span class="pname">Labor supply Ls (% chg)</span><span class="pval" id="v-Ls">0.0%</span></div>
-          <div class="pdesc">Shock to labor force participation / supply</div>
+          <div class="plabel"><span class="pname" data-i18n="sl-Ls-name">Labor supply Ls (% chg)</span><span class="pval" id="v-Ls">0.0%</span></div>
+          <div class="pdesc" data-i18n="sl-Ls-desc">Shock to labor force participation / supply</div>
           <input type="range" id="sl-Ls" min="-20" max="20" step="1" value="0" oninput="slPct(this,'v-Ls')">
         </div>
         <div class="prow">
-          <div class="plabel"><span class="pname">Wage elasticity φ</span><span class="pval" id="v-phi">0.50</span></div>
-          <div class="pdesc">Labor supply curve slope (higher = steeper)</div>
+          <div class="plabel"><span class="pname" data-i18n="sl-phi-name">Wage elasticity φ</span><span class="pval" id="v-phi">0.50</span></div>
+          <div class="pdesc" data-i18n="sl-phi-desc">Labor supply curve slope (higher = steeper)</div>
           <input type="range" id="sl-phi" min="0.10" max="1.50" step="0.05" value="0.50" oninput="slRaw(this,'v-phi')">
         </div>
         <div class="prow">
-          <div class="plabel"><span class="pname">Formality base α₀ (%)</span><span class="pval" id="v-alpha0">35.0%</span></div>
-          <div class="pdesc">Base formal employment share (IO: COE/GVA=25%)</div>
+          <div class="plabel"><span class="pname" data-i18n="sl-alpha0-name">Formality base α₀ (%)</span><span class="pval" id="v-alpha0">35.0%</span></div>
+          <div class="pdesc" data-i18n="sl-alpha0-desc">Base formal employment share (IO: COE/GVA=25%)</div>
           <input type="range" id="sl-alpha0" min="10" max="70" step="1" value="35" oninput="slPct(this,'v-alpha0')">
         </div>
       </div>
 
-      <button class="run-btn" id="runBtn" onclick="runSimulation()" data-i18n="cge_run_btn">▶ Run Simulation</button>
-      <button class="reset-btn" onclick="resetToBase()" data-i18n="reset_btn">↺ Reset to Base</button>
+      <button class="run-btn" id="runBtn" onclick="runSimulation()" data-i18n="btn-run">▶ Run Simulation</button>
+      <button class="reset-btn" onclick="resetToBase()" data-i18n="btn-reset">↺ Reset to Base</button>
       <div style="text-align:center;margin-top:10px;font-size:.68rem;color:var(--text3)">
-        Solver: <span id="solver-status" class="solver-ok">Ready</span>
+        <span data-i18n="solver-label">Solver:</span> <span id="solver-status" class="solver-ok" data-i18n="solver-ready">Ready</span>
       </div>
     </div>
 
@@ -336,94 +351,94 @@ tr:hover td { background: #f5f8ff; }
     <div class="sim-main">
       <div class="shdr">
         <div>
-          <div class="stitle">CGE 1-2-3 Model — Shock Results</div>
-          <div class="sdesc">Devarajan et al. (1997) · Uzbekistan 2021 calibration · Pd = 1 (numeraire)</div>
+          <div class="stitle" data-i18n="sim-title">CGE 1-2-3 Model — Shock Results</div>
+          <div class="sdesc" data-i18n="sim-desc">Devarajan et al. (1997) · Uzbekistan 2021 calibration · Pd = 1 (numeraire)</div>
         </div>
       </div>
 
       <!-- KPI cards -->
       <div class="kpis">
         <div class="kcard">
-          <div class="klbl" data-i18n="cge_kpi_y">GDP Impact (Y)</div>
+          <div class="klbl" data-i18n="kpi-Y-lbl">GDP Impact (Y)</div>
           <div class="kval" id="kpi-Y" style="color:var(--navy2)">—</div>
-          <div class="ksub">% change from base</div>
+          <div class="ksub" data-i18n="kpi-pct-sub">% change from base</div>
         </div>
         <div class="kcard">
-          <div class="klbl" data-i18n="cge_kpi_e">Exports (E)</div>
+          <div class="klbl" data-i18n="kpi-E-lbl">Exports (E)</div>
           <div class="kval" id="kpi-E" style="color:var(--green)">—</div>
-          <div class="ksub">% change from base</div>
+          <div class="ksub" data-i18n="kpi-pct-sub">% change from base</div>
         </div>
         <div class="kcard">
-          <div class="klbl" data-i18n="cge_kpi_m">Imports (M)</div>
+          <div class="klbl" data-i18n="kpi-M-lbl">Imports (M)</div>
           <div class="kval" id="kpi-M" style="color:var(--orange)">—</div>
-          <div class="ksub">% change from base</div>
+          <div class="ksub" data-i18n="kpi-pct-sub">% change from base</div>
         </div>
         <div class="kcard">
-          <div class="klbl" data-i18n="cge_kpi_er">Exchange Rate (Er)</div>
+          <div class="klbl" data-i18n="kpi-Er-lbl">Exchange Rate (Er)</div>
           <div class="kval" id="kpi-Er" style="color:var(--purple)">—</div>
-          <div class="ksub">Value (base = 1.00)</div>
+          <div class="ksub" data-i18n="kpi-er-sub">Value (base = 1.00)</div>
         </div>
       </div>
 
       <!-- Labor KPI row -->
-      <div class="section-divider">⚙ Labor Market</div>
+      <div class="section-divider" data-i18n="divider-labor">⚙ Labor Market</div>
       <div class="labor-kpis">
         <div class="kcard labor">
-          <div class="klbl">Employment (L)</div>
+          <div class="klbl" data-i18n="kpi-L-lbl">Employment (L)</div>
           <div class="kval" id="kpi-L" style="color:var(--orange)">—</div>
-          <div class="ksub" id="kpi-L-sub">millions of workers</div>
+          <div class="ksub" id="kpi-L-sub" data-i18n="kpi-L-sub-base">millions of workers</div>
         </div>
         <div class="kcard labor">
-          <div class="klbl">Real Wage Index (w)</div>
+          <div class="klbl" data-i18n="kpi-w-lbl">Real Wage Index (w)</div>
           <div class="kval" id="kpi-w" style="color:var(--orange)">—</div>
-          <div class="ksub">% change from base</div>
+          <div class="ksub" data-i18n="kpi-pct-sub">% change from base</div>
         </div>
         <div class="kcard labor">
-          <div class="klbl">Formal / Informal</div>
+          <div class="klbl" data-i18n="kpi-formal-lbl">Formal / Informal</div>
           <div class="kval" id="kpi-formal" style="color:var(--orange)">—</div>
-          <div class="ksub" id="kpi-formal-sub">millions formal / informal</div>
+          <div class="ksub" id="kpi-formal-sub" data-i18n="kpi-formal-sub-base">millions formal / informal</div>
         </div>
         <div class="kcard labor">
-          <div class="klbl">Unemployment Rate</div>
+          <div class="klbl" data-i18n="kpi-UR-lbl">Unemployment Rate</div>
           <div class="kval" id="kpi-UR" style="color:var(--orange)">—</div>
-          <div class="ksub" id="kpi-UR-sub">% of labor force</div>
+          <div class="ksub" id="kpi-UR-sub" data-i18n="kpi-UR-sub-base">% of labor force</div>
         </div>
       </div>
 
       <!-- Export toolbar -->
       <div class="export-toolbar">
-        <span class="export-label">Export Results:</span>
-        <button class="export-btn" onclick="exportCSV()" data-i18n="export_csv">📊 CSV</button>
-        <button class="export-btn" onclick="exportPNG()" data-i18n="export_png">🖼 PNG Chart</button>
-        <button class="export-btn" onclick="exportPDF()" data-i18n="export_pdf">📄 PDF Report</button>
-        <button class="export-btn" onclick="cgeSaveScenario()" data-i18n="save_scenario" style="background:#16a34a;color:#fff;border-color:#16a34a;">💾 Save</button>
-        <button class="export-btn" onclick="cgeAIAnalysis()" data-i18n="ai_analysis" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
+        <span class="export-label" data-i18n="export-label">Export Results:</span>
+        <button class="export-btn" onclick="exportCSV()" data-i18n="export-csv">📊 CSV</button>
+        <button class="export-btn" onclick="exportPNG()" data-i18n="export-png">🖼 PNG Chart</button>
+        <button class="export-btn" onclick="exportPDF()" data-i18n="export-pdf">📄 PDF Report</button>
+        <button class="export-btn" onclick="cgeSaveScenario()" style="background:#16a34a;color:#fff;border-color:#16a34a;" data-i18n="export-save">💾 Save</button>
+        <button class="export-btn" onclick="cgeAIAnalysis()" style="background:var(--navy2);color:#fff;border-color:#2563eb;" data-i18n="export-ai">🤖 AI</button>
       </div>
 
       <!-- Results table -->
       <div class="card" id="results-table-card">
-        <div class="card-title" data-i18n="cge_results_hd">Full Results — Base vs. Experiment</div>
-        <div class="card-sub">All values in model units (normalised to base year). Prices in UZS index (base Pd=1).</div>
+        <div class="card-title" data-i18n="results-card-title">Full Results — Base vs. Experiment</div>
+        <div class="card-sub" data-i18n="results-card-sub">All values in model units (normalised to base year). Prices in UZS index (base Pd=1).</div>
         <table id="results-table">
           <thead>
             <tr>
-              <th>Indicator</th>
-              <th>Description</th>
-              <th>Base (2021)</th>
-              <th>Experiment</th>
-              <th>% Change</th>
+              <th data-i18n="th-indicator">Indicator</th>
+              <th data-i18n="th-description">Description</th>
+              <th data-i18n="th-base">Base (2021)</th>
+              <th data-i18n="th-experiment">Experiment</th>
+              <th data-i18n="th-pct-change">% Change</th>
             </tr>
           </thead>
           <tbody id="results-tbody">
-            <tr><td colspan="5" style="text-align:center;color:var(--text3);padding:20px">Run the simulation to see results</td></tr>
+            <tr><td colspan="5" style="text-align:center;color:var(--text3);padding:20px" data-i18n="results-empty">Run the simulation to see results</td></tr>
           </tbody>
         </table>
       </div>
 
       <!-- Bar chart -->
       <div class="card">
-        <div class="card-title">% Change — Key Macro Indicators</div>
-        <div class="card-sub">Deviation of experiment from base year values</div>
+        <div class="card-title" data-i18n="chart-title">% Change — Key Macro Indicators</div>
+        <div class="card-sub" data-i18n="chart-sub">Deviation of experiment from base year values</div>
         <div class="chart-wrap">
           <canvas id="chart-main"></canvas>
         </div>
@@ -431,22 +446,22 @@ tr:hover td { background: #f5f8ff; }
 
       <!-- Labor Market Chart -->
       <div class="card">
-        <div class="card-title">Labor Market Results <span class="labor-badge">🧑‍🏭 Type II</span></div>
-        <div class="card-sub">Employment, wages, formal/informal split — derived from CGE output via Cobb-Douglas labor demand + wage curve</div>
+        <div class="card-title"><span data-i18n="labor-chart-title">Labor Market Results</span> <span class="labor-badge">🧑‍🏭 Cobb-Douglas</span></div>
+        <div class="card-sub" data-i18n="labor-chart-sub">Employment, wages, formal/informal split — derived from CGE output via Cobb-Douglas labor demand + wage curve</div>
         <div class="chart-wrap">
           <canvas id="chart-labor"></canvas>
         </div>
         <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:11.5px;">
           <div style="background:#fff7ed;border-radius:8px;padding:10px 12px;border:1px solid #fed7aa;">
-            <div style="font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;margin-bottom:4px;">Employment</div>
+            <div style="font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;margin-bottom:4px;" data-i18n="lab-box-L">Employment</div>
             <div id="lab-detail-L" style="color:var(--text)">—</div>
           </div>
           <div style="background:#fff7ed;border-radius:8px;padding:10px 12px;border:1px solid #fed7aa;">
-            <div style="font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;margin-bottom:4px;">Formal / Informal</div>
+            <div style="font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;margin-bottom:4px;" data-i18n="lab-box-fi">Formal / Informal</div>
             <div id="lab-detail-fi" style="color:var(--text)">—</div>
           </div>
           <div style="background:#fff7ed;border-radius:8px;padding:10px 12px;border:1px solid #fed7aa;">
-            <div style="font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;margin-bottom:4px;">Unemployment</div>
+            <div style="font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;margin-bottom:4px;" data-i18n="lab-box-ur">Unemployment</div>
             <div id="lab-detail-ur" style="color:var(--text)">—</div>
           </div>
         </div>
@@ -462,51 +477,51 @@ tr:hover td { background: #f5f8ff; }
   <div class="scenario-grid">
     <div class="scen-card">
       <div class="scen-icon">🛡️</div>
-      <div class="scen-title">Import Tariff +5pp</div>
-      <div class="scen-desc">Raise import tariff rate from 2% to 7%. Evaluates protectionist trade policy impact on domestic output, exchange rate, and absorption.</div>
-      <button class="scen-run" onclick="runScenario('tariff')">▶ Run Scenario</button>
+      <div class="scen-title" data-i18n="scen-tariff-title">Import Tariff +5pp</div>
+      <div class="scen-desc" data-i18n="scen-tariff-desc">Raise import tariff rate from 2% to 7%. Evaluates protectionist trade policy impact on domestic output, exchange rate, and absorption.</div>
+      <button class="scen-run" onclick="runScenario('tariff')" data-i18n="scen-run-btn">▶ Run Scenario</button>
     </div>
     <div class="scen-card">
       <div class="scen-icon">📉</div>
-      <div class="scen-title">Export Price Fall −10%</div>
-      <div class="scen-desc">World export price falls 10% (e.g. gold price shock). Simulates terms-of-trade deterioration and balance of payments adjustment.</div>
-      <button class="scen-run" onclick="runScenario('exprice')">▶ Run Scenario</button>
+      <div class="scen-title" data-i18n="scen-exprice-title">Export Price Fall −10%</div>
+      <div class="scen-desc" data-i18n="scen-exprice-desc">World export price falls 10% (e.g. gold price shock). Simulates terms-of-trade deterioration and balance of payments adjustment.</div>
+      <button class="scen-run" onclick="runScenario('exprice')" data-i18n="scen-run-btn">▶ Run Scenario</button>
     </div>
     <div class="scen-card">
       <div class="scen-icon">⛽</div>
-      <div class="scen-title">World Import Price +10%</div>
-      <div class="scen-desc">Rise in world import prices +10% (energy/food global shock). Tests real exchange rate and welfare effects of a terms-of-trade deterioration.</div>
-      <button class="scen-run" onclick="runScenario('imprice')">▶ Run Scenario</button>
+      <div class="scen-title" data-i18n="scen-imprice-title">World Import Price +10%</div>
+      <div class="scen-desc" data-i18n="scen-imprice-desc">Rise in world import prices +10% (energy/food global shock). Tests real exchange rate and welfare effects of a terms-of-trade deterioration.</div>
+      <button class="scen-run" onclick="runScenario('imprice')" data-i18n="scen-run-btn">▶ Run Scenario</button>
     </div>
     <div class="scen-card">
       <div class="scen-icon">🏛️</div>
-      <div class="scen-title">Energy Reform: VAT +5pp</div>
-      <div class="scen-desc">Indirect tax rate rises from 6% to 11% (VAT broadening). Evaluates fiscal revenue impact and absorption effects of energy subsidy reform.</div>
-      <button class="scen-run" onclick="runScenario('vat')">▶ Run Scenario</button>
+      <div class="scen-title" data-i18n="scen-vat-title">Energy Reform: VAT +5pp</div>
+      <div class="scen-desc" data-i18n="scen-vat-desc">Indirect tax rate rises from 6% to 11% (VAT broadening). Evaluates fiscal revenue impact and absorption effects of energy subsidy reform.</div>
+      <button class="scen-run" onclick="runScenario('vat')" data-i18n="scen-run-btn">▶ Run Scenario</button>
     </div>
     <div class="scen-card">
       <div class="scen-icon">💰</div>
-      <div class="scen-title">FDI Surge: Foreign Savings +50%</div>
-      <div class="scen-desc">Foreign savings (FDI inflows) increase 50%. Assesses Dutch disease risk, exchange rate appreciation, and investment expansion.</div>
-      <button class="scen-run" onclick="runScenario('fdi')">▶ Run Scenario</button>
+      <div class="scen-title" data-i18n="scen-fdi-title">FDI Surge: Foreign Savings +50%</div>
+      <div class="scen-desc" data-i18n="scen-fdi-desc">Foreign savings (FDI inflows) increase 50%. Assesses Dutch disease risk, exchange rate appreciation, and investment expansion.</div>
+      <button class="scen-run" onclick="runScenario('fdi')" data-i18n="scen-run-btn">▶ Run Scenario</button>
     </div>
     <div class="scen-card">
       <div class="scen-icon">✂️</div>
-      <div class="scen-title">Government Austerity −20%</div>
-      <div class="scen-desc">Government consumption cut by 20%. Fiscal consolidation scenario — evaluates GDP multiplier, trade balance, and private sector crowding-in.</div>
-      <button class="scen-run" onclick="runScenario('austerity')">▶ Run Scenario</button>
+      <div class="scen-title" data-i18n="scen-austerity-title">Government Austerity −20%</div>
+      <div class="scen-desc" data-i18n="scen-austerity-desc">Government consumption cut by 20%. Fiscal consolidation scenario — evaluates GDP multiplier, trade balance, and private sector crowding-in.</div>
+      <button class="scen-run" onclick="runScenario('austerity')" data-i18n="scen-run-btn">▶ Run Scenario</button>
     </div>
     <div class="scen-card">
       <div class="scen-icon">👷</div>
-      <div class="scen-title">Labor Supply Shock +10%</div>
-      <div class="scen-desc">Labor force grows 10% (e.g. rural-urban migration, returning diaspora). Tests unemployment absorption, wage pressure, and formality dynamics.</div>
-      <button class="scen-run" onclick="runScenario('labor_supply')">▶ Run Scenario</button>
+      <div class="scen-title" data-i18n="scen-labor-title">Labor Supply Shock +10%</div>
+      <div class="scen-desc" data-i18n="scen-labor-desc">Labor force grows 10% (e.g. rural-urban migration, returning diaspora). Tests unemployment absorption, wage pressure, and formality dynamics.</div>
+      <button class="scen-run" onclick="runScenario('labor_supply')" data-i18n="scen-run-btn">▶ Run Scenario</button>
     </div>
     <div class="scen-card">
       <div class="scen-icon">📋</div>
-      <div class="scen-title">Minimum Wage: Steep φ = 1.2</div>
-      <div class="scen-desc">High wage elasticity (φ = 1.2) simulates binding minimum wage effect — wages rise steeply with employment, slowing job creation. Tests employment-wage trade-off.</div>
-      <button class="scen-run" onclick="runScenario('min_wage')">▶ Run Scenario</button>
+      <div class="scen-title" data-i18n="scen-minwage-title">Minimum Wage: Steep φ = 1.2</div>
+      <div class="scen-desc" data-i18n="scen-minwage-desc">High wage elasticity (φ = 1.2) simulates binding minimum wage effect — wages rise steeply with employment, slowing job creation. Tests employment-wage trade-off.</div>
+      <button class="scen-run" onclick="runScenario('min_wage')" data-i18n="scen-run-btn">▶ Run Scenario</button>
     </div>
   </div>
   <div id="scen-results"></div>
@@ -519,14 +534,14 @@ tr:hover td { background: #f5f8ff; }
   <div class="calib-content">
     <div class="shdr">
       <div>
-        <div class="stitle">Calibration &amp; Data — Uzbekistan 2021</div>
-        <div class="sdesc">World Bank WDI · Statistics Agency of Uzbekistan · CERR estimates</div>
+        <div class="stitle" data-i18n="calib-title">Calibration &amp; Data — Uzbekistan 2021</div>
+        <div class="sdesc" data-i18n="calib-sub">World Bank WDI · Statistics Agency of Uzbekistan · CERR estimates</div>
       </div>
     </div>
 
-    <h3 style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:10px;">Model Parameters</h3>
+    <h3 style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:10px;" data-i18n="calib-h-params">Model Parameters</h3>
     <table class="param-table" style="margin-bottom:24px;">
-      <thead><tr><th>Parameter</th><th>Symbol</th><th>Value</th><th>Description</th></tr></thead>
+      <thead><tr><th data-i18n="th-parameter">Parameter</th><th data-i18n="th-symbol">Symbol</th><th data-i18n="th-value">Value</th><th data-i18n="th-description">Description</th></tr></thead>
       <tbody>
         <tr><td>CET scale</td><td>at</td><td>2.42</td><td>CET transformation function scale parameter</td></tr>
         <tr><td>CET export share</td><td>bt</td><td>0.82</td><td>CET export share parameter</td></tr>
@@ -539,9 +554,9 @@ tr:hover td { background: #f5f8ff; }
       </tbody>
     </table>
 
-    <h3 style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:10px;">Base Year Data — Exogenous Variables (2021)</h3>
+    <h3 style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:10px;" data-i18n="calib-h-exog">Base Year Data — Exogenous Variables (2021)</h3>
     <table class="param-table" style="margin-bottom:24px;">
-      <thead><tr><th>Variable</th><th>Symbol</th><th>Base Value</th><th>Description</th></tr></thead>
+      <thead><tr><th data-i18n="th-variable">Variable</th><th data-i18n="th-symbol">Symbol</th><th data-i18n="th-base-value">Base Value</th><th data-i18n="th-description">Description</th></tr></thead>
       <tbody>
         <tr><td>World import price</td><td>wm</td><td>0.98</td><td>World price of imports (index)</td></tr>
         <tr><td>World export price</td><td>we</td><td>1.00</td><td>World price of exports (index)</td></tr>
@@ -560,9 +575,9 @@ tr:hover td { background: #f5f8ff; }
       </tbody>
     </table>
 
-    <h3 style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:10px;">Base Year Endogenous Variables (2021)</h3>
+    <h3 style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:10px;" data-i18n="calib-h-endog">Base Year Endogenous Variables (2021)</h3>
     <table class="param-table" style="margin-bottom:24px;">
-      <thead><tr><th>Variable</th><th>Symbol</th><th>Value</th><th>Description</th></tr></thead>
+      <thead><tr><th data-i18n="th-variable">Variable</th><th data-i18n="th-symbol">Symbol</th><th data-i18n="th-value">Value</th><th data-i18n="th-description">Description</th></tr></thead>
       <tbody>
         <tr><td>Exports</td><td>E</td><td>0.26</td><td>Domestic production exported</td></tr>
         <tr><td>Imports</td><td>M</td><td>0.44</td><td>Imports absorbed domestically</td></tr>
@@ -583,9 +598,9 @@ tr:hover td { background: #f5f8ff; }
       </tbody>
     </table>
 
-    <h3 style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:10px;">Labor Market Parameters (2021 calibration)</h3>
+    <h3 style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:10px;" data-i18n="calib-h-labor">Labor Market Parameters (2021 calibration)</h3>
     <table class="param-table" style="margin-bottom:24px;">
-      <thead><tr><th>Parameter</th><th>Symbol</th><th>Value</th><th>Source</th></tr></thead>
+      <thead><tr><th data-i18n="th-parameter">Parameter</th><th data-i18n="th-symbol">Symbol</th><th data-i18n="th-value">Value</th><th data-i18n="th-source">Source</th></tr></thead>
       <tbody>
         <tr><td>Base employment</td><td>L̄</td><td>13.5 M</td><td>Statistics Agency of Uzbekistan 2021</td></tr>
         <tr><td>Labor force (supply)</td><td>Ls</td><td>14.5 M</td><td>Statistics Agency of Uzbekistan 2021</td></tr>
@@ -598,9 +613,9 @@ tr:hover td { background: #f5f8ff; }
       </tbody>
     </table>
 
-    <h3 style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:10px;">Calibration Checks</h3>
+    <h3 style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:10px;" data-i18n="calib-h-checks">Calibration Checks</h3>
     <div id="calib-checks" style="font-size:13px;color:var(--text2);background:#f8fafc;border-radius:8px;padding:16px;">
-      <em>Loading calibration diagnostics…</em>
+      <em data-i18n="calib-loading">Loading calibration diagnostics…</em>
     </div>
   </div>
 </div>
@@ -611,118 +626,17 @@ tr:hover td { background: #f5f8ff; }
 <div id="page-documentation" class="page">
   <div class="doc-content">
     <div class="shdr">
-      <div class="stitle">Model Documentation — CGE 1-2-3</div>
+      <div class="stitle" data-i18n="doc-page-title">Model Documentation — CGE 1-2-3</div>
     </div>
-
-    <div class="doc-section">
-      <h3>Overview</h3>
-      <p>The 1-2-3 model (Devarajan, Go, Lewis, Robinson &amp; Sinko, 1997) is a minimal computable general equilibrium framework designed for developing-country policy analysis. It features <strong>1 country, 2 sectors</strong> (exports vs. domestic goods), and <strong>3 commodities</strong> (exports E, imports M, domestic good D). The framework captures the essential open-economy macroeconomics in a tractable single-equation system.</p>
-      <p>The Uzbekistan calibration uses 2021 national accounts data. All variables are normalised so that base-year output X = 1 and the domestic price Pd = 1 (numeraire). The model is closed by a flexible real exchange rate that clears the balance of payments.</p>
-    </div>
-
-    <div class="doc-section">
-      <h3>Price System</h3>
-      <div class="eq-box">Pd = 1.00 &nbsp;&nbsp;&nbsp;&nbsp; (numeraire — domestic price level fixed)</div>
-      <div class="eq-box">Pe = we × (1 − te) × Er &nbsp;&nbsp;&nbsp; (export price in domestic currency)</div>
-      <div class="eq-box">Pm = wm × (1 + tm) × Er &nbsp;&nbsp;&nbsp; (import price in domestic currency)</div>
-    </div>
-
-    <div class="doc-section">
-      <h3>CET Production Frontier (Export Supply)</h3>
-      <p>Producers allocate output between exports and domestic sales according to a Constant Elasticity of Transformation (CET) function. The first-order condition gives the export-to-domestic ratio:</p>
-      <div class="eq-box">eRat = E/Ds = [(1−bt)/bt × Pe/Pd]^σ_t &nbsp;&nbsp;&nbsp; (FOC ratio)</div>
-      <div class="eq-box">Ds = X / (at × [bt × eRat^ρ_t + (1−bt)]^(1/ρ_t))</div>
-      <div class="eq-box">E = eRat × Ds</div>
-      <p>Parameters: at = 2.42, bt = 0.82, ρ_t = 2.43, σ_t = 0.70</p>
-    </div>
-
-    <div class="doc-section">
-      <h3>CES Absorption (Import Demand)</h3>
-      <p>Domestic consumers/firms combine imports and domestic goods according to a Constant Elasticity of Substitution (Armington) aggregator. The FOC gives the import-to-domestic ratio:</p>
-      <div class="eq-box">mRat = M/Dd = [bq/(1−bq) × Pd/Pm]^σ_q &nbsp;&nbsp;&nbsp; (Armington ratio)</div>
-      <div class="eq-box">M = mRat × Ds &nbsp;&nbsp;&nbsp; (domestic market clearing: Dd = Ds)</div>
-      <div class="eq-box">Q = aq × [bq × M^(−ρ_q) + (1−bq) × Ds^(−ρ_q)]^(−1/ρ_q)</div>
-      <p>Parameters: aq = 1.91, bq = 0.32, ρ_q = 0.43, σ_q = 0.70</p>
-    </div>
-
-    <div class="doc-section">
-      <h3>Balance of Payments Closure</h3>
-      <p>The real exchange rate Er is endogenous and adjusts to clear the balance of payments. We solve for Er by bisection on:</p>
-      <div class="eq-box">f(Er) = Pm(Er) × M(Er) − Pe(Er) × E(Er) − B − re − ft = 0</div>
-      <p>Import payments minus export receipts must equal the sum of foreign savings B, remittances re, and grants ft. The bisection searches Er ∈ [0.001, 1000] over 100 iterations.</p>
-    </div>
-
-    <div class="doc-section">
-      <h3>Derived Macro Aggregates</h3>
-      <div class="eq-box">Pq = (Pm×M + Ds) / Q &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (composite good price, Pd=1)</div>
-      <div class="eq-box">Pt = (Pe×E + Ds) / X &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (output price)</div>
-      <div class="eq-box">Px = Pf × Pt &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (GDP deflator)</div>
-      <div class="eq-box">TAX = ts×Pq×Q + ty×Px×X + tm×wm×Er×M + te×we×Er×E</div>
-      <div class="eq-box">Y = Px×X + tr + ft + re &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (national income)</div>
-      <div class="eq-box">Sg = TAX − G − tr &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (government budget balance)</div>
-      <div class="eq-box">Cn = (1−sy) × (Y − TAX) &nbsp;&nbsp;&nbsp;&nbsp; (private consumption)</div>
-      <div class="eq-box">S = sy×(Y−TAX) + Sg + B &nbsp;&nbsp;&nbsp;&nbsp; (total savings)</div>
-      <div class="eq-box">Z = S &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (savings = investment, Walras law)</div>
-      <div class="eq-box">TB = Pe×E − Pm×M &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (trade balance)</div>
-    </div>
-
-    <div class="doc-section">
-      <h3>Closure Rules</h3>
-      <ul>
-        <li><strong>Domestic price numeraire:</strong> Pd = 1 throughout. All price changes are expressed relative to the domestic price level.</li>
-        <li><strong>Exchange rate closure:</strong> Er is flexible and endogenous — it adjusts to balance the BOP. This is the standard "neoclassical" closure.</li>
-        <li><strong>Savings-Investment:</strong> Z = S (investment is savings-driven; no separate investment function).</li>
-        <li><strong>Government budget:</strong> Sg = TAX − G − tr (residual — government can run a surplus or deficit).</li>
-      </ul>
-    </div>
-
-    <div class="doc-section">
-      <h3>Labor Market Block</h3>
-      <p>The labor market extension follows Devarajan &amp; Go (1998) and ILO Uzbekistan reports. It is solved analytically after the goods-market BOP equilibrium and adds three new channels: <strong>labor demand</strong>, a <strong>wage curve</strong>, and a <strong>formal/informal split</strong>.</p>
-
-      <p><strong>Labor demand</strong> (Cobb-Douglas FOC, isoelastic form):</p>
-      <div class="eq-box">L/L̄ = (VA/VA̅)^(1/(1+φ·η)) &nbsp;&nbsp;&nbsp; where VA = Px·X</div>
-      <p>VA = Px·X is domestic value-added at model prices; VA̅ = 1 at base (Px=Pf·Pt=1, X=1). η = 0.50 is the labor demand wage elasticity (Hamermesh 1993).</p>
-
-      <p><strong>Wage supply curve</strong> (upward-sloping, Blanchflower-Oswald 1994):</p>
-      <div class="eq-box">w/w̄ = (L/L̄)^φ &nbsp;&nbsp;&nbsp; φ = 0.50 (default)</div>
-      <p>Substituting labor demand into the wage equation gives the closed-form equilibrium:</p>
-      <div class="eq-box">w/w̄ = (VA/VA̅)^(φ/(1+φ·η))</div>
-      <p>At base (VA = VA̅): L = L̄ = 13.5M, w = w̄ = 1.00 by construction.</p>
-
-      <p><strong>Formal / Informal split</strong> (Alaniz et al. 2011 for developing countries):</p>
-      <div class="eq-box">α = min(0.95, α₀ · (w/w̄)^ε_α)</div>
-      <div class="eq-box">L_formal = α · L &nbsp;&nbsp;&nbsp; L_informal = (1−α) · L</div>
-      <p>α₀ = 0.35 (base formality rate). ε_α = 0.80 means a 10% real wage rise increases the formal share by 8%. This captures the Uzbekistan-specific dynamic where rising wages pull informal workers into formal contracts (ILO Uzbekistan 2022).</p>
-
-      <p><strong>Unemployment</strong>:</p>
-      <div class="eq-box">U = max(0, Ls − L) &nbsp;&nbsp;&nbsp; UR = U/Ls × 100</div>
-      <p>Labor supply Ls = 14.5M is exogenous (can be shocked by the Ls slider). Base UR = 6.9%, consistent with Statistics Agency of Uzbekistan 2021 official figures.</p>
-
-      <p><strong>Key policy implications:</strong></p>
-      <ul>
-        <li><strong>Import tariff rise</strong> → Exchange rate depreciates → Pq rises → real wage (w/Px) falls → employment falls, informality rises</li>
-        <li><strong>FDI surge / foreign savings increase</strong> → Exchange rate appreciates → VA expands → employment and wages rise → formality increases</li>
-        <li><strong>Government austerity</strong> → Y contracts → VA falls → unemployment rises, wages fall, informal sector expands</li>
-        <li><strong>Labor supply shock (Ls↑)</strong> → Unemployment rises mechanically if demand does not adjust; φ governs the wage compression that stimulates demand response</li>
-      </ul>
-    </div>
-
-    <div class="doc-section">
-      <h3>References</h3>
-      <ul>
-        <li>Devarajan, S., D. Go, J. Lewis, S. Robinson &amp; P. Sinko (1997). <em>Simple General Equilibrium Modeling</em>. In J. Francois &amp; K. Reinert (Eds.), <em>Applied Methods for Trade Policy Analysis</em>. Cambridge University Press.</li>
-        <li>World Bank WDI — Uzbekistan National Accounts, 2021.</li>
-        <li>Statistics Agency under the President of Uzbekistan — GDP, trade, government finance, 2021.</li>
-        <li>Center for Economic Research and Reforms (CERR) — Calibration &amp; adaptation for Uzbekistan.</li>
-        <li>Devarajan, S. &amp; Go, D. (1998). <em>The simplest dynamic general equilibrium model of an open economy</em>. Journal of Policy Modeling, 20(6), 677–714.</li>
-        <li>Blanchflower, D.G. &amp; Oswald, A.J. (1994). <em>The Wage Curve</em>. MIT Press.</li>
-        <li>Hamermesh, D.S. (1993). <em>Labor Demand</em>. Princeton University Press.</li>
-        <li>ILO (2022). <em>Uzbekistan Labour Market Profile</em>. International Labour Organization.</li>
-        <li>Statistics Agency under the President of Uzbekistan — Labor force survey, employment and unemployment 2021.</li>
-        <li>Input-Output Table of Uzbekistan (2022) — Symmetric 136-sector table, COE/GVA = 25%. CERR/Statistics Agency.</li>
-      </ul>
-    </div>
+    <div class="doc-section" id="doc-sec-overview"></div>
+    <div class="doc-section" id="doc-sec-prices"></div>
+    <div class="doc-section" id="doc-sec-cet"></div>
+    <div class="doc-section" id="doc-sec-ces"></div>
+    <div class="doc-section" id="doc-sec-bop"></div>
+    <div class="doc-section" id="doc-sec-macro"></div>
+    <div class="doc-section" id="doc-sec-closure"></div>
+    <div class="doc-section" id="doc-sec-labor"></div>
+    <div class="doc-section" id="doc-sec-refs"></div>
   </div>
 </div>
 
@@ -731,6 +645,497 @@ tr:hover td { background: #f5f8ff; }
 ══════════════════════════════════════════ -->
 <script>
 'use strict';
+
+/* ════════════════════════════════════════════════════════════
+   i18n — Language Support (EN / RU / UZ)
+════════════════════════════════════════════════════════════ */
+let currentLang = localStorage.getItem('cge_lang') || 'en';
+
+const LANGS = {
+  /* ── Static UI ─────────────────────────────────────────── */
+  'header-title':   { en:'CGE 1-2-3 Model — Uzbekistan 2021', ru:'ОРМ 1-2-3 — Узбекистан 2021', uz:"ORM 1-2-3 — O'zbekiston 2021" },
+  'header-sub':     { en:'Policy Engine · Devarajan-Go-Lewis-Robinson-Sinko · CERR', ru:'Движок политики · Деваражан-Гоу-Льюис-Робинсон-Синко · ЦЭИИ', uz:"Siyosat mexanizmi · Devarajan-Go-Lewis-Robinson-Sinko · TIQT" },
+  'tab-simulator':  { en:'⚡ Shock Simulator', ru:'⚡ Симулятор шоков', uz:'⚡ Shok simulyatori' },
+  'tab-scenarios':  { en:'📋 Scenario Analysis', ru:'📋 Анализ сценариев', uz:"📋 Stsenariy tahlili" },
+  'tab-calibration':{ en:'🔢 Calibration &amp; Data', ru:'🔢 Калибровка и данные', uz:"🔢 Kalibrovka va ma'lumotlar" },
+  'tab-documentation':{ en:'📖 Model Documentation', ru:'📖 Документация модели', uz:'📖 Model hujjatlari' },
+  /* ── Sidebar ──────────────────────────────────────────── */
+  'sec-world-prices':  { en:'World Prices', ru:'Мировые цены', uz:'Dunyo narxlari' },
+  'sec-trade-policy':  { en:'Trade Policy', ru:'Торговая политика', uz:'Savdo siyosati' },
+  'sec-fiscal-policy': { en:'Fiscal Policy', ru:'Фискальная политика', uz:'Fiskal siyosat' },
+  'sec-macro-fiscal':  { en:'Macro / Fiscal', ru:'Макро / Фискальная', uz:'Makro / Fiskal' },
+  'sec-external':      { en:'External', ru:'Внешний сектор', uz:'Tashqi sektor' },
+  'sec-supply':        { en:'Supply', ru:'Предложение', uz:'Taklif' },
+  'sec-labor':         { en:'🧑‍🏭 Labor Market', ru:'🧑‍🏭 Рынок труда', uz:'🧑‍🏭 Mehnat bozori' },
+  /* ── Slider labels ─────────────────────────────────────── */
+  'sl-wm-name':    { en:'wm shock (%)', ru:'wm шок (%)', uz:'wm zarbasi (%)' },
+  'sl-wm-desc':    { en:'World import price — e.g. energy, food', ru:'Мировая цена импорта — напр. энергоносители, продовольствие', uz:"Dunyo import narxi — mas. energiya, oziq-ovqat" },
+  'sl-we-name':    { en:'we shock (%)', ru:'we шок (%)', uz:'we zarbasi (%)' },
+  'sl-we-desc':    { en:'World export price — e.g. gold, cotton', ru:'Мировая цена экспорта — напр. золото, хлопок', uz:"Dunyo eksport narxi — mas. oltin, paxta" },
+  'sl-tm-name':    { en:'Import tariff tm (%)', ru:'Импортный тариф tm (%)', uz:'Import tarifi tm (%)' },
+  'sl-te-name':    { en:'Export duty te (%)', ru:'Экспортная пошлина te (%)', uz:'Eksport bojxona to\'lovi te (%)' },
+  'sl-ts-name':    { en:'Indirect tax ts (%)', ru:'Косвенный налог ts (%)', uz:'Bilvosita soliq ts (%)' },
+  'sl-ty-name':    { en:'Direct tax ty (%)', ru:'Прямой налог ty (%)', uz:'To\'g\'ridan-to\'g\'ri soliq ty (%)' },
+  'sl-sy-name':    { en:'Savings rate sy (%)', ru:'Норма сбережений sy (%)', uz:'Jamg\'arma darajasi sy (%)' },
+  'sl-G-name':     { en:'Govt spending G (% chg)', ru:'Гос. расходы G (% изм.)', uz:'Davlat xarajatlari G (% o\'zg.)' },
+  'sl-B-name':     { en:'Foreign savings B (% chg)', ru:'Иностранные сбережения B (% изм.)', uz:'Tashqi jamg\'arma B (% o\'zg.)' },
+  'sl-re-name':    { en:'Remittances re (% chg)', ru:'Денежные переводы re (% изм.)', uz:"Pul o'tkazmalari re (% o'zg.)" },
+  'sl-X-name':     { en:'Output X (% chg)', ru:'Выпуск X (% изм.)', uz:"Ishlab chiqarish X (% o'zg.)" },
+  'sl-Pf-name':    { en:'Price factor Pf', ru:'Ценовой фактор Pf', uz:'Narx omili Pf' },
+  'sl-Ls-name':    { en:'Labor supply Ls (% chg)', ru:'Предложение труда Ls (% изм.)', uz:"Mehnat taklifi Ls (% o'zg.)" },
+  'sl-Ls-desc':    { en:'Shock to labor force participation / supply', ru:'Шок предложения рабочей силы / участия', uz:"Mehnat kuchi ishtirokiga / taklifiga zarba" },
+  'sl-phi-name':   { en:'Wage elasticity φ', ru:'Эластичность зарплаты φ', uz:'Ish haqi elastikligi φ' },
+  'sl-phi-desc':   { en:'Labor supply curve slope (higher = steeper)', ru:'Наклон кривой предложения труда (выше = круче)', uz:"Mehnat taklifi egri chizig'i qiyaligi (yuqori = tik)" },
+  'sl-alpha0-name':{ en:'Formality base α₀ (%)', ru:'Базовая доля формальных α₀ (%)', uz:'Rasmiylik asosi α₀ (%)' },
+  'sl-alpha0-desc':{ en:'Base formal employment share (IO: COE/GVA=25%)', ru:'Базовая доля формальной занятости (МО: ОТ/ВДС=25%)', uz:"Rasmiy bandlik ulushi asosi (IO: COE/YaIM=25%)" },
+  /* ── Buttons / Status ─────────────────────────────────── */
+  'btn-run':       { en:'▶ Run Simulation', ru:'▶ Запустить симуляцию', uz:"▶ Simulyatsiyani ishga tushirish" },
+  'btn-reset':     { en:'↺ Reset to Base', ru:'↺ Сбросить к базе', uz:'↺ Asosga qaytarish' },
+  'solver-label':  { en:'Solver:', ru:'Решатель:', uz:'Yechuvchi:' },
+  'solver-ready':  { en:'Ready', ru:'Готов', uz:'Tayyor' },
+  'solver-solving':{ en:'Solving…', ru:'Вычисление…', uz:'Hisoblanmoqda…' },
+  'solver-ok':     { en:'Converged', ru:'Решение найдено', uz:'Yechim topildi' },
+  'solver-err':    { en:'Solver error — BoP did not converge', ru:'Ошибка решателя — ПБ не сошёлся', uz:"Yechuvchi xatosi — To'lov balansi yaqinlaşmadi" },
+  /* ── Sim main ─────────────────────────────────────────── */
+  'sim-title':     { en:'CGE 1-2-3 Model — Shock Results', ru:'ОРМ 1-2-3 — Результаты шока', uz:"ORM 1-2-3 — Zarba natijalari" },
+  'sim-desc':      { en:'Devarajan et al. (1997) · Uzbekistan 2021 calibration · Pd = 1 (numeraire)', ru:'Деваражан и др. (1997) · Калибровка Узбекистана 2021 · Pd = 1 (нумерар)', uz:"Devarajan va boshq. (1997) · O'zbekiston 2021 kalibrovkasi · Pd = 1 (numeraire)" },
+  /* ── KPI labels ────────────────────────────────────────── */
+  'kpi-Y-lbl':     { en:'GDP Impact (Y)', ru:'ВВП (Y)', uz:'YaIM ta\'siri (Y)' },
+  'kpi-E-lbl':     { en:'Exports (E)', ru:'Экспорт (E)', uz:'Eksport (E)' },
+  'kpi-M-lbl':     { en:'Imports (M)', ru:'Импорт (M)', uz:'Import (M)' },
+  'kpi-Er-lbl':    { en:'Exchange Rate (Er)', ru:'Обменный курс (Er)', uz:'Valyuta kursi (Er)' },
+  'kpi-pct-sub':   { en:'% change from base', ru:'% изм. от базы', uz:'Bazadan % o\'zg.' },
+  'kpi-er-sub':    { en:'Value (base = 1.00)', ru:'Значение (база = 1.00)', uz:'Qiymat (asos = 1.00)' },
+  'divider-labor': { en:'⚙ Labor Market', ru:'⚙ Рынок труда', uz:'⚙ Mehnat bozori' },
+  'kpi-L-lbl':     { en:'Employment (L)', ru:'Занятость (L)', uz:'Bandlik (L)' },
+  'kpi-w-lbl':     { en:'Real Wage Index (w)', ru:'Индекс реальной зарплаты (w)', uz:'Real ish haqi indeksi (w)' },
+  'kpi-formal-lbl':{ en:'Formal / Informal', ru:'Форм. / Неформальная', uz:'Rasmiy / Norasmiy' },
+  'kpi-UR-lbl':    { en:'Unemployment Rate', ru:'Уровень безработицы', uz:'Ishsizlik darajasi' },
+  'kpi-L-sub-base':{ en:'millions of workers', ru:'млн работников', uz:'mln ishchi' },
+  'kpi-formal-sub-base':{ en:'millions formal / informal', ru:'млн формальных / неформальных', uz:'mln rasmiy / norasmiy' },
+  'kpi-UR-sub-base':{ en:'% of labor force', ru:'% рабочей силы', uz:'% mehnat kuchi' },
+  /* ── Export toolbar ────────────────────────────────────── */
+  'export-label':  { en:'Export Results:', ru:'Экспорт результатов:', uz:'Natijalarni eksport:' },
+  'export-csv':    { en:'📊 CSV', ru:'📊 CSV', uz:'📊 CSV' },
+  'export-png':    { en:'🖼 PNG Chart', ru:'🖼 График PNG', uz:'🖼 PNG grafik' },
+  'export-pdf':    { en:'📄 PDF Report', ru:'📄 PDF отчёт', uz:'📄 PDF hisobot' },
+  'export-save':   { en:'💾 Save', ru:'💾 Сохранить', uz:'💾 Saqlash' },
+  'export-ai':     { en:'🤖 AI', ru:'🤖 ИИ', uz:'🤖 AI' },
+  /* ── Results table ─────────────────────────────────────── */
+  'results-card-title':{ en:'Full Results — Base vs. Experiment', ru:'Полные результаты — База против Эксперимента', uz:"To'liq natijalar — Asos va Tajriba" },
+  'results-card-sub':  { en:'All values in model units (normalised to base year). Prices in UZS index (base Pd=1).', ru:'Все значения в нормализованных единицах (база = 2021). Цены в индексе сум (база Pd=1).', uz:"Barcha qiymatlar model birliklarida (asos yil = 2021). Narxlar so'm indeksida (Pd=1)." },
+  'th-indicator':  { en:'Indicator', ru:'Показатель', uz:'Ko\'rsatkich' },
+  'th-description':{ en:'Description', ru:'Описание', uz:'Tavsif' },
+  'th-base':       { en:'Base (2021)', ru:'База (2021)', uz:'Asos (2021)' },
+  'th-experiment': { en:'Experiment', ru:'Эксперимент', uz:'Tajriba' },
+  'th-pct-change': { en:'% Change', ru:'% Изменение', uz:"% O'zgarish" },
+  'results-empty': { en:'Run the simulation to see results', ru:'Запустите симуляцию для просмотра результатов', uz:"Natijalarni ko'rish uchun simulyatsiyani ishga tushiring" },
+  /* ── Charts ────────────────────────────────────────────── */
+  'chart-title':       { en:'% Change — Key Macro Indicators', ru:'% Изменение — Ключевые макропоказатели', uz:"% O'zgarish — Asosiy makroiqtisodiy ko'rsatkichlar" },
+  'chart-sub':         { en:'Deviation of experiment from base year values', ru:'Отклонение эксперимента от базовых значений', uz:"Tajribaning asos qiymatlardan og'ishi" },
+  'chart-dataset-lbl': { en:'% Change from Base', ru:'% Изм. от базы', uz:"Bazadan % o'zg." },
+  'labor-chart-title': { en:'Labor Market Results', ru:'Результаты рынка труда', uz:'Mehnat bozori natijalari' },
+  'labor-chart-sub':   { en:'Employment, wages, formal/informal split — derived from CGE output via Cobb-Douglas labor demand + wage curve', ru:'Занятость, зарплаты, формальная/неформальная занятость — рассчитано на основе выпуска ОРМ (спрос на труд Кобба-Дугласа + кривая зарплат)', uz:"Bandlik, ish haqlari, rasmiy/norasmiy bo'linish — ORM chiqishi asosida hisoblangan" },
+  'lab-box-L':         { en:'Employment', ru:'Занятость', uz:'Bandlik' },
+  'lab-box-fi':        { en:'Formal / Informal', ru:'Форм. / Неформ.', uz:'Rasmiy / Norasmiy' },
+  'lab-box-ur':        { en:'Unemployment', ru:'Безработица', uz:'Ishsizlik' },
+  /* ── Chart dynamic labels ──────────────────────────────── */
+  'lbl-gdp':       { en:'GDP (Y)', ru:'ВВП (Y)', uz:'YaIM (Y)' },
+  'lbl-exports':   { en:'Exports (E)', ru:'Экспорт (E)', uz:'Eksport (E)' },
+  'lbl-imports':   { en:'Imports (M)', ru:'Импорт (M)', uz:'Import (M)' },
+  'lbl-consump':   { en:'Consumption (Cn)', ru:'Потребление (Cn)', uz:'Iste\'mol (Cn)' },
+  'lbl-invest':    { en:'Investment (Z)', ru:'Инвестиции (Z)', uz:'Investitsiya (Z)' },
+  'lbl-tax':       { en:'Tax Revenue (TAX)', ru:'Налог. доходы (TAX)', uz:'Soliq daromadlari (TAX)' },
+  'lbl-govbal':    { en:'Govt Balance (Sg)', ru:'Бюджет (Sg)', uz:'Byudjet balansi (Sg)' },
+  'lbl-exrate':    { en:'Exch. Rate (Er)', ru:'Обм. курс (Er)', uz:'Valyuta kursi (Er)' },
+  'lbl-employ':    { en:'Employment (L,M)', ru:'Занятость (L,млн)', uz:'Bandlik (L,mln)' },
+  'lbl-wage':      { en:'Wage Index (w)', ru:'Индекс зарплаты (w)', uz:'Ish haqi indeksi (w)' },
+  'lbl-formal':    { en:'Formal Emp. (M)', ru:'Формальная (млн)', uz:'Rasmiy ish (mln)' },
+  'lbl-informal':  { en:'Informal Emp. (M)', ru:'Неформальная (млн)', uz:'Norasmiy ish (mln)' },
+  'lbl-unempl':    { en:'Unemployed (U,M)', ru:'Безработные (млн)', uz:'Ishsiz (mln)' },
+  'lbl-formality': { en:'Formality Rate (α)', ru:'Формальность (α)', uz:'Rasmiylik (α)' },
+  /* ── ROWS_DEF descriptions ─────────────────────────────── */
+  'rd-Er':  { en:'Real exch. rate (base=1.00)', ru:'Реальный обм. курс (база=1.00)', uz:"Real valyuta kursi (asos=1.00)" },
+  'rd-Y':   { en:'Y = Px·X + tr + ft + re', ru:'Y = Px·X + tr + ft + re', uz:'Y = Px·X + tr + ft + re' },
+  'rd-Cn':  { en:'Cn = (1−sy)·(Y−TAX)', ru:'Cn = (1−sy)·(Y−TAX)', uz:'Cn = (1−sy)·(Y−TAX)' },
+  'rd-Z':   { en:'Z = Total savings', ru:'Z = Совокупные сбережения', uz:'Z = Umumiy jamg\'armalar' },
+  'rd-E':   { en:'CET: domestic output exported', ru:'КЭТ: экспорт внутреннего выпуска', uz:"CET: ichki ishlab chiqarishdan eksport" },
+  'rd-M':   { en:'CES: Armington imports', ru:'КЭЗ: импорт по Армингтону', uz:'CES: Armington importi' },
+  'rd-Ds':  { en:'Output on domestic market', ru:'Выпуск на внутреннем рынке', uz:"Ichki bozordagi ishlab chiqarish" },
+  'rd-Q':   { en:'CES(M, Ds)', ru:'КЭЗ(M, Ds)', uz:'CES(M, Ds)' },
+  'rd-TAX': { en:'ts·Pq·Q + ty·Px·X + tm+te duties', ru:'ts·Pq·Q + ty·Px·X + пошлины tm+te', uz:'ts·Pq·Q + ty·Px·X + bojlar tm+te' },
+  'rd-Sg':  { en:'TAX − G − tr', ru:'TAX − G − tr', uz:'TAX − G − tr' },
+  'rd-S':   { en:'Private + Govt + Foreign', ru:'Частные + Гос. + Иностранные', uz:"Xususiy + Davlat + Tashqi" },
+  'rd-TB':  { en:'Pe·E − Pm·M', ru:'Pe·E − Pm·M', uz:'Pe·E − Pm·M' },
+  'rd-Pe':  { en:'we·(1−te)·Er', ru:'we·(1−te)·Er', uz:'we·(1−te)·Er' },
+  'rd-Pm':  { en:'wm·(1+tm)·Er', ru:'wm·(1+tm)·Er', uz:'wm·(1+tm)·Er' },
+  'rd-Pq':  { en:'CES price index', ru:'Индекс цен КЭЗ', uz:'CES narx indeksi' },
+  'rd-Px':  { en:'Pf·Pt', ru:'Pf·Pt', uz:'Pf·Pt' },
+  'rd-L':   { en:'Equilibrium employment (millions)', ru:'Равновесная занятость (млн)', uz:"Muvozanat bandlik (mln)" },
+  'rd-w':   { en:'Real wage index (base = 1.00)', ru:'Индекс реальной зарплаты (база=1.00)', uz:"Real ish haqi indeksi (asos=1.00)" },
+  'rd-wr':  { en:'Wage deflated by GDP deflator', ru:'Зарплата, дефлированная дефлятором ВВП', uz:"Ish haqi YaIM deflyatori bilan deflatsiyalangan" },
+  'rd-Lf':  { en:'α × L (millions)', ru:'α × L (млн)', uz:'α × L (mln)' },
+  'rd-Li':  { en:'(1−α) × L (millions)', ru:'(1−α) × L (млн)', uz:'(1−α) × L (mln)' },
+  'rd-al':  { en:'Formal share of employment', ru:'Доля формальной занятости', uz:"Rasmiy bandlik ulushi" },
+  'rd-U':   { en:'Ls − L (millions)', ru:'Ls − L (млн)', uz:'Ls − L (mln)' },
+  'rd-UR':  { en:'U / Ls × 100', ru:'U / Ls × 100', uz:'U / Ls × 100' },
+  /* ── ROWS_DEF labels ────────────────────────────────────── */
+  'rl-Er':  { en:'Exchange Rate', ru:'Обменный курс', uz:'Valyuta kursi' },
+  'rl-Y':   { en:'GDP (national income)', ru:'ВВП (национальный доход)', uz:"YaIM (milliy daromad)" },
+  'rl-Cn':  { en:'Private Consumption', ru:'Частное потребление', uz:"Xususiy iste'mol" },
+  'rl-Z':   { en:'Investment', ru:'Инвестиции', uz:'Investitsiya' },
+  'rl-E':   { en:'Exports', ru:'Экспорт', uz:'Eksport' },
+  'rl-M':   { en:'Imports', ru:'Импорт', uz:'Import' },
+  'rl-Ds':  { en:'Domestic Supply', ru:'Внутреннее предложение', uz:"Ichki taklif" },
+  'rl-Q':   { en:'Composite Absorption', ru:'Совокупное поглощение', uz:"Kompozit yutilish" },
+  'rl-TAX': { en:'Tax Revenue', ru:'Налоговые доходы', uz:'Soliq daromadlari' },
+  'rl-Sg':  { en:'Govt Budget Balance', ru:'Бюджетный баланс', uz:'Byudjet balansi' },
+  'rl-S':   { en:'Total Savings', ru:'Совокупные сбережения', uz:"Umumiy jamg'armalar" },
+  'rl-TB':  { en:'Trade Balance', ru:'Торговый баланс', uz:'Savdo balansi' },
+  'rl-Pe':  { en:'Export Price', ru:'Цена экспорта', uz:'Eksport narxi' },
+  'rl-Pm':  { en:'Import Price', ru:'Цена импорта', uz:'Import narxi' },
+  'rl-Pq':  { en:'Composite Price', ru:'Составная цена', uz:'Kompozit narx' },
+  'rl-Px':  { en:'GDP Deflator', ru:'Дефлятор ВВП', uz:"YaIM deflyatori" },
+  'rl-L':   { en:'Employment (L)', ru:'Занятость (L)', uz:'Bandlik (L)' },
+  'rl-w':   { en:'Wage Index (w)', ru:'Индекс зарплаты (w)', uz:'Ish haqi indeksi (w)' },
+  'rl-wr':  { en:'Real Wage (w/P)', ru:'Реальная зарплата (w/P)', uz:'Real ish haqi (w/P)' },
+  'rl-Lf':  { en:'Formal Employment', ru:'Формальная занятость', uz:"Rasmiy bandlik" },
+  'rl-Li':  { en:'Informal Employment', ru:'Неформальная занятость', uz:"Norasmiy bandlik" },
+  'rl-al':  { en:'Formality Rate (α)', ru:'Уровень формальности (α)', uz:'Rasmiylik darajasi (α)' },
+  'rl-U':   { en:'Unemployment (U)', ru:'Безработица (U)', uz:'Ishsizlik (U)' },
+  'rl-UR':  { en:'Unemployment Rate (%)', ru:'Уровень безработицы (%)', uz:'Ishsizlik darajasi (%)' },
+  /* ── Scenario cards ────────────────────────────────────── */
+  'scen-run-btn':       { en:'▶ Run Scenario', ru:'▶ Запустить', uz:"▶ Ishga tushirish" },
+  'scen-tariff-title':  { en:'Import Tariff +5pp', ru:'Импортный тариф +5пп', uz:"Import tarifi +5pp" },
+  'scen-tariff-desc':   { en:'Raise import tariff from 2% to 7%. Evaluates protectionist trade policy impact on domestic output, exchange rate, and absorption.', ru:'Повышение импортного тарифа с 2% до 7%. Оценивает влияние протекционистской торговой политики на выпуск, обменный курс и поглощение.', uz:"Import tarifini 2% dan 7% gacha ko'tarish. Protektsionistik savdo siyosatining ichki ishlab chiqarish, valyuta kursi va yutilishga ta'sirini baholaydi." },
+  'scen-exprice-title': { en:'Export Price Fall −10%', ru:'Падение цены экспорта −10%', uz:'Eksport narxi tushishi −10%' },
+  'scen-exprice-desc':  { en:'World export price falls 10% (e.g. gold price shock). Simulates terms-of-trade deterioration and balance of payments adjustment.', ru:'Мировая цена экспорта снижается на 10% (напр. шок цены золота). Моделирует ухудшение условий торговли и корректировку платёжного баланса.', uz:"Dunyo eksport narxi 10% ga tushadi (mas. oltin narxi zarbasi). Savdo shartlari yomonlashishini va to'lov balansi moslashishini modellashtiradi." },
+  'scen-imprice-title': { en:'World Import Price +10%', ru:'Мировая цена импорта +10%', uz:"Dunyo import narxi +10%" },
+  'scen-imprice-desc':  { en:'Rise in world import prices +10% (energy/food global shock). Tests real exchange rate and welfare effects of terms-of-trade deterioration.', ru:'Рост мировых цен на импорт +10% (глобальный шок энергоносителей/продовольствия). Проверяет реальный обменный курс и благосостояние при ухудшении условий торговли.', uz:"Dunyo import narxlarining +10% o'sishi (energiya/oziq-ovqat global zarbasi). Real valyuta kursini va savdo shartlari yomonlashishidagi farovonlik ta'sirini tekshiradi." },
+  'scen-vat-title':     { en:'Energy Reform: VAT +5pp', ru:'Энергореформа: НДС +5пп', uz:"Energiya islohoti: QQS +5pp" },
+  'scen-vat-desc':      { en:'Indirect tax rate rises from 6% to 11% (VAT broadening). Evaluates fiscal revenue impact and absorption effects of energy subsidy reform.', ru:'Косвенный налог растёт с 6% до 11% (расширение НДС). Оценивает влияние реформы энергосубсидий на налоговые доходы и поглощение.', uz:"Bilvosita soliq darajasi 6% dan 11% gacha ko'tariladi (QQS kengayishi). Energiya subsidiya islohotining fiskal daromad va yutilishga ta'sirini baholaydi." },
+  'scen-fdi-title':     { en:'FDI Surge: Foreign Savings +50%', ru:'Приток ПИИ: Иностр. сбережения +50%', uz:"TXI oqimi: Tashqi jamg'arma +50%" },
+  'scen-fdi-desc':      { en:'Foreign savings (FDI inflows) increase 50%. Assesses Dutch disease risk, exchange rate appreciation, and investment expansion.', ru:'Иностранные сбережения (приток ПИИ) растут на 50%. Оценивает риск «голландской болезни», ревальвацию обменного курса и расширение инвестиций.', uz:"Tashqi jamg'armalar (TXI oqimi) 50% ga ko'payadi. 'Golland kasalligi' xavfi, valyuta kursi qadrlashishi va investitsiya kengayishini baholaydi." },
+  'scen-austerity-title':{ en:'Government Austerity −20%', ru:'Бюджетная экономия −20%', uz:"Byudjet tejami −20%" },
+  'scen-austerity-desc': { en:'Government consumption cut by 20%. Fiscal consolidation — evaluates GDP multiplier, trade balance, and private sector crowding-in.', ru:'Государственное потребление сокращается на 20%. Фискальная консолидация — оценка мультипликатора ВВП, торгового баланса и вытеснения частного сектора.', uz:"Davlat iste'moli 20% ga qisqaradi. Fiskal konsolidatsiya — YaIM multiplikatori, savdo balansi va xususiy sektor siqilishini baholaydi." },
+  'scen-labor-title':   { en:'Labor Supply Shock +10%', ru:'Шок предложения труда +10%', uz:"Mehnat taklifi zarbasi +10%" },
+  'scen-labor-desc':    { en:'Labor force grows 10% (e.g. rural-urban migration, returning diaspora). Tests unemployment absorption, wage pressure, and formality dynamics.', ru:'Рабочая сила растёт на 10% (напр. сельско-городская миграция, возвращение диаспоры). Тестирует абсорбцию безработицы, давление на зарплаты и формализацию.', uz:"Mehnat kuchi 10% ga o'sadi (mas. qishloq-shahar migratsiyasi, diaspora qaytishi). Ishsizlikni yutilishi, ish haqi bosimi va rasmiylashtirish dinamikasini tekshiradi." },
+  'scen-minwage-title': { en:'Minimum Wage: Steep φ = 1.2', ru:'Мин. зарплата: крутой φ = 1.2', uz:"Eng kam ish haqi: tik φ = 1.2" },
+  'scen-minwage-desc':  { en:'High wage elasticity (φ = 1.2) simulates binding minimum wage — wages rise steeply with employment, slowing job creation. Tests employment-wage trade-off.', ru:'Высокая эластичность зарплат (φ = 1.2) имитирует обязательную минимальную зарплату — зарплаты растут круто с занятостью, замедляя создание рабочих мест.', uz:"Yuqori ish haqi elastikligi (φ = 1.2) majburiy eng kam ish haqini simulyatsiya qiladi — ish haqlari bandlik bilan keskin o'sadi, ish o'rinlari yaratilishini sekinlashtiradi." },
+  /* ── Calibration tab ───────────────────────────────────── */
+  'calib-title':    { en:'Calibration &amp; Data — Uzbekistan 2021', ru:'Калибровка и данные — Узбекистан 2021', uz:"Kalibrovka va ma'lumotlar — O'zbekiston 2021" },
+  'calib-sub':      { en:'World Bank WDI · Statistics Agency of Uzbekistan · CERR estimates', ru:'ВБ ВДИ · Агентство статистики Узбекистана · Оценки ЦЭИИ', uz:"Jahon banki WDI · O'zbekiston Statistika agentligi · TIQT hisob-kitoblari" },
+  'calib-h-params': { en:'Model Parameters', ru:'Параметры модели', uz:'Model parametrlari' },
+  'calib-h-exog':   { en:'Base Year Data — Exogenous Variables (2021)', ru:'Базовый год — Экзогенные переменные (2021)', uz:"Asos yil ma'lumotlari — Ekzogen o'zgaruvchilar (2021)" },
+  'calib-h-endog':  { en:'Base Year Endogenous Variables (2021)', ru:'Базовый год — Эндогенные переменные (2021)', uz:"Asos yil endogen o'zgaruvchilari (2021)" },
+  'calib-h-labor':  { en:'Labor Market Parameters (2021 calibration)', ru:'Параметры рынка труда (калибровка 2021)', uz:"Mehnat bozori parametrlari (2021 kalibrovkasi)" },
+  'calib-h-checks': { en:'Calibration Checks', ru:'Проверка калибровки', uz:"Kalibrovka tekshiruvi" },
+  'calib-loading':  { en:'Loading calibration diagnostics…', ru:'Загрузка диагностики калибровки…', uz:"Kalibrovka diagnostikasi yuklanmoqda…" },
+  /* ── Table column headers ──────────────────────────────── */
+  'th-parameter':   { en:'Parameter', ru:'Параметр', uz:'Parametr' },
+  'th-symbol':      { en:'Symbol', ru:'Символ', uz:'Belgi' },
+  'th-value':       { en:'Value', ru:'Значение', uz:'Qiymat' },
+  'th-description': { en:'Description', ru:'Описание', uz:'Tavsif' },
+  'th-variable':    { en:'Variable', ru:'Переменная', uz:"O'zgaruvchi" },
+  'th-base-value':  { en:'Base Value', ru:'Базовое значение', uz:'Asosiy qiymat' },
+  'th-source':      { en:'Source', ru:'Источник', uz:'Manba' },
+  /* ── Documentation page title ──────────────────────────── */
+  'doc-page-title': { en:'Model Documentation — CGE 1-2-3', ru:'Документация модели — ОРМ 1-2-3', uz:"Model hujjatlari — ORM 1-2-3" },
+};
+
+/* ── Documentation section HTML (EN/RU/UZ) ── */
+const DOC_HTML = {
+  'doc-sec-overview': {
+    en:`<h3>Overview</h3>
+<p>The 1-2-3 model (Devarajan, Go, Lewis, Robinson &amp; Sinko, 1997) is a minimal computable general equilibrium framework designed for developing-country policy analysis. It features <strong>1 country, 2 sectors</strong> (exports vs. domestic goods), and <strong>3 commodities</strong> (exports E, imports M, domestic good D). The framework captures the essential open-economy macroeconomics in a tractable single-equation system.</p>
+<p>The Uzbekistan calibration uses 2021 national accounts data. All variables are normalised so that base-year output X = 1 and the domestic price Pd = 1 (numeraire). The model is closed by a flexible real exchange rate that clears the balance of payments.</p>`,
+    ru:`<h3>Обзор</h3>
+<p>Модель 1-2-3 (Деваражан, Гоу, Льюис, Робинсон &amp; Синко, 1997) — минимальная вычислимая модель общего равновесия, разработанная для анализа политики в развивающихся странах. Охватывает <strong>1 страну, 2 сектора</strong> (экспортные и внутренние товары) и <strong>3 товара</strong> (экспорт E, импорт M, внутренний товар D). Структура отражает ключевую открытую макроэкономику в компактной системе уравнений.</p>
+<p>Калибровка для Узбекистана использует данные национальных счетов 2021 года. Все переменные нормализованы: базовый выпуск X = 1, внутренняя цена Pd = 1 (нумерар). Модель закрывается гибким реальным обменным курсом, уравновешивающим платёжный баланс.</p>`,
+    uz:`<h3>Umumiy ko'rinish</h3>
+<p>1-2-3 modeli (Devarajan, Go, Lewis, Robinson &amp; Sinko, 1997) — rivojlanayotgan mamlakatlar uchun siyosat tahlilida qo'llaniladigan minimal hisoblash umumiy muvozanat tizimi. U <strong>1 mamlakat, 2 sektor</strong> (eksport va ichki tovarlar) va <strong>3 tovar</strong> (eksport E, import M, ichki tovar D) ni qamrab oladi. Tizim ochiq iqtisodiyotning asosiy makroiqtisodiy munosabatlarini ixcham ko'rinishda ifodalaydi.</p>
+<p>O'zbekiston kalibrovkasi 2021 yil milliy hisoblar ma'lumotlaridan foydalanadi. Barcha o'zgaruvchilar normallashtirilib, asos yil ishlab chiqarish X = 1 va ichki narx Pd = 1 (numeraire) deb qabul qilinadi. Model to'lov balansini muvozanatlashtiradigan moslashuvchan real valyuta kursi orqali yopiladi.</p>`
+  },
+  'doc-sec-prices': {
+    en:`<h3>Price System</h3>
+<div class="eq-box">Pd = 1.00 &nbsp;&nbsp;&nbsp;&nbsp; (numeraire — domestic price level fixed)</div>
+<div class="eq-box">Pe = we × (1 − te) × Er &nbsp;&nbsp;&nbsp; (export price in domestic currency)</div>
+<div class="eq-box">Pm = wm × (1 + tm) × Er &nbsp;&nbsp;&nbsp; (import price in domestic currency)</div>`,
+    ru:`<h3>Система цен</h3>
+<div class="eq-box">Pd = 1.00 &nbsp;&nbsp;&nbsp;&nbsp; (нумерар — внутренний уровень цен зафиксирован)</div>
+<div class="eq-box">Pe = we × (1 − te) × Er &nbsp;&nbsp;&nbsp; (цена экспорта в национальной валюте)</div>
+<div class="eq-box">Pm = wm × (1 + tm) × Er &nbsp;&nbsp;&nbsp; (цена импорта в национальной валюте)</div>`,
+    uz:`<h3>Narxlar tizimi</h3>
+<div class="eq-box">Pd = 1.00 &nbsp;&nbsp;&nbsp;&nbsp; (numeraire — ichki narx darajasi qat'iy belgilangan)</div>
+<div class="eq-box">Pe = we × (1 − te) × Er &nbsp;&nbsp;&nbsp; (milliy valyutadagi eksport narxi)</div>
+<div class="eq-box">Pm = wm × (1 + tm) × Er &nbsp;&nbsp;&nbsp; (milliy valyutadagi import narxi)</div>`
+  },
+  'doc-sec-cet': {
+    en:`<h3>CET Production Frontier (Export Supply)</h3>
+<p>Producers allocate output between exports and domestic sales according to a Constant Elasticity of Transformation (CET) function. The first-order condition gives the export-to-domestic ratio:</p>
+<div class="eq-box">eRat = E/Ds = [(1−bt)/bt × Pe/Pd]^σ_t &nbsp;&nbsp;&nbsp; (FOC ratio)</div>
+<div class="eq-box">Ds = X / (at × [bt × eRat^ρ_t + (1−bt)]^(1/ρ_t))</div>
+<div class="eq-box">E = eRat × Ds</div>
+<p>Parameters: at = 2.42, bt = 0.82, ρ_t = 2.43, σ_t = 0.70</p>`,
+    ru:`<h3>Граница производства CET (предложение экспорта)</h3>
+<p>Производители распределяют выпуск между экспортом и внутренними продажами согласно функции постоянной эластичности трансформации (КЭТ). Условие первого порядка даёт соотношение экспорт/внутренние продажи:</p>
+<div class="eq-box">eRat = E/Ds = [(1−bt)/bt × Pe/Pd]^σ_t &nbsp;&nbsp;&nbsp; (соотношение ПОП)</div>
+<div class="eq-box">Ds = X / (at × [bt × eRat^ρ_t + (1−bt)]^(1/ρ_t))</div>
+<div class="eq-box">E = eRat × Ds</div>
+<p>Параметры: at = 2.42, bt = 0.82, ρ_t = 2.43, σ_t = 0.70</p>`,
+    uz:`<h3>CET ishlab chiqarish chegarasi (eksport taklifi)</h3>
+<p>Ishlab chiqaruvchilar chiqarishni eksport va ichki sotuvlar o'rtasida Doimiy Transformatsiya Elastikligi (CET) funksiyasiga asoslanib taqsimlaydi. Birinchi tartibli shart eksport/ichki nisbatni beradi:</p>
+<div class="eq-box">eRat = E/Ds = [(1−bt)/bt × Pe/Pd]^σ_t &nbsp;&nbsp;&nbsp; (birinchi tartib sharti)</div>
+<div class="eq-box">Ds = X / (at × [bt × eRat^ρ_t + (1−bt)]^(1/ρ_t))</div>
+<div class="eq-box">E = eRat × Ds</div>
+<p>Parametrlar: at = 2.42, bt = 0.82, ρ_t = 2.43, σ_t = 0.70</p>`
+  },
+  'doc-sec-ces': {
+    en:`<h3>CES Absorption (Import Demand)</h3>
+<p>Domestic consumers/firms combine imports and domestic goods according to a Constant Elasticity of Substitution (Armington) aggregator. The FOC gives the import-to-domestic ratio:</p>
+<div class="eq-box">mRat = M/Dd = [bq/(1−bq) × Pd/Pm]^σ_q &nbsp;&nbsp;&nbsp; (Armington ratio)</div>
+<div class="eq-box">M = mRat × Ds &nbsp;&nbsp;&nbsp; (domestic market clearing: Dd = Ds)</div>
+<div class="eq-box">Q = aq × [bq × M^(−ρ_q) + (1−bq) × Ds^(−ρ_q)]^(−1/ρ_q)</div>
+<p>Parameters: aq = 1.91, bq = 0.32, ρ_q = 0.43, σ_q = 0.70</p>`,
+    ru:`<h3>Поглощение CES (спрос на импорт)</h3>
+<p>Внутренние потребители/фирмы объединяют импорт и внутренние товары согласно агрегатору постоянной эластичности замещения (КЭЗ / Армингтон). Условие ПОП даёт соотношение импорт/внутренние:</p>
+<div class="eq-box">mRat = M/Dd = [bq/(1−bq) × Pd/Pm]^σ_q &nbsp;&nbsp;&nbsp; (соотношение Армингтона)</div>
+<div class="eq-box">M = mRat × Ds &nbsp;&nbsp;&nbsp; (клиринг внутреннего рынка: Dd = Ds)</div>
+<div class="eq-box">Q = aq × [bq × M^(−ρ_q) + (1−bq) × Ds^(−ρ_q)]^(−1/ρ_q)</div>
+<p>Параметры: aq = 1.91, bq = 0.32, ρ_q = 0.43, σ_q = 0.70</p>`,
+    uz:`<h3>CES yutilishi (import talabi)</h3>
+<p>Ichki iste'molchilar/firmalar importni va ichki tovarlarni Doimiy O'rnini Bosish Elastikligi (CES/Armington) agregatori asosida birlashtiradi. Birinchi tartibli shart import/ichki nisbatni beradi:</p>
+<div class="eq-box">mRat = M/Dd = [bq/(1−bq) × Pd/Pm]^σ_q &nbsp;&nbsp;&nbsp; (Armington nisbati)</div>
+<div class="eq-box">M = mRat × Ds &nbsp;&nbsp;&nbsp; (ichki bozor klirings: Dd = Ds)</div>
+<div class="eq-box">Q = aq × [bq × M^(−ρ_q) + (1−bq) × Ds^(−ρ_q)]^(−1/ρ_q)</div>
+<p>Parametrlar: aq = 1.91, bq = 0.32, ρ_q = 0.43, σ_q = 0.70</p>`
+  },
+  'doc-sec-bop': {
+    en:`<h3>Balance of Payments Closure</h3>
+<p>The real exchange rate Er is endogenous and adjusts to clear the balance of payments. We solve for Er by bisection on:</p>
+<div class="eq-box">f(Er) = Pm(Er) × M(Er) − Pe(Er) × E(Er) − B − re − ft = 0</div>
+<p>Import payments minus export receipts must equal the sum of foreign savings B, remittances re, and grants ft. The bisection searches Er ∈ [0.001, 1000] over 100 iterations.</p>`,
+    ru:`<h3>Закрытие платёжного баланса</h3>
+<p>Реальный обменный курс Er является эндогенным и корректируется для уравновешивания платёжного баланса. Er находится методом бисекции:</p>
+<div class="eq-box">f(Er) = Pm(Er) × M(Er) − Pe(Er) × E(Er) − B − re − ft = 0</div>
+<p>Импортные платежи минус экспортные поступления должны равняться сумме иностранных сбережений B, денежных переводов re и грантов ft. Бисекция ищет Er ∈ [0.001, 1000] за 100 итераций.</p>`,
+    uz:`<h3>To'lov balansi yopilishi</h3>
+<p>Real valyuta kursi Er endogen bo'lib, to'lov balansini muvozanatlashish uchun moslashadi. Er biseksiya usuli bilan topiladi:</p>
+<div class="eq-box">f(Er) = Pm(Er) × M(Er) − Pe(Er) × E(Er) − B − re − ft = 0</div>
+<p>Import to'lovlari minus eksport tushumlari tashqi jamg'armalar B, pul o'tkazmalari re va grantlar ft yig'indisiga teng bo'lishi kerak. Biseksiya Er ∈ [0.001, 1000] oralig'ida 100 ta iteratsiyada qidiradi.</p>`
+  },
+  'doc-sec-macro': {
+    en:`<h3>Derived Macro Aggregates</h3>
+<div class="eq-box">Pq = (Pm×M + Ds) / Q &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (composite good price, Pd=1)</div>
+<div class="eq-box">Pt = (Pe×E + Ds) / X &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (output price)</div>
+<div class="eq-box">Px = Pf × Pt &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (GDP deflator)</div>
+<div class="eq-box">TAX = ts×Pq×Q + ty×Px×X + tm×wm×Er×M + te×we×Er×E</div>
+<div class="eq-box">Y = Px×X + tr + ft + re &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (national income)</div>
+<div class="eq-box">Sg = TAX − G − tr &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (government budget balance)</div>
+<div class="eq-box">Cn = (1−sy) × (Y − TAX) &nbsp;&nbsp;&nbsp;&nbsp; (private consumption)</div>
+<div class="eq-box">S = sy×(Y−TAX) + Sg + B &nbsp;&nbsp;&nbsp;&nbsp; (total savings)</div>
+<div class="eq-box">Z = S &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (savings = investment, Walras law)</div>
+<div class="eq-box">TB = Pe×E − Pm×M &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (trade balance)</div>`,
+    ru:`<h3>Производные макроагрегаты</h3>
+<div class="eq-box">Pq = (Pm×M + Ds) / Q &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (цена составного блага, Pd=1)</div>
+<div class="eq-box">Pt = (Pe×E + Ds) / X &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (цена выпуска)</div>
+<div class="eq-box">Px = Pf × Pt &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (дефлятор ВВП)</div>
+<div class="eq-box">TAX = ts×Pq×Q + ty×Px×X + tm×wm×Er×M + te×we×Er×E</div>
+<div class="eq-box">Y = Px×X + tr + ft + re &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (национальный доход)</div>
+<div class="eq-box">Sg = TAX − G − tr &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (бюджетный баланс)</div>
+<div class="eq-box">Cn = (1−sy) × (Y − TAX) &nbsp;&nbsp;&nbsp;&nbsp; (частное потребление)</div>
+<div class="eq-box">S = sy×(Y−TAX) + Sg + B &nbsp;&nbsp;&nbsp;&nbsp; (совокупные сбережения)</div>
+<div class="eq-box">Z = S &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (сбережения = инвестиции, закон Вальраса)</div>
+<div class="eq-box">TB = Pe×E − Pm×M &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (торговый баланс)</div>`,
+    uz:`<h3>Hosil bo'lgan makro agregatlar</h3>
+<div class="eq-box">Pq = (Pm×M + Ds) / Q &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kompozit tovar narxi, Pd=1)</div>
+<div class="eq-box">Pt = (Pe×E + Ds) / X &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (ishlab chiqarish narxi)</div>
+<div class="eq-box">Px = Pf × Pt &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (YaIM deflyatori)</div>
+<div class="eq-box">TAX = ts×Pq×Q + ty×Px×X + tm×wm×Er×M + te×we×Er×E</div>
+<div class="eq-box">Y = Px×X + tr + ft + re &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (milliy daromad)</div>
+<div class="eq-box">Sg = TAX − G − tr &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (davlat byudjet balansi)</div>
+<div class="eq-box">Cn = (1−sy) × (Y − TAX) &nbsp;&nbsp;&nbsp;&nbsp; (xususiy iste'mol)</div>
+<div class="eq-box">S = sy×(Y−TAX) + Sg + B &nbsp;&nbsp;&nbsp;&nbsp; (umumiy jamg'armalar)</div>
+<div class="eq-box">Z = S &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (jamg'arma = investitsiya, Valras qonuni)</div>
+<div class="eq-box">TB = Pe×E − Pm×M &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (savdo balansi)</div>`
+  },
+  'doc-sec-closure': {
+    en:`<h3>Closure Rules</h3>
+<ul>
+  <li><strong>Domestic price numeraire:</strong> Pd = 1 throughout. All price changes are expressed relative to the domestic price level.</li>
+  <li><strong>Exchange rate closure:</strong> Er is flexible and endogenous — it adjusts to balance the BOP. This is the standard "neoclassical" closure.</li>
+  <li><strong>Savings-Investment:</strong> Z = S (investment is savings-driven; no separate investment function).</li>
+  <li><strong>Government budget:</strong> Sg = TAX − G − tr (residual — government can run a surplus or deficit).</li>
+</ul>`,
+    ru:`<h3>Правила закрытия модели</h3>
+<ul>
+  <li><strong>Нумерар внутренних цен:</strong> Pd = 1 на протяжении всей модели. Все изменения цен выражаются относительно внутреннего уровня цен.</li>
+  <li><strong>Закрытие по обменному курсу:</strong> Er гибкий и эндогенный — корректируется для уравновешивания ПБ. Стандартное «неоклассическое» закрытие.</li>
+  <li><strong>Сбережения-Инвестиции:</strong> Z = S (инвестиции определяются сбережениями; отдельной функции инвестиций нет).</li>
+  <li><strong>Бюджет правительства:</strong> Sg = TAX − G − tr (остаточный — правительство может иметь профицит или дефицит).</li>
+</ul>`,
+    uz:`<h3>Model yopilish qoidalari</h3>
+<ul>
+  <li><strong>Ichki narx numeraire:</strong> Pd = 1 butun model davomida. Barcha narx o'zgarishlari ichki narx darajasiga nisbatan ifodalanadi.</li>
+  <li><strong>Valyuta kursi yopilishi:</strong> Er moslashuvchan va endogen — to'lov balansini muvozanatlashish uchun moslashadi. Bu standart "neoklassik" yopilish.</li>
+  <li><strong>Jamg'arma-Investitsiya:</strong> Z = S (investitsiyalar jamg'armalar bilan aniqlanadi; alohida investitsiya funksiyasi yo'q).</li>
+  <li><strong>Davlat byudjeti:</strong> Sg = TAX − G − tr (qoldiq — davlat profitsit yoki defitsit bilan ishlashi mumkin).</li>
+</ul>`
+  },
+  'doc-sec-labor': {
+    en:`<h3>Labor Market Block</h3>
+<p>The labor market extension follows Devarajan &amp; Go (1998) and ILO Uzbekistan reports. It is solved analytically after the goods-market BOP equilibrium and adds three new channels: <strong>labor demand</strong>, a <strong>wage curve</strong>, and a <strong>formal/informal split</strong>.</p>
+<p><strong>Labor demand</strong> (Cobb-Douglas FOC, isoelastic form):</p>
+<div class="eq-box">L/L̄ = (VA/VA̅)^(1/(1+φ·η)) &nbsp;&nbsp;&nbsp; where VA = Px·X</div>
+<p>VA = Px·X is domestic value-added at model prices; VA̅ = 1 at base. η = 0.50 is the labor demand wage elasticity (Hamermesh 1993).</p>
+<p><strong>Wage supply curve</strong> (Blanchflower-Oswald 1994):</p>
+<div class="eq-box">w/w̄ = (L/L̄)^φ &nbsp;&nbsp;&nbsp; φ = 0.50 (default)</div>
+<p>Equilibrium (closed-form): <strong>w/w̄ = (VA/VA̅)^(φ/(1+φ·η))</strong>. At base L = L̄ = 13.5M, w = w̄ = 1.00 by construction.</p>
+<p><strong>Formal / Informal split</strong> (Alaniz et al. 2011):</p>
+<div class="eq-box">α = min(0.95, α₀ · (w/w̄)^ε_α) &nbsp;&nbsp; L_formal = α·L &nbsp;&nbsp; L_informal = (1−α)·L</div>
+<p>α₀ = 0.35, ε_α = 0.80: a 10% real wage rise → 8% increase in formal share. Captures Uzbekistan's informality dynamics (ILO 2022).</p>
+<p><strong>Unemployment:</strong></p>
+<div class="eq-box">U = max(0, Ls − L) &nbsp;&nbsp;&nbsp; UR = U/Ls × 100</div>
+<p>Base UR = 6.9% (Ls = 14.5M, L̄ = 13.5M). Ls is exogenous and can be shocked via the slider.</p>
+<p><strong>Key policy implications:</strong></p>
+<ul>
+  <li><strong>Import tariff rise</strong> → Er depreciates → Pq rises → real wage falls → employment falls, informality rises</li>
+  <li><strong>FDI surge</strong> → Er appreciates → VA expands → employment &amp; wages rise → formality increases</li>
+  <li><strong>Government austerity</strong> → Y contracts → VA falls → unemployment rises, informal sector expands</li>
+  <li><strong>Labor supply shock (Ls↑)</strong> → Unemployment rises mechanically; φ governs the wage compression that stimulates demand response</li>
+</ul>`,
+    ru:`<h3>Блок рынка труда</h3>
+<p>Расширение рынка труда следует Деваражану &amp; Гоу (1998) и отчётам МОТ по Узбекистану. Решается аналитически после равновесия товарного рынка (ПБ) и добавляет три новых канала: <strong>спрос на труд</strong>, <strong>кривую зарплат</strong> и <strong>разделение на формальный/неформальный секторы</strong>.</p>
+<p><strong>Спрос на труд</strong> (условие ПОП Кобба-Дугласа, изоэластичная форма):</p>
+<div class="eq-box">L/L̄ = (ВДС/ВДС̅)^(1/(1+φ·η)) &nbsp;&nbsp;&nbsp; где ВДС = Px·X</div>
+<p>ВДС = Px·X — внутренняя добавленная стоимость по ценам модели; ВДС̅ = 1 в базе. η = 0.50 — эластичность спроса на труд (Хамермеш 1993).</p>
+<p><strong>Кривая предложения заработной платы</strong> (Бланчфлауэр-Освальд 1994):</p>
+<div class="eq-box">w/w̄ = (L/L̄)^φ &nbsp;&nbsp;&nbsp; φ = 0.50 (по умолчанию)</div>
+<p>Равновесие (замкнутая форма): <strong>w/w̄ = (ВДС/ВДС̅)^(φ/(1+φ·η))</strong>. В базе L = L̄ = 13.5 млн, w = w̄ = 1.00 по построению.</p>
+<p><strong>Разделение формальный / неформальный</strong> (Аланис и др. 2011):</p>
+<div class="eq-box">α = min(0.95, α₀ · (w/w̄)^ε_α) &nbsp;&nbsp; L_форм = α·L &nbsp;&nbsp; L_нефорн = (1−α)·L</div>
+<p>α₀ = 0.35, ε_α = 0.80: рост реальной зарплаты на 10% → рост доли формального сектора на 8%. Отражает динамику неформальности в Узбекистане (МОТ 2022).</p>
+<p><strong>Безработица:</strong></p>
+<div class="eq-box">U = max(0, Ls − L) &nbsp;&nbsp;&nbsp; UR = U/Ls × 100</div>
+<p>Базовый UR = 6.9% (Ls = 14.5 млн, L̄ = 13.5 млн). Ls — экзогенный, можно задать шок через ползунок.</p>
+<p><strong>Ключевые политические выводы:</strong></p>
+<ul>
+  <li><strong>Рост импортного тарифа</strong> → Er обесценивается → Pq растёт → реальная зарплата падает → занятость снижается, неформальность растёт</li>
+  <li><strong>Приток ПИИ</strong> → Er ревальвируется → ВДС расширяется → занятость и зарплаты растут → формальность увеличивается</li>
+  <li><strong>Бюджетная экономия</strong> → Y сжимается → ВДС падает → безработица растёт, неформальный сектор расширяется</li>
+  <li><strong>Шок предложения труда (Ls↑)</strong> → Безработица механически растёт; φ управляет компрессией зарплат, стимулируя ответный спрос</li>
+</ul>`,
+    uz:`<h3>Mehnat bozori bloki</h3>
+<p>Mehnat bozori kengaytmasi Devarajan &amp; Go (1998) va ILO O'zbekiston hisobotlariga asoslanadi. To'lov balansi muvozanatidan keyin analitik tarzda yechiladi va uchta yangi kanal qo'shadi: <strong>mehnat talabi</strong>, <strong>ish haqi egri chizig'i</strong> va <strong>rasmiy/norasmiy bo'linish</strong>.</p>
+<p><strong>Mehnat talabi</strong> (Kobb-Duglas birinchi tartibli sharti, izoelastik shakl):</p>
+<div class="eq-box">L/L̄ = (YaIM/YaIM̅)^(1/(1+φ·η)) &nbsp;&nbsp;&nbsp; YaIM = Px·X</div>
+<p>YaIM = Px·X — model narxlaridagi ichki qo'shimcha qiymat; bazada YaIM̅ = 1. η = 0.50 — mehnat talabi ish haqi elastikligi (Hamermesh 1993).</p>
+<p><strong>Ish haqi taklifi egri chizig'i</strong> (Blanchflower-Oswald 1994):</p>
+<div class="eq-box">w/w̄ = (L/L̄)^φ &nbsp;&nbsp;&nbsp; φ = 0.50 (standart)</div>
+<p>Muvozanat (yopiq shakl): <strong>w/w̄ = (YaIM/YaIM̅)^(φ/(1+φ·η))</strong>. Bazada L = L̄ = 13.5 mln, w = w̄ = 1.00.</p>
+<p><strong>Rasmiy / Norasmiy bo'linish</strong> (Alaniz va boshq. 2011):</p>
+<div class="eq-box">α = min(0.95, α₀ · (w/w̄)^ε_α) &nbsp;&nbsp; L_rasmiy = α·L &nbsp;&nbsp; L_norasmiy = (1−α)·L</div>
+<p>α₀ = 0.35, ε_α = 0.80: real ish haqi 10% ga o'sishi → rasmiy ulush 8% ga ortishi. O'zbekistondagi norasmiylik dinamikasini aks ettiradi (ILO 2022).</p>
+<p><strong>Ishsizlik:</strong></p>
+<div class="eq-box">U = max(0, Ls − L) &nbsp;&nbsp;&nbsp; UR = U/Ls × 100</div>
+<p>Asos UR = 6.9% (Ls = 14.5 mln, L̄ = 13.5 mln). Ls ekzogen bo'lib, slayder orqali zarba berish mumkin.</p>
+<p><strong>Asosiy siyosat xulosalari:</strong></p>
+<ul>
+  <li><strong>Import tarifi o'sishi</strong> → Er qadrsizlanadi → Pq o'sadi → real ish haqi tushadi → bandlik kamayadi, norasmiylik ortadi</li>
+  <li><strong>TXI oqimi</strong> → Er qadrlanadi → YaIM kengayadi → bandlik va ish haqlari o'sadi → rasmiylik ortadi</li>
+  <li><strong>Byudjet tejami</strong> → Y qisqaradi → YaIM tushadi → ishsizlik o'sadi, norasmiy sektor kengayadi</li>
+  <li><strong>Mehnat taklifi zarbasi (Ls↑)</strong> → Ishsizlik mexanik ravishda o'sadi; φ talabni rag'batlantiradigan ish haqi siqilishini boshqaradi</li>
+</ul>`
+  },
+  'doc-sec-refs': {
+    en:`<h3>References</h3>
+<ul>
+  <li>Devarajan, S., D. Go, J. Lewis, S. Robinson &amp; P. Sinko (1997). <em>Simple General Equilibrium Modeling</em>. Cambridge University Press.</li>
+  <li>Devarajan, S. &amp; Go, D. (1998). <em>The simplest dynamic general equilibrium model of an open economy</em>. Journal of Policy Modeling, 20(6), 677–714.</li>
+  <li>Blanchflower, D.G. &amp; Oswald, A.J. (1994). <em>The Wage Curve</em>. MIT Press.</li>
+  <li>Hamermesh, D.S. (1993). <em>Labor Demand</em>. Princeton University Press.</li>
+  <li>ILO (2022). <em>Uzbekistan Labour Market Profile</em>. International Labour Organization.</li>
+  <li>World Bank WDI — Uzbekistan National Accounts, 2021.</li>
+  <li>Statistics Agency under the President of Uzbekistan — GDP, trade, labor force, 2021.</li>
+  <li>Input-Output Table of Uzbekistan (2022) — Symmetric 136-sector table, COE/GVA = 25%. CERR/Statistics Agency.</li>
+  <li>Center for Economic Research and Reforms (CERR) — Calibration &amp; adaptation for Uzbekistan.</li>
+</ul>`,
+    ru:`<h3>Литература</h3>
+<ul>
+  <li>Деваражан, С., Гоу, Д., Льюис, Дж., Робинсон, С. &amp; Синко, П. (1997). <em>Простое моделирование общего равновесия</em>. Cambridge University Press.</li>
+  <li>Деваражан, С. &amp; Гоу, Д. (1998). <em>Простейшая динамическая модель общего равновесия открытой экономики</em>. Journal of Policy Modeling, 20(6), 677–714.</li>
+  <li>Бланчфлауэр, Д.Дж. &amp; Освальд, А.Дж. (1994). <em>Кривая зарплат</em>. MIT Press.</li>
+  <li>Хамермеш, Д.С. (1993). <em>Спрос на труд</em>. Princeton University Press.</li>
+  <li>МОТ (2022). <em>Профиль рынка труда Узбекистана</em>. Международная организация труда.</li>
+  <li>Всемирный банк ВДИ — Национальные счета Узбекистана, 2021.</li>
+  <li>Агентство статистики при Президенте Республики Узбекистан — ВВП, торговля, рабочая сила, 2021.</li>
+  <li>Таблица «Затраты-Выпуск» Узбекистана (2022) — Симметричная таблица 136 секторов, ОТ/ВДС = 25%. ЦЭИИ/Агентство статистики.</li>
+  <li>Центр экономических исследований и реформ (ЦЭИИ) — Калибровка и адаптация для Узбекистана.</li>
+</ul>`,
+    uz:`<h3>Adabiyotlar</h3>
+<ul>
+  <li>Devarajan, S., Go, D., Lewis, J., Robinson, S. &amp; Sinko, P. (1997). <em>Oddiy umumiy muvozanat modellash</em>. Cambridge University Press.</li>
+  <li>Devarajan, S. &amp; Go, D. (1998). <em>Ochiq iqtisodiyotning eng oddiy dinamik umumiy muvozanat modeli</em>. Journal of Policy Modeling, 20(6), 677–714.</li>
+  <li>Blanchflower, D.G. &amp; Oswald, A.J. (1994). <em>Ish haqi egri chizig'i</em>. MIT Press.</li>
+  <li>Hamermesh, D.S. (1993). <em>Mehnat talabi</em>. Princeton University Press.</li>
+  <li>ILO (2022). <em>O'zbekiston mehnat bozori profili</em>. Xalqaro Mehnat Tashkiloti.</li>
+  <li>Jahon banki WDI — O'zbekiston milliy hisoblar, 2021.</li>
+  <li>O'zbekiston Respublikasi Prezidenti huzuridagi Statistika agentligi — YaIM, savdo, mehnat kuchi, 2021.</li>
+  <li>O'zbekiston Kirim-Chiqim jadvali (2022) — 136 tarmoqli simmetrik jadval, COE/YaIM = 25%. TIQT/Statistika agentligi.</li>
+  <li>Iqtisodiy tadqiqotlar va islohotlar markazi (TIQT) — O'zbekiston uchun kalibrovka va moslash.</li>
+</ul>`
+  }
+};
+
+/* ── t(key) — get current-language string ── */
+function t(key) {
+  const entry = LANGS[key];
+  if (!entry) return key;
+  return entry[currentLang] || entry['en'] || key;
+}
+
+/* ── applyLang — update all data-i18n elements ── */
+function applyLang(lang) {
+  currentLang = lang;
+  // Static text nodes
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const val = t(key);
+    if (key.startsWith('tab-')) el.innerHTML = val;  // tabs use innerHTML (emoji + text)
+    else el.textContent = val;
+  });
+  // Documentation sections (full innerHTML)
+  Object.keys(DOC_HTML).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = DOC_HTML[id][lang] || DOC_HTML[id]['en'];
+  });
+  // Update language toggle buttons
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.trim().toLowerCase() === lang);
+  });
+  // Re-render dynamic content if simulation was run
+  if (lastBase && lastExp) {
+    populateResults(lastBase, lastExp);
+    updateChart(lastBase, lastExp);
+    updateLaborChart(lastBase, lastExp);
+  }
+  // Re-render calibration if active
+  const calibPage = document.getElementById('page-calibration');
+  if (calibPage && calibPage.classList.contains('active')) runCalibrationChecks();
+}
+
+/* ── setLang — save + apply ── */
+function setLang(lang) {
+  localStorage.setItem('cge_lang', lang);
+  applyLang(lang);
+}
+
+// Keep the standalone switcher and the parent policy-engine language in sync.
+window.addEventListener('message', event => {
+  if (event.data?.type === 'setLang' && LANGS['header-title']?.[event.data.lang]) {
+    setLang(event.data.lang);
+  }
+});
 
 /* ── Base-year calibrated parameters ── */
 const BASE = {
@@ -987,32 +1392,33 @@ function pctChange(base, exp) {
 }
 
 /* ── Populate results table ── */
+// Keys map to LANGS 'rl-*' (label) and 'rd-*' (description)
 const ROWS_DEF = [
-  { sym: 'Er',  label: 'Exchange Rate',           desc: 'Real exch. rate (base=1.00)' },
-  { sym: 'Y',   label: 'GDP (national income)',    desc: 'Y = Px·X + tr + ft + re' },
-  { sym: 'Cn',  label: 'Private Consumption',      desc: 'Cn = (1−sy)·(Y−TAX)' },
-  { sym: 'Z',   label: 'Investment',               desc: 'Z = Total savings' },
-  { sym: 'E',   label: 'Exports',                  desc: 'CET: domestic output exported' },
-  { sym: 'M',   label: 'Imports',                  desc: 'CES: Armington imports' },
-  { sym: 'Ds',  label: 'Domestic Supply',          desc: 'Output on domestic market' },
-  { sym: 'Q',   label: 'Composite Absorption',     desc: 'CES(M, Ds)' },
-  { sym: 'TAX', label: 'Tax Revenue',              desc: 'ts·Pq·Q + ty·Px·X + tm+te duties' },
-  { sym: 'Sg',  label: 'Govt Budget Balance',      desc: 'TAX − G − tr' },
-  { sym: 'S',   label: 'Total Savings',            desc: 'Private + Govt + Foreign' },
-  { sym: 'TB',  label: 'Trade Balance',            desc: 'Pe·E − Pm·M' },
-  { sym: 'Pe',  label: 'Export Price',             desc: 'we·(1−te)·Er' },
-  { sym: 'Pm',  label: 'Import Price',             desc: 'wm·(1+tm)·Er' },
-  { sym: 'Pq',  label: 'Composite Price',          desc: 'CES price index' },
-  { sym: 'Px',  label: 'GDP Deflator',             desc: 'Pf·Pt' },
+  { sym: 'Er',        lk: 'rl-Er',  dk: 'rd-Er'  },
+  { sym: 'Y',         lk: 'rl-Y',   dk: 'rd-Y'   },
+  { sym: 'Cn',        lk: 'rl-Cn',  dk: 'rd-Cn'  },
+  { sym: 'Z',         lk: 'rl-Z',   dk: 'rd-Z'   },
+  { sym: 'E',         lk: 'rl-E',   dk: 'rd-E'   },
+  { sym: 'M',         lk: 'rl-M',   dk: 'rd-M'   },
+  { sym: 'Ds',        lk: 'rl-Ds',  dk: 'rd-Ds'  },
+  { sym: 'Q',         lk: 'rl-Q',   dk: 'rd-Q'   },
+  { sym: 'TAX',       lk: 'rl-TAX', dk: 'rd-TAX' },
+  { sym: 'Sg',        lk: 'rl-Sg',  dk: 'rd-Sg'  },
+  { sym: 'S',         lk: 'rl-S',   dk: 'rd-S'   },
+  { sym: 'TB',        lk: 'rl-TB',  dk: 'rd-TB'  },
+  { sym: 'Pe',        lk: 'rl-Pe',  dk: 'rd-Pe'  },
+  { sym: 'Pm',        lk: 'rl-Pm',  dk: 'rd-Pm'  },
+  { sym: 'Pq',        lk: 'rl-Pq',  dk: 'rd-Pq'  },
+  { sym: 'Px',        lk: 'rl-Px',  dk: 'rd-Px'  },
   // Labor market
-  { sym: 'L',        label: 'Employment (L)',          desc: 'Equilibrium employment (millions)' },
-  { sym: 'w',        label: 'Wage Index (w)',           desc: 'Real wage index (base = 1.00)' },
-  { sym: 'w_real',   label: 'Real Wage (w/P)',          desc: 'Wage deflated by GDP deflator' },
-  { sym: 'L_formal', label: 'Formal Employment',        desc: 'α × L (millions)' },
-  { sym: 'L_informal',label:'Informal Employment',      desc: '(1−α) × L (millions)' },
-  { sym: 'alpha',    label: 'Formality Rate (α)',       desc: 'Formal share of employment' },
-  { sym: 'U',        label: 'Unemployment (U)',         desc: 'Ls − L (millions)' },
-  { sym: 'UR',       label: 'Unemployment Rate (%)',    desc: 'U / Ls × 100' },
+  { sym: 'L',         lk: 'rl-L',   dk: 'rd-L'   },
+  { sym: 'w',         lk: 'rl-w',   dk: 'rd-w'   },
+  { sym: 'w_real',    lk: 'rl-wr',  dk: 'rd-wr'  },
+  { sym: 'L_formal',  lk: 'rl-Lf',  dk: 'rd-Lf'  },
+  { sym: 'L_informal',lk: 'rl-Li',  dk: 'rd-Li'  },
+  { sym: 'alpha',     lk: 'rl-al',  dk: 'rd-al'  },
+  { sym: 'U',         lk: 'rl-U',   dk: 'rd-U'   },
+  { sym: 'UR',        lk: 'rl-UR',  dk: 'rd-UR'  },
 ];
 
 function populateResults(base, exp) {
@@ -1021,12 +1427,13 @@ function populateResults(base, exp) {
   ROWS_DEF.forEach(row => {
     const bv = base[row.sym];
     const ev = exp[row.sym];
+    if (bv === undefined || ev === undefined) return;
     const chgStr = pctChange(bv, ev);
     const chgNum = (Math.abs(bv) > 1e-9) ? (ev - bv) / Math.abs(bv) * 100 : 0;
     const cls = chgNum > 0.05 ? 'pos' : chgNum < -0.05 ? 'neg' : 'neutral';
     const tr = document.createElement('tr');
     tr.innerHTML = `<td><strong>${row.sym}</strong></td>
-      <td style="font-size:11px;color:var(--text3)">${row.desc}</td>
+      <td style="font-size:11px;color:var(--text3)">${t(row.dk)}</td>
       <td>${f3(bv)}</td>
       <td>${f3(ev)}</td>
       <td class="${cls}">${chgStr}</td>`;
@@ -1036,7 +1443,7 @@ function populateResults(base, exp) {
 
 /* ── Update chart ── */
 function updateChart(base, exp) {
-  const labels = ['GDP (Y)', 'Exports (E)', 'Imports (M)', 'Consumption (Cn)', 'Investment (Z)', 'Tax (TAX)', 'Govt Balance (Sg)', 'Exch. Rate (Er)'];
+  const labels = [t('lbl-gdp'), t('lbl-exports'), t('lbl-imports'), t('lbl-consump'), t('lbl-invest'), t('lbl-tax'), t('lbl-govbal'), t('lbl-exrate')];
   const keys   = ['Y', 'E', 'M', 'Cn', 'Z', 'TAX', 'Sg', 'Er'];
   const data   = keys.map(k => {
     if (Math.abs(base[k]) < 1e-9) return 0;
@@ -1052,7 +1459,7 @@ function updateChart(base, exp) {
     data: {
       labels,
       datasets: [{
-        label: '% Change from Base',
+        label: t('chart-dataset-lbl'),
         data,
         backgroundColor: colors,
         borderColor: borderColors,
@@ -1089,7 +1496,7 @@ let laborChart = null;
 /* ── Labor market chart ── */
 function updateLaborChart(base, exp) {
   const chgPct = (b, e) => Math.abs(b) > 1e-9 ? (e - b) / Math.abs(b) * 100 : 0;
-  const labels = ['Employment\n(L, M)', 'Wage Index\n(w)', 'Formal Emp.\n(M)', 'Informal Emp.\n(M)', 'Unemployed\n(U, M)', 'Formality\nRate (α)'];
+  const labels = [t('lbl-employ'), t('lbl-wage'), t('lbl-formal'), t('lbl-informal'), t('lbl-unempl'), t('lbl-formality')];
   const data   = [
     chgPct(base.L,        exp.L),
     chgPct(base.w,        exp.w),
@@ -1197,7 +1604,7 @@ function updateKPIs(base, exp) {
 /* ── Main run simulation ── */
 function runSimulation() {
   const solverEl = document.getElementById('solver-status');
-  solverEl.textContent = 'Solving…'; solverEl.className = 'solver-warn';
+  solverEl.textContent = t('solver-solving'); solverEl.className = 'solver-warn';
 
   setTimeout(() => {
     const bParams = getBaseParams();
@@ -1207,7 +1614,7 @@ function runSimulation() {
     const exp  = solveCGE(eParams);
 
     if (base.error || exp.error) {
-      solverEl.textContent = 'Solver error — BoP did not converge';
+      solverEl.textContent = t('solver-err');
       solverEl.className = 'solver-err';
       // Show user-facing toast (not just status bar)
       const which = base.error ? 'baseline' : 'experiment';
@@ -1223,7 +1630,7 @@ function runSimulation() {
     updateChart(base, exp);
     updateLaborChart(base, exp);
 
-    solverEl.textContent = 'Converged'; solverEl.className = 'solver-ok';
+    solverEl.textContent = t('solver-ok'); solverEl.className = 'solver-ok';
 
     /* Auto-generate post-simulation policy brief (#15) */
     try { cgeAutoBrief(); } catch (e) { console.warn('cgeAutoBrief failed', e); }
@@ -1505,12 +1912,14 @@ function applyRegistryOverrides() {
   console.log('[CGE] Registry overrides applied:', {sig_q: BASE.sig_q, sig_t: BASE.sig_t});
 }
 
-/* ── Initialise sliders ── */
+/* ── Initialise sliders + i18n ── */
 (function initSliders() {
   document.querySelectorAll('input[type=range]').forEach(el => {
     const pct = ((+el.value - +el.min) / (+el.max - +el.min) * 100).toFixed(1) + '%';
     el.style.setProperty('--pct', pct);
   });
+  // Apply saved language (injects doc HTML, updates all data-i18n)
+  applyLang(currentLang);
   // Run base simulation on load for calibration check and initial state
   const start = () => runSimulation();
   if (window.EPE) {
