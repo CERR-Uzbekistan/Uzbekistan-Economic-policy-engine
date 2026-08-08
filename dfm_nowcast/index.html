@@ -803,6 +803,9 @@ function initWithData(data) {
   renderDataPage();
   buildUpdateInputs();
   setInitialUpdateKPIs();
+
+  /* Initial post-load policy brief (#15) — based on the headline nowcast */
+  try { dfmAutoBrief(); } catch (e) { console.warn('dfmAutoBrief failed', e); }
 }
 
 // ── StatOffice official GDP YoY (Republic of Uzbekistan, index-100 → %)
@@ -1118,6 +1121,9 @@ function runKFUpdate() {
 
   // News decomposition chart & table
   renderNewsChart(result.news, y_new);
+
+  /* Auto-generate post-simulation policy brief (#15) */
+  try { dfmAutoBrief(); } catch (e) { console.warn('dfmAutoBrief failed', e); }
 }
 
 function renderNewsChart(news, y_new) {
@@ -1419,15 +1425,16 @@ function dfmSaveScenario() {
   Toast.show('Scenario saved successfully!', 'success');
 }
 
-function dfmAIAnalysis() {
+function _dfmBuildPayload() {
   const latestYoY = document.getElementById('kpi-yoy')?.textContent || '—';
   const factor = document.getElementById('kpi-factor')?.textContent || '—';
   const status = document.getElementById('kpi-status')?.textContent || '—';
   const latestPeriod = document.getElementById('kpi-yoy-period')?.textContent || '—';
-  if (latestYoY === '—') { Toast.show('No nowcast data available yet.', 'warning'); return; }
-  const simData = {
-    modelId: 'dfm',
-    modelName: 'DFM Nowcasting — GDP Growth Forecast',
+  const updAfter = document.getElementById('upd-after')?.textContent || null;
+  const updBefore = document.getElementById('upd-before')?.textContent || null;
+  const updRev = document.getElementById('upd-revision')?.textContent || null;
+  return {
+    available: latestYoY !== '—',
     params: {
       model_type: 'Dynamic Factor Model (DFM)',
       reference: 'Bańbura & Modugno (2014)',
@@ -1435,15 +1442,48 @@ function dfmAIAnalysis() {
       common_factors: '1',
       nowcast_period: latestPeriod
     },
-    kpis: {
-      gdp_yoy_nowcast: latestYoY,
-      common_factor: factor,
-      model_status: status
-    },
-    tags: ['dfm', 'nowcast', 'gdp']
+    results: { kpis: [
+      { label: 'GDP YoY Nowcast', value: latestYoY },
+      { label: 'Common Factor',   value: factor },
+      { label: 'Model Status',    value: status },
+      ...(updBefore ? [{ label: 'Pre-update Estimate', value: updBefore }] : []),
+      ...(updAfter  ? [{ label: 'Updated Estimate',    value: updAfter  }] : []),
+      ...(updRev    ? [{ label: 'Revision',            value: updRev    }] : [])
+    ] }
   };
-  PolicyAdvisor.analyzeSim(simData);
-  PolicyAdvisor.renderAdvisorPanel(document.querySelector('.container'));
+}
+
+function _dfmEnsurePanel() {
+  let c = document.getElementById('dfm-ai-output');
+  if (!c) {
+    c = document.createElement('div');
+    c.id = 'dfm-ai-output';
+    c.style.margin = '20px 0';
+    const host = document.getElementById('page-nowcast') || document.body;
+    host.appendChild(c);
+  }
+  return c;
+}
+
+/* Offline policy brief — safe to call after every Kalman update. */
+function dfmAutoBrief() {
+  if (!window.PolicyAdvisor) return;
+  const payload = _dfmBuildPayload();
+  if (!payload.available) return;
+  _dfmEnsurePanel();
+  const analysis = PolicyAdvisor.briefSim('dfm', payload.params, payload.results);
+  PolicyAdvisor.renderAdvisorPanel('dfm-ai-output', analysis);
+}
+
+async function dfmAIAnalysis() {
+  if (!window.PolicyAdvisor) { Toast.show('AI advisor not loaded', 'error'); return; }
+  const payload = _dfmBuildPayload();
+  if (!payload.available) { Toast.show('No nowcast data available yet.', 'warning'); return; }
+  const c = _dfmEnsurePanel();
+  c.innerHTML = '<div style="padding:20px;color:#475569;">Analyzing…</div>';
+  c.scrollIntoView({ behavior: 'smooth' });
+  const analysis = await PolicyAdvisor.analyzeSim('dfm', payload.params, payload.results);
+  PolicyAdvisor.renderAdvisorPanel('dfm-ai-output', analysis);
 }
 
 // ════════════════════════════════════════════════════════════════════════

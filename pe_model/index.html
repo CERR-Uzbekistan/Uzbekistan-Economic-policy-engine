@@ -892,6 +892,50 @@ function runSim(){
     <td class="pos">+${fmtI(totWel)}</td>
     <td class="neg">${fmtI(totTax)}</td>
     <td>${pct(totEff,totImp)}</td>`;
+
+  /* Cache totals so the post-simulation brief can read them */
+  window._peLastResults = { cut, regime, secId, chId, ctyId, totTC, totTD, totWel, totTax };
+
+  /* Auto-generate post-simulation policy brief (#15) */
+  try { peAutoBrief(); } catch (e) { console.warn('peAutoBrief failed', e); }
+}
+
+function _peBuildPayload() {
+  const r = window._peLastResults;
+  if (!r) return null;
+  return {
+    params: { tariffCut: r.cut + '%', regime: r.regime, section: r.secId, chapter: r.chId, country: r.ctyId },
+    results: { kpis: [
+      { label: 'Trade Creation',         value: fmtM(r.totTC)  + ' USD' },
+      { label: 'Trade Diversion',        value: fmtM(r.totTD)  + ' USD' },
+      { label: 'Welfare Effect',         value: fmtM(r.totWel) + ' USD' },
+      { label: 'Tariff Revenue Change',  value: fmtM(r.totTax) + ' USD' }
+    ] }
+  };
+}
+
+function _peEnsurePanel() {
+  let c = document.getElementById('pe-ai-output');
+  if (!c) {
+    c = document.createElement('div');
+    c.id = 'pe-ai-output';
+    c.style.margin = '20px 0';
+    const host = document.getElementById('tab-simulator')
+              || document.querySelector('.main')
+              || document.body;
+    host.appendChild(c);
+  }
+  return c;
+}
+
+/* Offline post-simulation policy brief (#15). */
+function peAutoBrief() {
+  if (!window.PolicyAdvisor) return;
+  const payload = _peBuildPayload();
+  if (!payload) return;
+  _peEnsurePanel();
+  const analysis = PolicyAdvisor.briefSim('pe', payload.params, payload.results);
+  PolicyAdvisor.renderAdvisorPanel('pe-ai-output', analysis);
 }
 
 // ════════════════════════════════════════════════════════════
@@ -1183,52 +1227,16 @@ function peSaveScenario() {
 
 async function peAIAnalysis() {
   if(!window.PolicyAdvisor){ Toast.show('AI advisor not loaded','error'); return; }
-  const cut = parseInt(document.getElementById('sim-cut').value);
-  const scale = cut / 20;
-  const regime = document.getElementById('sim-regime').value;
-  const secId  = document.getElementById('sim-section').value;
-  const chId   = document.getElementById('sim-chapter').value;
-  const ctyId  = document.getElementById('sim-country').value;
-
-  let rows = [];
-  D.sections.forEach(s=>{
-    if(secId!=='all' && s.id!==secId) return;
-    let imp=0, tc=0, td=0, welfare=0, taxChg=0;
-    s.chapters.forEach(ch=>{
-      if(chId!=='all' && parseInt(chId)!==ch) return;
-      const cd = D.chapters[ch]; if(!cd) return;
-      const rf = regime==='all'?1.0:0.6;
-      const ef = elasAdj(s.id);
-      imp+=cd.imp*rf; tc+=cd.tc*scale*rf*ef; td+=cd.td*scale*rf*ef;
-      welfare+=cd.welfare*scale*rf*ef; taxChg+=cd.taxChg*scale*rf*ef;
-    });
-    if(imp>0) rows.push({imp,tc,td,welfare,taxChg});
-  });
-  if(ctyId!=='all'){
-    const cty=D.countries.find(c=>c.name===ctyId);
-    if(cty){ const sh=D.meta.totalImport>0?cty.imp/D.meta.totalImport:0;
-      rows=rows.map(r=>({...r,tc:r.tc*sh,td:r.td*sh,welfare:r.welfare*sh,taxChg:r.taxChg*sh}));
-    }
-  }
-  const totTC=rows.reduce((a,r)=>a+r.tc,0);
-  const totTD=rows.reduce((a,r)=>a+r.td,0);
-  const totWel=rows.reduce((a,r)=>a+r.welfare,0);
-  const totTax=rows.reduce((a,r)=>a+r.taxChg,0);
-
-  let c=document.getElementById('pe-ai-output');
-  if(!c){c=document.createElement('div');c.id='pe-ai-output';c.style.margin='20px 0';document.querySelector('.main')?.appendChild(c);}
-  c.innerHTML='<div style="padding:20px;color:#475569;">Analyzing...</div>';
-  const analysis=await PolicyAdvisor.analyzeSim('pe',
-    {tariffCut:cut+'%',regime,section:secId,chapter:chId,country:ctyId},
-    {kpis:[
-      {label:'Trade Creation',value:fmtM(totTC)+' USD'},
-      {label:'Trade Diversion',value:fmtM(totTD)+' USD'},
-      {label:'Welfare Effect',value:fmtM(totWel)+' USD'},
-      {label:'Tariff Revenue Change',value:fmtM(totTax)+' USD'}
-    ]}
-  );
-  PolicyAdvisor.renderAdvisorPanel('pe-ai-output',analysis);
+  if(!window._peLastResults){ runSim(); }
+  const payload = _peBuildPayload();
+  if(!payload){ Toast.show('Run the simulation first','warning'); return; }
+  const c = _peEnsurePanel();
+  c.innerHTML='<div style="padding:20px;color:#475569;">Analyzing…</div>';
+  c.scrollIntoView({behavior:'smooth'});
+  const analysis = await PolicyAdvisor.analyzeSim('pe', payload.params, payload.results);
+  PolicyAdvisor.renderAdvisorPanel('pe-ai-output', analysis);
 }
+
 </script>
 </body>
 </html>
