@@ -14,6 +14,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+from datetime import UTC, datetime
 from pathlib import Path
 
 logger = logging.getLogger("uz-policy-mcp.reforms")
@@ -118,7 +119,7 @@ async def fetch_reforms(
                     doc["type"] = entry_type
                 documents.extend(docs)
 
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - isolate one external source failure
                 logger.warning("Failed to fetch from %s: %s", src, e)
                 documents.append({"source": src, "error": str(e), "raw_text": ""})
 
@@ -230,7 +231,7 @@ Respond with a single JSON object following this exact schema:
                 return {"error": "Could not parse Claude response as JSON."}
 
             entry = json.loads(json_match.group())
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - return a stable pipeline error contract
         return {"error": f"Categorization failed: {e}"}
 
     entry = _validate_entry(entry, entry_type, source)
@@ -576,5 +577,4 @@ def _js_esc(s) -> str:
 
 def _today() -> str:
     """Return today's date as YYYY-MM-DD."""
-    from datetime import date
-    return date.today().isoformat()
+    return datetime.now(UTC).date().isoformat()

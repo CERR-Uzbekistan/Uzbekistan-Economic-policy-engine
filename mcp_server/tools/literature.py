@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+from datetime import UTC, datetime
 from pathlib import Path
 
 logger = logging.getLogger("uz-policy-mcp.literature")
@@ -116,7 +117,7 @@ async def fetch_papers(
                                 "source": "semantic_scholar",
                                 "model": mid,
                             })
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001 - isolate one external source failure
                     logger.warning("Semantic Scholar query failed for '%s': %s", query, e)
 
                 # --- OpenAlex ---
@@ -161,7 +162,7 @@ async def fetch_papers(
                                 "source": "openalex",
                                 "model": mid,
                             })
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001 - isolate one external source failure
                     logger.warning("OpenAlex query failed for '%s': %s", query, e)
 
     # Sort by citations descending, then year descending
@@ -257,7 +258,7 @@ Only include papers scoring >= 6. Topics should be from: monetary, fiscal, trade
                 return {"error": "Could not parse Claude response as JSON array."}
 
             scored = json.loads(json_match.group())
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - return a stable pipeline error contract
         return {"error": f"Curation failed: {e}"}
 
     # Merge scores back into candidates
@@ -427,5 +428,4 @@ def _js_esc(s: str) -> str:
 
 def _today() -> str:
     """Return today's date as YYYY-MM-DD."""
-    from datetime import date
-    return date.today().isoformat()
+    return datetime.now(UTC).date().isoformat()

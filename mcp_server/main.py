@@ -77,7 +77,7 @@ def get_dfm_data():
 
 
 # Register all tools
-from tools.registry import register_tools  # noqa: E402
+from tools.registry import register_tools
 
 register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir=str(SHARED_DIR))
 
