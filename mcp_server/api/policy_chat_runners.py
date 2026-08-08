@@ -14,7 +14,6 @@ from models.dfm import run_nowcast
 from models.io_model import run_demand_shock
 from models.qpm import solve_irf
 
-
 ALLOWED_QPM_SHOCKS = {
     "demand",
     "inflation",

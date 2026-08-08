@@ -12,7 +12,6 @@ import math
 
 from helpers.validation import CGE_BASE_ENDOGENOUS, CGE_DEFAULTS
 
-
 _STRUCT = {
     "at": 2.417688609007712,
     "bt": 0.8212363629719106,

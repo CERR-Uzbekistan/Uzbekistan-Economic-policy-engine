@@ -6,7 +6,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from helpers.validation import validate_qpm_params
-from models.qpm import solve_irf, run_baseline, run_level_scenario
+from models.qpm import run_baseline, run_level_scenario, solve_irf
 
 
 def assert_close_path(actual, expected, tol=1e-3):

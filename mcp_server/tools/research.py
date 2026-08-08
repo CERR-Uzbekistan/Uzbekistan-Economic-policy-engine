@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import logging
 import re
+from datetime import UTC, datetime
 from pathlib import Path
 
 logger = logging.getLogger("uz-policy-mcp.research")
@@ -135,5 +136,4 @@ def _js_esc(s: str) -> str:
 
 def _today() -> str:
     """Return today's date as YYYY-MM-DD."""
-    from datetime import date
-    return date.today().isoformat()
+    return datetime.now(UTC).date().isoformat()

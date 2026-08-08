@@ -12,8 +12,8 @@ from fastapi.testclient import TestClient
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from api.app import app  # noqa: E402
-from api.registry import (  # noqa: E402
+from api.app import app
+from api.registry import (
     PUBLIC_DATA_DIR,
     ArtifactSource,
     RegistryArtifactLoadError,
@@ -22,7 +22,7 @@ from api.registry import (  # noqa: E402
     load_registry_artifact,
     load_registry_artifacts,
 )
-from api.schemas import RegistryArtifactsResponse  # noqa: E402
+from api.schemas import RegistryArtifactsResponse
 
 
 class RegistryApiTests(unittest.TestCase):
@@ -98,9 +98,11 @@ class RegistryApiTests(unittest.TestCase):
     def test_missing_artifact_file_raises_registry_load_error(self) -> None:
         source = ArtifactSource("qpm", "QPM", "/data/qpm.json", Path("missing-qpm.json"))
 
-        with patch.object(Path, "read_text", side_effect=FileNotFoundError):
-            with self.assertRaises(RegistryArtifactLoadError) as context:
-                load_registry_artifact(source)
+        with (
+            patch.object(Path, "read_text", side_effect=FileNotFoundError),
+            self.assertRaises(RegistryArtifactLoadError) as context,
+        ):
+            load_registry_artifact(source)
 
         self.assertEqual(context.exception.artifact_id, "qpm")
         self.assertIn("missing", str(context.exception))
@@ -108,9 +110,11 @@ class RegistryApiTests(unittest.TestCase):
     def test_invalid_json_raises_registry_load_error(self) -> None:
         source = ArtifactSource("qpm", "QPM", "/data/qpm.json", Path("qpm.json"))
 
-        with patch.object(Path, "read_text", return_value="{ invalid json"):
-            with self.assertRaises(RegistryArtifactLoadError) as context:
-                load_registry_artifact(source)
+        with (
+            patch.object(Path, "read_text", return_value="{ invalid json"),
+            self.assertRaises(RegistryArtifactLoadError) as context,
+        ):
+            load_registry_artifact(source)
 
         self.assertEqual(context.exception.artifact_id, "qpm")
         self.assertIn("invalid JSON", str(context.exception))

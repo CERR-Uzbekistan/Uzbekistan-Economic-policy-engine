@@ -10,7 +10,6 @@ from typing import Any
 
 from .schemas import RegistryArtifactResponse, RegistryArtifactsResponse
 
-
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PUBLIC_DATA_DIR = REPO_ROOT / "apps" / "policy-ui" / "public" / "data"
 

@@ -23,7 +23,7 @@ SHARED_DIR = str(ROOT.parent / "shared")
 
 
 async def run_full_pipeline():
-    from tools.reforms import fetch_reforms, categorize_reform, update_tracker_file
+    from tools.reforms import categorize_reform, fetch_reforms, update_tracker_file
 
     api_key = os.getenv("ANTHROPIC_API_KEY")
     sources = ["lex_uz", "cbu", "wto"]

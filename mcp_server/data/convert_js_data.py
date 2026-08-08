@@ -48,8 +48,12 @@ process.stdout.write(JSON.stringify(data));
     try:
         result = subprocess.run(
             ["node", "-e", node_script],
-            capture_output=True, text=True, timeout=60,
-            encoding="utf-8", errors="replace",
+            capture_output=True,
+            text=True,
+            timeout=60,
+            encoding="utf-8",
+            errors="replace",
+            check=False,
         )
         if result.returncode != 0:
             print(f"  ERROR: Node.js failed for {src_path.name}:")
@@ -80,8 +84,7 @@ def convert_dfm():
 
     content = src.read_text(encoding="utf-8")
     # Remove BOM
-    if content.startswith("\ufeff"):
-        content = content[1:]
+    content = content.removeprefix("\ufeff")
     # Remove comment lines at the top
     lines = content.split("\n")
     data_start = 0
@@ -93,8 +96,7 @@ def convert_dfm():
     content = "\n".join(lines[data_start:])
     # Strip prefix and semicolon
     content = re.sub(r"^window\.DFM_DATA\s*=\s*", "", content.strip(), count=1)
-    if content.endswith(";"):
-        content = content[:-1]
+    content = content.removesuffix(";")
 
     data = json.loads(content.strip())
     out = DATA_OUT / "dfm_data.json"

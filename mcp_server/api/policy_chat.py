@@ -5,6 +5,7 @@ each call is proposed, reviewed, hashed, validated, and explicitly confirmed.
 """
 
 from __future__ import annotations
+
 import hashlib
 import hmac
 import json
