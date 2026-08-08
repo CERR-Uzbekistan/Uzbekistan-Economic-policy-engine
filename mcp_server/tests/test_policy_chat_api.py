@@ -10,8 +10,8 @@ from fastapi.testclient import TestClient
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from api.policy_chat import PolicyChatSettings  # noqa: E402
-from api.policy_chat_app import create_policy_chat_app  # noqa: E402
+from api.policy_chat import PolicyChatSettings
+from api.policy_chat_app import create_policy_chat_app
 
 
 class PolicyChatApiTests(unittest.TestCase):

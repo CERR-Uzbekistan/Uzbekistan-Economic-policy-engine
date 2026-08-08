@@ -561,10 +561,10 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
                     {"model": "qpm", "shock_type": "demand", "shock_size": 2.0}
                 ]
         """
-        from models.qpm import solve_irf as qpm_solve
+        from helpers.validation import CGE_DEFAULTS, validate_qpm_params
         from models.cge import solve_cge as cge_solve
         from models.fpp import solve_fpp as fpp_solve
-        from helpers.validation import validate_qpm_params, CGE_DEFAULTS
+        from models.qpm import solve_irf as qpm_solve
 
         if not scenarios or len(scenarios) < 2:
             return {"error": "Provide at least 2 scenarios to compare."}

@@ -9,7 +9,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from api.policy_chat_store import PolicyChatStore  # noqa: E402
+from api.policy_chat_store import PolicyChatStore
 
 
 class PolicyChatStoreTests(unittest.TestCase):
@@ -21,12 +21,11 @@ class PolicyChatStoreTests(unittest.TestCase):
                 "analyst@example.test",
                 metadata={"model_id": "qpm"},
             )
-            with self.assertRaises(sqlite3.IntegrityError):
-                with store._connection:  # noqa: SLF001 - verifies the database guard
-                    store._connection.execute(  # noqa: SLF001
-                        "DELETE FROM policy_chat_audit_events WHERE event_id = ?",
-                        (event_id,),
-                    )
+            with self.assertRaises(sqlite3.IntegrityError), store._connection:
+                store._connection.execute(
+                    "DELETE FROM policy_chat_audit_events WHERE event_id = ?",
+                    (event_id,),
+                )
             events = store.list_events("analyst@example.test")
             self.assertEqual(len(events), 1)
             self.assertEqual(events[0]["event_id"], event_id)
