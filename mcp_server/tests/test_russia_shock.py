@@ -5,14 +5,14 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from models.russia_shock import (  # noqa: E402
+from models.russia_shock import (
     Calibration,
     PolicyPackage,
     RussiaShockScenario,
     load_channel_calibration,
-    load_simple_yaml,
     load_policies,
     load_scenarios,
+    load_simple_yaml,
     run_russia_shock,
 )
 

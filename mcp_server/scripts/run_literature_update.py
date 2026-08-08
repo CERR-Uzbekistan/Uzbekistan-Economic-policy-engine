@@ -23,7 +23,7 @@ SHARED_DIR = str(ROOT.parent / "shared")
 
 
 async def run_full_pipeline():
-    from tools.literature import fetch_papers, curate_papers, update_literature_file
+    from tools.literature import curate_papers, fetch_papers, update_literature_file
 
     api_key = os.getenv("ANTHROPIC_API_KEY")
     models = ["qpm", "dfm", "cge", "io", "pe", "fpp"]
