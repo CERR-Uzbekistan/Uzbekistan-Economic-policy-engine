@@ -13,6 +13,7 @@
 <script src="../shared/toast.js"></script>
 <script src="../shared/scenario-engine.js"></script>
 <script src="../shared/ai-advisor.js"></script>
+<script src="../shared/i18n.js"></script>
 <script src="../shared/registry-loader.js"></script>
 <script>window.addEventListener('load', () => EPE?.ready(() => EPE.badge()));</script>
 <style>
@@ -1129,6 +1130,13 @@ function setLang(lang) {
   applyLang(lang);
 }
 
+// Keep the standalone switcher and the parent policy-engine language in sync.
+window.addEventListener('message', event => {
+  if (event.data?.type === 'setLang' && LANGS['header-title']?.[event.data.lang]) {
+    setLang(event.data.lang);
+  }
+});
+
 /* ── Base-year calibrated parameters ── */
 const BASE = {
   // CET (export supply)
@@ -1240,9 +1248,9 @@ function solveCGE(params) {
   const inner_q = bq * Math.pow(M, -rho_q) + (1 - bq) * Math.pow(Ds, -rho_q);
   const Q = aq * Math.pow(inner_q, -1.0 / rho_q);
 
-  // Prices
-  const Pq = (Pm * M + Pd * Ds) / Q;
-  const Pt = (Pe * E + Pd * Ds) / X;
+  // Prices (guard: Q and X must be > 0 to avoid division-by-zero)
+  const Pq = Q > 1e-12 ? (Pm * M + Pd * Ds) / Q : 0;
+  const Pt = X > 1e-12 ? (Pe * E + Pd * Ds) / X : 0;
   const Px = Pf * Pt;
 
   // Fiscal/macro aggregates
@@ -1608,6 +1616,9 @@ function runSimulation() {
     if (base.error || exp.error) {
       solverEl.textContent = t('solver-err');
       solverEl.className = 'solver-err';
+      // Show user-facing toast (not just status bar)
+      const which = base.error ? 'baseline' : 'experiment';
+      Toast.show(`CGE solver did not converge (${which} run) \u2014 try a smaller shock or reset parameters`, 'error');
       return;
     }
 
@@ -1620,6 +1631,9 @@ function runSimulation() {
     updateLaborChart(base, exp);
 
     solverEl.textContent = t('solver-ok'); solverEl.className = 'solver-ok';
+
+    /* Auto-generate post-simulation policy brief (#15) */
+    try { cgeAutoBrief(); } catch (e) { console.warn('cgeAutoBrief failed', e); }
   }, 50);
 }
 
@@ -1678,7 +1692,7 @@ function resetToBase() {
 
 /* ── Export functions ── */
 function exportCSV() {
-  if (!lastBase || !lastExp) { alert('Run the simulation first.'); return; }
+  if (!lastBase || !lastExp) { Toast.show('Run the simulation first', 'warning'); return; }
   const headers = ['Indicator', 'Description', 'Base (2021)', 'Experiment', '% Change'];
   const rows = ROWS_DEF.map(row => {
     const bv = lastBase[row.sym], ev = lastExp[row.sym];
@@ -1689,12 +1703,12 @@ function exportCSV() {
 }
 
 function exportPNG() {
-  if (!mainChart) { alert('Run the simulation first to generate the chart.'); return; }
+  if (!mainChart) { Toast.show('Run the simulation first to generate the chart', 'warning'); return; }
   ReportEngine.downloadChartPNG('chart-main', 'cge_chart.png');
 }
 
 function exportPDF() {
-  if (!lastBase || !lastExp) { alert('Run the simulation first.'); return; }
+  if (!lastBase || !lastExp) { Toast.show('Run the simulation first', 'warning'); return; }
   const assumptions = [
     { name: 'wm (world import price shock)', value: document.getElementById('v-wm').textContent },
     { name: 'we (world export price shock)', value: document.getElementById('v-we').textContent },
@@ -1952,15 +1966,13 @@ function cgeSaveScenario() {
   Toast.show('Scenario saved successfully!', 'success');
 }
 
-function cgeAIAnalysis() {
-  if (!lastBase || !lastExp) { Toast.show('Run the simulation first.', 'warning'); return; }
+function _cgeBuildPayload() {
+  if (!lastBase || !lastExp) return null;
   const getChg = (b, e) => {
     if (Math.abs(b) < 1e-9) return 'N/A';
     return ((e - b) / Math.abs(b) * 100).toFixed(2) + '%';
   };
-  const simData = {
-    modelId: 'cge',
-    modelName: 'CGE 1-2-3 Model — Uzbekistan 2021',
+  return {
     params: {
       wm_shock: document.getElementById('v-wm').textContent,
       we_shock: document.getElementById('v-we').textContent,
@@ -1972,18 +1984,48 @@ function cgeAIAnalysis() {
       govt_spending_G: document.getElementById('v-G').textContent,
       foreign_savings_B: document.getElementById('v-B').textContent
     },
-    kpis: {
-      gdp_effect: getChg(lastBase.Y, lastExp.Y),
-      welfare_change: getChg(lastBase.Cn, lastExp.Cn),
-      trade_balance_effect: getChg(lastBase.E - lastBase.M, lastExp.E - lastExp.M),
-      exports: getChg(lastBase.E, lastExp.E),
-      imports: getChg(lastBase.M, lastExp.M),
-      exchange_rate: lastExp.Er.toFixed(4)
-    },
-    tags: ['cge', 'general-equilibrium']
+    results: { kpis: [
+      { label: 'GDP Effect',           value: getChg(lastBase.Y, lastExp.Y) },
+      { label: 'Welfare (Cn)',         value: getChg(lastBase.Cn, lastExp.Cn) },
+      { label: 'Trade Balance (E-M)',  value: getChg(lastBase.E - lastBase.M, lastExp.E - lastExp.M) },
+      { label: 'Exports',              value: getChg(lastBase.E, lastExp.E) },
+      { label: 'Imports',              value: getChg(lastBase.M, lastExp.M) },
+      { label: 'Exchange Rate (Er)',   value: lastExp.Er.toFixed(4) }
+    ] }
   };
-  PolicyAdvisor.analyzeSim(simData);
-  PolicyAdvisor.renderAdvisorPanel(document.querySelector('.sim-main'));
+}
+
+function _cgeEnsurePanel() {
+  let c = document.getElementById('cge-ai-output');
+  if (!c) {
+    c = document.createElement('div');
+    c.id = 'cge-ai-output';
+    c.style.margin = '20px 0';
+    document.querySelector('.sim-main')?.appendChild(c);
+  }
+  return c;
+}
+
+/* Auto-render template-only brief after every simulation run. Always offline,
+   never calls the LLM, so it's safe to fire on every shock iteration. */
+function cgeAutoBrief() {
+  if (!window.PolicyAdvisor) return;
+  const payload = _cgeBuildPayload();
+  if (!payload) return;
+  _cgeEnsurePanel();
+  const analysis = PolicyAdvisor.briefSim('cge', payload.params, payload.results);
+  PolicyAdvisor.renderAdvisorPanel('cge-ai-output', analysis);
+}
+
+async function cgeAIAnalysis() {
+  if (!lastBase || !lastExp) { Toast.show('Run the simulation first.', 'warning'); return; }
+  if (!window.PolicyAdvisor) { Toast.show('AI advisor not loaded', 'error'); return; }
+  const payload = _cgeBuildPayload();
+  const c = _cgeEnsurePanel();
+  c.innerHTML = '<div style="padding:20px;color:#475569;">Analyzing…</div>';
+  c.scrollIntoView({ behavior: 'smooth' });
+  const analysis = await PolicyAdvisor.analyzeSim('cge', payload.params, payload.results);
+  PolicyAdvisor.renderAdvisorPanel('cge-ai-output', analysis);
 }
 </script>
 </body>

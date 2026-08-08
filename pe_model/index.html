@@ -12,6 +12,7 @@
 <script src="../shared/toast.js"></script>
 <script src="../shared/scenario-engine.js"></script>
 <script src="../shared/ai-advisor.js"></script>
+<script src="../shared/i18n.js"></script>
 <script src="../shared/registry-loader.js"></script>
 <script>window.addEventListener('load', () => EPE?.ready(() => EPE.badge()));</script>
 <style>
@@ -100,6 +101,7 @@ input[type=range]{flex:1;accent-color:var(--teal);height:4px;}
 .ctrl-val{font-size:13px;font-weight:800;color:var(--teal);min-width:44px;text-align:right;}
 select.ctrl-select{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:7px;
   font-size:12px;background:#fff;color:var(--text);cursor:pointer;margin-bottom:6px;}
+select.ctrl-select:disabled{background:#f8fafc;color:var(--text3);cursor:not-allowed;opacity:.6;}
 .chip-group{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
 .chip{padding:4px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;
   font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--text2);}
@@ -166,29 +168,29 @@ select.ctrl-select{width:100%;padding:7px 10px;border:1px solid var(--border);bo
 </header>
 
 <nav>
-  <button class="tab active" onclick="showTab('overview',this)">Overview</button>
-  <button class="tab" onclick="showTab('simulator',this)">Scenario Simulator</button>
-  <button class="tab" onclick="showTab('sectors',this)">Sector Analysis</button>
-  <button class="tab" onclick="showTab('partners',this)">Trade Partners</button>
-  <button class="tab" onclick="showTab('methodology',this)">Methodology</button>
+  <button class="tab active" onclick="showTab('overview',this)" data-i18n="pe_tab_overview">Overview</button>
+  <button class="tab" onclick="showTab('simulator',this)" data-i18n="pe_tab_scenario">Scenario Simulator</button>
+  <button class="tab" onclick="showTab('sectors',this)" data-i18n="pe_tab_sector">Sector Analysis</button>
+  <button class="tab" onclick="showTab('partners',this)" data-i18n="pe_tab_partners">Trade Partners</button>
+  <button class="tab" onclick="showTab('methodology',this)" data-i18n="pe_tab_method">Methodology</button>
 </nav>
 
 <!-- ════════════════════════ OVERVIEW ════════════════════════ -->
 <div id="tab-overview" class="page active">
 
-  <div class="slabel">Trade Statistics — Import Overview</div>
+  <div class="slabel" data-i18n="pe_trade_stats">Trade Statistics — Import Overview</div>
   <div id="ov-kpis" class="g4" style="margin-bottom:16px;"></div>
 
   <div class="g2" style="margin-bottom:16px;">
     <div class="card">
-      <div class="card-title">Import by HS Section</div>
+      <div class="card-title" data-i18n="pe_import_hs">Import by HS Section</div>
       <div class="card-sub">Total import value (thous. USD) — all HS codes</div>
       <div style="position:relative;height:300px;">
         <canvas id="ov-section-chart"></canvas>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">Import by Trade Regime</div>
+      <div class="card-title" data-i18n="pe_import_regime">Import by Trade Regime</div>
       <div class="card-sub">MFN (Most-Favoured-Nation) vs FTA (Free Trade Agreement)</div>
       <div style="position:relative;height:300px;">
         <canvas id="ov-regime-chart"></canvas>
@@ -198,7 +200,7 @@ select.ctrl-select{width:100%;padding:7px 10px;border:1px solid var(--border);bo
 
   <div class="g2" style="margin-bottom:16px;">
     <div class="card">
-      <div class="card-title">Top 15 Import Partners</div>
+      <div class="card-title" data-i18n="pe_top_partners">Top 15 Import Partners</div>
       <div class="card-sub">By import value (thous. USD)</div>
       <div style="position:relative;height:320px;">
         <canvas id="ov-country-chart"></canvas>
@@ -236,7 +238,7 @@ select.ctrl-select{width:100%;padding:7px 10px;border:1px solid var(--border);bo
 <div id="tab-simulator" class="page">
 
   <div class="sim-controls">
-    <h3>Scenario Configuration</h3>
+    <h3 data-i18n="pe_scenario_title">Scenario Configuration</h3>
     <div class="ctrl-grid">
 
       <!-- Tariff cut -->
@@ -298,10 +300,10 @@ select.ctrl-select{width:100%;padding:7px 10px;border:1px solid var(--border);bo
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
       <div class="card-title" style="margin:0;">Simulation Results by Sector</div>
       <div style="flex:1;"></div>
-      <button class="btn btn-ghost no-print" onclick="exportCSV('sim')">⬇ Export CSV</button>
+      <button class="btn btn-ghost no-print" onclick="exportCSV('sim')" data-i18n="export_csv">📊 CSV</button>
       <button class="btn btn-primary no-print" onclick="printSection('sim')">🖨 Print</button>
-      <button class="btn btn-ghost no-print" onclick="peSaveScenario()" style="background:#16a34a;color:#fff;border-color:#16a34a;">💾 Save</button>
-      <button class="btn btn-ghost no-print" onclick="peAIAnalysis()" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
+      <button class="btn btn-ghost no-print" onclick="peSaveScenario()" data-i18n="save_scenario" style="background:#16a34a;color:#fff;border-color:#16a34a;">💾 Save</button>
+      <button class="btn btn-ghost no-print" onclick="peAIAnalysis()" data-i18n="ai_analysis" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
     </div>
     <table id="sim-table">
       <thead><tr>
@@ -737,7 +739,12 @@ function updateChapterFilter(){
   const secId = document.getElementById('sim-section').value;
   const chSel = document.getElementById('sim-chapter');
   chSel.innerHTML='<option value="all">All Chapters</option>';
-  if(secId==='all') return;
+  chSel.value = 'all'; // explicit reset — prevents stale value surviving innerHTML rebuild
+  if(secId==='all'){
+    chSel.disabled = true;
+    return;
+  }
+  chSel.disabled = false;
   const sec = D.sections.find(s=>s.id===secId);
   if(!sec) return;
   sec.chapters.forEach(ch=>{
@@ -751,7 +758,20 @@ function updateChapterFilter(){
 }
 
 function runSim(){
-  const cut = parseInt(document.getElementById('sim-cut').value);
+  let cut = parseInt(document.getElementById('sim-cut').value);
+
+  // ── Validate: tariff cut cannot exceed 100% or be negative ──
+  if (cut > 100) {
+    cut = 100;
+    document.getElementById('sim-cut').value = 100;
+    Toast.show('Tariff cut capped at 100% \u2014 cannot exceed full tariff removal', 'warning');
+  }
+  if (cut < 0) {
+    cut = 0;
+    document.getElementById('sim-cut').value = 0;
+    Toast.show('Tariff cut cannot be negative \u2014 reset to 0%', 'warning');
+  }
+
   document.getElementById('sim-cut-val').textContent = cut;
   const scale = cut / 20;
   const regime = document.getElementById('sim-regime').value;
@@ -872,6 +892,50 @@ function runSim(){
     <td class="pos">+${fmtI(totWel)}</td>
     <td class="neg">${fmtI(totTax)}</td>
     <td>${pct(totEff,totImp)}</td>`;
+
+  /* Cache totals so the post-simulation brief can read them */
+  window._peLastResults = { cut, regime, secId, chId, ctyId, totTC, totTD, totWel, totTax };
+
+  /* Auto-generate post-simulation policy brief (#15) */
+  try { peAutoBrief(); } catch (e) { console.warn('peAutoBrief failed', e); }
+}
+
+function _peBuildPayload() {
+  const r = window._peLastResults;
+  if (!r) return null;
+  return {
+    params: { tariffCut: r.cut + '%', regime: r.regime, section: r.secId, chapter: r.chId, country: r.ctyId },
+    results: { kpis: [
+      { label: 'Trade Creation',         value: fmtM(r.totTC)  + ' USD' },
+      { label: 'Trade Diversion',        value: fmtM(r.totTD)  + ' USD' },
+      { label: 'Welfare Effect',         value: fmtM(r.totWel) + ' USD' },
+      { label: 'Tariff Revenue Change',  value: fmtM(r.totTax) + ' USD' }
+    ] }
+  };
+}
+
+function _peEnsurePanel() {
+  let c = document.getElementById('pe-ai-output');
+  if (!c) {
+    c = document.createElement('div');
+    c.id = 'pe-ai-output';
+    c.style.margin = '20px 0';
+    const host = document.getElementById('tab-simulator')
+              || document.querySelector('.main')
+              || document.body;
+    host.appendChild(c);
+  }
+  return c;
+}
+
+/* Offline post-simulation policy brief (#15). */
+function peAutoBrief() {
+  if (!window.PolicyAdvisor) return;
+  const payload = _peBuildPayload();
+  if (!payload) return;
+  _peEnsurePanel();
+  const analysis = PolicyAdvisor.briefSim('pe', payload.params, payload.results);
+  PolicyAdvisor.renderAdvisorPanel('pe-ai-output', analysis);
 }
 
 // ════════════════════════════════════════════════════════════
@@ -937,8 +1001,9 @@ function renderSectors(){
   document.getElementById('sec-thead').innerHTML = thRow;
 
   document.getElementById('sec-tbody').innerHTML = rows.map(r=>{
-    const maxImp = rows[0].imp;
-    const barW = Math.round(r.imp/maxImp*100);
+    // Guard: prevent division-by-zero if leading row has zero imports
+    const maxImp = (rows[0] && rows[0].imp > 0) ? rows[0].imp : 1;
+    const barW = Math.round(r.imp / maxImp * 100);
     const col2 = isSec ? `<td style="max-width:220px;">${(r.name||'').substring(0,40)}</td>`
                        : `<td><span class="badge badge-mfn" style="font-size:9px;">${r.sec||''}</span></td>`;
     return `<tr>
@@ -1094,10 +1159,10 @@ function applyPeRegistryOverrides() {
 
 function init(){
   applyPeRegistryOverrides();
-  try{ renderOverview(); }catch(e){ console.error('Overview:',e); }
-  try{ populateSimFilters(); runSim(); }catch(e){ console.error('Sim:',e); }
-  try{ renderSectors(); }catch(e){ console.error('Sectors:',e); }
-  try{ renderPartners(); }catch(e){ console.error('Partners:',e); }
+  try{ renderOverview(); }catch(e){ console.error('PE Overview error:',e); Toast.show('Error rendering overview \u2014 check console for details', 'error'); }
+  try{ populateSimFilters(); updateChapterFilter(); runSim(); }catch(e){ console.error('PE Simulation error:',e); Toast.show('Error running simulation \u2014 check console for details', 'error'); }
+  try{ renderSectors(); }catch(e){ console.error('PE Sectors error:',e); Toast.show('Error rendering sector data \u2014 check console for details', 'error'); }
+  try{ renderPartners(); }catch(e){ console.error('PE Partners error:',e); Toast.show('Error rendering partner data \u2014 check console for details', 'error'); }
 }
 document.addEventListener('DOMContentLoaded', () => {
   if (window.EPE) EPE.ready(init);
@@ -1162,52 +1227,16 @@ function peSaveScenario() {
 
 async function peAIAnalysis() {
   if(!window.PolicyAdvisor){ Toast.show('AI advisor not loaded','error'); return; }
-  const cut = parseInt(document.getElementById('sim-cut').value);
-  const scale = cut / 20;
-  const regime = document.getElementById('sim-regime').value;
-  const secId  = document.getElementById('sim-section').value;
-  const chId   = document.getElementById('sim-chapter').value;
-  const ctyId  = document.getElementById('sim-country').value;
-
-  let rows = [];
-  D.sections.forEach(s=>{
-    if(secId!=='all' && s.id!==secId) return;
-    let imp=0, tc=0, td=0, welfare=0, taxChg=0;
-    s.chapters.forEach(ch=>{
-      if(chId!=='all' && parseInt(chId)!==ch) return;
-      const cd = D.chapters[ch]; if(!cd) return;
-      const rf = regime==='all'?1.0:0.6;
-      const ef = elasAdj(s.id);
-      imp+=cd.imp*rf; tc+=cd.tc*scale*rf*ef; td+=cd.td*scale*rf*ef;
-      welfare+=cd.welfare*scale*rf*ef; taxChg+=cd.taxChg*scale*rf*ef;
-    });
-    if(imp>0) rows.push({imp,tc,td,welfare,taxChg});
-  });
-  if(ctyId!=='all'){
-    const cty=D.countries.find(c=>c.name===ctyId);
-    if(cty){ const sh=D.meta.totalImport>0?cty.imp/D.meta.totalImport:0;
-      rows=rows.map(r=>({...r,tc:r.tc*sh,td:r.td*sh,welfare:r.welfare*sh,taxChg:r.taxChg*sh}));
-    }
-  }
-  const totTC=rows.reduce((a,r)=>a+r.tc,0);
-  const totTD=rows.reduce((a,r)=>a+r.td,0);
-  const totWel=rows.reduce((a,r)=>a+r.welfare,0);
-  const totTax=rows.reduce((a,r)=>a+r.taxChg,0);
-
-  let c=document.getElementById('pe-ai-output');
-  if(!c){c=document.createElement('div');c.id='pe-ai-output';c.style.margin='20px 0';document.querySelector('.main')?.appendChild(c);}
-  c.innerHTML='<div style="padding:20px;color:#475569;">Analyzing...</div>';
-  const analysis=await PolicyAdvisor.analyzeSim('pe',
-    {tariffCut:cut+'%',regime,section:secId,chapter:chId,country:ctyId},
-    {kpis:[
-      {label:'Trade Creation',value:fmtM(totTC)+' USD'},
-      {label:'Trade Diversion',value:fmtM(totTD)+' USD'},
-      {label:'Welfare Effect',value:fmtM(totWel)+' USD'},
-      {label:'Tariff Revenue Change',value:fmtM(totTax)+' USD'}
-    ]}
-  );
-  PolicyAdvisor.renderAdvisorPanel('pe-ai-output',analysis);
+  if(!window._peLastResults){ runSim(); }
+  const payload = _peBuildPayload();
+  if(!payload){ Toast.show('Run the simulation first','warning'); return; }
+  const c = _peEnsurePanel();
+  c.innerHTML='<div style="padding:20px;color:#475569;">Analyzing…</div>';
+  c.scrollIntoView({behavior:'smooth'});
+  const analysis = await PolicyAdvisor.analyzeSim('pe', payload.params, payload.results);
+  PolicyAdvisor.renderAdvisorPanel('pe-ai-output', analysis);
 }
+
 </script>
 </body>
 </html>

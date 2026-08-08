@@ -25,7 +25,10 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
                     "description": (
                         "Simulates monetary policy transmission via IS curve, Phillips curve, "
                         "Taylor rule, and UIP. Produces impulse response functions for demand, "
-                        "cost-push, exchange rate, and monetary shocks."
+                        "cost-push, exchange rate, monetary, risk-premium, and external-demand shocks. "
+                        "The Phillips curve includes direct import-price pass-through a4=0.12. "
+                        "The external-demand gap gap*_t follows AR(1) decay with rho=0.75 "
+                        "and enters the IS curve as b3 * gap*_t."
                     ),
                     "tools": ["qpm_impulse_response", "qpm_baseline_forecast"],
                     "key_outputs": [
@@ -81,8 +84,8 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
                     "type": "Computable General Equilibrium",
                     "description": (
                         "Devarajan-Go 1-2-3 CGE with CET export supply, CES Armington imports, "
-                        "and BoP closure. Simulates tariff, tax, fiscal, and external shocks "
-                        "on the whole economy. Calibrated to 2021 Uzbekistan SAM."
+                        "and current-account closure under normalized relative prices. Formula-reconciled "
+                        "to the legacy 2021 workbook; model-owner source approval remains pending."
                     ),
                     "tools": ["cge_simulate"],
                     "key_outputs": [
@@ -134,6 +137,7 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
         a1: float = 0.60,
         a2: float = 0.20,
         a3: float = 0.65,
+        a4: float = 0.12,
         g1: float = 0.80,
         g2: float = 1.50,
         g3: float = 0.50,
@@ -146,12 +150,20 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
 
         Simulates how the economy responds to a one-time shock using a New-Keynesian
         DSGE model with IS curve, Phillips curve, Taylor rule, and UIP equation.
+        This MCP solver uses the same canonical equations as the public QPM
+        export: direct import-price pass-through enters inflation as a4 * dpm_t,
+        and a one-period risk-premium shock enters UIP as rho_t.
+        For external-demand shocks, the foreign output gap gap*_t follows AR(1)
+        decay with rho=0.75 and enters the IS curve as b3 * gap*_t.
 
         Args:
             shock_type: Type of shock. One of: "demand" (aggregate demand),
-                "cost_push" (cost-push inflation), "depreciation" (UZS depreciation),
-                "monetary" (monetary policy tightening).
-            shock_size: Shock magnitude in percentage points (0.25 to 5.0).
+                "cost_push" or "inflation" (cost-push inflation),
+                "depreciation" or "exchange" (UZS depreciation),
+                "monetary" (monetary policy tightening), "risk" (temporary
+                UIP risk-premium shock), "external_demand"
+                (foreign output gap spillover).
+            shock_size: Signed shock magnitude in percentage points (-20.0 to 20.0).
             horizon: Forecast horizon in quarters (8 to 32).
             b1: IS curve — output gap persistence (0.3 to 0.95).
             b2: IS curve — MCI sensitivity (0.05 to 0.6).
@@ -160,6 +172,7 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
             a1: Phillips curve — inflation persistence (0.3 to 0.9).
             a2: Phillips curve — marginal cost pass-through (0.05 to 0.5).
             a3: Phillips curve — domestic cost share (0.2 to 0.9).
+            a4: Phillips curve — direct import-price pass-through (0.0 to 0.35).
             g1: Taylor rule — interest rate smoothing (0.3 to 0.95).
             g2: Taylor rule — inflation response (1.0 to 3.0, >1 = Taylor principle).
             g3: Taylor rule — output gap response (0.1 to 1.5).
@@ -171,12 +184,15 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
         from helpers.validation import validate_qpm_params
         from models.qpm import solve_irf
 
-        valid_types = ("demand", "cost_push", "depreciation", "monetary")
+        valid_types = (
+            "demand", "cost_push", "inflation", "depreciation", "exchange",
+            "monetary", "risk", "external_demand", "external"
+        )
         if shock_type not in valid_types:
             return {"error": f"Invalid shock_type. Must be one of: {valid_types}"}
 
         params = validate_qpm_params(locals())
-        shock_size = max(0.25, min(5.0, shock_size))
+        shock_size = max(-20.0, min(20.0, shock_size))
         horizon = max(8, min(32, horizon))
 
         return solve_irf(params, shock_type, shock_size, horizon)
@@ -190,20 +206,25 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
         horizon: int = 16,
         b1: float = 0.70,
         b2: float = 0.20,
+        b3: float = 0.30,
+        b4: float = 0.60,
         a1: float = 0.60,
         a2: float = 0.20,
         a3: float = 0.65,
+        a4: float = 0.12,
         g1: float = 0.80,
         g2: float = 1.50,
         g3: float = 0.50,
+        e1: float = 0.70,
         inflation_target: float = 5.0,
         neutral_real_rate: float = 3.5,
         potential_growth: float = 6.0,
     ) -> dict:
         """Generate a QPM baseline macroeconomic forecast for Uzbekistan.
 
-        Projects inflation, policy rate, output gap, and NER depreciation forward
-        from current conditions using simplified QPM dynamics.
+        Projects inflation, policy rate, output gap, GDP growth, and NER
+        depreciation forward from current conditions using the canonical QPM
+        solver shared with qpm_impulse_response and the public QPM export.
 
         Args:
             initial_inflation_yoy: Current CPI inflation YoY (%).
@@ -213,12 +234,16 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
             horizon: Forecast horizon in quarters (4 to 32).
             b1: IS curve — output gap persistence.
             b2: IS curve — MCI sensitivity.
+            b3: IS curve — external-demand spillover.
+            b4: MCI — interest-rate weight.
             a1: Phillips curve — inflation persistence.
             a2: Phillips curve — marginal cost pass-through.
             a3: Phillips curve — domestic cost share.
+            a4: Phillips curve — direct import-price pass-through.
             g1: Taylor rule — smoothing.
             g2: Taylor rule — inflation response.
             g3: Taylor rule — output gap response.
+            e1: UIP backward-looking exchange-rate weight.
             inflation_target: Central bank target (%).
             neutral_real_rate: Neutral real rate (%).
             potential_growth: Potential GDP growth (%).
@@ -240,39 +265,41 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
 
     @mcp.tool()
     async def cge_simulate(
-        import_tariff_pct: float = 2.0,
+        import_tariff_pct: float = 1.6158659121002623,
         export_tax_pct: float = 0.0,
-        sales_tax_pct: float = 6.0,
-        income_tax_pct: float = 3.0,
-        savings_rate_pct: float = 38.0,
-        govt_spending: float = 0.18,
-        world_import_price: float = 0.98,
+        sales_tax_pct: float = 6.472233775029143,
+        income_tax_pct: float = 2.978092234143587,
+        savings_rate_pct: float = 37.80099228932178,
+        govt_spending: float = 0.17578408687290673,
+        world_import_price: float = 0.9840982911714002,
         world_export_price: float = 1.00,
-        foreign_borrowing: float = 0.04,
-        remittances: float = 0.14,
-        foreign_transfers: float = 0.00,
+        foreign_borrowing: float = 0.03894920311694469,
+        remittances: float = 0.13738252291489128,
+        foreign_transfers: float = 0.0005089419695851494,
         total_output: float = 1.00,
         productivity_factor: float = 1.00,
     ) -> dict:
         """Run a CGE 1-2-3 general equilibrium simulation for Uzbekistan.
 
-        Devarajan-Go model with CET export supply, CES Armington imports, and
-        BoP closure via flexible exchange rate. Calibrated to 2021 Uzbekistan SAM.
+        Formula-reconciled Devarajan-Go model with CET export supply, CES
+        Armington imports, and fixed-foreign-saving current-account closure. The
+        workbook fixes Er=1 and solves Pd; this port uses the equivalent Pd=1
+        normalization. Er is a relative-price index, not observed UZS/USD.
 
         Args:
-            import_tariff_pct: Import tariff rate (%). Base: 2%.
+            import_tariff_pct: Import tariff rate (%). Workbook base: 1.6159%.
             export_tax_pct: Export tax rate (%). Base: 0%.
-            sales_tax_pct: Sales/VAT tax rate (%). Base: 6%.
-            income_tax_pct: Income tax rate (%). Base: 3%.
-            savings_rate_pct: Household savings rate (%). Base: 38%.
-            govt_spending: Government consumption (base=0.18, share of GDP).
-            world_import_price: World import price index (base=0.98).
+            sales_tax_pct: Indirect tax rate (%). Workbook base: 6.4722%.
+            income_tax_pct: Direct tax rate (%). Workbook base: 2.9781%.
+            savings_rate_pct: Savings rate (%). Workbook base: 37.8010%.
+            govt_spending: Normalized government consumption (base=0.175784).
+            world_import_price: World import price index (base=0.984098).
             world_export_price: World export price index (base=1.00).
-            foreign_borrowing: Foreign borrowing (base=0.04).
-            remittances: Remittance inflows (base=0.14).
-            foreign_transfers: Foreign aid transfers (base=0.00).
+            foreign_borrowing: Fixed foreign saving (base=0.038949).
+            remittances: Net private remittance inflows (base=0.137383).
+            foreign_transfers: Foreign grants (base=0.000509).
             total_output: Total domestic output (base=1.00).
-            productivity_factor: TFP factor (base=1.00).
+            productivity_factor: Inactive legacy label; must remain 1.00.
         """
         from models.cge import solve_cge
 
@@ -290,7 +317,7 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
             "ft": foreign_transfers,
             "X": total_output,
             "Pf": productivity_factor,
-            "tr": -0.04,  # fixed net transfers
+            "tr": -0.03594210180831692,  # workbook government transfers
         }
         return solve_cge(params)
 
@@ -433,7 +460,11 @@ def register_tools(mcp, get_io_data, get_pe_data, get_dfm_data, shared_dir: str 
         """Simulate WTO tariff cut trade impact on Uzbekistan using WITS-SMART model.
 
         Calculates trade creation, trade diversion, consumer welfare, and
-        government revenue effects of tariff reductions.
+        government revenue effects of tariff reductions. The legacy PE source
+        stores 20% tariff-cut effects at uniform elasticity 1.27; this tool
+        applies documented HS-section elasticity correction factors before
+        scaling by tariff_cut_pct. Partner/regime filters use import-share
+        scaling and should not be read as a product-partner tariff schedule rerun.
 
         Args:
             tariff_cut_pct: Percentage reduction in tariffs (5 to 100).

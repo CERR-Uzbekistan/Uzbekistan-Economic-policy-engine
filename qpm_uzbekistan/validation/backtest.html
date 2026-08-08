@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QPM Backtest — Phase 2</title>
+<style>
+  :root{
+    --bg:#f6f8fa; --card:#fff; --txt:#0f172a; --muted:#64748b;
+    --line:#e2e8f0; --ok:#16a34a; --warn:#d97706; --err:#dc2626;
+    --accent:#1a3a5c;
+  }
+  html,body{margin:0;background:var(--bg);color:var(--txt);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.55}
+  h1{font-size:22px;margin:0 0 4px}
+  h2{font-size:16px;margin:24px 0 8px;color:var(--accent)}
+  h3{font-size:13px;margin:0 0 6px;font-weight:600;color:var(--accent)}
+  .wrap{max-width:1280px;margin:0 auto;padding:24px}
+  .sub{color:var(--muted);font-size:13px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px;margin:16px 0}
+  .toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+  .toolbar label{font-size:13px;color:var(--muted)}
+  .toolbar input[type=number]{width:70px;padding:4px 6px;border:1px solid var(--line);border-radius:4px;font-family:inherit}
+  button{padding:7px 14px;border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:5px;cursor:pointer;font-family:inherit}
+  button.ghost{background:#fff;color:var(--accent)}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .chart{background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px}
+  canvas{max-height:260px}
+  table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+  th,td{padding:6px 10px;border-bottom:1px solid var(--line);text-align:right}
+  th:first-child,td:first-child{text-align:left;font-weight:600}
+  th{background:#f1f5f9;font-weight:600;color:var(--accent)}
+  .verdict{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:600}
+  .verdict.pass{background:#dcfce7;color:#166534}
+  .verdict.warn{background:#fef3c7;color:#92400e}
+  .verdict.fail{background:#fee2e2;color:#991b1b}
+  code{background:#f1f5f9;padding:1px 5px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:12px}
+  .meta{font-size:12px;color:var(--muted)}
+  .meta a{color:var(--accent)}
+  .note{background:#fffbeb;border-left:3px solid #d97706;padding:10px 14px;font-size:13px;margin:10px 0}
+  details{margin:10px 0}
+  details summary{cursor:pointer;color:var(--accent);font-weight:600}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+<h1>QPM Rolling Backtest — Phase 2</h1>
+<div class="sub">
+  Pseudo-real-time forecasts using the JS QPM solver in <code>qpm_uzbekistan/index.html</code>,
+  scored against actual Uzbek macro outcomes 2018Q1–2025Q3.
+  See <a href="validation-note.md">validation-note.md</a> §4 for interpretation.
+</div>
+
+<div class="note">
+  <strong>Methodology caveat.</strong> Historical state at each forecast origin comes from the
+  MATLAB IRIS <em>Kalman-smoothed</em> decomposition (<code>data/matlab_kalman_filter.csv</code>).
+  This uses information from the full sample to estimate trends, so the backtest is not
+  fully real-time — it isolates the QPM's <em>gap-forecasting dynamics</em> from the separate
+  problem of trend estimation. Phase 3 (re-filter at each origin) would give true real-time results.
+</div>
+
+<div class="card">
+  <div class="toolbar">
+    <label>Forecast start: <input type="text" id="origStart" value="2018Q1" size="6"></label>
+    <label>Forecast end: <input type="text" id="origEnd" value="2024Q3" size="6"></label>
+    <label>Max horizon (Q): <input type="number" id="maxH" value="4" min="1" max="8"></label>
+    <button onclick="runBacktest()">▶ Run backtest</button>
+    <button class="ghost" onclick="downloadResults()">⬇ Download forecasts CSV</button>
+  </div>
+  <div class="meta" id="meta">Loading historical data…</div>
+</div>
+
+<div id="summary"></div>
+<div id="fitcharts"></div>
+<div id="byHorizon"></div>
+
+<div class="card">
+  <h2>Methodology — full detail</h2>
+  <ol style="margin:0;padding-left:18px;line-height:1.7">
+    <li><strong>Forecast origins.</strong> Each quarter <code>t₀</code> from the start to the end date above.</li>
+    <li><strong>Initial deviation state at <code>t₀</code></strong>, read from the Kalman-smoothed series:
+      <ul>
+        <li><code>gap₀ = L_GDP_GAP(t₀)</code></li>
+        <li><code>π₀ = D4L_CPI(t₀) − D4L_CPI_TAR(t₀)</code> (inflation deviation from target)</li>
+        <li><code>rs₀ = RS(t₀) − RSNEUTRAL(t₀)</code> (policy rate deviation from neutral)</li>
+        <li><code>d4ls₀ = 0</code> (NER YoY deviation from steady-state path; held at 0 for simplicity)</li>
+      </ul>
+    </li>
+    <li><strong>Forecast.</strong> Call <code>solveIRF(p, null, 0, h, initConds)</code> — no shock, deterministic forward projection in deviation form, with the JS solver's 5-quarter pre-history filled at the initial state.</li>
+    <li><strong>Level reconstruction</strong> using the smoothed trends at the forecast date:
+      <ul>
+        <li><code>D4L_CPI_pred(h) = D4L_CPI_TAR(t₀+h) + π_pred(h)</code></li>
+        <li><code>RS_pred(h) = RSNEUTRAL(t₀+h) + rs_pred(h)</code></li>
+        <li><code>D4L_GDP_pred(h) ≈ DLA_GDP_BAR(t₀+h) + gap_pred(h) − gap(t₀+h−4)</code> (YoY growth = trend + change in gap)</li>
+      </ul>
+    </li>
+    <li><strong>Score</strong> against actuals (<code>OBS_*</code>) at <code>t₀+h</code>:
+      <ul>
+        <li><strong>RMSE</strong> = √(Σ(pred − actual)²/N) — penalises large errors quadratically</li>
+        <li><strong>MAE</strong> = Σ|pred − actual|/N — average absolute error</li>
+        <li><strong>Directional accuracy</strong> = % of origins where sign(pred(h) − actual(t₀)) matches sign(actual(t₀+h) − actual(t₀))</li>
+      </ul>
+    </li>
+  </ol>
+</div>
+
+<script>
+//=========================================================================
+// QPM SOLVER — verbatim copy of qpm_uzbekistan/index.html:571–724.
+// Same solver as cross-check.html. Kept inline so the page is self-contained.
+//=========================================================================
+function solveIRF(p, shockType, shockSize, T, initConds) {
+  const hasInit = !!initConds;
+  const ST = hasInit ? 5 : 1;
+  const N  = T + ST + 10;
+  const z = () => new Float64Array(N);
+  let gap=z(), pi=z(), pi4=z(), rs=z(), rr_gap=z(), mci=z();
+  let rmc=z(), s=z(), l_cpi=z(), l_z_gap=z(), d4l_s=z(), dpm=z();
+
+  if (hasInit) {
+    const { gap: g0, pi: p0, rs: r0, d4ls: d0 } = initConds;
+    for (let t = 0; t < ST; t++) {
+      gap[t] = g0; pi[t] = p0; rs[t] = r0;
+      s[t] = d0 * t / (ST - 1);
+    }
+    for (let t = 1; t < ST; t++) {
+      l_cpi[t]   = l_cpi[t-1] + pi[t-1] / 4;
+      l_z_gap[t] = s[t] - l_cpi[t];
+    }
+  }
+
+  const shk_gap=z(), shk_pi=z(), shk_s=z(), shk_rs=z(), shk_rho=z();
+  if (shockType === 'demand')    shk_gap[ST] = shockSize;
+  if (shockType === 'inflation') shk_pi[ST]  = shockSize;
+  if (shockType === 'exchange')  shk_s[ST]   = shockSize;
+  if (shockType === 'monetary')  shk_rs[ST]  = shockSize;
+  const gap_star = z();
+  const { b1, b2, b3, b4, a1, a2, a3, a4, g1, g2, g3, e1 } = p;
+  const G = (arr, t) => (t >= 0 && t < N) ? arr[t] : 0;
+  for (let iter = 0; iter < 600; iter++) {
+    const pi0 = pi.slice(), s0 = s.slice(), gap0 = gap.slice();
+    for (let t = N - 2; t >= ST; t--) {
+      s[t] = (1-e1)*G(s,t+1) + e1*G(s,t-1) - (rs[t] - shk_rho[t])/4 + shk_s[t];
+    }
+    for (let t = ST; t < N - 1; t++) {
+      l_cpi[t]   = l_cpi[t-1] + G(pi, t-1) / 4;
+      l_z_gap[t] = G(s,t) - l_cpi[t];
+      dpm[t]     = G(s,t) - G(s,t-1);
+      rmc[t]     = a3 * G(gap,t-1) + (1-a3) * l_z_gap[t];
+      pi[t]      = a1*G(pi,t-1) + (1-a1)*G(pi,t+1) + a2*rmc[t] + a4*dpm[t] + shk_pi[t];
+      l_cpi[t]   = l_cpi[t-1] + pi[t] / 4;
+      l_z_gap[t] = G(s,t) - l_cpi[t];
+      pi4[t]     = (G(pi,t)+G(pi,t-1)+G(pi,t-2)+G(pi,t-3)) / 4;
+      rs[t]      = g1*G(rs,t-1) + (1-g1)*(G(pi,t+1) + g2*G(pi4,t+4) + g3*G(gap,t-1)) + shk_rs[t];
+      rr_gap[t]  = rs[t] - G(pi,t+1);
+      mci[t]     = b4*rr_gap[t] - (1-b4)*l_z_gap[t];
+      gap[t]     = b1*G(gap,t-1) - b2*mci[t] + b3*gap_star[t] + shk_gap[t];
+      rmc[t]     = a3*gap[t] + (1-a3)*l_z_gap[t];
+      pi[t]      = a1*G(pi,t-1) + (1-a1)*G(pi,t+1) + a2*rmc[t] + a4*dpm[t] + shk_pi[t];
+      l_cpi[t]   = l_cpi[t-1] + pi[t] / 4;
+      l_z_gap[t] = G(s,t) - l_cpi[t];
+      pi4[t]     = (G(pi,t)+G(pi,t-1)+G(pi,t-2)+G(pi,t-3)) / 4;
+      rs[t]      = g1*G(rs,t-1) + (1-g1)*(G(pi,t+1) + g2*G(pi4,t+4) + g3*gap[t]) + shk_rs[t];
+      rr_gap[t]  = rs[t] - G(pi,t+1);
+      mci[t]     = b4*rr_gap[t] - (1-b4)*l_z_gap[t];
+    }
+    for (let t = 0; t < N; t++) d4l_s[t] = G(s,t) - G(s,t-4);
+    let diff = 0;
+    for (let t = ST; t < N; t++) {
+      diff = Math.max(diff, Math.abs(pi[t]-pi0[t]), Math.abs(s[t]-s0[t]), Math.abs(gap[t]-gap0[t]));
+    }
+    if (iter > 3 && diff < 1e-10) break;
+  }
+  const sl = arr => { const out = []; for (let i = 0; i <= T; i++) out.push(arr[ST+i] ?? 0); return out; };
+  return { gap: sl(gap), pi4: sl(pi4), rs: sl(rs), d4l_s: sl(d4l_s), l_z_gap: sl(l_z_gap), mci: sl(mci) };
+}
+
+const DEFAULT_PARAMS = {
+  b1:0.7, b2:0.2, b3:0.3, b4:0.6,
+  a1:0.6, a2:0.20, a3:0.65, a4:0.12,
+  g1:0.8, g2:1.5, g3:0.5, e1:0.7,
+};
+
+//=========================================================================
+// CSV loader for IRIS databank output. Format:
+//   row 1: "Variables ->" then column names quoted
+//   row 2: "Comments ->" then comments (skip)
+//   row 3: "Class[Size] ->" then class info (skip)
+//   row 4+: "yyyyQq" then numeric values, NaN as literal NaN
+//=========================================================================
+async function loadKalman() {
+  const r = await fetch('data/matlab_kalman_filter.csv');
+  const txt = await r.text();
+  const lines = txt.trim().split('\n');
+  // Parse header — strip quotes
+  const parseRow = line => {
+    const out = [];
+    let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c === '"') { inQ = !inQ; continue; }
+      if (c === ',' && !inQ) { out.push(cur); cur = ''; continue; }
+      cur += c;
+    }
+    out.push(cur);
+    return out;
+  };
+  const header = parseRow(lines[0]);
+  // Date col is 0 (called "Variables ->")
+  const colIdx = name => header.indexOf(name);
+
+  // We want these series (column indices)
+  const cols = {
+    OBS_L_GDP: colIdx('OBS_L_GDP'),
+    OBS_L_CPI: colIdx('OBS_L_CPI'),
+    OBS_RS:    colIdx('OBS_RS'),
+    OBS_L_S:   colIdx('OBS_L_S'),
+    L_GDP:     colIdx('L_GDP'),
+    L_GDP_BAR: colIdx('L_GDP_BAR'),
+    L_GDP_GAP: colIdx('L_GDP_GAP'),
+    DLA_GDP:   colIdx('DLA_GDP'),
+    D4L_GDP:   colIdx('D4L_GDP'),
+    DLA_GDP_BAR: colIdx('DLA_GDP_BAR'),
+    D4L_CPI:   colIdx('D4L_CPI'),
+    D4L_CPI_TAR: colIdx('D4L_CPI_TAR'),
+    RS:        colIdx('RS'),
+    RSNEUTRAL: colIdx('RSNEUTRAL'),
+    RR_BAR:    colIdx('RR_BAR'),
+    D4L_S:     colIdx('D4L_S'),
+  };
+
+  const dates = [];
+  const data = {};
+  Object.keys(cols).forEach(k => data[k] = []);
+
+  for (let i = 3; i < lines.length; i++) {
+    const row = parseRow(lines[i]);
+    const dateStr = row[0]?.trim();
+    if (!dateStr || !/^\d{4}Q\d$/.test(dateStr)) continue;
+    dates.push(dateStr);
+    Object.keys(cols).forEach(k => {
+      const v = parseFloat(row[cols[k]]);
+      data[k].push(Number.isFinite(v) ? v : null);
+    });
+  }
+  return { dates, data, cols };
+}
+
+//=========================================================================
+// Helpers
+//=========================================================================
+const qcmp = (a,b) => {
+  const [ay,aq] = a.split('Q').map(Number);
+  const [by,bq] = b.split('Q').map(Number);
+  return (ay*4+aq) - (by*4+bq);
+};
+const qIdx = (dates, q) => dates.indexOf(q);
+const isNum = x => x !== null && Number.isFinite(x);
+
+function stats(residuals) {
+  const valid = residuals.filter(isNum);
+  const n = valid.length;
+  if (n === 0) return { n: 0, rmse: NaN, mae: NaN };
+  const sse = valid.reduce((a,b)=>a+b*b, 0);
+  const sae = valid.reduce((a,b)=>a+Math.abs(b), 0);
+  return { n, rmse: Math.sqrt(sse/n), mae: sae/n };
+}
+
+function directionalAccuracy(preds, actuals, baseline) {
+  let hits = 0, total = 0;
+  for (let i = 0; i < preds.length; i++) {
+    if (!isNum(preds[i]) || !isNum(actuals[i]) || !isNum(baseline[i])) continue;
+    const sgnP = Math.sign(preds[i] - baseline[i]);
+    const sgnA = Math.sign(actuals[i] - baseline[i]);
+    if (sgnA === 0) continue;
+    total++;
+    if (sgnP === sgnA) hits++;
+  }
+  return total > 0 ? hits/total : NaN;
+}
+
+//=========================================================================
+// Backtest core
+//=========================================================================
+let KALMAN = null;
+let RESULTS = null;
+
+async function init() {
+  try {
+    KALMAN = await loadKalman();
+    document.getElementById('meta').innerHTML =
+      `Loaded ${KALMAN.dates.length} quarters from <code>data/matlab_kalman_filter.csv</code>
+      (${KALMAN.dates[0]} – ${KALMAN.dates[KALMAN.dates.length-1]}).
+      Click "Run backtest" to score the JS QPM.`;
+    runBacktest();
+  } catch(e) {
+    document.getElementById('meta').innerHTML = `<span style="color:var(--err)">Failed to load data: ${e.message}</span>`;
+  }
+}
+
+function runBacktest() {
+  if (!KALMAN) return;
+  const { dates, data } = KALMAN;
+  const startQ = document.getElementById('origStart').value;
+  const endQ   = document.getElementById('origEnd').value;
+  const maxH   = parseInt(document.getElementById('maxH').value, 10);
+  const i0 = qIdx(dates, startQ);
+  const iN = qIdx(dates, endQ);
+  if (i0 < 0 || iN < 0) {
+    document.getElementById('meta').innerHTML =
+      `<span style="color:var(--err)">Invalid forecast range — try ${dates[0]}…${dates[dates.length-1-maxH]}</span>`;
+    return;
+  }
+
+  const p = { ...DEFAULT_PARAMS };
+  const variables = ['D4L_CPI', 'RS', 'D4L_GDP'];
+  const records = []; // { origin, horizon, var, predicted, actual, baseline }
+
+  for (let i = i0; i <= iN; i++) {
+    if (i + maxH >= dates.length) break;
+
+    // Initial deviation state at t₀
+    const gap0 = data.L_GDP_GAP[i];
+    const cpi0 = data.D4L_CPI[i];
+    const tar0 = data.D4L_CPI_TAR[i];
+    const rs0  = data.RS[i];
+    const rsn0 = data.RSNEUTRAL[i];
+    if (![gap0, cpi0, tar0, rs0, rsn0].every(isNum)) continue;
+
+    const initConds = {
+      gap:  gap0,
+      pi:   cpi0 - tar0,        // inflation deviation from target
+      rs:   rs0 - rsn0,         // rate deviation from neutral
+      d4ls: 0,                  // NER YoY deviation — held at 0
+    };
+
+    // Forecast
+    const res = solveIRF(p, null, 0, maxH, initConds);
+    // res.pi4[h], res.rs[h], res.gap[h] are deviation-form predictions
+    // res arrays have indices 0..maxH; res[0] = state at t₀ (deviation form, just the initConds folded forward 1 iter)
+
+    for (let h = 1; h <= maxH; h++) {
+      const ih = i + h;
+
+      // --- D4L_CPI ---
+      const cpiTarH = data.D4L_CPI_TAR[ih];
+      const cpiActH = data.D4L_CPI[ih];
+      const cpiActT0 = data.D4L_CPI[i];
+      if (isNum(cpiTarH) && isNum(cpiActH)) {
+        const cpiPredH = cpiTarH + res.pi4[h];
+        records.push({ origin: dates[i], target: dates[ih], horizon: h,
+                       var: 'D4L_CPI', predicted: cpiPredH, actual: cpiActH, baseline: cpiActT0 });
+      }
+
+      // --- RS ---
+      const rsnH = data.RSNEUTRAL[ih];
+      const rsActH = data.RS[ih];
+      const rsActT0 = data.RS[i];
+      if (isNum(rsnH) && isNum(rsActH)) {
+        const rsPredH = rsnH + res.rs[h];
+        records.push({ origin: dates[i], target: dates[ih], horizon: h,
+                       var: 'RS', predicted: rsPredH, actual: rsActH, baseline: rsActT0 });
+      }
+
+      // --- D4L_GDP ---
+      // DLA_GDP_BAR is "Real GDP Trend Growth QoQ annualized (% pa)" — in steady state ≈ D4L_GDP.
+      // YoY growth = trend YoY growth + (gap_t − gap_{t−4}).
+      // For gap_{t−4}: if h ≥ 4 use the model's own predicted path; otherwise use the smoothed actual.
+      const gdpBarH = data.DLA_GDP_BAR[ih];
+      const gdpActH = data.D4L_GDP[ih];
+      const gdpActT0 = data.D4L_GDP[i];
+      const gapLag4 = (h >= 4) ? res.gap[h-4] : data.L_GDP_GAP[ih-4];
+      if (isNum(gdpBarH) && isNum(gdpActH) && isNum(gapLag4)) {
+        const gdpPredH = gdpBarH + (res.gap[h] - gapLag4);
+        records.push({ origin: dates[i], target: dates[ih], horizon: h,
+                       var: 'D4L_GDP', predicted: gdpPredH, actual: gdpActH, baseline: gdpActT0 });
+      }
+    }
+  }
+
+  RESULTS = { records, params: p };
+  renderSummary();
+  renderFitCharts();
+  renderByHorizonTable();
+}
+
+//=========================================================================
+// Rendering
+//=========================================================================
+const VAR_META = {
+  D4L_CPI: { title: 'CPI Inflation YoY (D4L_CPI)', unit: '%' },
+  RS:      { title: 'Policy Rate (RS)',            unit: '%' },
+  D4L_GDP: { title: 'Real GDP YoY (D4L_GDP)',      unit: '%' },
+};
+const VARS = ['D4L_CPI', 'RS', 'D4L_GDP'];
+
+function verdictClass(rmse, var_) {
+  // Rough tolerances — what's "good" depends on the series scale
+  const t = { D4L_CPI: [1.5, 3.0], RS: [1.0, 2.5], D4L_GDP: [1.5, 3.0] }[var_];
+  if (!t) return 'warn';
+  if (rmse < t[0]) return 'pass';
+  if (rmse < t[1]) return 'warn';
+  return 'fail';
+}
+function verdictLabel(rmse, var_) {
+  return { pass: 'PASS', warn: 'WARN', fail: 'FAIL' }[verdictClass(rmse, var_)];
+}
+
+function renderSummary() {
+  const { records } = RESULTS;
+  const out = document.getElementById('summary');
+  out.innerHTML = `<div class="card"><h2>Fit summary — pooled across all horizons</h2>
+    <table>
+      <thead><tr><th>Variable</th><th>N</th><th>RMSE (pp)</th><th>MAE (pp)</th><th>Directional accuracy</th><th>Verdict</th></tr></thead>
+      <tbody id="sumBody"></tbody>
+    </table></div>`;
+  const body = document.getElementById('sumBody');
+
+  for (const v of VARS) {
+    const recs = records.filter(r => r.var === v);
+    const resid = recs.map(r => r.predicted - r.actual);
+    const s = stats(resid);
+    const da = directionalAccuracy(
+      recs.map(r => r.predicted),
+      recs.map(r => r.actual),
+      recs.map(r => r.baseline)
+    );
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${VAR_META[v].title}</td>
+                    <td>${s.n}</td>
+                    <td>${s.rmse.toFixed(3)}</td>
+                    <td>${s.mae.toFixed(3)}</td>
+                    <td>${(da*100).toFixed(1)}%</td>
+                    <td><span class="verdict ${verdictClass(s.rmse, v)}">${verdictLabel(s.rmse, v)}</span></td>`;
+    body.appendChild(tr);
+  }
+
+  const meta = document.getElementById('meta');
+  meta.innerHTML = `Backtest complete — ${records.length} forecast cells across
+    ${new Set(records.map(r => r.origin)).size} origins × ${VARS.length} variables × up to ${Math.max(...records.map(r=>r.horizon))} horizons.`;
+}
+
+const charts = [];
+function destroyCharts(){ charts.forEach(c=>c.destroy()); charts.length=0; }
+
+function renderFitCharts() {
+  destroyCharts();
+  const { records } = RESULTS;
+  const out = document.getElementById('fitcharts');
+  out.innerHTML = `<div class="card"><h2>Fit charts — actual vs forecast, by horizon</h2>
+    <p class="meta">Each chart overlays the realised series with the model's 1-, 2-, 3-, 4-quarter-ahead forecasts, aligned to the <strong>target date</strong> (not the forecast origin).</p>
+    <div class="grid-3" id="fitGrid"></div>
+  </div>`;
+  const grid = document.getElementById('fitGrid');
+
+  for (const v of VARS) {
+    const wrap = document.createElement('div');
+    wrap.className = 'chart';
+    const id = `fc-${v}`;
+    wrap.innerHTML = `<h3>${VAR_META[v].title}</h3><canvas id="${id}"></canvas>`;
+    grid.appendChild(wrap);
+
+    const recs = records.filter(r => r.var === v);
+    // Build x axis = sorted target dates
+    const targets = [...new Set(recs.map(r => r.target))].sort(qcmp);
+    const actualByTarget = {};
+    recs.forEach(r => actualByTarget[r.target] = r.actual);
+    const actual = targets.map(t => actualByTarget[t]);
+
+    const horizons = [1,2,3,4];
+    const colors = ['#1a3a5c','#16a34a','#d97706','#dc2626'];
+    const horizonSeries = horizons.map(h => {
+      const map = {};
+      recs.filter(r => r.horizon === h).forEach(r => map[r.target] = r.predicted);
+      return targets.map(t => map[t] ?? null);
+    });
+
+    new Chart(document.getElementById(id), {
+      type:'line',
+      data:{
+        labels: targets,
+        datasets: [
+          { label: 'Actual', data: actual, borderColor: '#000', borderWidth: 2.2,
+            fill: false, pointRadius: 2, tension: 0.15 },
+          ...horizonSeries.map((s, i) => ({
+            label: `${horizons[i]}Q ahead`,
+            data: s,
+            borderColor: colors[i],
+            borderWidth: 1.4,
+            borderDash: [4,3],
+            fill: false,
+            pointRadius: 1.5,
+            tension: 0.15,
+            spanGaps: true,
+          })),
+        ]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{ position:'bottom', labels:{font:{size:9}, boxWidth:14}} },
+        scales:{
+          y:{ ticks:{font:{size:9}} },
+          x:{ ticks:{font:{size:8}, maxRotation:60, minRotation:60, autoSkip:true, maxTicksLimit:15} }
+        }
+      }
+    });
+    charts.push(Chart.getChart(id));
+  }
+}
+
+function renderByHorizonTable() {
+  const { records } = RESULTS;
+  const out = document.getElementById('byHorizon');
+  out.innerHTML = `<div class="card"><h2>Fit by horizon</h2>
+    <table>
+      <thead><tr><th>Variable</th><th>Horizon</th><th>N</th><th>RMSE (pp)</th><th>MAE (pp)</th><th>Dir. accuracy</th></tr></thead>
+      <tbody id="hzBody"></tbody>
+    </table></div>`;
+  const body = document.getElementById('hzBody');
+
+  for (const v of VARS) {
+    for (let h = 1; h <= 4; h++) {
+      const recs = records.filter(r => r.var === v && r.horizon === h);
+      if (recs.length === 0) continue;
+      const resid = recs.map(r => r.predicted - r.actual);
+      const s = stats(resid);
+      const da = directionalAccuracy(
+        recs.map(r => r.predicted),
+        recs.map(r => r.actual),
+        recs.map(r => r.baseline)
+      );
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${VAR_META[v].title}</td>
+                      <td>${h}Q</td>
+                      <td>${s.n}</td>
+                      <td>${s.rmse.toFixed(3)}</td>
+                      <td>${s.mae.toFixed(3)}</td>
+                      <td>${(da*100).toFixed(1)}%</td>`;
+      body.appendChild(tr);
+    }
+  }
+}
+
+function downloadResults() {
+  if (!RESULTS) return;
+  const lines = ['origin,target,horizon,variable,predicted,actual,baseline,error'];
+  RESULTS.records.forEach(r => {
+    lines.push(`${r.origin},${r.target},${r.horizon},${r.var},${r.predicted.toFixed(4)},${r.actual.toFixed(4)},${r.baseline.toFixed(4)},${(r.predicted-r.actual).toFixed(4)}`);
+  });
+  const blob = new Blob([lines.join('\n')], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'qpm_backtest_forecasts.csv';
+  a.click();
+}
+
+init();
+</script>
+
+</div>
+</body>
+</html>

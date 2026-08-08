@@ -1,0 +1,2107 @@
+{
+  "trustState": {
+    "labels": {
+      "mockFixture": "Demo data",
+      "liveBridgeJson": "Live source",
+      "fallbackMock": "Backup reference",
+      "staticCuratedContent": "Curated source",
+      "localBrowserDraft": "Saved in this browser",
+      "planned": "Not active",
+      "artifactGuardChecked": "Format checked",
+      "sourceVintage": "Source date",
+      "artifactExport": "Run snapshot",
+      "registryGenerated": "Last checked",
+      "lastValidationCheck": "Last checked",
+      "overviewArtifact": "Current snapshot",
+      "staticOverviewFallback": "Approved snapshot"
+    }
+  },
+  "format": {
+    "notAvailable": "n/a",
+    "unavailable": "Unavailable",
+    "units": {
+      "percent": "%",
+      "percentagePoint": "pp",
+      "blnUzs": "bln UZS",
+      "mlnUsd": "mln USD",
+      "uzsUsd": "UZS/USD"
+    }
+  },
+  "shell": {
+    "skipToMainContent": "Skip to main content",
+    "workspaceNavigationAria": "Workspace navigation",
+    "primaryNavigationAria": "Primary",
+    "globalUtilitiesAria": "Global utilities",
+    "workspaceLabel": "Workspace",
+    "brandEyebrow": "Uzbekistan Economic Policy Engine",
+    "brandTitle": "Policy Analysis Workspace"
+  },
+  "languageSwitcher": {
+    "label": "Language",
+    "ariaLabel": "Select interface language"
+  },
+  "chartRenderer": {
+    "empty": "No data available for this chart.",
+    "srFallback": "chart",
+    "illustrativeBand": "Illustrative uncertainty band (hatched).",
+    "takeawayLabel": "Takeaway.",
+    "spec": {
+      "scenario_lab_impulse_response": {
+        "title": "QPM impulse response vs baseline",
+        "subtitle": "Deviation from baseline over 12 quarters; reference calculation, not a live forecast.",
+        "xLabel": "Horizon",
+        "yLabel": "Deviation from baseline",
+        "series": {
+          "gdp_gap": "GDP gap",
+          "inflation": "Inflation",
+          "policy_rate": "Policy rate"
+        },
+        "takeaway": "Read each line as a scenario deviation from baseline, not as a standalone forecast level."
+      },
+      "qpm_macro_path": {
+        "title": "Real GDP growth path",
+        "subtitle": "Baseline and selected scenario",
+        "xLabel": "Period",
+        "yLabel": "GDP growth",
+        "series": {
+          "baseline_path": "Baseline",
+          "scenario_path": "Scenario"
+        },
+        "takeaway": "Growth path reflects demand, cost, and policy-rate channels."
+      },
+      "qpm_external_balance": {
+        "title": "Current account path",
+        "subtitle": "Baseline and selected scenario",
+        "xLabel": "Period",
+        "yLabel": "Current account",
+        "series": {
+          "baseline_path": "Baseline",
+          "scenario_path": "Scenario"
+        },
+        "takeaway": "External balance responds to exchange-rate, trade, and remittance assumptions."
+      },
+      "qpm_fiscal_effects": {
+        "title": "Fiscal balance path",
+        "subtitle": "Baseline and selected scenario",
+        "xLabel": "Period",
+        "yLabel": "Fiscal balance",
+        "series": {
+          "baseline_path": "Baseline",
+          "scenario_path": "Scenario"
+        },
+        "takeaway": "Fiscal outcomes are reference accounting effects, not a separate fiscal-model run."
+      }
+    }
+  },
+  "nav": {
+    "overview": "Overview",
+    "scenarioLab": "Scenario Lab",
+    "policyChat": "Policy Chat",
+    "comparison": "Comparison",
+    "modelExplorer": "Model Explorer",
+    "dataRegistry": "Data Sources",
+    "knowledgeHub": "Knowledge Hub",
+    "pending": "Pending"
+  },
+  "pages": {
+    "overview": {
+      "title": "Overview",
+      "description": "Current macro state, near-term risks, and the scenario tests to run next."
+    },
+    "scenarioLab": {
+      "title": "Scenario Lab",
+      "description": "Build policy scenarios by adjusting assumptions, then review impacts and interpretation in one analysis workspace."
+    },
+    "policyChat": {
+      "title": "Policy Chat",
+      "description": "Turn a policy question into reviewable model assumptions, then run the confirmed scenario."
+    },
+    "comparison": {
+      "title": "Comparison",
+      "description": "Compare baseline and alternative scenarios side by side to surface trade-offs and decision framing."
+    },
+    "modelExplorer": {
+      "title": "Model Explorer",
+      "description": "Inspect the mechanics behind every output. Honest about what each model does — and does not — do.",
+      "catalogTitle": "Model catalog",
+      "catalogHint": "Select one model to inspect technical assumptions and caveats.",
+      "emptyState": "No model information is available in this workspace.",
+      "detailTabsAria": "Model detail tabs",
+      "tabs": {
+        "assumptions": "Assumptions",
+        "equations": "Equations",
+        "caveats": "Caveats",
+        "dataSources": "Data sources"
+      },
+      "status": {
+        "active": "Active",
+        "staging": "Staging",
+        "paused": "Paused"
+      },
+      "severity": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "detail": {
+        "empty": {
+          "assumptions": "No assumptions are documented for this model.",
+          "equations": "No equations are documented for this model.",
+          "caveats": "No caveats are documented for this model.",
+          "dataSources": "No data sources are documented for this model."
+        },
+        "implicationPrefix": "Implication"
+      }
+    },
+    "dataRegistry": {
+      "title": "Data Sources",
+      "description": "Read-only inventory of public data files, source dates, update status, and known limitations."
+    },
+    "knowledgeHub": {
+      "title": "Knowledge Hub",
+      "description": "Reform changes, research updates, and model literature in one place."
+    }
+  },
+  "overview": {
+    "common": {
+      "middleDot": "·",
+      "slash": "/"
+    },
+    "delta": {
+      "vsPeriodBasis": "vs {{period}} {{basis}}"
+    },
+    "tradeBalance": {
+      "deficit": "deficit",
+      "surplus": "surplus",
+      "balanced": "balanced",
+      "usdBnPattern": "USD {{value}}bn {{position}}"
+    },
+    "fx": {
+      "stronger": "UZS stronger",
+      "weaker": "UZS weaker",
+      "unchanged": "unchanged"
+    },
+    "claimLabels": {
+      "observed": "Observed",
+      "calculated": "Calculated",
+      "nowcast": "Nowcast",
+      "reference": "Reference",
+      "forecast": "Forecast"
+    },
+    "freshness": {
+      "current": "Current",
+      "stale": "Stale source",
+      "unavailable": "Unavailable"
+    },
+    "macroPulse": {
+      "gdp": "GDP",
+      "cpi": "CPI",
+      "tradeBalance": "Trade balance",
+      "usdUzs": "USD/UZS",
+      "yoy": "YoY",
+      "mom": "MoM"
+    },
+    "briefing": {
+      "kicker": "Snapshot",
+      "title": "Macro snapshot",
+      "description": "Headline values, the current nowcast, and the scenario checks to run next.",
+      "primarySignalsTitle": "Key indicators",
+      "primarySignalsAria": "Key overview indicators",
+      "analysisAria": "Nowcast and scenario tests"
+    },
+    "topbar": {
+      "freshness": "Oldest headline source · {{days}}d old"
+    },
+    "meta": {
+      "eyebrow": "Overview snapshot",
+      "vintageLabel": "Vintage",
+      "modelsLabel": "Models",
+      "modelsLive": "{{count}} live",
+      "lastRefreshLabel": "Last updated"
+    },
+    "header": {
+      "kicker": "Current state",
+      "modelListFallback": "MODEL SET",
+      "draftedFrom": "State narrative · drafted from {{models}} baseline",
+      "updatedAt": "State narrative reviewed {{date}}",
+      "staticFallbackNotice": "Reference summary · current snapshot unavailable",
+      "dataNoteReviewed": "Data note: reviewed {{date}}",
+      "dataNoteUpdated": "Data note: updated {{date}}",
+      "sourceNotesBelow": "{{count}} metric sources listed below",
+      "modelSource": "model source: {{models}}",
+      "artifactBrief": {
+        "summary": "Latest source-backed growth, inflation, trade, and exchange-rate indicators are shown below; unavailable model outputs are excluded from headline indicators."
+      },
+      "summary": {
+        "template": "{{items}}.",
+        "item": "{{label}} {{value}} {{unit}}{{qualifier}}",
+        "provisional": "provisional",
+        "unavailable": "Snapshot loaded, but no valid summary metrics are available.",
+        "labels": {
+          "gdp": "GDP",
+          "cpi": "CPI",
+          "exports": "exports",
+          "imports": "imports",
+          "policyRate": "policy rate",
+          "gold": "gold"
+        }
+      }
+    },
+    "kpi": {
+      "title": "Core indicators",
+      "description": "Current values and period-over-period change. Interpretation depends on the metric.",
+      "empty": "No headline indicators are available for this snapshot.",
+      "deltaSrLabel": "{{direction}} by {{delta}} versus prior period",
+      "noPrior": "No prior value",
+      "notAvailable": "n/a",
+      "freshness": "Metric timestamp {{date}}",
+      "smePendingChip": "Review needed",
+      "smePendingAria": "Context note needs review",
+      "provenance": {
+        "observed": "Observed",
+        "nowcast": "Nowcast",
+        "scenario": "Scenario",
+        "reference": "Reference",
+        "draft": "Draft"
+      },
+      "outputClass": {
+        "accounting_calculation": "Accounting calculation",
+        "nowcast": "Nowcast",
+        "forecast": "Forecast",
+        "static_reference": "Static reference"
+      },
+      "direction": {
+        "up": "higher",
+        "down": "lower",
+        "flat": "unchanged"
+      }
+    },
+    "comparisonBasis": {
+      "real_gdp_growth_annual_yoy": "print",
+      "real_gdp_growth_quarter_yoy": "print",
+      "gdp_nowcast_current_quarter": "model nowcast",
+      "cpi_yoy": "print",
+      "cpi_mom": "print",
+      "food_cpi_yoy": "print",
+      "exports_yoy": "trade print",
+      "imports_yoy": "trade print",
+      "trade_balance": "trade balance",
+      "policy_rate": "policy setting",
+      "usd_uzs_level": "official reference rate",
+      "usd_uzs_mom_change": "monthly FX change",
+      "usd_uzs_yoy_change": "annual FX change",
+      "reer_level": "REER index",
+      "gold_price_level": "market reference level",
+      "gold_price_change": "gold price change",
+      "gold_price_forecast": "forecast vintage"
+    },
+    "indicators": {
+      "title": "Monitoring signals",
+      "description": "Latest values grouped by theme. Source notes stay below for citation checks.",
+      "inflationPair": "CPI and food inflation pair",
+      "tradeFlowPair": "Exports / Imports",
+      "usdUzsPair": "USD/UZS",
+      "primarySource": "Primary source: {{source}}",
+      "forecastExternal": "Forecast (external)",
+      "groups": {
+        "growth": "Growth",
+        "inflation": "Inflation",
+        "trade": "Trade",
+        "monetary_fx": "Monetary / FX",
+        "gold": "Gold"
+      },
+      "status": {
+        "valid": "Valid",
+        "warning": "Caution",
+        "failed": "Failed"
+      }
+    },
+    "risks": {
+      "title": "What to test next",
+      "description": "Near-term risks linked to Scenario Lab checks.",
+      "empty": "No active risks are flagged for this snapshot.",
+      "hitsPrefix": "Channel: ",
+      "testAction": "Test scenario",
+      "testActionAria": "Run scenario test for {{title}}"
+    },
+    "quickActions": {
+      "title": "Recommended tests",
+      "description": "Open the most useful scenario checks from this snapshot.",
+      "empty": "No quick actions are configured for this snapshot.",
+      "kindAnalysis": "Scenario",
+      "openAction": "Open scenario"
+    },
+    "feeds": {
+      "sectionAria": "Overview feed panels",
+      "title": "Latest updates",
+      "description": "Recent policy and data updates kept as supporting context.",
+      "reforms": {
+        "title": "Reform changes",
+        "empty": "No reform changes are available from Knowledge Hub.",
+        "loading": "Loading reform changes from Knowledge Hub...",
+        "unavailable": "Knowledge Hub reform changes are unavailable.",
+        "viewAll": "View all in Knowledge Hub",
+        "actionType": {
+          "rate_decision": "Rate decision",
+          "regulation": "Regulation",
+          "announcement": "Announcement",
+          "other": "Other"
+        }
+      },
+      "dataRefreshes": {
+        "title": "Data refreshes",
+        "empty": "No fresh model data available.",
+        "refreshSuffix": "refresh"
+      },
+      "savedScenarios": {
+        "title": "Your saved scenarios",
+        "empty": "Saved scenarios will appear here after you save a draft in Scenario Lab.",
+        "openLab": "Open Scenario Lab",
+        "type": {
+          "baseline": "Baseline",
+          "alternative": "Alternative",
+          "stress": "Stress"
+        }
+      }
+    },
+    "nowcast": {
+      "refreshing": "Refreshing nowcast…",
+      "kicker": "Nowcast",
+      "legendAria": "Nowcast chart legend",
+      "modelNotOfficial": "Model nowcast · not an official forecast",
+      "markers": {
+        "aria": "Nowcast chart markers",
+        "lastActual": "Last actual",
+        "current": "Current nowcast"
+      },
+      "series": {
+        "period": "Period"
+      },
+      "fanInsetAria": "{{period}} nowcast fan: {{lower}} to {{upper}}, current {{current}}.",
+      "legend": {
+        "actual": "Actual history",
+        "nowcast": "Current nowcast",
+        "forecast": "Forecast path",
+        "band": "Uncertainty band"
+      },
+      "banner": {
+        "title": "Live nowcast unavailable",
+        "subtitle": "Showing reference data",
+        "retry": "Retry",
+        "freshnessDetail": "The DFM output does not pass the current-period, source-freshness, CI-reproducibility, and economist-approval gates.",
+        "detailLabels": {
+          "transport": "Connection",
+          "validation": "Validation",
+          "freshness": "Readiness"
+        }
+      }
+    },
+    "dfmContributionDetail": {
+      "kicker": "DFM contribution detail",
+      "title": "What is moving the nowcast",
+      "description": "Top standardized factor signals. Industry YoY and Wholesale Trade Growth stay visible as checkpoints.",
+      "pinnedSuffix": "pinned",
+      "factorUnit": "factor units",
+      "footnote": "These are standardized DFM factor contributions, not percentage-point effects on GDP growth.",
+      "headers": {
+        "indicator": "Indicator",
+        "signal": "Signal",
+        "latest": "Latest",
+        "contribution": "Factor contribution"
+      },
+      "signals": {
+        "contracting": "Contracting growth signal",
+        "below-trend": "Growing below trend",
+        "above-trend": "Growing above trend",
+        "interest-rate-native": "Rate, native units",
+        "monetary-aggregate-native": "Monetary aggregate, native units",
+        "npl-native": "NPL ratio, native units",
+        "fx-native": "FX rate, native units",
+        "level-native": "Level indicator, native units",
+        "native-unit": "Native-unit indicator",
+        "other-non-growth": "Non-growth indicator"
+      }
+    },
+    "caveats": {
+      "title": "Model caveats",
+      "description": "Known limitations affecting the metrics above. Read before citing.",
+      "affectedMetrics": "Affects: {{metrics}}",
+      "severity": {
+        "critical": "Critical",
+        "warning": "Warning",
+        "info": "Info"
+      }
+    },
+    "dataNotes": {
+      "title": "Data notes",
+      "description": "Source notes and limitations for the metrics above.",
+      "warningMetricCount": "{{count}} warning metric",
+      "warningMetricCountPlural": "{{count}} warning metrics",
+      "noteCount": "{{count}} source note",
+      "noteCountPlural": "{{count}} source notes",
+      "summaryLine": "Open source notes before citing or comparing the snapshot.",
+      "severityCounts": "{{critical}} critical · {{warning}} warning · {{info}} info",
+      "exportedAt": "Updated {{date}}"
+    },
+    "references": {
+      "title": "Sources and references",
+      "summary": "{{count}} sources · updated {{date}}",
+      "sourceDate": "Source date: {{date}}"
+    }
+  },
+  "buttons": {
+    "save": "Save",
+    "run": "Run",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "saveDraft": "Save draft",
+    "runScenario": "Run scenario",
+    "retryRun": "Retry run",
+    "close": "Close",
+    "load": "Load",
+    "delete": "Delete"
+  },
+  "scenarioLab": {
+    "header": {
+      "eyebrow": "Scenario construction",
+      "meta": {
+        "activeModelsLabel": "Current model",
+        "runLifecycleLabel": "Run lifecycle",
+        "dataVintageLabel": "Data date",
+        "runLifecycleStatus": {
+          "loading": "Running",
+          "ready": "Ready",
+          "error": "Retry needed"
+        }
+      }
+    },
+    "context": {
+      "label": "Context:",
+      "dataVintage": "data date",
+      "lane": {
+        "macroScenario": "Macro scenario",
+        "sectorLinkage": "Sector linkage",
+        "tradeIncidence": "Trade incidence"
+      },
+      "model": {
+        "qpm": "QPM",
+        "io": "I-O",
+        "pe": "PE",
+        "cge": "CGE",
+        "fpp": "FPP",
+        "savedRuns": "Saved runs",
+        "synthesis": "Synthesis"
+      },
+      "saveState": {
+        "saved": "saved",
+        "unsaved": "unsaved"
+      },
+      "referenceDataset": "reference data"
+    },
+    "modelTabs": {
+      "title": "Analysis tabs",
+      "description": "Run each active model in one workspace while keeping its results clearly separated.",
+      "tabsAria": "Scenario Lab model tabs",
+      "plannedTitle": "Inactive model lanes",
+      "plannedDescription": "These analysis lanes are shown for orientation only and do not run yet.",
+      "macroQpm": "Macro / QPM",
+      "ioSectorShock": "I-O Sector Shock",
+      "peTradeShock": "Tariff Incidence",
+      "cgeReformShock": "CGE Reform Shock",
+      "fppFiscalPath": "FPP Fiscal Path",
+      "savedRuns": "Saved Runs",
+      "synthesisPreview": "Synthesis",
+      "subtitle": {
+        "macroQpm": "Macro scenario simulation",
+        "ioSectorShock": "Sector linkage analysis",
+        "peTradeShock": "Direct tariff incidence",
+        "cgeReformShock": "Bounded aggregate equilibrium reference",
+        "fppFiscalPath": "Fiscal consistency, not active",
+        "savedRuns": "Saved analytical runs",
+        "synthesisPreview": "Cross-model synthesis, not active"
+      },
+      "status": {
+        "active": "Active",
+        "next": "Next",
+        "bridgePilot": "Active data",
+        "shell": "Local",
+        "reference": "Reference",
+        "planned": "Not active"
+      }
+    },
+    "modelTabShell": {
+      "eyebrow": "Model tab",
+      "plannedStatus": "Not active",
+      "io": {
+        "title": "I-O Sector Shock",
+        "description": "This tab runs final-demand sector transmission analysis with the I-O data layer.",
+        "items": {
+          "inputs": "Inputs: demand bucket, amount in billion UZS, distribution mode, and optional sector selector.",
+          "outputs": "Outputs: total-resource requirement, value-added, employment effects, top affected sectors, and linkage classes.",
+          "boundary": "Boundary: sector transmission evidence only; not a macro forecast or general-equilibrium result."
+        }
+      },
+      "pe": {
+        "title": "Tariff Incidence",
+        "description": "Direct tariff-incidence analysis from the PE public data file.",
+        "items": {
+          "inputs": "Inputs: tariff cut, HS section, partner or regime scope, and section elasticity set.",
+          "outputs": "Outputs: direct trade creation, trade diversion, welfare, revenue, and affected HS sections.",
+          "boundary": "Boundary: direct trade-channel evidence only until linked with I-O, CGE, or synthesis analysis."
+        }
+      },
+      "cge": {
+        "title": "CGE Reform Shock",
+        "description": "The aggregate 1-2-3 calculation engine is workbook-reconciled; public scenario runs remain disabled.",
+        "items": {
+          "inputs": "Validated inputs: world import/export prices, trade and domestic tax rates, government demand, transfers, remittances, and fixed foreign saving.",
+          "outputs": "Validated outputs: aggregate exports, imports, domestic and composite goods, consumption, investment, taxes, saving, and a normalized relative-price index.",
+          "boundary": "Boundary: no sector, labor, household distribution, dynamic forecast, or nominal UZS/USD result. Model-owner approval and two more benchmarks are required before activation."
+        }
+      },
+      "fpp": {
+        "title": "FPP Fiscal Path",
+        "description": "Fiscal path analysis is not active yet.",
+        "items": {
+          "inputs": "Expected inputs: revenue, expenditure, financing, debt stock, interest-rate, and growth assumptions.",
+          "outputs": "Expected outputs: deficit, debt path, financing gap, fiscal buffers, and risk flags.",
+          "boundary": "Integration boundary: fiscal sustainability evidence only; it will not backfill QPM, I-O, PE, or CGE outputs without reconciliation."
+        }
+      },
+      "saved": {
+        "title": "Saved Runs",
+        "description": "{{count}} saved run(s) are available in this browser session.",
+        "items": {
+          "macro": "QPM macro runs keep their existing saved scenario shape.",
+          "io": "I-O runs will be saved as sector-shock outputs after the analytics MVP is implemented.",
+          "compare": "Comparison will read saved outputs and render each model type in its own block."
+        }
+      },
+      "synthesis": {
+        "title": "Synthesis",
+        "description": "Cross-model reconciliation is not active yet.",
+        "items": {
+          "chain": "Target chain: PE tariff incidence -> I-O sector propagation -> CGE reallocation -> FPP fiscal path.",
+          "layers": "QPM and DFM enter as macro consistency and nowcast layers.",
+          "reconciliation": "The synthesis surface will show disagreements, confidence flags, and unresolved assumptions."
+        }
+      }
+    },
+    "ioShock": {
+      "title": "I-O final-demand shock",
+      "description": "Estimate which sectors supply a demand shock, how much value added it carries, and how many jobs are exposed.",
+      "loading": "Loading I-O analytics data...",
+      "unavailable": "I-O analytics data is unavailable. Existing Scenario Lab behavior is unchanged.",
+      "controlsAria": "I-O sector shock controls",
+      "setup": {
+        "eyebrow": "Scenario setup",
+        "title": "Choose the demand shock",
+        "description": "Set the policy case, amount, and allocation rule before reading the sector results."
+      },
+      "policyShockType": "Policy use case",
+      "policyShockTypeHint": "Use cases choose the demand bucket and allocation.",
+      "demandBucket": "Demand shock type",
+      "demandBucketHint": "Used for selected-demand allocation.",
+      "amount": "Shock amount",
+      "currency": "Currency",
+      "exchangeRate": "FX assumption, UZS/USD",
+      "distribution": "Distribution",
+      "sector": "Target sector",
+      "sectorHint": "Single-sector shocks route the final-demand vector to one of {{sectorCount}}.",
+      "boundary": "Scope: sector accounting only. This is not a macro, price, or employment forecast.",
+      "employmentBoundary": "Jobs are fixed-intensity estimates.",
+      "topSectors": "Top affected sectors",
+      "caveats": "Limits and source notes",
+      "saveRun": "Save I-O run",
+      "savedTitle": "I-O {{bucket}} shock · {{amount}} {{currency}}",
+      "savedDescription": "Saved I-O sector shock run for sector transmission analysis.",
+      "convertedShock": "Converted demand shock: {{amount}}",
+      "sourceLabelNote": "Sector labels use the original source names and are not translated here.",
+      "units": {
+        "employmentEstimate": "employment count estimate"
+      },
+      "claimLabels": {
+        "output": "Accounting multiplier / structural sector linkage",
+        "gdpContribution": "I-O value-added accounting contribution, not macro forecast",
+        "employment": "Linear employment-intensity estimate, not labor-market forecast"
+      },
+      "whatThisMeans": {
+        "title": "What this means",
+        "body": "This demand shock produces {{output}} of total-resource requirement and {{valueAdded}} of value-added accounting contribution. Employment is shown as {{employment}} estimated positions from fixed sector intensities."
+      },
+      "buckets": {
+        "consumption": "Consumption",
+        "government": "Government",
+        "investment": "Investment",
+        "export": "Export"
+      },
+      "policyShockTypes": {
+        "public_investment_project": "Public investment project",
+        "export_expansion": "Export expansion",
+        "domestic_demand_reallocation": "Domestic demand support",
+        "government_procurement": "Government procurement",
+        "single_sector_final_demand": "Single-sector final-demand shock",
+        "single_sector_production_disabled": "Single-sector production shock (not yet available)"
+      },
+      "distributions": {
+        "final_demand": "By selected demand shares",
+        "output": "By sector resource shares",
+        "gva": "By GVA shares",
+        "equal": "Equal across sectors",
+        "sector": "To one sector"
+      },
+      "currencies": {
+        "bln_uzs": "Billion UZS",
+        "mln_usd": "Million USD"
+      },
+      "summary": {
+        "title": "Current run",
+        "bucket": "Demand bucket",
+        "amount": "Amount",
+        "fx": "FX assumption",
+        "distribution": "Distribution mode",
+        "selectedSector": "Selected sector",
+        "dataVintage": "Base year",
+        "policyUse": "Policy use case",
+        "compact": "{{bucket}} · {{amount}} · {{distribution}} · {{vintage}}",
+        "fxCompact": "FX: {{fx}}",
+        "sectorCompact": "Sector: {{sector}}"
+      },
+      "kpis": {
+        "output": "Total resources",
+        "valueAdded": "Value added",
+        "gdpContribution": "GDP accounting contribution",
+        "employment": "Jobs estimate",
+        "multiplier": "Resource multiplier",
+        "outputNote": "Domestic output plus import content",
+        "valueAddedNote": "Accounting GDP contribution",
+        "employmentNote": "Fixed-intensity estimate",
+        "multiplierNote": "Total resources per 1 UZS final-demand shock"
+      },
+      "importContent": {
+        "title": "Domestic and import content",
+        "body": "Estimated with each sector's source import share. This is an I-O accounting split, not a trade forecast.",
+        "formula": "Total resources = domestic resource part + import content; import share = import content divided by total resources.",
+        "domestic": "Domestic resource part",
+        "imported": "Import content",
+        "share": "Import share"
+      },
+      "readerNote": {
+        "title": "How to read this result",
+        "shock": "The entered shock becomes {{shock}} of final demand.",
+        "resources": "Total resources, {{resources}}, include direct and supplier requirements.",
+        "valueAdded": "Value added, {{valueAdded}}, is the GDP-accounting part; {{imports}} is import content.",
+        "jobs": "Jobs, {{jobs}}, are exposure from fixed 2022 employment ratios, not a hiring forecast."
+      },
+      "decision": {
+        "eyebrow": "Decision view",
+        "title": "Final-demand shock result",
+        "lead": "{{bucket}} shock of {{amount}}, allocated {{distribution}}.",
+        "sectorLead": "Shock of {{amount}} assigned to {{sector}}."
+      },
+      "method": {
+        "title": "How this run is calculated",
+        "steps": {
+          "finalDemand": "Convert the entered amount into a final-demand vector.",
+          "leontief": "Pass it through the 2022 Leontief I-O table.",
+          "outputs": "Read total resources, value added, import content, and jobs exposure."
+        }
+      },
+      "meta": {
+        "dataVintage": "Base year {{vintage}}",
+        "auditPassed": "Data checks passed {{passed}}/{{total}}",
+        "auditFailed": "Data checks need review: {{failed}}"
+      },
+      "concentration": {
+        "title": "Where the effect concentrates",
+        "subtitle": "Top sectors by total-resource response. Value-added and employment are shown beside each row.",
+        "share": "Share"
+      },
+      "sensitivity": {
+        "title": "Advanced robustness checks",
+        "subtitle": "Compare allocation and assumption choices against the base run.",
+        "allocations": "Allocation modes",
+        "parameters": "Assumption ranges",
+        "deltaLabel": "vs base",
+        "headers": {
+          "case": "Case",
+          "output": "Resources",
+          "valueAdded": "Value added",
+          "employment": "Employment",
+          "multiplier": "Mult."
+        },
+        "cases": {
+          "allocation-final-demand": {
+            "label": "Selected final-demand shares",
+            "assumption": "Uses the selected final-demand bucket as allocation weights."
+          },
+          "allocation-output": {
+            "label": "Sector resource shares",
+            "assumption": "Allocates the same shock by baseline total-resource shares."
+          },
+          "allocation-sector": {
+            "label": "One selected sector",
+            "assumption": "Assigns the shock to one selected sector."
+          },
+          "employment-low": {
+            "label": "Employment intensity low",
+            "assumption": "-15% fixed employment coefficient."
+          },
+          "employment-base": {
+            "label": "Employment intensity base",
+            "assumption": "Source employment coefficient."
+          },
+          "employment-high": {
+            "label": "Employment intensity high",
+            "assumption": "+15% fixed employment coefficient."
+          },
+          "import-leakage-low": {
+            "label": "Import leakage low",
+            "assumption": "Lower additional import-leakage scaler."
+          },
+          "import-leakage-base": {
+            "label": "Import leakage base",
+            "assumption": "Uses source import shares."
+          },
+          "import-leakage-high": {
+            "label": "Import leakage high",
+            "assumption": "Higher additional import-leakage scaler."
+          },
+          "fx-low": {
+            "label": "FX conversion low",
+            "assumption": "-5% UZS/USD conversion assumption when USD input is active."
+          },
+          "fx-base": {
+            "label": "FX conversion base",
+            "assumption": "Selected UZS/USD conversion assumption."
+          },
+          "fx-high": {
+            "label": "FX conversion high",
+            "assumption": "+5% UZS/USD conversion assumption when USD input is active."
+          }
+        },
+        "note": "Sensitivity rows are deterministic re-runs of the same static I-O calculation; they do not add prices, substitution, fiscal feedback, or general-equilibrium effects."
+      },
+      "interpretation": {
+        "title": "Interpretation",
+        "exposure": "Largest exposure",
+        "exposureBody": "{{sector}} accounts for {{share}}% of the total-resource effect.",
+        "noExposure": "No sector concentration is available for this shock.",
+        "boundary": "Boundary",
+        "boundaryBody": "Read this as sector transmission evidence. It is not a price, inflation, or macro forecast.",
+        "sensitivity": "Sensitivity",
+        "sensitivityBody": "Use advanced checks to see whether the sector story changes under allocation, jobs, import, or FX assumptions.",
+        "nextUse": "Next model to link",
+        "nextUseBody": "Use this as sector evidence. PE, CGE, or macro links need a separate model handoff before making broader claims."
+      },
+      "detailTable": "Detailed sector table",
+      "dataChecks": {
+        "title": "Data quality checks",
+        "note": "These checks test data-file structure and accounting identities. They do not validate behavioral responses or forecast accuracy."
+      },
+      "sourceLedger": {
+        "title": "Source ledger",
+        "source": "Source table",
+        "owner": "Source owner",
+        "workbooks": "Local workbooks"
+      },
+      "table": {
+        "rank": "Rank",
+        "sector": "Sector",
+        "sectorCode": "Code",
+        "sourceLabel": "Source label",
+        "output": "Total resources, bln UZS",
+        "valueAdded": "Value added, bln UZS",
+        "employment": "Employment",
+        "linkage": "Linkage"
+      }
+    },
+    "peShock": {
+      "title": "Tariff Incidence",
+      "description": "Test a tariff change by product scope, partner, or trade regime, then inspect direct PE effects before any macro or sector linkage.",
+      "loading": "Loading PE trade data...",
+      "unavailable": "PE trade data is unavailable. Existing Scenario Lab behavior is unchanged.",
+      "controlsAria": "Tariff incidence controls",
+      "tariffChange": "Tariff change",
+      "directionLabel": "Tariff change direction",
+      "direction": {
+        "cut": "Cut",
+        "increase": "Increase",
+        "cutAction": "cut",
+        "increaseAction": "increased"
+      },
+      "tariffCut": "Change size",
+      "section": "HS section",
+      "productScope": "Product scope",
+      "regime": "Trade regime",
+      "partner": "Partner",
+      "partnerScope": "Partner scope",
+      "allSections": "All sections",
+      "allRegimes": "All regimes",
+      "allPartners": "All partners",
+      "productSearch": "Search product scope",
+      "partnerSearch": "Search partners",
+      "noMatches": "No matches",
+      "regimeLabels": {
+        "mfn": "MFN partners",
+        "fta": "Free-trade partners",
+        "full": "Duty-free partners"
+      },
+      "boundary": "Direct tariff-incidence only. These values are not GDP, inflation, I-O, CGE, or fiscal-path effects.",
+      "partnerBoundary": "Partner and regime filters use import-share scaling because product-partner tariff matrices are not in the public data file.",
+      "topSections": "Largest direct effects by HS section",
+      "caveats": "Source caveats",
+      "saveRun": "Save to Comparison",
+      "saveRunHint": "Saved PE runs appear as separate trade-incidence evidence in Comparison.",
+      "savedTitle": "PE {{change}} {{direction}} · {{section}}",
+      "savedDescription": "Saved PE trade-shock run for direct tariff-incidence analysis.",
+      "sourceLabelNote": "Product labels follow the source HS section names. Source: {{source}}.",
+      "setup": {
+        "step": "Scenario inputs",
+        "title": "Policy setup",
+        "description": "Set the tariff direction and choose product, partner, or regime scope."
+      },
+      "baseline": {
+        "title": "Data coverage",
+        "importBase": "Import base",
+        "importCoverage": "Import coverage",
+        "baseYear": "Base year",
+        "sourceScope": "Source scope"
+      },
+      "scope": {
+        "regime": "{{regime}}"
+      },
+      "units": {
+        "usdThousand": "USD th.",
+        "usdMillion": "USD mn"
+      },
+      "claimLabels": {
+        "direct": "Direct PE result",
+        "welfare": "Direct consumer-welfare estimate",
+        "revenue": "Tariff-revenue accounting estimate"
+      },
+      "decision": {
+        "eyebrow": "Decision view",
+        "title": "Direct tariff effect",
+        "lead": "If tariffs are {{direction}} by {{change}} for {{scope}} ({{partnerScope}}), the direct PE result is:",
+        "body": "A {{change}} tariff change for {{scope}} ({{partnerScope}}) gives {{tradeEffect}} of direct trade effect, {{welfare}} of welfare change, and {{revenue}} of tariff-revenue change."
+      },
+      "tradeoff": {
+        "benefit": "Direct consumer gain",
+        "consumerCost": "Direct consumer cost",
+        "fiscalCost": "Fiscal accounting effect",
+        "fiscalGain": "Fiscal accounting gain",
+        "tradeContraction": "Import contraction before macro linkage",
+        "tradeExpansion": "Import response before macro linkage",
+        "importBase": "Effect relative to selected import base"
+      },
+      "whatThisMeans": {
+        "title": "What this means",
+        "body": "This tariff cut produces {{tradeEffect}} of direct trade effect, {{welfare}} of welfare effect, and {{revenue}} of tariff-revenue change before macro or sector-propagation effects."
+      },
+      "summary": {
+        "title": "Run summary",
+        "cut": "Tariff cut",
+        "section": "Section",
+        "partnerScope": "Partner scope",
+        "dataVintage": "Data date"
+      },
+      "kpis": {
+        "tradeEffect": "Trade effect",
+        "tradeCreation": "Trade creation",
+        "welfare": "Consumer welfare",
+        "revenue": "Tariff revenue change",
+        "impactPct": "Import-base effect"
+      },
+      "meta": {
+        "sections": "{{count}} HS sections",
+        "partners": "{{count}} partners"
+      },
+      "table": {
+        "rank": "Rank",
+        "section": "Section",
+        "importBase": "Import base",
+        "effectShare": "Effect share",
+        "importShare": "Import share",
+        "tradeEffect": "Trade effect",
+        "welfare": "Welfare",
+        "revenue": "Revenue",
+        "elasticity": "Elasticity"
+      },
+      "interpretation": {
+        "title": "Interpretation",
+        "cutEffect": "A tariff cut raises direct import demand and consumer welfare, but lowers tariff revenue.",
+        "increaseEffect": "A tariff increase lowers direct import demand and consumer welfare, but raises tariff revenue.",
+        "exposure": "Largest direct effect is concentrated in {{section}}.",
+        "fiscal": "Tariff revenue changes by {{revenue}}; this is an accounting effect, not a fiscal path.",
+        "next": "Save this run, then link it with I-O or CGE before making macro claims."
+      },
+      "methodNote": {
+        "title": "Use as",
+        "direct": "Direct, linear PE incidence estimate only.",
+        "filters": "Partner and regime filters are import-share approximations; the public data file has no product-partner tariff matrix."
+      },
+      "sensitivity": {
+        "title": "Elasticity sensitivity",
+        "description": "Shows how the direct trade and welfare effects move if import-demand elasticities are lower or higher than the baseline.",
+        "multiplier": "{{value}}x elasticity",
+        "cases": {
+          "low": "Low",
+          "base": "Base",
+          "high": "High"
+        }
+      },
+      "readiness": {
+        "title": "Data readiness",
+        "available": {
+          "label": "Available",
+          "value": "HS-section imports, section elasticities, partner import shares."
+        },
+        "approximate": {
+          "label": "Approximate",
+          "value": "Partner and regime results are import-share scaled."
+        },
+        "missing": {
+          "label": "Needed for PE v2",
+          "value": "Product-partner tariff matrix, HS drill-down, household/firm incidence."
+        }
+      },
+      "copyResultNote": "Copy result note",
+      "copyStatus": "Result note copied.",
+      "copyUnavailable": "Copy is unavailable in this browser.",
+      "copyNote": "PE tariff incidence: {{change}} {{direction}} for {{scope}} ({{partnerScope}}). Direct trade effect {{tradeEffect}}; consumer welfare {{welfare}}; tariff revenue {{revenue}}. Direct PE result only."
+    },
+    "savedRuns": {
+      "title": "Saved Runs",
+      "description": "{{count}} saved run(s) are available in this browser session.",
+      "empty": "Saved macro, I-O, and PE runs will appear here after you save them.",
+      "filtersAria": "Saved run filters",
+      "openInComparison": "Open in Comparison",
+      "ioBoundary": "Sector transmission evidence only; this is not a macro forecast or general-equilibrium result.",
+      "macroFallback": "Saved QPM macro scenario.",
+      "filters": {
+        "all": "All",
+        "macro_qpm": "Macro/QPM",
+        "io": "I-O",
+        "pe": "PE"
+      },
+      "filteredEmpty": {
+        "all": "No saved runs match this filter.",
+        "macro_qpm": "No saved Macro/QPM runs yet.",
+        "io": "No saved I-O runs yet.",
+        "pe": "No saved PE runs yet."
+      },
+      "type": {
+        "io": "I-O sector shock",
+        "pe": "Tariff incidence",
+        "macro": "Macro/QPM"
+      },
+      "fields": {
+        "type": "Type",
+        "data": "Data date",
+        "source": "Data date",
+        "sourceVintage": "Data date",
+        "sourceArtifact": "Source coverage",
+        "ioSourceCoverage": "I-O source tables and public data snapshot",
+        "saved": "Saved"
+      }
+    },
+    "presets": {
+      "baseline": {
+        "title": "Baseline"
+      },
+      "rate-cut-100bp": {
+        "title": "Policy rate cut (-100 bp)"
+      },
+      "rate-hike-100bp": {
+        "title": "Policy rate hike (+100 bp)"
+      },
+      "exchange-rate-shock": {
+        "title": "UZS depreciation (+10%)"
+      },
+      "external-slowdown": {
+        "title": "External slowdown"
+      }
+    },
+    "form": {
+      "preset": "Preset",
+      "scenarioName": "Scenario name",
+      "scenarioNamePlaceholder": "Scenario name",
+      "scenarioType": "Scenario type",
+      "description": "Description",
+      "descriptionPlaceholder": "Optional scenario description",
+      "tags": "Tags",
+      "detailsSummary": "Scenario details",
+      "scenarioTypeOptions": {
+        "baseline": "Baseline",
+        "alternative": "Alternative",
+        "stress": "Stress"
+      },
+      "tagOptions": {
+        "monetary": "Monetary",
+        "fiscal": "Fiscal",
+        "external": "External",
+        "trade": "Trade",
+        "inflation": "Inflation"
+      }
+    },
+    "assumptions": {
+      "title": "Assumptions",
+      "description": "Define policy and shock assumptions in plain language.",
+      "showTechnical": "Show technical variable names",
+      "technicalPrefix": "Technical: {{variable}}",
+      "numericValueLabel": "{{label}} numeric value",
+      "qpmCoreTitle": "Core QPM shocks",
+      "qpmCoreDescription": "Direct QPM controls: policy-rate shock, exchange-rate/risk-premium shock, and external-demand shock.",
+      "linkedTitle": "Proxy assumptions",
+      "linkedDescription": "Fiscal spending, tariffs, commodity prices, and remittances are simple scenario mappings around the QPM path, not full endogenous QPM blocks.",
+      "inputs": {
+        "policy_rate_change": {
+          "label": "Policy rate change",
+          "description": "Change in policy rate relative to baseline stance."
+        },
+        "exchange_rate_change": {
+          "label": "Exchange-rate depreciation",
+          "description": "Additional depreciation relative to baseline path."
+        },
+        "export_demand_change": {
+          "label": "Foreign output gap shock",
+          "description": "Foreign output-gap shock entering the QPM IS curve through b3 * gap*_t."
+        },
+        "remittance_change": {
+          "label": "Remittance shock",
+          "description": "Change in remittance inflows against baseline."
+        },
+        "commodity_price_change": {
+          "label": "Commodity price shock",
+          "description": "External commodity-price move affecting import bill and inflation."
+        },
+        "gov_spending_change": {
+          "label": "Government spending",
+          "description": "Change in government spending relative to baseline."
+        },
+        "tax_revenue_change": {
+          "label": "Tax revenue effort",
+          "description": "Change in tax revenue effort relative to baseline."
+        },
+        "tariff_change": {
+          "label": "Import tariff change",
+          "description": "Change in import tariff setting relative to baseline."
+        },
+        "pass_through_adjustment": {
+          "label": "FX pass-through",
+          "description": "Additional exchange-rate pass-through to inflation."
+        },
+        "risk_premium_shock": {
+          "label": "Risk premium shock",
+          "description": "External financing-risk shock affecting policy and activity."
+        }
+      },
+      "categories": {
+        "macro": "Monetary",
+        "external": "External",
+        "fiscal": "Fiscal",
+        "trade": "Trade",
+        "advanced": "Advanced"
+      },
+      "emptyCategory": "No assumptions available in this category.",
+      "emptyAdvanced": "No advanced assumptions are currently configured."
+    },
+    "results": {
+      "title": "Results",
+      "description": "Review headline effects and transmission paths for the current assumptions.",
+      "tabsAria": "Result views",
+      "tabs": {
+        "headlineImpact": "Headline impact",
+        "macroPath": "Macro path",
+        "externalBalance": "External balance",
+        "fiscalEffects": "Fiscal effects"
+      },
+      "impulseResponseEyebrow": "IMPULSE RESPONSE",
+      "impulseResponseCaption": "Canonical QPM calculation: each panel shows a deviation from baseline over 12 quarters. The dashed zero line means no scenario effect.",
+      "impulsePanels": {
+        "subtitle": "Deviation from baseline; zero line marks no effect.",
+        "xLabel": "Horizon",
+        "yLabel": "Deviation from baseline",
+        "gdp_gap": {
+          "title": "GDP gap",
+          "takeaway": "Positive values indicate demand running above the baseline path."
+        },
+        "inflation": {
+          "title": "Inflation",
+          "takeaway": "Positive values indicate inflation above the baseline path."
+        },
+        "policy_rate": {
+          "title": "Policy rate",
+          "takeaway": "Positive values indicate a higher policy-rate path than baseline."
+        }
+      },
+      "qpmReferenceBadge": "Canonical QPM",
+      "headlineMetricsAria": "Headline macro indicators",
+      "metrics": {
+        "gdp_growth": "GDP growth",
+        "inflation": "Inflation",
+        "current_account": "Current account",
+        "fiscal_balance": "Fiscal balance",
+        "policy_rate": "Policy rate"
+      },
+      "decision": {
+        "eyebrow": "Scenario effect",
+        "title": "Effect by {{period}}",
+        "currentScenario": "current scenario",
+        "periodUnavailable": "the final quarter",
+        "lead": "If “{{scenarioName}}” is applied, the QPM result is shown first as the change versus baseline.",
+        "note": "The baseline path is anchored to the latest Overview snapshot. Scenario values add QPM shock effects around that baseline. External and fiscal tabs are accounting views."
+      },
+        "explanations": {
+          "headlineImpact": "Shows how the selected scenario deviates from the baseline across 12 quarters; values are percentage-point deviations from the canonical QPM calculation.",
+          "macroPath": "Shows the scenario effect as scenario minus baseline. Endpoint cards keep the level comparison.",
+          "externalBalance": "Shows the current-account effect as scenario minus baseline. This is an accounting/proxy view, not an endogenous QPM external-sector block.",
+          "fiscalEffects": "Shows the fiscal effect as scenario minus baseline. This is an accounting/proxy view, not an endogenous QPM fiscal block."
+        },
+        "claimLabels": {
+          "headlineImpact": "Scenario impulse response",
+          "macroPath": "Scenario effect vs baseline",
+          "externalBalance": "Current-account effect vs baseline",
+          "fiscalEffects": "Fiscal effect vs baseline"
+        },
+        "effectChart": {
+          "title": "{{metric}} effect vs baseline",
+          "subtitle": "Scenario minus baseline; zero line means no scenario effect.",
+          "yLabel": "Scenario minus baseline",
+          "series": "Scenario effect",
+          "takeaway": "Read this as the scenario effect over time, not as a standalone forecast level.",
+          "metrics": {
+            "macro_path": "GDP growth",
+            "external_balance": "Current account",
+            "fiscal_effects": "Fiscal balance"
+          }
+        },
+        "baselineSource": {
+        "ariaLabel": "QPM starting point",
+        "eyebrow": "Starting point",
+        "title": "Latest Overview snapshot",
+        "summary": "Baseline path uses the latest Overview snapshot; source details are kept here.",
+        "details": "Source and context details",
+        "artifact": "Source file",
+        "exportedAt": "Exported",
+        "contextOnly": "context only"
+      },
+      "activeShocks": {
+        "ariaLabel": "Active QPM shock assumptions",
+        "title": "Active shocks",
+        "none": "No active shocks; this is a baseline-style reference run."
+      },
+      "pathDeltas": {
+        "period": "Endpoint",
+        "baselineEnd": "Baseline endpoint",
+        "scenarioEnd": "Scenario endpoint",
+        "difference": "Scenario minus baseline",
+        "noMaterialDifference": "No material difference from the baseline path under this scenario."
+      },
+      "deltaVsBaseline": "{{delta}} vs baseline",
+      "effectVsBaseline": "Effect vs baseline",
+      "scenarioAndBaseline": "Scenario {{scenario}} · baseline {{baseline}}"
+    },
+    "interpretation": {
+      "title": "Interpretation",
+      "description": "Translate model outputs into decision language.",
+      "and": "and",
+      "sections": {
+        "whatChanged": "What changed",
+        "whyItChanged": "Why it changed",
+        "keyRisks": "Key risks",
+        "policyImplications": "Policy implications",
+        "suggestedNextScenarios": "Suggested next scenarios"
+      },
+      "drivers": {
+        "policyRate": "policy-rate setting",
+        "exchangeRate": "exchange-rate path",
+        "remittances": "remittance inflows",
+        "commodityPrices": "commodity-price pressure",
+        "governmentSpending": "government spending",
+        "taxRevenue": "tax-revenue effort",
+        "importTariff": "import tariff setting",
+        "externalDemand": "external demand",
+        "passThrough": "pass-through calibration",
+        "riskPremium": "risk premium"
+      },
+      "items": {
+        "gdpGrowthDelta": "GDP growth is {{delta}} pp versus baseline by 2026 Q4.",
+        "inflationNoShock": "Inflation is {{delta}} pp versus baseline; no additional price shock channel is selected.",
+        "inflationDrivers": "Inflation is {{delta}} pp versus baseline; active price channels: {{drivers}}.",
+        "balanceDrivers": "External and fiscal balances move through {{drivers}}.",
+        "balanceNearBaseline": "External and fiscal balances stay near baseline because remittance, trade, spending, and revenue settings are unchanged.",
+        "mainDrivers": "Main drivers are {{drivers}}.",
+        "domesticDemandSequence": "Domestic demand and price channels respond first, then external and fiscal balances adjust.",
+        "passThroughRisk": "Pass-through may be stronger than assumed when exchange-rate shocks are persistent.",
+        "fiscalExternalRisk": "Fiscal and external shocks can amplify each other in downside cases.",
+        "sequencePolicy": "Sequence monetary and fiscal decisions to avoid conflicting signals.",
+        "targetedMitigation": "Use targeted mitigation if downside scenarios widen the growth-inflation trade-off."
+      },
+      "suggestedNext": {
+        "external-slowdown": "Deepen external-demand slowdown",
+        "exchange-rate-shock": "Add exchange-rate pass-through stress",
+        "compare_with_baseline_and_tight_money": "Compare with baseline and tight money"
+      },
+      "aiAttribution": {
+        "title": "AI-assisted · Unreviewed draft",
+        "body": "This interpretation was drafted from structured simulation outputs using the {{engine}}. Human review is required before citing externally.",
+        "engineTemplate": "template narrative engine",
+        "engineAssisted": "assisted narrative engine",
+        "engineReviewed": "reviewed narrative engine",
+        "reviewedMeta": "Reviewed by {{reviewer_name}} on {{review_date}}.",
+        "assisted": {
+          "title": "AI-assisted · Unreviewed draft",
+          "body": "AI-assisted draft. Generated by model output, not yet reviewed by CERR analytical staff. Do not cite, export, or share externally."
+        },
+        "reviewed": {
+          "title": "AI-assisted · Reviewed {{reviewed_at}}",
+          "body": "AI-assisted narrative, reviewed by {{reviewer_name}} on {{review_date}}. Cleared for internal use and citation."
+        }
+      }
+    },
+    "cgeShock": {
+      "loading": "Loading CGE reference data...",
+      "eyebrow": "Experimental reference",
+      "title": "CGE Reform Shock",
+      "description": "Test bounded aggregate shocks against the reconciled 2021 equilibrium.",
+      "status": "Not model-owner approved",
+      "setup": "Policy setup",
+      "presets": "CGE reference presets",
+      "preset": {
+        "baseline": {
+          "title": "Calibrated base",
+          "description": "No additional shock."
+        },
+        "world_import_price_benchmark": {
+          "title": "World import-price benchmark",
+          "description": "Reproduces the verified source-workbook experiment."
+        },
+        "tariff_removal_sensitivity": {
+          "title": "Tariff removal sensitivity",
+          "description": "Removes the aggregate import tariff in the reference equations."
+        },
+        "remittance_decline_sensitivity": {
+          "title": "Remittance decline sensitivity",
+          "description": "Tests lower household foreign-transfer income."
+        }
+      },
+      "controls": {
+        "world_import_price_change_pct": "World import-price change",
+        "import_tariff_change_pp": "Import tariff change",
+        "government_consumption_change_pct": "Government consumption change",
+        "remittances_change_pct": "Remittances change"
+      },
+      "boundary": "Comparative-static aggregate effects only. No GDP forecast, sector, labor, distribution, or nominal UZS/USD result.",
+      "decisionView": "Decision view",
+      "resultTitle": "Change from the calibrated base",
+      "resultDescription": "Percent change from the {{year}} equilibrium; this is not a time forecast.",
+      "outputs": {
+        "exports": "Exports",
+        "imports": "Imports",
+        "compositeSupply": "Composite supply",
+        "consumption": "Consumption",
+        "investment": "Investment",
+        "taxRevenue": "Tax revenue",
+        "governmentSaving": "Government saving",
+        "relativePriceIndex": "Relative-price index"
+      },
+      "effectsTitle": "Aggregate transmission",
+      "effectsDescription": "Bars compare magnitude around the zero line; direction is shown by sign.",
+      "evidenceTitle": "Validation evidence",
+      "evidenceDescription": "Two source workbooks are reproduced within tolerance.",
+      "exactMatch": "Exact workbook match",
+      "caveats": "Method and source caveats",
+      "excludedSources": "Excluded from benchmark evidence",
+      "benchmark": {
+        "energy_world_import_price": { "title": "21 December 2023 world import-price experiment", "note": "Exact real-quantity match under the equivalent Python numeraire." },
+        "gold_export_price_variant": { "title": "Gold export-price workbook variant", "note": "Exact match requires the workbook's alternative Armington elasticity; this is not an isolated gold-price effect." }
+      },
+      "caveat": {
+        "0": "Experimental comparative-static reference, not a forecast or model-owner-approved policy estimate.",
+        "1": "The relative-price index is normalized; it is not the nominal UZS/USD exchange rate.",
+        "2": "The aggregate model has no sector, labor, household-distribution, debt, or time-path block.",
+        "3": "Government consumption and remittance controls are solver sensitivities without accepted source-workbook benchmarks."
+      },
+      "excluded": {
+        "0": "Saved outputs move without displayed exogenous-input changes; not accepted as a CGE benchmark.",
+        "1": "The accompanying note states that the calculation used an input-output method, not this CGE 1-2-3 model."
+      },
+      "errors": {
+        "failed": "The selected controls did not produce a valid equilibrium."
+      }
+    },    "saved": {
+      "title": "Saved scenarios",
+      "empty": "No saved scenarios yet.",
+      "load": "Load",
+      "loadLink": "Load saved scenario",
+      "localBrowserDisclosure": "Saved runs are stored only in this browser.",
+      "delete": "Delete",
+      "confirmDelete": "Delete saved scenario \"{{scenarioName}}\"?"
+    }
+  },
+  "comparison": {
+    "header": {
+      "eyebrow": "Scenario trade-offs",
+      "meta": {
+        "comparing": "Comparing",
+        "scenarioCount": "{{count}} scenarios",
+        "horizon": "Horizon",
+        "mode": "Mode",
+        "deltasVsBaseline": "Deltas vs. Baseline"
+      }
+    },
+    "context": {
+      "label": "Context:",
+      "runName": "{{baseline}} + {{alternatives}} alternative(s)",
+      "saveState": "comparison view"
+    },
+    "chip": {
+      "remove": "Remove {{name}} from comparison"
+    },
+    "table": {
+      "indicator": "Indicator",
+      "baselineFallback": "Baseline",
+      "highestTitle": "Numerically highest",
+      "lowestTitle": "Numerically lowest",
+      "footnote": "★ indicates numerically lowest or highest value. Policy judgment is separate and not encoded."
+    },
+    "ioEvidence": {
+      "title": "I-O sector evidence",
+      "status": "Validated",
+      "note": "This panel describes structural sector transmission evidence from the I-O data layer. It is not a macro forecast, scenario delta, or causal effect of the scenarios above.",
+      "sourceArtifact": "Source coverage",
+      "sourceCoverageIo": "I-O source tables and public data snapshot",
+      "publishedDataFile": "published data file",
+      "dataVintage": "Data date",
+      "exportedAt": "Updated",
+      "sectorCount": "Sectors",
+      "framework": "Framework",
+      "units": "Units",
+      "linkageCounts": "Linkage classes",
+      "caveats": "Limitations",
+      "linkageClass": {
+        "key": "Key",
+        "backward": "Backward-only",
+        "forward": "Forward-only",
+        "weak": "Weak"
+      }
+    },
+    "selector": {
+      "inView": "In view",
+      "addSaved": "Add saved scenario",
+      "title": "Scenario selector",
+      "description": "Select 2-3 scenarios and define one baseline for delta interpretation.",
+      "empty": "No scenarios are available to compare.",
+      "selectedCount": "Selected: {{count}} / {{max}}",
+      "baselineLabel": "Baseline",
+      "baselineBadge": "Baseline",
+      "tagLabel": "Scenario tag",
+      "qpmSection": "QPM reference scenarios",
+      "savedSection": "Saved runs",
+      "savedEmpty": "No saved runs yet. Run and save a scenario in Scenario Lab to compare it here.",
+      "scenarioType": {
+        "baseline": "Baseline",
+        "alternative": "Alternative",
+        "stress": "Stress"
+      },
+      "tag": {
+        "preferred": "Preferred",
+        "balanced": "Balanced",
+        "aggressive": "Aggressive",
+        "downside_stress": "Downside stress"
+      }
+    },
+    "savedModal": {
+      "title": "Add saved scenario",
+      "localBrowserDisclosure": "Saved runs are stored only in this browser.",
+      "addSelected": "Add selected"
+    },
+    "savedIo": {
+      "title": "Sector evidence from saved I-O runs",
+      "separationNote": "Not part of the macro scenario delta table.",
+      "description": "{{count}} saved run(s) are shown as sector transmission analytics in a separate evidence section.",
+      "description_one": "{{count}} saved run is shown as sector transmission analytics in a separate evidence section.",
+      "description_few": "{{count}} saved runs are shown as sector transmission analytics in a separate evidence section.",
+      "description_many": "{{count}} saved runs are shown as sector transmission analytics in a separate evidence section.",
+      "description_other": "{{count}} saved runs are shown as sector transmission analytics in a separate evidence section.",
+      "emptyWithAvailable": "{{count}} saved I-O run(s) are available. Add them to show sector transmission blocks below the macro table.",
+      "emptyWithAvailable_one": "{{count}} saved I-O run is available. Add it to show sector transmission blocks below the macro table.",
+      "emptyWithAvailable_few": "{{count}} saved I-O runs are available. Add them to show sector transmission blocks below the macro table.",
+      "emptyWithAvailable_many": "{{count}} saved I-O runs are available. Add them to show sector transmission blocks below the macro table.",
+      "emptyWithAvailable_other": "{{count}} saved I-O runs are available. Add them to show sector transmission blocks below the macro table.",
+      "addAction": "Add saved run",
+      "type": "I-O run",
+      "topSectors": "Top sectors",
+      "boundary": "Boundary: value-added is an I-O accounting contribution, not a causal macro scenario delta.",
+      "employmentUnit": "employment count estimate",
+      "claimLabels": {
+        "output": "Accounting multiplier / structural sector linkage",
+        "gdpAccounting": "I-O value-added accounting contribution, not macro forecast",
+        "employment": "Linear employment-intensity estimate, not labor-market forecast"
+      },
+      "metrics": {
+        "output": "Output",
+        "valueAdded": "Value added",
+        "gdpAccounting": "GDP accounting",
+        "employment": "Employment"
+      }
+    },
+    "savedPe": {
+      "title": "Trade evidence from saved PE runs",
+      "separationNote": "Not part of the macro scenario delta table.",
+      "description": "{{count}} saved run(s) are shown as direct tariff-incidence evidence in a separate section.",
+      "description_one": "{{count}} saved run is shown as direct tariff-incidence evidence in a separate section.",
+      "description_few": "{{count}} saved runs are shown as direct tariff-incidence evidence in a separate section.",
+      "description_many": "{{count}} saved runs are shown as direct tariff-incidence evidence in a separate section.",
+      "description_other": "{{count}} saved runs are shown as direct tariff-incidence evidence in a separate section.",
+      "emptyWithAvailable": "{{count}} saved PE run(s) are available. Add them to show trade-incidence blocks below the macro table.",
+      "emptyWithAvailable_one": "{{count}} saved PE run is available. Add it to show trade-incidence blocks below the macro table.",
+      "emptyWithAvailable_few": "{{count}} saved PE runs are available. Add them to show trade-incidence blocks below the macro table.",
+      "emptyWithAvailable_many": "{{count}} saved PE runs are available. Add them to show trade-incidence blocks below the macro table.",
+      "emptyWithAvailable_other": "{{count}} saved PE runs are available. Add them to show trade-incidence blocks below the macro table.",
+      "addAction": "Add saved run",
+      "type": "PE run",
+      "topSections": "Top HS sections",
+      "boundary": "Boundary: PE results are direct tariff-incidence estimates, not macro, I-O, or CGE effects.",
+      "claimLabels": {
+        "direct": "Direct partial-equilibrium trade effect",
+        "welfare": "Direct consumer-welfare estimate",
+        "revenue": "Tariff-revenue accounting estimate"
+      },
+      "metrics": {
+        "tradeEffect": "Trade effect",
+        "welfare": "Welfare",
+        "revenue": "Revenue",
+        "importShare": "Import share"
+      }
+    },
+    "chart": {
+      "title": "Comparative charts",
+      "description": "Small multiples by scenario for the selected comparison dimension.",
+      "emptySelection": "Select at least one baseline and one alternative scenario to populate charts.",
+      "tabSwitcherAria": "Comparison chart tabs",
+      "tabSwitcher": {
+        "headline_impact": "Headline impact",
+        "macro_path": "Macro path",
+        "external_balance": "External balance",
+        "fiscal_effects": "Fiscal effects"
+      },
+      "miniTitle": "{{scenario_name}}",
+      "miniSubtitle": "{{tab_label}}",
+      "miniTakeaway": "Path view for the selected scenario and tab.",
+      "slotAria": "{{scenario_name}} chart in {{tab_label}} tab",
+      "savedRunEmpty": "Chart unavailable — saved before full run persistence",
+      "unavailable": "Chart unavailable for this scenario and tab."
+    },
+    "tradeoff": {
+      "title": "Trade-off summary",
+      "smePendingChip": "Review needed",
+      "smePendingAria": "Trade-off summary needs review",
+      "description": "Template-based comparison sentences for each alternative scenario.",
+      "empty": "Select a baseline and at least one alternative scenario to generate a trade-off summary.",
+      "shifts": "shifts",
+      "by": "by",
+      "metric": {
+        "gdp_growth": "GDP",
+        "inflation": "inflation",
+        "policy_rate": "policy rate"
+      },
+      "template": "Compared to baseline, {{scenario_name}} {{delta_gdp}}{{delta_inf}}{{delta_rate}}.",
+      "negligible": "Compared to baseline, {{scenario_name}} shows negligible differences across headline metrics."
+    }
+  },
+  "knowledgeHub": {
+    "pending": {
+      "status": "Pending",
+      "title": "Knowledge Hub pending",
+      "message": "Knowledge Hub is not active in this internal preview.",
+      "reason": "Source/citation workflow is pending; no live legal or research feed is connected.",
+      "nextStep": "Next: accept the source/citation workflow, reviewer-of-record process, and static/currentness caveats before activation."
+    },
+    "staticPilotBanner": "Curated static pilot content — not a live legal or research feed.",
+    "metadata": {
+      "sourceStatic": "Source: static pilot content",
+      "reviewCurated": "Review state: curated pilot copy",
+      "reviewedBy": "Reviewed by {{reviewer}}",
+      "author": "Author: {{author}}",
+      "sourceDate": "Source date: {{date}}"
+    },
+    "header": {
+      "eyebrow": "Reforms · Research · Literature",
+      "meta": {
+        "reformsTracked": "Reforms tracked",
+        "researchBriefs": "Research briefs",
+        "literatureItems": "Literature items"
+      }
+    },
+    "reforms": {
+      "title": "Reform changes",
+      "helper": "Policy actions linked to affected models and economic domains.",
+      "empty": "No reforms are currently available."
+    },
+    "briefs": {
+      "title": "Research briefs",
+      "helper": "CERR team analysis linked to official sources and models.",
+      "empty": "No research briefs are currently available.",
+      "aiDraftedChip": "AI-drafted",
+      "byline": {
+        "aiDrafted": "AI-drafted",
+        "reviewedBy": "reviewed by {{reviewer}}",
+        "readTime": "{{minutes}} min read"
+      }
+    },
+    "reformTracker": {
+      "errorUnavailable": "Knowledge Hub data is unavailable.",
+      "dossierDeskAria": "Reform list and details",
+      "header": {
+        "eyebrow": "Knowledge Hub",
+        "automaticTracker": "Official reform changes",
+        "sources": "official sources",
+        "packages": "packages",
+        "lastFetch": "Last fetch",
+        "updated": "Updated"
+      },
+      "metrics": {
+        "aria": "Reform change metrics",
+        "dossiers": "Reforms",
+        "activePackages": "Active packages",
+        "upcomingMilestones": "Upcoming milestones",
+        "officialSources": "Official sources",
+        "verifiedLinks": "Verified links",
+        "lastFetch": "Last fetch",
+        "lastSourceCheck": "Updated",
+        "staticPreview": "Source summary",
+        "notRegistry": "not a legal registry"
+      },
+      "extractionMode": {
+        "artifact": "Saved data",
+        "configured-source-fetch": "Source update",
+        "fixture-demo": "Demo data"
+      },
+      "notice": {
+        "aria": "Reform source note",
+        "title": "Source note",
+        "caveat": "Summaries come from official source links. This page is not a legal registry.",
+        "sourceLanguage": "Package titles and source excerpts stay in the source language; interface labels are translated."
+      },
+      "tabs": {
+        "aria": "Reform views",
+        "packages": "Reform Packages",
+        "timeline": "Implementation Timeline"
+      },
+      "views": {
+        "aria": "Reform tracker views",
+        "latestChanges": "Latest Changes",
+        "register": "Register",
+        "upcomingDates": "Upcoming Dates"
+      },
+      "filters": {
+        "aria": "Reform filters",
+        "title": "Filters",
+        "clearAll": "Clear all",
+        "more": "Filters",
+        "search": "Search reforms",
+        "searchPlaceholder": "Search by measure, source, institution, or area",
+        "policyArea": "Policy area",
+        "status": "Status",
+        "source": "Source",
+        "stage": "Stage",
+        "institution": "Institution",
+        "sourceType": "Evidence",
+        "allAreas": "All areas",
+        "allStages": "All stages",
+        "allInstitutions": "All institutions",
+        "allSources": "All sources"
+      },
+      "latestChanges": {
+        "aria": "Latest reform changes",
+        "title": "Latest changes",
+        "description": "Short summary of the newest official changes."
+      },
+      "sourceChecks": {
+        "aria": "Source check summary",
+        "reforms": "reforms",
+        "brokenLinks": "broken links",
+        "sources": "sources"
+      },
+      "registerPreview": {
+        "aria": "Reform register preview",
+        "title": "Register preview",
+        "description": "Recent reforms in the archive."
+      },
+      "upcoming": {
+        "aria": "Upcoming implementation dates",
+        "previewAria": "Upcoming dates and source checks",
+        "title": "Upcoming dates",
+        "description": "Future effective dates, deadlines, and implementation steps found in official sources.",
+        "empty": "No upcoming date has been published."
+      },
+      "archive": {
+        "aria": "Reform archive",
+        "title": "Reform archive",
+        "showing": "Showing {{count}} of {{total}} reforms",
+        "empty": "No reforms match the current filters.",
+        "reformChanges": "Reform changes",
+        "timeline": "Timeline",
+        "noTimeline": "No dated milestones are available.",
+        "modelLenses": "Model lenses",
+        "possibleLenses": "Possible lenses",
+        "experimentalReference": "experimental",
+        "plannedLenses": "Planned lenses",
+        "noActiveLens": "No active lens",
+        "source": "Source",
+        "openSource": "Open source"
+      },
+      "support": {
+        "aria": "Reform supporting information",
+        "sourcesTitle": "Sources checked",
+        "sourcesChecked": "Official sources",
+        "reforms": "Reforms",
+        "brokenLinks": "Broken links",
+        "selectionTitle": "How reforms are selected",
+        "selectionFallback": "This view keeps items with a clear policy instrument, adopted measure, parameter change, or dated implementation step."
+      },
+      "packages": {
+        "aria": "Reform list",
+        "empty": "No reforms match the current filters.",
+        "count": "{{count}} reform",
+        "count_one": "{{count}} reform",
+        "count_few": "{{count}} reforms",
+        "count_many": "{{count}} reforms",
+        "count_other": "{{count}} reforms",
+        "sortRecent": "Recent updates",
+        "showing": "Showing {{count}} of {{total}}",
+        "officialSource": "Official source"
+      },
+      "table": {
+        "package": "Reform package",
+        "policyArea": "Policy area",
+        "currentStage": "Current stage",
+        "nextMilestone": "Next milestone",
+        "noUpcomingMilestone": "No upcoming milestone published",
+        "institution": "Responsible institution",
+        "financing": "Financing / incentive",
+        "legalBasis": "Legal basis",
+        "confidence": "Source confidence"
+      },
+      "dossier": {
+        "aria": "Selected reform",
+        "lastUpdated": "Last updated: {{date}}",
+        "status": "Status / current stage",
+        "officialSource": "Official source",
+        "officialSourceBasis": "Source",
+        "source": "Source",
+        "sourceInstitution": "Publisher",
+        "publicationDate": "Publication date",
+        "openOfficialSource": "Open official source",
+        "openOfficialSourceAria": "Open official source for {{title}} in a new tab",
+        "sourceLinkMeta": "{{host}} · opens in new tab",
+        "policyArea": "Policy area",
+        "financing": "Financing / incentive",
+        "whatChanged": "What changed",
+        "whyTracked": "Selection basis",
+        "measureTracks": "Measures",
+        "measuresAndParameters": "Key measures",
+        "keyMeasures": "Key measures",
+        "upcomingMilestones": "Upcoming milestones",
+        "noUpcomingMilestones": "No upcoming milestone has been published for this package.",
+        "packageTimeline": "Package timeline",
+        "implementationTimeline": "Implementation timeline",
+        "noPackageTimeline": "No package timeline events are available.",
+        "evidence": "Evidence / sources",
+        "modelRelevance": "Model relevance",
+        "responsibleInstitutions": "Responsible institutions",
+        "lead": "Lead",
+        "partner": "Partner",
+        "policyModelRelevance": "Policy channels",
+        "policyChannels": "Policy channels",
+        "caveats": "Note",
+        "note": "Note",
+        "staticCaveat": "Source summary only, not a legal registry.",
+        "modelCaveat": "Use as context for scenario design.",
+        "registryNote": "Source summary only. Check the official link before citing or using as a legal reference."
+      },
+      "timeline": {
+        "aria": "Implementation timeline",
+        "empty": "No implementation milestones are available.",
+        "detailAria": "Selected milestone detail",
+        "package": "Reform package",
+        "source": "Source",
+        "evidenceType": "Evidence type",
+        "institution": "Responsible institution",
+        "confidence": "Confidence",
+        "relatedNext": "Related next milestones"
+      },
+      "labels": {
+        "sourceConfidence": {
+          "high": "High",
+          "medium": "Medium",
+          "low": "Low"
+        },
+        "eventType": {
+          "instructions_issued": "Instructions issued",
+          "consultation": "Consultation",
+          "approved": "Approved",
+          "effective_date": "Effective date",
+          "implementation_milestone": "Implementation milestone",
+          "financing_allocated": "Financing allocated",
+          "monitoring_update": "Monitoring update",
+          "target_deadline": "Target deadline",
+          "amended": "Amended",
+          "completed": "Completed",
+          "superseded": "Superseded"
+        },
+        "evidenceType": {
+          "legal_text": "Legal text",
+          "official_policy_announcement": "Official policy announcement",
+          "consultation_notice": "Consultation notice",
+          "budget_tax_measure": "Budget or tax measure",
+          "regulatory_parameter_change": "Regulatory parameter change",
+          "implementation_program": "Implementation program",
+          "international_agreement": "International agreement"
+        }
+      }
+    },
+    "researchUpdates": {
+      "aria": "Knowledge Hub research updates",
+      "title": "Research Updates",
+      "description": "Recent model-use and policy-application research relevant to macro, nowcasting, sector, fiscal, and trade analysis.",
+      "topic": "Topic",
+      "models": "Models",
+      "methods": "Methods",
+      "relevance": "Relevance",
+      "sources": "Sources",
+      "source": "Institution / source",
+      "empty": "No research updates are available."
+    },
+    "literatureHub": {
+      "aria": "Knowledge Hub literature hub",
+      "title": "Literature Hub",
+      "description": "Core references for understanding the models used in the platform.",
+      "filterAria": "Filter literature by model",
+      "allModels": "All models",
+      "model": "Model",
+      "method": "Method",
+      "year": "Year",
+      "source": "Source / institution",
+      "referenceTitle": "Reference title",
+      "openSource": "Open reference",
+      "empty": "No references are listed for this model yet."
+    },
+    "sections": {
+      "aria": "Knowledge Hub subsections",
+      "reformTracker": "Reform Tracker",
+      "researchUpdates": "Research Updates",
+      "literatureHub": "Literature Hub"
+    }
+  },
+  "dataRegistry": {
+    "header": {
+      "eyebrow": "Sources · Dates · Checks",
+      "meta": {
+        "expectedArtifacts": "Expected files",
+        "plannedFamilies": "Not active",
+        "generated": "Last checked",
+        "metadataSource": "Data mode"
+      }
+    },
+    "metadataSource": {
+      "api": "API",
+      "static-fallback": "Static file"
+    },
+    "sourceLabels": {
+      "overview": "Overview public data",
+      "qpm": "QPM scenario data",
+      "dfm": "DFM nowcast data",
+      "io": "I-O source tables",
+      "knowledgeHub": "Knowledge Hub public data",
+      "overviewSystem": "Overview source snapshot",
+      "qpmSystem": "QPM model output",
+      "dfmSystem": "DFM nowcast output"
+    },
+    "summary": {
+      "aria": "Data source status summary"
+    },
+    "filters": {
+      "aria": "Data source status filters",
+      "all": "All",
+      "active": "Active files",
+      "warnings": "Warnings",
+      "planned": "Not active",
+      "missingUnavailable": "Missing / unavailable",
+      "empty": "No records match this filter."
+    },
+    "legend": {
+      "title": "Status legend",
+      "valid": {
+        "label": "Format checked",
+        "description": "Data file loaded and passed format checks. This is not economic or model validation."
+      },
+      "warning": {
+        "label": "Warning",
+        "description": "Data file loaded, but caveats or date warnings exist."
+      },
+      "planned": {
+        "label": "Not active",
+        "description": "Intentionally absent in this release."
+      },
+      "lastValidationCheck": {
+        "description": "Last time this page checked the data files."
+      }
+    },
+    "status": {
+      "valid": "Format checked",
+      "warning": "Warning",
+      "failed": "Failed",
+      "missing": "Missing",
+      "unavailable": "Unavailable",
+      "planned": "Not active"
+    },
+    "sections": {
+      "dataSources": {
+        "title": "Data sources",
+        "description": "Source domains, source dates, update times, and model families."
+      },
+      "modelInputs": {
+        "title": "Model inputs",
+        "description": "Model families with available frontend inputs and those not active yet."
+      },
+      "bridgeOutputs": {
+        "title": "Model outputs",
+        "description": "Public JSON files loaded by the frontend data clients."
+      },
+      "plannedArtifacts": {
+        "title": "Not active yet",
+        "description": "Categories reserved for future source coverage. They are not failed data files."
+      },
+      "vintages": {
+        "title": "Vintages",
+        "description": "Source dates and update times shown separately."
+      },
+      "validation": {
+        "title": "Update status",
+        "description": "Readiness and freshness status for each public data file."
+      },
+      "warnings": {
+        "title": "Stale/missing warnings",
+        "description": "Warnings from missing files, stale dates, or known limitations."
+      }
+    },
+    "table": {
+      "type": "Type",
+      "domain": "Domain",
+      "status": "Status",
+      "vintage": "Source date",
+      "export": "Updated",
+      "source": "Source",
+      "owner": "Owner / source system",
+      "notes": "Notes"
+    },
+    "registryType": {
+      "source_series": "Source series",
+      "model_input": "Model input",
+      "bridge_output": "Model output",
+      "planned_artifact": "Not active"
+    },
+    "artifact": {
+      "dataVintage": "Source date",
+      "exportTimestamp": "Updated",
+      "sourceVintage": "Source date",
+      "lastValidationCheck": "Last validation check",
+      "checksum": "Checksum",
+      "owner": "Owner",
+      "sourceSystem": "Source system",
+      "solver": "Solver",
+      "caveats": "Caveats",
+      "consumers": "Consumer surfaces"
+    },
+    "detail": {
+      "summary": "View checks",
+      "validationScope": "Validation scope",
+      "freshnessRule": "Freshness rule",
+      "caveats": "Caveats",
+      "sourceVsExport": "Source date vs update"
+    },
+    "vintages": {
+      "boundary": "The source date and update time can differ. A recently updated file may still contain an older source table."
+    },
+    "warnings": {
+      "empty": "No stale, missing, unavailable, or validation warnings are currently visible."
+    },
+    "links": {
+      "modelExplorer": "Model Explorer methodology"
+    }
+  },
+  "modelExplorer": {
+    "header": {
+      "eyebrow": "Methodology · Parameters · Caveats",
+      "meta": {
+        "modelsLabel": "Models",
+        "modelsLive": "{{count}} live",
+        "bridgeBackedLabel": "Available for current policy use",
+        "bridgeBackedModels": "QPM, DFM, PE, I-O",
+        "plannedLimitedLabel": "Unavailable or reference only",
+        "plannedLimitedModels": "CGE, FPP",
+        "lastAuditLabel": "Last calibration audit",
+        "openIssuesLabel": "Open production gates"
+      }
+    },
+    "catalog": {
+      "activeTitle": "Active models",
+      "activeDescription": "Available in the current workspace through public data artifacts or scenario tools.",
+      "referenceTitle": "Reference models",
+      "referenceDescription": "Documented for methodology context, but not connected to active runs in this preview."
+    },
+    "card": {
+      "currentUse": "Current app use",
+      "methodologyOnly": "Methodology only",
+      "selectAria": "Inspect {{model}} model"
+    },
+    "status": {
+      "active": "Active",
+      "notActive": "Not active"
+    },
+    "statusNotice": {
+      "referenceTitle": "Reference only",
+      "referenceBody": "This model is documented for methodology context. It is not connected to Scenario Lab runs or public model artifacts in the current preview.",
+      "activationTitle": "Required before activation"
+    },
+    "tabs": {
+      "aria": "Model detail tabs",
+      "overview": "Overview",
+      "equations": "Equations",
+      "parameters": "Parameters",
+      "dataSources": "Data sources",
+      "caveats": "Caveats"
+    },
+    "purpose": {
+      "title": "Purpose"
+    },
+    "equations": {
+      "title": "Core equations",
+      "smePendingChip": "Review needed",
+      "smePendingAria": "Equation rendering needs review"
+    },
+    "parameters": {
+      "title": "Key parameters",
+      "symbol": "Symbol",
+      "name": "Name",
+      "value": "Value",
+      "range": "Range",
+      "empty": "No parameters are documented for this model."
+    },
+    "caveats": {
+      "title": "Caveats",
+      "empty": "No caveats are documented for this model.",
+      "trackedPrefix": "Tracked as issue",
+      "target": "Target {{version}}."
+    },
+    "dataSources": {
+      "title": "Data sources",
+      "empty": "No data sources are documented for this model."
+    },
+    "validation": {
+      "title": "Validation summary",
+      "smePendingChip": "Review needed",
+      "smePendingAria": "Validation summary needs review"
+    },
+    "bridgeEvidence": {
+      "title": "Model evidence",
+      "sourceArtifact": "Source coverage",
+      "sourceCoverageIo": "I-O source tables and public data snapshot",
+      "publishedDataFile": "published data file",
+      "dataVintage": "Data date",
+      "exportedAt": "Updated",
+      "solverVersion": "Solver",
+      "sectorCount": "Sectors",
+      "framework": "Framework",
+      "units": "Units",
+      "linkageCounts": "Linkage classes",
+      "caveats": "Limitations"
+    }
+  },
+  "policyChat": {
+    "meta": { "scope": "Enabled models", "qpm": "QPM · DFM · I-O", "control": "Execution", "confirmation": "Confirmation required" },
+    "threadAria": "Policy Chat conversation",
+    "you": "Your question",
+    "empty": {
+      "kicker": "Conversational scenario workspace",
+      "title": "Ask the model. Inspect every assumption.",
+      "description": "Ask about a QPM macro shock, the approved DFM nowcast, or an I-O final-demand scenario. Policy Chat shows the selected model and every assumption before it calculates or retrieves anything.",
+      "startersAria": "Suggested scenario questions"
+    },
+    "starters": {
+      "monetary": "Raise the policy rate by 2 percentage points for 16 quarters",
+      "demand": "What is the latest GDP nowcast and uncertainty range?",
+      "external": "Estimate the output effect of UZS 5 trillion of infrastructure investment"
+    },
+    "status": { "interpreting": "Interpreting the question and preparing assumptions..." },
+    "proposal": { "label": "Proposed model run", "title": "Review assumptions", "dirty": "Review the edited values before running the model." },
+    "parameters": { "shock_type": "Shock channel", "shock_size": "Shock size", "horizon": "Analysis horizon", "retrieval": "Retrieval", "artifact": "Approved artifact", "demand_bucket": "Final-demand channel", "amount_bln_uzs": "Demand shock", "distribution": "Distribution", "sector_code": "Sector", "base_year": "I-O base year" },
+    "origins": { "user_stated": "Stated in your question", "inferred": "Interpreted from your question", "model_default": "Model default" },
+    "units": { "shock_size": "percentage points", "horizon": "quarters", "amount_bln_uzs": "billion UZS", "base_year": "year" },
+    "values": { "monetary": "Monetary", "demand": "Demand", "inflation": "Inflation", "exchange": "Exchange rate", "risk": "Risk premium", "external_demand": "External demand", "latest_nowcast": "Latest nowcast", "investment": "Investment", "government": "Government spending", "consumption": "Consumption", "exports": "Exports", "output": "Output shares", "all_sectors": "All sectors" },
+    "caveat": "QPM results are calibrated deviations from baseline, not an official forecast.",
+    "actions": { "update": "Review changes", "updating": "Reviewing changes...", "run": "Run confirmed model", "running": "Running approved model...",
+      "save": "Save scenario",
+      "saved": "Scenario saved",
+      "openLab": "Open in Scenario Lab" },
+    "results": {
+      "label": "Model result", "title": "model output", "chartTitle": "Response paths", "chartSubtitle": "Percentage-point deviations across the selected horizon", "chartDescription": "Lines show the output gap, inflation, and policy-rate deviations by quarter.", "legendAria": "Chart series", "viewTable": "View accessible data table", "quarter": "Quarter", "interpretation": "Interpretation", "limitations": "Limitations",
+      "latestNowcast": "Latest GDP nowcast",
+      "yearOnYear": "year on year",
+      "forecastHorizon": "Near-term forecast and uncertainty",
+      "horizon": "Months ahead",
+      "estimate": "Estimate",
+      "ci90": "90% interval",
+      "aggregateEffects": "Aggregate effects",
+      "output": "Output",
+      "valueAdded": "Value added",
+      "employment": "Employment",
+      "multiplier": "Multiplier",
+      "billionUzs": "billion UZS",
+      "persons": "persons",
+      "topSectors": "View top affected sectors",
+      "sector": "Sector",
+      "series": { "output_gap": "Output gap", "inflation_yoy": "Inflation", "policy_rate": "Policy rate" }
+    },
+    "composer": { "label": "Policy question", "placeholder": "Example: Raise the policy rate by 2 percentage points for 16 quarters", "notice": "Internal preview. Do not enter restricted or personal information.", "action": "Interpret question" },
+    "ledger": { "kicker": "Run control", "title": "Assumption ledger", "model": "Model", "state": "State", "confirmation": "Confirmation", "data": "Calibration", "notSelected": "Not selected", "waiting": "Waiting for a question", "review": "Ready for review", "edited": "Edited — review required", "complete": "Run complete", "required": "Required before execution", "confirmed": "Confirmed", "pending": "Available after run", "disclosure": "Each run is tied to the assumptions shown in the conversation. Editing them invalidates the prior confirmation." },
+    "errors": { "title": "Policy Chat could not continue", "request_failed": "The request failed. Check the service and try again.", "network": "The Policy Chat service could not be reached. Start the local service or check the connection.", "timeout": "The model request timed out. Try again.", "policy_chat_disabled": "Policy Chat is disabled in this environment.", "identity_not_configured": "Internal identity is not configured for this environment.", "authentication_required": "Sign in to use Policy Chat.", "unsupported_scenario": "Supported requests are QPM macro shocks, the approved DFM nowcast, and I-O final-demand shocks.", "invalid_horizon": "Use a horizon between 8 and 32 quarters.", "invalid_shock_size": "Use a shock between -20 and 20 percentage points.", "parameter_out_of_range": "One assumption is outside the allowed range.", "stale_proposal": "The assumptions changed after confirmation. Review them and run again." }
+  },  "states": {
+    "loading": {
+      "overview": "Loading latest overview snapshot...",
+      "comparison": "Loading comparison workspace...",
+      "modelExplorer": "Loading model information...",
+      "dataRegistry": "Loading data sources...",
+      "scenarioLabRun": "Running scenario with current assumptions...",
+      "knowledgeHub": "Loading Knowledge Hub..."
+    },
+    "error": {
+      "overviewUnavailable": "Overview data is currently unavailable.",
+      "comparisonUnavailable": "Comparison data is currently unavailable.",
+      "modelExplorerUnavailable": "Model information is currently unavailable.",
+      "scenarioRunFailed": "Scenario run failed. Please retry.",
+      "scenarioSaveFailed": "Could not save scenario to local storage.",
+      "savedScenarioLoadFailed": "Saved scenario could not be loaded.",
+      "savedScenarioDeleteFailed": "Saved scenario could not be deleted.",
+      "scenarioModelIdsUnavailable": "Run scenario to save results",
+      "scenarioSaveStaleEdits": "Run scenario to save with current edits"
+    },
+    "stale": {
+      "scenarioResults": "Results reflect the previous run. Run scenario to update with current assumptions."
+    },
+    "empty": {
+      "scenarioRunToView": "Run a scenario to view results.",
+      "scenarioInterpretationAfterRun": "Interpretation appears after a successful scenario run."
+    },
+    "success": {
+      "savedToLocalSessionAt": "Saved to local session at {{timestamp}}.",
+      "savedScenarioLoaded": "Loaded \"{{scenarioName}}\" into Scenario Lab.",
+      "savedScenarioLoadedWithResults": "Loaded \"{{scenarioName}}\" with persisted run results.",
+      "savedScenarioDeleted": "Deleted \"{{scenarioName}}\" from saved scenarios."
+    }
+  }
+}

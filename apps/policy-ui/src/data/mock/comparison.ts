@@ -1,0 +1,90 @@
+import type { ComparisonWorkspace } from '../../contracts/data-contract'
+
+export const comparisonWorkspaceMock: ComparisonWorkspace = {
+  workspace_id: 'comparison-v1-workspace',
+  generated_at: '2026-04-17T12:20:00+05:00',
+  // Extended in Shot-1 amend to cover the 7-row delta-table metric set expected
+  // by composeComparisonContent (prompt §4.3). Unemployment and real-wages are
+  // stub-only per audit §5.3 until Shot 2 wires live QPM/IO/CGE outputs.
+  metric_definitions: [
+    { metric_id: 'gdp_growth', label: 'GDP growth · 3y avg', unit: '%' },
+    { metric_id: 'inflation', label: 'Inflation · terminal', unit: '%' },
+    { metric_id: 'current_account', label: 'Current account · %GDP', unit: '% GDP' },
+    { metric_id: 'fiscal_balance', label: 'Fiscal balance · %GDP', unit: '% GDP' },
+    { metric_id: 'reserves_end', label: 'Reserves · end', unit: 'USD bn' },
+    { metric_id: 'unemployment_avg', label: 'Unemployment · avg', unit: '%' },
+    { metric_id: 'real_wages_cumulative', label: 'Real wages · cumulative', unit: '%' },
+  ],
+  scenarios: [
+    {
+      scenario_id: 'baseline-2026',
+      scenario_name: 'Baseline',
+      scenario_type: 'baseline',
+      summary: 'Reference path with current-policy settings and no additional shocks.',
+      initial_tag: 'balanced',
+      values: {
+        gdp_growth: 5.8,
+        inflation: 5.4,
+        current_account: -3.3,
+        fiscal_balance: -2.7,
+        reserves_end: 43.8,
+        unemployment_avg: 6.4,
+        real_wages_cumulative: 8.2,
+      },
+      risk_index: 42,
+    },
+    {
+      scenario_id: 'fiscal-consolidation',
+      scenario_name: 'Fiscal consolidation',
+      scenario_type: 'alternative',
+      summary: 'Expenditure discipline and targeted tax measures; external balance and price stability improve at the cost of growth.',
+      initial_tag: 'preferred',
+      values: {
+        gdp_growth: 5.3,
+        inflation: 4.6,
+        current_account: -2.5,
+        fiscal_balance: -1.1,
+        reserves_end: 46.2,
+        unemployment_avg: 7.1,
+        real_wages_cumulative: 9.1,
+      },
+      risk_index: 38,
+    },
+    {
+      scenario_id: 'aggressive-expansion',
+      scenario_name: 'Aggressive expansion',
+      scenario_type: 'alternative',
+      summary: 'High growth push with larger fiscal and inflation pressure.',
+      initial_tag: 'aggressive',
+      values: {
+        gdp_growth: 6.8,
+        inflation: 9.7,
+        current_account: -3.0,
+        fiscal_balance: -4.2,
+        reserves_end: 41.5,
+        unemployment_avg: 5.9,
+        real_wages_cumulative: 10.4,
+      },
+      risk_index: 68,
+    },
+    {
+      scenario_id: 'russia-slowdown',
+      scenario_name: 'Russia slowdown',
+      scenario_type: 'stress',
+      summary: 'External demand and remittance shock with broad macro deterioration across every dimension.',
+      initial_tag: 'downside_stress',
+      values: {
+        gdp_growth: 4.8,
+        inflation: 5.7,
+        current_account: -4.9,
+        fiscal_balance: -3.6,
+        reserves_end: 38.4,
+        unemployment_avg: 7.8,
+        real_wages_cumulative: 5.1,
+      },
+      risk_index: 84,
+    },
+  ],
+  default_baseline_id: 'baseline-2026',
+  default_selected_ids: ['baseline-2026', 'fiscal-consolidation', 'russia-slowdown'],
+}

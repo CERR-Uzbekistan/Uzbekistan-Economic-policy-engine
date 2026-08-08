@@ -1,0 +1,69 @@
+name: Policy UI Client Hosted Smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Base URL to smoke; use hosted for the GitHub Pages deployment."
+        required: false
+        default: hosted
+
+permissions:
+  contents: read
+
+concurrency:
+  group: policy-ui-client-hosted-smoke
+  cancel-in-progress: false
+
+jobs:
+  client-hosted-smoke:
+    name: Client-rendered hosted smoke
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/policy-ui
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Resolve smoke target
+        id: target
+        shell: bash
+        run: |
+          base_url="${{ github.event.inputs.base_url }}"
+          if [ -z "$base_url" ]; then
+            base_url="hosted"
+          fi
+          echo "base_url=$base_url" >> "$GITHUB_OUTPUT"
+
+      - name: Check hosted client smoke syntax
+        shell: bash
+        run: node --check scripts/hosted-client-smoke.mjs
+
+      - name: Smoke deployed policy-ui in Chrome via CDP
+        shell: bash
+        run: |
+          set +e
+          node scripts/hosted-client-smoke.mjs "${{ steps.target.outputs.base_url }}" 2>&1 | tee "$RUNNER_TEMP/policy-ui-client-hosted-smoke.log"
+          status=${PIPESTATUS[0]}
+          set -e
+
+          if [ "$status" -eq 0 ]; then
+            exit 0
+          fi
+
+          if [ "$status" -eq 2 ]; then
+            echo "::warning::Hosted policy-ui URL was unavailable during client smoke; treating as hosted-unavailable rather than an app regression."
+            exit 0
+          fi
+
+          if [ "$status" -eq 3 ]; then
+            echo "::error::Chrome/Chromium CDP was unavailable on the hosted runner."
+            exit "$status"
+          fi
+
+          echo "::error::Hosted policy-ui client smoke failed with an app, route hydration, console, network, language, Knowledge Hub, or Data Registry regression."
+          exit "$status"

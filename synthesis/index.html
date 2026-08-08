@@ -8,6 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="../shared/design-system.css" />
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="../shared/toast.js"></script>
+<script src="../shared/parameter-registry.js"></script>
 <script src="../shared/registry-loader.js"></script>
 <script src="../shared/synth-engines.js"></script>
 <style>
@@ -145,6 +147,7 @@
 
   <div class="panel">
     <h3><span class="num">2</span> Model outputs (running simultaneously)</h3>
+    <div id="errState" style="display:none; background:#fef2f2; border:1px solid #fecaca; color:#991b1b; padding:12px 14px; border-radius:10px; font-size:13px; margin-bottom:12px;"></div>
     <div class="results-grid" id="resultsGrid"></div>
   </div>
 
@@ -183,8 +186,16 @@ function loadRegistry() {
   return new Promise(resolve => {
     EPE.ready(() => {
       REG = EPE.registry;
-      if (REG) document.getElementById('regVer').textContent = REG._meta.version;
-      else alert('Could not load parameter registry. Serve this page via a local HTTP server (not file://).');
+      const err = document.getElementById('errState');
+      if (REG) {
+        document.getElementById('regVer').textContent = REG._meta.version;
+        err.style.display = 'none';
+      } else {
+        const msg = 'Could not load parameter registry. Check that shared/parameter-registry.js is included.';
+        err.textContent = msg;
+        err.style.display = 'block';
+        if (window.Toast) Toast.show(msg, { type: 'error', duration: 6000 });
+      }
       resolve();
     });
   });
@@ -241,22 +252,35 @@ function renderCards(pe, io, cge, fpp) {
 }
 
 function renderReconcile(pe, io, cge, fpp) {
+  // null = model does not produce this indicator; excluded from spread calc.
   const rows = [
-    { ind: 'GDP impact (%)', vals: [pe.gdp_impact_pct, io.gdp_impact_pct, cge.gdp_impact_pct, fpp.gdp_impact_pct] },
+    { ind: 'GDP impact (%)',       vals: [pe.gdp_impact_pct, io.gdp_impact_pct, cge.gdp_impact_pct, fpp.gdp_impact_pct], tol: 0.30 },
+    { ind: 'Inflation (pp)',       vals: [null,              null,              cge.inflation_pp,   null],              tol: 0.30 },
+    { ind: 'Trade balance (% GDP)',vals: [null,              null,              null,               fpp.current_account_chg_pct_gdp], tol: 0.30 },
+    { ind: 'Fiscal revenue (% GDP)', vals: [null,            null,              null,               fpp.revenue_chg_pct_gdp],         tol: 0.30 },
   ];
   const tbody = document.querySelector('#reconcileTable tbody');
   tbody.innerHTML = rows.map(r => {
-    const mn = Math.min(...r.vals), mx = Math.max(...r.vals);
-    const spread = Math.abs(mx - mn);
-    const mean = r.vals.reduce((a,b)=>a+b,0) / r.vals.length;
-    const relSpread = Math.abs(mean) > 0.01 ? spread / Math.abs(mean) : 0;
-    const ok = relSpread < 0.15;
+    const active = r.vals.filter(v => v != null && !isNaN(v));
+    let spread = null, ok = true, note = '';
+    if (active.length >= 2) {
+      const mn = Math.min(...active), mx = Math.max(...active);
+      spread = Math.abs(mx - mn);
+      const mean = active.reduce((a,b)=>a+b,0) / active.length;
+      const relSpread = Math.abs(mean) > 0.01 ? spread / Math.abs(mean) : 0;
+      ok = relSpread < r.tol;
+      note = ok ? '✓ within tolerance' : '⚠ review';
+    } else if (active.length === 1) {
+      note = 'single source';
+    } else {
+      note = '—';
+    }
     return `
       <tr>
         <td><b>${r.ind}</b></td>
-        ${r.vals.map(v => `<td class="num">${fmt(v,2)}</td>`).join('')}
-        <td class="num">${spread.toFixed(2)}</td>
-        <td class="${ok ? 'flag-ok' : 'flag-warn'}">${ok ? '✓ within tolerance' : '⚠ review'}</td>
+        ${r.vals.map(v => `<td class="num">${v == null ? '—' : fmt(v,2)}</td>`).join('')}
+        <td class="num">${spread == null ? '—' : spread.toFixed(2)}</td>
+        <td class="${active.length < 2 ? '' : (ok ? 'flag-ok' : 'flag-warn')}">${note}</td>
       </tr>
     `;
   }).join('');
@@ -265,15 +289,24 @@ function renderReconcile(pe, io, cge, fpp) {
 function runAll() {
   if (!REG) return;
   const t = parseFloat(document.getElementById('tariffSlider').value);
-  const { pe, io, cge, fpp } = SynthEngines.runAll({ tariff_pp: t });
+  const h = parseInt(document.getElementById('horizon').value, 10);
+  const { pe, io, cge, fpp } = SynthEngines.runAll({ tariff_pp: t, horizon_q: h });
   renderCards(pe, io, cge, fpp);
   renderReconcile(pe, io, cge, fpp);
 }
 
+let _runTimer = null;
+function scheduleRun() {
+  clearTimeout(_runTimer);
+  _runTimer = setTimeout(runAll, 80);
+}
+
 document.getElementById('tariffSlider').addEventListener('input', (e) => {
   document.getElementById('tariffVal').textContent = e.target.value + ' pp';
-  runAll();
+  scheduleRun();
 });
+document.getElementById('horizon').addEventListener('change', runAll);
+document.getElementById('shockType').addEventListener('change', runAll);
 document.getElementById('runBtn').addEventListener('click', runAll);
 
 loadRegistry().then(runAll);

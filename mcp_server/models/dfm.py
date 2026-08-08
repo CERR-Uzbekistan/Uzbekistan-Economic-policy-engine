@@ -37,10 +37,6 @@ def run_nowcast(data: dict) -> dict:
     p = _load_params(data)
     meta = data.get("meta", {})
     gdp_data = data.get("gdp", {})
-    var_info = data.get("vars", {})
-    var_names = var_info.get("names", []) if isinstance(var_info, dict) else []
-    var_labels = var_info.get("labels", []) if isinstance(var_info, dict) else []
-    var_categories = var_info.get("categories", []) if isinstance(var_info, dict) else []
     loadings = data.get("loadings", [])
 
     # GDP prediction from last filtered state
@@ -144,7 +140,6 @@ def run_kalman_update(data: dict, observations: dict) -> dict:
     gdp_idx = p["gdp_idx"]
     Z = p["Z_last"].copy()
     V = p["V_last"].copy()
-    m = A.shape[0]
     n = C.shape[0]
 
     # Build name-to-index map
@@ -195,7 +190,6 @@ def run_kalman_update(data: dict, observations: dict) -> dict:
 
     # Update
     Z_new = Z_pred + K @ innov
-    V_new = (np.eye(m) - K @ C_obs) @ V_pred
 
     # GDP prediction after update
     gdp_after = float(np.dot(C[gdp_idx], Z_new) * sdevs[gdp_idx] + means[gdp_idx]) * 100

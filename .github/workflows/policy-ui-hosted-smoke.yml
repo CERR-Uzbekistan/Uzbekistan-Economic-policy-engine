@@ -1,0 +1,66 @@
+name: Policy UI Hosted Smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Base URL to smoke; use hosted for the GitHub Pages deployment."
+        required: false
+        default: hosted
+  workflow_run:
+    workflows:
+      - Deploy Pages
+    types:
+      - completed
+
+permissions:
+  contents: read
+
+concurrency:
+  group: policy-ui-hosted-smoke
+  cancel-in-progress: false
+
+jobs:
+  hosted-smoke:
+    name: Hosted Pages smoke
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/policy-ui
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Resolve smoke target
+        id: target
+        shell: bash
+        run: |
+          base_url="${{ github.event.inputs.base_url }}"
+          if [ -z "$base_url" ]; then
+            base_url="hosted"
+          fi
+          echo "base_url=$base_url" >> "$GITHUB_OUTPUT"
+
+      - name: Smoke deployed policy-ui
+        shell: bash
+        run: |
+          set +e
+          npm run smoke:active-preview -- "${{ steps.target.outputs.base_url }}" 2>&1 | tee "$RUNNER_TEMP/policy-ui-hosted-smoke.log"
+          status=${PIPESTATUS[0]}
+          set -e
+
+          if [ "$status" -eq 0 ]; then
+            exit 0
+          fi
+
+          if grep -q "\[active-preview-smoke\] FAIL: hosted URL unavailable / timeout" "$RUNNER_TEMP/policy-ui-hosted-smoke.log"; then
+            echo "::warning::Hosted policy-ui URL was unavailable during smoke; treating as hosted-unavailable rather than an app regression."
+            exit 0
+          fi
+
+          echo "::error::Hosted policy-ui smoke failed with an app, asset, route, or public data artifact regression."
+          exit "$status"
