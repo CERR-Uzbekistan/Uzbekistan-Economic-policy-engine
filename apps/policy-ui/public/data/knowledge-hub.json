@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-08-10T04:13:38.447Z",
+  "generated_at": "2026-08-11T04:01:37.787Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -303,12 +303,11 @@
       "url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
       "parser": "lexuz-official-search",
       "fetch_url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
-      "ok": false,
-      "candidate_count": 0,
+      "ok": true,
+      "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-10T04:13:38.447Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-08-11T04:01:37.787Z"
     },
     {
       "id": "president-reform-news",
@@ -317,10 +316,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 2,
-      "excluded_count": 10,
-      "link_invalid_count": 2,
-      "fetched_at": "2026-08-10T04:13:38.447Z"
+      "candidate_count": 4,
+      "excluded_count": 8,
+      "link_invalid_count": 0,
+      "fetched_at": "2026-08-11T04:01:37.787Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -332,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-10T04:13:38.447Z"
+      "fetched_at": "2026-08-11T04:01:37.787Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -344,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-10T04:13:38.447Z"
+      "fetched_at": "2026-08-11T04:01:37.787Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -356,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-10T04:13:38.447Z"
+      "fetched_at": "2026-08-11T04:01:37.787Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -368,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-10T04:13:38.447Z"
+      "fetched_at": "2026-08-11T04:01:37.787Z"
     },
     {
       "id": "cbu-policy-news",
@@ -380,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 353,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-10T04:13:38.447Z"
+      "fetched_at": "2026-08-11T04:01:37.787Z"
     },
     {
       "id": "customs-committee-news",
@@ -392,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-10T04:13:38.447Z"
+      "fetched_at": "2026-08-11T04:01:37.787Z"
     },
     {
       "id": "mef-policy-news",
@@ -404,7 +403,7 @@
       "candidate_count": 1,
       "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-10T04:13:38.447Z"
+      "fetched_at": "2026-08-11T04:01:37.787Z"
     },
     {
       "id": "tax-committee-news",
@@ -416,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-10T04:13:38.447Z"
+      "fetched_at": "2026-08-11T04:01:37.787Z"
     },
     {
       "id": "energy-ministry-news",
@@ -424,12 +423,11 @@
       "url": "https://gov.uz/en/minenergy/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": false,
+      "ok": true,
       "candidate_count": 0,
-      "excluded_count": 0,
+      "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-10T04:13:38.447Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-08-11T04:01:37.787Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -441,7 +439,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-10T04:13:38.447Z"
+      "fetched_at": "2026-08-11T04:01:37.787Z"
     },
     {
       "id": "justice-ministry-news",
@@ -449,12 +447,11 @@
       "url": "https://gov.uz/en/adliya/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": false,
-      "candidate_count": 0,
-      "excluded_count": 0,
+      "ok": true,
+      "candidate_count": 2,
+      "excluded_count": 10,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-10T04:13:38.447Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-08-11T04:01:37.787Z"
     }
   ],
   "reform_packages": [
@@ -471,15 +468,15 @@
         "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
         "Official website of the President of the Republic of Uzbekistan"
       ],
-      "legal_basis": "Verified official source events: PQ-292-сон 04.08.2026. Alohida taʼlimga ehtiyoji boʻlgan bolalarni taʼlim va ijtimoiy xizmatlar bilan qamrab olish tizimini takomillashtirish boʻyicha qoʻshimcha chora-tadbirlar toʻgʻrisida; President reviews proposals to improve the remuneration system for civil servants; O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida.",
+      "legal_basis": "Verified official source events: PQ-292-сон 04.08.2026. Alohida taʼlimga ehtiyoji boʻlgan bolalarni taʼlim va ijtimoiy xizmatlar bilan qamrab olish tizimini takomillashtirish boʻyicha qoʻshimcha chora-tadbirlar toʻgʻrisida; President reviews proposals to improve the remuneration system for civil servants; O‘RQ-1163-сон 07.08.2026. Rieltorlik faoliyati toʻgʻrisida; O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida.",
       "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz); Official website of the President of the Republic of Uzbekistan",
-      "short_summary": "3 official measures update tax administration and fiscal incentives rules or procedures.",
+      "short_summary": "4 official measures update tax administration and fiscal incentives rules or procedures.",
       "parameters_or_amounts": [
         "approved measures",
         "verified official measure"
       ],
       "source_confidence": "high",
-      "why_tracked": "The package is assembled from 3 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "why_tracked": "The package is assembled from 4 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
       "model_relevance": [
         "Fiscal balance",
         "Investment",
@@ -503,6 +500,11 @@
         },
         {
           "id": "tax-administration-incentives-measure-3",
+          "label": "verified official measure",
+          "status": "source verified"
+        },
+        {
+          "id": "tax-administration-incentives-measure-4",
           "label": "verified official measure",
           "status": "source verified"
         }
@@ -683,6 +685,24 @@
           "confidence": "high",
           "related_next_milestone_ids": [
             "tax-administration-incentives-implementation_milestone-2026-08-04"
+          ]
+        },
+        {
+          "id": "tax-administration-incentives-instructions_issued-2026-08-07",
+          "label": "official measure recorded",
+          "date": "2026-08-07",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-07-o-rq-1163-07-08-2026-rieltorlik-faoliyati-to-g-risida"
+          ],
+          "confidence": "high",
+          "related_next_milestone_ids": [
+            "tax-administration-incentives-instructions_issued-2026-11-07"
           ]
         },
         {
@@ -1019,6 +1039,34 @@
           }
         },
         {
+          "id": "source-event-2026-08-07-o-rq-1163-07-08-2026-rieltorlik-faoliyati-to-g-risida",
+          "title": "O‘RQ-1163-сон 07.08.2026. Rieltorlik faoliyati toʻgʻrisida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/-8383786",
+          "source_published_at": "2026-08-07",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-11T04:01:37.787Z",
+          "localized": {
+            "title": {
+              "uz": "O‘RQ-1163-сон 07.08.2026. Rieltorlik faoliyati toʻgʻrisida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/-8383786",
+              "uz": "https://lex.uz/uz/docs/-8383786"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
           "id": "source-event-2026-11-07-o-rq-1162-05-08-2026-avtomobil-yo-llari-to-g-risida",
           "title": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida",
           "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
@@ -1057,7 +1105,7 @@
         },
         "short_summary": {
           "ru": "В этой связи предложено внедрить единую, прозрачную и основанную на результатах систему оплаты труда государственных гражданских служащих.",
-          "uz": "Сўнгги йилларда давлат хизматида кадрларни танлаш, ишга жойлаш ва рағбатлантириш тизимини такомиллаштириш бўйича кенг кўламли ислоҳотлар амалга оширилди."
+          "uz": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change."
         },
         "parameters_or_amounts": {
           "ru": [
@@ -1068,12 +1116,7 @@
             "Самое главное, каждый государственный служащий будет заранее знать, как формируется его заработная плата и за какие результаты ему могут быть начислены надбавки или выплачены бонусы."
           ],
           "uz": [
-            "Сўнгги йилларда давлат хизматида кадрларни танлаш, ишга жойлаш ва рағбатлантириш тизимини такомиллаштириш бўйича кенг кўламли ислоҳотлар амалга оширилди.",
-            "Шу боис, давлат фуқаролик хизматчилари меҳнатига ҳақ тўлашнинг ягона, очиқ ва натижага асосланган тизимини жорий этиш таклиф қилинди.",
-            "Халқаро тажриба асосида 11 та разряд ва 6 та поғонадан иборат янги иш ҳақи сеткасини жорий этиш таклиф қилинди.",
-            "Ўндан ортиқ устама ва мукофотлар ўрнига учта асосий рағбатлантириш тўлови жорий этилади.",
-            "Шунингдек, муҳим ва мураккаб вазифаларни бажарган, инновацион ёндашувларни жорий этган ҳамда юқори натижа кўрсатган ходимларга ҳисобот даври якунлари бўйича бонус тўловлари бериш назарда тутилмоқда.",
-            "Шунингдек, бонус тўловлари ходимнинг илғор ахборот технологияларни, жумладан, сунъий интеллект, замонавий билим ва кўникмаларни ўзлаштиргани, тажриба ва малакасини оширгани каби аниқ мезонлар асосида тўланиши белгиланди."
+            "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change."
           ]
         },
         "digest": {
@@ -1081,7 +1124,7 @@
             "changed": "В этой связи предложено внедрить единую, прозрачную и основанную на результатах систему оплаты труда государственных гражданских служащих."
           },
           "uz": {
-            "changed": "Сўнгги йилларда давлат хизматида кадрларни танлаш, ишга жойлаш ва рағбатлантириш тизимини такомиллаштириш бўйича кенг кўламли ислоҳотлар амалга оширилди.",
+            "changed": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
             "document": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida"
           }
         }
@@ -1371,21 +1414,21 @@
       "title": "Monetary and financial-sector parameter reform",
       "policy_area": "Monetary policy and prudential regulation",
       "reform_category": "monetary_policy",
-      "current_stage": "Rules amended",
+      "current_stage": "Regulation approved",
       "current_stage_date": "2026-08-04",
       "next_milestone": "No future milestone published in verified source",
       "next_milestone_date": "2026-08-04",
       "responsible_institutions": [
         "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
       ],
-      "legal_basis": "Verified official source events: 3030-12 03.08.2026 Bank xizmatlari isteʼmolchilari bilan oʻzaro munosabatlarni amalga oshirishda tijorat banklarining faoliyatiga qoʻyiladigan minimal talablar toʻgʻrisidagi nizomga qoʻshimchalar va oʻzgartirish kiritish haqida; 3656-1 04.08.2026 Mikromoliya tashkiloti va bank faoliyatini oʻzgartirish tartibi toʻgʻrisidagi nizomga oʻzgartirish va qoʻshimchalar kiritish haqida.",
+      "legal_basis": "Verified official source event: 3917-сон 04.08.2026. Oʻzbekiston Respublikasi moliyaviy hisobotning milliy standarti (77-sonli MHMS) “Nodavlat notijorat tashkilotlari uchun soddalashtirilgan buxgalteriya hisobi va moliyaviy hisobot”ni tasdiqlash haqida.",
       "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-      "short_summary": "2 official measures update monetary policy and prudential regulation rules or procedures.",
+      "short_summary": "The cited official document updates monetary policy and prudential regulation rules or procedures.",
       "parameters_or_amounts": [
-        "amended rules"
+        "approved regulation"
       ],
-      "source_confidence": "medium",
-      "why_tracked": "The package is assembled from 2 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "source_confidence": "high",
+      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
       "model_relevance": [
         "Inflation",
         "Credit conditions",
@@ -1399,13 +1442,8 @@
       "measure_tracks": [
         {
           "id": "monetary-prudential-parameters-measure-1",
-          "label": "amended rules",
-          "status": "source verified"
-        },
-        {
-          "id": "monetary-prudential-parameters-measure-2",
-          "label": "amended rules",
-          "status": "source verified"
+          "label": "approved regulation",
+          "status": "approved"
         }
       ],
       "implementation_milestones": [
@@ -1474,6 +1512,21 @@
           "related_next_milestone_ids": [
             "monetary-prudential-parameters-amended-2026-08-04"
           ]
+        },
+        {
+          "id": "monetary-prudential-parameters-approved-2026-08-04",
+          "label": "official measure approved",
+          "date": "2026-08-04",
+          "date_precision": "day",
+          "event_type": "approved",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-04-3917-04-08-2026-o-zbekiston-respublikasi-moliyaviy-hisobotning-milliy"
+          ],
+          "confidence": "high"
         },
         {
           "id": "monetary-prudential-parameters-amended-2026-08-04",
@@ -1637,22 +1690,50 @@
               "uz": "verified"
             }
           }
+        },
+        {
+          "id": "source-event-2026-08-04-3917-04-08-2026-o-zbekiston-respublikasi-moliyaviy-hisobotning-milliy",
+          "title": "3917-сон 04.08.2026. Oʻzbekiston Respublikasi moliyaviy hisobotning milliy standarti (77-sonli MHMS) “Nodavlat notijorat tashkilotlari uchun soddalashtirilgan buxgalteriya hisobi va moliyaviy hisobot”ni tasdiqlash haqida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/8379837",
+          "source_published_at": "2026-08-04",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "approved",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-11T04:01:37.787Z",
+          "localized": {
+            "title": {
+              "uz": "3917-сон 04.08.2026. Oʻzbekiston Respublikasi moliyaviy hisobotning milliy standarti (77-sonli MHMS) “Nodavlat notijorat tashkilotlari uchun soddalashtirilgan buxgalteriya hisobi va moliyaviy hisobot”ni tasdiqlash haqida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/8379837",
+              "uz": "https://lex.uz/uz/docs/8379837"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
         }
       ],
       "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
       "digest": {
-        "changed": "amended rules",
+        "changed": "approved regulation",
         "applies_to": "Monetary policy and prudential regulation",
-        "effective_status": "Rules amended (2026-08-04)",
-        "document": "3656-1 04.08.2026 Mikromoliya tashkiloti va bank faoliyatini oʻzgartirish tartibi toʻgʻrisidagi nizomga oʻzgartirish va qoʻshimchalar kiritish haqida"
+        "effective_status": "Regulation approved (2026-08-04)",
+        "document": "3917-сон 04.08.2026. Oʻzbekiston Respublikasi moliyaviy hisobotning milliy standarti (77-sonli MHMS) “Nodavlat notijorat tashkilotlari uchun soddalashtirilgan buxgalteriya hisobi va moliyaviy hisobot”ni tasdiqlash haqida"
       },
       "localized": {
         "title": {
-          "uz": "3656-1 04.08.2026 Mikromoliya tashkiloti va bank faoliyatini oʻzgartirish tartibi toʻgʻrisidagi nizomga oʻzgartirish va qoʻshimchalar kiritish haqida"
+          "uz": "3917-сон 04.08.2026. Oʻzbekiston Respublikasi moliyaviy hisobotning milliy standarti (77-sonli MHMS) “Nodavlat notijorat tashkilotlari uchun soddalashtirilgan buxgalteriya hisobi va moliyaviy hisobot”ni tasdiqlash haqida"
         },
         "short_summary": {
           "ru": "Эффективно внедряются новые инструменты финансирования.",
-          "uz": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
+          "uz": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program."
         },
         "parameters_or_amounts": {
           "ru": [
@@ -1660,7 +1741,7 @@
             "Особое внимание уделено расширению использования инструментов Группы Банка по поддержке развития малого и среднего предпринимательства, реализации мер по сокращению бедности, совместному продвижению программ приватизации государственных предприятий, внедрению искусственного интеллекта в секторах экономики."
           ],
           "uz": [
-            "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
+            "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program."
           ]
         },
         "digest": {
@@ -1668,8 +1749,8 @@
             "changed": "Эффективно внедряются новые инструменты финансирования."
           },
           "uz": {
-            "changed": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement.",
-            "document": "3656-1 04.08.2026 Mikromoliya tashkiloti va bank faoliyatini oʻzgartirish tartibi toʻgʻrisidagi nizomga oʻzgartirish va qoʻshimchalar kiritish haqida"
+            "changed": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
+            "document": "3917-сон 04.08.2026. Oʻzbekiston Respublikasi moliyaviy hisobotning milliy standarti (77-sonli MHMS) “Nodavlat notijorat tashkilotlari uchun soddalashtirilgan buxgalteriya hisobi va moliyaviy hisobot”ni tasdiqlash haqida"
           }
         }
       }
@@ -5308,7 +5389,6 @@
     "This is a deterministic official-source reform package artifact.",
     "Generated from configured source URLs at artifact build time.",
     "Public packages are assembled only from source events whose official links passed validation.",
-    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser.",
-    "One or more configured sources failed during this automatic refresh; previous verified packages were carried forward when needed to avoid deleting reforms during a temporary source outage."
+    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser."
   ]
 }
