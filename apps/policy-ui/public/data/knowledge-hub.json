@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-08-14T04:23:30.728Z",
+  "generated_at": "2026-08-15T03:18:32.863Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -303,12 +303,11 @@
       "url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
       "parser": "lexuz-official-search",
       "fetch_url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
-      "ok": false,
-      "candidate_count": 0,
+      "ok": true,
+      "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-14T04:23:30.728Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-08-15T03:18:32.863Z"
     },
     {
       "id": "president-reform-news",
@@ -317,10 +316,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 5,
-      "excluded_count": 7,
-      "link_invalid_count": 2,
-      "fetched_at": "2026-08-14T04:23:30.728Z"
+      "candidate_count": 7,
+      "excluded_count": 5,
+      "link_invalid_count": 0,
+      "fetched_at": "2026-08-15T03:18:32.863Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -332,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-14T04:23:30.728Z"
+      "fetched_at": "2026-08-15T03:18:32.863Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -344,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-14T04:23:30.728Z"
+      "fetched_at": "2026-08-15T03:18:32.863Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -356,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-14T04:23:30.728Z"
+      "fetched_at": "2026-08-15T03:18:32.863Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -368,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-14T04:23:30.728Z"
+      "fetched_at": "2026-08-15T03:18:32.863Z"
     },
     {
       "id": "cbu-policy-news",
@@ -380,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 353,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-14T04:23:30.728Z"
+      "fetched_at": "2026-08-15T03:18:32.863Z"
     },
     {
       "id": "customs-committee-news",
@@ -392,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-14T04:23:30.728Z"
+      "fetched_at": "2026-08-15T03:18:32.863Z"
     },
     {
       "id": "mef-policy-news",
@@ -401,10 +400,10 @@
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
       "ok": true,
-      "candidate_count": 2,
-      "excluded_count": 10,
+      "candidate_count": 3,
+      "excluded_count": 9,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-14T04:23:30.728Z"
+      "fetched_at": "2026-08-15T03:18:32.863Z"
     },
     {
       "id": "tax-committee-news",
@@ -416,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-14T04:23:30.728Z"
+      "fetched_at": "2026-08-15T03:18:32.863Z"
     },
     {
       "id": "energy-ministry-news",
@@ -428,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-14T04:23:30.728Z"
+      "fetched_at": "2026-08-15T03:18:32.863Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -440,7 +439,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-14T04:23:30.728Z"
+      "fetched_at": "2026-08-15T03:18:32.863Z"
     },
     {
       "id": "justice-ministry-news",
@@ -448,35 +447,36 @@
       "url": "https://gov.uz/en/adliya/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": false,
-      "candidate_count": 0,
-      "excluded_count": 0,
+      "ok": true,
+      "candidate_count": 1,
+      "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-14T04:23:30.728Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-08-15T03:18:32.863Z"
     }
   ],
   "reform_packages": [
     {
-      "package_id": "pkg-tax-administration-incentives-2026-08-04",
+      "package_id": "pkg-tax-administration-incentives-2026-08-11",
       "title": "Tax administration and investment incentive reform",
       "policy_area": "Tax administration and fiscal incentives",
       "reform_category": "fiscal_tax",
-      "current_stage": "Implementation started",
+      "current_stage": "Multiple changes published",
       "current_stage_date": "2026-11-07",
       "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-08-04",
+      "next_milestone_date": "2026-08-11",
       "responsible_institutions": [
-        "Official website of the President of the Republic of Uzbekistan"
+        "Official website of the President of the Republic of Uzbekistan",
+        "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
       ],
-      "legal_basis": "Verified official source event: President reviews proposals to improve the remuneration system for civil servants.",
-      "official_basis": "Official website of the President of the Republic of Uzbekistan",
-      "short_summary": "The cited official document updates tax administration and fiscal incentives rules or procedures.",
+      "legal_basis": "Verified official source events: President reviews proposals to improve the remuneration system for civil servants; O‘RQ-1163-сон 07.08.2026. Rieltorlik faoliyati toʻgʻrisida; 3921-сон 11.08.2026. “Soliq-servis” AJ tomonidan fermer xoʻjaliklarining buxgalteriya hisobini yuritish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida.",
+      "official_basis": "Official website of the President of the Republic of Uzbekistan; National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+      "short_summary": "3 official measures update tax administration and fiscal incentives rules or procedures.",
       "parameters_or_amounts": [
-        "verified official measure"
+        "verified official measure",
+        "approved regulation"
       ],
       "source_confidence": "high",
-      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "why_tracked": "The package is assembled from 3 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
       "model_relevance": [
         "Fiscal balance",
         "Investment",
@@ -492,6 +492,16 @@
           "id": "tax-administration-incentives-measure-1",
           "label": "verified official measure",
           "status": "source verified"
+        },
+        {
+          "id": "tax-administration-incentives-measure-2",
+          "label": "verified official measure",
+          "status": "source verified"
+        },
+        {
+          "id": "tax-administration-incentives-measure-3",
+          "label": "approved regulation",
+          "status": "approved"
         }
       ],
       "implementation_milestones": [
@@ -709,6 +719,21 @@
           ]
         },
         {
+          "id": "tax-administration-incentives-approved-2026-08-11",
+          "label": "official measure approved",
+          "date": "2026-08-11",
+          "date_precision": "day",
+          "event_type": "approved",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-11-3921-11-08-2026-soliq-servis-aj-tomonidan-fermer-xo-jaliklarining-bux"
+          ],
+          "confidence": "high"
+        },
+        {
           "id": "tax-administration-incentives-instructions_issued-2026-11-07",
           "label": "official measure recorded",
           "date": "2026-11-07",
@@ -770,6 +795,9 @@
               "en": "Information on work completed during the 1st quarter of 2026 on the development of information systems and artificial intelligence technologies",
               "ru": "Министерство экономики и финансов Республики Узбекистан",
               "uz": "Ахборот тизимлари ва сунъий интеллект технологияларини ривожлантириш юзасидан 2026 йил 1-чораги давомида бажарилган ишлар бўйича маълумот"
+            },
+            "summary": {
+              "uz": "бўйича: Иқтисодиёт ва молия вазирлигининг тегишли функция ва вазифаларини рақамлаштиришга қаратилган 4 та устувор лойиҳа амалга оширилди. С унъий интеллект ( AI ) технологияларини жорий қилиш бўйича: Иқтисодиёт ва молия вазирлигида сунъий интеллект ташаббусларини тизимли мувофиқлаштириш ҳамда стратегик ривожлантириш мақсадида «Сунъий интеллект технологияларини жорий қилиш жараёнларини жадаллаштириш юзасидан Ишчи гуруҳ» ташкил этилди."
             },
             "source_url": {
               "en": "https://gov.uz/en/imv/news/view/164666",
@@ -1098,6 +1126,31 @@
           }
         },
         {
+          "id": "source-event-2026-08-11-3921-11-08-2026-soliq-servis-aj-tomonidan-fermer-xo-jaliklarining-bux",
+          "title": "3921-сон 11.08.2026. “Soliq-servis” AJ tomonidan fermer xoʻjaliklarining buxgalteriya hisobini yuritish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/8395791",
+          "source_published_at": "2026-08-11",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "approved",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-15T03:18:32.863Z",
+          "localized": {
+            "title": {
+              "uz": "3921-сон 11.08.2026. “Soliq-servis” AJ tomonidan fermer xoʻjaliklarining buxgalteriya hisobini yuritish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida"
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/8395791",
+              "uz": "https://lex.uz/uz/docs/8395791"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
           "id": "source-event-2026-11-07-o-rq-1162-05-08-2026-avtomobil-yo-llari-to-g-risida",
           "title": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida",
           "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
@@ -1127,7 +1180,7 @@
       "digest": {
         "changed": "verified official measure",
         "applies_to": "Tax administration and fiscal incentives",
-        "effective_status": "Implementation started (2026-11-07)",
+        "effective_status": "Multiple changes published (2026-11-07)",
         "document": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida"
       },
       "localized": {
@@ -1162,27 +1215,27 @@
       }
     },
     {
-      "package_id": "pkg-energy-tariff-compensation-2026-08-11",
+      "package_id": "pkg-energy-tariff-compensation-2026-08-13",
       "title": "Energy tariff adjustment and compensation reform",
       "policy_area": "Energy tariffs, household compensation, and fiscal monitoring",
       "reform_category": "energy_tariffs",
       "current_stage": "Multiple changes published",
-      "current_stage_date": "2026-08-11",
+      "current_stage_date": "2026-08-13",
       "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-08-11",
+      "next_milestone_date": "2026-08-13",
       "responsible_institutions": [
         "Ministry of Economy and Finance of Uzbekistan",
         "Official website of the President of the Republic of Uzbekistan"
       ],
-      "legal_basis": "Verified official source events: Regulated tariffs applicable between enterprises in the energy sector have been approved; Uzbekistan Introduces a New System of State Regulation of Tariffs in the Energy Sector; Measures to ensure oil and gas market stability discussed.",
+      "legal_basis": "Verified official source events: Regulated tariffs applicable between enterprises in the energy sector have been approved; Uzbekistan Introduces a New System of State Regulation of Tariffs in the Energy Sector; Measures to ensure oil and gas market stability discussed; Tasks defined to improve the management of the fuel and energy sector in the regions.",
       "official_basis": "Ministry of Economy and Finance of Uzbekistan; Official website of the President of the Republic of Uzbekistan",
-      "short_summary": "3 official measures update energy tariffs, household compensation, and fiscal monitoring rules or procedures.",
+      "short_summary": "4 official measures update energy tariffs, household compensation, and fiscal monitoring rules or procedures.",
       "parameters_or_amounts": [
         "approved measures",
         "verified official measure"
       ],
       "source_confidence": "medium",
-      "why_tracked": "The package is assembled from 3 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "why_tracked": "The package is assembled from 4 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
       "model_relevance": [
         "Inflation",
         "Household income",
@@ -1206,6 +1259,11 @@
         },
         {
           "id": "energy-tariff-compensation-measure-3",
+          "label": "verified official measure",
+          "status": "source verified"
+        },
+        {
+          "id": "energy-tariff-compensation-measure-4",
           "label": "verified official measure",
           "status": "source verified"
         }
@@ -1301,6 +1359,21 @@
           "evidence_type": "official_policy_announcement",
           "source_event_ids": [
             "source-event-2026-08-11-measures-to-ensure-oil-and-gas-market-stability-discussed"
+          ],
+          "confidence": "medium"
+        },
+        {
+          "id": "energy-tariff-compensation-instructions_issued-2026-08-13",
+          "label": "official measure recorded",
+          "date": "2026-08-13",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-13-tasks-defined-to-improve-the-management-of-the-fuel-and-energy-sector"
           ],
           "confidence": "medium"
         }
@@ -1497,65 +1570,100 @@
               "uz": "verified"
             }
           }
+        },
+        {
+          "id": "source-event-2026-08-13-tasks-defined-to-improve-the-management-of-the-fuel-and-energy-sector",
+          "title": "Tasks defined to improve the management of the fuel and energy sector in the regions",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9496",
+          "source_published_at": "2026-08-13",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-15T03:18:32.863Z",
+          "localized": {
+            "title": {
+              "en": "Tasks defined to improve the management of the fuel and energy sector in the regions",
+              "ru": "Определены задачи по системной организации работы топливно-энергетической отрасли в регионах",
+              "uz": "Ҳудудларда ёқилғи-энергетика соҳасидаги ишларни тизимли ташкил этиш вазифалари белгиланди"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "Ранее была поставлена задача создать образцовую систему в 14 районах, отобранных по одному в каждом регионе.",
+              "uz": "Аввалроқ ушбу тажриба асосида ҳар бир ҳудуддан биттадан танлаб олинган 14 та туманда намунавий тизим яратиш вазифаси қўйилган эди. Шу мақсадда ишлар “маҳаллабай” ташкил этилиб, энергетика соҳасидаги муаммоларни жойига чиққан ҳолда ўрганиш ва манзилли чоралар кўриш йўлга қўйилди."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9496",
+              "ru": "https://president.uz/ru/lists/view/9496",
+              "uz": "https://president.uz/uz/lists/view/9496"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
         }
       ],
       "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
       "digest": {
         "changed": "approved measures",
         "applies_to": "Energy tariffs, household compensation, and fiscal monitoring",
-        "effective_status": "Multiple changes published (2026-08-11)",
-        "document": "Measures to ensure oil and gas market stability discussed"
+        "effective_status": "Multiple changes published (2026-08-13)",
+        "document": "Tasks defined to improve the management of the fuel and energy sector in the regions"
       },
       "localized": {
         "title": {
-          "ru": "Рассмотрены вопросы обеспечения стабильности нефтегазового рынка",
-          "uz": "Нефть-газ бозори барқарорлигини таъминлаш масалалари кўриб чиқилди"
+          "ru": "Определены задачи по системной организации работы топливно-энергетической отрасли в регионах",
+          "uz": "Ҳудудларда ёқилғи-энергетика соҳасидаги ишларни тизимли ташкил этиш вазифалари белгиланди"
         },
         "short_summary": {
-          "ru": "За счет работ на месторождениях «Янги Култак», «Ниёз», «Коратау», «Марварид» и «Тегирмон» будет создана возможность дополнительной добычи 887 тысяч кубометров природного газа.",
-          "uz": "Август ойида 27 та қудуқни ишга тушириш режалаштирилган."
+          "ru": "Ранее была поставлена задача создать образцовую систему в 14 районах, отобранных по одному в каждом регионе.",
+          "uz": "Аввалроқ ушбу тажриба асосида ҳар бир ҳудуддан биттадан танлаб олинган 14 та туманда намунавий тизим яратиш вазифаси қўйилган эди."
         },
         "parameters_or_amounts": {
           "ru": [
-            "За счет работ на месторождениях «Янги Култак», «Ниёз», «Коратау», «Марварид» и «Тегирмон» будет создана возможность дополнительной добычи 887 тысяч кубометров природного газа.",
-            "Дано поручение установить действенный контроль за недопущением случаев необоснованного ограничения поставок ресурсов, создания искусственного дефицита и действий, направленных на завышение цен."
+            "Ранее была поставлена задача создать образцовую систему в 14 районах, отобранных по одному в каждом регионе."
           ],
           "uz": [
-            "Август ойида 27 та қудуқни ишга тушириш режалаштирилган.",
-            "Ички бозорда талаб ва таклиф мувозанатини сақлаш, углеводород ресурслари таъминотида узилишларга ҳамда нархларнинг асоссиз ўсишига йўл қўймаслик мақсадида “Ўзбекнефтгаз” акциядорлик жамиятига нефть ва газ қазиб чиқариш бўйича белгиланган прогноз кўрсаткичларини сўзсиз таъминлаш вазифаси қўйилди."
+            "Аввалроқ ушбу тажриба асосида ҳар бир ҳудуддан биттадан танлаб олинган 14 та туманда намунавий тизим яратиш вазифаси қўйилган эди.",
+            "Шу мақсадда ишлар “маҳаллабай” ташкил этилиб, энергетика соҳасидаги муаммоларни жойига чиққан ҳолда ўрганиш ва манзилли чоралар кўриш йўлга қўйилди.",
+            "Давлатимиз раҳбари 14 та туманда қўлланган мазкур ёндашув билан чекланиб қолмасдан, уни республиканинг барча туманларида жорий этиш зарурлигини таъкидлади.",
+            "Мақсад – энергетика соҳасида “муаммо пайдо бўлгандан кейин уни бартараф этиш” амалиётидан “муаммони олдиндан аниқлаш, зарур чораларни режалаштириш ва унинг олдини олиш” тизимига ўтиш."
           ]
         },
         "digest": {
           "ru": {
-            "changed": "За счет работ на месторождениях «Янги Култак», «Ниёз», «Коратау», «Марварид» и «Тегирмон» будет создана возможность дополнительной добычи 887 тысяч кубометров природного газа.",
-            "document": "Рассмотрены вопросы обеспечения стабильности нефтегазового рынка"
+            "changed": "Ранее была поставлена задача создать образцовую систему в 14 районах, отобранных по одному в каждом регионе.",
+            "document": "Определены задачи по системной организации работы топливно-энергетической отрасли в регионах"
           },
           "uz": {
-            "changed": "Август ойида 27 та қудуқни ишга тушириш режалаштирилган.",
-            "document": "Нефть-газ бозори барқарорлигини таъминлаш масалалари кўриб чиқилди"
+            "changed": "Аввалроқ ушбу тажриба асосида ҳар бир ҳудуддан биттадан танлаб олинган 14 та туманда намунавий тизим яратиш вазифаси қўйилган эди.",
+            "document": "Ҳудудларда ёқилғи-энергетика соҳасидаги ишларни тизимли ташкил этиш вазифалари белгиланди"
           }
         }
       }
     },
     {
-      "package_id": "pkg-monetary-prudential-parameters-2026-08-04",
+      "package_id": "pkg-monetary-prudential-parameters-2026-08-11",
       "title": "Monetary and financial-sector parameter reform",
       "policy_area": "Monetary policy and prudential regulation",
       "reform_category": "monetary_policy",
-      "current_stage": "Regulation approved",
-      "current_stage_date": "2026-08-04",
+      "current_stage": "Rules amended",
+      "current_stage_date": "2026-08-11",
       "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-08-04",
+      "next_milestone_date": "2026-08-11",
       "responsible_institutions": [
         "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
       ],
-      "legal_basis": "Verified official source event: 3917-сон 04.08.2026. Oʻzbekiston Respublikasi moliyaviy hisobotning milliy standarti (77-sonli MHMS) “Nodavlat notijorat tashkilotlari uchun soddalashtirilgan buxgalteriya hisobi va moliyaviy hisobot”ni tasdiqlash haqida.",
+      "legal_basis": "Verified official source event: 2692-1-сон 11.08.2026. Tijorat banklari tomonidan jalb qilinadigan depozitlar (omonatlar) boʻyicha foiz stavkalarini shakllantirish mexanizmi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida.",
       "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
       "short_summary": "The cited official document updates monetary policy and prudential regulation rules or procedures.",
       "parameters_or_amounts": [
-        "approved regulation"
+        "amended rules"
       ],
-      "source_confidence": "high",
+      "source_confidence": "medium",
       "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
       "model_relevance": [
         "Inflation",
@@ -1570,8 +1678,8 @@
       "measure_tracks": [
         {
           "id": "monetary-prudential-parameters-measure-1",
-          "label": "approved regulation",
-          "status": "approved"
+          "label": "amended rules",
+          "status": "source verified"
         }
       ],
       "implementation_milestones": [
@@ -1668,6 +1776,21 @@
           "evidence_type": "official_policy_announcement",
           "source_event_ids": [
             "source-event-2026-08-04-3656-1-04-08-2026-mikromoliya-tashkiloti-va-bank-faoliyatini-o-zgarti"
+          ],
+          "confidence": "medium"
+        },
+        {
+          "id": "monetary-prudential-parameters-amended-2026-08-11",
+          "label": "rules amended",
+          "date": "2026-08-11",
+          "date_precision": "day",
+          "event_type": "amended",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-11-2692-1-11-08-2026-tijorat-banklari-tomonidan-jalb-qilinadigan-depozit"
           ],
           "confidence": "medium"
         }
@@ -1846,22 +1969,50 @@
               "uz": "verified"
             }
           }
+        },
+        {
+          "id": "source-event-2026-08-11-2692-1-11-08-2026-tijorat-banklari-tomonidan-jalb-qilinadigan-depozit",
+          "title": "2692-1-сон 11.08.2026. Tijorat banklari tomonidan jalb qilinadigan depozitlar (omonatlar) boʻyicha foiz stavkalarini shakllantirish mexanizmi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/8395307",
+          "source_published_at": "2026-08-11",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "amended",
+          "summary": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-15T03:18:32.863Z",
+          "localized": {
+            "title": {
+              "uz": "2692-1-сон 11.08.2026. Tijorat banklari tomonidan jalb qilinadigan depozitlar (omonatlar) boʻyicha foiz stavkalarini shakllantirish mexanizmi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/8395307",
+              "uz": "https://lex.uz/uz/docs/8395307"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
         }
       ],
       "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
       "digest": {
-        "changed": "approved regulation",
+        "changed": "amended rules",
         "applies_to": "Monetary policy and prudential regulation",
-        "effective_status": "Regulation approved (2026-08-04)",
-        "document": "3917-сон 04.08.2026. Oʻzbekiston Respublikasi moliyaviy hisobotning milliy standarti (77-sonli MHMS) “Nodavlat notijorat tashkilotlari uchun soddalashtirilgan buxgalteriya hisobi va moliyaviy hisobot”ni tasdiqlash haqida"
+        "effective_status": "Rules amended (2026-08-11)",
+        "document": "2692-1-сон 11.08.2026. Tijorat banklari tomonidan jalb qilinadigan depozitlar (omonatlar) boʻyicha foiz stavkalarini shakllantirish mexanizmi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
       },
       "localized": {
         "title": {
-          "uz": "3917-сон 04.08.2026. Oʻzbekiston Respublikasi moliyaviy hisobotning milliy standarti (77-sonli MHMS) “Nodavlat notijorat tashkilotlari uchun soddalashtirilgan buxgalteriya hisobi va moliyaviy hisobot”ni tasdiqlash haqida"
+          "uz": "2692-1-сон 11.08.2026. Tijorat banklari tomonidan jalb qilinadigan depozitlar (omonatlar) boʻyicha foiz stavkalarini shakllantirish mexanizmi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
         },
         "short_summary": {
           "ru": "Эффективно внедряются новые инструменты финансирования.",
-          "uz": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program."
+          "uz": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
         },
         "parameters_or_amounts": {
           "ru": [
@@ -1869,7 +2020,7 @@
             "Особое внимание уделено расширению использования инструментов Группы Банка по поддержке развития малого и среднего предпринимательства, реализации мер по сокращению бедности, совместному продвижению программ приватизации государственных предприятий, внедрению искусственного интеллекта в секторах экономики."
           ],
           "uz": [
-            "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program."
+            "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
           ]
         },
         "digest": {
@@ -1877,8 +2028,8 @@
             "changed": "Эффективно внедряются новые инструменты финансирования."
           },
           "uz": {
-            "changed": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
-            "document": "3917-сон 04.08.2026. Oʻzbekiston Respublikasi moliyaviy hisobotning milliy standarti (77-sonli MHMS) “Nodavlat notijorat tashkilotlari uchun soddalashtirilgan buxgalteriya hisobi va moliyaviy hisobot”ni tasdiqlash haqida"
+            "changed": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement.",
+            "document": "2692-1-сон 11.08.2026. Tijorat banklari tomonidan jalb qilinadigan depozitlar (omonatlar) boʻyicha foiz stavkalarini shakllantirish mexanizmi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
           }
         }
       }
@@ -4967,7 +5118,7 @@
     ],
     "package_links": [
       {
-        "package_id": "pkg-tax-administration-incentives-2026-08-04",
+        "package_id": "pkg-tax-administration-incentives-2026-08-11",
         "active_lenses": [
           {
             "model_id": "DFM",
@@ -5009,7 +5160,7 @@
         ]
       },
       {
-        "package_id": "pkg-energy-tariff-compensation-2026-08-11",
+        "package_id": "pkg-energy-tariff-compensation-2026-08-13",
         "active_lenses": [
           {
             "model_id": "QPM",
@@ -5041,7 +5192,7 @@
         ]
       },
       {
-        "package_id": "pkg-monetary-prudential-parameters-2026-08-04",
+        "package_id": "pkg-monetary-prudential-parameters-2026-08-11",
         "active_lenses": [
           {
             "model_id": "QPM",
@@ -5517,7 +5668,6 @@
     "This is a deterministic official-source reform package artifact.",
     "Generated from configured source URLs at artifact build time.",
     "Public packages are assembled only from source events whose official links passed validation.",
-    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser.",
-    "One or more configured sources failed during this automatic refresh; previous verified packages were carried forward when needed to avoid deleting reforms during a temporary source outage."
+    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser."
   ]
 }
