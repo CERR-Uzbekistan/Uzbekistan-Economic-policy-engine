@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-08-16T03:27:15.497Z",
+  "generated_at": "2026-08-17T03:27:48.496Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -307,7 +307,7 @@
       "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-16T03:27:15.497Z"
+      "fetched_at": "2026-08-17T03:27:48.496Z"
     },
     {
       "id": "president-reform-news",
@@ -319,7 +319,7 @@
       "candidate_count": 7,
       "excluded_count": 5,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-16T03:27:15.497Z"
+      "fetched_at": "2026-08-17T03:27:48.496Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-16T03:27:15.497Z"
+      "fetched_at": "2026-08-17T03:27:48.496Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-16T03:27:15.497Z"
+      "fetched_at": "2026-08-17T03:27:48.496Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-16T03:27:15.497Z"
+      "fetched_at": "2026-08-17T03:27:48.496Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-16T03:27:15.497Z"
+      "fetched_at": "2026-08-17T03:27:48.496Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 353,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-16T03:27:15.497Z"
+      "fetched_at": "2026-08-17T03:27:48.496Z"
     },
     {
       "id": "customs-committee-news",
@@ -391,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-16T03:27:15.497Z"
+      "fetched_at": "2026-08-17T03:27:48.496Z"
     },
     {
       "id": "mef-policy-news",
@@ -403,7 +403,7 @@
       "candidate_count": 2,
       "excluded_count": 10,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-16T03:27:15.497Z"
+      "fetched_at": "2026-08-17T03:27:48.496Z"
     },
     {
       "id": "tax-committee-news",
@@ -415,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-16T03:27:15.497Z"
+      "fetched_at": "2026-08-17T03:27:48.496Z"
     },
     {
       "id": "energy-ministry-news",
@@ -427,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-16T03:27:15.497Z"
+      "fetched_at": "2026-08-17T03:27:48.496Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -439,7 +439,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-16T03:27:15.497Z"
+      "fetched_at": "2026-08-17T03:27:48.496Z"
     },
     {
       "id": "justice-ministry-news",
@@ -451,7 +451,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-16T03:27:15.497Z"
+      "fetched_at": "2026-08-17T03:27:48.496Z"
     }
   ],
   "reform_packages": [
@@ -5660,7 +5660,6 @@
     "This is a deterministic official-source reform package artifact.",
     "Generated from configured source URLs at artifact build time.",
     "Public packages are assembled only from source events whose official links passed validation.",
-    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser.",
-    "One or more configured research sources failed during this automatic refresh; previous or curated research updates were carried forward when needed."
+    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser."
   ]
 }
