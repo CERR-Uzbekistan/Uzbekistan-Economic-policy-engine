@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-08-17T03:27:48.496Z",
+  "generated_at": "2026-08-24T03:31:54.047Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -304,10 +304,10 @@
       "parser": "lexuz-official-search",
       "fetch_url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
       "ok": true,
-      "candidate_count": 12,
-      "excluded_count": 0,
+      "candidate_count": 11,
+      "excluded_count": 1,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-17T03:27:48.496Z"
+      "fetched_at": "2026-08-24T03:31:54.047Z"
     },
     {
       "id": "president-reform-news",
@@ -316,10 +316,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 7,
-      "excluded_count": 5,
+      "candidate_count": 11,
+      "excluded_count": 1,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-17T03:27:48.496Z"
+      "fetched_at": "2026-08-24T03:31:54.047Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-17T03:27:48.496Z"
+      "fetched_at": "2026-08-24T03:31:54.047Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-17T03:27:48.496Z"
+      "fetched_at": "2026-08-24T03:31:54.047Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-17T03:27:48.496Z"
+      "fetched_at": "2026-08-24T03:31:54.047Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-17T03:27:48.496Z"
+      "fetched_at": "2026-08-24T03:31:54.047Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 353,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-17T03:27:48.496Z"
+      "fetched_at": "2026-08-24T03:31:54.047Z"
     },
     {
       "id": "customs-committee-news",
@@ -391,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-17T03:27:48.496Z"
+      "fetched_at": "2026-08-24T03:31:54.047Z"
     },
     {
       "id": "mef-policy-news",
@@ -400,10 +400,10 @@
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
       "ok": true,
-      "candidate_count": 2,
-      "excluded_count": 10,
+      "candidate_count": 1,
+      "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-17T03:27:48.496Z"
+      "fetched_at": "2026-08-24T03:31:54.047Z"
     },
     {
       "id": "tax-committee-news",
@@ -415,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-17T03:27:48.496Z"
+      "fetched_at": "2026-08-24T03:31:54.047Z"
     },
     {
       "id": "energy-ministry-news",
@@ -427,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-17T03:27:48.496Z"
+      "fetched_at": "2026-08-24T03:31:54.047Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -439,7 +439,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-17T03:27:48.496Z"
+      "fetched_at": "2026-08-24T03:31:54.047Z"
     },
     {
       "id": "justice-ministry-news",
@@ -448,10 +448,10 @@
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
       "ok": true,
-      "candidate_count": 0,
-      "excluded_count": 12,
+      "candidate_count": 1,
+      "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-17T03:27:48.496Z"
+      "fetched_at": "2026-08-24T03:31:54.047Z"
     }
   ],
   "reform_packages": [
@@ -1207,27 +1207,25 @@
       }
     },
     {
-      "package_id": "pkg-energy-tariff-compensation-2026-08-13",
+      "package_id": "pkg-energy-tariff-compensation-2026-08-19",
       "title": "Energy tariff adjustment and compensation reform",
       "policy_area": "Energy tariffs, household compensation, and fiscal monitoring",
       "reform_category": "energy_tariffs",
-      "current_stage": "Multiple changes published",
-      "current_stage_date": "2026-08-13",
+      "current_stage": "Instructions issued",
+      "current_stage_date": "2026-08-19",
       "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-08-13",
+      "next_milestone_date": "2026-08-19",
       "responsible_institutions": [
-        "Ministry of Economy and Finance of Uzbekistan",
         "Official website of the President of the Republic of Uzbekistan"
       ],
-      "legal_basis": "Verified official source events: Regulated tariffs applicable between enterprises in the energy sector have been approved; Uzbekistan Introduces a New System of State Regulation of Tariffs in the Energy Sector; Measures to ensure oil and gas market stability discussed; Tasks defined to improve the management of the fuel and energy sector in the regions.",
-      "official_basis": "Ministry of Economy and Finance of Uzbekistan; Official website of the President of the Republic of Uzbekistan",
-      "short_summary": "4 official measures update energy tariffs, household compensation, and fiscal monitoring rules or procedures.",
+      "legal_basis": "Verified official source event: Measures presented for small and micro hydropower development.",
+      "official_basis": "Official website of the President of the Republic of Uzbekistan",
+      "short_summary": "The cited official document updates energy tariffs, household compensation, and fiscal monitoring rules or procedures.",
       "parameters_or_amounts": [
-        "approved measures",
         "verified official measure"
       ],
-      "source_confidence": "medium",
-      "why_tracked": "The package is assembled from 4 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "source_confidence": "high",
+      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
       "model_relevance": [
         "Inflation",
         "Household income",
@@ -1241,21 +1239,6 @@
       "measure_tracks": [
         {
           "id": "energy-tariff-compensation-measure-1",
-          "label": "approved measures",
-          "status": "approved"
-        },
-        {
-          "id": "energy-tariff-compensation-measure-2",
-          "label": "verified official measure",
-          "status": "source verified"
-        },
-        {
-          "id": "energy-tariff-compensation-measure-3",
-          "label": "verified official measure",
-          "status": "source verified"
-        },
-        {
-          "id": "energy-tariff-compensation-measure-4",
           "label": "verified official measure",
           "status": "source verified"
         }
@@ -1368,6 +1351,21 @@
             "source-event-2026-08-13-tasks-defined-to-improve-the-management-of-the-fuel-and-energy-sector"
           ],
           "confidence": "medium"
+        },
+        {
+          "id": "energy-tariff-compensation-instructions_issued-2026-08-19",
+          "label": "official measure recorded",
+          "date": "2026-08-19",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-19-measures-presented-for-small-and-micro-hydropower-development"
+          ],
+          "confidence": "high"
         }
       ],
       "official_source_events": [
@@ -1596,43 +1594,86 @@
               "uz": "verified"
             }
           }
+        },
+        {
+          "id": "source-event-2026-08-19-measures-presented-for-small-and-micro-hydropower-development",
+          "title": "Measures presented for small and micro hydropower development",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9513",
+          "source_published_at": "2026-08-19",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-24T03:31:54.047Z",
+          "localized": {
+            "title": {
+              "en": "Measures presented for small and micro hydropower development",
+              "ru": "Представлены меры по дальнейшему развитию малой и микрогидроэнергетики",
+              "uz": "Кичик ва микро гидроэнергетикани ривожлантириш чора-тадбирлари тақдимот қилинди"
+            },
+            "summary": {
+              "en": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
+              "ru": "Будет разрешено изменять конструкцию каналов, рек и русел для создания дополнительного напора воды. Также будет разрешено строительство малых и микроГЭС на объектах водного хозяйства для собственных нужд без проведения аукциона.",
+              "uz": "Ўтган йили қабул қилинган алоҳида қарорга мувофиқ, хусусий сектор иштирокида жами 164 мегаватт қувватли қарийб 3 мингта кичик ва микро ГЭС қуриш белгиланган. Аммо бу белгиланган қувватнинг атиги тўртдан бир қисмини ташкил этади."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9513",
+              "ru": "https://president.uz/ru/lists/view/9513",
+              "uz": "https://president.uz/uz/lists/view/9513"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
         }
       ],
       "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
       "digest": {
-        "changed": "approved measures",
+        "changed": "verified official measure",
         "applies_to": "Energy tariffs, household compensation, and fiscal monitoring",
-        "effective_status": "Multiple changes published (2026-08-13)",
-        "document": "Tasks defined to improve the management of the fuel and energy sector in the regions"
+        "effective_status": "Instructions issued (2026-08-19)",
+        "document": "Measures presented for small and micro hydropower development"
       },
       "localized": {
         "title": {
-          "ru": "Определены задачи по системной организации работы топливно-энергетической отрасли в регионах",
-          "uz": "Ҳудудларда ёқилғи-энергетика соҳасидаги ишларни тизимли ташкил этиш вазифалари белгиланди"
+          "ru": "Представлены меры по дальнейшему развитию малой и микрогидроэнергетики",
+          "uz": "Кичик ва микро гидроэнергетикани ривожлантириш чора-тадбирлари тақдимот қилинди"
         },
         "short_summary": {
-          "ru": "Ранее была поставлена задача создать образцовую систему в 14 районах, отобранных по одному в каждом регионе.",
-          "uz": "Аввалроқ ушбу тажриба асосида ҳар бир ҳудуддан биттадан танлаб олинган 14 та туманда намунавий тизим яратиш вазифаси қўйилган эди."
+          "ru": "Будет разрешено изменять конструкцию каналов, рек и русел для создания дополнительного напора воды.",
+          "uz": "Ўтган йили қабул қилинган алоҳида қарорга мувофиқ, хусусий сектор иштирокида жами 164 мегаватт қувватли қарийб 3 мингта кичик ва микро ГЭС қуриш белгиланган."
         },
         "parameters_or_amounts": {
           "ru": [
-            "Ранее была поставлена задача создать образцовую систему в 14 районах, отобранных по одному в каждом регионе."
+            "Будет разрешено изменять конструкцию каналов, рек и русел для создания дополнительного напора воды.",
+            "Также будет разрешено строительство малых и микроГЭС на объектах водного хозяйства для собственных нужд без проведения аукциона.",
+            "Будет внедрена цифровая платформа, охватывающая все процессы – от определения подходящих площадок для проектов до запуска и эксплуатации объектов.",
+            "Будет сформирован конкретный перечень гидроагрегатов и комплектующих, производство которых можно локализовать.",
+            "В целом к 2030 году планируется довести мощность таких станций до 204,8 мегаватта и обеспечить ежегодную выработку 620 миллионов киловатт-часов экологически чистой электроэнергии.",
+            "Кроме того, с нового учебного года будет внедрена система дуального образования для подготовки высококвалифицированных кадров в сфере малой «зеленой» энергетики."
           ],
           "uz": [
-            "Аввалроқ ушбу тажриба асосида ҳар бир ҳудуддан биттадан танлаб олинган 14 та туманда намунавий тизим яратиш вазифаси қўйилган эди.",
-            "Шу мақсадда ишлар “маҳаллабай” ташкил этилиб, энергетика соҳасидаги муаммоларни жойига чиққан ҳолда ўрганиш ва манзилли чоралар кўриш йўлга қўйилди.",
-            "Давлатимиз раҳбари 14 та туманда қўлланган мазкур ёндашув билан чекланиб қолмасдан, уни республиканинг барча туманларида жорий этиш зарурлигини таъкидлади.",
-            "Мақсад – энергетика соҳасида “муаммо пайдо бўлгандан кейин уни бартараф этиш” амалиётидан “муаммони олдиндан аниқлаш, зарур чораларни режалаштириш ва унинг олдини олиш” тизимига ўтиш."
+            "Ўтган йили қабул қилинган алоҳида қарорга мувофиқ, хусусий сектор иштирокида жами 164 мегаватт қувватли қарийб 3 мингта кичик ва микро ГЭС қуриш белгиланган.",
+            "Аммо бу белгиланган қувватнинг атиги тўртдан бир қисмини ташкил этади.",
+            "Шу муносабат билан аукционларда лойиҳанинг бошланғич нархи билан бирга электр энергиясини харид қилиш тарифининг энг қуйи чегарасини белгилаш, тарифларни станция қувватига қараб табақалаштириш таклиф қилинди.",
+            "Шунингдек, 100 киловаттгача бўлган микро ГЭСларни лойиҳалаш ва қуриш соддалаштирилган тартибда амалга оширилади.",
+            "Лойиҳалар учун муносиб жойларни аниқлашдан тортиб, уларни ишга тушириш ва эксплуатация қилишгача бўлган жараёнларни қамраб олувчи рақамли платформа жорий этилади.",
+            "Маҳаллийлаштириш мумкин бўлган агрегат ва бутловчи қисмларнинг аниқ рўйхатини шакллантириб, уларни мамлакатимизда ишлаб чиқариш бўйича тадбиркор ва инвесторларга таклифлар берилади.",
+            "Умуман, 2030 йилга қадар бундай станциялар қувватини 204,8 мегаваттга етказиб, йилига 620 миллион киловатт-соат экологик тоза электр энергияси ишлаб чиқариш режалаштирилган.",
+            "Шунингдек, янги ўқув йилидан кичик қувватли “яшил” энергетика йўналишларида юқори малакали кадрлар тайёрлаш учун дуал таълим тизими жорий этилади."
           ]
         },
         "digest": {
           "ru": {
-            "changed": "Ранее была поставлена задача создать образцовую систему в 14 районах, отобранных по одному в каждом регионе.",
-            "document": "Определены задачи по системной организации работы топливно-энергетической отрасли в регионах"
+            "changed": "Будет разрешено изменять конструкцию каналов, рек и русел для создания дополнительного напора воды.",
+            "document": "Представлены меры по дальнейшему развитию малой и микрогидроэнергетики"
           },
           "uz": {
-            "changed": "Аввалроқ ушбу тажриба асосида ҳар бир ҳудуддан биттадан танлаб олинган 14 та туманда намунавий тизим яратиш вазифаси қўйилган эди.",
-            "document": "Ҳудудларда ёқилғи-энергетика соҳасидаги ишларни тизимли ташкил этиш вазифалари белгиланди"
+            "changed": "Ўтган йили қабул қилинган алоҳида қарорга мувофиқ, хусусий сектор иштирокида жами 164 мегаватт қувватли қарийб 3 мингта кичик ва микро ГЭС қуриш белгиланган.",
+            "document": "Кичик ва микро гидроэнергетикани ривожлантириш чора-тадбирлари тақдимот қилинди"
           }
         }
       }
@@ -4869,6 +4910,25 @@
       "why_relevant": "Useful for comparing nowcast methods and indicator use around the DFM lane."
     },
     {
+      "id": "research-imf-working-papers-repec-2026-monetary-fiscal-policy-interactions-in-korea-a-qpm-based-analysis",
+      "title": "Monetary–Fiscal Policy Interactions in Korea: A QPM-Based Analysis",
+      "topic": "QPM scenario design and monetary transmission",
+      "summary": "QPM scenario design and monetary transmission. Included as a source-linked methods update for QPM; it is not a platform model result.",
+      "model_ids": [
+        "QPM"
+      ],
+      "methods": [
+        "Quarterly projection model",
+        "monetary policy model",
+        "scenario analysis"
+      ],
+      "source_title": "Monetary–Fiscal Policy Interactions in Korea: A QPM-Based Analysis",
+      "source_institution": "International Monetary Fund",
+      "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-172.html",
+      "published_at": "2026",
+      "why_relevant": "Useful for benchmarking semi-structural monetary-policy scenarios before platform model results are cited."
+    },
+    {
       "id": "research-imf-working-papers-repec-2026-nowcasting-country-level-trade-estimates-using-imf-portwatch",
       "title": "Nowcasting Country-Level Trade Estimates Using IMF PortWatch",
       "topic": "Nowcasting and high-frequency monitoring",
@@ -4981,25 +5041,6 @@
       "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-048.html",
       "published_at": "2026",
       "why_relevant": "Useful for comparing nowcast methods and indicator use around the DFM lane."
-    },
-    {
-      "id": "research-imf-working-papers-repec-2026-sovereign-debt-sustainability-and-redistribution",
-      "title": "Sovereign Debt Sustainability and Redistribution",
-      "topic": "Fiscal programming and debt-sustainability methods",
-      "summary": "Fiscal programming and debt-sustainability methods. Included as a source-linked methods update for FPP; it is not a platform model result.",
-      "model_ids": [
-        "FPP"
-      ],
-      "methods": [
-        "Fiscal programming",
-        "debt sustainability",
-        "medium-term fiscal framework"
-      ],
-      "source_title": "Sovereign Debt Sustainability and Redistribution",
-      "source_institution": "International Monetary Fund",
-      "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-042.html",
-      "published_at": "2026",
-      "why_relevant": "Useful as a literature watch item while FPP remains gated in public outputs."
     }
   ],
   "literature_items": [
@@ -5152,7 +5193,7 @@
         ]
       },
       {
-        "package_id": "pkg-energy-tariff-compensation-2026-08-13",
+        "package_id": "pkg-energy-tariff-compensation-2026-08-19",
         "active_lenses": [
           {
             "model_id": "QPM",
