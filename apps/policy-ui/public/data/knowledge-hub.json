@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-08-24T03:31:54.047Z",
+  "generated_at": "2026-08-25T03:26:14.747Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -304,10 +304,10 @@
       "parser": "lexuz-official-search",
       "fetch_url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
       "ok": true,
-      "candidate_count": 11,
-      "excluded_count": 1,
+      "candidate_count": 12,
+      "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-24T03:31:54.047Z"
+      "fetched_at": "2026-08-25T03:26:14.747Z"
     },
     {
       "id": "president-reform-news",
@@ -316,10 +316,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 11,
-      "excluded_count": 1,
+      "candidate_count": 8,
+      "excluded_count": 4,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-24T03:31:54.047Z"
+      "fetched_at": "2026-08-25T03:26:14.747Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-24T03:31:54.047Z"
+      "fetched_at": "2026-08-25T03:26:14.747Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-24T03:31:54.047Z"
+      "fetched_at": "2026-08-25T03:26:14.747Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-24T03:31:54.047Z"
+      "fetched_at": "2026-08-25T03:26:14.747Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-24T03:31:54.047Z"
+      "fetched_at": "2026-08-25T03:26:14.747Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 353,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-24T03:31:54.047Z"
+      "fetched_at": "2026-08-25T03:26:14.747Z"
     },
     {
       "id": "customs-committee-news",
@@ -391,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-24T03:31:54.047Z"
+      "fetched_at": "2026-08-25T03:26:14.747Z"
     },
     {
       "id": "mef-policy-news",
@@ -403,7 +403,7 @@
       "candidate_count": 1,
       "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-24T03:31:54.047Z"
+      "fetched_at": "2026-08-25T03:26:14.747Z"
     },
     {
       "id": "tax-committee-news",
@@ -415,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-24T03:31:54.047Z"
+      "fetched_at": "2026-08-25T03:26:14.747Z"
     },
     {
       "id": "energy-ministry-news",
@@ -427,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-24T03:31:54.047Z"
+      "fetched_at": "2026-08-25T03:26:14.747Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -439,7 +439,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-24T03:31:54.047Z"
+      "fetched_at": "2026-08-25T03:26:14.747Z"
     },
     {
       "id": "justice-ministry-news",
@@ -448,10 +448,10 @@
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
       "ok": true,
-      "candidate_count": 1,
-      "excluded_count": 11,
+      "candidate_count": 0,
+      "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-08-24T03:31:54.047Z"
+      "fetched_at": "2026-08-25T03:26:14.747Z"
     }
   ],
   "reform_packages": [
@@ -1679,24 +1679,24 @@
       }
     },
     {
-      "package_id": "pkg-monetary-prudential-parameters-2026-08-11",
+      "package_id": "pkg-monetary-prudential-parameters-2026-08-18",
       "title": "Monetary and financial-sector parameter reform",
       "policy_area": "Monetary policy and prudential regulation",
       "reform_category": "monetary_policy",
-      "current_stage": "Rules amended",
-      "current_stage_date": "2026-08-11",
+      "current_stage": "Instructions issued",
+      "current_stage_date": "2026-08-18",
       "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-08-11",
+      "next_milestone_date": "2026-08-18",
       "responsible_institutions": [
         "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
       ],
-      "legal_basis": "Verified official source event: 2692-1-сон 11.08.2026. Tijorat banklari tomonidan jalb qilinadigan depozitlar (omonatlar) boʻyicha foiz stavkalarini shakllantirish mexanizmi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida.",
+      "legal_basis": "Verified official source event: 444-сон 18.08.2026. Jahon banki ishtirokida “Oʻzbekistonda gaz sizib chiqishlarini bartaraf etish mexanizmini yaratish” loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida.",
       "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
       "short_summary": "The cited official document updates monetary policy and prudential regulation rules or procedures.",
       "parameters_or_amounts": [
-        "amended rules"
+        "approved measures"
       ],
-      "source_confidence": "medium",
+      "source_confidence": "high",
       "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
       "model_relevance": [
         "Inflation",
@@ -1711,7 +1711,7 @@
       "measure_tracks": [
         {
           "id": "monetary-prudential-parameters-measure-1",
-          "label": "amended rules",
+          "label": "approved measures",
           "status": "source verified"
         }
       ],
@@ -1826,6 +1826,21 @@
             "source-event-2026-08-11-2692-1-11-08-2026-tijorat-banklari-tomonidan-jalb-qilinadigan-depozit"
           ],
           "confidence": "medium"
+        },
+        {
+          "id": "monetary-prudential-parameters-instructions_issued-2026-08-18",
+          "label": "official measure recorded",
+          "date": "2026-08-18",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-18-444-18-08-2026-jahon-banki-ishtirokida-o-zbekistonda-gaz-sizib-chiqis"
+          ],
+          "confidence": "high"
         }
       ],
       "official_source_events": [
@@ -2030,22 +2045,50 @@
               "uz": "verified"
             }
           }
+        },
+        {
+          "id": "source-event-2026-08-18-444-18-08-2026-jahon-banki-ishtirokida-o-zbekistonda-gaz-sizib-chiqis",
+          "title": "444-сон 18.08.2026. Jahon banki ishtirokida “Oʻzbekistonda gaz sizib chiqishlarini bartaraf etish mexanizmini yaratish” loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/-8419973",
+          "source_published_at": "2026-08-18",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-25T03:26:14.747Z",
+          "localized": {
+            "title": {
+              "uz": "444-сон 18.08.2026. Jahon banki ishtirokida “Oʻzbekistonda gaz sizib chiqishlarini bartaraf etish mexanizmini yaratish” loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/-8419973",
+              "uz": "https://lex.uz/uz/docs/-8419973"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
         }
       ],
       "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
       "digest": {
-        "changed": "amended rules",
+        "changed": "approved measures",
         "applies_to": "Monetary policy and prudential regulation",
-        "effective_status": "Rules amended (2026-08-11)",
-        "document": "2692-1-сон 11.08.2026. Tijorat banklari tomonidan jalb qilinadigan depozitlar (omonatlar) boʻyicha foiz stavkalarini shakllantirish mexanizmi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
+        "effective_status": "Instructions issued (2026-08-18)",
+        "document": "444-сон 18.08.2026. Jahon banki ishtirokida “Oʻzbekistonda gaz sizib chiqishlarini bartaraf etish mexanizmini yaratish” loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida"
       },
       "localized": {
         "title": {
-          "uz": "2692-1-сон 11.08.2026. Tijorat banklari tomonidan jalb qilinadigan depozitlar (omonatlar) boʻyicha foiz stavkalarini shakllantirish mexanizmi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
+          "uz": "444-сон 18.08.2026. Jahon banki ishtirokida “Oʻzbekistonda gaz sizib chiqishlarini bartaraf etish mexanizmini yaratish” loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida"
         },
         "short_summary": {
           "ru": "Эффективно внедряются новые инструменты финансирования.",
-          "uz": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
+          "uz": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
         },
         "parameters_or_amounts": {
           "ru": [
@@ -2053,7 +2096,7 @@
             "Особое внимание уделено расширению использования инструментов Группы Банка по поддержке развития малого и среднего предпринимательства, реализации мер по сокращению бедности, совместному продвижению программ приватизации государственных предприятий, внедрению искусственного интеллекта в секторах экономики."
           ],
           "uz": [
-            "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
+            "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
           ]
         },
         "digest": {
@@ -2061,8 +2104,8 @@
             "changed": "Эффективно внедряются новые инструменты финансирования."
           },
           "uz": {
-            "changed": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement.",
-            "document": "2692-1-сон 11.08.2026. Tijorat banklari tomonidan jalb qilinadigan depozitlar (omonatlar) boʻyicha foiz stavkalarini shakllantirish mexanizmi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
+            "changed": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program.",
+            "document": "444-сон 18.08.2026. Jahon banki ishtirokida “Oʻzbekistonda gaz sizib chiqishlarini bartaraf etish mexanizmini yaratish” loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida"
           }
         }
       }
@@ -5225,7 +5268,7 @@
         ]
       },
       {
-        "package_id": "pkg-monetary-prudential-parameters-2026-08-11",
+        "package_id": "pkg-monetary-prudential-parameters-2026-08-18",
         "active_lenses": [
           {
             "model_id": "QPM",
