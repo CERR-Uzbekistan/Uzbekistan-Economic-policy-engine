@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-09-08T07:23:04.458Z",
+  "generated_at": "2026-09-10T07:29:07.443Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -303,12 +303,11 @@
       "url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
       "parser": "lexuz-official-search",
       "fetch_url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
-      "ok": false,
-      "candidate_count": 0,
+      "ok": true,
+      "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-08T07:23:04.458Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-09-10T07:29:07.443Z"
     },
     {
       "id": "president-reform-news",
@@ -320,7 +319,7 @@
       "candidate_count": 8,
       "excluded_count": 4,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-08T07:23:04.458Z"
+      "fetched_at": "2026-09-10T07:29:07.443Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -332,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-08T07:23:04.458Z"
+      "fetched_at": "2026-09-10T07:29:07.443Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -344,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-08T07:23:04.458Z"
+      "fetched_at": "2026-09-10T07:29:07.443Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -356,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-08T07:23:04.458Z"
+      "fetched_at": "2026-09-10T07:29:07.443Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -368,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-08T07:23:04.458Z"
+      "fetched_at": "2026-09-10T07:29:07.443Z"
     },
     {
       "id": "cbu-policy-news",
@@ -380,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 362,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-08T07:23:04.458Z"
+      "fetched_at": "2026-09-10T07:29:07.443Z"
     },
     {
       "id": "customs-committee-news",
@@ -392,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-08T07:23:04.458Z"
+      "fetched_at": "2026-09-10T07:29:07.443Z"
     },
     {
       "id": "mef-policy-news",
@@ -404,7 +403,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-08T07:23:04.458Z"
+      "fetched_at": "2026-09-10T07:29:07.443Z"
     },
     {
       "id": "tax-committee-news",
@@ -416,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-08T07:23:04.458Z"
+      "fetched_at": "2026-09-10T07:29:07.443Z"
     },
     {
       "id": "energy-ministry-news",
@@ -424,12 +423,11 @@
       "url": "https://gov.uz/en/minenergy/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": false,
+      "ok": true,
       "candidate_count": 0,
-      "excluded_count": 0,
+      "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-08T07:23:04.458Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-09-10T07:29:07.443Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -441,7 +439,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-08T07:23:04.458Z",
+      "fetched_at": "2026-09-10T07:29:07.443Z",
       "error": "TypeError: fetch failed"
     },
     {
@@ -454,28 +452,28 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-08T07:23:04.458Z",
+      "fetched_at": "2026-09-10T07:29:07.443Z",
       "error": "TypeError: fetch failed"
     }
   ],
   "reform_packages": [
     {
-      "package_id": "pkg-tax-administration-incentives-2026-09-02",
+      "package_id": "pkg-tax-administration-incentives-2026-09-09",
       "title": "Tax administration and investment incentive reform",
       "policy_area": "Tax administration and fiscal incentives",
       "reform_category": "fiscal_tax",
-      "current_stage": "Implementation started",
+      "current_stage": "Instructions issued",
       "current_stage_date": "2026-11-07",
       "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-09-02",
+      "next_milestone_date": "2026-09-09",
       "responsible_institutions": [
         "Official website of the President of the Republic of Uzbekistan"
       ],
-      "legal_basis": "Verified official source event: New data management model to be introduced in the national statistical system.",
+      "legal_basis": "Verified official source event: Efforts to ensure employment and increase household incomes critically reviewed.",
       "official_basis": "Official website of the President of the Republic of Uzbekistan",
       "short_summary": "The cited official document updates tax administration and fiscal incentives rules or procedures.",
       "parameters_or_amounts": [
-        "introduced rules"
+        "verified official measure"
       ],
       "source_confidence": "high",
       "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
@@ -492,7 +490,7 @@
       "measure_tracks": [
         {
           "id": "tax-administration-incentives-measure-1",
-          "label": "introduced rules",
+          "label": "verified official measure",
           "status": "source verified"
         }
       ],
@@ -737,6 +735,21 @@
           "evidence_type": "official_policy_announcement",
           "source_event_ids": [
             "source-event-2026-09-02-new-data-management-model-to-be-introduced-in-the-national-statistica"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "tax-administration-incentives-instructions_issued-2026-09-09",
+          "label": "official measure recorded",
+          "date": "2026-09-09",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-09-09-efforts-to-ensure-employment-and-increase-household-incomes-criticall"
           ],
           "confidence": "high"
         },
@@ -1189,6 +1202,39 @@
           }
         },
         {
+          "id": "source-event-2026-09-09-efforts-to-ensure-employment-and-increase-household-incomes-criticall",
+          "title": "Efforts to ensure employment and increase household incomes critically reviewed",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9594",
+          "source_published_at": "2026-09-09",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure, parameter_change; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-09-10T07:29:07.443Z",
+          "localized": {
+            "title": {
+              "en": "Efforts to ensure employment and increase household incomes critically reviewed",
+              "ru": "Критически проанализирована работа по обеспечению занятости и повышению доходов населения",
+              "uz": "Аҳоли бандлиги ва даромадини ошириш бўйича ишлар танқидий таҳлил қилинди"
+            },
+            "summary": {
+              "ru": "В этой связи подчеркнуто: если предприниматели предлагают готовые проекты по созданию детских садов, школ и техникумов и намерены бесплатно обучать детей из нуждающихся семей, государство готово выставлять земельные участки на аукцион со стартовой ценой 1 миллион сумов. Работа будет вестись в уведомительном порядке.",
+              "uz": "Унда ҳудудларда ишни ташкил этиш тартиби тубдан ўзгартирилиб, асосий ваколат ва ресурсларни туман даражасига тушириш белгиланганди. Янги тизимга мувофиқ, ҳар бир вилоят ва туманда ҳоким бошчилигида штаблар ташкил этилиб, бандлик идоралари ва иқтисодий комплекс ташкилотлари одамларни иш билан таъминлаш ва даромадини ошириш масалаларини жойнинг ўзида ҳал қилиши лозим."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9594",
+              "ru": "https://president.uz/ru/lists/view/9594",
+              "uz": "https://president.uz/uz/lists/view/9594"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
           "id": "source-event-2026-11-07-o-rq-1162-05-08-2026-avtomobil-yo-llari-to-g-risida",
           "title": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida",
           "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
@@ -1216,9 +1262,9 @@
       ],
       "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
       "digest": {
-        "changed": "introduced rules",
+        "changed": "verified official measure",
         "applies_to": "Tax administration and fiscal incentives",
-        "effective_status": "Implementation started (2026-11-07)",
+        "effective_status": "Instructions issued (2026-11-07)",
         "document": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida"
       },
       "localized": {
@@ -1226,55 +1272,50 @@
           "uz": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida"
         },
         "short_summary": {
-          "ru": "Кроме того, будут переоценены показатели национальных счетов за 2017–2025 годы.",
-          "uz": "Бундай ўзгаришлар аҳоли таркиби, яшаш манзиллари, ер ресурслари, қишлоқ хўжалиги ҳамда озиқ-овқат манбалари тўғрисида аниқ ва ишончли маълумотларга бўлган эҳтиёжни оширди."
+          "ru": "В этой связи подчеркнуто: если предприниматели предлагают готовые проекты по созданию детских садов, школ и техникумов и намерены бесплатно обучать детей из нуждающихся семей, государство готово выставлять земельные участки на аукцион со стартовой ценой 1 миллион сумов.",
+          "uz": "Унда ҳудудларда ишни ташкил этиш тартиби тубдан ўзгартирилиб, асосий ваколат ва ресурсларни туман даражасига тушириш белгиланганди."
         },
         "parameters_or_amounts": {
           "ru": [
-            "Кроме того, будут переоценены показатели национальных счетов за 2017–2025 годы.",
-            "Будут обновлены статистические регистры предприятий и организаций и создана надежная основа для проведения выборочных наблюдений.",
-            "Для формирования единого подхода к управлению данными предложено создать Комиссию по управлению данными с участием министерств и ведомств.",
-            "До 1 июля 2027 года планируется запустить Национальную платформу данных.",
-            "Кроме того, предложено создать проектный офис по работе с открытыми данными и внедрить для государственных органов «Рейтинг открытых данных».",
-            "В целях расширения подготовки кадров и исследований в сфере статистики планируется создать Школу управления на основе данных.",
-            "Использование цифровых технологий в национальной статистической системе также будет расширено.",
-            "До 1 июля 2027 года статистические данные будут публиковаться в форматах, пригодных для обработки системами искусственного интеллекта."
+            "В этой связи подчеркнуто: если предприниматели предлагают готовые проекты по созданию детских садов, школ и техникумов и намерены бесплатно обучать детей из нуждающихся семей, государство готово выставлять земельные участки на аукцион со стартовой ценой 1 миллион сумов.",
+            "Работа будет вестись в уведомительном порядке.",
+            "Даны поручения по выявлению свободных территорий вокруг многоквартирных домов, упорядочению самовольно занятых участков, созданию детских площадок, спортивных и фитнес-зон, зеленых пространств общего пользования, а также освещению улиц."
           ],
           "uz": [
-            "Бундай ўзгаришлар аҳоли таркиби, яшаш манзиллари, ер ресурслари, қишлоқ хўжалиги ҳамда озиқ-овқат манбалари тўғрисида аниқ ва ишончли маълумотларга бўлган эҳтиёжни оширди.",
-            "Жараёнларнинг рақамлаштирилгани ҳисобига рўйхатга олиш харажати аҳоли жон бошига 1,5 минг сўмдан ошмади.",
-            "Шу муносабат билан жорий йилнинг 15 октябридан 30 ноябрига қадар бизнесни рўйхатга олиш тадбирини ўтказиш таклифи маъқулланди.",
-            "Маълумотларни бошқариш бўйича ягона ёндашувни шакллантириш мақсадида вазирлик ва идоралар иштирокида Маълумотларни бошқариш комиссиясини ташкил этиш таклиф қилинди.",
-            "Комиссия жорий йил 1 декабрга қадар давлат органлари ва ташкилотларидаги маълумотларни бошқариш тизимларини тўлиқ хатловдан ўтказади, 2027 йил 1 майгача уларни такомиллаштириш бўйича чора-тадбирлар режасини тасдиқлайди.",
-            "2027 йил 1 июлга қадар Миллий маълумотлар платформасини ишга тушириш режалаштирилган.",
-            "Шунингдек, Очиқ маълумотлар билан ишлаш бўйича лойиҳа офисини ташкил этиш ва давлат идоралари учун “Очиқ маълумотлар рейтинги”ни жорий қилиш таклиф этилди.",
-            "Статистика соҳасида кадрлар тайёрлаш ва тадқиқотларни кенгайтириш мақсадида Маълумотларга асосланган бошқарув мактабини ташкил этиш режалаштирилмоқда."
+            "Унда ҳудудларда ишни ташкил этиш тартиби тубдан ўзгартирилиб, асосий ваколат ва ресурсларни туман даражасига тушириш белгиланганди.",
+            "Янги тизимга мувофиқ, ҳар бир вилоят ва туманда ҳоким бошчилигида штаблар ташкил этилиб, бандлик идоралари ва иқтисодий комплекс ташкилотлари одамларни иш билан таъминлаш ва даромадини ошириш масалаларини жойнинг ўзида ҳал қилиши лозим.",
+            "Қишлоқ туманларида эҳтиёжманд оила аъзосини ишга олган корхоналар учун 1 октябрдан ушбу ходим бўйича ижтимоий солиқ ставкаси 2 фоиз бўлиши белгиланди.",
+            "Оқолтин туманида тадбиркор томонидан 880 ўринли хусусий мактаб ташкил этилиб, эҳтиёжманд оилаларнинг 110 нафар фарзанди бепул ўқитилаётгани ижобий мисол сифатида келтирилди.",
+            "Шу боис, кўп квартирали уйларнинг биринчи қаватидаги хонадонларни нотурар жой тоифасига ўтказмасдан, савдо ва сервис фаолиятига мослаштиришга рухсат бериш таклиф этилди.",
+            "Мутасаддиларга бир ой муддатда бундай хонадонларда ташкил этилиши мумкин бўлган хизмат турлари рўйхати ва хавфсизлик талабларини ишлаб чиқиш топширилди.",
+            "Мактаб, техникум, олийгоҳ ва бошқа ташкилот биноларининг бўш хоналарида, асосий хоналарнинг дарсдан ташқари вақтларида ёшлар, аёллар ва ишсиз фуқароларни касб-ҳунар ҳамда тилларга ўқитиш муҳитини яратиш вазифаси белгиланди.",
+            "Яқинда имзоланган Президент фармони билан маҳалла тизими билан ишлаш бўйича Бош вазир ўринбосари лавозими жорий этилди."
           ]
         },
         "digest": {
           "ru": {
-            "changed": "Кроме того, будут переоценены показатели национальных счетов за 2017–2025 годы."
+            "changed": "В этой связи подчеркнуто: если предприниматели предлагают готовые проекты по созданию детских садов, школ и техникумов и намерены бесплатно обучать детей из нуждающихся семей, государство готово выставлять земельные участки на аукцион со стартовой ценой 1 миллион сумов."
           },
           "uz": {
-            "changed": "Бундай ўзгаришлар аҳоли таркиби, яшаш манзиллари, ер ресурслари, қишлоқ хўжалиги ҳамда озиқ-овқат манбалари тўғрисида аниқ ва ишончли маълумотларга бўлган эҳтиёжни оширди.",
+            "changed": "Унда ҳудудларда ишни ташкил этиш тартиби тубдан ўзгартирилиб, асосий ваколат ва ресурсларни туман даражасига тушириш белгиланганди.",
             "document": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida"
           }
         }
       }
     },
     {
-      "package_id": "pkg-customs-clearance-digitalization-2026-09-07",
+      "package_id": "pkg-customs-clearance-digitalization-2026-09-08",
       "title": "Risk-based customs clearance and electronic declaration reform",
       "policy_area": "Trade facilitation and customs digitalization",
       "reform_category": "trade_customs",
       "current_stage": "Instructions issued",
-      "current_stage_date": "2026-09-07",
+      "current_stage_date": "2026-09-08",
       "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-09-07",
+      "next_milestone_date": "2026-09-08",
       "responsible_institutions": [
         "Official website of the President of the Republic of Uzbekistan"
       ],
-      "legal_basis": "Verified official source events: NPP construction progress and satellite town project reviewed; President of Uzbekistan receives WCO Secretary General.",
+      "legal_basis": "Verified official source events: President of Uzbekistan receives WCO Secretary General; Presidents of Uzbekistan and Serbia participate in joint business forum.",
       "official_basis": "Official website of the President of the Republic of Uzbekistan",
       "short_summary": "Customs clearance, declaration, and border-process measures are updated.",
       "parameters_or_amounts": [
@@ -1507,6 +1548,21 @@
           "evidence_type": "official_policy_announcement",
           "source_event_ids": [
             "source-event-2026-09-07-president-of-uzbekistan-receives-wco-secretary-general"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "customs-clearance-digitalization-instructions_issued-2026-09-08",
+          "label": "official measure recorded",
+          "date": "2026-09-08",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-09-08-presidents-of-uzbekistan-and-serbia-participate-in-joint-business-for"
           ],
           "confidence": "high"
         }
@@ -1894,42 +1950,73 @@
               "uz": "verified"
             }
           }
+        },
+        {
+          "id": "source-event-2026-09-08-presidents-of-uzbekistan-and-serbia-participate-in-joint-business-for",
+          "title": "Presidents of Uzbekistan and Serbia participate in joint business forum",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9592",
+          "source_published_at": "2026-09-08",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure, Trade or customs modernization with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-09-10T07:29:07.443Z",
+          "localized": {
+            "title": {
+              "en": "Presidents of Uzbekistan and Serbia participate in joint business forum",
+              "ru": "Президенты Узбекистана и Сербии приняли участие в совместном бизнес-форуме",
+              "uz": "Ўзбекистон ва Сербия Президентлари қўшма бизнес форумида иштирок этдилар"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure, Trade or customs modernization with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+              "uz": "Ўзаро етказиб бериладиган маҳсулотлар турини кенгайтириш ва божхона тартиб-таомилларини соддалаштириш ҳисобига ўзаро савдо ҳажмини бир неча баробар ошириш бўйича марра белгиланган."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9592",
+              "ru": "https://president.uz/ru/lists/view/9592",
+              "uz": "https://president.uz/uz/lists/view/9592"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
         }
       ],
       "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
       "digest": {
         "changed": "Customs and trade-facilitation procedures are updated.",
         "applies_to": "Trade facilitation and customs digitalization",
-        "effective_status": "Instructions issued (2026-09-07)",
-        "document": "President of Uzbekistan receives WCO Secretary General"
+        "effective_status": "Instructions issued (2026-09-08)",
+        "document": "Presidents of Uzbekistan and Serbia participate in joint business forum"
       },
       "localized": {
         "title": {
-          "ru": "Президент Узбекистана принял генерального секретаря Всемирной таможенной организации",
-          "uz": "Ўзбекистон Президенти Жаҳон божхона ташкилоти бош котибини қабул қилди"
+          "ru": "Президенты Узбекистана и Сербии приняли участие в совместном бизнес-форуме",
+          "uz": "Ўзбекистон ва Сербия Президентлари қўшма бизнес форумида иштирок этдилар"
         },
         "short_summary": {
           "ru": "Активно внедряются цифровые решения, обеспечивающие эффективное взаимодействие таможенных органов с бизнесом, сокращаются административные формальности и минимизируются коррупционные риски.",
-          "uz": "Ўзбекистонда божхона соҳасида амалга оширилган кенг кўламли ислоҳотлар натижасида бугунги кунда экспорт юкларининг 94 фоизи ва импорт юкларининг 87 фоизи соддалаштирилган тартибда расмийлаштирилмоқда."
+          "uz": "Ўзаро етказиб бериладиган маҳсулотлар турини кенгайтириш ва божхона тартиб-таомилларини соддалаштириш ҳисобига ўзаро савдо ҳажмини бир неча баробар ошириш бўйича марра белгиланган."
         },
         "parameters_or_amounts": {
           "ru": [
             "Активно внедряются цифровые решения, обеспечивающие эффективное взаимодействие таможенных органов с бизнесом, сокращаются административные формальности и минимизируются коррупционные риски."
           ],
           "uz": [
-            "Ўзбекистонда божхона соҳасида амалга оширилган кенг кўламли ислоҳотлар натижасида бугунги кунда экспорт юкларининг 94 фоизи ва импорт юкларининг 87 фоизи соддалаштирилган тартибда расмийлаштирилмоқда.",
-            "Божхона органларининг тадбиркорлик субъектлари билан самарали ҳамкорлигини таъминлайдиган рақамли ечимлар фаол жорий этилмоқда, маъмурий тўсиқлар қисқартирилиб, коррупциявий хавфлар камайтирилмоқда.",
-            "Учрашувда божхона тартиб-таомилларини янада рақамлаштириш ва уйғунлаштириш, норматив-ҳуқуқий базани такомиллаштириш ҳамда кадрларни ўқитиш ва уларнинг малакасини ошириш масалаларига алоҳида эътибор қаратилди."
+            "Ўзаро етказиб бериладиган маҳсулотлар турини кенгайтириш ва божхона тартиб-таомилларини соддалаштириш ҳисобига ўзаро савдо ҳажмини бир неча баробар ошириш бўйича марра белгиланган."
           ]
         },
         "digest": {
           "ru": {
             "changed": "Активно внедряются цифровые решения, обеспечивающие эффективное взаимодействие таможенных органов с бизнесом, сокращаются административные формальности и минимизируются коррупционные риски.",
-            "document": "Президент Узбекистана принял генерального секретаря Всемирной таможенной организации"
+            "document": "Президенты Узбекистана и Сербии приняли участие в совместном бизнес-форуме"
           },
           "uz": {
-            "changed": "Ўзбекистонда божхона соҳасида амалга оширилган кенг кўламли ислоҳотлар натижасида бугунги кунда экспорт юкларининг 94 фоизи ва импорт юкларининг 87 фоизи соддалаштирилган тартибда расмийлаштирилмоқда.",
-            "document": "Ўзбекистон Президенти Жаҳон божхона ташкилоти бош котибини қабул қилди"
+            "changed": "Ўзаро етказиб бериладиган маҳсулотлар турини кенгайтириш ва божхона тартиб-таомилларини соддалаштириш ҳисобига ўзаро савдо ҳажмини бир неча баробар ошириш бўйича марра белгиланган.",
+            "document": "Ўзбекистон ва Сербия Президентлари қўшма бизнес форумида иштирок этдилар"
           }
         }
       }
@@ -4963,7 +5050,7 @@
       "title": "Model routing notes for current reform packages",
       "summary": "Internal package-routing note retained for non-public workflow compatibility.",
       "package_ids": [
-        "pkg-customs-clearance-digitalization-2026-09-07",
+        "pkg-customs-clearance-digitalization-2026-09-08",
         "pkg-public-transport-system-2026-05-13",
         "pkg-food-safety-veterinary-agrologistics-2026-06-11"
       ],
@@ -5392,7 +5479,7 @@
     ],
     "package_links": [
       {
-        "package_id": "pkg-tax-administration-incentives-2026-09-02",
+        "package_id": "pkg-tax-administration-incentives-2026-09-09",
         "active_lenses": [
           {
             "model_id": "DFM",
@@ -5434,7 +5521,7 @@
         ]
       },
       {
-        "package_id": "pkg-customs-clearance-digitalization-2026-09-07",
+        "package_id": "pkg-customs-clearance-digitalization-2026-09-08",
         "active_lenses": [
           {
             "model_id": "DFM",
