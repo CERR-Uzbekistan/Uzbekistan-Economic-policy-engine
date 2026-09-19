@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-09-18T07:34:05.500Z",
+  "generated_at": "2026-09-19T07:29:37.772Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -307,7 +307,7 @@
       "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-18T07:34:05.500Z"
+      "fetched_at": "2026-09-19T07:29:37.772Z"
     },
     {
       "id": "president-reform-news",
@@ -316,10 +316,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 1,
-      "excluded_count": 11,
+      "candidate_count": 9,
+      "excluded_count": 3,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-18T07:34:05.500Z"
+      "fetched_at": "2026-09-19T07:29:37.772Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-18T07:34:05.500Z"
+      "fetched_at": "2026-09-19T07:29:37.772Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-18T07:34:05.500Z"
+      "fetched_at": "2026-09-19T07:29:37.772Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-18T07:34:05.500Z"
+      "fetched_at": "2026-09-19T07:29:37.772Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-18T07:34:05.500Z"
+      "fetched_at": "2026-09-19T07:29:37.772Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 371,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-18T07:34:05.500Z"
+      "fetched_at": "2026-09-19T07:29:37.772Z"
     },
     {
       "id": "customs-committee-news",
@@ -391,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-18T07:34:05.500Z"
+      "fetched_at": "2026-09-19T07:29:37.772Z"
     },
     {
       "id": "mef-policy-news",
@@ -403,7 +403,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-18T07:34:05.500Z"
+      "fetched_at": "2026-09-19T07:29:37.772Z"
     },
     {
       "id": "tax-committee-news",
@@ -415,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-18T07:34:05.500Z"
+      "fetched_at": "2026-09-19T07:29:37.772Z"
     },
     {
       "id": "energy-ministry-news",
@@ -427,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-18T07:34:05.500Z"
+      "fetched_at": "2026-09-19T07:29:37.772Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -435,12 +435,11 @@
       "url": "https://gov.uz/en/miit/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": false,
+      "ok": true,
       "candidate_count": 0,
-      "excluded_count": 0,
+      "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-18T07:34:05.500Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-09-19T07:29:37.772Z"
     },
     {
       "id": "justice-ministry-news",
@@ -448,12 +447,11 @@
       "url": "https://gov.uz/en/adliya/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": false,
-      "candidate_count": 0,
-      "excluded_count": 0,
+      "ok": true,
+      "candidate_count": 2,
+      "excluded_count": 10,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-18T07:34:05.500Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-09-19T07:29:37.772Z"
     }
   ],
   "reform_packages": [
@@ -1299,6 +1297,602 @@
           "uz": {
             "changed": "Унда ҳудудларда ишни ташкил этиш тартиби тубдан ўзгартирилиб, асосий ваколат ва ресурсларни туман даражасига тушириш белгиланганди.",
             "document": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida"
+          }
+        }
+      }
+    },
+    {
+      "package_id": "pkg-monetary-prudential-parameters-2026-09-17",
+      "title": "Monetary and financial-sector parameter reform",
+      "policy_area": "Monetary policy and prudential regulation",
+      "reform_category": "monetary_policy",
+      "current_stage": "Multiple changes published",
+      "current_stage_date": "2026-09-17",
+      "next_milestone": "No future milestone published in verified source",
+      "next_milestone_date": "2026-09-17",
+      "responsible_institutions": [
+        "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+      ],
+      "legal_basis": "Verified official source events: 3941-сон 17.09.2026. Qimmatli qogʻozlar emitentlarining reytingini yuritish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida; PQ-330-сон 17.09.2026. “Qoraqalpogʻiston Respublikasida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida; PQ-331-сон 17.09.2026. “Buxoro va Navoiy viloyatlarida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida; PQ-332-сон 17.09.2026. “Surxondaryo viloyatida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida.",
+      "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+      "short_summary": "4 official measures update monetary policy and prudential regulation rules or procedures.",
+      "parameters_or_amounts": [
+        "approved regulation",
+        "approved measures"
+      ],
+      "source_confidence": "high",
+      "why_tracked": "The package is assembled from 4 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "model_relevance": [
+        "Inflation",
+        "Credit conditions",
+        "Financial stability"
+      ],
+      "policy_channels": [
+        "Inflation",
+        "Credit conditions",
+        "Financial stability"
+      ],
+      "measure_tracks": [
+        {
+          "id": "monetary-prudential-parameters-measure-1",
+          "label": "approved regulation",
+          "status": "approved"
+        },
+        {
+          "id": "monetary-prudential-parameters-measure-2",
+          "label": "approved measures",
+          "status": "source verified"
+        },
+        {
+          "id": "monetary-prudential-parameters-measure-3",
+          "label": "approved measures",
+          "status": "source verified"
+        },
+        {
+          "id": "monetary-prudential-parameters-measure-4",
+          "label": "approved measures",
+          "status": "source verified"
+        }
+      ],
+      "implementation_milestones": [
+        {
+          "id": "monetary-prudential-parameters-instructions_issued-2026-06-29",
+          "label": "official measure recorded",
+          "date": "2026-06-29",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-06-29-president-of-uzbekistan-discusses-further-development-of-partnership-"
+          ],
+          "confidence": "medium"
+        },
+        {
+          "id": "monetary-prudential-parameters-amended-2026-07-15",
+          "label": "rules amended",
+          "date": "2026-07-15",
+          "date_precision": "day",
+          "event_type": "amended",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-07-15-2634-10-15-07-2026-budjet-tashkilotlari-va-budjet-mablag-lari-oluvchi"
+          ],
+          "confidence": "high",
+          "related_next_milestone_ids": [
+            "monetary-prudential-parameters-amended-2026-07-16"
+          ]
+        },
+        {
+          "id": "monetary-prudential-parameters-amended-2026-07-16",
+          "label": "rules amended",
+          "date": "2026-07-16",
+          "date_precision": "day",
+          "event_type": "amended",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-07-16-3281-6-16-07-2026-o-zbekiston-respublikasida-valyuta-operatsiyalarini"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "monetary-prudential-parameters-amended-2026-08-03",
+          "label": "rules amended",
+          "date": "2026-08-03",
+          "date_precision": "day",
+          "event_type": "amended",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-03-3030-12-03-08-2026-bank-xizmatlari-iste-molchilari-bilan-o-zaro-munos"
+          ],
+          "confidence": "medium",
+          "related_next_milestone_ids": [
+            "monetary-prudential-parameters-amended-2026-08-04"
+          ]
+        },
+        {
+          "id": "monetary-prudential-parameters-approved-2026-08-04",
+          "label": "official measure approved",
+          "date": "2026-08-04",
+          "date_precision": "day",
+          "event_type": "approved",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-04-3917-04-08-2026-o-zbekiston-respublikasi-moliyaviy-hisobotning-milliy"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "monetary-prudential-parameters-amended-2026-08-04",
+          "label": "rules amended",
+          "date": "2026-08-04",
+          "date_precision": "day",
+          "event_type": "amended",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-04-3656-1-04-08-2026-mikromoliya-tashkiloti-va-bank-faoliyatini-o-zgarti"
+          ],
+          "confidence": "medium"
+        },
+        {
+          "id": "monetary-prudential-parameters-amended-2026-08-11",
+          "label": "rules amended",
+          "date": "2026-08-11",
+          "date_precision": "day",
+          "event_type": "amended",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-11-2692-1-11-08-2026-tijorat-banklari-tomonidan-jalb-qilinadigan-depozit"
+          ],
+          "confidence": "medium"
+        },
+        {
+          "id": "monetary-prudential-parameters-instructions_issued-2026-08-18",
+          "label": "official measure recorded",
+          "date": "2026-08-18",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-18-444-18-08-2026-jahon-banki-ishtirokida-o-zbekistonda-gaz-sizib-chiqis"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "monetary-prudential-parameters-approved-2026-09-17",
+          "label": "official measure approved",
+          "date": "2026-09-17",
+          "date_precision": "day",
+          "event_type": "approved",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-09-17-3941-17-09-2026-qimmatli-qog-ozlar-emitentlarining-reytingini-yuritis"
+          ],
+          "confidence": "high",
+          "related_next_milestone_ids": [
+            "monetary-prudential-parameters-instructions_issued-2026-09-17"
+          ]
+        },
+        {
+          "id": "monetary-prudential-parameters-instructions_issued-2026-09-17",
+          "label": "official measure recorded",
+          "date": "2026-09-17",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-09-17-pq-330-17-09-2026-qoraqalpog-iston-respublikasida-qattiq-maishiy-chiq"
+          ],
+          "confidence": "high",
+          "related_next_milestone_ids": [
+            "monetary-prudential-parameters-instructions_issued-2026-09-17"
+          ]
+        }
+      ],
+      "official_source_events": [
+        {
+          "id": "source-event-2026-06-29-president-of-uzbekistan-discusses-further-development-of-partnership-",
+          "title": "President of Uzbekistan discusses further development of partnership with the World Bank",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9364",
+          "source_published_at": "2026-06-29",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-07-03T06:09:10.444Z",
+          "localized": {
+            "title": {
+              "en": "President of Uzbekistan discusses further development of partnership with the World Bank",
+              "ru": "Президент Узбекистана обсудил дальнейшее развитие партнёрства со Всемирным банком",
+              "uz": "Ўзбекистон Президенти Жаҳон банки билан шерикликни янада ривожлантириш масалаларини муҳокама қилди"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "Эффективно внедряются новые инструменты финансирования. Особое внимание уделено расширению использования инструментов Группы Банка по поддержке развития малого и среднего предпринимательства, реализации мер по сокращению бедности, совместному продвижению программ приватизации государственных предприятий, внедрению искусственного интеллекта в секторах экономики.",
+              "uz": "Молиялаштиришнинг янги механизмлари самарали жорий этилмоқда."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9364",
+              "ru": "https://president.uz/ru/lists/view/9364",
+              "uz": "https://president.uz/uz/lists/view/9364"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-07-15-2634-10-15-07-2026-budjet-tashkilotlari-va-budjet-mablag-lari-oluvchi",
+          "title": "2634-10-сон 15.07.2026. Budjet tashkilotlari va budjet mablagʻlari oluvchilarning xarajatlar smetasi va shtat jadvallarini tuzish, tasdiqlash va roʻyxatdan oʻtkazish tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/8329190",
+          "source_published_at": "2026-07-15",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "amended",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-07-18T05:09:07.754Z",
+          "localized": {
+            "title": {
+              "uz": "2634-10-сон 15.07.2026. Budjet tashkilotlari va budjet mablagʻlari oluvchilarning xarajatlar smetasi va shtat jadvallarini tuzish, tasdiqlash va roʻyxatdan oʻtkazish tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/8329190",
+              "uz": "https://lex.uz/uz/docs/8329190"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-07-16-3281-6-16-07-2026-o-zbekiston-respublikasida-valyuta-operatsiyalarini",
+          "title": "3281-6-сон 16.07.2026. Oʻzbekiston Respublikasida valyuta operatsiyalarini amalga oshirish qoidalarining 28-bandiga oʻzgartirish kiritish haqida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/8335201",
+          "source_published_at": "2026-07-16",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "amended",
+          "summary": "Included by Legal or regulatory change, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-07-18T05:09:07.754Z",
+          "localized": {
+            "title": {
+              "uz": "3281-6-сон 16.07.2026. Oʻzbekiston Respublikasida valyuta operatsiyalarini amalga oshirish qoidalarining 28-bandiga oʻzgartirish kiritish haqida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/8335201",
+              "uz": "https://lex.uz/uz/docs/8335201"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-08-03-3030-12-03-08-2026-bank-xizmatlari-iste-molchilari-bilan-o-zaro-munos",
+          "title": "3030-12 03.08.2026 Bank xizmatlari isteʼmolchilari bilan oʻzaro munosabatlarni amalga oshirishda tijorat banklarining faoliyatiga qoʻyiladigan minimal talablar toʻgʻrisidagi nizomga qoʻshimchalar va oʻzgartirish kiritish haqida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/8370274",
+          "source_published_at": "2026-08-03",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "amended",
+          "summary": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-05T05:30:46.560Z",
+          "localized": {
+            "title": {
+              "uz": "3030-12 03.08.2026 Bank xizmatlari isteʼmolchilari bilan oʻzaro munosabatlarni amalga oshirishda tijorat banklarining faoliyatiga qoʻyiladigan minimal talablar toʻgʻrisidagi nizomga qoʻshimchalar va oʻzgartirish kiritish haqida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/8370274",
+              "uz": "https://lex.uz/uz/docs/8370274"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-08-04-3656-1-04-08-2026-mikromoliya-tashkiloti-va-bank-faoliyatini-o-zgarti",
+          "title": "3656-1 04.08.2026 Mikromoliya tashkiloti va bank faoliyatini oʻzgartirish tartibi toʻgʻrisidagi nizomga oʻzgartirish va qoʻshimchalar kiritish haqida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/8371820",
+          "source_published_at": "2026-08-04",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "amended",
+          "summary": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-05T05:30:46.560Z",
+          "localized": {
+            "title": {
+              "uz": "3656-1 04.08.2026 Mikromoliya tashkiloti va bank faoliyatini oʻzgartirish tartibi toʻgʻrisidagi nizomga oʻzgartirish va qoʻshimchalar kiritish haqida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/8371820",
+              "uz": "https://lex.uz/uz/docs/8371820"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-08-04-3917-04-08-2026-o-zbekiston-respublikasi-moliyaviy-hisobotning-milliy",
+          "title": "3917-сон 04.08.2026. Oʻzbekiston Respublikasi moliyaviy hisobotning milliy standarti (77-sonli MHMS) “Nodavlat notijorat tashkilotlari uchun soddalashtirilgan buxgalteriya hisobi va moliyaviy hisobot”ni tasdiqlash haqida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/8379837",
+          "source_published_at": "2026-08-04",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "approved",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-11T04:01:37.787Z",
+          "localized": {
+            "title": {
+              "uz": "3917-сон 04.08.2026. Oʻzbekiston Respublikasi moliyaviy hisobotning milliy standarti (77-sonli MHMS) “Nodavlat notijorat tashkilotlari uchun soddalashtirilgan buxgalteriya hisobi va moliyaviy hisobot”ni tasdiqlash haqida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/8379837",
+              "uz": "https://lex.uz/uz/docs/8379837"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-08-11-2692-1-11-08-2026-tijorat-banklari-tomonidan-jalb-qilinadigan-depozit",
+          "title": "2692-1-сон 11.08.2026. Tijorat banklari tomonidan jalb qilinadigan depozitlar (omonatlar) boʻyicha foiz stavkalarini shakllantirish mexanizmi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/8395307",
+          "source_published_at": "2026-08-11",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "amended",
+          "summary": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-15T03:18:32.863Z",
+          "localized": {
+            "title": {
+              "uz": "2692-1-сон 11.08.2026. Tijorat banklari tomonidan jalb qilinadigan depozitlar (omonatlar) boʻyicha foiz stavkalarini shakllantirish mexanizmi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/8395307",
+              "uz": "https://lex.uz/uz/docs/8395307"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-08-18-444-18-08-2026-jahon-banki-ishtirokida-o-zbekistonda-gaz-sizib-chiqis",
+          "title": "444-сон 18.08.2026. Jahon banki ishtirokida “Oʻzbekistonda gaz sizib chiqishlarini bartaraf etish mexanizmini yaratish” loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/-8419973",
+          "source_published_at": "2026-08-18",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-25T03:26:14.747Z",
+          "localized": {
+            "title": {
+              "uz": "444-сон 18.08.2026. Jahon banki ishtirokida “Oʻzbekistonda gaz sizib chiqishlarini bartaraf etish mexanizmini yaratish” loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/-8419973",
+              "uz": "https://lex.uz/uz/docs/-8419973"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-09-17-3941-17-09-2026-qimmatli-qog-ozlar-emitentlarining-reytingini-yuritis",
+          "title": "3941-сон 17.09.2026. Qimmatli qogʻozlar emitentlarining reytingini yuritish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/8489227",
+          "source_published_at": "2026-09-17",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "approved",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-09-19T07:29:37.772Z",
+          "localized": {
+            "title": {
+              "uz": "3941-сон 17.09.2026. Qimmatli qogʻozlar emitentlarining reytingini yuritish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/8489227",
+              "uz": "https://lex.uz/uz/docs/8489227"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-09-17-pq-330-17-09-2026-qoraqalpog-iston-respublikasida-qattiq-maishiy-chiq",
+          "title": "PQ-330-сон 17.09.2026. “Qoraqalpogʻiston Respublikasida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/-8488547",
+          "source_published_at": "2026-09-17",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-09-19T07:29:37.772Z",
+          "localized": {
+            "title": {
+              "uz": "PQ-330-сон 17.09.2026. “Qoraqalpogʻiston Respublikasida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/-8488547",
+              "uz": "https://lex.uz/uz/docs/-8488547"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-09-17-pq-331-17-09-2026-buxoro-va-navoiy-viloyatlarida-qattiq-maishiy-chiqi",
+          "title": "PQ-331-сон 17.09.2026. “Buxoro va Navoiy viloyatlarida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/-8488615",
+          "source_published_at": "2026-09-17",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-09-19T07:29:37.772Z",
+          "localized": {
+            "title": {
+              "uz": "PQ-331-сон 17.09.2026. “Buxoro va Navoiy viloyatlarida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/-8488615",
+              "uz": "https://lex.uz/uz/docs/-8488615"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-09-17-pq-332-17-09-2026-surxondaryo-viloyatida-qattiq-maishiy-chiqindilarni",
+          "title": "PQ-332-сон 17.09.2026. “Surxondaryo viloyatida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/-8487939",
+          "source_published_at": "2026-09-17",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-09-19T07:29:37.772Z",
+          "localized": {
+            "title": {
+              "uz": "PQ-332-сон 17.09.2026. “Surxondaryo viloyatida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/-8487939",
+              "uz": "https://lex.uz/uz/docs/-8487939"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        }
+      ],
+      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
+      "digest": {
+        "changed": "approved regulation",
+        "applies_to": "Monetary policy and prudential regulation",
+        "effective_status": "Multiple changes published (2026-09-17)",
+        "document": "PQ-332-сон 17.09.2026. “Surxondaryo viloyatida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida"
+      },
+      "localized": {
+        "title": {
+          "uz": "PQ-332-сон 17.09.2026. “Surxondaryo viloyatida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida"
+        },
+        "short_summary": {
+          "ru": "Эффективно внедряются новые инструменты финансирования.",
+          "uz": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
+        },
+        "parameters_or_amounts": {
+          "ru": [
+            "Эффективно внедряются новые инструменты финансирования.",
+            "Особое внимание уделено расширению использования инструментов Группы Банка по поддержке развития малого и среднего предпринимательства, реализации мер по сокращению бедности, совместному продвижению программ приватизации государственных предприятий, внедрению искусственного интеллекта в секторах экономики."
+          ],
+          "uz": [
+            "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
+          ]
+        },
+        "digest": {
+          "ru": {
+            "changed": "Эффективно внедряются новые инструменты финансирования."
+          },
+          "uz": {
+            "changed": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program.",
+            "document": "PQ-332-сон 17.09.2026. “Surxondaryo viloyatida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida"
           }
         }
       }
@@ -2489,438 +3083,6 @@
           "uz": {
             "changed": "Ўтган йили қабул қилинган алоҳида қарорга мувофиқ, хусусий сектор иштирокида жами 164 мегаватт қувватли қарийб 3 мингта кичик ва микро ГЭС қуриш белгиланган.",
             "document": "Кичик ва микро гидроэнергетикани ривожлантириш чора-тадбирлари тақдимот қилинди"
-          }
-        }
-      }
-    },
-    {
-      "package_id": "pkg-monetary-prudential-parameters-2026-08-18",
-      "title": "Monetary and financial-sector parameter reform",
-      "policy_area": "Monetary policy and prudential regulation",
-      "reform_category": "monetary_policy",
-      "current_stage": "Instructions issued",
-      "current_stage_date": "2026-08-18",
-      "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-08-18",
-      "responsible_institutions": [
-        "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-      ],
-      "legal_basis": "Verified official source event: 444-сон 18.08.2026. Jahon banki ishtirokida “Oʻzbekistonda gaz sizib chiqishlarini bartaraf etish mexanizmini yaratish” loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida.",
-      "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-      "short_summary": "The cited official document updates monetary policy and prudential regulation rules or procedures.",
-      "parameters_or_amounts": [
-        "approved measures"
-      ],
-      "source_confidence": "high",
-      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
-      "model_relevance": [
-        "Inflation",
-        "Credit conditions",
-        "Financial stability"
-      ],
-      "policy_channels": [
-        "Inflation",
-        "Credit conditions",
-        "Financial stability"
-      ],
-      "measure_tracks": [
-        {
-          "id": "monetary-prudential-parameters-measure-1",
-          "label": "approved measures",
-          "status": "source verified"
-        }
-      ],
-      "implementation_milestones": [
-        {
-          "id": "monetary-prudential-parameters-instructions_issued-2026-06-29",
-          "label": "official measure recorded",
-          "date": "2026-06-29",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-06-29-president-of-uzbekistan-discusses-further-development-of-partnership-"
-          ],
-          "confidence": "medium"
-        },
-        {
-          "id": "monetary-prudential-parameters-amended-2026-07-15",
-          "label": "rules amended",
-          "date": "2026-07-15",
-          "date_precision": "day",
-          "event_type": "amended",
-          "responsible_institutions": [
-            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-07-15-2634-10-15-07-2026-budjet-tashkilotlari-va-budjet-mablag-lari-oluvchi"
-          ],
-          "confidence": "high",
-          "related_next_milestone_ids": [
-            "monetary-prudential-parameters-amended-2026-07-16"
-          ]
-        },
-        {
-          "id": "monetary-prudential-parameters-amended-2026-07-16",
-          "label": "rules amended",
-          "date": "2026-07-16",
-          "date_precision": "day",
-          "event_type": "amended",
-          "responsible_institutions": [
-            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-07-16-3281-6-16-07-2026-o-zbekiston-respublikasida-valyuta-operatsiyalarini"
-          ],
-          "confidence": "high"
-        },
-        {
-          "id": "monetary-prudential-parameters-amended-2026-08-03",
-          "label": "rules amended",
-          "date": "2026-08-03",
-          "date_precision": "day",
-          "event_type": "amended",
-          "responsible_institutions": [
-            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-08-03-3030-12-03-08-2026-bank-xizmatlari-iste-molchilari-bilan-o-zaro-munos"
-          ],
-          "confidence": "medium",
-          "related_next_milestone_ids": [
-            "monetary-prudential-parameters-amended-2026-08-04"
-          ]
-        },
-        {
-          "id": "monetary-prudential-parameters-approved-2026-08-04",
-          "label": "official measure approved",
-          "date": "2026-08-04",
-          "date_precision": "day",
-          "event_type": "approved",
-          "responsible_institutions": [
-            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-08-04-3917-04-08-2026-o-zbekiston-respublikasi-moliyaviy-hisobotning-milliy"
-          ],
-          "confidence": "high"
-        },
-        {
-          "id": "monetary-prudential-parameters-amended-2026-08-04",
-          "label": "rules amended",
-          "date": "2026-08-04",
-          "date_precision": "day",
-          "event_type": "amended",
-          "responsible_institutions": [
-            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-08-04-3656-1-04-08-2026-mikromoliya-tashkiloti-va-bank-faoliyatini-o-zgarti"
-          ],
-          "confidence": "medium"
-        },
-        {
-          "id": "monetary-prudential-parameters-amended-2026-08-11",
-          "label": "rules amended",
-          "date": "2026-08-11",
-          "date_precision": "day",
-          "event_type": "amended",
-          "responsible_institutions": [
-            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-08-11-2692-1-11-08-2026-tijorat-banklari-tomonidan-jalb-qilinadigan-depozit"
-          ],
-          "confidence": "medium"
-        },
-        {
-          "id": "monetary-prudential-parameters-instructions_issued-2026-08-18",
-          "label": "official measure recorded",
-          "date": "2026-08-18",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-08-18-444-18-08-2026-jahon-banki-ishtirokida-o-zbekistonda-gaz-sizib-chiqis"
-          ],
-          "confidence": "high"
-        }
-      ],
-      "official_source_events": [
-        {
-          "id": "source-event-2026-06-29-president-of-uzbekistan-discusses-further-development-of-partnership-",
-          "title": "President of Uzbekistan discusses further development of partnership with the World Bank",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9364",
-          "source_published_at": "2026-06-29",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-07-03T06:09:10.444Z",
-          "localized": {
-            "title": {
-              "en": "President of Uzbekistan discusses further development of partnership with the World Bank",
-              "ru": "Президент Узбекистана обсудил дальнейшее развитие партнёрства со Всемирным банком",
-              "uz": "Ўзбекистон Президенти Жаҳон банки билан шерикликни янада ривожлантириш масалаларини муҳокама қилди"
-            },
-            "summary": {
-              "en": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
-              "ru": "Эффективно внедряются новые инструменты финансирования. Особое внимание уделено расширению использования инструментов Группы Банка по поддержке развития малого и среднего предпринимательства, реализации мер по сокращению бедности, совместному продвижению программ приватизации государственных предприятий, внедрению искусственного интеллекта в секторах экономики.",
-              "uz": "Молиялаштиришнинг янги механизмлари самарали жорий этилмоқда."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9364",
-              "ru": "https://president.uz/ru/lists/view/9364",
-              "uz": "https://president.uz/uz/lists/view/9364"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-07-15-2634-10-15-07-2026-budjet-tashkilotlari-va-budjet-mablag-lari-oluvchi",
-          "title": "2634-10-сон 15.07.2026. Budjet tashkilotlari va budjet mablagʻlari oluvchilarning xarajatlar smetasi va shtat jadvallarini tuzish, tasdiqlash va roʻyxatdan oʻtkazish tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida",
-          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-          "source_url": "https://lex.uz/uz/docs/8329190",
-          "source_published_at": "2026-07-15",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "amended",
-          "summary": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-07-18T05:09:07.754Z",
-          "localized": {
-            "title": {
-              "uz": "2634-10-сон 15.07.2026. Budjet tashkilotlari va budjet mablagʻlari oluvchilarning xarajatlar smetasi va shtat jadvallarini tuzish, tasdiqlash va roʻyxatdan oʻtkazish tartibi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
-            },
-            "summary": {
-              "uz": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program."
-            },
-            "source_url": {
-              "ru": "https://lex.uz/ru/docs/8329190",
-              "uz": "https://lex.uz/uz/docs/8329190"
-            },
-            "source_url_status": {
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-07-16-3281-6-16-07-2026-o-zbekiston-respublikasida-valyuta-operatsiyalarini",
-          "title": "3281-6-сон 16.07.2026. Oʻzbekiston Respublikasida valyuta operatsiyalarini amalga oshirish qoidalarining 28-bandiga oʻzgartirish kiritish haqida",
-          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-          "source_url": "https://lex.uz/uz/docs/8335201",
-          "source_published_at": "2026-07-16",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "amended",
-          "summary": "Included by Legal or regulatory change, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-07-18T05:09:07.754Z",
-          "localized": {
-            "title": {
-              "uz": "3281-6-сон 16.07.2026. Oʻzbekiston Respublikasida valyuta operatsiyalarini amalga oshirish qoidalarining 28-bandiga oʻzgartirish kiritish haqida"
-            },
-            "summary": {
-              "uz": "Included by Legal or regulatory change, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
-            },
-            "source_url": {
-              "ru": "https://lex.uz/ru/docs/8335201",
-              "uz": "https://lex.uz/uz/docs/8335201"
-            },
-            "source_url_status": {
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-08-03-3030-12-03-08-2026-bank-xizmatlari-iste-molchilari-bilan-o-zaro-munos",
-          "title": "3030-12 03.08.2026 Bank xizmatlari isteʼmolchilari bilan oʻzaro munosabatlarni amalga oshirishda tijorat banklarining faoliyatiga qoʻyiladigan minimal talablar toʻgʻrisidagi nizomga qoʻshimchalar va oʻzgartirish kiritish haqida",
-          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-          "source_url": "https://lex.uz/uz/docs/8370274",
-          "source_published_at": "2026-08-03",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "amended",
-          "summary": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-08-05T05:30:46.560Z",
-          "localized": {
-            "title": {
-              "uz": "3030-12 03.08.2026 Bank xizmatlari isteʼmolchilari bilan oʻzaro munosabatlarni amalga oshirishda tijorat banklarining faoliyatiga qoʻyiladigan minimal talablar toʻgʻrisidagi nizomga qoʻshimchalar va oʻzgartirish kiritish haqida"
-            },
-            "summary": {
-              "uz": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
-            },
-            "source_url": {
-              "ru": "https://lex.uz/ru/docs/8370274",
-              "uz": "https://lex.uz/uz/docs/8370274"
-            },
-            "source_url_status": {
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-08-04-3656-1-04-08-2026-mikromoliya-tashkiloti-va-bank-faoliyatini-o-zgarti",
-          "title": "3656-1 04.08.2026 Mikromoliya tashkiloti va bank faoliyatini oʻzgartirish tartibi toʻgʻrisidagi nizomga oʻzgartirish va qoʻshimchalar kiritish haqida",
-          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-          "source_url": "https://lex.uz/uz/docs/8371820",
-          "source_published_at": "2026-08-04",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "amended",
-          "summary": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-08-05T05:30:46.560Z",
-          "localized": {
-            "title": {
-              "uz": "3656-1 04.08.2026 Mikromoliya tashkiloti va bank faoliyatini oʻzgartirish tartibi toʻgʻrisidagi nizomga oʻzgartirish va qoʻshimchalar kiritish haqida"
-            },
-            "summary": {
-              "uz": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
-            },
-            "source_url": {
-              "ru": "https://lex.uz/ru/docs/8371820",
-              "uz": "https://lex.uz/uz/docs/8371820"
-            },
-            "source_url_status": {
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-08-04-3917-04-08-2026-o-zbekiston-respublikasi-moliyaviy-hisobotning-milliy",
-          "title": "3917-сон 04.08.2026. Oʻzbekiston Respublikasi moliyaviy hisobotning milliy standarti (77-sonli MHMS) “Nodavlat notijorat tashkilotlari uchun soddalashtirilgan buxgalteriya hisobi va moliyaviy hisobot”ni tasdiqlash haqida",
-          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-          "source_url": "https://lex.uz/uz/docs/8379837",
-          "source_published_at": "2026-08-04",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "approved",
-          "summary": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-08-11T04:01:37.787Z",
-          "localized": {
-            "title": {
-              "uz": "3917-сон 04.08.2026. Oʻzbekiston Respublikasi moliyaviy hisobotning milliy standarti (77-sonli MHMS) “Nodavlat notijorat tashkilotlari uchun soddalashtirilgan buxgalteriya hisobi va moliyaviy hisobot”ni tasdiqlash haqida"
-            },
-            "summary": {
-              "uz": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program."
-            },
-            "source_url": {
-              "ru": "https://lex.uz/ru/docs/8379837",
-              "uz": "https://lex.uz/uz/docs/8379837"
-            },
-            "source_url_status": {
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-08-11-2692-1-11-08-2026-tijorat-banklari-tomonidan-jalb-qilinadigan-depozit",
-          "title": "2692-1-сон 11.08.2026. Tijorat banklari tomonidan jalb qilinadigan depozitlar (omonatlar) boʻyicha foiz stavkalarini shakllantirish mexanizmi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida",
-          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-          "source_url": "https://lex.uz/uz/docs/8395307",
-          "source_published_at": "2026-08-11",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "amended",
-          "summary": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-08-15T03:18:32.863Z",
-          "localized": {
-            "title": {
-              "uz": "2692-1-сон 11.08.2026. Tijorat banklari tomonidan jalb qilinadigan depozitlar (omonatlar) boʻyicha foiz stavkalarini shakllantirish mexanizmi toʻgʻrisidagi nizomga oʻzgartirishlar kiritish haqida"
-            },
-            "summary": {
-              "uz": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
-            },
-            "source_url": {
-              "ru": "https://lex.uz/ru/docs/8395307",
-              "uz": "https://lex.uz/uz/docs/8395307"
-            },
-            "source_url_status": {
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-08-18-444-18-08-2026-jahon-banki-ishtirokida-o-zbekistonda-gaz-sizib-chiqis",
-          "title": "444-сон 18.08.2026. Jahon banki ishtirokida “Oʻzbekistonda gaz sizib chiqishlarini bartaraf etish mexanizmini yaratish” loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida",
-          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-          "source_url": "https://lex.uz/uz/docs/-8419973",
-          "source_published_at": "2026-08-18",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-08-25T03:26:14.747Z",
-          "localized": {
-            "title": {
-              "uz": "444-сон 18.08.2026. Jahon banki ishtirokida “Oʻzbekistonda gaz sizib chiqishlarini bartaraf etish mexanizmini yaratish” loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida"
-            },
-            "summary": {
-              "uz": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
-            },
-            "source_url": {
-              "ru": "https://lex.uz/ru/docs/-8419973",
-              "uz": "https://lex.uz/uz/docs/-8419973"
-            },
-            "source_url_status": {
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        }
-      ],
-      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
-      "digest": {
-        "changed": "approved measures",
-        "applies_to": "Monetary policy and prudential regulation",
-        "effective_status": "Instructions issued (2026-08-18)",
-        "document": "444-сон 18.08.2026. Jahon banki ishtirokida “Oʻzbekistonda gaz sizib chiqishlarini bartaraf etish mexanizmini yaratish” loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida"
-      },
-      "localized": {
-        "title": {
-          "uz": "444-сон 18.08.2026. Jahon banki ishtirokida “Oʻzbekistonda gaz sizib chiqishlarini bartaraf etish mexanizmini yaratish” loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida"
-        },
-        "short_summary": {
-          "ru": "Эффективно внедряются новые инструменты финансирования.",
-          "uz": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
-        },
-        "parameters_or_amounts": {
-          "ru": [
-            "Эффективно внедряются новые инструменты финансирования.",
-            "Особое внимание уделено расширению использования инструментов Группы Банка по поддержке развития малого и среднего предпринимательства, реализации мер по сокращению бедности, совместному продвижению программ приватизации государственных предприятий, внедрению искусственного интеллекта в секторах экономики."
-          ],
-          "uz": [
-            "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program."
-          ]
-        },
-        "digest": {
-          "ru": {
-            "changed": "Эффективно внедряются новые инструменты финансирования."
-          },
-          "uz": {
-            "changed": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program.",
-            "document": "444-сон 18.08.2026. Jahon banki ishtirokida “Oʻzbekistonda gaz sizib chiqishlarini bartaraf etish mexanizmini yaratish” loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida"
           }
         }
       }
@@ -5521,6 +5683,33 @@
         ]
       },
       {
+        "package_id": "pkg-monetary-prudential-parameters-2026-09-17",
+        "active_lenses": [
+          {
+            "model_id": "QPM",
+            "channel": "Macro-financial and inflation transmission context.",
+            "caveat": "Possible lens only."
+          }
+        ],
+        "gated_lenses": [
+          {
+            "model_id": "FPP",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "HFI",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "Synthesis",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          }
+        ]
+      },
+      {
         "package_id": "pkg-customs-clearance-digitalization-2026-09-08",
         "active_lenses": [
           {
@@ -5574,33 +5763,6 @@
             "model_id": "CGE",
             "channel": "Experimental economy-wide comparative-static reference.",
             "caveat": "Experimental reference only; not a forecast or model-owner-approved estimate."
-          }
-        ],
-        "gated_lenses": [
-          {
-            "model_id": "FPP",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "HFI",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "Synthesis",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          }
-        ]
-      },
-      {
-        "package_id": "pkg-monetary-prudential-parameters-2026-08-18",
-        "active_lenses": [
-          {
-            "model_id": "QPM",
-            "channel": "Macro-financial and inflation transmission context.",
-            "caveat": "Possible lens only."
           }
         ],
         "gated_lenses": [
@@ -6029,7 +6191,6 @@
     "This is a deterministic official-source reform package artifact.",
     "Generated from configured source URLs at artifact build time.",
     "Public packages are assembled only from source events whose official links passed validation.",
-    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser.",
-    "One or more configured sources failed during this automatic refresh; previous verified packages were carried forward when needed to avoid deleting reforms during a temporary source outage."
+    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser."
   ]
 }
