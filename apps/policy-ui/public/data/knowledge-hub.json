@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-09-19T07:29:37.772Z",
+  "generated_at": "2026-09-20T07:53:08.266Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -307,7 +307,7 @@
       "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-19T07:29:37.772Z"
+      "fetched_at": "2026-09-20T07:53:08.266Z"
     },
     {
       "id": "president-reform-news",
@@ -316,10 +316,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 9,
-      "excluded_count": 3,
+      "candidate_count": 10,
+      "excluded_count": 2,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-19T07:29:37.772Z"
+      "fetched_at": "2026-09-20T07:53:08.266Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-19T07:29:37.772Z"
+      "fetched_at": "2026-09-20T07:53:08.266Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-19T07:29:37.772Z"
+      "fetched_at": "2026-09-20T07:53:08.266Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-19T07:29:37.772Z"
+      "fetched_at": "2026-09-20T07:53:08.266Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-19T07:29:37.772Z"
+      "fetched_at": "2026-09-20T07:53:08.266Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 371,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-19T07:29:37.772Z"
+      "fetched_at": "2026-09-20T07:53:08.266Z"
     },
     {
       "id": "customs-committee-news",
@@ -391,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-19T07:29:37.772Z"
+      "fetched_at": "2026-09-20T07:53:08.266Z"
     },
     {
       "id": "mef-policy-news",
@@ -403,7 +403,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-19T07:29:37.772Z"
+      "fetched_at": "2026-09-20T07:53:08.266Z"
     },
     {
       "id": "tax-committee-news",
@@ -415,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-19T07:29:37.772Z"
+      "fetched_at": "2026-09-20T07:53:08.266Z"
     },
     {
       "id": "energy-ministry-news",
@@ -427,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-19T07:29:37.772Z"
+      "fetched_at": "2026-09-20T07:53:08.266Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -439,7 +439,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-19T07:29:37.772Z"
+      "fetched_at": "2026-09-20T07:53:08.266Z"
     },
     {
       "id": "justice-ministry-news",
@@ -448,10 +448,10 @@
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
       "ok": true,
-      "candidate_count": 2,
-      "excluded_count": 10,
+      "candidate_count": 1,
+      "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-19T07:29:37.772Z"
+      "fetched_at": "2026-09-20T07:53:08.266Z"
     }
   ],
   "reform_packages": [
@@ -1313,15 +1313,15 @@
       "responsible_institutions": [
         "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
       ],
-      "legal_basis": "Verified official source events: 3941-сон 17.09.2026. Qimmatli qogʻozlar emitentlarining reytingini yuritish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida; PQ-330-сон 17.09.2026. “Qoraqalpogʻiston Respublikasida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida; PQ-331-сон 17.09.2026. “Buxoro va Navoiy viloyatlarida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida; PQ-332-сон 17.09.2026. “Surxondaryo viloyatida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida.",
+      "legal_basis": "Verified official source events: 3941-сон 17.09.2026. Qimmatli qogʻozlar emitentlarining reytingini yuritish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida; PQ-330-сон 17.09.2026. “Qoraqalpogʻiston Respublikasida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida; PQ-331-сон 17.09.2026. “Buxoro va Navoiy viloyatlarida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida.",
       "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-      "short_summary": "4 official measures update monetary policy and prudential regulation rules or procedures.",
+      "short_summary": "3 official measures update monetary policy and prudential regulation rules or procedures.",
       "parameters_or_amounts": [
         "approved regulation",
         "approved measures"
       ],
       "source_confidence": "high",
-      "why_tracked": "The package is assembled from 4 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "why_tracked": "The package is assembled from 3 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
       "model_relevance": [
         "Inflation",
         "Credit conditions",
@@ -1345,11 +1345,6 @@
         },
         {
           "id": "monetary-prudential-parameters-measure-3",
-          "label": "approved measures",
-          "status": "source verified"
-        },
-        {
-          "id": "monetary-prudential-parameters-measure-4",
           "label": "approved measures",
           "status": "source verified"
         }
