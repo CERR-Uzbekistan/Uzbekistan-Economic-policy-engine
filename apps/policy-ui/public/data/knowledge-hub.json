@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-09-22T07:54:11.992Z",
+  "generated_at": "2026-09-23T07:55:14.657Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -303,12 +303,11 @@
       "url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
       "parser": "lexuz-official-search",
       "fetch_url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
-      "ok": false,
-      "candidate_count": 0,
+      "ok": true,
+      "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-22T07:54:11.992Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-09-23T07:55:14.657Z"
     },
     {
       "id": "president-reform-news",
@@ -317,10 +316,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 6,
-      "excluded_count": 6,
-      "link_invalid_count": 2,
-      "fetched_at": "2026-09-22T07:54:11.992Z"
+      "candidate_count": 7,
+      "excluded_count": 5,
+      "link_invalid_count": 0,
+      "fetched_at": "2026-09-23T07:55:14.657Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -332,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-22T07:54:11.992Z"
+      "fetched_at": "2026-09-23T07:55:14.657Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -344,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-22T07:54:11.992Z"
+      "fetched_at": "2026-09-23T07:55:14.657Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -356,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-22T07:54:11.992Z"
+      "fetched_at": "2026-09-23T07:55:14.657Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -368,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-22T07:54:11.992Z"
+      "fetched_at": "2026-09-23T07:55:14.657Z"
     },
     {
       "id": "cbu-policy-news",
@@ -380,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 371,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-22T07:54:11.992Z"
+      "fetched_at": "2026-09-23T07:55:14.657Z"
     },
     {
       "id": "customs-committee-news",
@@ -392,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-22T07:54:11.992Z"
+      "fetched_at": "2026-09-23T07:55:14.657Z"
     },
     {
       "id": "mef-policy-news",
@@ -404,7 +403,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-22T07:54:11.992Z"
+      "fetched_at": "2026-09-23T07:55:14.657Z"
     },
     {
       "id": "tax-committee-news",
@@ -416,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-22T07:54:11.992Z"
+      "fetched_at": "2026-09-23T07:55:14.657Z"
     },
     {
       "id": "energy-ministry-news",
@@ -424,12 +423,11 @@
       "url": "https://gov.uz/en/minenergy/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": false,
+      "ok": true,
       "candidate_count": 0,
-      "excluded_count": 0,
+      "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-22T07:54:11.992Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-09-23T07:55:14.657Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -437,12 +435,11 @@
       "url": "https://gov.uz/en/miit/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": false,
+      "ok": true,
       "candidate_count": 0,
-      "excluded_count": 0,
+      "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-22T07:54:11.992Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-09-23T07:55:14.657Z"
     },
     {
       "id": "justice-ministry-news",
@@ -450,12 +447,11 @@
       "url": "https://gov.uz/en/adliya/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": false,
-      "candidate_count": 0,
-      "excluded_count": 0,
+      "ok": true,
+      "candidate_count": 1,
+      "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-22T07:54:11.992Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-09-23T07:55:14.657Z"
     }
   ],
   "reform_packages": [
@@ -1310,22 +1306,21 @@
       "title": "Monetary and financial-sector parameter reform",
       "policy_area": "Monetary policy and prudential regulation",
       "reform_category": "monetary_policy",
-      "current_stage": "Multiple changes published",
+      "current_stage": "Regulation approved",
       "current_stage_date": "2026-09-17",
       "next_milestone": "No future milestone published in verified source",
       "next_milestone_date": "2026-09-17",
       "responsible_institutions": [
         "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
       ],
-      "legal_basis": "Verified official source events: 3941-сон 17.09.2026. Qimmatli qogʻozlar emitentlarining reytingini yuritish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida; PQ-330-сон 17.09.2026. “Qoraqalpogʻiston Respublikasida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida; PQ-331-сон 17.09.2026. “Buxoro va Navoiy viloyatlarida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida.",
+      "legal_basis": "Verified official source event: 3941-сон 17.09.2026. Qimmatli qogʻozlar emitentlarining reytingini yuritish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida.",
       "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-      "short_summary": "3 official measures update monetary policy and prudential regulation rules or procedures.",
+      "short_summary": "The cited official document updates monetary policy and prudential regulation rules or procedures.",
       "parameters_or_amounts": [
-        "approved regulation",
-        "approved measures"
+        "approved regulation"
       ],
       "source_confidence": "high",
-      "why_tracked": "The package is assembled from 3 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
       "model_relevance": [
         "Inflation",
         "Credit conditions",
@@ -1341,16 +1336,6 @@
           "id": "monetary-prudential-parameters-measure-1",
           "label": "approved regulation",
           "status": "approved"
-        },
-        {
-          "id": "monetary-prudential-parameters-measure-2",
-          "label": "approved measures",
-          "status": "source verified"
-        },
-        {
-          "id": "monetary-prudential-parameters-measure-3",
-          "label": "approved measures",
-          "status": "source verified"
         }
       ],
       "implementation_milestones": [
@@ -1865,7 +1850,7 @@
       "digest": {
         "changed": "approved regulation",
         "applies_to": "Monetary policy and prudential regulation",
-        "effective_status": "Multiple changes published (2026-09-17)",
+        "effective_status": "Regulation approved (2026-09-17)",
         "document": "PQ-332-сон 17.09.2026. “Surxondaryo viloyatida qattiq maishiy chiqindilarni yoqish orqali elektr energiyasi ishlab chiqarish” investitsiya loyihasini amalga oshirish chora-tadbirlari toʻgʻrisida"
       },
       "localized": {
@@ -6190,7 +6175,6 @@
     "This is a deterministic official-source reform package artifact.",
     "Generated from configured source URLs at artifact build time.",
     "Public packages are assembled only from source events whose official links passed validation.",
-    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser.",
-    "One or more configured sources failed during this automatic refresh; previous verified packages were carried forward when needed to avoid deleting reforms during a temporary source outage."
+    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser."
   ]
 }
