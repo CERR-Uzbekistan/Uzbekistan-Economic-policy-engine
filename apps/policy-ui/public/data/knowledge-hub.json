@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-09-23T07:55:14.657Z",
+  "generated_at": "2026-09-24T07:45:36.964Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -307,7 +307,7 @@
       "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-23T07:55:14.657Z"
+      "fetched_at": "2026-09-24T07:45:36.964Z"
     },
     {
       "id": "president-reform-news",
@@ -316,10 +316,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 7,
-      "excluded_count": 5,
+      "candidate_count": 9,
+      "excluded_count": 3,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-23T07:55:14.657Z"
+      "fetched_at": "2026-09-24T07:45:36.964Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-23T07:55:14.657Z"
+      "fetched_at": "2026-09-24T07:45:36.964Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-23T07:55:14.657Z"
+      "fetched_at": "2026-09-24T07:45:36.964Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-23T07:55:14.657Z"
+      "fetched_at": "2026-09-24T07:45:36.964Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-23T07:55:14.657Z"
+      "fetched_at": "2026-09-24T07:45:36.964Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 371,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-23T07:55:14.657Z"
+      "fetched_at": "2026-09-24T07:45:36.964Z"
     },
     {
       "id": "customs-committee-news",
@@ -391,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-23T07:55:14.657Z"
+      "fetched_at": "2026-09-24T07:45:36.964Z"
     },
     {
       "id": "mef-policy-news",
@@ -403,7 +403,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-23T07:55:14.657Z"
+      "fetched_at": "2026-09-24T07:45:36.964Z"
     },
     {
       "id": "tax-committee-news",
@@ -415,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-23T07:55:14.657Z"
+      "fetched_at": "2026-09-24T07:45:36.964Z"
     },
     {
       "id": "energy-ministry-news",
@@ -427,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-23T07:55:14.657Z"
+      "fetched_at": "2026-09-24T07:45:36.964Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -439,7 +439,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-23T07:55:14.657Z"
+      "fetched_at": "2026-09-24T07:45:36.964Z"
     },
     {
       "id": "justice-ministry-news",
@@ -451,23 +451,23 @@
       "candidate_count": 1,
       "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-09-23T07:55:14.657Z"
+      "fetched_at": "2026-09-24T07:45:36.964Z"
     }
   ],
   "reform_packages": [
     {
-      "package_id": "pkg-tax-administration-incentives-2026-09-09",
+      "package_id": "pkg-tax-administration-incentives-2026-09-23",
       "title": "Tax administration and investment incentive reform",
       "policy_area": "Tax administration and fiscal incentives",
       "reform_category": "fiscal_tax",
-      "current_stage": "Instructions issued",
+      "current_stage": "Implementation started",
       "current_stage_date": "2026-11-07",
       "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-09-09",
+      "next_milestone_date": "2026-09-23",
       "responsible_institutions": [
         "Official website of the President of the Republic of Uzbekistan"
       ],
-      "legal_basis": "Verified official source event: Efforts to ensure employment and increase household incomes critically reviewed.",
+      "legal_basis": "Verified official source event: Andijan introduces artificial intelligence and dual education in the textile industry.",
       "official_basis": "Official website of the President of the Republic of Uzbekistan",
       "short_summary": "The cited official document updates tax administration and fiscal incentives rules or procedures.",
       "parameters_or_amounts": [
@@ -748,6 +748,21 @@
           "evidence_type": "official_policy_announcement",
           "source_event_ids": [
             "source-event-2026-09-09-efforts-to-ensure-employment-and-increase-household-incomes-criticall"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "tax-administration-incentives-implementation_milestone-2026-09-23",
+          "label": "implementation measure recorded",
+          "date": "2026-09-23",
+          "date_precision": "day",
+          "event_type": "implementation_milestone",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-09-23-andijan-introduces-artificial-intelligence-and-dual-education-in-the-"
           ],
           "confidence": "high"
         },
@@ -1233,6 +1248,39 @@
           }
         },
         {
+          "id": "source-event-2026-09-23-andijan-introduces-artificial-intelligence-and-dual-education-in-the-",
+          "title": "Andijan introduces artificial intelligence and dual education in the textile industry",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9650",
+          "source_published_at": "2026-09-23",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "implementation_milestone",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-09-24T07:45:36.964Z",
+          "localized": {
+            "title": {
+              "en": "Andijan introduces artificial intelligence and dual education in the textile industry",
+              "ru": "В Андижане искусственный интеллект и дуальное образование внедряются в текстильную промышленность",
+              "uz": "Андижонда тўқимачилик саноатига сунъий интеллект ва дуал таълим жорий этилмоқда"
+            },
+            "summary": {
+              "ru": "Чтобы повысить квалификацию работников, здесь внедрили систему дуального образования.",
+              "uz": "Бу ерда ишчи-ходимларнинг малакасини ошириш мақсадида дуал таълим тизими йўлга қўйилган. Корхонада ишлаб чиқариш жараёни замонавий стандартлар асосида ташкил этилган."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9650",
+              "ru": "https://president.uz/ru/lists/view/9650",
+              "uz": "https://president.uz/uz/lists/view/9650"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
           "id": "source-event-2026-11-07-o-rq-1162-05-08-2026-avtomobil-yo-llari-to-g-risida",
           "title": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida",
           "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
@@ -1262,7 +1310,7 @@
       "digest": {
         "changed": "verified official measure",
         "applies_to": "Tax administration and fiscal incentives",
-        "effective_status": "Instructions issued (2026-11-07)",
+        "effective_status": "Implementation started (2026-11-07)",
         "document": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida"
       },
       "localized": {
@@ -1270,32 +1318,24 @@
           "uz": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida"
         },
         "short_summary": {
-          "ru": "В этой связи подчеркнуто: если предприниматели предлагают готовые проекты по созданию детских садов, школ и техникумов и намерены бесплатно обучать детей из нуждающихся семей, государство готово выставлять земельные участки на аукцион со стартовой ценой 1 миллион сумов.",
-          "uz": "Унда ҳудудларда ишни ташкил этиш тартиби тубдан ўзгартирилиб, асосий ваколат ва ресурсларни туман даражасига тушириш белгиланганди."
+          "ru": "Чтобы повысить квалификацию работников, здесь внедрили систему дуального образования.",
+          "uz": "Бу ерда ишчи-ходимларнинг малакасини ошириш мақсадида дуал таълим тизими йўлга қўйилган."
         },
         "parameters_or_amounts": {
           "ru": [
-            "В этой связи подчеркнуто: если предприниматели предлагают готовые проекты по созданию детских садов, школ и техникумов и намерены бесплатно обучать детей из нуждающихся семей, государство готово выставлять земельные участки на аукцион со стартовой ценой 1 миллион сумов.",
-            "Работа будет вестись в уведомительном порядке.",
-            "Даны поручения по выявлению свободных территорий вокруг многоквартирных домов, упорядочению самовольно занятых участков, созданию детских площадок, спортивных и фитнес-зон, зеленых пространств общего пользования, а также освещению улиц."
+            "Чтобы повысить квалификацию работников, здесь внедрили систему дуального образования."
           ],
           "uz": [
-            "Унда ҳудудларда ишни ташкил этиш тартиби тубдан ўзгартирилиб, асосий ваколат ва ресурсларни туман даражасига тушириш белгиланганди.",
-            "Янги тизимга мувофиқ, ҳар бир вилоят ва туманда ҳоким бошчилигида штаблар ташкил этилиб, бандлик идоралари ва иқтисодий комплекс ташкилотлари одамларни иш билан таъминлаш ва даромадини ошириш масалаларини жойнинг ўзида ҳал қилиши лозим.",
-            "Қишлоқ туманларида эҳтиёжманд оила аъзосини ишга олган корхоналар учун 1 октябрдан ушбу ходим бўйича ижтимоий солиқ ставкаси 2 фоиз бўлиши белгиланди.",
-            "Оқолтин туманида тадбиркор томонидан 880 ўринли хусусий мактаб ташкил этилиб, эҳтиёжманд оилаларнинг 110 нафар фарзанди бепул ўқитилаётгани ижобий мисол сифатида келтирилди.",
-            "Шу боис, кўп квартирали уйларнинг биринчи қаватидаги хонадонларни нотурар жой тоифасига ўтказмасдан, савдо ва сервис фаолиятига мослаштиришга рухсат бериш таклиф этилди.",
-            "Мутасаддиларга бир ой муддатда бундай хонадонларда ташкил этилиши мумкин бўлган хизмат турлари рўйхати ва хавфсизлик талабларини ишлаб чиқиш топширилди.",
-            "Мактаб, техникум, олийгоҳ ва бошқа ташкилот биноларининг бўш хоналарида, асосий хоналарнинг дарсдан ташқари вақтларида ёшлар, аёллар ва ишсиз фуқароларни касб-ҳунар ҳамда тилларга ўқитиш муҳитини яратиш вазифаси белгиланди.",
-            "Яқинда имзоланган Президент фармони билан маҳалла тизими билан ишлаш бўйича Бош вазир ўринбосари лавозими жорий этилди."
+            "Бу ерда ишчи-ходимларнинг малакасини ошириш мақсадида дуал таълим тизими йўлга қўйилган.",
+            "Корхонада ишлаб чиқариш жараёни замонавий стандартлар асосида ташкил этилган."
           ]
         },
         "digest": {
           "ru": {
-            "changed": "В этой связи подчеркнуто: если предприниматели предлагают готовые проекты по созданию детских садов, школ и техникумов и намерены бесплатно обучать детей из нуждающихся семей, государство готово выставлять земельные участки на аукцион со стартовой ценой 1 миллион сумов."
+            "changed": "Чтобы повысить квалификацию работников, здесь внедрили систему дуального образования."
           },
           "uz": {
-            "changed": "Унда ҳудудларда ишни ташкил этиш тартиби тубдан ўзгартирилиб, асосий ваколат ва ресурсларни туман даражасига тушириш белгиланганди.",
+            "changed": "Бу ерда ишчи-ходимларнинг малакасини ошириш мақсадида дуал таълим тизими йўлга қўйилган.",
             "document": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida"
           }
         }
@@ -5625,7 +5665,7 @@
     ],
     "package_links": [
       {
-        "package_id": "pkg-tax-administration-incentives-2026-09-09",
+        "package_id": "pkg-tax-administration-incentives-2026-09-23",
         "active_lenses": [
           {
             "model_id": "DFM",
