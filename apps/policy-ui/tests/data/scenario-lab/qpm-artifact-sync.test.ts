@@ -46,7 +46,7 @@ test('preserves the captured QPM baseline when current observations advance', ()
   assert.equal(baseline.source_artifact, 'apps/policy-ui/public/data/overview.json')
   assert.equal(qpm.attribution.timestamp, baseline.exported_at)
   assert.ok(Date.parse(baseline.exported_at) <= Date.parse(overview.exported_at))
-  assert.equal(createHash('sha256').update(readFileSync(QPM_PATH)).digest('hex'), 'd0f034422e7c3ca4501447e732cfbdbe15bb1e7a534075912680da91b7dcb9bb')
+  assert.equal(createHash('sha256').update(readFileSync(QPM_PATH, 'utf8').replace(/\r\n/g, '\n')).digest('hex'), '685501b3d2628abcf093daacf1657ba126eec6a95d85516af1a0081aeba5973b')
 
   const overviewById = new Map(overview.metrics.map((metric) => [metric.id, metric]))
   assert.ok(baseline.metrics.length > 0)
