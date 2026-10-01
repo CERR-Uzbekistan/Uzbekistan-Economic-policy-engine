@@ -79,13 +79,19 @@ also be dispatched manually. It:
 
 1. checks out `main`;
 2. runs the strict Overview source families;
-3. blocks on hard family errors;
-4. skips `manual_required` families while leaving their existing public metrics unchanged;
+3. retains failed or `manual_required` families and reports their reasons;
+4. allows a partial refresh only when every configured family has one result and at least one independent validated source change exists;
 5. marks changed strict-source snapshots as `source_verified_for_public_artifact`;
 6. exports `apps/policy-ui/public/data/overview.json`;
 7. runs the policy-ui quality gates; and
 8. commits the refreshed snapshot, diff report, and public artifact back to `main` only
    when those files changed.
+
+The workflow also reconciles the pinned releases in `reviewed-releases.json` and archives source captures and validation reports with a requested 90-day retention. Parsed JSON is captured as normalized JSON; XLSX and PDF captures preserve downloaded bytes. New annual/food CPI releases and policy decisions require reviewed registry entries. Threshold freshness does not prove that no newer release exists.
+
+Historical QPM bytes are preserved. Observation refresh does not run the R QPM exporter, promote models, dispatch Pages, or deploy the site. Pages now requires an explicit manual dispatch. PR changes to this pipeline run offline source tests and the full UI lint, test and build gates before merging.
+
+An isolated candidate can be checked with `node scripts/overview/refresh-candidate.mjs --out tmp/overview-candidate --as-of <UTC ISO timestamp>`. This does not change the selected local preview. The live CPI parser accepts both Latin `M` and Cyrillic `М` month keys while preserving source-period regression checks. Derived goods trade balance uses the older input release date.
 
 The older `.github/workflows/overview-source-refresh.yml` remains available as a manual
 PR workflow for owner-review cases. It writes only

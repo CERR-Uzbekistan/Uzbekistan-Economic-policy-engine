@@ -61,6 +61,8 @@ async function fetchWithRetry(url, options = {}) {
           headers: {
             Accept: options.accept ?? 'application/json',
             'User-Agent': userAgent,
+            'Cache-Control': 'no-cache',
+            Pragma: 'no-cache',
           },
           signal: controller.signal,
         })

@@ -552,6 +552,10 @@ function buildTradeBalanceUpdate(exportsDataset, importsDataset, tradeBalance, e
     source_period: exportsDataset.current.periodLabel,
     source_url: exportsDataset.sourceUrl,
     source_reference: `Calculated from SIAT cumulative monthly goods trade levels for ${exportsDataset.current.periodLabel}: exports USD ${formatUsdMillion(exportsDataset.current.value)} million from ${exportsDataset.datasetId}, imports USD ${formatUsdMillion(importsDataset.current.value)} million from ${importsDataset.datasetId}. Source URLs: ${exportsDataset.sourceUrl}; ${importsDataset.sourceUrl}.`,
+    observed_at: exportsDataset.current.observedAt && importsDataset.current.observedAt
+      ? (Date.parse(exportsDataset.current.observedAt) <= Date.parse(importsDataset.current.observedAt)
+        ? exportsDataset.current.observedAt : importsDataset.current.observedAt)
+      : null,
     extracted_at: extractedAt,
     validation_status: 'warning',
     caveats: [

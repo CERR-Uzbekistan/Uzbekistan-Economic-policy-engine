@@ -1,0 +1,26 @@
+{
+  "schema_version": "reviewed-overview-releases-v1",
+  "releases": [
+    {
+      "id": "cpi-2026-08",
+      "url": "https://stat.uz/img/news/press-release_cpi_august_2026_en_p63576.pdf",
+      "sha256": "7252e48ef6f4f7b22dc51ce9195247cc528aac577e46cd52ae065d177007b500",
+      "observed_at": "2026-09-05T00:00:00Z",
+      "period": "August 2026",
+      "evidence": "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585.",
+      "metrics": [
+        { "metric_id": "cpi_yoy", "value": 6.2, "previous_value": 6.4 },
+        { "metric_id": "food_cpi_yoy", "value": 6.2, "previous_value": 6.4 }
+      ]
+    },
+    {
+      "id": "policy-rate-2026-09-16",
+      "url": "https://cbu.uz/en/press_center/releases/4540151/",
+      "required_title": "The Central Bank Board decided at its meeting on 16 September 2026 to keep the policy rate at 14 percent per annum",
+      "observed_at": "2026-09-16T00:00:00Z",
+      "period": "Decision of 16 September 2026",
+      "evidence": "Official CBU decision retains the policy rate at 14 percent per annum. This refreshes the decision vintage, not the rate value.",
+      "metrics": [{ "metric_id": "policy_rate", "value": 14, "previous_value": 14 }]
+    }
+  ]
+}

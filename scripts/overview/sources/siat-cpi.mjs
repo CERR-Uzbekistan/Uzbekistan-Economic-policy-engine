@@ -7,7 +7,10 @@ export const SIAT_CPI_MOM_METRIC_IDS = ['cpi_mom']
 export const SIAT_CPI_MOM_SOURCE_URL = 'https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json'
 export const SIAT_CPI_MOM_INDICATOR_CODE = '1.11.01.0026'
 
-const CYRILLIC_MONTH_PERIOD_PATTERN = /^(\d{4})-\u041c(0[1-9]|1[0-2])$/
+// SIAT historically used Cyrillic "М" in monthly keys, then switched to
+// Latin "M" during 2026. Accept both encodings and retain the source key so
+// values can be read without silently rewriting the dataset schema.
+const MONTH_PERIOD_PATTERN = /^(\d{4})-([M\u041c])(0[1-9]|1[0-2])$/
 const VALUE_PREFERENCE_KEYS = ['value_en', 'value_ru', 'value_uz', 'value_uzc']
 const NAME_KEYS = ['name_en', 'name_ru', 'name_uz', 'name_uzc']
 const MONTH_INDEX_BY_NAME = new Map(
@@ -216,9 +219,9 @@ export function selectAggregateRow(rows) {
 }
 
 function parsePeriodKey(key) {
-  const match = CYRILLIC_MONTH_PERIOD_PATTERN.exec(key)
+  const match = MONTH_PERIOD_PATTERN.exec(key)
   if (!match) return null
-  return { key, year: Number(match[1]), month: Number(match[2]) }
+  return { key, year: Number(match[1]), month: Number(match[3]) }
 }
 
 function comparePeriod(left, right) {
@@ -234,7 +237,7 @@ function samePeriod(left, right) {
   return left.year === right.year && left.month === right.month
 }
 
-function periodKey(period) {
+function canonicalPeriodKey(period) {
   return `${period.year}-\u041c${String(period.month).padStart(2, '0')}`
 }
 
@@ -278,7 +281,7 @@ function readAggregatePeriods(row) {
     .sort(comparePeriod)
 
   if (periods.length === 0) {
-    manualRequired('siat_cpi_mom_no_cyrillic_period_keys')
+    manualRequired('siat_cpi_mom_no_month_period_keys')
   }
   return periods
 }
@@ -299,14 +302,18 @@ export function parseSiatCpiMomDataset(json, options = {}) {
   const periods = readAggregatePeriods(aggregateRow)
   const current = periods.at(-1)
   const prior = previousMonth(current)
-  if (!periods.some((period) => samePeriod(period, prior))) {
-    manualRequired('siat_cpi_mom_previous_month_missing', { current: periodKey(current), previous: periodKey(prior) })
+  const previous = periods.find((period) => samePeriod(period, prior))
+  if (!previous) {
+    manualRequired('siat_cpi_mom_previous_month_missing', {
+      current: current.key,
+      previous: canonicalPeriodKey(prior),
+    })
   }
 
-  const currentIndex = asStrictNumber(aggregateRow[periodKey(current)], `aggregate.${periodKey(current)}`)
-  const priorIndex = asStrictNumber(aggregateRow[periodKey(prior)], `aggregate.${periodKey(prior)}`)
-  validateIndexValue(currentIndex, `aggregate.${periodKey(current)}`)
-  validateIndexValue(priorIndex, `aggregate.${periodKey(prior)}`)
+  const currentIndex = asStrictNumber(aggregateRow[current.key], `aggregate.${current.key}`)
+  const priorIndex = asStrictNumber(aggregateRow[previous.key], `aggregate.${previous.key}`)
+  validateIndexValue(currentIndex, `aggregate.${current.key}`)
+  validateIndexValue(priorIndex, `aggregate.${previous.key}`)
 
   return {
     sourceUrl,
@@ -314,15 +321,15 @@ export function parseSiatCpiMomDataset(json, options = {}) {
     metadata,
     current: {
       ...current,
-      periodKey: periodKey(current),
+      periodKey: current.key,
       periodLabel: formatPeriodLabel(current),
       indexValue: currentIndex,
       value: roundTo(currentIndex - 100, 2),
     },
     previous: {
-      ...prior,
-      periodKey: periodKey(prior),
-      periodLabel: formatPeriodLabel(prior),
+      ...previous,
+      periodKey: previous.key,
+      periodLabel: formatPeriodLabel(previous),
       indexValue: priorIndex,
       value: roundTo(priorIndex - 100, 2),
     },

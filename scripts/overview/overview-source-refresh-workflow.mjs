@@ -314,11 +314,24 @@ function verifyPublicExportReady(args) {
   const results = readJson(args.results, [])
   const errors = results.filter((result) => result.outcome === 'error')
   const manualRequired = results.filter((result) => result.manual_required || result.outcome === 'manual_required')
-  if (errors.length > 0) {
+  const partial = args['allow-partial'] === 'true'
+  if (partial) {
+    if (results.length !== families.length || families.some((family) => results.filter((result) => result.family === family).length !== 1)) {
+      fail('Partial refresh requires exactly one result for every configured source family.')
+    }
+    const accepted = results.filter((result) => result.outcome === 'changed' && result.status === 'source_verified_for_public_artifact' && !result.manual_required)
+    if ((errors.length || manualRequired.length) && accepted.length === 0) {
+      fail('Partial refresh has no independently validated source changes to export.')
+    }
+    for (const result of [...errors, ...manualRequired]) {
+      console.warn(`DEGRADED: ${result.family} retained unchanged: ${result.manual_required?.reason ?? result.error?.message}`)
+    }
+  }
+  if (errors.length > 0 && !partial) {
     for (const result of errors) console.error(`${result.family}: ${result.error?.message ?? 'family failed'}`)
     fail('Overview public export blocked because at least one source family errored.')
   }
-  if (manualRequired.length > 0) {
+  if (manualRequired.length > 0 && !partial) {
     for (const result of manualRequired) {
       console.error(`${result.family}: ${result.manual_required?.reason ?? 'manual review required'}`)
     }

@@ -141,32 +141,34 @@ test('never uses COICOP product rows to compute headline CPI MoM', () => {
   assert.equal(dataset.current.value, 0.6)
 })
 
-test('accepts Cyrillic-M period keys and ignores Latin-M keys', () => {
+test('accepts mixed Cyrillic-M and Latin-M period keys', () => {
   const json = minimalJson({
     rows: [
       makeAggregateRow({
         '2026-\u041c02': 100.6,
         '2026-\u041c03': 100.6,
-        '2026-M04': 130,
+        '2026-M04': 100.4,
       }),
     ],
   })
 
   const dataset = parseSiatCpiMomDataset(json, { sourceUrl: SIAT_CPI_MOM_SOURCE_URL })
 
-  assert.equal(dataset.current.periodKey, '2026-\u041c03')
-  assert.equal(dataset.current.value, 0.6)
+  assert.equal(dataset.current.periodKey, '2026-M04')
+  assert.equal(dataset.current.value, 0.4)
+  assert.equal(dataset.previous.periodKey, '2026-\u041c03')
 })
 
-test('returns manual_required when zero valid Cyrillic-M period columns exist', () => {
+test('accepts Latin-M-only period keys', () => {
   const json = minimalJson({
     rows: [makeAggregateRow({ '2026-M02': 100.6, '2026-M03': 100.6 })],
   })
 
-  assertManualRequired(
-    () => parseSiatCpiMomDataset(json, { sourceUrl: SIAT_CPI_MOM_SOURCE_URL }),
-    'siat_cpi_mom_no_cyrillic_period_keys',
-  )
+  const dataset = parseSiatCpiMomDataset(json, { sourceUrl: SIAT_CPI_MOM_SOURCE_URL })
+
+  assert.equal(dataset.current.periodKey, '2026-M03')
+  assert.equal(dataset.current.value, 0.6)
+  assert.equal(dataset.previous.periodKey, '2026-M02')
 })
 
 test('returns manual_required for aggregate zero sentinel on current or previous month', () => {

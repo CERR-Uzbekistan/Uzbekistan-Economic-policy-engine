@@ -5,6 +5,7 @@ import {
   applyPresetToState,
   buildScenarioLabResults,
 } from '../../../src/data/mock/scenario-lab.js'
+import { QPM_FALLBACK_BASELINE } from '../../../src/data/scenario-lab/qpm-baseline.js'
 import { solveScenarioLabQpm } from '../../../src/data/scenario-lab/qpm-solver.js'
 
 type QpmArtifactScenario = {
@@ -46,6 +47,14 @@ function assertClosePath(actual: number[], expected: number[], tolerance = 0.01)
 
 function average(values: number[]): number {
   return values.reduce((sum, value) => sum + value, 0) / values.length
+}
+
+function overviewInputsEligible(): boolean {
+  const artifact = JSON.parse(readFileSync('public/data/overview.json', 'utf8')) as {
+    metrics: Array<{ id: string; validation_status: string; freshness: { status: string } }>
+  }
+  const required = ['cpi_yoy', 'policy_rate', 'usd_uzs_level', 'usd_uzs_yoy_change', 'exports_yoy', 'real_gdp_growth_quarter_yoy']
+  return required.every(id => artifact.metrics.some(metric => metric.id === id && metric.validation_status === 'valid' && metric.freshness.status === 'current'))
 }
 
 describe('Scenario Lab canonical QPM solver', () => {
@@ -112,31 +121,33 @@ describe('Scenario Lab canonical QPM solver', () => {
     const startIndex = Number(startMatch[1]) * 4 + Number(startMatch[2])
     const exportDate = new Date(qpmRun.baselineSource.exported_at)
     const exportQuarterIndex = exportDate.getUTCFullYear() * 4 + Math.floor(exportDate.getUTCMonth() / 3) + 1
-    assert.ok(startIndex >= exportQuarterIndex)
-    assert.equal(results.baseline_source?.source, 'overview-artifact')
-    assert.equal(results.baseline_source?.metrics.some((metric) => metric.metric_id === 'cpi_yoy'), true)
+    if (overviewInputsEligible()) assert.ok(startIndex >= exportQuarterIndex)
+    else assert.equal(startIndex, QPM_FALLBACK_BASELINE.startYear * 4 + QPM_FALLBACK_BASELINE.startQuarter)
+    assert.equal(results.baseline_source?.source, overviewInputsEligible() ? 'overview-artifact' : 'deterministic-fallback')
+    assert.equal(results.baseline_source?.metrics.some((metric) => metric.metric_id === 'cpi_yoy'), overviewInputsEligible())
   })
 
-  it('anchors visible baseline levels to the current Overview snapshot instead of raw steady-state transition', () => {
+  it('uses eligible Overview inputs or preserves the disclosed fallback without provisional inputs', () => {
     const run = solveScenarioLabQpm({}, 8)
 
-    const metricValue = (metricId: string) => {
-      const metric = run.baselineSource.metrics.find((entry) => entry.metric_id === metricId)
-      assert.ok(metric)
-      return metric.value
+    assert.equal(run.baselineSource.source, overviewInputsEligible() ? 'overview-artifact' : 'deterministic-fallback')
+    if (overviewInputsEligible()) {
+      const metricValue = (metricId: string) => {
+        const metric = run.baselineSource.metrics.find(entry => entry.metric_id === metricId)
+        assert.ok(metric)
+        return metric.value
+      }
+      assertClosePath(run.baseline.gdpGrowth.slice(0, 1), [metricValue('real_gdp_growth_quarter_yoy')])
+      assertClosePath(run.baseline.inflation.slice(0, 1), [metricValue('cpi_yoy')])
+      assertClosePath(run.baseline.policyRate.slice(0, 1), [metricValue('policy_rate')])
+    } else {
+      assert.deepEqual(run.baselineSource, QPM_FALLBACK_BASELINE.metadata)
+      assert.equal(run.baseline.periods[0], `${QPM_FALLBACK_BASELINE.startYear} Q${QPM_FALLBACK_BASELINE.startQuarter}`)
+      assert.deepEqual(run.scenario.gdpGrowth, run.baseline.gdpGrowth)
+      assert.deepEqual(run.scenario.inflation, run.baseline.inflation)
+      assert.deepEqual(run.scenario.policyRate, run.baseline.policyRate)
     }
-
-    assertClosePath(run.baseline.gdpGrowth.slice(0, 1), [metricValue('real_gdp_growth_quarter_yoy')])
-    assertClosePath(run.baseline.inflation.slice(0, 1), [metricValue('cpi_yoy')])
-    assertClosePath(run.baseline.policyRate.slice(0, 1), [metricValue('policy_rate')])
-    assert.equal(
-      run.baselineSource.metrics.some((metric) => metric.metric_id === 'gdp_nowcast_current_quarter'),
-      false,
-    )
-    assert.equal(
-      run.baselineSource.metrics.some((metric) => metric.metric_id === 'real_gdp_growth_quarter_yoy'),
-      true,
-    )
+    assert.equal(run.baselineSource.metrics.some(metric => metric.metric_id === 'gdp_nowcast_current_quarter'), false)
   })
 
   it('keeps risk-premium shock signs consistent with depreciation stress', () => {
