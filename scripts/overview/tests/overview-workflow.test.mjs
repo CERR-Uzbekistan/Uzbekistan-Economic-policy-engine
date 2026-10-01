@@ -45,3 +45,26 @@ test('automatic public export gate blocks promotion when any source family requi
   assert.match(result.stderr, /public export blocked/i)
   assert.doesNotMatch(result.stdout, /Overview public export ready/)
 })
+
+test('partial gate rejects incomplete family results rather than treating missing checks as healthy', () => {
+  const path = tempJson('results.json', [{ family: 'cbu-fx', outcome: 'changed', status: 'source_verified_for_public_artifact' }])
+  const result = spawnSync(process.execPath, [workflowScriptPath, 'verify-public-export-ready', '--results', path, '--allow-partial', 'true'], { cwd: repoRoot, encoding: 'utf8' })
+  assert.notEqual(result.status, 0)
+  assert.match(result.stderr, /exactly one result/)
+})
+
+test('partial gate retains a failing family and admits independently validated changes with a degraded warning', () => {
+  const path = tempJson('results.json', ['cbu-fx', 'siat-trade', 'siat-cpi', 'siat-gdp-annual', 'world-bank-gold'].map(family => family === 'siat-cpi'
+    ? { family, outcome: 'manual_required', manual_required: { reason: 'source_older' } }
+    : { family, outcome: family === 'cbu-fx' ? 'changed' : 'no_change', status: 'source_verified_for_public_artifact' }))
+  const result = spawnSync(process.execPath, [workflowScriptPath, 'verify-public-export-ready', '--results', path, '--allow-partial', 'true'], { cwd: repoRoot, encoding: 'utf8' })
+  assert.equal(result.status, 0, result.stderr)
+  assert.match(result.stderr, /DEGRADED.*siat-cpi.*retained unchanged/)
+})
+
+test('partial gate fails when every attempted change is unavailable', () => {
+  const path = tempJson('results.json', ['cbu-fx', 'siat-trade', 'siat-cpi', 'siat-gdp-annual', 'world-bank-gold'].map(family => ({ family, outcome: 'error', error: { message: 'offline' } })))
+  const result = spawnSync(process.execPath, [workflowScriptPath, 'verify-public-export-ready', '--results', path, '--allow-partial', 'true'], { cwd: repoRoot, encoding: 'utf8' })
+  assert.notEqual(result.status, 0)
+  assert.match(result.stderr, /no independently validated/)
+})

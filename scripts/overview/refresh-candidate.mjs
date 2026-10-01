@@ -1,0 +1,102 @@
+import { readFile, writeFile, mkdir } from 'node:fs/promises'
+import { resolve, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { createHash } from 'node:crypto'
+import { spawnSync } from 'node:child_process'
+import { buildCbuFxMetricUpdates } from './sources/cbu-fx.mjs'
+import { buildSiatTradeMetricUpdates } from './sources/siat-trade.mjs'
+import { buildSiatCpiMetricUpdates } from './sources/siat-cpi.mjs'
+import { buildSiatGdpAnnualMetricUpdates } from './sources/siat-gdp-annual.mjs'
+import { buildWorldBankGoldMetricUpdates } from './sources/world-bank-gold.mjs'
+import { fetchJsonWithRetry, fetchArrayBufferWithRetry } from './sources/http.mjs'
+import { applyMetricUpdatesToSnapshot } from './sources/update-snapshot.mjs'
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
+const args = Object.fromEntries(Array.from({ length: Math.floor((process.argv.length - 2) / 2) }, (_, index) => process.argv.slice(2 + index * 2, 4 + index * 2)))
+if (!args['--out'] || !args['--as-of']) throw new Error('Required: --out directory --as-of ISO timestamp')
+const now = args['--as-of']
+if (!Number.isFinite(Date.parse(now))) throw new Error('Invalid as-of timestamp')
+const output = resolve(args['--out'])
+if (!output.startsWith(`${root}/`) && !output.startsWith(`${root}\\`)) throw new Error('Candidate must stay inside the workspace')
+await mkdir(resolve(output, 'raw'), { recursive: true })
+const json = async path => JSON.parse(await readFile(path, 'utf8'))
+const hash = data => createHash('sha256').update(data).digest('hex')
+let snapshot = await json(resolve(root, 'scripts/overview/overview_source_snapshot.json'))
+const report = { generated_at: now, checked_at: now, status: 'validated', scope: 'Configured source families; freshness is evaluated separately per metric', families: [], sources: [], diff: [] }
+async function capture(url, body, extension) {
+  const bytes = Buffer.from(body)
+  const digest = hash(bytes)
+  const path = `raw/${digest}.${extension}`
+  await writeFile(resolve(output, path), bytes)
+  report.sources.push({ url, sha256: digest, bytes: bytes.length, path, representation: extension === 'json' ? 'normalized JSON' : 'downloaded bytes', fetched_at: now })
+}
+async function fetchJson(url) {
+  const data = await fetchJsonWithRetry(url)
+  await capture(url, JSON.stringify(data), 'json')
+  return data
+}
+async function fetchArrayBuffer(url) {
+  const data = await fetchArrayBufferWithRetry(url)
+  await capture(url, Buffer.from(data), 'xlsx')
+  return data
+}
+function apply(updates) {
+  const result = applyMetricUpdatesToSnapshot(snapshot, updates, { publicStatus: 'source_verified_for_public_artifact', sourceVerifiedBy: 'validated-official-source-refresh', sourceVerifiedAt: now })
+  snapshot = result.snapshot
+  report.diff.push(...result.diff)
+  return result.changed
+}
+const builders = {
+  'cbu-fx': buildCbuFxMetricUpdates,
+  'siat-trade': buildSiatTradeMetricUpdates,
+  'siat-cpi': buildSiatCpiMetricUpdates,
+  'siat-gdp-annual': buildSiatGdpAnnualMetricUpdates,
+  'world-bank-gold': buildWorldBankGoldMetricUpdates,
+}
+for (const [family, build] of Object.entries(builders)) {
+  try {
+    const updates = await build({ snapshot, latestDate: now.slice(0, 10), extractedAt: now, fetchJson, fetchArrayBuffer })
+    report.families.push({ family, status: 'validated', changed: apply(updates), metrics: updates.map(value => value.metric_id) })
+  } catch (error) {
+    report.status = 'degraded'
+    report.families.push({ family, status: 'retained', reason: error.reason ?? error.message })
+  }
+}
+const releases = await json(resolve(root, 'scripts/overview/reviewed-releases.json'))
+for (const release of releases.releases) {
+  try {
+    const response = await fetch(release.url, { headers: { 'Cache-Control': 'no-cache' }, signal: AbortSignal.timeout(15_000) })
+    if (!response.ok) throw new Error(`HTTP ${response.status}`)
+    const body = Buffer.from(await response.arrayBuffer())
+    await capture(release.url, body, release.sha256 ? 'pdf' : 'html')
+    if (release.sha256 && hash(body) !== release.sha256) throw new Error('Reviewed source hash changed; renewed review required')
+    if (release.required_title && !body.toString('utf8').includes(release.required_title)) throw new Error('Reviewed decision title missing')
+    const updates = release.metrics.filter(entry => {
+      const old = snapshot.metrics.find(metric => metric.metric_id === entry.metric_id)
+      return old && Date.parse(old.observed_at ?? old.extracted_at) <= Date.parse(release.observed_at)
+    }).map(entry => ({ ...entry, source_period: release.period, source_url: release.url, observed_at: release.observed_at, extracted_at: now,
+      source_reference: release.evidence, validation_status: 'valid', warnings: [], caveats: [release.evidence] }))
+    if (updates.length > 0 && release.id.startsWith('cpi-')) {
+      const monthly = snapshot.metrics.find(metric => metric.metric_id === 'cpi_mom')
+      if (monthly.source_period !== release.period || monthly.value !== 0.2) throw new Error('Reviewed CPI release does not reconcile with monthly SIAT observation')
+    }
+    report.families.push({ family: release.id, status: 'validated', changed: apply(updates) })
+  } catch (error) {
+    report.status = 'degraded'
+    report.families.push({ family: release.id, status: 'retained', reason: error.message })
+  }
+}
+const snapshotFile = resolve(output, 'source-snapshot.json')
+await writeFile(snapshotFile, `${JSON.stringify(snapshot, null, 2)}\n`)
+const artifactFile = resolve(output, 'overview.json')
+const exported = spawnSync(process.execPath, [resolve(root, 'scripts/overview/export-overview.mjs'), '--exported-at', now], {
+  env: { ...process.env, OVERVIEW_SOURCE_SNAPSHOT_PATH: snapshotFile, OVERVIEW_OUTPUT_PATH: artifactFile }, encoding: 'utf8', cwd: root,
+})
+if (exported.status !== 0) throw new Error(exported.error?.message || exported.stderr || exported.stdout || 'Exporter failed')
+report.snapshot_sha256 = hash(await readFile(snapshotFile))
+report.artifact_sha256 = hash(await readFile(artifactFile))
+report.changed = report.diff.length > 0
+report.value_hash = snapshot.value_hash
+report.snapshot_status = snapshot.status
+await writeFile(resolve(output, 'refresh-report.json'), `${JSON.stringify(report, null, 2)}\n`)
+console.log(JSON.stringify({ status: report.status, changed_fields: report.diff.length, families: report.families, artifact_sha256: report.artifact_sha256 }, null, 2))

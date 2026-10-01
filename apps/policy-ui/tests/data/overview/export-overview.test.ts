@@ -15,11 +15,15 @@ const repoRoot = resolve(process.cwd(), '..', '..')
 const exporterPath = join(repoRoot, 'scripts', 'overview', 'export-overview.mjs')
 const sourceSnapshotPath = join(repoRoot, 'scripts', 'overview', 'overview_source_snapshot.json')
 const publicOverviewArtifactPath = join(repoRoot, 'apps', 'policy-ui', 'public', 'data', 'overview.json')
-const fixedExportedAt = '2026-07-17T09:32:00Z'
+const sourceClock = JSON.parse(readFileSync(sourceSnapshotPath, 'utf8')) as {
+  metrics: Array<{ observed_at?: string; extracted_at: string }>
+}
+const fixedExportedAt = new Date(Math.max(...sourceClock.metrics.flatMap(metric =>
+  [metric.observed_at, metric.extracted_at].filter((date): date is string => Boolean(date)).map(Date.parse),
+)) + 86_400_000).toISOString()
 const freshnessWarningMetricIds = [
   'gdp_nowcast_current_quarter',
   'reer_level',
-  'gold_price_forecast',
 ]
 
 function tempPath(name: string): string {
@@ -116,6 +120,27 @@ describe('overview exporter', () => {
     const validation = validateOverviewArtifact(artifact)
     assert.equal(validation.ok, true)
     assert.equal(artifact.validation_status, 'warning')
+  })
+
+  it('keeps reviewed annual CPI evidence and independently fetched monthly CPI distinct', () => {
+    const artifact = readJson(publicOverviewArtifactPath) as OverviewArtifact
+    const byId = new Map(artifact.metrics.map((metric) => [metric.id, metric]))
+    const registry = readJson(join(repoRoot, 'scripts/overview/reviewed-releases.json')) as {
+      releases: Array<{ period: string; url: string; metrics: Array<{ metric_id: string; value: number; previous_value: number }> }>
+    }
+    for (const id of ['cpi_yoy', 'food_cpi_yoy'] as const) {
+      const metric = byId.get(id)!
+      const release = registry.releases.find(entry => entry.period === metric.source_period && entry.metrics.some(value => value.metric_id === id))
+      assert.ok(release, `Missing reviewed release for ${id} ${metric.source_period}`)
+      const expected = release.metrics.find(entry => entry.metric_id === id)!
+      assert.equal(metric.value, expected.value)
+      assert.equal(metric.previous_value, expected.previous_value)
+      assert.equal(metric.source_url, release.url)
+    }
+    const source = readJson(sourceSnapshotPath) as { metrics: Array<{ metric_id: string; value: number; source_period: string }> }
+    const monthly = source.metrics.find(metric => metric.metric_id === 'cpi_mom')!
+    assert.equal(byId.get('cpi_mom')?.value, monthly.value)
+    assert.equal(byId.get('cpi_mom')?.source_period, monthly.source_period)
   })
 
   it('refuses to export a draft source snapshot', () => {
@@ -217,9 +242,9 @@ describe('overview exporter', () => {
     assert.ok(nowcast?.warnings.length)
 
     const reer = artifact.metrics.find((entry) => entry.id === 'reer_level')
-    assert.equal(reer?.source_label, 'CERR, REER')
+    assert.equal(reer?.source_label, 'Central Bank of Uzbekistan Monetary Policy Report, 2026 Q1')
     assert.equal(reer?.validation_status, 'warning')
-    assert.match(reer?.warnings.join(' '), /Source URL is pending/)
+    assert.match(reer?.warnings.join(' '), /March 2026/)
   })
 
   it('fails export when a locked metric is missing', () => {

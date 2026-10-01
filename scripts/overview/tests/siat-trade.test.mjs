@@ -211,6 +211,7 @@ test('builds SIAT trade metric updates with source provenance and no live networ
   assert.equal(exportsUpdate.value, -23.61)
   assert.equal(importsUpdate.value, 29.92)
   assert.equal(balanceUpdate.value, -4.51)
+  assert.equal(balanceUpdate.observed_at, exportsUpdate.observed_at)
   assert.equal(exportsUpdate.source_period, 'January-February 2026')
   assert.match(exportsUpdate.source_reference, /sdmx_data_2407/)
   assert.equal(balanceUpdate.caveats[0], SIAT_TRADE_BALANCE_CAVEAT)

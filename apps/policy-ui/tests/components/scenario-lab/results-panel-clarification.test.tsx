@@ -153,7 +153,7 @@ describe('ResultsPanel clarification copy', () => {
     )
 
     assert.match(markup, /Scenario impulse response/)
-    assert.match(markup, /Effect by 2027 Q2/)
+    assert.ok(markup.includes(`Effect by ${results.headline_metrics[0].period}`))
     assert.match(markup, /Starting point/)
     assert.match(markup, /Latest Overview snapshot/)
     assert.ok(results.baseline_source?.data_version)

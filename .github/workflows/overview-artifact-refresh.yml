@@ -2,26 +2,32 @@ name: Overview Artifact Refresh
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/overview-artifact-refresh.yml'
+      - 'scripts/overview/**'
+      - 'apps/policy-ui/public/data/overview.json'
+      - 'apps/policy-ui/tests/data/overview/**'
+      - 'apps/policy-ui/tests/data/scenario-lab/qpm-artifact-sync.test.ts'
   schedule:
     - cron: "30 4 * * 1-5"
 
 permissions:
   contents: write
-  actions: write
 
 concurrency:
-  group: overview-artifact-refresh
+  group: overview-artifact-refresh-${{ github.event_name == 'pull_request' && github.event.pull_request.number || 'main' }}
   cancel-in-progress: false
 
 jobs:
   refresh-overview-artifact:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
       SNAPSHOT_PATH: scripts/overview/overview_source_snapshot.json
       DIFF_REPORT_PATH: scripts/overview/overview_source_snapshot.diff_report.json
       PUBLIC_OVERVIEW_PATH: apps/policy-ui/public/data/overview.json
-      PUBLIC_QPM_PATH: apps/policy-ui/public/data/qpm.json
     steps:
       - name: Check out main
         uses: actions/checkout@v4
@@ -31,7 +37,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24.14.0"
           cache: npm
           cache-dependency-path: apps/policy-ui/package-lock.json
 
@@ -108,7 +114,21 @@ jobs:
             --summary "$RUNNER_TEMP/overview-artifact-refresh/summary.md"
 
       - name: Verify automatic public export gate
-        run: node scripts/overview/overview-source-refresh-workflow.mjs verify-public-export-ready --results "$RUNNER_TEMP/overview-artifact-refresh/family-results.json"
+        run: node scripts/overview/overview-source-refresh-workflow.mjs verify-public-export-ready --allow-partial true --results "$RUNNER_TEMP/overview-artifact-refresh/family-results.json"
+
+      - name: Reconcile reviewed official releases and archive source evidence
+        run: |
+          node scripts/overview/refresh-candidate.mjs --out tmp/overview-refresh-candidate --as-of "${{ steps.meta.outputs.run_started_at }}"
+          cp tmp/overview-refresh-candidate/source-snapshot.json "$SNAPSHOT_PATH"
+          cp tmp/overview-refresh-candidate/refresh-report.json "$DIFF_REPORT_PATH"
+
+      - name: Retain source refresh evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: overview-source-evidence
+          path: tmp/overview-refresh-candidate
+          retention-days: 90
 
       - name: Check whether source snapshot changed
         id: source_changes
@@ -125,20 +145,6 @@ jobs:
         env:
           OVERVIEW_EXPORTER_FORCE_COMPILED: "1"
         run: node scripts/overview/export-overview.mjs --exported-at "${{ steps.meta.outputs.run_started_at }}"
-
-      - name: Set up R for dependent QPM export
-        if: steps.source_changes.outputs.snapshot_changed == 'true'
-        uses: r-lib/actions/setup-r@v2
-        with:
-          r-version: '4.4.1'
-
-      - name: Install QPM exporter dependency
-        if: steps.source_changes.outputs.snapshot_changed == 'true'
-        run: Rscript -e 'install.packages("jsonlite", repos = "https://cloud.r-project.org")'
-
-      - name: Refresh dependent QPM artifact atomically
-        if: steps.source_changes.outputs.snapshot_changed == 'true'
-        run: Rscript scripts/export_qpm.R
 
       - name: Lint policy-ui
         if: steps.source_changes.outputs.snapshot_changed == 'true'
@@ -159,7 +165,7 @@ jobs:
         id: commit_overview_artifact
         if: steps.source_changes.outputs.snapshot_changed == 'true'
         run: |
-          if git diff --quiet -- "$SNAPSHOT_PATH" "$DIFF_REPORT_PATH" "$PUBLIC_OVERVIEW_PATH" "$PUBLIC_QPM_PATH"; then
+          if git diff --quiet -- "$SNAPSHOT_PATH" "$DIFF_REPORT_PATH" "$PUBLIC_OVERVIEW_PATH"; then
             echo "No Overview artifact changes to publish." >> "$GITHUB_STEP_SUMMARY"
             echo "artifact_committed=false" >> "$GITHUB_OUTPUT"
             exit 0
@@ -167,34 +173,11 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "$SNAPSHOT_PATH" "$DIFF_REPORT_PATH" "$PUBLIC_OVERVIEW_PATH" "$PUBLIC_QPM_PATH"
-          git commit -m "chore(overview): refresh overview and dependent qpm artifacts"
+          git add "$SNAPSHOT_PATH" "$DIFF_REPORT_PATH" "$PUBLIC_OVERVIEW_PATH"
+          git commit -m "chore(overview): refresh validated observations"
           git push origin HEAD:main
           echo "artifact_committed=true" >> "$GITHUB_OUTPUT"
           echo "artifact_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-
-      - name: Dispatch Pages deploy for refreshed artifact
-        if: steps.commit_overview_artifact.outputs.artifact_committed == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          ARTIFACT_SHA: ${{ steps.commit_overview_artifact.outputs.artifact_sha }}
-        run: |
-          remote_sha=""
-          for attempt in {1..12}; do
-            remote_sha=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq '.object.sha')
-            if [ "$remote_sha" = "$ARTIFACT_SHA" ]; then
-              break
-            fi
-            echo "Waiting for main to expose refreshed artifact commit ($attempt/12)..."
-            sleep 5
-          done
-
-          if [ "$remote_sha" != "$ARTIFACT_SHA" ]; then
-            echo "::error::main resolved to $remote_sha instead of refreshed artifact $ARTIFACT_SHA."
-            exit 1
-          fi
-
-          gh workflow run pages.yml --ref main
 
       - name: Write workflow summary
         if: always()
@@ -202,3 +185,25 @@ jobs:
           if [ -f "$RUNNER_TEMP/overview-artifact-refresh/summary.md" ]; then
             cat "$RUNNER_TEMP/overview-artifact-refresh/summary.md" >> "$GITHUB_STEP_SUMMARY"
           fi
+
+  verify-refresh-change:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24.14.0"
+          cache: npm
+          cache-dependency-path: apps/policy-ui/package-lock.json
+      - run: npm ci
+        working-directory: apps/policy-ui
+      - run: node --test scripts/overview/tests/*.test.mjs
+      - run: npm run lint
+        working-directory: apps/policy-ui
+      - run: npm test
+        working-directory: apps/policy-ui
+      - run: npm run build
+        working-directory: apps/policy-ui
