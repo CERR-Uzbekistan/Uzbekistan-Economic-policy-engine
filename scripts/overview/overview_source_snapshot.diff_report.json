@@ -1,11 +1,13 @@
 {
-  "checked_at": "2026-10-01T15:32:00Z",
+  "generated_at": "2026-10-03T19:58:02Z",
+  "checked_at": "2026-10-03T19:58:02Z",
   "status": "validated",
+  "scope": "Configured source families; freshness is evaluated separately per metric",
   "families": [
     {
       "family": "cbu-fx",
       "status": "validated",
-      "changed": true,
+      "changed": false,
       "metrics": [
         "usd_uzs_level",
         "usd_uzs_mom_change",
@@ -15,7 +17,7 @@
     {
       "family": "siat-trade",
       "status": "validated",
-      "changed": true,
+      "changed": false,
       "metrics": [
         "exports_yoy",
         "imports_yoy",
@@ -25,7 +27,7 @@
     {
       "family": "siat-cpi",
       "status": "validated",
-      "changed": true,
+      "changed": false,
       "metrics": [
         "cpi_mom"
       ]
@@ -41,7 +43,7 @@
     {
       "family": "world-bank-gold",
       "status": "validated",
-      "changed": true,
+      "changed": false,
       "metrics": [
         "gold_price_level",
         "gold_price_change"
@@ -50,623 +52,101 @@
     {
       "family": "cpi-2026-08",
       "status": "validated",
-      "changed": true
+      "changed": false
     },
     {
       "family": "policy-rate-2026-09-16",
       "status": "validated",
-      "changed": true
+      "changed": false
     }
   ],
   "sources": [
     {
-      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-01/",
-      "sha256": "535b93377491b1f73a2408a651e058d30ad821887e8f535c573bbaaf107aea07",
+      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-03/",
+      "sha256": "c98c1b7960e7c7c07934a6726008d931b9c36f216e9582adf7c9701f94be440c",
       "bytes": 221,
-      "path": "raw/535b93377491b1f73a2408a651e058d30ad821887e8f535c573bbaaf107aea07.json",
-      "fetched_at": "2026-10-01T15:32:00Z"
+      "path": "raw/c98c1b7960e7c7c07934a6726008d931b9c36f216e9582adf7c9701f94be440c.json",
+      "representation": "normalized JSON",
+      "fetched_at": "2026-10-03T19:58:02Z"
     },
     {
-      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-09-01/",
-      "sha256": "0c2238e32cb226b3a5c4a7fe72b579de07b0cf8b2180676222971cf01c070581",
-      "bytes": 221,
-      "path": "raw/0c2238e32cb226b3a5c4a7fe72b579de07b0cf8b2180676222971cf01c070581.json",
-      "fetched_at": "2026-10-01T15:32:00Z"
+      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-09-03/",
+      "sha256": "df6d5a1b8664f7d1708b89c4caa931daa114d80409a4b32fd693e64bcdf9bfcf",
+      "bytes": 220,
+      "path": "raw/df6d5a1b8664f7d1708b89c4caa931daa114d80409a4b32fd693e64bcdf9bfcf.json",
+      "representation": "normalized JSON",
+      "fetched_at": "2026-10-03T19:58:02Z"
     },
     {
-      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2025-10-01/",
-      "sha256": "85e5157a083f645318029263b62a98b33ddd8b7f885a866bf7447731882a5128",
-      "bytes": 221,
-      "path": "raw/85e5157a083f645318029263b62a98b33ddd8b7f885a866bf7447731882a5128.json",
-      "fetched_at": "2026-10-01T15:32:00Z"
+      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2025-10-03/",
+      "sha256": "c1f4b1829436cc4f0042e1be8043a6c692afca4329c9ff49355a7ad7d4adede2",
+      "bytes": 220,
+      "path": "raw/c1f4b1829436cc4f0042e1be8043a6c692afca4329c9ff49355a7ad7d4adede2.json",
+      "representation": "normalized JSON",
+      "fetched_at": "2026-10-03T19:58:02Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json",
       "sha256": "8e5e8062c495359e032628896c485da90803fec0f695a77bebaaf8b7b46e04c5",
       "bytes": 327805,
       "path": "raw/8e5e8062c495359e032628896c485da90803fec0f695a77bebaaf8b7b46e04c5.json",
-      "fetched_at": "2026-10-01T15:32:00Z"
+      "representation": "normalized JSON",
+      "fetched_at": "2026-10-03T19:58:02Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2414.json",
       "sha256": "9d09d8844df814500602e74cb5f5d0fd5f49a51fde2b77bc3a4d8bd0c116b365",
       "bytes": 330060,
       "path": "raw/9d09d8844df814500602e74cb5f5d0fd5f49a51fde2b77bc3a4d8bd0c116b365.json",
-      "fetched_at": "2026-10-01T15:32:00Z"
+      "representation": "normalized JSON",
+      "fetched_at": "2026-10-03T19:58:02Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json",
       "sha256": "921b2257d410d2b1c32e1f58e2d7b3611ec3632bccfb5c7b722f5380c7cc23fe",
       "bytes": 470370,
       "path": "raw/921b2257d410d2b1c32e1f58e2d7b3611ec3632bccfb5c7b722f5380c7cc23fe.json",
-      "fetched_at": "2026-10-01T15:32:00Z"
+      "representation": "normalized JSON",
+      "fetched_at": "2026-10-03T19:58:02Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_582.json",
       "sha256": "5261061f73ec576477e2b752b11561863c2cfe9fc3e50967fabf0df390c5be92",
       "bytes": 12304,
       "path": "raw/5261061f73ec576477e2b752b11561863c2cfe9fc3e50967fabf0df390c5be92.json",
-      "fetched_at": "2026-10-01T15:32:00Z"
+      "representation": "normalized JSON",
+      "fetched_at": "2026-10-03T19:58:02Z"
     },
     {
       "url": "https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Monthly.xlsx",
-      "sha256": "9fdcfa8a2aed9a1bb545a10c1a5ce036c6a0acd4766f450424ca800b4b5a0225",
-      "bytes": 586735,
-      "path": "raw/9fdcfa8a2aed9a1bb545a10c1a5ce036c6a0acd4766f450424ca800b4b5a0225.xlsx",
-      "fetched_at": "2026-10-01T15:32:00Z"
+      "sha256": "ea1c350827878ea3bbe30e3cda16a13fd3bd5b409b8458940dc94a36b5a33154",
+      "bytes": 586099,
+      "path": "raw/ea1c350827878ea3bbe30e3cda16a13fd3bd5b409b8458940dc94a36b5a33154.xlsx",
+      "representation": "downloaded bytes",
+      "fetched_at": "2026-10-03T19:58:02Z"
     },
     {
       "url": "https://stat.uz/img/news/press-release_cpi_august_2026_en_p63576.pdf",
       "sha256": "7252e48ef6f4f7b22dc51ce9195247cc528aac577e46cd52ae065d177007b500",
       "bytes": 329568,
       "path": "raw/7252e48ef6f4f7b22dc51ce9195247cc528aac577e46cd52ae065d177007b500.pdf",
-      "fetched_at": "2026-10-01T15:32:00Z"
+      "representation": "downloaded bytes",
+      "fetched_at": "2026-10-03T19:58:02Z"
     },
     {
       "url": "https://cbu.uz/en/press_center/releases/4540151/",
-      "sha256": "e8735e8d459f0a3b3e50d79f664a5eea9f0f942ba150fcc2af47aaf56ce211f2",
-      "bytes": 198537,
-      "path": "raw/e8735e8d459f0a3b3e50d79f664a5eea9f0f942ba150fcc2af47aaf56ce211f2.html",
-      "fetched_at": "2026-10-01T15:32:00Z"
+      "sha256": "0bd6c4ab59b0a943127b1d3d04096bdee318d3ab2bbb65a196ddabdce021d045",
+      "bytes": 198541,
+      "path": "raw/0bd6c4ab59b0a943127b1d3d04096bdee318d3ab2bbb65a196ddabdce021d045.html",
+      "representation": "downloaded bytes",
+      "fetched_at": "2026-10-03T19:58:02Z"
     }
   ],
-  "diff": [
-    {
-      "metric_id": "usd_uzs_level",
-      "field": "value",
-      "old_value": 11915.64,
-      "new_value": 11808.76
-    },
-    {
-      "metric_id": "usd_uzs_level",
-      "field": "previous_value",
-      "old_value": 12042.05,
-      "new_value": 11801.23
-    },
-    {
-      "metric_id": "usd_uzs_level",
-      "field": "source_period",
-      "old_value": "2026-08-07",
-      "new_value": "2026-10-01"
-    },
-    {
-      "metric_id": "usd_uzs_level",
-      "field": "source_url",
-      "old_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-08-07/",
-      "new_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-01/"
-    },
-    {
-      "metric_id": "usd_uzs_level",
-      "field": "observed_at",
-      "old_value": "2026-08-07T00:00:00Z",
-      "new_value": "2026-10-01T00:00:00Z"
-    },
-    {
-      "metric_id": "usd_uzs_level",
-      "field": "caveats",
-      "old_value": [
-        "Official/reference rate, not transaction-weighted market average.",
-        "Latest observation: requested 2026-08-07; actual CBU date/rate 2026-08-07, 11915.64 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-07-07; actual CBU date/rate 2026-07-07, 12042.05 UZS per USD."
-      ],
-      "new_value": [
-        "Official/reference rate, not transaction-weighted market average.",
-        "Latest observation: requested 2026-10-01; actual CBU date/rate 2026-10-01, 11808.76 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-09-01; actual CBU date/rate 2026-08-28 returned for requested 2026-09-01, 11801.23 UZS per USD."
-      ]
-    },
-    {
-      "metric_id": "usd_uzs_level",
-      "field": "warnings",
-      "old_value": [],
-      "new_value": [
-        "Prior-month requested date 2026-09-01 differed from actual CBU date 2026-08-28; nearest available CBU observation was used."
-      ]
-    },
-    {
-      "metric_id": "usd_uzs_mom_change",
-      "field": "value",
-      "old_value": -1.05,
-      "new_value": 0.06
-    },
-    {
-      "metric_id": "usd_uzs_mom_change",
-      "field": "source_period",
-      "old_value": "2026-08-07 vs 2026-07-07",
-      "new_value": "2026-10-01 vs 2026-08-28"
-    },
-    {
-      "metric_id": "usd_uzs_mom_change",
-      "field": "source_url",
-      "old_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-08-07/",
-      "new_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-01/"
-    },
-    {
-      "metric_id": "usd_uzs_mom_change",
-      "field": "source_reference",
-      "old_value": "Calculated from CBU official USD rates: 11915.64 on 2026-08-07 and 12042.05 on 2026-07-07. Requested dates: latest 2026-08-07, prior-month 2026-07-07.",
-      "new_value": "Calculated from CBU official USD rates: 11808.76 on 2026-10-01 and 11801.23 on 2026-08-28. Requested dates: latest 2026-10-01, prior-month 2026-09-01."
-    },
-    {
-      "metric_id": "usd_uzs_mom_change",
-      "field": "extracted_at",
-      "old_value": "2026-08-07T07:11:33.158Z",
-      "new_value": "2026-10-01T15:32:00Z"
-    },
-    {
-      "metric_id": "usd_uzs_mom_change",
-      "field": "caveats",
-      "old_value": [
-        "Latest observation: requested 2026-08-07; actual CBU date/rate 2026-08-07, 11915.64 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-07-07; actual CBU date/rate 2026-07-07, 12042.05 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-08-07; actual CBU date/rate 2025-08-07, 12502.99 UZS per USD.",
-        "Formula: ((latest - comparison) / comparison) * 100.",
-        "Rounded to 2 decimal places.",
-        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
-      ],
-      "new_value": [
-        "Latest observation: requested 2026-10-01; actual CBU date/rate 2026-10-01, 11808.76 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-09-01; actual CBU date/rate 2026-08-28 returned for requested 2026-09-01, 11801.23 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-10-01; actual CBU date/rate 2025-09-30 returned for requested 2025-10-01, 12067.76 UZS per USD.",
-        "Formula: ((latest - comparison) / comparison) * 100.",
-        "Rounded to 2 decimal places.",
-        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
-      ]
-    },
-    {
-      "metric_id": "usd_uzs_mom_change",
-      "field": "warnings",
-      "old_value": [],
-      "new_value": [
-        "Prior-month requested date 2026-09-01 differed from actual CBU date 2026-08-28; nearest available CBU observation was used."
-      ]
-    },
-    {
-      "metric_id": "usd_uzs_yoy_change",
-      "field": "value",
-      "old_value": -4.7,
-      "new_value": -2.15
-    },
-    {
-      "metric_id": "usd_uzs_yoy_change",
-      "field": "source_period",
-      "old_value": "2026-08-07 vs 2025-08-07",
-      "new_value": "2026-10-01 vs 2025-09-30"
-    },
-    {
-      "metric_id": "usd_uzs_yoy_change",
-      "field": "source_url",
-      "old_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-08-07/",
-      "new_value": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-01/"
-    },
-    {
-      "metric_id": "usd_uzs_yoy_change",
-      "field": "source_reference",
-      "old_value": "Calculated from CBU official USD rates: 11915.64 on 2026-08-07 and 12502.99 on 2025-08-07. Requested dates: latest 2026-08-07, prior-year 2025-08-07.",
-      "new_value": "Calculated from CBU official USD rates: 11808.76 on 2026-10-01 and 12067.76 on 2025-09-30. Requested dates: latest 2026-10-01, prior-year 2025-10-01."
-    },
-    {
-      "metric_id": "usd_uzs_yoy_change",
-      "field": "extracted_at",
-      "old_value": "2026-08-07T07:11:33.158Z",
-      "new_value": "2026-10-01T15:32:00Z"
-    },
-    {
-      "metric_id": "usd_uzs_yoy_change",
-      "field": "caveats",
-      "old_value": [
-        "Latest observation: requested 2026-08-07; actual CBU date/rate 2026-08-07, 11915.64 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-07-07; actual CBU date/rate 2026-07-07, 12042.05 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-08-07; actual CBU date/rate 2025-08-07, 12502.99 UZS per USD.",
-        "Formula: ((latest - comparison) / comparison) * 100.",
-        "Rounded to 2 decimal places.",
-        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
-      ],
-      "new_value": [
-        "Latest observation: requested 2026-10-01; actual CBU date/rate 2026-10-01, 11808.76 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-09-01; actual CBU date/rate 2026-08-28 returned for requested 2026-09-01, 11801.23 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-10-01; actual CBU date/rate 2025-09-30 returned for requested 2025-10-01, 12067.76 UZS per USD.",
-        "Formula: ((latest - comparison) / comparison) * 100.",
-        "Rounded to 2 decimal places.",
-        "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
-      ]
-    },
-    {
-      "metric_id": "usd_uzs_yoy_change",
-      "field": "warnings",
-      "old_value": [],
-      "new_value": [
-        "Prior-year requested date 2025-10-01 differed from actual CBU date 2025-09-30; nearest available CBU observation was used."
-      ]
-    },
-    {
-      "metric_id": "exports_yoy",
-      "field": "value",
-      "old_value": -6.07,
-      "new_value": -3.36
-    },
-    {
-      "metric_id": "exports_yoy",
-      "field": "source_period",
-      "old_value": "January-June 2026",
-      "new_value": "January-August 2026"
-    },
-    {
-      "metric_id": "exports_yoy",
-      "field": "source_reference",
-      "old_value": "Calculated from SIAT sdmx_data_2407 cumulative monthly export levels for January-June 2026: USD 15,862.3 million versus USD 16,886.7 million for January-June 2025.",
-      "new_value": "Calculated from SIAT sdmx_data_2407 cumulative monthly export levels for January-August 2026: USD 22,866.9 million versus USD 23,661.7 million for January-August 2025."
-    },
-    {
-      "metric_id": "exports_yoy",
-      "field": "observed_at",
-      "old_value": "2026-07-28T00:00:00Z",
-      "new_value": "2026-09-26T00:00:00Z"
-    },
-    {
-      "metric_id": "exports_yoy",
-      "field": "extracted_at",
-      "old_value": "2026-08-07T07:11:33.466Z",
-      "new_value": "2026-10-01T15:32:00Z"
-    },
-    {
-      "metric_id": "exports_yoy",
-      "field": "caveats",
-      "old_value": [
-        "Trade values can be revised; show latest-vintage status.",
-        "YoY rate calculated from official SIAT cumulative monthly export levels: USD 15,862.3 million for January-June 2026 versus USD 16,886.7 million for January-June 2025."
-      ],
-      "new_value": [
-        "Trade values can be revised; show latest-vintage status.",
-        "YoY rate calculated from official SIAT cumulative monthly export levels: USD 22,866.9 million for January-August 2026 versus USD 23,661.7 million for January-August 2025."
-      ]
-    },
-    {
-      "metric_id": "imports_yoy",
-      "field": "value",
-      "old_value": 24.91,
-      "new_value": 16.26
-    },
-    {
-      "metric_id": "imports_yoy",
-      "field": "source_period",
-      "old_value": "January-June 2026",
-      "new_value": "January-August 2026"
-    },
-    {
-      "metric_id": "imports_yoy",
-      "field": "source_reference",
-      "old_value": "Calculated from SIAT sdmx_data_2414 cumulative monthly import levels for January-June 2026: USD 25,148.9 million versus USD 20,133.2 million for January-June 2025.",
-      "new_value": "Calculated from SIAT sdmx_data_2414 cumulative monthly import levels for January-August 2026: USD 34,535.6 million versus USD 29,706.6 million for January-August 2025."
-    },
-    {
-      "metric_id": "imports_yoy",
-      "field": "observed_at",
-      "old_value": "2026-07-28T00:00:00Z",
-      "new_value": "2026-09-26T00:00:00Z"
-    },
-    {
-      "metric_id": "imports_yoy",
-      "field": "extracted_at",
-      "old_value": "2026-08-07T07:11:33.466Z",
-      "new_value": "2026-10-01T15:32:00Z"
-    },
-    {
-      "metric_id": "imports_yoy",
-      "field": "caveats",
-      "old_value": [
-        "Trade values can be revised; show latest-vintage status.",
-        "YoY rate calculated from official SIAT cumulative monthly import levels: USD 25,148.9 million for January-June 2026 versus USD 20,133.2 million for January-June 2025."
-      ],
-      "new_value": [
-        "Trade values can be revised; show latest-vintage status.",
-        "YoY rate calculated from official SIAT cumulative monthly import levels: USD 34,535.6 million for January-August 2026 versus USD 29,706.6 million for January-August 2025."
-      ]
-    },
-    {
-      "metric_id": "trade_balance",
-      "field": "value",
-      "old_value": -9.29,
-      "new_value": -11.67
-    },
-    {
-      "metric_id": "trade_balance",
-      "field": "source_period",
-      "old_value": "January-June 2026",
-      "new_value": "January-August 2026"
-    },
-    {
-      "metric_id": "trade_balance",
-      "field": "source_reference",
-      "old_value": "Calculated from SIAT cumulative monthly goods trade levels for January-June 2026: exports USD 15,862.3 million from sdmx_data_2407, imports USD 25,148.9 million from sdmx_data_2414. Source URLs: https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json; https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2414.json.",
-      "new_value": "Calculated from SIAT cumulative monthly goods trade levels for January-August 2026: exports USD 22,866.9 million from sdmx_data_2407, imports USD 34,535.6 million from sdmx_data_2414. Source URLs: https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json; https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2414.json."
-    },
-    {
-      "metric_id": "trade_balance",
-      "field": "extracted_at",
-      "old_value": "2026-08-07T07:11:33.466Z",
-      "new_value": "2026-10-01T15:32:00Z"
-    },
-    {
-      "metric_id": "cpi_mom",
-      "field": "value",
-      "old_value": -0.1,
-      "new_value": 0.2
-    },
-    {
-      "metric_id": "cpi_mom",
-      "field": "previous_value",
-      "old_value": 0.6,
-      "new_value": -0.1
-    },
-    {
-      "metric_id": "cpi_mom",
-      "field": "source_period",
-      "old_value": "July 2026",
-      "new_value": "August 2026"
-    },
-    {
-      "metric_id": "cpi_mom",
-      "field": "source_reference",
-      "old_value": "Calculated from SIAT sdmx_data_4585 aggregate CPI previous-month index for July 2026: 99.9 minus 100. Previous value uses June 2026 aggregate index 100.6 minus 100.",
-      "new_value": "Calculated from SIAT sdmx_data_4585 aggregate CPI previous-month index for August 2026: 100.2 minus 100. Previous value uses July 2026 aggregate index 99.9 minus 100."
-    },
-    {
-      "metric_id": "cpi_mom",
-      "field": "observed_at",
-      "old_value": "2026-08-05T00:00:00Z",
-      "new_value": "2026-09-05T00:00:00Z"
-    },
-    {
-      "metric_id": "cpi_mom",
-      "field": "extracted_at",
-      "old_value": "2026-08-07T07:11:34.354Z",
-      "new_value": "2026-10-01T15:32:00Z"
-    },
-    {
-      "metric_id": "cpi_mom",
-      "field": "caveats",
-      "old_value": [
-        "Monthly inflation can be volatile; do not present as trend alone.",
-        "previous_value 0.6 is June 2026 SIAT 4585 aggregate index 100.6 minus 100."
-      ],
-      "new_value": [
-        "Monthly inflation can be volatile; do not present as trend alone.",
-        "previous_value -0.1 is July 2026 SIAT 4585 aggregate index 99.9 minus 100."
-      ]
-    },
-    {
-      "metric_id": "gold_price_level",
-      "field": "value",
-      "old_value": 4073,
-      "new_value": 4411
-    },
-    {
-      "metric_id": "gold_price_level",
-      "field": "previous_value",
-      "old_value": 4228,
-      "new_value": 4073
-    },
-    {
-      "metric_id": "gold_price_level",
-      "field": "source_period",
-      "old_value": "July 2026 monthly average",
-      "new_value": "August 2026 monthly average"
-    },
-    {
-      "metric_id": "gold_price_level",
-      "field": "observed_at",
-      "old_value": "2026-08-04T00:00:00Z",
-      "new_value": "2026-09-02T00:00:00Z"
-    },
-    {
-      "metric_id": "gold_price_level",
-      "field": "extracted_at",
-      "old_value": "2026-08-07T07:11:35.296Z",
-      "new_value": "2026-10-01T15:32:00Z"
-    },
-    {
-      "metric_id": "gold_price_change",
-      "field": "value",
-      "old_value": -3.67,
-      "new_value": 8.3
-    },
-    {
-      "metric_id": "gold_price_change",
-      "field": "source_period",
-      "old_value": "July 2026 vs June 2026",
-      "new_value": "August 2026 vs July 2026"
-    },
-    {
-      "metric_id": "gold_price_change",
-      "field": "source_reference",
-      "old_value": "Calculated from World Bank Pink Sheet monthly gold prices: 4073 for July 2026 and 4228 for June 2026",
-      "new_value": "Calculated from World Bank Pink Sheet monthly gold prices: 4411 for August 2026 and 4073 for July 2026"
-    },
-    {
-      "metric_id": "gold_price_change",
-      "field": "observed_at",
-      "old_value": "2026-08-04T00:00:00Z",
-      "new_value": "2026-09-02T00:00:00Z"
-    },
-    {
-      "metric_id": "gold_price_change",
-      "field": "extracted_at",
-      "old_value": "2026-08-07T07:11:35.296Z",
-      "new_value": "2026-10-01T15:32:00Z"
-    },
-    {
-      "metric_id": "cpi_yoy",
-      "field": "value",
-      "old_value": 6.4,
-      "new_value": 6.2
-    },
-    {
-      "metric_id": "cpi_yoy",
-      "field": "source_period",
-      "old_value": "July 2026",
-      "new_value": "August 2026"
-    },
-    {
-      "metric_id": "cpi_yoy",
-      "field": "source_url",
-      "old_value": "https://stat.uz/img/press-relizlar/press-reliz-ini-iyul-2026-en_p37035.pdf",
-      "new_value": "https://stat.uz/img/news/press-release_cpi_august_2026_en_p63576.pdf"
-    },
-    {
-      "metric_id": "cpi_yoy",
-      "field": "observed_at",
-      "old_value": "2026-08-05T00:00:00Z",
-      "new_value": "2026-09-05T00:00:00Z"
-    },
-    {
-      "metric_id": "cpi_yoy",
-      "field": "extracted_at",
-      "old_value": "2026-08-08T08:49:19.486Z",
-      "new_value": "2026-10-01T15:32:00Z"
-    },
-    {
-      "metric_id": "cpi_yoy",
-      "field": "source_reference",
-      "old_value": "Official July 2026 CPI release: aggregate CPI 106.4 relative to July 2025 and 99.9 relative to June 2026. The monthly headline index is independently reconciled to SIAT sdmx_data_4585.",
-      "new_value": "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585."
-    },
-    {
-      "metric_id": "cpi_yoy",
-      "field": "caveats",
-      "old_value": [
-        "Official aggregate CPI: 106.4 relative to July 2025.",
-        "previous_value 6.4 is the official June 2026 annual CPI rate."
-      ],
-      "new_value": [
-        "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585."
-      ]
-    },
-    {
-      "metric_id": "food_cpi_yoy",
-      "field": "value",
-      "old_value": 6.4,
-      "new_value": 6.2
-    },
-    {
-      "metric_id": "food_cpi_yoy",
-      "field": "previous_value",
-      "old_value": 6.3,
-      "new_value": 6.4
-    },
-    {
-      "metric_id": "food_cpi_yoy",
-      "field": "source_period",
-      "old_value": "July 2026",
-      "new_value": "August 2026"
-    },
-    {
-      "metric_id": "food_cpi_yoy",
-      "field": "source_url",
-      "old_value": "https://stat.uz/img/press-relizlar/press-reliz-ini-iyul-2026-en_p37035.pdf",
-      "new_value": "https://stat.uz/img/news/press-release_cpi_august_2026_en_p63576.pdf"
-    },
-    {
-      "metric_id": "food_cpi_yoy",
-      "field": "observed_at",
-      "old_value": "2026-08-05T00:00:00Z",
-      "new_value": "2026-09-05T00:00:00Z"
-    },
-    {
-      "metric_id": "food_cpi_yoy",
-      "field": "extracted_at",
-      "old_value": "2026-08-08T08:49:19.486Z",
-      "new_value": "2026-10-01T15:32:00Z"
-    },
-    {
-      "metric_id": "food_cpi_yoy",
-      "field": "source_reference",
-      "old_value": "Official July 2026 CPI release: food-products group CPI 106.4 relative to July 2025 and 99.1 relative to June 2026. The annual rate is reconciled to the SIAT 4585 monthly food-products index chain.",
-      "new_value": "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585."
-    },
-    {
-      "metric_id": "food_cpi_yoy",
-      "field": "caveats",
-      "old_value": [
-        "Official CPI for the food-products main group: 106.4 relative to July 2025.",
-        "previous_value 6.3 is the official June 2026 food-products annual CPI rate."
-      ],
-      "new_value": [
-        "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585."
-      ]
-    },
-    {
-      "metric_id": "policy_rate",
-      "field": "source_period",
-      "old_value": "Decision of 29 July 2026",
-      "new_value": "Decision of 16 September 2026"
-    },
-    {
-      "metric_id": "policy_rate",
-      "field": "source_url",
-      "old_value": "https://cbu.uz/en/press_center/releases/4256855/",
-      "new_value": "https://cbu.uz/en/press_center/releases/4540151/"
-    },
-    {
-      "metric_id": "policy_rate",
-      "field": "observed_at",
-      "old_value": "2026-07-29T00:00:00Z",
-      "new_value": "2026-09-16T00:00:00Z"
-    },
-    {
-      "metric_id": "policy_rate",
-      "field": "extracted_at",
-      "old_value": "2026-08-07T07:11:09.182Z",
-      "new_value": "2026-10-01T15:32:00Z"
-    },
-    {
-      "metric_id": "policy_rate",
-      "field": "source_reference",
-      "old_value": "Central Bank Board decision of 29 July 2026 retained the policy rate at 14 percent per annum; the next scheduled review is 16 September 2026.",
-      "new_value": "Official CBU decision retains the policy rate at 14 percent per annum. This refreshes the decision vintage, not the rate value."
-    },
-    {
-      "metric_id": "policy_rate",
-      "field": "caveats",
-      "old_value": [
-        "Event-based policy setting; the Board kept the rate unchanged at 14 percent per annum on 29 July 2026."
-      ],
-      "new_value": [
-        "Official CBU decision retains the policy rate at 14 percent per annum. This refreshes the decision vintage, not the rate value."
-      ]
-    },
-    {
-      "metric_id": "trade_balance",
-      "field": "observed_at",
-      "old_value": "2026-07-28T00:00:00Z",
-      "new_value": "2026-09-26T00:00:00Z"
-    }
-  ],
-  "snapshot_sha256": "657ee75ef06d50f0d0f4fa9bee736e9e539fc5c961d83448f34d5a38e9ea7e70",
-  "artifact_sha256": "0681c71e24079a53d521b973740b0aaa5169c502508d138bdbc8f4aedef3fb9f",
-  "generated_at": "2026-10-01T15:32:00Z",
-  "scope": "Configured source families; freshness is evaluated separately per metric",
-  "changed": true,
-  "value_hash": "edf41018cca88a6eed4ffa653ed6793c37b3c2bf5b67c892fed93e853a028641",
+  "diff": [],
+  "exported_at": "2026-10-03T19:58:34.093Z",
+  "snapshot_sha256": "dbe1fa4aa6f0b270e25dba3912d249da0fedb3c6c124f69e84f342b0bc9a4d98",
+  "artifact_sha256": "0852409ec9b1f37ad62f3e5a1df947a2375a987b19ddaf40496c0c2c7982cb4e",
+  "changed": false,
+  "value_hash": "0a0880505db6f28028c00eaa1df715f43d39ededa0231b4eb8bd104d0963ff09",
   "snapshot_status": "source_verified_for_public_artifact"
 }

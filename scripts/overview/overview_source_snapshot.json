@@ -2,9 +2,9 @@
   "source_snapshot_version": "overview-source.v1",
   "status": "source_verified_for_public_artifact",
   "snapshot_note": "Overview V2 source snapshot refreshed from official sources on 7 August 2026 and CPI figures corrected against the official 5 August 2026 release on 8 August 2026. The REER is source-backed but remains a Q1 reference; the static DFM fallback remains unavailable for current-quarter headline use until an accepted Q3 run is produced.",
-  "value_hash": "edf41018cca88a6eed4ffa653ed6793c37b3c2bf5b67c892fed93e853a028641",
-  "source_verified_by": "validated-official-source-refresh",
-  "source_verified_at": "2026-10-01T15:32:00Z",
+  "value_hash": "0a0880505db6f28028c00eaa1df715f43d39ededa0231b4eb8bd104d0963ff09",
+  "source_verified_by": "github-actions[bot]",
+  "source_verified_at": "2026-10-03T19:58:02Z",
   "metrics": [
     {
       "metric_id": "real_gdp_growth_annual_yoy",
@@ -212,74 +212,68 @@
     },
     {
       "metric_id": "usd_uzs_level",
-      "value": 11808.76,
-      "previous_value": 11801.23,
+      "value": 11772.95,
+      "previous_value": 11813.09,
       "source_label": "Central Bank of Uzbekistan exchange rate",
-      "source_period": "2026-10-01",
-      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-01/",
-      "observed_at": "2026-10-01T00:00:00Z",
+      "source_period": "2026-10-03",
+      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-03/",
+      "observed_at": "2026-10-03T00:00:00Z",
       "claim_type": "observed",
       "unit": "UZS per USD",
       "frequency": "daily",
       "validation_status": "valid",
       "caveats": [
         "Official/reference rate, not transaction-weighted market average.",
-        "Latest observation: requested 2026-10-01; actual CBU date/rate 2026-10-01, 11808.76 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-09-01; actual CBU date/rate 2026-08-28 returned for requested 2026-09-01, 11801.23 UZS per USD."
+        "Latest observation: requested 2026-10-03; actual CBU date/rate 2026-10-03, 11772.95 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-09-03; actual CBU date/rate 2026-09-03, 11813.09 UZS per USD."
       ],
-      "warnings": [
-        "Prior-month requested date 2026-09-01 differed from actual CBU date 2026-08-28; nearest available CBU observation was used."
-      ]
+      "warnings": []
     },
     {
       "metric_id": "usd_uzs_mom_change",
-      "value": 0.06,
+      "value": -0.34,
       "previous_value": null,
       "source_label": "CBU exchange rate, calculated",
-      "source_period": "2026-10-01 vs 2026-08-28",
-      "source_reference": "Calculated from CBU official USD rates: 11808.76 on 2026-10-01 and 11801.23 on 2026-08-28. Requested dates: latest 2026-10-01, prior-month 2026-09-01.",
-      "extracted_at": "2026-10-01T15:32:00Z",
+      "source_period": "2026-10-03 vs 2026-09-03",
+      "source_reference": "Calculated from CBU official USD rates: 11772.95 on 2026-10-03 and 11813.09 on 2026-09-03. Requested dates: latest 2026-10-03, prior-month 2026-09-03.",
+      "extracted_at": "2026-10-03T19:58:03.035Z",
       "claim_type": "calculated_identity",
       "unit": "percent MoM",
       "frequency": "monthly from daily observations",
       "validation_status": "valid",
       "caveats": [
-        "Latest observation: requested 2026-10-01; actual CBU date/rate 2026-10-01, 11808.76 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-09-01; actual CBU date/rate 2026-08-28 returned for requested 2026-09-01, 11801.23 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-10-01; actual CBU date/rate 2025-09-30 returned for requested 2025-10-01, 12067.76 UZS per USD.",
+        "Latest observation: requested 2026-10-03; actual CBU date/rate 2026-10-03, 11772.95 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-09-03; actual CBU date/rate 2026-09-03, 11813.09 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-10-03; actual CBU date/rate 2025-10-03, 12099.72 UZS per USD.",
         "Formula: ((latest - comparison) / comparison) * 100.",
         "Rounded to 2 decimal places.",
         "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
       ],
-      "warnings": [
-        "Prior-month requested date 2026-09-01 differed from actual CBU date 2026-08-28; nearest available CBU observation was used."
-      ],
-      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-01/"
+      "warnings": [],
+      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-03/"
     },
     {
       "metric_id": "usd_uzs_yoy_change",
-      "value": -2.15,
+      "value": -2.7,
       "previous_value": null,
       "source_label": "CBU exchange rate, calculated",
-      "source_period": "2026-10-01 vs 2025-09-30",
-      "source_reference": "Calculated from CBU official USD rates: 11808.76 on 2026-10-01 and 12067.76 on 2025-09-30. Requested dates: latest 2026-10-01, prior-year 2025-10-01.",
-      "extracted_at": "2026-10-01T15:32:00Z",
+      "source_period": "2026-10-03 vs 2025-10-03",
+      "source_reference": "Calculated from CBU official USD rates: 11772.95 on 2026-10-03 and 12099.72 on 2025-10-03. Requested dates: latest 2026-10-03, prior-year 2025-10-03.",
+      "extracted_at": "2026-10-03T19:58:03.035Z",
       "claim_type": "calculated_identity",
       "unit": "percent YoY",
       "frequency": "monthly from daily observations",
       "validation_status": "valid",
       "caveats": [
-        "Latest observation: requested 2026-10-01; actual CBU date/rate 2026-10-01, 11808.76 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-09-01; actual CBU date/rate 2026-08-28 returned for requested 2026-09-01, 11801.23 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-10-01; actual CBU date/rate 2025-09-30 returned for requested 2025-10-01, 12067.76 UZS per USD.",
+        "Latest observation: requested 2026-10-03; actual CBU date/rate 2026-10-03, 11772.95 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-09-03; actual CBU date/rate 2026-09-03, 11813.09 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-10-03; actual CBU date/rate 2025-10-03, 12099.72 UZS per USD.",
         "Formula: ((latest - comparison) / comparison) * 100.",
         "Rounded to 2 decimal places.",
         "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
       ],
-      "warnings": [
-        "Prior-year requested date 2025-10-01 differed from actual CBU date 2025-09-30; nearest available CBU observation was used."
-      ],
-      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-01/"
+      "warnings": [],
+      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-03/"
     },
     {
       "metric_id": "reer_level",
@@ -305,12 +299,12 @@
     },
     {
       "metric_id": "gold_price_level",
-      "value": 4411,
-      "previous_value": 4073,
+      "value": 4319,
+      "previous_value": 4411,
       "source_label": "World Bank Pink Sheet gold price",
-      "source_period": "August 2026 monthly average",
+      "source_period": "September 2026 monthly average",
       "source_url": "https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Monthly.xlsx",
-      "observed_at": "2026-09-02T00:00:00Z",
+      "observed_at": "2026-10-02T00:00:00Z",
       "claim_type": "observed_market_price",
       "unit": "USD per troy ounce",
       "frequency": "daily or monthly",
@@ -319,16 +313,16 @@
         "External monthly average market price; not a CERR forecast."
       ],
       "warnings": [],
-      "extracted_at": "2026-10-01T15:32:00Z"
+      "extracted_at": "2026-10-03T19:58:22.308Z"
     },
     {
       "metric_id": "gold_price_change",
-      "value": 8.3,
+      "value": -2.09,
       "previous_value": null,
       "source_label": "World Bank Pink Sheet gold price, calculated",
-      "source_period": "August 2026 vs July 2026",
-      "source_reference": "Calculated from World Bank Pink Sheet monthly gold prices: 4411 for August 2026 and 4073 for July 2026",
-      "extracted_at": "2026-10-01T15:32:00Z",
+      "source_period": "September 2026 vs August 2026",
+      "source_reference": "Calculated from World Bank Pink Sheet monthly gold prices: 4319 for September 2026 and 4411 for August 2026",
+      "extracted_at": "2026-10-03T19:58:22.308Z",
       "claim_type": "calculated_identity",
       "unit": "percent MoM or YoY",
       "frequency": "monthly",
@@ -337,7 +331,7 @@
         "Comparison basis is MoM."
       ],
       "warnings": [],
-      "observed_at": "2026-09-02T00:00:00Z",
+      "observed_at": "2026-10-02T00:00:00Z",
       "source_url": "https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Monthly.xlsx"
     },
     {
