@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - '.github/workflows/overview-artifact-refresh.yml'
+      - '.github/workflows/data-regen.yml'
       - 'scripts/overview/**'
       - 'apps/policy-ui/public/data/overview.json'
       - 'apps/policy-ui/tests/data/overview/**'
@@ -121,6 +122,7 @@ jobs:
           node scripts/overview/refresh-candidate.mjs --out tmp/overview-refresh-candidate --as-of "${{ steps.meta.outputs.run_started_at }}"
           cp tmp/overview-refresh-candidate/source-snapshot.json "$SNAPSHOT_PATH"
           cp tmp/overview-refresh-candidate/refresh-report.json "$DIFF_REPORT_PATH"
+          cp tmp/overview-refresh-candidate/overview.json "$PUBLIC_OVERVIEW_PATH"
 
       - name: Retain source refresh evidence
         if: always()
@@ -139,12 +141,6 @@ jobs:
           else
             echo "snapshot_changed=true" >> "$GITHUB_OUTPUT"
           fi
-
-      - name: Export public Overview artifact
-        if: steps.source_changes.outputs.snapshot_changed == 'true'
-        env:
-          OVERVIEW_EXPORTER_FORCE_COMPILED: "1"
-        run: node scripts/overview/export-overview.mjs --exported-at "${{ steps.meta.outputs.run_started_at }}"
 
       - name: Lint policy-ui
         if: steps.source_changes.outputs.snapshot_changed == 'true'
