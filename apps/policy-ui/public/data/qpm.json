@@ -4,9 +4,9 @@
     "model_name": "Quarterly Projection Model (Uzbekistan)",
     "module": "qpm",
     "version": "0.3.0",
-    "run_id": "qpm-nightly-2026-10-03",
-    "data_version": "Overview 2026-10-01",
-    "timestamp": "2026-10-01T15:32:00Z"
+    "run_id": "qpm-nightly-2026-10-01",
+    "data_version": "Overview 2026-07-17",
+    "timestamp": "2026-07-17T09:31:21.521Z"
   },
   "parameters": [
     {
@@ -179,9 +179,9 @@
       "periods": ["2026 Q3", "2026 Q4", "2027 Q1", "2027 Q2", "2027 Q3", "2027 Q4", "2028 Q1", "2028 Q2"],
       "paths": {
         "gdp_growth": [6, 6, 6, 6, 6, 6, 6, 6],
-        "inflation": [6.2, 6.05, 5.9, 5.75, 5.75, 5.75, 5.75, 5.75],
+        "inflation": [6.4, 6.25, 6.1, 5.95, 5.8, 5.75, 5.75, 5.75],
         "policy_rate": [14, 13.75, 13.5, 13.25, 13, 12.75, 12.5, 12.25],
-        "exchange_rate": [11808.8, 11844.6, 11970.8, 12199.1, 12499.7, 12830.2, 13154, 13444.8]
+        "exchange_rate": [12093.4, 12111.7, 12263.8, 12561.8, 12940, 13346.3, 13735.5, 14075.6]
       },
       "shocks_applied": {
         "rs_shock": 0,
@@ -190,7 +190,7 @@
         "pie_shock": 0,
         "external_demand_shock": 0
       },
-      "solver_iterations": 379
+      "solver_iterations": 386
     },
     {
       "scenario_id": "rate-cut-100bp",
@@ -199,10 +199,10 @@
       "horizon_quarters": 8,
       "periods": ["2026 Q3", "2026 Q4", "2027 Q1", "2027 Q2", "2027 Q3", "2027 Q4", "2028 Q1", "2028 Q2"],
       "paths": {
-        "gdp_growth": [6.166, 6.2451, 6.2542, 6.2146, 6.1488, 6.076, 6.0111, 5.9633],
-        "inflation": [6.2611, 6.2127, 6.1814, 6.1453, 6.1776, 6.1404, 6.0556, 5.9484],
-        "policy_rate": [13.2263, 13.3676, 13.4023, 13.3275, 13.156, 12.9102, 12.6169, 12.3016],
-        "exchange_rate": [11848.5, 11901.1, 12028.7, 12250, 12540.9, 12862.6, 13181.3, 13472]
+        "gdp_growth": [6.166, 6.2452, 6.2542, 6.2146, 6.1487, 6.076, 6.0112, 5.9633],
+        "inflation": [6.4611, 6.4128, 6.3814, 6.3452, 6.2277, 6.1405, 6.0556, 5.9485],
+        "policy_rate": [13.2263, 13.3676, 13.4022, 13.3276, 13.156, 12.9102, 12.6169, 12.3015],
+        "exchange_rate": [12134.1, 12169.5, 12323.1, 12614.3, 12982.6, 13380, 13764.1, 14104]
       },
       "shocks_applied": {
         "rs_shock": -1,
@@ -211,7 +211,7 @@
         "pie_shock": 0,
         "external_demand_shock": 0
       },
-      "solver_iterations": 378
+      "solver_iterations": 379
     },
     {
       "scenario_id": "rate-hike-100bp",
@@ -220,10 +220,10 @@
       "horizon_quarters": 8,
       "periods": ["2026 Q3", "2026 Q4", "2027 Q1", "2027 Q2", "2027 Q3", "2027 Q4", "2028 Q1", "2028 Q2"],
       "paths": {
-        "gdp_growth": [5.834, 5.7548, 5.7458, 5.7853, 5.8513, 5.924, 5.9888, 6.0367],
-        "inflation": [6.1389, 5.8872, 5.6187, 5.3547, 5.3223, 5.3596, 5.4444, 5.5516],
-        "policy_rate": [14.7737, 14.1325, 13.5978, 13.1724, 12.8439, 12.5897, 12.3831, 12.1985],
-        "exchange_rate": [11769.1, 11788.4, 11913.2, 12148.3, 12458.8, 12797.9, 13126.6, 13417.7]
+        "gdp_growth": [5.834, 5.7549, 5.7458, 5.7853, 5.8513, 5.9241, 5.9889, 6.0367],
+        "inflation": [6.339, 6.0872, 5.8186, 5.5547, 5.3724, 5.3596, 5.4444, 5.5516],
+        "policy_rate": [14.7737, 14.1325, 13.5977, 13.1724, 12.8439, 12.5897, 12.3831, 12.1984],
+        "exchange_rate": [12052.8, 12054.3, 12204.7, 12509.6, 12897.6, 13312.6, 13707, 14047.2]
       },
       "shocks_applied": {
         "rs_shock": 1,
@@ -232,7 +232,7 @@
         "pie_shock": 0,
         "external_demand_shock": 0
       },
-      "solver_iterations": 379
+      "solver_iterations": 386
     },
     {
       "scenario_id": "exchange-rate-shock",
@@ -241,10 +241,10 @@
       "horizon_quarters": 8,
       "periods": ["2026 Q3", "2026 Q4", "2027 Q1", "2027 Q2", "2027 Q3", "2027 Q4", "2028 Q1", "2028 Q2"],
       "paths": {
-        "gdp_growth": [7.2465, 7.5952, 7.3506, 6.795, 6.1593, 5.6068, 5.2299, 5.0584],
-        "inflation": [7.3069, 8.3908, 9.3761, 10.1089, 9.5596, 8.5579, 7.3832, 6.2733],
-        "policy_rate": [16.2547, 17.4639, 17.8024, 17.3744, 16.3945, 15.1182, 13.7862, 12.5855],
-        "exchange_rate": [13375.5, 13099.8, 12916.1, 12878.1, 12978.7, 13184.5, 13457.2, 13759.5]
+        "gdp_growth": [7.2465, 7.5953, 7.3506, 6.795, 6.1593, 5.6068, 5.2299, 5.0585],
+        "inflation": [7.5069, 8.5908, 9.5761, 10.3089, 9.6097, 8.558, 7.3832, 6.2734],
+        "policy_rate": [16.2547, 17.4639, 17.8024, 17.3745, 16.3945, 15.1181, 13.7862, 12.5854],
+        "exchange_rate": [13697.8, 13395.2, 13232.1, 13261.1, 13435.9, 13714.8, 14052.2, 14405]
       },
       "shocks_applied": {
         "rs_shock": 0,
@@ -253,7 +253,7 @@
         "pie_shock": 0,
         "external_demand_shock": 0
       },
-      "solver_iterations": 362
+      "solver_iterations": 345
     },
     {
       "scenario_id": "remittance-downside",
@@ -262,10 +262,10 @@
       "horizon_quarters": 8,
       "periods": ["2026 Q3", "2026 Q4", "2027 Q1", "2027 Q2", "2027 Q3", "2027 Q4", "2028 Q1", "2028 Q2"],
       "paths": {
-        "gdp_growth": [5.8491, 5.7913, 5.7893, 5.817, 5.8568, 5.897, 5.9313, 5.9565],
-        "inflation": [6.1907, 6.0253, 5.8591, 5.6969, 5.701, 5.7195, 5.7458, 5.773],
-        "policy_rate": [13.9579, 13.6733, 13.4066, 13.1597, 12.9295, 12.7091, 12.4916, 12.2707],
-        "exchange_rate": [11813.1, 11854.9, 11987.5, 12221.6, 12526.6, 12859.4, 13183.1, 13472]
+        "gdp_growth": [5.8491, 5.7914, 5.7893, 5.817, 5.8568, 5.8971, 5.9313, 5.9566],
+        "inflation": [6.3908, 6.2253, 6.0591, 5.8968, 5.7511, 5.7195, 5.7458, 5.773],
+        "policy_rate": [13.9579, 13.6733, 13.4065, 13.1598, 12.9295, 12.7091, 12.4916, 12.2707],
+        "exchange_rate": [12097.8, 12122.2, 12280.8, 12585, 12967.9, 13376.6, 13766, 14104]
       },
       "shocks_applied": {
         "rs_shock": 0,
@@ -344,24 +344,24 @@
     }
   ],
   "metadata": {
-    "exported_at": "2026-10-03T00:08:57Z",
+    "exported_at": "2026-10-01T00:21:55Z",
     "source_script_sha": null,
     "solver_version": "0.3.0",
     "baseline_source": {
       "source": "overview-artifact",
       "source_artifact": "apps/policy-ui/public/data/overview.json",
-      "exported_at": "2026-10-01T15:32:00Z",
-      "data_version": "Overview 2026-10-01",
+      "exported_at": "2026-07-17T09:31:21.521Z",
+      "data_version": "Overview 2026-07-17",
       "status_label": "Overview artifact baseline",
       "note": "Scenario Lab anchors the visible QPM baseline path to the latest approved Overview values where mapped, then applies QPM shock deviations around that path. Warning-status trade metrics are retained as context but are not allowed to mechanically drive the baseline external-demand gap.",
       "metrics": [
         {
           "metric_id": "cpi_yoy",
           "label": "CPI inflation, YoY",
-          "value": 6.2,
+          "value": 6.4,
           "unit": "percent YoY",
-          "source_label": "National Statistics Committee CPI",
-          "source_period": "August 2026"
+          "source_label": "Statistics Agency CPI",
+          "source_period": "June 2026"
         },
         {
           "metric_id": "policy_rate",
@@ -369,39 +369,39 @@
           "value": 14,
           "unit": "percent",
           "source_label": "Central Bank of Uzbekistan policy rate",
-          "source_period": "Decision of 16 September 2026"
+          "source_period": "Decision of 17 June 2026"
         },
         {
           "metric_id": "gdp_nowcast_current_quarter",
           "label": "GDP nowcast, current quarter",
           "value": 6,
           "unit": "percent YoY",
-          "source_label": "Static Overview fallback; no accepted Q3 DFM run",
+          "source_label": "Owner-approved static Overview fallback",
           "source_period": "2026 Q2 nowcast"
         },
         {
           "metric_id": "usd_uzs_level",
           "label": "USD/UZS exchange rate",
-          "value": 11808.76,
+          "value": 12093.35,
           "unit": "UZS per USD",
           "source_label": "Central Bank of Uzbekistan exchange rate",
-          "source_period": "2026-10-01"
+          "source_period": "2026-07-17"
         },
         {
           "metric_id": "usd_uzs_yoy_change",
           "label": "USD/UZS annual change",
-          "value": -2.15,
+          "value": -5.21,
           "unit": "percent YoY",
           "source_label": "CBU exchange rate, calculated",
-          "source_period": "2026-10-01 vs 2025-09-30"
+          "source_period": "2026-07-17 vs 2025-07-17"
         },
         {
           "metric_id": "exports_yoy",
           "label": "Exports growth, YoY",
-          "value": -3.36,
+          "value": -15.5,
           "unit": "percent YoY",
-          "source_label": "Statistics Agency SIAT trade data, calculated YoY",
-          "source_period": "January-August 2026"
+          "source_label": "National Statistics Committee foreign trade release, calculated YoY",
+          "source_period": "January-May 2026"
         }
       ]
     }

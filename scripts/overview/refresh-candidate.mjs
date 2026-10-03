@@ -9,6 +9,7 @@ import { buildSiatCpiMetricUpdates } from './sources/siat-cpi.mjs'
 import { buildSiatGdpAnnualMetricUpdates } from './sources/siat-gdp-annual.mjs'
 import { buildWorldBankGoldMetricUpdates } from './sources/world-bank-gold.mjs'
 import { fetchJsonWithRetry, fetchArrayBufferWithRetry } from './sources/http.mjs'
+import { resolveRefreshExportedAt } from './sources/refresh-clock.mjs'
 import { applyMetricUpdatesToSnapshot } from './sources/update-snapshot.mjs'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
@@ -89,7 +90,9 @@ for (const release of releases.releases) {
 const snapshotFile = resolve(output, 'source-snapshot.json')
 await writeFile(snapshotFile, `${JSON.stringify(snapshot, null, 2)}\n`)
 const artifactFile = resolve(output, 'overview.json')
-const exported = spawnSync(process.execPath, [resolve(root, 'scripts/overview/export-overview.mjs'), '--exported-at', now], {
+// Export after acquisition; the run start can precede retained extraction timestamps.
+report.exported_at = resolveRefreshExportedAt(now, new Date().toISOString())
+const exported = spawnSync(process.execPath, [resolve(root, 'scripts/overview/export-overview.mjs'), '--exported-at', report.exported_at], {
   env: { ...process.env, OVERVIEW_SOURCE_SNAPSHOT_PATH: snapshotFile, OVERVIEW_OUTPUT_PATH: artifactFile }, encoding: 'utf8', cwd: root,
 })
 if (exported.status !== 0) throw new Error(exported.error?.message || exported.stderr || exported.stdout || 'Exporter failed')

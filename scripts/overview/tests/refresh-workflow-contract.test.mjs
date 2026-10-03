@@ -26,3 +26,11 @@ test('refresh remains scheduled, validates PRs and cannot deploy or change QPM',
   assert.equal(pages.on.push, undefined)
   assert.ok(Object.hasOwn(pages.on, 'workflow_dispatch'))
 })
+
+
+test('nightly regeneration preserves the frozen historical QPM artifact', async () => {
+  const workflow = await read('data-regen.yml')
+  const steps = workflow.jobs['export-model-data'].steps
+  assert.ok(!steps.some(step => /export_qpm|public\/data\/qpm\.json/.test(step.run ?? '')))
+  assert.ok(steps.some(step => step.run?.includes('dfm/export-canonical.mjs')))
+})
