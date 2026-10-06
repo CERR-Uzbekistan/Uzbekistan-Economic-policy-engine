@@ -36,7 +36,8 @@ test('workflow publishes the validated candidate without reexporting at run star
 test('real exporter accepts collection before completion and rejects future extraction', () => {
   const directory = mkdtempSync(join(tmpdir(), 'overview-clock-'))
   try {
-    const snapshot = JSON.parse(readFileSync(new URL('../overview_source_snapshot.json', import.meta.url), 'utf8'))
+    // Frozen before this run's clock; production refreshes must not move this fixture.
+    const snapshot = JSON.parse(readFileSync(new URL('../test-fixtures/refresh-clock-source-snapshot.json', import.meta.url), 'utf8'))
     const metric = snapshot.metrics.find(value => value.metric_id === 'usd_uzs_mom_change')
     metric.observed_at = null
     metric.extracted_at = '2026-10-04T10:41:28.128Z'
@@ -49,11 +50,22 @@ test('real exporter accepts collection before completion and rejects future extr
     })
     const before = run('2026-10-04T10:41:28Z')
     assert.notEqual(before.status, 0)
-    assert.match(before.stderr, /after artifact export/)
+    assert.match(before.stderr, /Metric usd_uzs_mom_change has freshness timestamp 2026-10-04T10:41:28\.128Z after artifact export/)
     const after = run(resolveRefreshExportedAt('2026-10-04T10:41:28Z', '2026-10-04T10:44:52.437Z'))
     assert.equal(after.status, 0, after.stderr)
     const artifact = JSON.parse(readFileSync(join(directory, 'overview.json'), 'utf8'))
     assert.equal(artifact.exported_at, '2026-10-04T10:44:52.437Z')
+    const exportedMetric = artifact.metrics.find(value => value.id === metric.metric_id)
+    assert.equal(exportedMetric.extracted_at, metric.extracted_at)
+    assert.equal(exportedMetric.freshness.as_of, metric.extracted_at)
+
+    // Completion time must not bless genuinely future-dated source data.
+    metric.extracted_at = '2026-10-04T10:44:52.438Z'
+    snapshot.value_hash = computeOverviewValueHash(snapshot.metrics)
+    writeFileSync(source, JSON.stringify(snapshot))
+    const future = run(artifact.exported_at)
+    assert.notEqual(future.status, 0)
+    assert.match(future.stderr, /Metric usd_uzs_mom_change has freshness timestamp 2026-10-04T10:44:52\.438Z after artifact export/)
   } finally {
     rmSync(directory, { recursive: true, force: true })
   }
