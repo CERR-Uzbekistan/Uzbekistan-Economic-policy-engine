@@ -89,6 +89,13 @@ also be dispatched manually. It:
 
 The workflow also reconciles the pinned releases in `reviewed-releases.json` and archives source captures and validation reports with a requested 90-day retention. Parsed JSON is captured as normalized JSON; XLSX and PDF captures preserve downloaded bytes. New annual/food CPI releases and policy decisions require reviewed registry entries. Threshold freshness does not prove that no newer release exists.
 
+Reviewed CPI releases declare their expected monthly change in `reconciliation`.
+Reconciliation selects that release's exact month from the captured, strictly
+validated SIAT 4585 dataset; a newer monthly observation does not invalidate an
+older reviewed release and is never overwritten by it. PDF hashes, official hosts,
+calendar dates, completed observation periods, and non-regressing source vintages
+remain required. New annual/food CPI values still require a reviewed registry entry.
+
 Historical QPM bytes are preserved. Observation refresh does not run the R QPM exporter, promote models, dispatch Pages, or deploy the site. Pages now requires an explicit manual dispatch. PR changes to this pipeline run offline source tests and the full UI lint, test and build gates before merging.
 
 An isolated candidate can be checked with `node scripts/overview/refresh-candidate.mjs --out tmp/overview-candidate --as-of <UTC ISO timestamp>`. This does not change the selected local preview. The live CPI parser accepts both Latin `M` and Cyrillic `М` month keys while preserving source-period regression checks. Derived goods trade balance uses the older input release date.
@@ -171,9 +178,9 @@ The SIAT 4585 parser is deliberately narrow:
 - It selects only the headline aggregate row where `Code === "1"` and the classifier
   label matches `COMPOSITE INDEX` or its RU/UZ equivalents. COICOP/product rows are
   never used to compute headline CPI MoM.
-- Monthly period columns must use Cyrillic `М` keys such as `2026-М03`. Latin `M`
-  keys are ignored; if no Cyrillic-`М` periods exist, the script returns
-  `manual_required`.
+- Monthly period columns accept Cyrillic `М` and Latin `M` keys such as `2026-М03`
+  and `2026-M03`. Duplicate encodings for one month are ambiguous and return
+  `manual_required`; no period is silently preferred.
 - A `0.0` value on the selected aggregate row for the current or previous month is
   treated as a missing-data sentinel and returns `manual_required`.
 - SIAT 4585 metadata is a multilingual `{ name_*, value_* }` array. Value preference is
