@@ -5,12 +5,13 @@ import { createHash } from 'node:crypto'
 import { spawnSync } from 'node:child_process'
 import { buildCbuFxMetricUpdates } from './sources/cbu-fx.mjs'
 import { buildSiatTradeMetricUpdates } from './sources/siat-trade.mjs'
-import { buildSiatCpiMetricUpdates } from './sources/siat-cpi.mjs'
+import { buildSiatCpiMetricUpdates, SIAT_CPI_MOM_SOURCE_URL } from './sources/siat-cpi.mjs'
 import { buildSiatGdpAnnualMetricUpdates } from './sources/siat-gdp-annual.mjs'
 import { buildWorldBankGoldMetricUpdates } from './sources/world-bank-gold.mjs'
 import { fetchJsonWithRetry, fetchArrayBufferWithRetry } from './sources/http.mjs'
 import { resolveRefreshExportedAt } from './sources/refresh-clock.mjs'
 import { applyMetricUpdatesToSnapshot } from './sources/update-snapshot.mjs'
+import { buildReviewedReleaseMetricUpdates } from './sources/reviewed-releases.mjs'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 const args = Object.fromEntries(Array.from({ length: Math.floor((process.argv.length - 2) / 2) }, (_, index) => process.argv.slice(2 + index * 2, 4 + index * 2)))
@@ -24,6 +25,7 @@ const json = async path => JSON.parse(await readFile(path, 'utf8'))
 const hash = data => createHash('sha256').update(data).digest('hex')
 let snapshot = await json(resolve(root, 'scripts/overview/overview_source_snapshot.json'))
 const report = { generated_at: now, checked_at: now, status: 'validated', scope: 'Configured source families; freshness is evaluated separately per metric', families: [], sources: [], diff: [] }
+const capturedJson = new Map()
 async function capture(url, body, extension) {
   const bytes = Buffer.from(body)
   const digest = hash(bytes)
@@ -34,6 +36,7 @@ async function capture(url, body, extension) {
 async function fetchJson(url) {
   const data = await fetchJsonWithRetry(url)
   await capture(url, JSON.stringify(data), 'json')
+  capturedJson.set(url, data)
   return data
 }
 async function fetchArrayBuffer(url) {
@@ -70,21 +73,13 @@ for (const release of releases.releases) {
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
     const body = Buffer.from(await response.arrayBuffer())
     await capture(release.url, body, release.sha256 ? 'pdf' : 'html')
-    if (release.sha256 && hash(body) !== release.sha256) throw new Error('Reviewed source hash changed; renewed review required')
-    if (release.required_title && !body.toString('utf8').includes(release.required_title)) throw new Error('Reviewed decision title missing')
-    const updates = release.metrics.filter(entry => {
-      const old = snapshot.metrics.find(metric => metric.metric_id === entry.metric_id)
-      return old && Date.parse(old.observed_at ?? old.extracted_at) <= Date.parse(release.observed_at)
-    }).map(entry => ({ ...entry, source_period: release.period, source_url: release.url, observed_at: release.observed_at, extracted_at: now,
-      source_reference: release.evidence, validation_status: 'valid', warnings: [], caveats: [release.evidence] }))
-    if (updates.length > 0 && release.id.startsWith('cpi-')) {
-      const monthly = snapshot.metrics.find(metric => metric.metric_id === 'cpi_mom')
-      if (monthly.source_period !== release.period || monthly.value !== 0.2) throw new Error('Reviewed CPI release does not reconcile with monthly SIAT observation')
-    }
+    const updates = buildReviewedReleaseMetricUpdates({
+      release, body, snapshot, asOf: now, siatCpiJson: capturedJson.get(SIAT_CPI_MOM_SOURCE_URL),
+    })
     report.families.push({ family: release.id, status: 'validated', changed: apply(updates) })
   } catch (error) {
     report.status = 'degraded'
-    report.families.push({ family: release.id, status: 'retained', reason: error.message })
+    report.families.push({ family: release.id, status: 'retained', reason: error.reason ?? error.message })
   }
 }
 const snapshotFile = resolve(output, 'source-snapshot.json')

@@ -187,7 +187,10 @@ function validateMetadata(metadata, sourceUrl) {
 function normalizeObservedAt(value) {
   const text = String(value ?? '').trim()
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(text)
-  if (!match) manualRequired('siat_cpi_mom_last_modified_date_invalid', { value })
+  const time = Date.parse(`${text}T00:00:00Z`)
+  if (!match || !Number.isFinite(time) || new Date(time).toISOString().slice(0, 10) !== text) {
+    manualRequired('siat_cpi_mom_last_modified_date_invalid', { value })
+  }
   return `${match[1]}-${match[2]}-${match[3]}T00:00:00Z`
 }
 
@@ -252,12 +255,12 @@ function formatPeriodLabel(period) {
   return `${monthName(period.month)} ${period.year}`
 }
 
-function parseHumanMonthPeriod(label, path) {
+export function parseSiatCpiMonthPeriod(label, path, reason = 'siat_cpi_mom_snapshot_period_unparseable') {
   const match = /^([A-Za-z]+) (\d{4})$/.exec(String(label ?? '').trim())
-  if (!match) manualRequired('siat_cpi_mom_snapshot_period_unparseable', { path, label })
+  if (!match) manualRequired(reason, { path, label })
   const month = MONTH_INDEX_BY_NAME.get(match[1].toLowerCase())
   if (!month) {
-    manualRequired('siat_cpi_mom_snapshot_period_unparseable', { path, label })
+    manualRequired(reason, { path, label })
   }
   return { year: Number(match[2]), month }
 }
@@ -283,6 +286,11 @@ function readAggregatePeriods(row) {
   if (periods.length === 0) {
     manualRequired('siat_cpi_mom_no_month_period_keys')
   }
+  for (let index = 1; index < periods.length; index += 1) {
+    if (samePeriod(periods[index - 1], periods[index])) {
+      manualRequired('siat_cpi_mom_period_ambiguous', { keys: [periods[index - 1].key, periods[index].key] })
+    }
+  }
   return periods
 }
 
@@ -300,7 +308,24 @@ export function parseSiatCpiMomDataset(json, options = {}) {
   const metadata = validateMetadata(dataset.metadata, sourceUrl)
   const aggregateRow = selectAggregateRow(dataset.data)
   const periods = readAggregatePeriods(aggregateRow)
-  const current = periods.at(-1)
+  // Historical evidence selection is explicit and never changes the live builder's
+  // latest-period selection or its source-period regression gate.
+  const requested = options.period === undefined ? null : parseSiatCpiMonthPeriod(
+    options.period, 'period', 'siat_cpi_mom_requested_period_unparseable',
+  )
+  const current = requested ? periods.find(period => samePeriod(period, requested)) : periods.at(-1)
+  if (!current) manualRequired('siat_cpi_mom_requested_period_missing', { period: options.period })
+  if (options.asOf !== undefined) {
+    const asOf = Date.parse(options.asOf)
+    if (!Number.isFinite(asOf)) manualRequired('siat_cpi_mom_as_of_invalid', { asOf: options.asOf })
+    if (Date.parse(metadata.observedAt) > asOf) {
+      manualRequired('siat_cpi_mom_observation_in_future', { observedAt: metadata.observedAt, asOf: options.asOf })
+    }
+    const periodEnd = Date.UTC(current.year, current.month, 1)
+    if (periodEnd > asOf || periodEnd > Date.parse(metadata.observedAt)) {
+      manualRequired('siat_cpi_mom_period_not_complete', { period: current.key, observedAt: metadata.observedAt })
+    }
+  }
   const prior = previousMonth(current)
   const previous = periods.find((period) => samePeriod(period, prior))
   if (!previous) {
@@ -343,7 +368,7 @@ function findMetric(snapshot, metricId) {
 function validateNotOlderThanSnapshot(dataset, snapshot) {
   const metric = findMetric(snapshot, 'cpi_mom')
   if (!metric) manualRequired('siat_cpi_mom_snapshot_metric_missing')
-  const snapshotPeriod = parseHumanMonthPeriod(metric.source_period, 'cpi_mom.source_period')
+  const snapshotPeriod = parseSiatCpiMonthPeriod(metric.source_period, 'cpi_mom.source_period')
   if (comparePeriod(dataset.current, snapshotPeriod) < 0) {
     manualRequired('siat_cpi_mom_source_older_than_snapshot', {
       sourcePeriod: dataset.current.periodLabel,
@@ -378,7 +403,7 @@ export async function fetchSiatCpiMomDataset(options = {}) {
   const json = options.fetchJson
     ? await options.fetchJson(sourceUrl, 'cpi_mom')
     : await fetchJsonWithRetry(sourceUrl, options.http)
-  return parseSiatCpiMomDataset(json, { sourceUrl })
+  return parseSiatCpiMomDataset(json, { sourceUrl, asOf: options.asOf })
 }
 
 export async function buildSiatCpiMetricUpdates(options = {}) {
@@ -388,6 +413,7 @@ export async function buildSiatCpiMetricUpdates(options = {}) {
     sourceUrl: options.sourceUrl ?? SIAT_CPI_MOM_SOURCE_URL,
     fetchJson: options.fetchJson,
     http: options.http,
+    asOf: extractedAt,
   })
   validateNotOlderThanSnapshot(dataset, snapshot)
   return [buildSiatCpiMomUpdate(dataset, extractedAt)]

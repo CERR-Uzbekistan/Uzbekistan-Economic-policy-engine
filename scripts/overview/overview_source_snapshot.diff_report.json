@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-06T15:00:27Z",
-  "checked_at": "2026-10-06T15:00:27Z",
-  "status": "degraded",
+  "generated_at": "2026-10-06T15:24:00Z",
+  "checked_at": "2026-10-06T15:24:00Z",
+  "status": "validated",
   "scope": "Configured source families; freshness is evaluated separately per metric",
   "families": [
     {
@@ -51,8 +51,13 @@
     },
     {
       "family": "cpi-2026-08",
-      "status": "retained",
-      "reason": "Reviewed CPI release does not reconcile with monthly SIAT observation"
+      "status": "validated",
+      "changed": true
+    },
+    {
+      "family": "cpi-2026-09",
+      "status": "validated",
+      "changed": true
     },
     {
       "family": "policy-rate-2026-09-16",
@@ -67,7 +72,7 @@
       "bytes": 218,
       "path": "raw/005250007bc04303147cb6c1cedaccfc89c65a1f5d96aff9db6a9ec5b6d11a9d.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-06T15:00:27Z"
+      "fetched_at": "2026-10-06T15:24:00Z"
     },
     {
       "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-09-06/",
@@ -75,7 +80,7 @@
       "bytes": 221,
       "path": "raw/0fc20697a8ad4af04b34633415f48b1f448297fc3e08e2505b76237fb960fe1e.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-06T15:00:27Z"
+      "fetched_at": "2026-10-06T15:24:00Z"
     },
     {
       "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2025-10-06/",
@@ -83,7 +88,7 @@
       "bytes": 221,
       "path": "raw/036c3c90c05924b3ccfe4882fdc2ec968e21a6a42e5329ec5092b512b04eb7b5.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-06T15:00:27Z"
+      "fetched_at": "2026-10-06T15:24:00Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json",
@@ -91,7 +96,7 @@
       "bytes": 327805,
       "path": "raw/8e5e8062c495359e032628896c485da90803fec0f695a77bebaaf8b7b46e04c5.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-06T15:00:27Z"
+      "fetched_at": "2026-10-06T15:24:00Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2414.json",
@@ -99,7 +104,7 @@
       "bytes": 330060,
       "path": "raw/9d09d8844df814500602e74cb5f5d0fd5f49a51fde2b77bc3a4d8bd0c116b365.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-06T15:00:27Z"
+      "fetched_at": "2026-10-06T15:24:00Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json",
@@ -107,7 +112,7 @@
       "bytes": 479246,
       "path": "raw/4d66b450aecdc3567f1bc097eb403d2839949d3e410899f61054102a9f7737f4.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-06T15:00:27Z"
+      "fetched_at": "2026-10-06T15:24:00Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_582.json",
@@ -115,7 +120,7 @@
       "bytes": 12304,
       "path": "raw/5261061f73ec576477e2b752b11561863c2cfe9fc3e50967fabf0df390c5be92.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-06T15:00:27Z"
+      "fetched_at": "2026-10-06T15:24:00Z"
     },
     {
       "url": "https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Monthly.xlsx",
@@ -123,7 +128,7 @@
       "bytes": 586099,
       "path": "raw/ea1c350827878ea3bbe30e3cda16a13fd3bd5b409b8458940dc94a36b5a33154.xlsx",
       "representation": "downloaded bytes",
-      "fetched_at": "2026-10-06T15:00:27Z"
+      "fetched_at": "2026-10-06T15:24:00Z"
     },
     {
       "url": "https://stat.uz/img/news/press-release_cpi_august_2026_en_p63576.pdf",
@@ -131,22 +136,167 @@
       "bytes": 329568,
       "path": "raw/7252e48ef6f4f7b22dc51ce9195247cc528aac577e46cd52ae065d177007b500.pdf",
       "representation": "downloaded bytes",
-      "fetched_at": "2026-10-06T15:00:27Z"
+      "fetched_at": "2026-10-06T15:24:00Z"
+    },
+    {
+      "url": "https://stat.uz/img/news/press-release_cpi_september_2026_en_p49619.pdf",
+      "sha256": "f05137fdb4bb869ae9c09292dc7d69e20a8f75e9f7f03f505ea17978a92b9aa6",
+      "bytes": 318481,
+      "path": "raw/f05137fdb4bb869ae9c09292dc7d69e20a8f75e9f7f03f505ea17978a92b9aa6.pdf",
+      "representation": "downloaded bytes",
+      "fetched_at": "2026-10-06T15:24:00Z"
     },
     {
       "url": "https://cbu.uz/en/press_center/releases/4540151/",
-      "sha256": "282c4e8cb3867918e6d96e2e56537df66305d7ae3b13894d49b54c4934cfca32",
+      "sha256": "d167c841050d0902d0fc3e608a2b40cf2d67601377aca0fbc6bc8a48c2bdb515",
       "bytes": 198537,
-      "path": "raw/282c4e8cb3867918e6d96e2e56537df66305d7ae3b13894d49b54c4934cfca32.html",
+      "path": "raw/d167c841050d0902d0fc3e608a2b40cf2d67601377aca0fbc6bc8a48c2bdb515.html",
       "representation": "downloaded bytes",
-      "fetched_at": "2026-10-06T15:00:27Z"
+      "fetched_at": "2026-10-06T15:24:00Z"
     }
   ],
-  "diff": [],
-  "exported_at": "2026-10-06T15:01:01.008Z",
-  "snapshot_sha256": "a79ec6da8fb56e0d979fd94f836c233f64404d98ca33d4f2798db00b69168f50",
-  "artifact_sha256": "6150fd5e54e69be1dce624f6d116759d6e743469e2c9910900036b9043452d08",
-  "changed": false,
-  "value_hash": "d66dbe0fae9f3c0efef14fff8b8414e6522fc1a614135171421f56d35bfce727",
+  "diff": [
+    {
+      "metric_id": "cpi_yoy",
+      "field": "extracted_at",
+      "old_value": "2026-10-01T15:32:00Z",
+      "new_value": "2026-10-06T15:24:00Z"
+    },
+    {
+      "metric_id": "cpi_yoy",
+      "field": "source_reference",
+      "old_value": "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585.",
+      "new_value": "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585. Independently reconciled to SIAT 4585 (https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json) for August 2026: aggregate index 100.2 minus 100 = 0.2%."
+    },
+    {
+      "metric_id": "cpi_yoy",
+      "field": "caveats",
+      "old_value": [
+        "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585."
+      ],
+      "new_value": [
+        "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585. Independently reconciled to SIAT 4585 (https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json) for August 2026: aggregate index 100.2 minus 100 = 0.2%."
+      ]
+    },
+    {
+      "metric_id": "food_cpi_yoy",
+      "field": "extracted_at",
+      "old_value": "2026-10-01T15:32:00Z",
+      "new_value": "2026-10-06T15:24:00Z"
+    },
+    {
+      "metric_id": "food_cpi_yoy",
+      "field": "source_reference",
+      "old_value": "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585.",
+      "new_value": "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585. Independently reconciled to SIAT 4585 (https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json) for August 2026: aggregate index 100.2 minus 100 = 0.2%."
+    },
+    {
+      "metric_id": "food_cpi_yoy",
+      "field": "caveats",
+      "old_value": [
+        "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585."
+      ],
+      "new_value": [
+        "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585. Independently reconciled to SIAT 4585 (https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json) for August 2026: aggregate index 100.2 minus 100 = 0.2%."
+      ]
+    },
+    {
+      "metric_id": "cpi_yoy",
+      "field": "value",
+      "old_value": 6.2,
+      "new_value": 6.4
+    },
+    {
+      "metric_id": "cpi_yoy",
+      "field": "previous_value",
+      "old_value": 6.4,
+      "new_value": 6.2
+    },
+    {
+      "metric_id": "cpi_yoy",
+      "field": "source_period",
+      "old_value": "August 2026",
+      "new_value": "September 2026"
+    },
+    {
+      "metric_id": "cpi_yoy",
+      "field": "source_url",
+      "old_value": "https://stat.uz/img/news/press-release_cpi_august_2026_en_p63576.pdf",
+      "new_value": "https://stat.uz/img/news/press-release_cpi_september_2026_en_p49619.pdf"
+    },
+    {
+      "metric_id": "cpi_yoy",
+      "field": "observed_at",
+      "old_value": "2026-09-05T00:00:00Z",
+      "new_value": "2026-10-05T00:00:00Z"
+    },
+    {
+      "metric_id": "cpi_yoy",
+      "field": "source_reference",
+      "old_value": "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585. Independently reconciled to SIAT 4585 (https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json) for August 2026: aggregate index 100.2 minus 100 = 0.2%.",
+      "new_value": "Official National Statistics Committee September 2026 CPI release, published 5 October 2026: page 1 composite annual index 106.4 and monthly index 100.7; page 4 food products annual index 106.3. August annual growth is 6.2 for both headline CPI (page 1 chart) and food products (page 4 chart). Monthly index 100.7 is independently reconciled to the September SIAT 4585 aggregate. Independently reconciled to SIAT 4585 (https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json) for September 2026: aggregate index 100.7 minus 100 = 0.7%."
+    },
+    {
+      "metric_id": "cpi_yoy",
+      "field": "caveats",
+      "old_value": [
+        "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585. Independently reconciled to SIAT 4585 (https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json) for August 2026: aggregate index 100.2 minus 100 = 0.2%."
+      ],
+      "new_value": [
+        "Official National Statistics Committee September 2026 CPI release, published 5 October 2026: page 1 composite annual index 106.4 and monthly index 100.7; page 4 food products annual index 106.3. August annual growth is 6.2 for both headline CPI (page 1 chart) and food products (page 4 chart). Monthly index 100.7 is independently reconciled to the September SIAT 4585 aggregate. Independently reconciled to SIAT 4585 (https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json) for September 2026: aggregate index 100.7 minus 100 = 0.7%."
+      ]
+    },
+    {
+      "metric_id": "food_cpi_yoy",
+      "field": "value",
+      "old_value": 6.2,
+      "new_value": 6.3
+    },
+    {
+      "metric_id": "food_cpi_yoy",
+      "field": "previous_value",
+      "old_value": 6.4,
+      "new_value": 6.2
+    },
+    {
+      "metric_id": "food_cpi_yoy",
+      "field": "source_period",
+      "old_value": "August 2026",
+      "new_value": "September 2026"
+    },
+    {
+      "metric_id": "food_cpi_yoy",
+      "field": "source_url",
+      "old_value": "https://stat.uz/img/news/press-release_cpi_august_2026_en_p63576.pdf",
+      "new_value": "https://stat.uz/img/news/press-release_cpi_september_2026_en_p49619.pdf"
+    },
+    {
+      "metric_id": "food_cpi_yoy",
+      "field": "observed_at",
+      "old_value": "2026-09-05T00:00:00Z",
+      "new_value": "2026-10-05T00:00:00Z"
+    },
+    {
+      "metric_id": "food_cpi_yoy",
+      "field": "source_reference",
+      "old_value": "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585. Independently reconciled to SIAT 4585 (https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json) for August 2026: aggregate index 100.2 minus 100 = 0.2%.",
+      "new_value": "Official National Statistics Committee September 2026 CPI release, published 5 October 2026: page 1 composite annual index 106.4 and monthly index 100.7; page 4 food products annual index 106.3. August annual growth is 6.2 for both headline CPI (page 1 chart) and food products (page 4 chart). Monthly index 100.7 is independently reconciled to the September SIAT 4585 aggregate. Independently reconciled to SIAT 4585 (https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json) for September 2026: aggregate index 100.7 minus 100 = 0.7%."
+    },
+    {
+      "metric_id": "food_cpi_yoy",
+      "field": "caveats",
+      "old_value": [
+        "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585. Independently reconciled to SIAT 4585 (https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json) for August 2026: aggregate index 100.2 minus 100 = 0.2%."
+      ],
+      "new_value": [
+        "Official National Statistics Committee September 2026 CPI release, published 5 October 2026: page 1 composite annual index 106.4 and monthly index 100.7; page 4 food products annual index 106.3. August annual growth is 6.2 for both headline CPI (page 1 chart) and food products (page 4 chart). Monthly index 100.7 is independently reconciled to the September SIAT 4585 aggregate. Independently reconciled to SIAT 4585 (https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json) for September 2026: aggregate index 100.7 minus 100 = 0.7%."
+      ]
+    }
+  ],
+  "exported_at": "2026-10-06T15:26:43.379Z",
+  "snapshot_sha256": "0b5f69d1ece8108943a16d3b20330fe035587c020d93880e777527f5a9a83909",
+  "artifact_sha256": "6008b0fcb4a73e4f885421f59653bf05afdc6dc5f1e59e3d08610e80d58dd5a5",
+  "changed": true,
+  "value_hash": "00437c3eef34ca77a4d3458c8b0c88599fc34df79fd261ec9289496537fa6090",
   "snapshot_status": "source_verified_for_public_artifact"
 }

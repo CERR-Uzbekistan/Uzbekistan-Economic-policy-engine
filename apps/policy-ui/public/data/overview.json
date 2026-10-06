@@ -1,6 +1,6 @@
 {
   "schema_version": "overview.v2",
-  "exported_at": "2026-10-06T15:01:01.008Z",
+  "exported_at": "2026-10-06T15:26:43.379Z",
   "generated_by": "scripts/overview/export-overview.mjs",
   "validation_status": "warning",
   "metrics": [
@@ -34,7 +34,7 @@
         "max_age_days": 550,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-10-06T15:01:01.008Z",
+      "exported_at": "2026-10-06T15:26:43.379Z",
       "top_card": false
     },
     {
@@ -66,7 +66,7 @@
         "max_age_days": 150,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-10-06T15:01:01.008Z",
+      "exported_at": "2026-10-06T15:26:43.379Z",
       "top_card": true,
       "top_card_order": 1
     },
@@ -101,7 +101,7 @@
         "max_age_days": 45,
         "reason": "source_url_missing"
       },
-      "exported_at": "2026-10-06T15:01:01.008Z",
+      "exported_at": "2026-10-06T15:26:43.379Z",
       "top_card": false
     },
     {
@@ -111,28 +111,28 @@
       "claim_type": "observed",
       "unit": "percent YoY",
       "frequency": "monthly",
-      "value": 6.2,
-      "previous_value": 6.4,
+      "value": 6.4,
+      "previous_value": 6.2,
       "source_label": "National Statistics Committee CPI",
-      "source_period": "August 2026",
-      "source_url": "https://stat.uz/img/news/press-release_cpi_august_2026_en_p63576.pdf",
-      "source_reference": "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585.",
-      "observed_at": "2026-09-05T00:00:00Z",
-      "extracted_at": "2026-10-01T15:32:00Z",
+      "source_period": "September 2026",
+      "source_url": "https://stat.uz/img/news/press-release_cpi_september_2026_en_p49619.pdf",
+      "source_reference": "Official National Statistics Committee September 2026 CPI release, published 5 October 2026: page 1 composite annual index 106.4 and monthly index 100.7; page 4 food products annual index 106.3. August annual growth is 6.2 for both headline CPI (page 1 chart) and food products (page 4 chart). Monthly index 100.7 is independently reconciled to the September SIAT 4585 aggregate. Independently reconciled to SIAT 4585 (https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json) for September 2026: aggregate index 100.7 minus 100 = 0.7%.",
+      "observed_at": "2026-10-05T00:00:00Z",
+      "extracted_at": "2026-10-06T15:24:00Z",
       "validation_status": "valid",
       "caveats": [
-        "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585."
+        "Official National Statistics Committee September 2026 CPI release, published 5 October 2026: page 1 composite annual index 106.4 and monthly index 100.7; page 4 food products annual index 106.3. August annual growth is 6.2 for both headline CPI (page 1 chart) and food products (page 4 chart). Monthly index 100.7 is independently reconciled to the September SIAT 4585 aggregate. Independently reconciled to SIAT 4585 (https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json) for September 2026: aggregate index 100.7 minus 100 = 0.7%."
       ],
       "warnings": [],
       "output_class": "static_reference",
       "freshness": {
         "status": "current",
-        "as_of": "2026-09-05T00:00:00Z",
-        "age_days": 31,
+        "as_of": "2026-10-05T00:00:00Z",
+        "age_days": 1,
         "max_age_days": 62,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-10-06T15:01:01.008Z",
+      "exported_at": "2026-10-06T15:26:43.379Z",
       "top_card": true,
       "top_card_order": 2
     },
@@ -165,7 +165,7 @@
         "max_age_days": 62,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-10-06T15:01:01.008Z",
+      "exported_at": "2026-10-06T15:26:43.379Z",
       "top_card": false
     },
     {
@@ -175,28 +175,28 @@
       "claim_type": "observed",
       "unit": "percent YoY",
       "frequency": "monthly",
-      "value": 6.2,
-      "previous_value": 6.4,
+      "value": 6.3,
+      "previous_value": 6.2,
       "source_label": "National Statistics Committee food CPI",
-      "source_period": "August 2026",
-      "source_url": "https://stat.uz/img/news/press-release_cpi_august_2026_en_p63576.pdf",
-      "source_reference": "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585.",
-      "observed_at": "2026-09-05T00:00:00Z",
-      "extracted_at": "2026-10-01T15:32:00Z",
+      "source_period": "September 2026",
+      "source_url": "https://stat.uz/img/news/press-release_cpi_september_2026_en_p49619.pdf",
+      "source_reference": "Official National Statistics Committee September 2026 CPI release, published 5 October 2026: page 1 composite annual index 106.4 and monthly index 100.7; page 4 food products annual index 106.3. August annual growth is 6.2 for both headline CPI (page 1 chart) and food products (page 4 chart). Monthly index 100.7 is independently reconciled to the September SIAT 4585 aggregate. Independently reconciled to SIAT 4585 (https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json) for September 2026: aggregate index 100.7 minus 100 = 0.7%.",
+      "observed_at": "2026-10-05T00:00:00Z",
+      "extracted_at": "2026-10-06T15:24:00Z",
       "validation_status": "valid",
       "caveats": [
-        "Official PDF page 1: annual composite index 106.2; page 4: food products annual growth 6.2. Prior July annual rates 6.4 appear in both charts. Monthly 100.2 is independently reconciled to SIAT 4585."
+        "Official National Statistics Committee September 2026 CPI release, published 5 October 2026: page 1 composite annual index 106.4 and monthly index 100.7; page 4 food products annual index 106.3. August annual growth is 6.2 for both headline CPI (page 1 chart) and food products (page 4 chart). Monthly index 100.7 is independently reconciled to the September SIAT 4585 aggregate. Independently reconciled to SIAT 4585 (https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json) for September 2026: aggregate index 100.7 minus 100 = 0.7%."
       ],
       "warnings": [],
       "output_class": "static_reference",
       "freshness": {
         "status": "current",
-        "as_of": "2026-09-05T00:00:00Z",
-        "age_days": 31,
+        "as_of": "2026-10-05T00:00:00Z",
+        "age_days": 1,
         "max_age_days": 62,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-10-06T15:01:01.008Z",
+      "exported_at": "2026-10-06T15:26:43.379Z",
       "top_card": true,
       "top_card_order": 3
     },
@@ -231,7 +231,7 @@
         "max_age_days": 62,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-10-06T15:01:01.008Z",
+      "exported_at": "2026-10-06T15:26:43.379Z",
       "top_card": false
     },
     {
@@ -265,7 +265,7 @@
         "max_age_days": 62,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-10-06T15:01:01.008Z",
+      "exported_at": "2026-10-06T15:26:43.379Z",
       "top_card": false
     },
     {
@@ -299,7 +299,7 @@
         "max_age_days": 62,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-10-06T15:01:01.008Z",
+      "exported_at": "2026-10-06T15:26:43.379Z",
       "top_card": false
     },
     {
@@ -330,7 +330,7 @@
         "max_age_days": 75,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-10-06T15:01:01.008Z",
+      "exported_at": "2026-10-06T15:26:43.379Z",
       "top_card": true,
       "top_card_order": 4
     },
@@ -366,7 +366,7 @@
         "max_age_days": 3,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-10-06T15:01:01.008Z",
+      "exported_at": "2026-10-06T15:26:43.379Z",
       "top_card": true,
       "top_card_order": 5
     },
@@ -405,7 +405,7 @@
         "max_age_days": 35,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-10-06T15:01:01.008Z",
+      "exported_at": "2026-10-06T15:26:43.379Z",
       "top_card": false
     },
     {
@@ -441,7 +441,7 @@
         "max_age_days": 35,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-10-06T15:01:01.008Z",
+      "exported_at": "2026-10-06T15:26:43.379Z",
       "top_card": false
     },
     {
@@ -475,7 +475,7 @@
         "max_age_days": 62,
         "reason": "source_too_old"
       },
-      "exported_at": "2026-10-06T15:01:01.008Z",
+      "exported_at": "2026-10-06T15:26:43.379Z",
       "top_card": false
     },
     {
@@ -506,7 +506,7 @@
         "max_age_days": 62,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-10-06T15:01:01.008Z",
+      "exported_at": "2026-10-06T15:26:43.379Z",
       "top_card": false
     },
     {
@@ -537,7 +537,7 @@
         "max_age_days": 62,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-10-06T15:01:01.008Z",
+      "exported_at": "2026-10-06T15:26:43.379Z",
       "top_card": false
     },
     {
@@ -569,7 +569,7 @@
         "max_age_days": 210,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-10-06T15:01:01.008Z",
+      "exported_at": "2026-10-06T15:26:43.379Z",
       "top_card": false
     }
   ],
