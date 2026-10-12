@@ -68,6 +68,8 @@ jobs:
         run: uv run --project "$OPERATIONAL_SOURCE/mcp_server" --frozen --extra dev --group build --no-editable python "$OPERATIONAL_SOURCE/scripts/testing/linux_publication_gate.py"
       - name: Frozen MCP image, Compose and isolated HTTP/stdio lifecycles
         run: uv run --project "$OPERATIONAL_SOURCE/mcp_server" --frozen --extra dev --group build --no-editable python "$OPERATIONAL_SOURCE/scripts/testing/linux_mcp_container_gate.py" --source "$RUNNER_TEMP/operational-source" --evidence "$RUNNER_TEMP/operational-evidence/mcp"
+      - name: Frozen read-only Registry API image and artifact failures
+        run: python "$OPERATIONAL_SOURCE/scripts/testing/linux_registry_container_gate.py" --source "$RUNNER_TEMP/operational-source" --evidence "$RUNNER_TEMP/operational-evidence/registry"
       - name: Save review evidence only
         if: always()
         uses: actions/upload-artifact@v4
