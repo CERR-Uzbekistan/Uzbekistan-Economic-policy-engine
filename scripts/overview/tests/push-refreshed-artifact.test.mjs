@@ -37,3 +37,6 @@ test('persistent server failure stops at the retry bound',async()=>{
 test('unrelated commits and dirty checkouts cannot be published by the helper',async()=>{
  const f=await fixture();try{await writeFile(resolve(f.worker,'README.txt'),'unvalidated\n');await assert.rejects(pushRefreshedArtifact({cwd:f.worker,log:()=>{}}),/clean checkout/);f.run(f.worker,['add','README.txt']);f.run(f.worker,['commit','-m','unrelated']);await assert.rejects(pushRefreshedArtifact({cwd:f.worker,log:()=>{}}),/limited to validated/);}finally{await f.cleanup()}
 });
+test('generated refresh evidence may remain untracked and is never pushed',async()=>{
+ const f=await fixture();try{await mkdir(resolve(f.worker,'tmp/overview-refresh-candidate/raw'),{recursive:true});await writeFile(resolve(f.worker,'tmp/overview-refresh-candidate/raw/source.json'),'official evidence\n');const result=await pushRefreshedArtifact({cwd:f.worker,wait:async()=>{},log:()=>{}});assert.equal(result.verified,true);assert.equal(f.run(f.remote,['ls-tree','-r','--name-only','main','tmp/overview-refresh-candidate']),'');}finally{await f.cleanup()}
+});
