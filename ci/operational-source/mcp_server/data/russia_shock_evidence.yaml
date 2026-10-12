@@ -1,0 +1,89 @@
+remittance_total_2025:
+  value: 18900000000
+  unit: USD
+  role: exposure
+  evidence_type: memo_anchor_pending_official_refresh
+  confidence: medium
+  source_name: Uploaded Uzbekistan-Russia shock memo
+  source_url: local_attachment
+  note: Used as current exposure anchor until CBU BoP remittance table is wired.
+
+russia_remittance_share:
+  value: 0.78
+  unit: share
+  role: exposure
+  evidence_type: memo_anchor_pending_official_refresh
+  confidence: medium
+  source_name: Uploaded Uzbekistan-Russia shock memo
+  source_url: local_attachment
+  note: High dependence motivates remittance channel; should be replaced by CBU corridor data if available.
+
+russia_trade_turnover_memo:
+  value: 13000000000
+  unit: USD
+  role: exposure
+  evidence_type: memo_anchor_pending_customs_refresh
+  confidence: medium
+  source_name: Uploaded Uzbekistan-Russia shock memo
+  source_url: local_attachment
+  note: Split in model as 4.3bn exports and 8.6bn imports.
+
+gasoline_import_share_from_russia:
+  value: 0.80
+  unit: share
+  role: exposure
+  evidence_type: memo_anchor_pending_customs_refresh
+  confidence: low
+  source_name: Uploaded Uzbekistan-Russia shock memo
+  source_url: local_attachment
+  note: Treated as high-importance but low-confidence until HS-level fuel imports are verified.
+
+uzbek_migrants_in_russia:
+  value: 1300000
+  unit: persons
+  role: exposure
+  evidence_type: memo_anchor_pending_migration_refresh
+  confidence: medium
+  source_name: Uploaded Uzbekistan-Russia shock memo
+  source_url: local_attachment
+  note: Used to bound return-migration stress rather than forecast actual returns.
+
+russia_growth_slowdown_rationale:
+  value: 0.6_to_1.0
+  unit: percent_real_gdp_growth
+  role: scenario_rationale
+  evidence_type: external_forecast_context
+  confidence: medium
+  source_name: IMF forecast context reported by Business Insider and Guardian
+  source_url: https://www.businessinsider.com/russia-economy-imf-downgrade-gdp-growth-outlook-wartime-boom-fast-2025-7
+  note: Supports stagnation/central-stress framing rather than defaulting to collapse.
+
+russia_fuel_disruption_rationale:
+  value: refinery_capacity_and_export_ban_disruptions
+  unit: qualitative
+  role: scenario_rationale
+  evidence_type: external_event_context
+  confidence: medium
+  source_name: 2025-2026 fuel disruption reporting
+  source_url: https://www.lemonde.fr/en/international/article/2026/06/30/after-ukraine-strikes-refineries-putin-admits-to-a-certain-shortage-of-fuel_6755013_4.html
+  note: Supports dedicated fuel_supply_disruption scenario and positive fuel-price shock.
+
+qpm_parameters:
+  value: project_qpm_v0_3_0
+  unit: model_artifact
+  role: transmission
+  evidence_type: project_model
+  confidence: medium
+  source_name: apps/policy-ui/public/data/qpm.json and mcp_server/models/qpm.py
+  source_url: local_repo
+  note: Used for inflation, output gap, exchange-rate, and risk-premium transmission.
+
+io_2022_table:
+  value: 136_sector_table
+  unit: model_artifact
+  role: transmission
+  evidence_type: project_model
+  confidence: medium
+  source_name: Uzbekistan 2022 input-output bridge
+  source_url: local_repo
+  note: Used for sectoral output, value-added, import-content, and employment propagation.

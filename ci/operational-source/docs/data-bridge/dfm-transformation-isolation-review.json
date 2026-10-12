@@ -1,0 +1,194 @@
+{
+  "artifact": {
+    "id": "dfm-transformation-isolation-review",
+    "generated_at": "2026-06-09T07:07:01Z",
+    "source_folder": "C:/Users/n.ortiqov/Desktop/2026/50. Nowcasting/Nowcasting 2026 q1/DFM Nowcast/Nowcasting ready for R",
+    "source_workbook": "C:/Users/n.ortiqov/Desktop/2026/50. Nowcasting/Nowcasting 2026 q1/DFM Nowcast/Nowcasting ready for R/data/data_uzbekistan.xlsx",
+    "source_workbook_md5": "763365dcca1a9a307ad22c4260aa91b7",
+    "transformation_map": "C:/Users/n.ortiqov/Desktop/Uzbekistan-Economic-policy-engine/docs/data-bridge/dfm-transformation-map.json",
+    "runner": "scripts/dfm/review-transformation-isolation.R",
+    "r_version": "4.5.2",
+    "em_settings": {
+      "max_iter": 300,
+      "threshold": 1e-05
+    },
+    "case_filter": "single_ip_cppy_plus_foreign_leading_index,single_ind_percap_grwth_plus_foreign_leading_index,single_const_grwth_plus_foreign_leading_index,single_IND_YOY_plus_foreign_leading_index,single_manf_YOY_plus_foreign_leading_index"
+  },
+  "baseline_reference": {
+    "json_artifact": "docs/data-bridge/dfm-2026q2-robustness-review.json",
+    "nowcast_period": "2026Q2",
+    "gdp_growth_yoy_pct": 7.984,
+    "gdp_growth_qoq_pct": 1.5293
+  },
+  "cases": [
+    {
+      "case_id": "single_ip_cppy_plus_foreign_leading_index",
+      "label": "Apply ip_cppy plus Kazakhstan leading-index transformations",
+      "status": "completed",
+      "converged": true,
+      "iterations": 150,
+      "loglik": 1948.992944,
+      "nowcast_period": "2026Q2",
+      "gdp_growth_yoy_pct": 7.9586,
+      "gdp_growth_qoq_pct": 1.5054,
+      "gdp_level": 298755.4,
+      "elapsed_seconds": 126.46,
+      "warnings": [],
+      "variable_ids": [
+        "ip_cppy",
+        "kazakh_leadind"
+      ],
+      "decisions": [
+        {
+          "variable_id": "ip_cppy",
+          "mode": "native_growth_level_signal",
+          "replaced": true
+        },
+        {
+          "variable_id": "kazakh_leadind",
+          "mode": "native_growth_level_signal",
+          "replaced": true
+        }
+      ],
+      "yoy_difference_vs_baseline_pp": -0.0254,
+      "qoq_difference_vs_baseline_pp": -0.0239
+    },
+    {
+      "case_id": "single_ind_percap_grwth_plus_foreign_leading_index",
+      "label": "Apply ind_percap_grwth plus Kazakhstan leading-index transformations",
+      "status": "completed",
+      "converged": true,
+      "iterations": 153,
+      "loglik": 2021.924427,
+      "nowcast_period": "2026Q2",
+      "gdp_growth_yoy_pct": 7.9443,
+      "gdp_growth_qoq_pct": 1.4919,
+      "gdp_level": 298715.8,
+      "elapsed_seconds": 126.46,
+      "warnings": [],
+      "variable_ids": [
+        "ind_percap_grwth",
+        "kazakh_leadind"
+      ],
+      "decisions": [
+        {
+          "variable_id": "ind_percap_grwth",
+          "mode": "native_growth_level_signal",
+          "replaced": true
+        },
+        {
+          "variable_id": "kazakh_leadind",
+          "mode": "native_growth_level_signal",
+          "replaced": true
+        }
+      ],
+      "yoy_difference_vs_baseline_pp": -0.0397,
+      "qoq_difference_vs_baseline_pp": -0.0374
+    },
+    {
+      "case_id": "single_const_grwth_plus_foreign_leading_index",
+      "label": "Apply const_grwth plus Kazakhstan leading-index transformations",
+      "status": "completed",
+      "converged": true,
+      "iterations": 256,
+      "loglik": 2183.274066,
+      "nowcast_period": "2026Q2",
+      "gdp_growth_yoy_pct": 7.9787,
+      "gdp_growth_qoq_pct": 1.5243,
+      "gdp_level": 298810.9,
+      "elapsed_seconds": 232.14,
+      "warnings": [],
+      "variable_ids": [
+        "const_grwth",
+        "kazakh_leadind"
+      ],
+      "decisions": [
+        {
+          "variable_id": "const_grwth",
+          "mode": "native_growth_level_signal",
+          "replaced": true
+        },
+        {
+          "variable_id": "kazakh_leadind",
+          "mode": "native_growth_level_signal",
+          "replaced": true
+        }
+      ],
+      "yoy_difference_vs_baseline_pp": -0.0053,
+      "qoq_difference_vs_baseline_pp": -0.005
+    },
+    {
+      "case_id": "single_IND_YOY_plus_foreign_leading_index",
+      "label": "Apply IND_YOY plus Kazakhstan leading-index transformations",
+      "status": "completed",
+      "converged": true,
+      "iterations": 210,
+      "loglik": 2367.313676,
+      "nowcast_period": "2026Q2",
+      "gdp_growth_yoy_pct": 7.9916,
+      "gdp_growth_qoq_pct": 1.5364,
+      "gdp_level": 298846.6,
+      "elapsed_seconds": 173.98,
+      "warnings": [],
+      "variable_ids": [
+        "IND_YOY",
+        "kazakh_leadind"
+      ],
+      "decisions": [
+        {
+          "variable_id": "IND_YOY",
+          "mode": "native_growth_level_signal",
+          "replaced": true
+        },
+        {
+          "variable_id": "kazakh_leadind",
+          "mode": "native_growth_level_signal",
+          "replaced": true
+        }
+      ],
+      "yoy_difference_vs_baseline_pp": 0.0076,
+      "qoq_difference_vs_baseline_pp": 0.0071
+    },
+    {
+      "case_id": "single_manf_YOY_plus_foreign_leading_index",
+      "label": "Apply manf_YOY plus Kazakhstan leading-index transformations",
+      "status": "completed",
+      "converged": true,
+      "iterations": 216,
+      "loglik": 2346.713144,
+      "nowcast_period": "2026Q2",
+      "gdp_growth_yoy_pct": 7.9892,
+      "gdp_growth_qoq_pct": 1.5341,
+      "gdp_level": 298840,
+      "elapsed_seconds": 206.3,
+      "warnings": [],
+      "variable_ids": [
+        "manf_YOY",
+        "kazakh_leadind"
+      ],
+      "decisions": [
+        {
+          "variable_id": "manf_YOY",
+          "mode": "native_growth_level_signal",
+          "replaced": true
+        },
+        {
+          "variable_id": "kazakh_leadind",
+          "mode": "native_growth_level_signal",
+          "replaced": true
+        }
+      ],
+      "yoy_difference_vs_baseline_pp": 0.0052,
+      "qoq_difference_vs_baseline_pp": 0.0048
+    }
+  ],
+  "reviewer_findings": {
+    "status": "all_selected_cases_converged",
+    "nonconverged_case_ids": [],
+    "slow_case_ids": [
+      "single_const_grwth_plus_foreign_leading_index"
+    ],
+    "max_abs_yoy_difference_pp": 0.0397,
+    "interpretation": "Selected individual/group transformations converge under the configured EM cap; the full reviewed-transformations nonconvergence is likely an interaction among rows."
+  }
+}

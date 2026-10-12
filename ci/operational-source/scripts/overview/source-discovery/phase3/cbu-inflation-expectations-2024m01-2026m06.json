@@ -1,0 +1,78 @@
+{
+  "source_id": "cbu-narxtahlil-inflation-expectations",
+  "institution": "Central Bank of the Republic of Uzbekistan",
+  "retrieved_at": "2026-07-20",
+  "api_url": "https://narxtahlil.uz/api/expectations/dashboard/",
+  "dashboard_url": "https://narxtahlil.uz/expectations/",
+  "respondent_scope": "national household and business survey aggregates",
+  "expectation_horizon_months": 12,
+  "unit": "percent",
+  "frequency": "monthly",
+  "coverage": "2024M01/2026M06",
+  "readiness": "verified_official_api",
+  "api_response_fields": {
+    "period": "box_11_overview.categories",
+    "household": "box_11_overview.aholi",
+    "business": "box_11_overview.tadbirkor"
+  },
+  "cross_checks": [
+    {
+      "source": "https://cbu.uz/upload/medialibrary/bf1/0lh2ynrq8sb4cg0sochnpisoziaizrrt/MPR_2026Q1_ENG.pdf",
+      "pages": [27, 29],
+      "note": "CBU Monetary Policy Report 2026Q1 states the survey horizon and independently reports selected household, business, and financial-sector expert values."
+    },
+    {
+      "source": "https://cbu.uz/upload/medialibrary/25d/cugg1d2t6sn5qkfjub3shodfoxgdhp4l/MPR-2025-Q4.pdf",
+      "pages": [24],
+      "note": "CBU Monetary Policy Report 2025Q4 independently reports selected household and business values."
+    }
+  ],
+  "observations": [
+    {"period": "2024M01", "household": 13.12, "business": 12.65},
+    {"period": "2024M02", "household": 12.96, "business": 12.65},
+    {"period": "2024M03", "household": 12.83, "business": 12.17},
+    {"period": "2024M04", "household": 14.02, "business": 13.33},
+    {"period": "2024M05", "household": 14.02, "business": 12.72},
+    {"period": "2024M06", "household": 12.78, "business": 11.92},
+    {"period": "2024M07", "household": 11.95, "business": 11.15},
+    {"period": "2024M08", "household": 13.14, "business": 12.52},
+    {"period": "2024M09", "household": 13.34, "business": 12.59},
+    {"period": "2024M10", "household": 12.76, "business": 11.99},
+    {"period": "2024M11", "household": 13.73, "business": 12.72},
+    {"period": "2024M12", "household": 14.41, "business": 13.90},
+    {"period": "2025M01", "household": 14.43, "business": 12.87},
+    {"period": "2025M02", "household": 15.36, "business": 13.78},
+    {"period": "2025M03", "household": 14.23, "business": 13.01},
+    {"period": "2025M04", "household": 14.19, "business": 13.51},
+    {"period": "2025M05", "household": 13.69, "business": 12.85},
+    {"period": "2025M06", "household": 13.18, "business": 11.79},
+    {"period": "2025M07", "household": 12.90, "business": 12.13},
+    {"period": "2025M08", "household": 12.23, "business": 11.78},
+    {"period": "2025M09", "household": 11.95, "business": 11.68},
+    {"period": "2025M10", "household": 11.71, "business": 11.09},
+    {"period": "2025M11", "household": 11.46, "business": 10.50},
+    {"period": "2025M12", "household": 11.53, "business": 11.13},
+    {"period": "2026M01", "household": 11.21, "business": 10.75},
+    {"period": "2026M02", "household": 11.18, "business": 10.76},
+    {"period": "2026M03", "household": 11.00, "business": 10.65},
+    {"period": "2026M04", "household": 10.60, "business": 10.25},
+    {"period": "2026M05", "household": 10.08, "business": 9.91},
+    {"period": "2026M06", "household": 10.13, "business": 9.90}
+  ],
+  "financial_sector_expert_observations": [
+    {"period": "2025M12", "twelve_month": 7.8, "three_year": 5.8},
+    {"period": "2026M01", "twelve_month": 7.6, "three_year": 5.6},
+    {"period": "2026M02", "twelve_month": 7.7, "three_year": 5.6},
+    {"period": "2026M03", "twelve_month": 7.4, "three_year": 5.6}
+  ],
+  "expert_source": {
+    "url": "https://cbu.uz/upload/medialibrary/bf1/0lh2ynrq8sb4cg0sochnpisoziaizrrt/MPR_2026Q1_ENG.pdf",
+    "page": 29,
+    "readiness": "verified_official_report_text"
+  },
+  "limitations": [
+    "The dashboard is a live endpoint; this file is a dated reproducible snapshot.",
+    "Respondent expectations can contain attention, salience, and rounding effects and are not interchangeable with model-consistent expectations.",
+    "Financial-sector expert expectations have only four published monthly observations in the source report."
+  ]
+}

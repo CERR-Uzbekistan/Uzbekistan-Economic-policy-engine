@@ -1,0 +1,37 @@
+# R
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Claude Code
+.claude/
+
+# MCP Server generated data (regenerate with: cd mcp_server/data && python convert_js_data.py)
+mcp_server/data/*.json
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+
+# Dev server log files
+.tmp-dev-*.log
+
+# Project history exports (do not commit to repo)
+/conversation-history-*.md
+# Deterministically prepared test derivatives (not approval artifacts)
+/mcp_server/tests/generated/

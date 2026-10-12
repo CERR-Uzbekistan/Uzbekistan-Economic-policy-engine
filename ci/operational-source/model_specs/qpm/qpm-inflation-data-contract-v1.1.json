@@ -1,0 +1,50 @@
+{
+  "contract_id": "uzbekistan-qpm-inflation-v1.1",
+  "version": "1.1.0",
+  "status": "validated_research_inputs",
+  "extends": "model_specs/qpm/qpm-inflation-data-contract-v1.0.json",
+  "official_import_price": {
+    "institution": "National Statistics Committee of the Republic of Uzbekistan",
+    "indicator_code": "1.11.02.0016",
+    "indicator_id": 1320,
+    "frequency": "monthly",
+    "unit": "previous-month price relative, percent",
+    "classifier": "TN VED 2017",
+    "primary_source": "Database of Customs services",
+    "coverage": "2019M01/2026M05",
+    "series": 116,
+    "composite_series": 1,
+    "source_url": "https://siat.stat.uz/data/1320/?lang=en",
+    "local_snapshot": "scripts/overview/source-discovery/phase4/siat-import-price-mom-1320-2026-07.json",
+    "transformation": "chain composite monthly relatives; compute 100 times log index change from twelve months earlier",
+    "month_label_rule": "accept one- or two-digit month and normalize to YYYY-MM"
+  },
+  "core_exclusion_definition": {
+    "institution": "Central Bank of the Republic of Uzbekistan",
+    "document": "Core inflation and its estimation methods",
+    "approved": "2025-12-11",
+    "source_url": "https://cbu.uz/upload/iblock/99a/11soxyzf092t6mkb2yok3zpaatc65z7y/Methodology-of-core-inflation-and-its-estimation.pdf",
+    "local_snapshot": "scripts/overview/source-discovery/phase4/cbu-core-inflation-methodology-2025.pdf",
+    "regulated_items": 26,
+    "regulated_share_percent": 15,
+    "seasonal_items": 26,
+    "seasonal_share_percent": 7,
+    "core_items": 458,
+    "core_share_percent": 78,
+    "mapping": "model_specs/qpm/cbu-core-exclusion-map-v1.1.json",
+    "current_item_weights_available": false,
+    "production_component_aggregation_allowed": false
+  },
+  "monthly_bridge_real_time_rules": {
+    "core_target": "official CBU core inflation, YoY percent",
+    "import_regressor_lag_months": 1,
+    "output_gap_mapping": "last completed quarter only",
+    "forecast_estimation": "expanding window using observations strictly before forecast month",
+    "partial_quarters": "excluded from quarterly bridge",
+    "interpolation": false
+  },
+  "rejected_sources": {
+    "siat_1287": "aggregate CPI weights ending in 2020; no current item weights",
+    "local_cross_country_energy_workbook": "cross-sectional historical comparison, not a Uzbekistan tariff time series"
+  }
+}

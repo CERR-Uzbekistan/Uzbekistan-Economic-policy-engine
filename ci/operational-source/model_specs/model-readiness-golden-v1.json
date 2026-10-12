@@ -1,0 +1,19 @@
+{
+  "policy_version": "2026-09-30-v3",
+  "clock": "2026-09-29T00:00:00Z",
+  "cases": [
+    {"name": "legacy-io-qualified", "variant": "io-legacy-output-v0", "intent": "diagnostic", "expected_status": "qualified", "expected_codes": ["diagnostic_only"]},
+    {"name": "public-io-qualified", "variant": "io-total-resource-buckets-v1", "intent": "diagnostic", "expected_status": "qualified", "expected_codes": ["diagnostic_only"]},
+    {"name": "public-io-not-authoritative", "variant": "io-total-resource-buckets-v1", "intent": "authoritative", "expected_status": "blocked", "expected_codes": ["approval_missing"]},
+    {"name": "judgment-fallback", "variant": "level-consistent-judgment-v1", "intent": "diagnostic", "expected_status": "qualified", "expected_codes": ["diagnostic_only", "overview_snapshot_required"]},
+    {"name": "frozen-qpm-is-historical-diagnostic", "variant": "legacy-v0.3", "intent": "diagnostic", "expected_status": "qualified", "expected_codes": ["diagnostic_only"]},
+    {"name": "stale-public-dfm", "variant": "dfm-source-reconciled-v1", "intent": "diagnostic", "expected_status": "blocked", "expected_codes": ["diagnostic_only", "source_stale", "source_stale", "period_mismatch"]},
+    {"name": "stale-legacy-dfm", "variant": "dfm-legacy-state-v0", "intent": "diagnostic", "expected_status": "blocked", "expected_codes": ["diagnostic_only", "source_stale", "source_stale"]},
+    {"name": "research-not-released", "variant": "research-qpm-extended-v1.1", "intent": "diagnostic", "expected_status": "blocked", "expected_codes": ["diagnostic_not_released", "diagnostic_only"]},
+    {"name": "fpp-not-released", "variant": "fpp-reduced-form-v0", "intent": "diagnostic", "expected_status": "blocked", "expected_codes": ["diagnostic_not_released", "diagnostic_only"]},
+    {"name": "unknown-variant", "variant": "qpm-not-declared", "intent": "diagnostic", "expected_status": "blocked", "expected_codes": ["unknown_variant"]},
+    {"name": "missing-public-io", "variant": "io-total-resource-buckets-v1", "intent": "diagnostic", "missing_artifacts": true, "expected_status": "blocked", "expected_codes": ["diagnostic_only", "artifact_missing"]},
+    {"name": "changed-public-io", "variant": "io-total-resource-buckets-v1", "intent": "diagnostic", "changed_artifact": true, "expected_status": "blocked", "expected_codes": ["diagnostic_only", "artifact_hash_mismatch"]},
+    {"name": "unsupported-policy-schema", "variant": "io-total-resource-buckets-v1", "intent": "diagnostic", "unsupported_schema": true, "expected_status": "blocked", "expected_codes": ["manifest_schema_incompatible", "diagnostic_only"]}
+  ]
+}

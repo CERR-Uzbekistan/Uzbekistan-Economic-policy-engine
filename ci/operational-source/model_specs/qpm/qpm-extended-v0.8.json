@@ -1,0 +1,143 @@
+{
+  "model_id": "uzbekistan-qpm-extended",
+  "version": "0.8.0",
+  "status": "research_diagnostic",
+  "production_runtime": false,
+  "reference": {
+    "document": "QPM_MB_lot.pdf",
+    "institution": "Central Bank of the Republic of Uzbekistan",
+    "calibration_as_of": "2026-07-20"
+  },
+  "compatibility_model": "qpm-core-v0.3",
+  "modules": {
+    "observed_state": "mcp_server/models/qpm_observed_state.py",
+    "official_gdp": "mcp_server/models/qpm_siat_gdp.py",
+    "official_cpi_policy": "mcp_server/models/qpm_official_macro_data.py",
+    "inflation_expectations": "mcp_server/models/qpm_expectations_data.py",
+    "monetary_stance": "mcp_server/models/qpm_monetary_stance.py",
+    "macro_proxies": "mcp_server/models/qpm_macro_proxies.py",
+    "credit_equation": "mcp_server/models/qpm_credit_equation.py",
+    "extended_runtime": "mcp_server/models/qpm_extended_runtime.py"
+  },
+  "data_inputs": {
+    "credit_and_fdi_activity_proxy": {
+      "readiness": "verified_official",
+      "coverage": "2020Q1/2026Q1"
+    },
+    "nominal_gdp_and_discrete_real_growth": {
+      "readiness": "verified_official",
+      "contract": "model_specs/qpm/qpm-gdp-data-contract-v0.1.json"
+    },
+    "headline_cpi_and_policy_rate": {
+      "readiness": "verified_official",
+      "contract": "model_specs/qpm/qpm-official-macro-data-contract-v0.1.json",
+      "quarterly_cpi_yoy_coverage": "2022Q1/2026Q2",
+      "quarterly_policy_coverage": "2016Q1/2026Q2"
+    },
+    "inflation_expectations_and_neutral_rate": {
+      "readiness": "verified_official_api_and_benchmark_range",
+      "contract": "model_specs/qpm/qpm-monetary-stance-data-contract-v0.1.json",
+      "survey_monthly_coverage": "2024M01/2026M06",
+      "survey_quarterly_coverage": "2024Q1/2026Q2",
+      "expert_coverage": "2025M12/2026M03"
+    }
+  },
+  "published_satellite_demand_weights": {
+    "credit_activity": 0.2,
+    "fdi_gap": 0.05
+  },
+  "monetary_stance_diagnostics": {
+    "definition": "calendar-day-weighted official policy rate minus 12-month CBU survey expectations, compared with a CBU working-paper neutral-rate range",
+    "coverage": "2024Q1/2026Q2",
+    "observations": 10,
+    "neutral_rate_cross_model_central_percent": 4.0,
+    "neutral_rate_cross_model_range_percent": [3.4, 4.5],
+    "latest": {
+      "period": "2026Q2",
+      "policy_rate_percent": 14.0,
+      "household_expectation_percent": 10.27,
+      "business_expectation_percent": 10.02,
+      "composite_expectation_percent": 10.145,
+      "household_real_rate_percent": 3.73,
+      "business_real_rate_percent": 3.98,
+      "composite_real_rate_percent": 3.855,
+      "central_stance_gap_percentage_points": -0.145,
+      "stance_gap_range_percentage_points": [-0.645, 0.455],
+      "classification": "inside_neutral_range"
+    },
+    "financial_sector_expert_sensitivity": {
+      "period": "2026Q1",
+      "expectation_12m_percent": 7.5666666667,
+      "real_rate_percent": 6.4333333333,
+      "central_stance_gap_percentage_points": 2.4333333333,
+      "interpretation": "above neutral benchmark; not blended with household/business series"
+    },
+    "structural_interpretation_allowed": false
+  },
+  "empirical_diagnostics": {
+    "expectations_based_credit_activity": {
+      "coverage": "2024Q2/2026Q1",
+      "observations": 8,
+      "rolling_backtest_forecasts": 0,
+      "composite": {
+        "persistence": -0.0346402157,
+        "real_policy_rate_gap_slope": -1.0699527697,
+        "output_growth_gap_slope": 1.9906627075,
+        "r_squared": 0.4385823002,
+        "standardized_condition_number": 2.6985457954,
+        "expected_signs_satisfied": false
+      },
+      "business": {
+        "persistence": 0.0011835995,
+        "real_policy_rate_gap_slope": -1.1715972508,
+        "output_growth_gap_slope": 1.8934875249,
+        "expected_signs_satisfied": true
+      },
+      "household": {
+        "persistence": -0.0618632080,
+        "real_policy_rate_gap_slope": -0.9581541188,
+        "output_growth_gap_slope": 2.0368209039,
+        "expected_signs_satisfied": false
+      },
+      "promoted": false,
+      "reason": "zero rolling forecasts and respondent-sensitive persistence"
+    },
+    "ex_post_credit_activity_v0_7": {
+      "coverage": "2023Q2/2026Q1",
+      "observations": 12,
+      "rolling_backtest_forecasts": 4,
+      "promoted": false,
+      "reason": "retained as a longer-sample diagnostic; did not beat the random-walk benchmark"
+    }
+  },
+  "latest_diagnostic_conditioning": {
+    "credit_period": "2026Q1",
+    "fdi_proxy_period": "2026Q1",
+    "mapped_demand_contribution": 0.2856265494,
+    "mixed_vintage": false,
+    "production_authorized": false
+  },
+  "explicitly_unidentified": [
+    "structural_output_gap",
+    "time_varying_neutral_real_interest_rate",
+    "model_consistent_inflation_expectations",
+    "structural_monetary_policy_gap",
+    "causal_credit_equation_slopes",
+    "balance_of_payments_fdi_flow",
+    "credit_default_migration_and_cure_flows"
+  ],
+  "promotion_state": {
+    "official_credit_observed_state": true,
+    "official_gdp_observed_state": true,
+    "official_headline_cpi": true,
+    "official_policy_rate_events": true,
+    "official_inflation_expectations_snapshot": true,
+    "expectations_based_stance_diagnostic": true,
+    "structural_monetary_policy_gap": false,
+    "multivariate_credit_equation": false,
+    "joint_forward_solver": false,
+    "historical_decomposition": false,
+    "parameter_uncertainty": false,
+    "model_owner_approval": false
+  }
+}

@@ -1,0 +1,629 @@
+{
+  "artifact": {
+    "id": "dfm-2026q2-robustness-review",
+    "generated_at": "2026-07-16T10:12:04Z",
+    "source_folder": "<DFM_SOURCE_DIR>",
+    "source_workbook": "<DFM_SOURCE_DIR>/data/data_uzbekistan.xlsx",
+    "source_workbook_md5": "42a1e478f39a77db3797c188cd841f78",
+    "runner": "scripts/dfm/review-source-nowcast.R",
+    "r_version": "4.5.2"
+  },
+  "baseline": {
+    "case_id": "baseline",
+    "label": "Baseline source workflow",
+    "seasonal_policy": "source",
+    "monthly_cutoff": null,
+    "drop_variables": [],
+    "status": "completed",
+    "converged": true,
+    "iterations": 155,
+    "loglik": 3157.224604,
+    "variable_count": 36,
+    "last_growth_date": "2025-12-01",
+    "last_observed_gdp_date": "2025-12-01",
+    "nowcast_period": "2026Q1",
+    "gdp_growth_yoy_pct": 7.0078,
+    "gdp_growth_qoq_pct": 1.4398,
+    "gdp_level": 287054,
+    "elapsed_seconds": 175.77,
+    "warnings": [
+      "Seasonal adjustment failed for column: ent_new"
+    ]
+  },
+  "source_gdp_history_audit": {
+    "status": "review_only_unverified",
+    "source_series_label": "Uzbekistan, Gross Domestic Product, Total, Constant Prices, volume 2021, UZS",
+    "source_provenance": null,
+    "latest_observed_period": "2025Q4",
+    "latest_observed_quarter_end_date": "2025-12-01",
+    "raw_gdp_level": 317688.7,
+    "raw_gdp_growth_yoy_pct": 8.5455,
+    "model_adjusted_gdp_level": 282979.5,
+    "model_adjusted_gdp_growth_yoy_pct": 8.7027,
+    "model_adjusted_minus_raw_yoy_pp": 0.1572,
+    "display_rule": "Source-workbook GDP history is audit-only until source provenance and series continuity are verified; seasonally adjusted GDP is model input, not an official release.",
+    "interpretation": "The comparison diagnoses how seasonal adjustment changes the GDP input. It must not be presented as official history until the workbook source and series continuity are verified.",
+    "recent_quarters": [
+      {
+        "period": "2024Q1",
+        "quarter_end_date": "2024-03-01",
+        "raw_gdp_level": 198218.6,
+        "raw_gdp_growth_yoy_pct": 7.2416,
+        "model_adjusted_gdp_level": 254529.1,
+        "model_adjusted_gdp_growth_yoy_pct": 8.5113,
+        "model_adjusted_minus_raw_yoy_pp": 1.2697
+      },
+      {
+        "period": "2024Q2",
+        "quarter_end_date": "2024-06-01",
+        "raw_gdp_level": 269923.5,
+        "raw_gdp_growth_yoy_pct": 14.2956,
+        "model_adjusted_gdp_level": 259534,
+        "model_adjusted_gdp_growth_yoy_pct": 6.6449,
+        "model_adjusted_minus_raw_yoy_pp": -7.6507
+      },
+      {
+        "period": "2024Q3",
+        "quarter_end_date": "2024-09-01",
+        "raw_gdp_level": 275520.2,
+        "raw_gdp_growth_yoy_pct": 13.7263,
+        "model_adjusted_gdp_level": 263979.3,
+        "model_adjusted_gdp_growth_yoy_pct": 10.2295,
+        "model_adjusted_minus_raw_yoy_pp": -3.4968
+      },
+      {
+        "period": "2024Q4",
+        "quarter_end_date": "2024-12-01",
+        "raw_gdp_level": 292677.9,
+        "raw_gdp_growth_yoy_pct": -4.9756,
+        "model_adjusted_gdp_level": 260324.3,
+        "model_adjusted_gdp_growth_yoy_pct": 1.6241,
+        "model_adjusted_minus_raw_yoy_pp": 6.5998
+      },
+      {
+        "period": "2025Q1",
+        "quarter_end_date": "2025-03-01",
+        "raw_gdp_level": 207673.9,
+        "raw_gdp_growth_yoy_pct": 4.7701,
+        "model_adjusted_gdp_level": 268255.2,
+        "model_adjusted_gdp_growth_yoy_pct": 5.3927,
+        "model_adjusted_minus_raw_yoy_pp": 0.6226
+      },
+      {
+        "period": "2025Q2",
+        "quarter_end_date": "2025-06-01",
+        "raw_gdp_level": 286529.4,
+        "raw_gdp_growth_yoy_pct": 6.1521,
+        "model_adjusted_gdp_level": 273495,
+        "model_adjusted_gdp_growth_yoy_pct": 5.3793,
+        "model_adjusted_minus_raw_yoy_pp": -0.7728
+      },
+      {
+        "period": "2025Q3",
+        "quarter_end_date": "2025-09-01",
+        "raw_gdp_level": 293933.6,
+        "raw_gdp_growth_yoy_pct": 6.6832,
+        "model_adjusted_gdp_level": 277701.8,
+        "model_adjusted_gdp_growth_yoy_pct": 5.1983,
+        "model_adjusted_minus_raw_yoy_pp": -1.4848
+      },
+      {
+        "period": "2025Q4",
+        "quarter_end_date": "2025-12-01",
+        "raw_gdp_level": 317688.7,
+        "raw_gdp_growth_yoy_pct": 8.5455,
+        "model_adjusted_gdp_level": 282979.5,
+        "model_adjusted_gdp_growth_yoy_pct": 8.7027,
+        "model_adjusted_minus_raw_yoy_pp": 0.1572
+      }
+    ]
+  },
+  "gdp_seasonal_adjustment_audit": {
+    "status": "completed",
+    "json_artifact": "docs/data-bridge/dfm-gdp-seasonal-adjustment-audit.json",
+    "markdown_report": "docs/data-bridge/dfm-gdp-seasonal-adjustment-audit.md",
+    "decision": "keep_adjusted_gdp_for_model_estimation_and_block_source_history_from_public_display_pending_verification",
+    "raw_qoq_sd_pp": 25.4865,
+    "adjusted_qoq_sd_pp": 1.9876,
+    "latest_raw_qoq_pct": 8.0818,
+    "latest_adjusted_qoq_pct": 1.9005
+  },
+  "coverage": {
+    "monthly_row_count": 107,
+    "monthly_start_date": "2017-02-01",
+    "monthly_end_date": "2025-12-01",
+    "latest_date_counts": [
+      35
+    ],
+    "latest_date_labels": [
+      "2025-12-01"
+    ],
+    "series_latest_dates": [
+      {
+        "variable_id": "ip_uzs",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "ip_cppy",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "imp",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "exp",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "imp_agg",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "exp_agg",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "ent_new",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "cpi_services",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "cpi_goods",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "ppi",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "m0",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "m2",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "financial_sound",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "rate_1y",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "uzs_usd",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "kazakh_leadind",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "IDA_yoy",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "IDA_mom",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "bank_trans",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "real_est",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "cars",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "ind_percap_grwth",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "construction (2021p)",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "const_grwth",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "IND_2021p",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "IND_YOY",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "wholesale_trade_grwth",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "retail_trade_grwth",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "retail_trade_2021p",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "services_grwth",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "bus_clim",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "bus_clim_exp",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "manf=2021",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "manf_YOY",
+        "latest_date": "2025-12-01"
+      },
+      {
+        "variable_id": "stock_deals",
+        "latest_date": "2025-12-01"
+      }
+    ]
+  },
+  "top_drivers": [
+    {
+      "variable_id": "real_est",
+      "label": "Number of real estate sales",
+      "category": "Real estate",
+      "frequency": "Monthly",
+      "source_unit": "Number",
+      "latest_level_date": "2025-12-01",
+      "latest_level_value": 31264,
+      "latest_growth_date": "2025-12-01",
+      "latest_transformed_growth": 0.229771,
+      "standardized_signal": 0.599861,
+      "loading": 0.405417,
+      "contribution": 0.243193,
+      "direction": "supports_nowcast"
+    },
+    {
+      "variable_id": "IDA_mom",
+      "label": "Business activity index month on month",
+      "category": "Business survey",
+      "frequency": "Monthly",
+      "source_unit": "Index",
+      "latest_level_date": "2025-12-01",
+      "latest_level_value": 1066.5793,
+      "latest_growth_date": "2025-12-01",
+      "latest_transformed_growth": 0.073186,
+      "standardized_signal": 0.577247,
+      "loading": 0.393503,
+      "contribution": 0.227149,
+      "direction": "supports_nowcast"
+    },
+    {
+      "variable_id": "IDA_yoy",
+      "label": "Business activity index year on year",
+      "category": "Business survey",
+      "frequency": "Monthly",
+      "source_unit": "Index",
+      "latest_level_date": "2025-12-01",
+      "latest_level_value": 1221.9993,
+      "latest_growth_date": "2025-12-01",
+      "latest_transformed_growth": 0.094911,
+      "standardized_signal": 0.679154,
+      "loading": 0.229651,
+      "contribution": 0.155968,
+      "direction": "supports_nowcast"
+    },
+    {
+      "variable_id": "manf_YOY",
+      "label": "Manufacturing year on year growth rate",
+      "category": "Production",
+      "frequency": "Monthly",
+      "source_unit": "Index",
+      "latest_level_date": "2025-12-01",
+      "latest_level_value": 112.8186,
+      "latest_growth_date": "2025-12-01",
+      "latest_transformed_growth": 0.05564,
+      "standardized_signal": 0.475208,
+      "loading": 0.318693,
+      "contribution": 0.151445,
+      "direction": "supports_nowcast"
+    },
+    {
+      "variable_id": "bank_trans",
+      "label": "Number of banking transactions",
+      "category": "Transactions",
+      "frequency": "Monthly",
+      "source_unit": "Number",
+      "latest_level_date": "2025-12-01",
+      "latest_level_value": 6244923.3789,
+      "latest_growth_date": "2025-12-01",
+      "latest_transformed_growth": 0.023023,
+      "standardized_signal": 0.344392,
+      "loading": 0.369669,
+      "contribution": 0.127311,
+      "direction": "supports_nowcast"
+    },
+    {
+      "variable_id": "m0",
+      "label": "Monetary Statistics, Monetary Aggregates, M0, Currency in Circulation (M0), Beginning of Period, UZS",
+      "category": "Money, Banking & Credit",
+      "frequency": "Monthly",
+      "source_unit": "Currency Units",
+      "latest_level_date": "2025-12-01",
+      "latest_level_value": 65172148716000,
+      "latest_growth_date": "2025-12-01",
+      "latest_transformed_growth": -0.029709,
+      "standardized_signal": -0.892403,
+      "loading": -0.088204,
+      "contribution": 0.078714,
+      "direction": "supports_nowcast"
+    },
+    {
+      "variable_id": "stock_deals",
+      "label": "number of deals in stock market",
+      "category": "Stock market",
+      "frequency": "Monthly",
+      "source_unit": "Index",
+      "latest_level_date": "2025-12-01",
+      "latest_level_value": 50971,
+      "latest_growth_date": "2025-12-01",
+      "latest_transformed_growth": 0.274797,
+      "standardized_signal": 1.345633,
+      "loading": 0.044576,
+      "contribution": 0.059983,
+      "direction": "supports_nowcast"
+    },
+    {
+      "variable_id": "retail_trade_grwth",
+      "label": "reatail trade growth rate",
+      "category": "Trade",
+      "frequency": "Monthly",
+      "source_unit": "Index",
+      "latest_level_date": "2025-12-01",
+      "latest_level_value": 111,
+      "latest_growth_date": "2025-12-01",
+      "latest_transformed_growth": 0.006326,
+      "standardized_signal": 0.191841,
+      "loading": 0.223641,
+      "contribution": 0.042903,
+      "direction": "supports_nowcast"
+    },
+    {
+      "variable_id": "ent_new",
+      "label": "Enterprises, Number of Enterprises, Newly Established Enterprises, Aggregate",
+      "category": "Business Statistics",
+      "frequency": "Monthly",
+      "source_unit": "Number",
+      "latest_level_date": "2025-12-01",
+      "latest_level_value": 87775,
+      "latest_growth_date": "2025-12-01",
+      "latest_transformed_growth": 0.08606,
+      "standardized_signal": 0.09891,
+      "loading": 0.235017,
+      "contribution": 0.023246,
+      "direction": "supports_nowcast"
+    },
+    {
+      "variable_id": "IND_YOY",
+      "label": "Industry year on year growth",
+      "category": "Production",
+      "frequency": "Monthly",
+      "source_unit": "Index",
+      "latest_level_date": "2025-12-01",
+      "latest_level_value": 108.3771,
+      "latest_growth_date": "2025-12-01",
+      "latest_transformed_growth": -0.005017,
+      "standardized_signal": -0.060707,
+      "loading": 0.381273,
+      "contribution": -0.023146,
+      "direction": "drags_nowcast"
+    },
+    {
+      "variable_id": "bus_clim",
+      "label": "business clmate index",
+      "category": "Business survey",
+      "frequency": "Monthly",
+      "source_unit": "Index",
+      "latest_level_date": "2025-12-01",
+      "latest_level_value": 57.5294,
+      "latest_growth_date": "2025-12-01",
+      "latest_transformed_growth": 0.096241,
+      "standardized_signal": 0.522253,
+      "loading": 0.042729,
+      "contribution": 0.022316,
+      "direction": "supports_nowcast"
+    },
+    {
+      "variable_id": "bus_clim_exp",
+      "label": "business clmate expectation index",
+      "category": "Business survey",
+      "frequency": "Monthly",
+      "source_unit": "Index",
+      "latest_level_date": "2025-12-01",
+      "latest_level_value": 64.7658,
+      "latest_growth_date": "2025-12-01",
+      "latest_transformed_growth": 0.175239,
+      "standardized_signal": 1.023618,
+      "loading": 0.019256,
+      "contribution": 0.01971,
+      "direction": "supports_nowcast"
+    },
+    {
+      "variable_id": "wholesale_trade_grwth",
+      "label": "wholesale trade growth rate",
+      "category": "Trade",
+      "frequency": "Monthly",
+      "source_unit": "Index",
+      "latest_level_date": "2025-12-01",
+      "latest_level_value": 112.5,
+      "latest_growth_date": "2025-12-01",
+      "latest_transformed_growth": -0.002663,
+      "standardized_signal": -0.081278,
+      "loading": 0.216741,
+      "contribution": -0.017616,
+      "direction": "drags_nowcast"
+    },
+    {
+      "variable_id": "retail_trade_2021p",
+      "label": "retail trade adjusted by CPI at 2021 proces",
+      "category": "Trade",
+      "frequency": "Monthly",
+      "source_unit": "Currency Units",
+      "latest_level_date": "2025-12-01",
+      "latest_level_value": 31712433.2359,
+      "latest_growth_date": "2025-12-01",
+      "latest_transformed_growth": 0.010504,
+      "standardized_signal": 0.064332,
+      "loading": 0.208802,
+      "contribution": 0.013433,
+      "direction": "supports_nowcast"
+    }
+  ],
+  "robustness_cases": [
+    {
+      "case_id": "baseline",
+      "label": "Baseline source workflow",
+      "seasonal_policy": "source",
+      "monthly_cutoff": null,
+      "drop_variables": [],
+      "status": "completed",
+      "converged": true,
+      "iterations": 155,
+      "loglik": 3157.224604,
+      "variable_count": 36,
+      "last_growth_date": "2025-12-01",
+      "last_observed_gdp_date": "2025-12-01",
+      "nowcast_period": "2026Q1",
+      "gdp_growth_yoy_pct": 7.0078,
+      "gdp_growth_qoq_pct": 1.4398,
+      "gdp_level": 287054,
+      "elapsed_seconds": 175.77,
+      "warnings": [
+        "Seasonal adjustment failed for column: ent_new"
+      ]
+    },
+    {
+      "case_id": "no_gdp_seasonal_adjustment",
+      "label": "Skip seasonal adjustment for GDP only",
+      "seasonal_policy": "skip_gdp",
+      "monthly_cutoff": null,
+      "drop_variables": [],
+      "status": "completed",
+      "converged": true,
+      "iterations": 154,
+      "loglik": 3160.174042,
+      "variable_count": 36,
+      "last_growth_date": "2025-12-01",
+      "last_observed_gdp_date": "2025-12-01",
+      "nowcast_period": "2026Q1",
+      "gdp_growth_yoy_pct": 47.8691,
+      "gdp_growth_qoq_pct": -3.3376,
+      "gdp_level": 307085.7,
+      "elapsed_seconds": 165.57,
+      "warnings": [
+        "Seasonal adjustment failed for column: ent_new"
+      ]
+    },
+    {
+      "case_id": "april_only_high_frequency",
+      "label": "Remove May 2026 high-frequency observations",
+      "seasonal_policy": "source",
+      "monthly_cutoff": "2026-04-01",
+      "drop_variables": [],
+      "status": "completed",
+      "converged": true,
+      "iterations": 155,
+      "loglik": 3157.224604,
+      "variable_count": 36,
+      "last_growth_date": "2025-12-01",
+      "last_observed_gdp_date": "2025-12-01",
+      "nowcast_period": "2026Q1",
+      "gdp_growth_yoy_pct": 7.0078,
+      "gdp_growth_qoq_pct": 1.4398,
+      "gdp_level": 287054,
+      "elapsed_seconds": 168.09,
+      "warnings": [
+        "Seasonal adjustment failed for column: ent_new"
+      ]
+    },
+    {
+      "case_id": "drop_top3_absolute_drivers",
+      "label": "Drop top 3 absolute baseline driver rows",
+      "seasonal_policy": "source",
+      "monthly_cutoff": null,
+      "drop_variables": [
+        "real_est",
+        "IDA_mom",
+        "IDA_yoy"
+      ],
+      "status": "completed",
+      "converged": true,
+      "iterations": 115,
+      "loglik": 3304.002084,
+      "variable_count": 33,
+      "last_growth_date": "2025-12-01",
+      "last_observed_gdp_date": "2025-12-01",
+      "nowcast_period": "2026Q1",
+      "gdp_growth_yoy_pct": 7.0115,
+      "gdp_growth_qoq_pct": 1.4434,
+      "gdp_level": 287064,
+      "elapsed_seconds": 118.77,
+      "warnings": [
+        "Seasonal adjustment failed for column: ent_new"
+      ]
+    }
+  ],
+  "sensitivity": [
+    {
+      "case_id": "no_gdp_seasonal_adjustment",
+      "yoy_difference_vs_baseline_pp": 40.8613,
+      "qoq_difference_vs_baseline_pp": -4.7774
+    },
+    {
+      "case_id": "april_only_high_frequency",
+      "yoy_difference_vs_baseline_pp": 0,
+      "qoq_difference_vs_baseline_pp": 0
+    },
+    {
+      "case_id": "drop_top3_absolute_drivers",
+      "yoy_difference_vs_baseline_pp": 0.0037,
+      "qoq_difference_vs_baseline_pp": 0.0036
+    }
+  ],
+  "reviewer_findings": {
+    "critical": [
+      "Source-workbook GDP history and model-adjusted GDP history differ. Both remain review-only until source provenance and series continuity are verified.",
+      "The result remains a one-factor DFM with no true real-time vintage backtest."
+    ],
+    "warnings": [
+      "The no-GDP-seasonal-adjustment case moves the point estimate materially, but the seasonal-adjustment audit shows this is expected because raw GDP QoQ is dominated by quarter seasonality.",
+      "May-data removal and top-driver leave-out move the point estimate only modestly.",
+      "Top contributions are standardized factor signals, not GDP percentage-point effects.",
+      "Some source rows are already growth/rate/native-unit indicators and still use the generic source transformation path."
+    ],
+    "notes": [
+      "This review does not publish the 2026Q2 result into apps/policy-ui/public/data/dfm.json.",
+      "All source-folder raw files remain outside git."
+    ]
+  },
+  "limitations": [
+    "No historical source-workbook vintages are available, so this is not a true real-time DFM backtest.",
+    "The source workflow still relies on generic log-difference transformations for multiple caveated rows.",
+    "Alternative block/factor structures are not estimated in this run; the source model remains one-factor.",
+    "The PDF report step remains skipped because Pandoc is not available locally."
+  ]
+}

@@ -1,0 +1,88 @@
+remittances:
+  russia_share: 0.78
+  gdp_elasticity_low: 0.9
+  gdp_elasticity_central: 1.4
+  gdp_elasticity_high: 2.0
+  wage_elasticity_low: 0.3
+  wage_elasticity_central: 0.5
+  wage_elasticity_high: 0.8
+  ruble_depreciation_elasticity_low: 0.10
+  ruble_depreciation_elasticity_central: 0.25
+  ruble_depreciation_elasticity_high: 0.45
+  migrant_stress_elasticity_low: 0.25
+  migrant_stress_elasticity_central: 0.45
+  migrant_stress_elasticity_high: 0.70
+  min_shock: -0.65
+  max_shock: 0.10
+  confidence: medium
+  evidence_note: Elasticity range reflects remittance sensitivity to host-country activity, wages, exchange rate, and migrant employment; pending econometric estimation.
+  spending_response_low: 0.60
+  spending_response_central: 0.80
+  spending_response_high: 1.00
+  household_consumption_domestic_share: 0.863841
+  effective_domestic_demand_pass_through_low: 0.518305
+  effective_domestic_demand_pass_through_central: 0.691073
+  effective_domestic_demand_pass_through_high: 0.863841
+  spending_response_confidence: low_to_medium
+  spending_response_note: The spending-response range is evidence-informed, not econometrically estimated. The domestic share is calculated from the 2022 Uzbekistan I-O table using sector household demand and domestic-resource shares.
+
+return_migration:
+  migrant_base_count: 1300000
+  labor_stress_return_share_low: 0.15
+  labor_stress_return_share: 0.28
+  labor_stress_return_share_high: 0.45
+  gdp_shock_return_share_per_pp_low: 0.003
+  gdp_shock_return_share_per_pp: 0.006
+  gdp_shock_return_share_per_pp_high: 0.010
+  max_return_share: 0.35
+  confidence: low
+  evidence_note: Converts Russia migrant labor-market stress into a share of the configured migrant base; both the base and response need migration-record calibration.
+
+exports:
+  russia_gdp_elasticity_low: 0.8
+  russia_gdp_elasticity_central: 1.2
+  russia_gdp_elasticity_high: 1.8
+  sector_stress_elasticity_low: 0.45
+  sector_stress_elasticity_central: 0.75
+  sector_stress_elasticity_high: 1.10
+  payment_stress_elasticity_low: 0.10
+  payment_stress_elasticity_central: 0.25
+  payment_stress_elasticity_high: 0.45
+  min_shock: -0.60
+  max_shock: 0.10
+  confidence: low
+  evidence_note: Sector export elasticities are placeholders until Russia-bound exports are mapped from HS products to I-O sectors.
+
+fuel_imports:
+  supply_loss_per_disruption_index_low: 0.30
+  supply_loss_per_disruption_index: 0.55
+  supply_loss_per_disruption_index_high: 0.75
+  price_pass_through_low: 0.30
+  price_pass_through_central: 0.55
+  price_pass_through_high: 0.80
+  ruble_depreciation_price_pass_through: 0.10
+  max_supply_loss: 0.60
+  max_price_shock: 0.55
+  confidence: low
+  evidence_note: Fuel pass-through reflects high Russia gasoline exposure and 2025-2026 refinery/export-ban disruption evidence; needs HS 2710 validation.
+
+payments:
+  friction_per_restriction_index_low: 0.35
+  friction_per_restriction_index: 0.70
+  friction_per_restriction_index_high: 0.90
+  max_payment_friction: 0.75
+  confidence: low
+  evidence_note: Payment friction is an index calibrated from comparable sanctions/payment restrictions, not observed Uzbekistan transaction data.
+
+risk_premium:
+  base_bps: 0
+  bps_per_payment_index: 325
+  bps_per_fuel_index: 75
+  bps_per_gdp_shock_pp: 25
+  confidence: low
+  evidence_note: Risk premium range is judgemental and should be replaced by sovereign spread/event-study evidence.
+
+external_financing:
+  max_fast_disbursing_support_usd: 3000000000
+  confidence: medium
+  evidence_note: Caps quick-disbursing external support in scenario drivers; separate policy packages still control IFI financing and reserve use.

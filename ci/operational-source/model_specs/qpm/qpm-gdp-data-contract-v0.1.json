@@ -1,0 +1,44 @@
+{
+  "schema_version": "0.1.0",
+  "status": "verified_official_research_input",
+  "as_of": "2026-07-20",
+  "source_vintage": "2026-04-29",
+  "national_code": "1700",
+  "sources": {
+    "nominal_gdp_ytd": {
+      "indicator_id": 3695,
+      "indicator_code": "1.01.01.0056",
+      "path": "scripts/overview/source-discovery/phase3/siat-gdp-current-quarterly-3695.json",
+      "url": "https://siat.stat.uz/data/3695/?lang=en",
+      "unit": "national currency, billion soums",
+      "coverage": "2018Q1/2026Q1"
+    },
+    "real_gdp_ytd_growth": {
+      "indicator_id": 3698,
+      "indicator_code": "1.01.01.0059",
+      "path": "scripts/overview/source-discovery/phase3/siat-gdp-growth-quarterly-3698.json",
+      "url": "https://siat.stat.uz/data/3698/?lang=en",
+      "unit": "index, corresponding period previous year=100",
+      "coverage": "2018Q1/2026Q1"
+    }
+  },
+  "transformations": {
+    "nominal_quarterly_flow": "Q1=YTD(Q1); Qn=YTD(Qn)-YTD(Qn-1)",
+    "real_quarterly_growth": "deflate current YTD with published real-volume index, difference within year, divide by previous-year nominal quarterly flow",
+    "lookahead": "none",
+    "seasonal_adjustment": "none"
+  },
+  "validation": {
+    "contiguous_periods": true,
+    "missing_observations": 0,
+    "positive_nominal_quarterly_flows": true,
+    "annual_sum_equals_q4_ytd": true,
+    "annual_crosscheck_url": "https://siat.stat.uz/data/544/?lang=en"
+  },
+  "semantic_guards": [
+    "published quarterly values are cumulative year-to-date",
+    "published growth is cumulative-year-to-date, not discrete-quarter growth",
+    "derived growth is not a seasonally adjusted output gap",
+    "raw files are read-only"
+  ]
+}

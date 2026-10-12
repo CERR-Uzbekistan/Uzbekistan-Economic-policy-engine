@@ -1,0 +1,124 @@
+{
+  "model_id": "uzbekistan-qpm-extended",
+  "version": "0.5.0",
+  "status": "research_diagnostic",
+  "production_runtime": false,
+  "reference": {
+    "document": "QPM_MB_lot.pdf",
+    "institution": "Central Bank of the Republic of Uzbekistan",
+    "calibration_as_of": "2026-05"
+  },
+  "compatibility_model": "qpm-core-v0.3",
+  "modules": {
+    "structural_baseline": "mcp_server/models/qpm_structural_baseline.py",
+    "inflation": "mcp_server/models/qpm_inflation_block.py",
+    "satellite_equations": "mcp_server/models/qpm_satellite_blocks.py",
+    "observed_state": "mcp_server/models/qpm_observed_state.py",
+    "credit_data": "mcp_server/models/qpm_credit_data.py",
+    "fdi_proxy_data": "mcp_server/models/qpm_siat_fdi.py",
+    "reduced_form_diagnostics": "mcp_server/models/qpm_reduced_form.py",
+    "extended_runtime": "mcp_server/models/qpm_extended_runtime.py",
+    "validation": "mcp_server/models/qpm_validation.py"
+  },
+  "data_inputs": {
+    "credit_stock_npl_fx_share_new_lending": {
+      "readiness": "verified_official",
+      "coverage": "2020Q1/2026Q1",
+      "contract": "model_specs/qpm/qpm-financial-data-contract-v0.1.json"
+    },
+    "fixed_investment_financed_by_fdi_and_loans": {
+      "readiness": "verified_official_activity_proxy",
+      "coverage": "2021Q1/2026Q1",
+      "not_equivalent_to": "balance_of_payments_fdi"
+    },
+    "nominal_gdp_for_fdi_proxy_ratio": {
+      "readiness": "provisional_reconcile",
+      "coverage": "2021Q1/2025Q3"
+    }
+  },
+  "published_satellite_demand_weights": {
+    "credit_activity": 0.2,
+    "fdi_gap": 0.05
+  },
+  "empirical_diagnostics": {
+    "estimation": "OLS AR(1) with intercept",
+    "backtest": "expanding-window one-quarter-ahead, minimum eight observations",
+    "credit_activity": {
+      "definition": "quarterly gross new lending / lagged quarter-end gross credit, percent",
+      "observations": 24,
+      "coverage": "2020Q2/2026Q1",
+      "persistence": 0.2165522031,
+      "steady_state_percent": 15.0437791594,
+      "residual_std_percentage_points": 1.8449561863,
+      "backtest_forecasts": 16,
+      "ar1_rmse": 2.2245543063,
+      "random_walk_rmse": 2.2406561983,
+      "historical_mean_rmse": 2.1293686154,
+      "promoted": false,
+      "reason": "AR(1) does not beat the expanding historical mean"
+    },
+    "fixed_investment_fdi_loans_ratio": {
+      "definition": "official quarterly activity-proxy flow / provisional nominal GDP, percent",
+      "observations": 19,
+      "coverage": "2021Q1/2025Q3",
+      "persistence": 0.729638833,
+      "steady_state_percent": 17.5314165301,
+      "residual_std_percentage_points": 4.2109104415,
+      "backtest_forecasts": 11,
+      "ar1_rmse": 6.206857982,
+      "random_walk_rmse": 5.4705769187,
+      "historical_mean_rmse": 7.8802699676,
+      "promoted": false,
+      "reason": "AR(1) beats the mean but not the random walk and uses provisional GDP"
+    }
+  },
+  "irf_acceptance": {
+    "credit_activity_positive_gap": {
+      "required_signs": [
+        "positive_output_gap",
+        "positive_inflation",
+        "positive_policy_rate"
+      ],
+      "timing": "output on impact; inflation and policy response after impact"
+    },
+    "fdi_proxy_positive_gap": {
+      "required_signs": [
+        "positive_output_gap",
+        "positive_inflation",
+        "positive_policy_rate"
+      ],
+      "semantic_guard": "activity proxy, not external-financing FDI"
+    }
+  },
+  "latest_diagnostic_conditioning": {
+    "credit_period": "2026Q1",
+    "fdi_proxy_period": "2025Q3",
+    "credit_activity_gap_percentage_points": -0.1513584782,
+    "fdi_proxy_ratio_gap_percentage_points": 5.8796581323,
+    "mapped_demand_contribution": 0.263711211,
+    "mixed_vintage": true,
+    "production_authorized": false
+  },
+  "explicitly_unidentified": [
+    "gross_default_migration_rate",
+    "npl_cures",
+    "loan_restructuring_flows",
+    "loan_sales",
+    "writeoff_rate",
+    "repayment_rate",
+    "causal_new_credit_equation_slopes",
+    "balance_of_payments_fdi_flow"
+  ],
+  "promotion_state": {
+    "official_credit_observed_state": true,
+    "official_fdi_activity_proxy": true,
+    "rolling_satellite_backtest": true,
+    "satellite_irf_acceptance_tests": true,
+    "credit_persistence": false,
+    "fdi_proxy_persistence": false,
+    "joint_forward_solver": false,
+    "historical_decomposition": false,
+    "parameter_uncertainty": false,
+    "model_owner_approval": false
+  }
+}

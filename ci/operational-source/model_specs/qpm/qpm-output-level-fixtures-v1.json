@@ -1,0 +1,30 @@
+{
+  "variant": "level-consistent-judgment-v1",
+  "definition": "Potential output index is 100 in projected quarter 0. Actual index equals potential times exp(gap log points / 100). Four pre-projection gaps equal initial_gap, a disclosed judgment. Quarterly growth is discrete QoQ percent; GDP growth is discrete YoY percent.",
+  "cases": [
+    {
+      "name": "flat gap",
+      "initial_gap": 0,
+      "potential_growth_yoy": 4,
+      "gaps": [0, 0, 0, 0, 0],
+      "expected": {
+        "potential_output_index": [100, 100.985341, 101.980390, 102.985245, 104],
+        "actual_output_index": [100, 100.985341, 101.980390, 102.985245, 104],
+        "quarterly_growth": [0.985341, 0.985341, 0.985341, 0.985341, 0.985341],
+        "gdp_growth": [4, 4, 4, 4, 4]
+      }
+    },
+    {
+      "name": "one-point gap step",
+      "initial_gap": 0,
+      "potential_growth_yoy": 4,
+      "gaps": [0, 1, 1, 0, 0],
+      "expected": {
+        "potential_output_index": [100, 100.985341, 101.980390, 102.985245, 104],
+        "actual_output_index": [100, 102.000260, 103.005310, 102.985245, 104],
+        "quarterly_growth": [0.985341, 2.000260, 0.985341, -0.019480, 0.985341],
+        "gdp_growth": [4, 5.045217, 5.045217, 4, 4]
+      }
+    }
+  ]
+}

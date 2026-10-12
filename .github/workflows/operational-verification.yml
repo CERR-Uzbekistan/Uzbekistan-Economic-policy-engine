@@ -1,0 +1,77 @@
+name: Operational verification (no deployment)
+
+on:
+  push:
+    branches: [codex/operational-verification-20261012]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  linux-operational:
+    name: Isolated Linux operational acceptance
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      OPERATIONAL_SOURCE: ci/operational-source
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.14.0'
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.9.26'
+      - name: Verify exact review fixture bytes
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          root = Path('ci/operational-source')
+          manifest = json.loads((root / 'operational-source-manifest.json').read_text())
+          files = manifest['files']
+          for name, expected in files.items():
+              assert hashlib.sha256((root / name).read_bytes()).hexdigest() == expected, name
+          print(f'Verified {len(files)} exact operational fixture files')
+          PY
+      - name: Install frozen operational environment
+        run: uv sync --project "$OPERATIONAL_SOURCE/mcp_server" --frozen --extra dev --group build --no-editable
+      - name: Prepare and validate frozen fixtures
+        run: |
+          uv run --project "$OPERATIONAL_SOURCE/mcp_server" --frozen --extra dev --group build --no-editable python "$OPERATIONAL_SOURCE/scripts/testing/prepare_model_fixtures.py" prepare
+          uv run --project "$OPERATIONAL_SOURCE/mcp_server" --frozen --extra dev --group build --no-editable python "$OPERATIONAL_SOURCE/scripts/testing/prepare_model_fixtures.py" validate
+      - name: Readiness, identity, claims, recovery and MCP lifecycles
+        run: |
+          mkdir -p "$RUNNER_TEMP/operational-evidence"
+          uv run --project "$OPERATIONAL_SOURCE/mcp_server" --frozen --extra dev --group build --no-editable python -m pytest \
+            "$OPERATIONAL_SOURCE/mcp_server/tests/test_policy_chat_startup.py" \
+            "$OPERATIONAL_SOURCE/mcp_server/tests/test_policy_chat_api.py" "$OPERATIONAL_SOURCE/mcp_server/tests/test_policy_chat_store.py" \
+            "$OPERATIONAL_SOURCE/mcp_server/tests/test_policy_chat_identity.py" "$OPERATIONAL_SOURCE/mcp_server/tests/test_policy_chat_idempotency.py" \
+            "$OPERATIONAL_SOURCE/mcp_server/tests/test_policy_chat_operational_readiness.py" "$OPERATIONAL_SOURCE/mcp_server/tests/test_policy_chat_recovery.py" \
+            "$OPERATIONAL_SOURCE/mcp_server/tests/test_run_provenance.py" "$OPERATIONAL_SOURCE/mcp_server/tests/test_registry_api.py" "$OPERATIONAL_SOURCE/mcp_server/tests/test_mcp_transport.py" \
+            --basetemp="$RUNNER_TEMP/operational-test-state" --junitxml="$RUNNER_TEMP/operational-evidence/operational-junit.xml" -q
+      - name: Capture exact image source
+        run: python "$OPERATIONAL_SOURCE/scripts/testing/create_clean_snapshot.py" --output "$RUNNER_TEMP/operational-source"
+      - name: Prepare isolated image derivatives
+        run: |
+          uv run --project "$RUNNER_TEMP/operational-source/mcp_server" --frozen --extra dev --group build --no-editable python "$RUNNER_TEMP/operational-source/scripts/testing/prepare_model_fixtures.py" prepare
+          uv run --project "$RUNNER_TEMP/operational-source/mcp_server" --frozen --extra dev --group build --no-editable python "$RUNNER_TEMP/operational-source/scripts/testing/prepare_model_fixtures.py" validate
+      - name: Non-root container, readiness, authorization, durable recovery and restart
+        run: python "$OPERATIONAL_SOURCE/scripts/testing/linux_container_gate.py" --source "$RUNNER_TEMP/operational-source" --evidence "$RUNNER_TEMP/operational-evidence/container"
+      - name: POSIX publication boundaries (no publication)
+        run: uv run --project "$OPERATIONAL_SOURCE/mcp_server" --frozen --extra dev --group build --no-editable python "$OPERATIONAL_SOURCE/scripts/testing/linux_publication_gate.py"
+      - name: Save review evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: operational-evidence-${{ github.sha }}-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/operational-evidence
+            ${{ runner.temp }}/operational-source/clean-source-snapshot.json
+          retention-days: 90

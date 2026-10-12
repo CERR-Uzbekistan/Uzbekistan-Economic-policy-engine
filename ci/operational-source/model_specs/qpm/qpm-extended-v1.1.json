@@ -1,0 +1,75 @@
+{
+  "model_id": "uzbekistan-qpm-extended",
+  "version": "1.1.0",
+  "status": "research_diagnostic",
+  "production_runtime": false,
+  "extends": "model_specs/qpm/qpm-extended-v1.0.json",
+  "production_runtime_retained": "model_specs/qpm/qpm-extended-v0.9.json",
+  "modules": {
+    "official_import_price": "mcp_server/models/qpm_import_price_data.py",
+    "core_exclusions": "mcp_server/models/qpm_core_exclusions.py",
+    "monthly_equation_engine": "mcp_server/models/qpm_monthly_inflation_v1.py",
+    "monthly_selection_policy": "mcp_server/models/qpm_monthly_inflation_v11.py",
+    "monthly_bridge_state_space_experiment": "mcp_server/models/qpm_state_space_v11.py"
+  },
+  "data_contracts": [
+    "model_specs/qpm/qpm-inflation-data-contract-v1.1.json",
+    "model_specs/qpm/qpm-state-space-contract-v0.1.json"
+  ],
+  "official_import_price_readiness": {
+    "series": 116,
+    "months": 89,
+    "coverage": "2019M01/2026M05",
+    "contiguous_composite": true,
+    "customs_based": true,
+    "replaces_world_bank_proxy_in_preferred_equation": true
+  },
+  "core_exclusion_readiness": {
+    "regulated_codes_resolved": 26,
+    "seasonal_codes_resolved": 26,
+    "shares_sum_to_100_percent": true,
+    "current_item_weights_available": false,
+    "production_aggregation_allowed": false
+  },
+  "monthly_core_bridge": {
+    "selected": "monthly_core_import_gap",
+    "selection_rule": "fewest regressors among admitted candidates within two percent of best RMSE",
+    "observations": 50,
+    "rolling_forecasts": 26,
+    "model_rmse": 0.3729969443,
+    "persistence_rmse": 0.4057792387,
+    "rmse_improvement_percent": 8.0788495823,
+    "model_mae": 0.3107746601,
+    "persistence_mae": 0.3475956162,
+    "mae_improvement_percent": 10.5930438735,
+    "coefficients": {
+      "intercept": -0.5906895566,
+      "lag_target": 0.9076250382,
+      "import_price_yoy_lag": 0.1107118042,
+      "output_gap_lag": 0.1366674152
+    },
+    "passes_training_window_stability": true,
+    "admitted_as_forecast_bridge": true,
+    "structural_interpretation_allowed": false
+  },
+  "quarterly_state_space_bridge": {
+    "measurement": "quarterly mean of expanding-window monthly core forecast errors",
+    "measurement_quarters": 10,
+    "filter_rmse_percentage_points": 0.3100650467,
+    "zero_rmse_percentage_points": 0.2992165383,
+    "beats_zero": false,
+    "one_sided_invariance_verified": true,
+    "promoted": false
+  },
+  "promotion_state": {
+    "official_domestic_import_price": true,
+    "monthly_core_forecast_bridge": true,
+    "training_window_stability": true,
+    "exact_core_exclusion_classification": true,
+    "exact_regulated_component_weights": false,
+    "state_space_bridge_benchmark": false,
+    "structural_monthly_coefficients": false,
+    "production_runtime_changed": false,
+    "model_owner_approval": false
+  }
+}

@@ -1,0 +1,2419 @@
+{
+  "schema_version": "1.0",
+  "policy_version": "2026-09-30-v3",
+  "hash_scheme": "sorted-json-typed-f64-v1",
+  "default_intent": "authoritative",
+  "variants": [
+    {
+      "id": "qpm-core-irf-v0.3",
+      "model": "qpm",
+      "equations": {
+        "uip": "s[t] = (1-e1)*s[t+1] + e1*s[t-1] - (rs[t]-risk[t])/4 + exchange_shock[t]",
+        "cpi_level": "l_cpi[t] = l_cpi[t-1] + pi[t-1]/4",
+        "rer_gap": "z_gap[t] = s[t] - l_cpi[t]",
+        "import_price": "dpm[t] = s[t] - s[t-1]",
+        "rmc": "rmc[t] = a3*gap[t] + (1-a3)*z_gap[t]",
+        "phillips": "pi[t] = a1*pi[t-1] + (1-a1)*pi[t+1] + a2*rmc[t] + a4*dpm[t] + inflation_shock[t]",
+        "inflation_yoy": "pi4[t] = (pi[t] + pi[t-1] + pi[t-2] + pi[t-3])/4",
+        "taylor": "rs[t] = g1*rs[t-1] + (1-g1)*(pi[t+1] + g2*pi4[t+4] + g3*gap[t]) + monetary_shock[t]",
+        "real_rate_gap": "rr_gap[t] = rs[t] - pi[t+1]",
+        "mci": "mci[t] = b4*rr_gap[t] - (1-b4)*z_gap[t]",
+        "is": "gap[t] = b1*gap[t-1] - b2*mci[t] + b3*gap_star[t] + demand_shock[t]",
+        "external_demand": "gap_star[t] = 0.75*gap_star[t-1]"
+      },
+      "allocation": "One-time t=0 shocks; foreign gap AR(1)=0.75",
+      "units": "Log gap points; annualized inflation/rate pp deviations; exchange log points",
+      "period": "Quarterly, relative to steady state",
+      "calibration_version": "qpm-core-v0.3",
+      "artifacts": [
+        {
+          "path": "model_specs/qpm/qpm-core-v0.3.json",
+          "sha256": "adbe6ec972af461d2971a1ce580663651e190b93b414dca4ae147a9ce83dc831",
+          "semantic_sha256": "2713e2cb71b3c99aa594dedbc1756398a660e4a38fb4d0e19c7a1584165c3e4a",
+          "embedded": {
+            "schema_version": "1.0.0",
+            "model_id": "qpm-core",
+            "model_version": "0.3.0",
+            "frequency": "quarterly",
+            "numeric_convention": {
+              "percent_scale": 100,
+              "one_percentage_point": 1.0,
+              "positive_exchange_rate_change": "UZS depreciation",
+              "dynamic_form": "steady-state deviation"
+            },
+            "solver": {
+              "algorithm": "bidirectional-gauss-seidel",
+              "max_iterations": 600,
+              "reference_tolerance": 1e-08,
+              "terminal_buffer_quarters": 10,
+              "external_demand_persistence": 0.75
+            },
+            "parameters": {
+              "b1": {
+                "default": 0.7,
+                "minimum": 0.3,
+                "maximum": 0.95,
+                "equation": "is",
+                "meaning": "Output-gap persistence",
+                "status": "literature-calibrated"
+              },
+              "b2": {
+                "default": 0.2,
+                "minimum": 0.05,
+                "maximum": 0.6,
+                "equation": "is",
+                "meaning": "Monetary-conditions effect on demand",
+                "status": "literature-calibrated"
+              },
+              "b3": {
+                "default": 0.3,
+                "minimum": 0.05,
+                "maximum": 0.6,
+                "equation": "is",
+                "meaning": "Foreign output-gap spillover",
+                "status": "literature-calibrated"
+              },
+              "b4": {
+                "default": 0.6,
+                "minimum": 0.1,
+                "maximum": 0.9,
+                "equation": "mci",
+                "meaning": "Real-interest-rate weight in MCI",
+                "status": "literature-calibrated"
+              },
+              "a1": {
+                "default": 0.6,
+                "minimum": 0.3,
+                "maximum": 0.9,
+                "equation": "phillips",
+                "meaning": "Backward-looking inflation weight",
+                "status": "literature-calibrated"
+              },
+              "a2": {
+                "default": 0.2,
+                "minimum": 0.05,
+                "maximum": 0.5,
+                "equation": "phillips",
+                "meaning": "Real-marginal-cost pass-through",
+                "status": "literature-calibrated"
+              },
+              "a3": {
+                "default": 0.65,
+                "minimum": 0.2,
+                "maximum": 0.9,
+                "equation": "rmc",
+                "meaning": "Domestic-cost share in real marginal cost",
+                "status": "provisional-judgment"
+              },
+              "a4": {
+                "default": 0.12,
+                "minimum": 0.0,
+                "maximum": 0.35,
+                "equation": "phillips",
+                "meaning": "Direct quarterly import-price pass-through",
+                "status": "literature-calibrated"
+              },
+              "g1": {
+                "default": 0.8,
+                "minimum": 0.3,
+                "maximum": 0.95,
+                "equation": "taylor",
+                "meaning": "Policy-rate smoothing",
+                "status": "literature-calibrated"
+              },
+              "g2": {
+                "default": 1.5,
+                "minimum": 1.0,
+                "maximum": 3.0,
+                "equation": "taylor",
+                "meaning": "Inflation response",
+                "status": "literature-calibrated"
+              },
+              "g3": {
+                "default": 0.5,
+                "minimum": 0.1,
+                "maximum": 1.5,
+                "equation": "taylor",
+                "meaning": "Output-gap response",
+                "status": "literature-calibrated"
+              },
+              "e1": {
+                "default": 0.7,
+                "minimum": 0.1,
+                "maximum": 0.9,
+                "equation": "uip",
+                "meaning": "Backward-looking exchange-rate weight",
+                "status": "provisional-judgment"
+              }
+            },
+            "steady_state": {
+              "inflation_target": {
+                "default": 5.0,
+                "unit": "percent annualized",
+                "status": "CBU-public"
+              },
+              "neutral_real_rate": {
+                "default": 3.5,
+                "unit": "percent annualized",
+                "status": "provisional-judgment"
+              },
+              "potential_growth": {
+                "default": 6.0,
+                "unit": "percent year-on-year",
+                "status": "provisional-judgment"
+              }
+            },
+            "equations": {
+              "uip": "s[t] = (1-e1)*s[t+1] + e1*s[t-1] - (rs[t]-risk[t])/4 + exchange_shock[t]",
+              "cpi_level": "l_cpi[t] = l_cpi[t-1] + pi[t-1]/4",
+              "rer_gap": "z_gap[t] = s[t] - l_cpi[t]",
+              "import_price": "dpm[t] = s[t] - s[t-1]",
+              "rmc": "rmc[t] = a3*gap[t] + (1-a3)*z_gap[t]",
+              "phillips": "pi[t] = a1*pi[t-1] + (1-a1)*pi[t+1] + a2*rmc[t] + a4*dpm[t] + inflation_shock[t]",
+              "inflation_yoy": "pi4[t] = (pi[t] + pi[t-1] + pi[t-2] + pi[t-3])/4",
+              "taylor": "rs[t] = g1*rs[t-1] + (1-g1)*(pi[t+1] + g2*pi4[t+4] + g3*gap[t]) + monetary_shock[t]",
+              "real_rate_gap": "rr_gap[t] = rs[t] - pi[t+1]",
+              "mci": "mci[t] = b4*rr_gap[t] - (1-b4)*z_gap[t]",
+              "is": "gap[t] = b1*gap[t-1] - b2*mci[t] + b3*gap_star[t] + demand_shock[t]",
+              "external_demand": "gap_star[t] = 0.75*gap_star[t-1]"
+            },
+            "shock_ids": [
+              "demand",
+              "inflation",
+              "exchange",
+              "monetary",
+              "risk",
+              "external_demand"
+            ],
+            "source_files": [
+              "qpm_uzbekistan/index.html",
+              "scripts/export_qpm.R",
+              "mcp_server/models/qpm.py",
+              "apps/policy-ui/src/data/scenario-lab/qpm-solver.ts"
+            ],
+            "golden_fixture": "mcp_server/tests/fixtures/qpm-core-v0.3-golden.json"
+          }
+        }
+      ],
+      "freshness": [],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": true,
+        "evidence_required": [
+          "Signed initial-gap and potential-growth estimates with history",
+          "Approve neutral rate, floors, decay, FX conversion and calibrated coefficients",
+          "Validate forecasts and solver stability against owner-approved benchmarks"
+        ]
+      },
+      "disclosures": [
+        "Literature calibration and provisional judgments; not an estimated forecast"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "shock_type": {
+          "enum": [
+            "demand",
+            "inflation",
+            "exchange",
+            "monetary",
+            "risk",
+            "external_demand"
+          ],
+          "aliases": {
+            "cost_push": "inflation",
+            "depreciation": "exchange",
+            "external": "external_demand"
+          }
+        },
+        "shock_size": {
+          "minimum": -20,
+          "maximum": 20,
+          "unit": "percentage/log points as declared by shock"
+        },
+        "horizon": {
+          "minimum": 8,
+          "maximum": 32,
+          "integer": true,
+          "unit": "quarter transitions"
+        }
+      }
+    },
+    {
+      "id": "level-consistent-judgment-v1",
+      "model": "qpm",
+      "equations": {
+        "uip": "s[t] = (1-e1)*s[t+1] + e1*s[t-1] - (rs[t]-risk[t])/4 + exchange_shock[t]",
+        "cpi_level": "l_cpi[t] = l_cpi[t-1] + pi[t-1]/4",
+        "rer_gap": "z_gap[t] = s[t] - l_cpi[t]",
+        "import_price": "dpm[t] = s[t] - s[t-1]",
+        "rmc": "rmc[t] = a3*gap[t] + (1-a3)*z_gap[t]",
+        "phillips": "pi[t] = a1*pi[t-1] + (1-a1)*pi[t+1] + a2*rmc[t] + a4*dpm[t] + inflation_shock[t]",
+        "inflation_yoy": "pi4[t] = (pi[t] + pi[t-1] + pi[t-2] + pi[t-3])/4",
+        "taylor": "rs[t] = g1*rs[t-1] + (1-g1)*(pi[t+1] + g2*pi4[t+4] + g3*gap[t]) + monetary_shock[t]",
+        "real_rate_gap": "rr_gap[t] = rs[t] - pi[t+1]",
+        "mci": "mci[t] = b4*rr_gap[t] - (1-b4)*z_gap[t]",
+        "is": "gap[t] = b1*gap[t-1] - b2*mci[t] + b3*gap_star[t] + demand_shock[t]",
+        "external_demand": "gap_star[t] = 0.75*gap_star[t-1]",
+        "output": "Y*=100*(1+g*/100)^(t/4); Y=Y*exp(gap/100); QoQ=100*(Y/Y[-1]-1); YoY=100*(Y/Y[-4]-1)"
+      },
+      "allocation": "Scenario Lab assumption-to-shock mapping; constant prehistory gap judgment",
+      "units": "Output indices; log gap points; discrete QoQ and YoY percent; UZS/USD",
+      "period": "Quarterly conditional path, start quarter from shared Overview",
+      "calibration_version": "qpm-core-v0.3/output-level-v1",
+      "artifacts": [
+        {
+          "path": "model_specs/qpm/qpm-core-v0.3.json",
+          "sha256": "adbe6ec972af461d2971a1ce580663651e190b93b414dca4ae147a9ce83dc831",
+          "semantic_sha256": "2713e2cb71b3c99aa594dedbc1756398a660e4a38fb4d0e19c7a1584165c3e4a",
+          "embedded": {
+            "schema_version": "1.0.0",
+            "model_id": "qpm-core",
+            "model_version": "0.3.0",
+            "frequency": "quarterly",
+            "numeric_convention": {
+              "percent_scale": 100,
+              "one_percentage_point": 1.0,
+              "positive_exchange_rate_change": "UZS depreciation",
+              "dynamic_form": "steady-state deviation"
+            },
+            "solver": {
+              "algorithm": "bidirectional-gauss-seidel",
+              "max_iterations": 600,
+              "reference_tolerance": 1e-08,
+              "terminal_buffer_quarters": 10,
+              "external_demand_persistence": 0.75
+            },
+            "parameters": {
+              "b1": {
+                "default": 0.7,
+                "minimum": 0.3,
+                "maximum": 0.95,
+                "equation": "is",
+                "meaning": "Output-gap persistence",
+                "status": "literature-calibrated"
+              },
+              "b2": {
+                "default": 0.2,
+                "minimum": 0.05,
+                "maximum": 0.6,
+                "equation": "is",
+                "meaning": "Monetary-conditions effect on demand",
+                "status": "literature-calibrated"
+              },
+              "b3": {
+                "default": 0.3,
+                "minimum": 0.05,
+                "maximum": 0.6,
+                "equation": "is",
+                "meaning": "Foreign output-gap spillover",
+                "status": "literature-calibrated"
+              },
+              "b4": {
+                "default": 0.6,
+                "minimum": 0.1,
+                "maximum": 0.9,
+                "equation": "mci",
+                "meaning": "Real-interest-rate weight in MCI",
+                "status": "literature-calibrated"
+              },
+              "a1": {
+                "default": 0.6,
+                "minimum": 0.3,
+                "maximum": 0.9,
+                "equation": "phillips",
+                "meaning": "Backward-looking inflation weight",
+                "status": "literature-calibrated"
+              },
+              "a2": {
+                "default": 0.2,
+                "minimum": 0.05,
+                "maximum": 0.5,
+                "equation": "phillips",
+                "meaning": "Real-marginal-cost pass-through",
+                "status": "literature-calibrated"
+              },
+              "a3": {
+                "default": 0.65,
+                "minimum": 0.2,
+                "maximum": 0.9,
+                "equation": "rmc",
+                "meaning": "Domestic-cost share in real marginal cost",
+                "status": "provisional-judgment"
+              },
+              "a4": {
+                "default": 0.12,
+                "minimum": 0.0,
+                "maximum": 0.35,
+                "equation": "phillips",
+                "meaning": "Direct quarterly import-price pass-through",
+                "status": "literature-calibrated"
+              },
+              "g1": {
+                "default": 0.8,
+                "minimum": 0.3,
+                "maximum": 0.95,
+                "equation": "taylor",
+                "meaning": "Policy-rate smoothing",
+                "status": "literature-calibrated"
+              },
+              "g2": {
+                "default": 1.5,
+                "minimum": 1.0,
+                "maximum": 3.0,
+                "equation": "taylor",
+                "meaning": "Inflation response",
+                "status": "literature-calibrated"
+              },
+              "g3": {
+                "default": 0.5,
+                "minimum": 0.1,
+                "maximum": 1.5,
+                "equation": "taylor",
+                "meaning": "Output-gap response",
+                "status": "literature-calibrated"
+              },
+              "e1": {
+                "default": 0.7,
+                "minimum": 0.1,
+                "maximum": 0.9,
+                "equation": "uip",
+                "meaning": "Backward-looking exchange-rate weight",
+                "status": "provisional-judgment"
+              }
+            },
+            "steady_state": {
+              "inflation_target": {
+                "default": 5.0,
+                "unit": "percent annualized",
+                "status": "CBU-public"
+              },
+              "neutral_real_rate": {
+                "default": 3.5,
+                "unit": "percent annualized",
+                "status": "provisional-judgment"
+              },
+              "potential_growth": {
+                "default": 6.0,
+                "unit": "percent year-on-year",
+                "status": "provisional-judgment"
+              }
+            },
+            "equations": {
+              "uip": "s[t] = (1-e1)*s[t+1] + e1*s[t-1] - (rs[t]-risk[t])/4 + exchange_shock[t]",
+              "cpi_level": "l_cpi[t] = l_cpi[t-1] + pi[t-1]/4",
+              "rer_gap": "z_gap[t] = s[t] - l_cpi[t]",
+              "import_price": "dpm[t] = s[t] - s[t-1]",
+              "rmc": "rmc[t] = a3*gap[t] + (1-a3)*z_gap[t]",
+              "phillips": "pi[t] = a1*pi[t-1] + (1-a1)*pi[t+1] + a2*rmc[t] + a4*dpm[t] + inflation_shock[t]",
+              "inflation_yoy": "pi4[t] = (pi[t] + pi[t-1] + pi[t-2] + pi[t-3])/4",
+              "taylor": "rs[t] = g1*rs[t-1] + (1-g1)*(pi[t+1] + g2*pi4[t+4] + g3*gap[t]) + monetary_shock[t]",
+              "real_rate_gap": "rr_gap[t] = rs[t] - pi[t+1]",
+              "mci": "mci[t] = b4*rr_gap[t] - (1-b4)*z_gap[t]",
+              "is": "gap[t] = b1*gap[t-1] - b2*mci[t] + b3*gap_star[t] + demand_shock[t]",
+              "external_demand": "gap_star[t] = 0.75*gap_star[t-1]"
+            },
+            "shock_ids": [
+              "demand",
+              "inflation",
+              "exchange",
+              "monetary",
+              "risk",
+              "external_demand"
+            ],
+            "source_files": [
+              "qpm_uzbekistan/index.html",
+              "scripts/export_qpm.R",
+              "mcp_server/models/qpm.py",
+              "apps/policy-ui/src/data/scenario-lab/qpm-solver.ts"
+            ],
+            "golden_fixture": "mcp_server/tests/fixtures/qpm-core-v0.3-golden.json"
+          }
+        }
+      ],
+      "freshness": [
+        {
+          "kind": "overview",
+          "policy": "shared effectiveOverviewFreshness per-metric thresholds; no stale authoritative override"
+        }
+      ],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": true,
+        "evidence_required": [
+          "Signed initial-gap and potential-growth estimates with history",
+          "Approve neutral rate, floors, decay, FX conversion and calibrated coefficients",
+          "Validate forecasts and solver stability against owner-approved benchmarks"
+        ]
+      },
+      "disclosures": [
+        "Initial gap -1.5, potential YoY growth 6%, external gap zero are judgments",
+        "Inflation/rate floors and decay and annual FX /400 conversion are prescribed judgments",
+        "Missing/stale Overview uses disclosed deterministic diagnostic fallback",
+        "qpm-canonical-solver is an attribution identity, not an HTTP execution ID"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "horizon": {
+          "minimum": 4,
+          "maximum": 32,
+          "integer": true,
+          "unit": "quarter points"
+        }
+      }
+    },
+    {
+      "id": "legacy-v0.3",
+      "model": "qpm",
+      "equations": {
+        "uip": "s[t] = (1-e1)*s[t+1] + e1*s[t-1] - (rs[t]-risk[t])/4 + exchange_shock[t]",
+        "cpi_level": "l_cpi[t] = l_cpi[t-1] + pi[t-1]/4",
+        "rer_gap": "z_gap[t] = s[t] - l_cpi[t]",
+        "import_price": "dpm[t] = s[t] - s[t-1]",
+        "rmc": "rmc[t] = a3*gap[t] + (1-a3)*z_gap[t]",
+        "phillips": "pi[t] = a1*pi[t-1] + (1-a1)*pi[t+1] + a2*rmc[t] + a4*dpm[t] + inflation_shock[t]",
+        "inflation_yoy": "pi4[t] = (pi[t] + pi[t-1] + pi[t-2] + pi[t-3])/4",
+        "taylor": "rs[t] = g1*rs[t-1] + (1-g1)*(pi[t+1] + g2*pi4[t+4] + g3*gap[t]) + monetary_shock[t]",
+        "real_rate_gap": "rr_gap[t] = rs[t] - pi[t+1]",
+        "mci": "mci[t] = b4*rr_gap[t] - (1-b4)*z_gap[t]",
+        "is": "gap[t] = b1*gap[t-1] - b2*mci[t] + b3*gap_star[t] + demand_shock[t]",
+        "external_demand": "gap_star[t] = 0.75*gap_star[t-1]",
+        "growth_display": "potential_growth + output_gap (legacy judgment, not growth identity)"
+      },
+      "allocation": "Frozen precomputed artifact; do not relabel its horizon",
+      "units": "Legacy percent display and log gap points",
+      "period": "Frozen artifact periods only",
+      "calibration_version": "qpm-export-0.3.0",
+      "artifacts": [
+        {
+          "path": "apps/policy-ui/public/data/qpm.json",
+          "sha256": "8b3fef333c69e858900aa32ed7a757691648a8bfaf85b1e63dae809bbad82f06",
+          "semantic_sha256": "77a8b14c93dd7a5e00e3ee4f566e3ad2718749a1df140e6bf27299879d3816ec"
+        }
+      ],
+      "freshness": [],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": true,
+        "evidence_required": [
+          "Signed initial-gap and potential-growth estimates with history",
+          "Approve neutral rate, floors, decay, FX conversion and calibrated coefficients",
+          "Validate forecasts and solver stability against owner-approved benchmarks"
+        ]
+      },
+      "disclosures": [
+        "Frozen legacy GDP presentation is not level-consistent",
+        "Historical diagnostic only; no current baseline claim"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "source": "versioned artifact controls or specification data contracts"
+      }
+    },
+    {
+      "id": "dfm-source-reconciled-v1",
+      "model": "dfm",
+      "equations": {
+        "state": "Z[t]=A Z[t-1]+u; x[t]=C Z[t]+e",
+        "growth": "Source transformation and GDP postprocessing; public bridge is not legacy C[gdp]Z rescaling",
+        "quarterly_growth": "g_q=100*predicted_GDP_QoQ; quarter-end months 03/06/09/12",
+        "level": "Y[q]=Y[q-1]*(1+g_q/100) starting from last observed level",
+        "yoy": "100*(Y[q]/Y[q-4]-1)",
+        "bands": "3.3867*sqrt(quarter horizon), z=0.674/1.036/1.645 for illustrative 50/70/90% bands; validation-proxy RMSE, not DFM vintage coverage"
+      },
+      "allocation": "Mixed monthly/quarterly factor signals; contributions are not GDP pp effects",
+      "units": "GDP YoY/QoQ percent; factor index; illustrative uncertainty",
+      "period": "Published current_quarter and forecast periods; not automatically current",
+      "calibration_version": "source-reconciled-0.1.0",
+      "artifacts": [
+        {
+          "path": "apps/policy-ui/public/data/dfm.json",
+          "sha256": "2553cbecd8838a0b1e1e2171f2cb53108c01d1bb25b3df1087e01d74a525649d",
+          "semantic_sha256": "4636f1bbab236927a5147a8f8a2b19cd73f8f3e031d6d4c25790e4e6ed00281f"
+        }
+      ],
+      "freshness": [
+        {
+          "path": "metadata.source_artifact_exported_at",
+          "max_age_days": 45
+        },
+        {
+          "path": "factor.last_data_date",
+          "max_age_days": 62
+        },
+        {
+          "path": "nowcast.current_quarter.period",
+          "current_quarter": true
+        }
+      ],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": true,
+        "evidence_required": [
+          "Reproducible raw-source refit in CI",
+          "Signed transformation map and GDP reconstruction",
+          "Current-quarter vintage and validated interval methodology"
+        ]
+      },
+      "disclosures": [
+        "Internal preview; illustrative intervals",
+        "Source refit and economist signoff are not production-approved"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "source": "versioned artifact controls or specification data contracts"
+      }
+    },
+    {
+      "id": "dfm-legacy-state-v0",
+      "model": "dfm",
+      "equations": {
+        "state": "Z[h]=A^h Z[last]",
+        "headline": "100*(C[gdp] Z * sd[gdp] + mean[gdp])",
+        "bands": "sigma=0.45*sqrt(h); 68%=+-sigma; 90%=+-1.645sigma"
+      },
+      "allocation": "Legacy standardized-state rescaling; monthly propagation",
+      "units": "Headline percent labeled YoY; illustrative pp bands",
+      "period": "Legacy state last_data_date; monthly horizons",
+      "calibration_version": "converted-legacy-dfm-2026-04-08",
+      "artifacts": [
+        {
+          "path": "mcp_server/data/dfm_data.json",
+          "sha256": "9dc241027ea3c95181e5306118e2f2d63c80d13ce0871f84606e6a2e8624b5c0",
+          "semantic_sha256": "01004711fc48beec304e3c4559ace01d8655c2ef92a609c93f3ed74a7057ef41"
+        }
+      ],
+      "freshness": [
+        {
+          "path": "meta.exported_at",
+          "max_age_days": 45
+        },
+        {
+          "path": "meta.last_data_date",
+          "max_age_days": 62
+        }
+      ],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": true,
+        "evidence_required": [
+          "Reconcile transformations, GDP units and quarter aggregation to source-refit",
+          "Replace illustrative intervals or approve their diagnostic labeling"
+        ]
+      },
+      "disclosures": [
+        "Legacy rescaling disagrees with source-reconciled bridge",
+        "Bands are illustrative, not calibrated confidence intervals"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "source": "versioned artifact controls or specification data contracts"
+      }
+    },
+    {
+      "id": "io-total-resource-buckets-v1",
+      "model": "io",
+      "equations": {
+        "output": "dX=L dY",
+        "value_added": "dVA=dX*GVA/total_resources",
+        "employment": "dEmp=dX_bln*employment/(total_resources/1000)"
+      },
+      "allocation": "Allocate by selected bucket: household+NPISH, government, GFCF+inventories, exports; output uses total resources; gva/equal/sector explicit",
+      "units": "Source monetary arrays /1000 -> billion UZS; employment persons; fixed-price accounting",
+      "period": "2022 comparative static, no forecast horizon",
+      "calibration_version": "io-resource-2022-v1",
+      "artifacts": [
+        {
+          "path": "apps/policy-ui/public/data/io.json",
+          "sha256": "ac7ac4366a2f789ffc19baade9ac5d8af0ea8b1c63edb70a56c272894882b29d",
+          "semantic_sha256": "53c9c306b8a3ca99fc73609b4fa13dff5de33f8e5544a77bfa3d12c8be7a24d0"
+        }
+      ],
+      "freshness": [],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": true,
+        "evidence_required": [
+          "Owner signoff on total-resource denominator and bucket allocation",
+          "Confirm source monetary and employment units and source workbook reconciliation"
+        ]
+      },
+      "disclosures": [
+        "Fixed coefficients, no behavioral or general-equilibrium response",
+        "Employment and FX sensitivity ranges are illustrative",
+        "Source monetary field names are legacy labels; adopted conversion /1000 requires owner unit signoff"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "currency": {
+          "enum": [
+            "bln_uzs",
+            "mln_usd"
+          ]
+        },
+        "demand_bucket": {
+          "enum": [
+            "consumption",
+            "government",
+            "investment",
+            "export"
+          ]
+        },
+        "distribution": {
+          "enum": [
+            "final_demand",
+            "output",
+            "gva",
+            "equal",
+            "sector"
+          ]
+        },
+        "amount": {
+          "finite": true
+        },
+        "exchange_rate_uzs_per_usd": {
+          "minimum": 1e-06,
+          "unit": "UZS/USD"
+        }
+      }
+    },
+    {
+      "id": "io-legacy-output-v0",
+      "model": "io",
+      "equations": {
+        "output": "dX=L dY",
+        "value_added": "dVA=dX*GVA/X",
+        "employment": "dEmp=dX*Emp/(X/1000)"
+      },
+      "allocation": "Sum all buckets, allocate by X/GVA/equal or selected sector; bucket identity lost",
+      "units": "Billion UZS shocks/effects; legacy source X in million UZS; persons",
+      "period": "2022 comparative static",
+      "calibration_version": "converted-legacy-io-2022",
+      "artifacts": [
+        {
+          "path": "mcp_server/data/io_data.json",
+          "sha256": "f545d813bee7d9e20a277d2e39dce60b8db3af51cfc63adb44c7a923f30a6523",
+          "semantic_sha256": "8b48992df588d7dc6c8dbfab31331c5bb1633299ce4fc3f4a84f0e0ba53a9e72"
+        }
+      ],
+      "freshness": [],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": true,
+        "evidence_required": [
+          "Reconcile X vs total resources and allocation with approved I-O workbook"
+        ]
+      },
+      "disclosures": [
+        "Legacy allocation is different from UI bucket allocation",
+        "Qualified diagnostic only; cannot claim bucket-specific policy effects"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "distribution": {
+          "enum": [
+            "output",
+            "gva",
+            "equal"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pe-bounded-section-v1",
+      "model": "pe",
+      "equations": {
+        "effects": "Public pre-adjusted section effects * clamp(cut,-100,100)/20 * selected partner import share; round sections to USD thousand 0.01 before summing"
+      },
+      "allocation": "Selected section or all sections; selected partner share takes precedence over regime aggregate share",
+      "units": "USD thousand; tariff cut percent",
+      "period": "2025 comparative-static baseline",
+      "calibration_version": "pe-wits-smart-public-bridge-v1",
+      "artifacts": [
+        {
+          "path": "apps/policy-ui/public/data/pe-v1-frozen.json",
+          "sha256": "d799a0acc31c0ef01d9bd07f05c1c80876d9ba2b34f1b5c525a46a89d0735aee",
+          "semantic_sha256": "2aa432903ccb444207b42afc16a259cc33695c3f26c478253af62cfd25a5b089"
+        }
+      ],
+      "freshness": [],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": false,
+        "evidence_required": [
+          "Signed source extract, monetary units and elasticity calibration",
+          "Approve partner/regime filter semantics and bounds"
+        ]
+      },
+      "disclosures": [
+        "Bounded scaling of precomputed effects; no dynamic forecast",
+        "Elasticities and source provenance pending owner review"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "provenance_artifacts": [
+        {
+          "path": "mcp_server/data/pe_data.json",
+          "sha256": "eba64c5a1ada1f733d0c1986c25b0942cc665d24440b91b68d63ecce480f6fa1",
+          "semantic_sha256": "92a23ba4159f2ff426873a5092415cd387adca9a0bfd2bb55c886b38c7cd555b"
+        }
+      ],
+      "input_contract": {
+        "tariff_cut_pct": {
+          "minimum": -100,
+          "maximum": 100,
+          "unit": "percent cut"
+        }
+      }
+    },
+    {
+      "id": "cge-formula-reference-v1",
+      "model": "cge",
+      "equations": {
+        "structure": "CET export transformation; CES Armington aggregation; current-account closure",
+        "normalization": "Pd=1; exchange-rate index adjusts",
+        "cet_ratio": "E/Ds=((Pe/Pd)/(bt/(1-bt)))^(1/(rho_t-1))",
+        "cet_level": "Ds=X/[at*(bt*(E/Ds)^rho_t+1-bt)^(1/rho_t)]",
+        "armington_ratio": "M/Ds=((Pd/Pm)*(bq/(1-bq)))^(1/(1+rho_q))",
+        "armington_level": "Q=aq*(bq*M^(-rho_q)+(1-bq)*Ds^(-rho_q))^(-1/rho_q)",
+        "prices": "Pd=1; Pe=Er*we/(1+te); Pm=Er*wm*(1+tm)",
+        "closure": "wm*M-we*E-ft-re-B=0; Qd=Cn+Z+G=Q",
+        "accounts": "Pq=(Pm*M+Pd*Ds)/Q; Pt=Pq*(1+ts); Px=(Pe*E+Pd*Ds)/X; Y=Px*X+tr*Pq+re*Er; TAX=tm*wm*Er*M+te*Pe*E+ts*Pq*Q+ty*Y; Sg=TAX-G*Pt-tr*Pq+ft*Er; S=sy*Y+Er*B+Sg; Cn=Y*(1-ty-sy)/Pt; Z=S/Pt"
+      },
+      "allocation": "Aggregate 1-2-3 closure, fixed 2021 reference",
+      "units": "Percent change from 2021 base; normalized prices, not observed UZS/USD",
+      "period": "2021 comparative static",
+      "calibration_version": "CGE 1-2-3 formula-reconciled v1",
+      "artifacts": [
+        {
+          "path": "apps/policy-ui/public/data/cge.json",
+          "sha256": "0947733d6013987aed3fdfd0bc3a2eb9517d4a474da1d154f94901b22a07eef1",
+          "semantic_sha256": "45aa9fecf1435968452e236a8a6e2690e1ce817cf5c18e05ac6cf72f76db3367"
+        }
+      ],
+      "freshness": [],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": true,
+        "evidence_required": [
+          "Signed workbook/source approval and closure/normalization validation"
+        ]
+      },
+      "disclosures": [
+        "Experimental reference, source approval pending"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "source": "versioned artifact controls or specification data contracts"
+      }
+    },
+    {
+      "id": "fpp-reduced-form-v0",
+      "model": "fpp",
+      "equations": {
+        "structure": "Reduced-form annual real/external/fiscal/monetary accounts"
+      },
+      "allocation": "Internal diagnostic only; validated exogenous annual inputs, derived fiscal balance, residual debt/NDA financing; no approved target closure",
+      "units": "Annual growth/inflation percent and fiscal/current-account percent GDP",
+      "period": "2025-2027",
+      "calibration_version": "legacy-reduced-form",
+      "artifacts": [],
+      "freshness": [],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": false,
+        "evidence_required": [
+          "Accepted source workbook and reproducible workbook parity across all sectors",
+          "Model-owner approval of equations, calibration, units, period and source lineage",
+          "Approved revenue/expenditure closure before accepting a fiscal-balance target",
+          "Approve endogenous inflation, deflator/gap proxies and residual financing assumptions"
+        ]
+      },
+      "disclosures": [
+        "Blocked: no accepted workbook parity or model-owner approval",
+        "Inflation inputs and fiscal-balance targets are rejected; inflation remains endogenous",
+        "Residual financing, CPI deflator proxy, gap proxy, floors and prescribed paths are unapproved judgments",
+        "Heuristic traffic lights are illustrative, not validation or approval"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "version": "fpp-input-v1",
+        "years": {
+          "min_items": 0,
+          "max_items": 3,
+          "forecast_years": [
+            2025,
+            2026,
+            2027
+          ],
+          "fields": {
+            "g": {
+              "aliases": [
+                "gdp_growth"
+              ],
+              "unit": "annual real growth percent",
+              "equations": [
+                "gap judgment",
+                "nominal GDP"
+              ]
+            },
+            "ner_dep": {
+              "aliases": [
+                "ner_depreciation"
+              ],
+              "unit": "annual exchange-rate depreciation percent",
+              "equations": [
+                "exchange-rate level",
+                "imported inflation",
+                "USD GDP",
+                "NFA flow conversion"
+              ]
+            },
+            "us_inf": {
+              "aliases": [
+                "us_inflation"
+              ],
+              "unit": "annual US inflation percent",
+              "equations": [
+                "imported inflation",
+                "Phillips curve"
+              ]
+            },
+            "ca": {
+              "aliases": [
+                "current_account",
+                "current_account_pct_gdp"
+              ],
+              "unit": "percent GDP",
+              "equations": [
+                "current-account flow",
+                "reserves",
+                "NFA"
+              ]
+            },
+            "fdi": {
+              "aliases": [
+                "fdi_pct_gdp"
+              ],
+              "unit": "percent GDP",
+              "equations": [
+                "FDI flow",
+                "reserves",
+                "NFA"
+              ]
+            },
+            "ofa": {
+              "aliases": [
+                "other_financial_account",
+                "other_financial_account_pct_gdp"
+              ],
+              "unit": "percent GDP",
+              "equations": [
+                "other financial-account flow",
+                "reserves",
+                "NFA"
+              ]
+            },
+            "rev": {
+              "aliases": [
+                "revenue_pct_gdp"
+              ],
+              "unit": "percent GDP",
+              "equations": [
+                "revenue",
+                "fiscal balance",
+                "residual debt financing"
+              ]
+            },
+            "exp": {
+              "aliases": [
+                "expenditure_pct_gdp"
+              ],
+              "unit": "percent GDP",
+              "equations": [
+                "expenditure",
+                "fiscal balance",
+                "residual debt financing"
+              ]
+            },
+            "pr": {
+              "aliases": [
+                "policy_rate"
+              ],
+              "unit": "annual nominal rate percent",
+              "equations": [
+                "reported policy rate",
+                "ex-post real rate only; no transmission equation"
+              ]
+            },
+            "vel": {
+              "aliases": [
+                "velocity"
+              ],
+              "unit": "annual nominal income / year-end M2 proxy",
+              "equations": [
+                "M2 demand",
+                "residual NDA"
+              ]
+            }
+          },
+          "defaults": [
+            {
+              "g": 5.9,
+              "ner_dep": 3.3,
+              "us_inf": 2.5,
+              "ca": -3.3,
+              "fdi": 2.0,
+              "ofa": 3.5,
+              "rev": 26.7,
+              "exp": 31.6,
+              "pr": 13.5,
+              "vel": 5.77
+            },
+            {
+              "g": 5.8,
+              "ner_dep": 5.3,
+              "us_inf": 2.5,
+              "ca": -3.6,
+              "fdi": 2.3,
+              "ofa": 3.8,
+              "rev": 27.2,
+              "exp": 32.1,
+              "pr": 9.9,
+              "vel": 5.83
+            },
+            {
+              "g": 5.7,
+              "ner_dep": 5.9,
+              "us_inf": 2.5,
+              "ca": -4.8,
+              "fdi": 2.9,
+              "ofa": 4.2,
+              "rev": 27.5,
+              "exp": 31.8,
+              "pr": 9.1,
+              "vel": 5.87
+            }
+          ],
+          "unknown_fields": "reject",
+          "duplicate_aliases": "reject"
+        },
+        "public_tool_fields": {
+          "gdp_growth": "g",
+          "policy_rate": "pr",
+          "ner_depreciation": "ner_dep",
+          "current_account_pct_gdp": "ca"
+        },
+        "unsupported": {
+          "inflation": "Endogenous; no approved assumption equation",
+          "fiscal_balance_target": "No documented, approved revenue/expenditure closure"
+        }
+      },
+      "source_vintage": "Legacy code constants labeled CAEM SEP 2025; 2024 base; workbook not verified",
+      "diagnostic_source": {
+        "path": "mcp_server/models/fpp.py",
+        "sha256": "1ebace43d5acc41cc01b83379e902a3bf9747f44ad37dec7aa1121dc1d31ed07",
+        "accepted_artifact": false
+      }
+    },
+    {
+      "id": "qpm-level-core-judgment-v1",
+      "model": "qpm",
+      "equations": {
+        "uip": "s[t] = (1-e1)*s[t+1] + e1*s[t-1] - (rs[t]-risk[t])/4 + exchange_shock[t]",
+        "cpi_level": "l_cpi[t] = l_cpi[t-1] + pi[t-1]/4",
+        "rer_gap": "z_gap[t] = s[t] - l_cpi[t]",
+        "import_price": "dpm[t] = s[t] - s[t-1]",
+        "rmc": "rmc[t] = a3*gap[t] + (1-a3)*z_gap[t]",
+        "phillips": "pi[t] = a1*pi[t-1] + (1-a1)*pi[t+1] + a2*rmc[t] + a4*dpm[t] + inflation_shock[t]",
+        "inflation_yoy": "pi4[t] = (pi[t] + pi[t-1] + pi[t-2] + pi[t-3])/4",
+        "taylor": "rs[t] = g1*rs[t-1] + (1-g1)*(pi[t+1] + g2*pi4[t+4] + g3*gap[t]) + monetary_shock[t]",
+        "real_rate_gap": "rr_gap[t] = rs[t] - pi[t+1]",
+        "mci": "mci[t] = b4*rr_gap[t] - (1-b4)*z_gap[t]",
+        "is": "gap[t] = b1*gap[t-1] - b2*mci[t] + b3*gap_star[t] + demand_shock[t]",
+        "external_demand": "gap_star[t] = 0.75*gap_star[t-1]",
+        "output": "Y*=100*(1+g*/100)^(t/4); Y=Y*exp(gap/100); QoQ=100*(Y/Y[-1]-1); YoY=100*(Y/Y[-4]-1)",
+        "presentation": "Unanchored solver levels: inflation=target+pi4; policy=neutral+target+rs; distinct from Scenario Lab floors/decay"
+      },
+      "allocation": "Direct initial conditions and core shocks; no Scenario Lab presentation anchoring",
+      "units": "Output indices; log gap points; discrete QoQ and YoY percent; UZS/USD",
+      "period": "Quarterly conditional path, start quarter from shared Overview",
+      "calibration_version": "qpm-core-v0.3/output-level-v1",
+      "artifacts": [
+        {
+          "path": "model_specs/qpm/qpm-core-v0.3.json",
+          "sha256": "adbe6ec972af461d2971a1ce580663651e190b93b414dca4ae147a9ce83dc831",
+          "semantic_sha256": "2713e2cb71b3c99aa594dedbc1756398a660e4a38fb4d0e19c7a1584165c3e4a",
+          "embedded": {
+            "schema_version": "1.0.0",
+            "model_id": "qpm-core",
+            "model_version": "0.3.0",
+            "frequency": "quarterly",
+            "numeric_convention": {
+              "percent_scale": 100,
+              "one_percentage_point": 1.0,
+              "positive_exchange_rate_change": "UZS depreciation",
+              "dynamic_form": "steady-state deviation"
+            },
+            "solver": {
+              "algorithm": "bidirectional-gauss-seidel",
+              "max_iterations": 600,
+              "reference_tolerance": 1e-08,
+              "terminal_buffer_quarters": 10,
+              "external_demand_persistence": 0.75
+            },
+            "parameters": {
+              "b1": {
+                "default": 0.7,
+                "minimum": 0.3,
+                "maximum": 0.95,
+                "equation": "is",
+                "meaning": "Output-gap persistence",
+                "status": "literature-calibrated"
+              },
+              "b2": {
+                "default": 0.2,
+                "minimum": 0.05,
+                "maximum": 0.6,
+                "equation": "is",
+                "meaning": "Monetary-conditions effect on demand",
+                "status": "literature-calibrated"
+              },
+              "b3": {
+                "default": 0.3,
+                "minimum": 0.05,
+                "maximum": 0.6,
+                "equation": "is",
+                "meaning": "Foreign output-gap spillover",
+                "status": "literature-calibrated"
+              },
+              "b4": {
+                "default": 0.6,
+                "minimum": 0.1,
+                "maximum": 0.9,
+                "equation": "mci",
+                "meaning": "Real-interest-rate weight in MCI",
+                "status": "literature-calibrated"
+              },
+              "a1": {
+                "default": 0.6,
+                "minimum": 0.3,
+                "maximum": 0.9,
+                "equation": "phillips",
+                "meaning": "Backward-looking inflation weight",
+                "status": "literature-calibrated"
+              },
+              "a2": {
+                "default": 0.2,
+                "minimum": 0.05,
+                "maximum": 0.5,
+                "equation": "phillips",
+                "meaning": "Real-marginal-cost pass-through",
+                "status": "literature-calibrated"
+              },
+              "a3": {
+                "default": 0.65,
+                "minimum": 0.2,
+                "maximum": 0.9,
+                "equation": "rmc",
+                "meaning": "Domestic-cost share in real marginal cost",
+                "status": "provisional-judgment"
+              },
+              "a4": {
+                "default": 0.12,
+                "minimum": 0.0,
+                "maximum": 0.35,
+                "equation": "phillips",
+                "meaning": "Direct quarterly import-price pass-through",
+                "status": "literature-calibrated"
+              },
+              "g1": {
+                "default": 0.8,
+                "minimum": 0.3,
+                "maximum": 0.95,
+                "equation": "taylor",
+                "meaning": "Policy-rate smoothing",
+                "status": "literature-calibrated"
+              },
+              "g2": {
+                "default": 1.5,
+                "minimum": 1.0,
+                "maximum": 3.0,
+                "equation": "taylor",
+                "meaning": "Inflation response",
+                "status": "literature-calibrated"
+              },
+              "g3": {
+                "default": 0.5,
+                "minimum": 0.1,
+                "maximum": 1.5,
+                "equation": "taylor",
+                "meaning": "Output-gap response",
+                "status": "literature-calibrated"
+              },
+              "e1": {
+                "default": 0.7,
+                "minimum": 0.1,
+                "maximum": 0.9,
+                "equation": "uip",
+                "meaning": "Backward-looking exchange-rate weight",
+                "status": "provisional-judgment"
+              }
+            },
+            "steady_state": {
+              "inflation_target": {
+                "default": 5.0,
+                "unit": "percent annualized",
+                "status": "CBU-public"
+              },
+              "neutral_real_rate": {
+                "default": 3.5,
+                "unit": "percent annualized",
+                "status": "provisional-judgment"
+              },
+              "potential_growth": {
+                "default": 6.0,
+                "unit": "percent year-on-year",
+                "status": "provisional-judgment"
+              }
+            },
+            "equations": {
+              "uip": "s[t] = (1-e1)*s[t+1] + e1*s[t-1] - (rs[t]-risk[t])/4 + exchange_shock[t]",
+              "cpi_level": "l_cpi[t] = l_cpi[t-1] + pi[t-1]/4",
+              "rer_gap": "z_gap[t] = s[t] - l_cpi[t]",
+              "import_price": "dpm[t] = s[t] - s[t-1]",
+              "rmc": "rmc[t] = a3*gap[t] + (1-a3)*z_gap[t]",
+              "phillips": "pi[t] = a1*pi[t-1] + (1-a1)*pi[t+1] + a2*rmc[t] + a4*dpm[t] + inflation_shock[t]",
+              "inflation_yoy": "pi4[t] = (pi[t] + pi[t-1] + pi[t-2] + pi[t-3])/4",
+              "taylor": "rs[t] = g1*rs[t-1] + (1-g1)*(pi[t+1] + g2*pi4[t+4] + g3*gap[t]) + monetary_shock[t]",
+              "real_rate_gap": "rr_gap[t] = rs[t] - pi[t+1]",
+              "mci": "mci[t] = b4*rr_gap[t] - (1-b4)*z_gap[t]",
+              "is": "gap[t] = b1*gap[t-1] - b2*mci[t] + b3*gap_star[t] + demand_shock[t]",
+              "external_demand": "gap_star[t] = 0.75*gap_star[t-1]"
+            },
+            "shock_ids": [
+              "demand",
+              "inflation",
+              "exchange",
+              "monetary",
+              "risk",
+              "external_demand"
+            ],
+            "source_files": [
+              "qpm_uzbekistan/index.html",
+              "scripts/export_qpm.R",
+              "mcp_server/models/qpm.py",
+              "apps/policy-ui/src/data/scenario-lab/qpm-solver.ts"
+            ],
+            "golden_fixture": "mcp_server/tests/fixtures/qpm-core-v0.3-golden.json"
+          }
+        }
+      ],
+      "freshness": [
+        {
+          "kind": "overview",
+          "policy": "shared effectiveOverviewFreshness per-metric thresholds; no stale authoritative override"
+        }
+      ],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": true,
+        "evidence_required": [
+          "Signed initial-gap and potential-growth estimates with history",
+          "Approve neutral rate, floors, decay, FX conversion and calibrated coefficients",
+          "Validate forecasts and solver stability against owner-approved benchmarks"
+        ]
+      },
+      "disclosures": [
+        "Initial gap -1.5, potential YoY growth 6%, external gap zero are judgments",
+        "Inflation/rate floors and decay and annual FX /400 conversion are prescribed judgments",
+        "Missing/stale Overview uses disclosed deterministic diagnostic fallback",
+        "qpm-canonical-solver is an attribution identity, not an HTTP execution ID",
+        "Shares output-level growth identity, not all presentation paths, with Scenario Lab"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "horizon": {
+          "minimum": 4,
+          "maximum": 32,
+          "integer": true,
+          "unit": "quarter points"
+        }
+      }
+    },
+    {
+      "id": "pe-legacy-section-v0",
+      "model": "pe",
+      "equations": {
+        "effects": "Legacy precomputed section effects * cut/20 * section_elasticity/1.27; existing legacy cut bounds and filters"
+      },
+      "allocation": "Legacy partner/regime filters and positive cut bounds; differs from signed UI cut controls",
+      "units": "USD thousand; tariff cut percent",
+      "period": "2025 comparative-static baseline",
+      "calibration_version": "pe-wits-smart-public-bridge-v1",
+      "artifacts": [
+        {
+          "path": "mcp_server/data/pe_data.json",
+          "sha256": "eba64c5a1ada1f733d0c1986c25b0942cc665d24440b91b68d63ecce480f6fa1",
+          "semantic_sha256": "92a23ba4159f2ff426873a5092415cd387adca9a0bfd2bb55c886b38c7cd555b"
+        }
+      ],
+      "freshness": [],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": false,
+        "evidence_required": [
+          "Signed source extract, monetary units and elasticity calibration",
+          "Approve partner/regime filter semantics and bounds"
+        ]
+      },
+      "disclosures": [
+        "Bounded scaling of precomputed effects; no dynamic forecast",
+        "Elasticities and source provenance pending owner review",
+        "Legacy filters and bounds must not be substituted for public UI controls",
+        "Every non-all regime uses a prescribed 0.6 scaler; not a regime-specific tariff schedule"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "tariff_cut_pct": {
+          "minimum": 5,
+          "maximum": 100
+        },
+        "regime": {
+          "enum": [
+            "all",
+            "mfn",
+            "fta",
+            "full"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pe-share-scaled-usd-v2",
+      "model": "pe",
+      "equations": {
+        "effects": "Pre-adjusted section baseline USD effects * cut/20 * accepted import share; section rounding 0.01 USD before summation",
+        "tariff_rate": "t_new=t_old*(1-cut_pct/100), not t_old-cut_pct percentage points"
+      },
+      "allocation": "Selected section; country share or normalized regime import share from accepted countries[].imp/meta.totalImport. Country and regime must agree. Incomplete partner coverage disclosed. Missing evidence is qualified unavailable.",
+      "units": "Actual USD, currency USD and scale 1; source USD thousand scale 1000 converted exactly once at public-artifact boundary; tariff change is relative percent reduction, not percentage points",
+      "period": "2025 comparative-static baseline",
+      "calibration_version": "pe-wits-smart-public-bridge-v2",
+      "artifacts": [
+        {
+          "path": "apps/policy-ui/public/data/pe.json",
+          "sha256": "d07f55cf6899c7ce1ef7ebbaa302ab5ff74673cbeffa5619dd812925d583bcb9",
+          "semantic_sha256": "df70d857e77e01c6e5f5e4d158a77e75b1bd4fb451fb034b976b19ad10691ff4"
+        }
+      ],
+      "freshness": [],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": true,
+        "evidence_required": [
+          "Signed source extract, monetary units and elasticity calibration",
+          "Approve partner/regime filter semantics and bounds",
+          "Approve response-v2 USD conversion, relative-percent tariff semantics, source-derived regime shares and incomplete partner coverage"
+        ]
+      },
+      "disclosures": [
+        "Qualified diagnostic; owner approval pending",
+        "Partner/regime effects are share-scaled approximations, not independently rerun tariff simulations",
+        "Source partner list has incomplete import coverage; no full product-partner elasticity matrix",
+        "Accepted 2025 vintage and section elasticities unchanged"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "provenance_artifacts": [
+        {
+          "path": "mcp_server/data/pe_data.json",
+          "sha256": "eba64c5a1ada1f733d0c1986c25b0942cc665d24440b91b68d63ecce480f6fa1",
+          "semantic_sha256": "92a23ba4159f2ff426873a5092415cd387adca9a0bfd2bb55c886b38c7cd555b"
+        }
+      ],
+      "response_contract_version": "pe-response-v2",
+      "input_contract": {
+        "tariff_cut_pct": {
+          "minimum": -100,
+          "maximum": 100,
+          "unit": "relative percent reduction"
+        },
+        "section_id": {
+          "enum": [
+            "all",
+            "I",
+            "II",
+            "III",
+            "IV",
+            "V",
+            "VI",
+            "VII",
+            "VIII",
+            "IX",
+            "XI",
+            "XII",
+            "XIII",
+            "XV",
+            "XVI",
+            "XVII",
+            "XVIII",
+            "XIX",
+            "XX",
+            "XXI"
+          ]
+        },
+        "hs_section": {
+          "enum": [
+            "all",
+            "I",
+            "II",
+            "III",
+            "IV",
+            "V",
+            "VI",
+            "VII",
+            "VIII",
+            "IX",
+            "XI",
+            "XII",
+            "XIII",
+            "XV",
+            "XVI",
+            "XVII",
+            "XVIII",
+            "XIX",
+            "XX",
+            "XXI"
+          ]
+        },
+        "partner_name": {
+          "enum": [
+            "all",
+            "Китай",
+            "Российская Федерация",
+            "Казахстан",
+            "Турция",
+            "Республика Корея",
+            "Германия",
+            "Индия",
+            "Туркменистан",
+            "Беларусь",
+            "Соединенные Штаты Америки",
+            "Швейцария",
+            "Франция",
+            "Кыргызстан",
+            "Иран (Исламская Республика)",
+            "Италия",
+            "Япония",
+            "Объединенные Арабские Эмираты",
+            "Австрия",
+            "Вьетнам",
+            "Бразилия",
+            "Польша",
+            "Литва",
+            "Украина",
+            "Таджикистан",
+            "Нидерланды",
+            "Словения",
+            "Соединенное Королевство Великобритании и Северной Ирландии",
+            "Грузия",
+            "Афганистан",
+            "Индонезия",
+            "Чехия",
+            "Мексика",
+            "Латвия",
+            "Таиланд",
+            "Пакистан",
+            "Малайзия",
+            "Венгрия",
+            "Гонконг, Специальный административный район Китая",
+            "Бельгия",
+            "Испания",
+            "Сингапур",
+            "Ирландия",
+            "Финляндия",
+            "Азербайджан",
+            "Словакия",
+            "Бангладеш",
+            "Румыния",
+            "Греция",
+            "Дания",
+            "Эквадор",
+            "Швеция",
+            "Монголия",
+            "Эстония",
+            "Болгария",
+            "Аргентина",
+            "Канада",
+            "Тайвань (провинция Китая)",
+            "Египет",
+            "Норвегия",
+            "Ирак"
+          ]
+        },
+        "country": {
+          "enum": [
+            "all",
+            "Китай",
+            "Российская Федерация",
+            "Казахстан",
+            "Турция",
+            "Республика Корея",
+            "Германия",
+            "Индия",
+            "Туркменистан",
+            "Беларусь",
+            "Соединенные Штаты Америки",
+            "Швейцария",
+            "Франция",
+            "Кыргызстан",
+            "Иран (Исламская Республика)",
+            "Италия",
+            "Япония",
+            "Объединенные Арабские Эмираты",
+            "Австрия",
+            "Вьетнам",
+            "Бразилия",
+            "Польша",
+            "Литва",
+            "Украина",
+            "Таджикистан",
+            "Нидерланды",
+            "Словения",
+            "Соединенное Королевство Великобритании и Северной Ирландии",
+            "Грузия",
+            "Афганистан",
+            "Индонезия",
+            "Чехия",
+            "Мексика",
+            "Латвия",
+            "Таиланд",
+            "Пакистан",
+            "Малайзия",
+            "Венгрия",
+            "Гонконг, Специальный административный район Китая",
+            "Бельгия",
+            "Испания",
+            "Сингапур",
+            "Ирландия",
+            "Финляндия",
+            "Азербайджан",
+            "Словакия",
+            "Бангладеш",
+            "Румыния",
+            "Греция",
+            "Дания",
+            "Эквадор",
+            "Швеция",
+            "Монголия",
+            "Эстония",
+            "Болгария",
+            "Аргентина",
+            "Канада",
+            "Тайвань (провинция Китая)",
+            "Египет",
+            "Норвегия",
+            "Ирак"
+          ]
+        },
+        "regime": {
+          "enum": [
+            "all",
+            "fta",
+            "full",
+            "mfn"
+          ],
+          "normalization": "trim_lowercase"
+        }
+      }
+    },
+    {
+      "id": "research-qpm-extended-v0.4",
+      "model": "qpm",
+      "equations": {
+        "specification": "model_specs/qpm/qpm-extended-v0.4.json",
+        "declared_equations": {
+          "legacy_contract": "mcp_server/models/qpm_spec.py",
+          "structural_baseline": "mcp_server/models/qpm_structural_baseline.py",
+          "inflation": "mcp_server/models/qpm_inflation_block.py",
+          "cpi_data": "mcp_server/models/qpm_cpi_data.py",
+          "satellites": "mcp_server/models/qpm_satellite_blocks.py",
+          "validation": "mcp_server/models/qpm_validation.py"
+        }
+      },
+      "allocation": "Research specification only; no public execution route",
+      "units": "Defined in versioned specification and data contracts; not interchangeable with core",
+      "period": "Research data-contract periods only",
+      "calibration_version": "0.4.0",
+      "artifacts": [
+        {
+          "path": "model_specs/qpm/qpm-extended-v0.4.json",
+          "sha256": "e63a794c8971b6630a6b0f3eed119a5f8441ddad17a6a045495d8e34d13fa9c6",
+          "semantic_sha256": "599051d4a1b450e5b5ca83ef48f82c6b4609b0bd0a3e8a2a819ba16da9864761"
+        }
+      ],
+      "freshness": [],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": false,
+        "evidence_required": [
+          "Model-owner approval of this exact specification and data contracts",
+          "Route parity, source freshness, backtests and forecast validation",
+          "Approved calibration, gap/history and uncertainty methodology"
+        ]
+      },
+      "disclosures": [
+        "Research approval boundary retained regardless of production_runtime flag in spec"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "source": "Unapproved versioned research data contracts; no public route"
+      },
+      "calibration": {
+        "demand_lag": 0.6,
+        "demand_forward": 0.01,
+        "demand_rmci": 0.15,
+        "demand_foreign_gap": 0.18,
+        "demand_remittance_gap": 0.03,
+        "demand_fiscal_impulse": 0.2,
+        "demand_credit_activity": 0.2,
+        "demand_fdi_gap": 0.05,
+        "rmci_rer_share": 0.45,
+        "core_expectations": 0.25,
+        "core_imported_inflation": 0.15,
+        "core_marginal_cost": 0.5,
+        "core_adaptive_inertia": 0.6,
+        "fruit_vegetable_inertia": 0.2,
+        "fruit_vegetable_relative_price_reversion": 1.0,
+        "regulated_inertia": 0.01,
+        "regulated_relative_price_reversion": 0.5,
+        "policy_rate_smoothing": 0.6,
+        "policy_inflation_response": 1.0,
+        "policy_output_gap_response": 0.35,
+        "exchange_expectations_weight": 0.2,
+        "exchange_rer_gap_response": 1.0,
+        "exchange_remittance_response": 0.1,
+        "remittance_inertia": 0.8,
+        "remittance_russia_gap_response": 0.65,
+        "remittance_trend_inertia": 0.9,
+        "remittance_ruble_response": 0.1,
+        "wage_expectations_weight": 0.5,
+        "wage_output_gap_response": 3.0,
+        "wage_real_gap_response": 0.7,
+        "import_inflation_inertia": 0.4
+      },
+      "data_contracts": [],
+      "equation_sources": [
+        {
+          "path": "mcp_server/models/qpm_spec.py",
+          "sha256": "0048d4597e78bab2b7c1ad721636694f4479b060803652b8ff4a20939f3802cc"
+        },
+        {
+          "path": "mcp_server/models/qpm_structural_baseline.py",
+          "sha256": "2fb44bc9512d1c8e70deded1e8f6149710d2709e772c3e57ed34ed378b567680"
+        },
+        {
+          "path": "mcp_server/models/qpm_inflation_block.py",
+          "sha256": "d76789d5730b14a5616c23f32ec379038a3e6908b634eae7cb48f94c894d8d20"
+        },
+        {
+          "path": "mcp_server/models/qpm_cpi_data.py",
+          "sha256": "e358e717acb8877d32ab674b9824b82878c2dffada0c6aa4a57a66828a3b06c4"
+        },
+        {
+          "path": "mcp_server/models/qpm_satellite_blocks.py",
+          "sha256": "d788946d4926ce8c53c6e8d9eb6546a1154f4ebececec370ab39c92f16e9de71"
+        },
+        {
+          "path": "mcp_server/models/qpm_validation.py",
+          "sha256": "71c933195e5d0d53721e1ae92212a4b2570a60da9741b3fa22f1140bdf81481d"
+        }
+      ]
+    },
+    {
+      "id": "research-qpm-extended-v0.5",
+      "model": "qpm",
+      "equations": {
+        "specification": "model_specs/qpm/qpm-extended-v0.5.json",
+        "declared_equations": {
+          "structural_baseline": "mcp_server/models/qpm_structural_baseline.py",
+          "inflation": "mcp_server/models/qpm_inflation_block.py",
+          "satellite_equations": "mcp_server/models/qpm_satellite_blocks.py",
+          "observed_state": "mcp_server/models/qpm_observed_state.py",
+          "credit_data": "mcp_server/models/qpm_credit_data.py",
+          "fdi_proxy_data": "mcp_server/models/qpm_siat_fdi.py",
+          "reduced_form_diagnostics": "mcp_server/models/qpm_reduced_form.py",
+          "extended_runtime": "mcp_server/models/qpm_extended_runtime.py",
+          "validation": "mcp_server/models/qpm_validation.py"
+        }
+      },
+      "allocation": "Research specification only; no public execution route",
+      "units": "Defined in versioned specification and data contracts; not interchangeable with core",
+      "period": "Research data-contract periods only",
+      "calibration_version": "0.5.0",
+      "artifacts": [
+        {
+          "path": "model_specs/qpm/qpm-extended-v0.5.json",
+          "sha256": "1f23887a6058a80bcbfd5aa4e19a1f56cb7db202216395f026f0c8fda9a3ecb7",
+          "semantic_sha256": "c4fd78caa7507d5e781e73bee549d9768e72a4e54ce378b0f75b430b442981de"
+        }
+      ],
+      "freshness": [],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": false,
+        "evidence_required": [
+          "Model-owner approval of this exact specification and data contracts",
+          "Route parity, source freshness, backtests and forecast validation",
+          "Approved calibration, gap/history and uncertainty methodology"
+        ]
+      },
+      "disclosures": [
+        "Research approval boundary retained regardless of production_runtime flag in spec"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "source": "Unapproved versioned research data contracts; no public route"
+      },
+      "calibration": {
+        "credit_activity": 0.2,
+        "fdi_gap": 0.05
+      },
+      "data_contracts": [],
+      "equation_sources": [
+        {
+          "path": "mcp_server/models/qpm_structural_baseline.py",
+          "sha256": "2fb44bc9512d1c8e70deded1e8f6149710d2709e772c3e57ed34ed378b567680"
+        },
+        {
+          "path": "mcp_server/models/qpm_inflation_block.py",
+          "sha256": "d76789d5730b14a5616c23f32ec379038a3e6908b634eae7cb48f94c894d8d20"
+        },
+        {
+          "path": "mcp_server/models/qpm_satellite_blocks.py",
+          "sha256": "d788946d4926ce8c53c6e8d9eb6546a1154f4ebececec370ab39c92f16e9de71"
+        },
+        {
+          "path": "mcp_server/models/qpm_observed_state.py",
+          "sha256": "578f2a9401bece8b29f124bf5c94608a10e9334b552328c2725ca707947e1edb"
+        },
+        {
+          "path": "mcp_server/models/qpm_credit_data.py",
+          "sha256": "0c46ef8773b9be63c6ceaa31b008adefaa2261e1decdea45401167e5fd61eede"
+        },
+        {
+          "path": "mcp_server/models/qpm_siat_fdi.py",
+          "sha256": "c0682a9eb0d6d010548f94c16b0844c3a4055bf6ca366c1ef49601d2b17ac495"
+        },
+        {
+          "path": "mcp_server/models/qpm_reduced_form.py",
+          "sha256": "7f7d474fe74e5d20ed01a414a6134c5b6492b570cdf4f5827607c9d24acc963d"
+        },
+        {
+          "path": "mcp_server/models/qpm_extended_runtime.py",
+          "sha256": "6b61baa20cb2dff4a85eba37c9b329240141d9eab9aae3a8f50d3621071f9209"
+        },
+        {
+          "path": "mcp_server/models/qpm_validation.py",
+          "sha256": "71c933195e5d0d53721e1ae92212a4b2570a60da9741b3fa22f1140bdf81481d"
+        }
+      ]
+    },
+    {
+      "id": "research-qpm-extended-v0.6",
+      "model": "qpm",
+      "equations": {
+        "specification": "model_specs/qpm/qpm-extended-v0.6.json",
+        "declared_equations": {
+          "structural_baseline": "mcp_server/models/qpm_structural_baseline.py",
+          "inflation": "mcp_server/models/qpm_inflation_block.py",
+          "satellite_equations": "mcp_server/models/qpm_satellite_blocks.py",
+          "observed_state": "mcp_server/models/qpm_observed_state.py",
+          "official_gdp": "mcp_server/models/qpm_siat_gdp.py",
+          "macro_proxies": "mcp_server/models/qpm_macro_proxies.py",
+          "credit_equation": "mcp_server/models/qpm_credit_equation.py",
+          "reduced_form_diagnostics": "mcp_server/models/qpm_reduced_form.py",
+          "extended_runtime": "mcp_server/models/qpm_extended_runtime.py"
+        }
+      },
+      "allocation": "Research specification only; no public execution route",
+      "units": "Defined in versioned specification and data contracts; not interchangeable with core",
+      "period": "Research data-contract periods only",
+      "calibration_version": "0.6.0",
+      "artifacts": [
+        {
+          "path": "model_specs/qpm/qpm-extended-v0.6.json",
+          "sha256": "a85ce2fe7c7eda522cdca972c4e367d3d7ece065bb194947f8de7503052b2961",
+          "semantic_sha256": "32a270baf9a13a846d2ad5f09f9d4c8bda1e706a6ab265d2300b71f35204a190"
+        }
+      ],
+      "freshness": [],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": false,
+        "evidence_required": [
+          "Model-owner approval of this exact specification and data contracts",
+          "Route parity, source freshness, backtests and forecast validation",
+          "Approved calibration, gap/history and uncertainty methodology"
+        ]
+      },
+      "disclosures": [
+        "Research approval boundary retained regardless of production_runtime flag in spec"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "source": "Unapproved versioned research data contracts; no public route"
+      },
+      "calibration": {
+        "credit_activity": 0.2,
+        "fdi_gap": 0.05
+      },
+      "data_contracts": [],
+      "equation_sources": [
+        {
+          "path": "mcp_server/models/qpm_structural_baseline.py",
+          "sha256": "2fb44bc9512d1c8e70deded1e8f6149710d2709e772c3e57ed34ed378b567680"
+        },
+        {
+          "path": "mcp_server/models/qpm_inflation_block.py",
+          "sha256": "d76789d5730b14a5616c23f32ec379038a3e6908b634eae7cb48f94c894d8d20"
+        },
+        {
+          "path": "mcp_server/models/qpm_satellite_blocks.py",
+          "sha256": "d788946d4926ce8c53c6e8d9eb6546a1154f4ebececec370ab39c92f16e9de71"
+        },
+        {
+          "path": "mcp_server/models/qpm_observed_state.py",
+          "sha256": "578f2a9401bece8b29f124bf5c94608a10e9334b552328c2725ca707947e1edb"
+        },
+        {
+          "path": "mcp_server/models/qpm_siat_gdp.py",
+          "sha256": "f8ef52ef98a029b434a3325a2672efe7a1b7ede89f681f4f1ca954cad7ccac25"
+        },
+        {
+          "path": "mcp_server/models/qpm_macro_proxies.py",
+          "sha256": "e579f4a5f912933cbd7ccd92a5bb060cdbf71b5e688966bfd3fc47fcf032796f"
+        },
+        {
+          "path": "mcp_server/models/qpm_credit_equation.py",
+          "sha256": "889b21ec3c6254de4c6bd5655ccbaf371514a65198b707f8e0561f9b5e67de2b"
+        },
+        {
+          "path": "mcp_server/models/qpm_reduced_form.py",
+          "sha256": "7f7d474fe74e5d20ed01a414a6134c5b6492b570cdf4f5827607c9d24acc963d"
+        },
+        {
+          "path": "mcp_server/models/qpm_extended_runtime.py",
+          "sha256": "6b61baa20cb2dff4a85eba37c9b329240141d9eab9aae3a8f50d3621071f9209"
+        }
+      ]
+    },
+    {
+      "id": "research-qpm-extended-v0.7",
+      "model": "qpm",
+      "equations": {
+        "specification": "model_specs/qpm/qpm-extended-v0.7.json",
+        "declared_equations": {
+          "observed_state": "mcp_server/models/qpm_observed_state.py",
+          "official_gdp": "mcp_server/models/qpm_siat_gdp.py",
+          "official_cpi_policy": "mcp_server/models/qpm_official_macro_data.py",
+          "macro_proxies": "mcp_server/models/qpm_macro_proxies.py",
+          "credit_equation": "mcp_server/models/qpm_credit_equation.py",
+          "extended_runtime": "mcp_server/models/qpm_extended_runtime.py"
+        }
+      },
+      "allocation": "Research specification only; no public execution route",
+      "units": "Defined in versioned specification and data contracts; not interchangeable with core",
+      "period": "Research data-contract periods only",
+      "calibration_version": "0.7.0",
+      "artifacts": [
+        {
+          "path": "model_specs/qpm/qpm-extended-v0.7.json",
+          "sha256": "ee689c700d5e3229e1998fb1ccff5f38de2898238b8ef1954caf211145abf3a5",
+          "semantic_sha256": "4e35cf96823a78ffda0d29d3387cd01b96b63e9b9f0a9b52d033328b86de8f71"
+        }
+      ],
+      "freshness": [],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": false,
+        "evidence_required": [
+          "Model-owner approval of this exact specification and data contracts",
+          "Route parity, source freshness, backtests and forecast validation",
+          "Approved calibration, gap/history and uncertainty methodology"
+        ]
+      },
+      "disclosures": [
+        "Research approval boundary retained regardless of production_runtime flag in spec"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "source": "Unapproved versioned research data contracts; no public route"
+      },
+      "calibration": {
+        "credit_activity": 0.2,
+        "fdi_gap": 0.05
+      },
+      "data_contracts": [],
+      "equation_sources": [
+        {
+          "path": "mcp_server/models/qpm_observed_state.py",
+          "sha256": "578f2a9401bece8b29f124bf5c94608a10e9334b552328c2725ca707947e1edb"
+        },
+        {
+          "path": "mcp_server/models/qpm_siat_gdp.py",
+          "sha256": "f8ef52ef98a029b434a3325a2672efe7a1b7ede89f681f4f1ca954cad7ccac25"
+        },
+        {
+          "path": "mcp_server/models/qpm_official_macro_data.py",
+          "sha256": "5e8e3facbcba8d8ecd53fdda9f044615abcb51022b69c199c59d5aef5b4b7fde"
+        },
+        {
+          "path": "mcp_server/models/qpm_macro_proxies.py",
+          "sha256": "e579f4a5f912933cbd7ccd92a5bb060cdbf71b5e688966bfd3fc47fcf032796f"
+        },
+        {
+          "path": "mcp_server/models/qpm_credit_equation.py",
+          "sha256": "889b21ec3c6254de4c6bd5655ccbaf371514a65198b707f8e0561f9b5e67de2b"
+        },
+        {
+          "path": "mcp_server/models/qpm_extended_runtime.py",
+          "sha256": "6b61baa20cb2dff4a85eba37c9b329240141d9eab9aae3a8f50d3621071f9209"
+        }
+      ]
+    },
+    {
+      "id": "research-qpm-extended-v0.8",
+      "model": "qpm",
+      "equations": {
+        "specification": "model_specs/qpm/qpm-extended-v0.8.json",
+        "declared_equations": {
+          "observed_state": "mcp_server/models/qpm_observed_state.py",
+          "official_gdp": "mcp_server/models/qpm_siat_gdp.py",
+          "official_cpi_policy": "mcp_server/models/qpm_official_macro_data.py",
+          "inflation_expectations": "mcp_server/models/qpm_expectations_data.py",
+          "monetary_stance": "mcp_server/models/qpm_monetary_stance.py",
+          "macro_proxies": "mcp_server/models/qpm_macro_proxies.py",
+          "credit_equation": "mcp_server/models/qpm_credit_equation.py",
+          "extended_runtime": "mcp_server/models/qpm_extended_runtime.py"
+        }
+      },
+      "allocation": "Research specification only; no public execution route",
+      "units": "Defined in versioned specification and data contracts; not interchangeable with core",
+      "period": "Research data-contract periods only",
+      "calibration_version": "0.8.0",
+      "artifacts": [
+        {
+          "path": "model_specs/qpm/qpm-extended-v0.8.json",
+          "sha256": "cd698c154c61f1ba402c8b1f7c19b7340e16799b22121ec1de8a42311f0a8226",
+          "semantic_sha256": "b47ace22e407323c701f7d5f410f384e57563de930572989b83f01bac5402d22"
+        }
+      ],
+      "freshness": [],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": false,
+        "evidence_required": [
+          "Model-owner approval of this exact specification and data contracts",
+          "Route parity, source freshness, backtests and forecast validation",
+          "Approved calibration, gap/history and uncertainty methodology"
+        ]
+      },
+      "disclosures": [
+        "Research approval boundary retained regardless of production_runtime flag in spec"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "source": "Unapproved versioned research data contracts; no public route"
+      },
+      "calibration": {
+        "credit_activity": 0.2,
+        "fdi_gap": 0.05
+      },
+      "data_contracts": [],
+      "equation_sources": [
+        {
+          "path": "mcp_server/models/qpm_observed_state.py",
+          "sha256": "578f2a9401bece8b29f124bf5c94608a10e9334b552328c2725ca707947e1edb"
+        },
+        {
+          "path": "mcp_server/models/qpm_siat_gdp.py",
+          "sha256": "f8ef52ef98a029b434a3325a2672efe7a1b7ede89f681f4f1ca954cad7ccac25"
+        },
+        {
+          "path": "mcp_server/models/qpm_official_macro_data.py",
+          "sha256": "5e8e3facbcba8d8ecd53fdda9f044615abcb51022b69c199c59d5aef5b4b7fde"
+        },
+        {
+          "path": "mcp_server/models/qpm_expectations_data.py",
+          "sha256": "7a0ad4ed35b770761833268c0ca9c13ab634c8c780632019ec5a310d494d0879"
+        },
+        {
+          "path": "mcp_server/models/qpm_monetary_stance.py",
+          "sha256": "4fb5e3d6e624fdf00950b4ca1bd4ff586613b7679f886f497b2cfbbd890e7fd9"
+        },
+        {
+          "path": "mcp_server/models/qpm_macro_proxies.py",
+          "sha256": "e579f4a5f912933cbd7ccd92a5bb060cdbf71b5e688966bfd3fc47fcf032796f"
+        },
+        {
+          "path": "mcp_server/models/qpm_credit_equation.py",
+          "sha256": "889b21ec3c6254de4c6bd5655ccbaf371514a65198b707f8e0561f9b5e67de2b"
+        },
+        {
+          "path": "mcp_server/models/qpm_extended_runtime.py",
+          "sha256": "6b61baa20cb2dff4a85eba37c9b329240141d9eab9aae3a8f50d3621071f9209"
+        }
+      ]
+    },
+    {
+      "id": "research-qpm-extended-v0.9",
+      "model": "qpm",
+      "equations": {
+        "specification": "model_specs/qpm/qpm-extended-v0.9.json",
+        "declared_equations": {
+          "observed_state": "mcp_server/models/qpm_observed_state.py",
+          "official_gdp": "mcp_server/models/qpm_siat_gdp.py",
+          "official_cpi_policy": "mcp_server/models/qpm_official_macro_data.py",
+          "inflation_expectations": "mcp_server/models/qpm_expectations_data.py",
+          "monetary_stance": "mcp_server/models/qpm_monetary_stance.py",
+          "state_space_filter": "mcp_server/models/qpm_state_space.py",
+          "macro_proxies": "mcp_server/models/qpm_macro_proxies.py",
+          "credit_equation": "mcp_server/models/qpm_credit_equation.py",
+          "extended_runtime": "mcp_server/models/qpm_extended_runtime.py"
+        }
+      },
+      "allocation": "Research specification only; no public execution route",
+      "units": "Defined in versioned specification and data contracts; not interchangeable with core",
+      "period": "Research data-contract periods only",
+      "calibration_version": "0.9.0",
+      "artifacts": [
+        {
+          "path": "model_specs/qpm/qpm-extended-v0.9.json",
+          "sha256": "d8a3961f7b840281dab44cad50eec4b4b05c86a3b896ec491006c5fc3e7fb3e7",
+          "semantic_sha256": "d19dfb1a838a889fbfa6a51ea00886048cd00150cbdf909ff312c85428cb7f67"
+        }
+      ],
+      "freshness": [],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": false,
+        "evidence_required": [
+          "Model-owner approval of this exact specification and data contracts",
+          "Route parity, source freshness, backtests and forecast validation",
+          "Approved calibration, gap/history and uncertainty methodology"
+        ]
+      },
+      "disclosures": [
+        "Research approval boundary retained regardless of production_runtime flag in spec"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "source": "Unapproved versioned research data contracts; no public route"
+      },
+      "calibration": {
+        "credit_activity": 0.2,
+        "fdi_gap": 0.05
+      },
+      "data_contracts": [
+        {
+          "path": "model_specs/qpm/qpm-gdp-data-contract-v0.1.json",
+          "sha256": "a982900d5422aa0f4fe585556768aa4390935d7345adaea6e307fceb28a371dd",
+          "semantic_sha256": "598d4b5a45c8685b5374aa52d71f443a7747b472fb8776b12adc1a5004896574"
+        },
+        {
+          "path": "model_specs/qpm/qpm-official-macro-data-contract-v0.1.json",
+          "sha256": "c98e638cc487f7b3ef0d62030f4856ebc3dc35524a93f58dd1241dc25e0416d6",
+          "semantic_sha256": "792095ed457ec3ff4483bf735dbaf60fde257923d30461d4659f11bcc436b6a5"
+        },
+        {
+          "path": "model_specs/qpm/qpm-monetary-stance-data-contract-v0.1.json",
+          "sha256": "d3ccd6d4b35535943e8070463288a7e601572c63e6993d79af3a18461fa67d7a",
+          "semantic_sha256": "17469667a595a6ce69aba59c45f35d77fec029aa358562b0ded6ac39949174c0"
+        },
+        {
+          "path": "model_specs/qpm/qpm-state-space-contract-v0.1.json",
+          "sha256": "a153c3951f350aa05cff6027ee8d20dc1e3931ca2f57a7d063879800d7203cb0",
+          "semantic_sha256": "5f51e1888cf3c28c292381b13ed655ef1635ef53162c554e72a7e34bef6e77d9"
+        }
+      ],
+      "equation_sources": [
+        {
+          "path": "mcp_server/models/qpm_observed_state.py",
+          "sha256": "578f2a9401bece8b29f124bf5c94608a10e9334b552328c2725ca707947e1edb"
+        },
+        {
+          "path": "mcp_server/models/qpm_siat_gdp.py",
+          "sha256": "f8ef52ef98a029b434a3325a2672efe7a1b7ede89f681f4f1ca954cad7ccac25"
+        },
+        {
+          "path": "mcp_server/models/qpm_official_macro_data.py",
+          "sha256": "5e8e3facbcba8d8ecd53fdda9f044615abcb51022b69c199c59d5aef5b4b7fde"
+        },
+        {
+          "path": "mcp_server/models/qpm_expectations_data.py",
+          "sha256": "7a0ad4ed35b770761833268c0ca9c13ab634c8c780632019ec5a310d494d0879"
+        },
+        {
+          "path": "mcp_server/models/qpm_monetary_stance.py",
+          "sha256": "4fb5e3d6e624fdf00950b4ca1bd4ff586613b7679f886f497b2cfbbd890e7fd9"
+        },
+        {
+          "path": "mcp_server/models/qpm_state_space.py",
+          "sha256": "0c3ab41cc9e0ac58c375bb45b30aa6ff3bc9126f2402e47dd4827a6f325ebcc7"
+        },
+        {
+          "path": "mcp_server/models/qpm_macro_proxies.py",
+          "sha256": "e579f4a5f912933cbd7ccd92a5bb060cdbf71b5e688966bfd3fc47fcf032796f"
+        },
+        {
+          "path": "mcp_server/models/qpm_credit_equation.py",
+          "sha256": "889b21ec3c6254de4c6bd5655ccbaf371514a65198b707f8e0561f9b5e67de2b"
+        },
+        {
+          "path": "mcp_server/models/qpm_extended_runtime.py",
+          "sha256": "6b61baa20cb2dff4a85eba37c9b329240141d9eab9aae3a8f50d3621071f9209"
+        }
+      ]
+    },
+    {
+      "id": "research-qpm-extended-v1.0",
+      "model": "qpm",
+      "equations": {
+        "specification": "model_specs/qpm/qpm-extended-v1.0.json",
+        "declared_equations": {
+          "inflation_source_adapter": "mcp_server/models/qpm_inflation_data_v1.py",
+          "domestic_dataset_entry_point": "mcp_server/models/qpm_inflation_runtime_v1.py",
+          "constrained_equations": "mcp_server/models/qpm_inflation_equations_v1.py",
+          "core_measurement_state_space_experiment": "mcp_server/models/qpm_state_space_v1.py",
+          "retained_state_space_filter": "mcp_server/models/qpm_state_space.py"
+        }
+      },
+      "allocation": "Research specification only; no public execution route",
+      "units": "Defined in versioned specification and data contracts; not interchangeable with core",
+      "period": "Research data-contract periods only",
+      "calibration_version": "1.0.0",
+      "artifacts": [
+        {
+          "path": "model_specs/qpm/qpm-extended-v1.0.json",
+          "sha256": "f3df6b197bbea0ecbe738a61b1fab19ca0bf94d0e74a6dfcf72db076e939383f",
+          "semantic_sha256": "afd037ff4083eb79c0ea745d2204ff994c87a0ba5199eb42ade963c7523665f9"
+        }
+      ],
+      "freshness": [],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": false,
+        "evidence_required": [
+          "Model-owner approval of this exact specification and data contracts",
+          "Route parity, source freshness, backtests and forecast validation",
+          "Approved calibration, gap/history and uncertainty methodology"
+        ]
+      },
+      "disclosures": [
+        "Research approval boundary retained regardless of production_runtime flag in spec"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "source": "Unapproved versioned research data contracts; no public route"
+      },
+      "calibration": {},
+      "data_contracts": [
+        {
+          "path": "model_specs/qpm/qpm-inflation-data-contract-v1.0.json",
+          "sha256": "37e5d7256f4727070eb5d5361d3d6463a392279a2ab67cf48fbb9776c4d221cb",
+          "semantic_sha256": "d007a4394bcba393b3b9c2a1f136ba097de9b9ca3076f3f0765d4b833bb8b2d1"
+        },
+        {
+          "path": "model_specs/qpm/qpm-state-space-contract-v0.1.json",
+          "sha256": "a153c3951f350aa05cff6027ee8d20dc1e3931ca2f57a7d063879800d7203cb0",
+          "semantic_sha256": "5f51e1888cf3c28c292381b13ed655ef1635ef53162c554e72a7e34bef6e77d9"
+        }
+      ],
+      "equation_sources": [
+        {
+          "path": "mcp_server/models/qpm_inflation_data_v1.py",
+          "sha256": "bf7968136f010795a367bda5373336dc9f21153ef4b20a4063fde98433d0d04f"
+        },
+        {
+          "path": "mcp_server/models/qpm_inflation_runtime_v1.py",
+          "sha256": "4aba0a12b0ef934ff9333f4f0a0c099462878c449dfa2bbec4a9390a53ced5d6"
+        },
+        {
+          "path": "mcp_server/models/qpm_inflation_equations_v1.py",
+          "sha256": "037a01971c43de85e0c7fee23d2cc2cc44774e0e369a0ae1c9e0e3673ef5afbf"
+        },
+        {
+          "path": "mcp_server/models/qpm_state_space_v1.py",
+          "sha256": "31a73e667b1e7a12d84911e6fb6f85e5ea3b477f3188596209ab52b2936ad87a"
+        },
+        {
+          "path": "mcp_server/models/qpm_state_space.py",
+          "sha256": "0c3ab41cc9e0ac58c375bb45b30aa6ff3bc9126f2402e47dd4827a6f325ebcc7"
+        }
+      ]
+    },
+    {
+      "id": "research-qpm-extended-v1.1",
+      "model": "qpm",
+      "equations": {
+        "specification": "model_specs/qpm/qpm-extended-v1.1.json",
+        "declared_equations": {
+          "official_import_price": "mcp_server/models/qpm_import_price_data.py",
+          "core_exclusions": "mcp_server/models/qpm_core_exclusions.py",
+          "monthly_equation_engine": "mcp_server/models/qpm_monthly_inflation_v1.py",
+          "monthly_selection_policy": "mcp_server/models/qpm_monthly_inflation_v11.py",
+          "monthly_bridge_state_space_experiment": "mcp_server/models/qpm_state_space_v11.py"
+        }
+      },
+      "allocation": "Research specification only; no public execution route",
+      "units": "Defined in versioned specification and data contracts; not interchangeable with core",
+      "period": "Research data-contract periods only",
+      "calibration_version": "1.1.0",
+      "artifacts": [
+        {
+          "path": "model_specs/qpm/qpm-extended-v1.1.json",
+          "sha256": "80b76d3a8092d0cc5fdc8983fb27bfeb5cbb8697480a701b2f17e93c8f326049",
+          "semantic_sha256": "04c888724064e7651e7ecf22cd4ca977f3cdc0c7cdd1501a1460c4f4c2fdcbeb"
+        }
+      ],
+      "freshness": [],
+      "approval": {
+        "status": "pending_model_owner",
+        "authoritative": false,
+        "diagnostic": false,
+        "evidence_required": [
+          "Model-owner approval of this exact specification and data contracts",
+          "Route parity, source freshness, backtests and forecast validation",
+          "Approved calibration, gap/history and uncertainty methodology"
+        ]
+      },
+      "disclosures": [
+        "Research approval boundary retained regardless of production_runtime flag in spec"
+      ],
+      "tolerance": {
+        "absolute": 1e-06,
+        "rounded_qpm_level": 0.0001,
+        "rounded_fx_uzs_per_usd": 0.1,
+        "rounded_monetary": 0.001,
+        "rounded_persons": 1
+      },
+      "input_contract": {
+        "source": "Unapproved versioned research data contracts; no public route"
+      },
+      "calibration": {
+        "selected": "monthly_core_import_gap",
+        "selection_rule": "fewest regressors among admitted candidates within two percent of best RMSE",
+        "observations": 50,
+        "rolling_forecasts": 26,
+        "model_rmse": 0.3729969443,
+        "persistence_rmse": 0.4057792387,
+        "rmse_improvement_percent": 8.0788495823,
+        "model_mae": 0.3107746601,
+        "persistence_mae": 0.3475956162,
+        "mae_improvement_percent": 10.5930438735,
+        "coefficients": {
+          "intercept": -0.5906895566,
+          "lag_target": 0.9076250382,
+          "import_price_yoy_lag": 0.1107118042,
+          "output_gap_lag": 0.1366674152
+        },
+        "passes_training_window_stability": true,
+        "admitted_as_forecast_bridge": true,
+        "structural_interpretation_allowed": false
+      },
+      "data_contracts": [
+        {
+          "path": "model_specs/qpm/qpm-inflation-data-contract-v1.1.json",
+          "sha256": "760e7dd9b644a0ba89e35b93799d4af6fe6fcf05c80b2f0fa776471190538b36",
+          "semantic_sha256": "24ef7400e93fd9f2ecc778909f56f076b019b008d0bd804649e8e28b88693115"
+        },
+        {
+          "path": "model_specs/qpm/qpm-state-space-contract-v0.1.json",
+          "sha256": "a153c3951f350aa05cff6027ee8d20dc1e3931ca2f57a7d063879800d7203cb0",
+          "semantic_sha256": "5f51e1888cf3c28c292381b13ed655ef1635ef53162c554e72a7e34bef6e77d9"
+        }
+      ],
+      "equation_sources": [
+        {
+          "path": "mcp_server/models/qpm_import_price_data.py",
+          "sha256": "94ddde8b38b23e76ebc1a2d2524b5c9003f1d308b5d7d342041d910ad630e83e"
+        },
+        {
+          "path": "mcp_server/models/qpm_core_exclusions.py",
+          "sha256": "8a7a13c6e4e85da2aa757de376d1a142ca07385ce5bbbc001cf20f9f4b53624b"
+        },
+        {
+          "path": "mcp_server/models/qpm_monthly_inflation_v1.py",
+          "sha256": "d36a85f6537e64afb972354f1cf99eb212b27694bf9e4e991c2e00837af5a57f"
+        },
+        {
+          "path": "mcp_server/models/qpm_monthly_inflation_v11.py",
+          "sha256": "d49f328baab51b20dcb57f07d228876108d10ed8ec2d2b90d37442788a2d81cd"
+        },
+        {
+          "path": "mcp_server/models/qpm_state_space_v11.py",
+          "sha256": "68d304eb9eea08eea39b005efb3967f3d74839192e9dd1ee9abcb40bb2715c21"
+        }
+      ]
+    }
+  ],
+  "routes": {
+    "ui:qpm": "level-consistent-judgment-v1",
+    "ui:qpm-artifact": "legacy-v0.3",
+    "ui:dfm": "dfm-source-reconciled-v1",
+    "ui:io": "io-total-resource-buckets-v1",
+    "ui:pe": "pe-share-scaled-usd-v2",
+    "ui:cge": "cge-formula-reference-v1",
+    "policy-chat:qpm": "qpm-core-irf-v0.3",
+    "policy-chat:dfm": "dfm-legacy-state-v0",
+    "policy-chat:io": "io-legacy-output-v0",
+    "mcp:qpm-irf": "qpm-core-irf-v0.3",
+    "mcp:qpm-baseline": "qpm-level-core-judgment-v1",
+    "mcp:dfm": "dfm-legacy-state-v0",
+    "mcp:io": "io-legacy-output-v0",
+    "mcp:pe": "pe-share-scaled-usd-v2",
+    "mcp:cge": "cge-formula-reference-v1",
+    "mcp:fpp": "fpp-reduced-form-v0",
+    "ui:fpp": "fpp-reduced-form-v0",
+    "policy-chat:fpp": "fpp-reduced-form-v0"
+  }
+}

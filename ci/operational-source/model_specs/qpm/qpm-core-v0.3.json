@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0.0",
+  "model_id": "qpm-core",
+  "model_version": "0.3.0",
+  "frequency": "quarterly",
+  "numeric_convention": {
+    "percent_scale": 100,
+    "one_percentage_point": 1.0,
+    "positive_exchange_rate_change": "UZS depreciation",
+    "dynamic_form": "steady-state deviation"
+  },
+  "solver": {
+    "algorithm": "bidirectional-gauss-seidel",
+    "max_iterations": 600,
+    "reference_tolerance": 1e-8,
+    "terminal_buffer_quarters": 10,
+    "external_demand_persistence": 0.75
+  },
+  "parameters": {
+    "b1": {"default": 0.7, "minimum": 0.3, "maximum": 0.95, "equation": "is", "meaning": "Output-gap persistence", "status": "literature-calibrated"},
+    "b2": {"default": 0.2, "minimum": 0.05, "maximum": 0.6, "equation": "is", "meaning": "Monetary-conditions effect on demand", "status": "literature-calibrated"},
+    "b3": {"default": 0.3, "minimum": 0.05, "maximum": 0.6, "equation": "is", "meaning": "Foreign output-gap spillover", "status": "literature-calibrated"},
+    "b4": {"default": 0.6, "minimum": 0.1, "maximum": 0.9, "equation": "mci", "meaning": "Real-interest-rate weight in MCI", "status": "literature-calibrated"},
+    "a1": {"default": 0.6, "minimum": 0.3, "maximum": 0.9, "equation": "phillips", "meaning": "Backward-looking inflation weight", "status": "literature-calibrated"},
+    "a2": {"default": 0.2, "minimum": 0.05, "maximum": 0.5, "equation": "phillips", "meaning": "Real-marginal-cost pass-through", "status": "literature-calibrated"},
+    "a3": {"default": 0.65, "minimum": 0.2, "maximum": 0.9, "equation": "rmc", "meaning": "Domestic-cost share in real marginal cost", "status": "provisional-judgment"},
+    "a4": {"default": 0.12, "minimum": 0.0, "maximum": 0.35, "equation": "phillips", "meaning": "Direct quarterly import-price pass-through", "status": "literature-calibrated"},
+    "g1": {"default": 0.8, "minimum": 0.3, "maximum": 0.95, "equation": "taylor", "meaning": "Policy-rate smoothing", "status": "literature-calibrated"},
+    "g2": {"default": 1.5, "minimum": 1.0, "maximum": 3.0, "equation": "taylor", "meaning": "Inflation response", "status": "literature-calibrated"},
+    "g3": {"default": 0.5, "minimum": 0.1, "maximum": 1.5, "equation": "taylor", "meaning": "Output-gap response", "status": "literature-calibrated"},
+    "e1": {"default": 0.7, "minimum": 0.1, "maximum": 0.9, "equation": "uip", "meaning": "Backward-looking exchange-rate weight", "status": "provisional-judgment"}
+  },
+  "steady_state": {
+    "inflation_target": {"default": 5.0, "unit": "percent annualized", "status": "CBU-public"},
+    "neutral_real_rate": {"default": 3.5, "unit": "percent annualized", "status": "provisional-judgment"},
+    "potential_growth": {"default": 6.0, "unit": "percent year-on-year", "status": "provisional-judgment"}
+  },
+  "equations": {
+    "uip": "s[t] = (1-e1)*s[t+1] + e1*s[t-1] - (rs[t]-risk[t])/4 + exchange_shock[t]",
+    "cpi_level": "l_cpi[t] = l_cpi[t-1] + pi[t-1]/4",
+    "rer_gap": "z_gap[t] = s[t] - l_cpi[t]",
+    "import_price": "dpm[t] = s[t] - s[t-1]",
+    "rmc": "rmc[t] = a3*gap[t] + (1-a3)*z_gap[t]",
+    "phillips": "pi[t] = a1*pi[t-1] + (1-a1)*pi[t+1] + a2*rmc[t] + a4*dpm[t] + inflation_shock[t]",
+    "inflation_yoy": "pi4[t] = (pi[t] + pi[t-1] + pi[t-2] + pi[t-3])/4",
+    "taylor": "rs[t] = g1*rs[t-1] + (1-g1)*(pi[t+1] + g2*pi4[t+4] + g3*gap[t]) + monetary_shock[t]",
+    "real_rate_gap": "rr_gap[t] = rs[t] - pi[t+1]",
+    "mci": "mci[t] = b4*rr_gap[t] - (1-b4)*z_gap[t]",
+    "is": "gap[t] = b1*gap[t-1] - b2*mci[t] + b3*gap_star[t] + demand_shock[t]",
+    "external_demand": "gap_star[t] = 0.75*gap_star[t-1]"
+  },
+  "shock_ids": ["demand", "inflation", "exchange", "monetary", "risk", "external_demand"],
+  "source_files": [
+    "qpm_uzbekistan/index.html",
+    "scripts/export_qpm.R",
+    "mcp_server/models/qpm.py",
+    "apps/policy-ui/src/data/scenario-lab/qpm-solver.ts"
+  ],
+  "golden_fixture": "mcp_server/tests/fixtures/qpm-core-v0.3-golden.json"
+}

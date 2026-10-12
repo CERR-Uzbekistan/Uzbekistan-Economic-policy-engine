@@ -1,0 +1,64 @@
+{
+  "contract_id": "qpm-monetary-stance-data-contract",
+  "version": "0.1.0",
+  "status": "research_diagnostic",
+  "as_of": "2026-07-20",
+  "production_authorized": false,
+  "survey_expectations": {
+    "institution": "Central Bank of the Republic of Uzbekistan",
+    "dashboard_url": "https://narxtahlil.uz/expectations/",
+    "api_url": "https://narxtahlil.uz/api/expectations/dashboard/",
+    "local_snapshot": "scripts/overview/source-discovery/phase3/cbu-inflation-expectations-2024m01-2026m06.json",
+    "respondents": ["household", "business"],
+    "horizon_months": 12,
+    "unit": "percent",
+    "frequency": "monthly",
+    "coverage": "2024M01/2026M06",
+    "quarterly_aggregation": "arithmetic mean of three monthly national values",
+    "composite": "equal-weight mean of household and business aggregates",
+    "readiness": "verified_official_api"
+  },
+  "expert_expectations": {
+    "institution": "Central Bank of the Republic of Uzbekistan",
+    "source": "https://cbu.uz/upload/medialibrary/bf1/0lh2ynrq8sb4cg0sochnpisoziaizrrt/MPR_2026Q1_ENG.pdf",
+    "page": 29,
+    "horizons": ["12_month", "3_year"],
+    "coverage": "2025M12/2026M03",
+    "use": "respondent sensitivity only",
+    "readiness": "verified_official_report_text"
+  },
+  "policy_rate": {
+    "contract": "model_specs/qpm/qpm-official-macro-data-contract-v0.1.json",
+    "quarterly_aggregation": "calendar-day-weighted mean of official event rates"
+  },
+  "neutral_real_rate_benchmark": {
+    "source": "https://cbu.uz/upload/iblock/552/ub8r0kacxr494fo7gmlk8z23lg598w72/HEIDWP02_2025.pdf",
+    "paper": "Natural Rate of Interest in Uzbekistan",
+    "cross_model_central_percent": 4.0,
+    "cross_model_range_percent": [3.4, 4.5],
+    "cbu_qpm_2020_2024_average_percent": 3.02,
+    "cbu_qpm_2023q3_percent": 2.97,
+    "interpretation": "literature benchmark range; not a time-varying current-sample estimate"
+  },
+  "transformations": {
+    "ex_ante_real_policy_rate": "quarterly policy rate minus quarterly mean 12-month expected inflation",
+    "central_stance_gap": "ex-ante real policy rate minus 4.0 percent neutral benchmark",
+    "stance_gap_uncertainty_interval": "[real rate - 4.5, real rate - 3.4]",
+    "credit_regressor_timing": "one-quarter lag"
+  },
+  "validation_gates": {
+    "monthly_periods_contiguous": true,
+    "complete_quarters_only": true,
+    "respondent_series_not_silently_blended_with_experts": true,
+    "minimum_credit_estimation_observations": 8,
+    "minimum_rolling_forecasts_for_promotion": 8,
+    "current_rolling_forecasts": 0
+  },
+  "limitations": [
+    "Survey expectations are not model-consistent expectations.",
+    "The equal-weight household/business composite is a transparent sensitivity convention, not an estimated optimal weight.",
+    "The neutral-rate range is uncertain and does not capture time variation after the working-paper sample.",
+    "The expert series is too short for estimation and is kept separate.",
+    "The expectations-based credit equation is not eligible for promotion without rolling forecast evidence."
+  ]
+}

@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="../shared/model-readiness.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Input-Output Model — Uzbekistan 2022</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/design-system.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="io_data.js"></script>
+<script src="../shared/toast.js"></script>
+<script src="../shared/scenario-engine.js"></script>
+<script src="../shared/ai-advisor.js"></script>
+<script src="../shared/i18n.js"></script>
+<script src="../shared/registry-loader.js"></script>
+<script>window.addEventListener('load', () => EPE?.ready(() => EPE.badge()));</script>
+<style>
+/* Tokens inherited from design-system.css — aliases for backward compat */
+:root{
+  --card:var(--surface);--primary:var(--navy2);--primary-l:var(--blue);
+}
+
+header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:0 24px;
+  display:flex;align-items:center;gap:14px;height:var(--header-h);box-shadow:0 2px 10px rgba(0,0,0,.25);
+  position:sticky;top:0;z-index:100;}
+.logo{width:36px;height:36px;background:rgba(255,255,255,.12);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:18px;}
+.header-title h1{font-size:16px;font-weight:700;}
+.header-title p{font-size:10px;opacity:.6;text-transform:uppercase;letter-spacing:1px;}
+.hbadge{background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.2);
+  font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.5px;}
+.lang-switcher{margin-left:auto;display:flex;gap:6px;align-items:center;}
+.lang-btn{background:none;border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:4px 10px;
+  font-size:12px;font-weight:700;color:rgba(255,255,255,.65);cursor:pointer;font-family:inherit;transition:all .15s;}
+.lang-btn.active{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.4);color:#fff;}
+
+nav{background:var(--card);border-bottom:1px solid var(--border);display:flex;padding:0 20px;overflow-x:auto;}
+.tab{padding:13px 18px;font-size:13px;font-weight:600;color:var(--text2);border:none;background:none;
+  cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;}
+.tab:hover{color:var(--primary);}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary);}
+
+.page{display:none;padding:22px 22px 50px;max-width:1320px;margin:0 auto;}
+.page.active{display:block;}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.span2{grid-column:span 2;}
+.span3{grid-column:span 3;}
+
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:18px 20px;border:1px solid var(--border);}
+.card-title{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;
+  color:var(--text3);margin-bottom:4px;}
+.card-sub{font-size:11px;color:#aab;margin-bottom:12px;}
+.kpi{font-size:30px;font-weight:800;line-height:1.1;}
+.kpi-unit{font-size:12px;color:var(--text2);margin-top:3px;}
+.kpi-note{font-size:11px;color:var(--text3);margin-top:5px;}
+.slabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:22px 0 12px;display:flex;align-items:center;gap:8px;}
+.slabel::after{content:'';flex:1;height:1px;background:var(--border);}
+.chart-wrap{position:relative;}
+
+/* Table */
+table{width:100%;border-collapse:collapse;font-size:12.5px;}
+th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.6px;
+  color:var(--text3);font-weight:700;padding:8px 10px;border-bottom:2px solid var(--border);
+  cursor:pointer;user-select:none;white-space:nowrap;}
+th:hover{color:var(--primary);}
+td{padding:7px 10px;border-bottom:1px solid #f0f2f5;vertical-align:middle;}
+tr:hover td{background:#fffbf3;}
+.code-badge{font-family:'JetBrains Mono','Consolas',monospace;font-size:10px;
+  background:var(--bg);padding:2px 6px;border-radius:5px;color:var(--text2);}
+
+/* Badges */
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.4px;}
+.badge-key{background:#fef3c7;color:#92400e;}
+.badge-back{background:#dbeafe;color:#1e40af;}
+.badge-fwd{background:#d1fae5;color:#065f46;}
+.badge-weak{background:#f1f5f9;color:#64748b;}
+.badge-strong{background:#ede9fe;color:#5b21b6;}
+.pos{color:var(--green);font-weight:700;}
+.neg{color:var(--red);font-weight:700;}
+.clickable{cursor:pointer;color:var(--primary-l);font-weight:600;}
+.clickable:hover{text-decoration:underline;}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:8px;
+  font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:all .18s;}
+.btn-amber{background:var(--navy2);color:#fff;}
+.btn-amber:hover{background:var(--navy);}
+.btn-blue{background:var(--primary);color:#fff;}
+.btn-blue:hover{background:#0d2550;}
+.btn-outline{background:#fff;color:var(--text2);border:1px solid var(--border);}
+.btn-outline:hover{background:var(--bg);}
+.btn-sm{padding:5px 12px;font-size:11px;}
+.btn-red{background:#fee2e2;color:var(--red);border:1px solid #fca5a5;}
+.btn-red:hover{background:var(--red);color:#fff;}
+
+/* Simulator panels */
+.sim-panel{background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px 22px;margin-bottom:18px;}
+.sim-title{font-size:14px;font-weight:700;color:#92400e;margin-bottom:4px;}
+.sim-sub{font-size:12px;color:#a16207;margin-bottom:14px;}
+.sim-inputs{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;}
+.sim-field{display:flex;flex-direction:column;gap:4px;}
+.sim-field label{font-size:11px;font-weight:600;color:#78350f;}
+.sim-field input,.sim-field select{border:1px solid #fcd34d;border-radius:7px;
+  padding:8px 12px;font-size:13px;background:#fff;outline:none;min-width:180px;}
+.sim-field input:focus,.sim-field select:focus{border-color:var(--amber);}
+
+/* Price panel (blue theme) */
+.price-panel{background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px 22px;margin-bottom:18px;}
+.price-title{font-size:14px;font-weight:700;color:#1e3a8a;margin-bottom:4px;}
+.price-sub{font-size:12px;color:#1e40af;margin-bottom:14px;}
+.price-field{display:flex;flex-direction:column;gap:4px;}
+.price-field label{font-size:11px;font-weight:600;color:#1e3a8a;}
+.price-field input,.price-field select{border:1px solid #93c5fd;border-radius:7px;
+  padding:8px 12px;font-size:13px;background:#fff;outline:none;min-width:180px;}
+
+/* Shock tags */
+.tag-list{display:flex;gap:6px;flex-wrap:wrap;min-height:34px;padding:6px 0;}
+.tag{display:flex;align-items:center;gap:5px;background:#fff;border:1px solid #fcd34d;
+  border-radius:6px;padding:3px 10px;font-size:11px;font-weight:600;color:#92400e;}
+.tag button{background:none;border:none;cursor:pointer;color:#dc2626;font-size:13px;padding:0;line-height:1;}
+.ptag{border-color:#93c5fd;color:#1e3a8a;}
+
+/* Dropdown */
+.dd-wrap{position:relative;}
+.dd-menu{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);
+  border-radius:8px;box-shadow:var(--shadow);max-height:220px;overflow-y:auto;z-index:50;
+  min-width:340px;font-size:12px;}
+.dd-item{padding:7px 14px;cursor:pointer;border-bottom:1px solid #f5f7fa;}
+.dd-item:hover{background:#fffbf3;}
+
+/* Result card */
+.result-card{background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:18px 22px;margin-bottom:16px;}
+.result-card.blue{background:var(--surface);border-color:var(--border);}
+.result-title{font-size:13px;font-weight:700;color:#14532d;margin-bottom:10px;}
+.result-card.blue .result-title{color:#1e3a8a;}
+.result-kpis{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:12px;}
+.rkpi{border-right:1px solid #86efac;padding-right:24px;}
+.result-card.blue .rkpi{border-color:#93c5fd;}
+.rkpi:last-child{border-right:none;}
+.rkpi-val{font-size:22px;font-weight:800;color:var(--green);}
+.result-card.blue .rkpi-val{color:#1d4ed8;}
+.rkpi-lbl{font-size:11px;color:#166534;margin-top:2px;}
+.result-card.blue .rkpi-lbl{color:#1e40af;}
+
+/* JSON panel */
+.json-box{background:#0f172a;border-radius:8px;padding:14px 16px;font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:#94a3b8;max-height:280px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;}
+.json-box .k{color:#7dd3fc;}
+.json-box .v{color:#86efac;}
+.json-box .s{color:#fde68a;}
+
+/* Search */
+.search-row{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap;}
+.search-input{flex:1;min-width:200px;border:1px solid var(--border);border-radius:8px;
+  padding:8px 14px;font-size:13px;color:var(--text);background:#fafbfd;outline:none;}
+.search-input:focus{border-color:var(--amber);}
+.filter-select{border:1px solid var(--border);border-radius:8px;padding:8px 12px;
+  font-size:12px;color:var(--text2);background:#fafbfd;cursor:pointer;}
+
+/* Bar visual */
+.bar-viz{display:inline-block;height:6px;border-radius:3px;vertical-align:middle;margin-left:6px;}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;
+  align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--card);border-radius:16px;width:90%;max-width:780px;
+  max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.modal-header{padding:20px 24px 0;display:flex;justify-content:space-between;align-items:flex-start;}
+.modal-body{padding:20px 24px 24px;}
+.modal-close{background:var(--bg);border:1px solid var(--border);border-radius:8px;
+  padding:6px 12px;font-size:18px;cursor:pointer;line-height:1;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;}
+
+/* Export toolbar */
+.export-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 20px;background:#f8fafc;border-radius:10px;
+  border:1px solid #e0e4ef;margin:16px 0;}
+.export-label{font-size:12px;font-weight:600;color:#64748b;}
+.export-btn{padding:7px 16px;border:1px solid #cbd5e1;background:white;
+  border-radius:8px;font-size:12px;cursor:pointer;color:#334155;
+  display:inline-flex;align-items:center;gap:6px;transition:all .15s;font-family:inherit;}
+.export-btn:hover{background:#1a3a6e;color:white;border-color:#1a3a6e;}
+
+/* Scatter quadrant */
+.quadrant-legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px;}
+.ql-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);}
+.ql-dot{width:10px;height:10px;border-radius:50%;}
+
+/* Multiplier type toggle */
+.mult-toggle{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#f1f5f9;}
+.mult-toggle button{padding:6px 14px;font-size:12px;font-weight:600;border:none;background:transparent;
+  cursor:pointer;color:var(--text2);font-family:inherit;transition:all .15s;}
+.mult-toggle button.active{background:#1a3a6e;color:#fff;}
+.mult-toggle-label{font-size:12px;font-weight:600;color:#64748b;margin-right:4px;}
+
+@media(max-width:900px){
+  .g2,.g3,.g4{grid-template-columns:1fr;}
+  .span2,.span3{grid-column:span 1;}
+  .detail-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🔗</div>
+  <div class="header-title">
+    <h1 data-i18n="title">Input-Output Model — Uzbekistan 2022</h1>
+    <p data-i18n="subtitle">Center for Economic Research and Reforms · Leontief Framework · 136 Sectors</p>
+  </div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" id="lang-en" onclick="setLang('en')">🇬🇧 EN</button>
+    <button class="lang-btn" id="lang-ru" onclick="setLang('ru')">🇷🇺 RU</button>
+    <button class="lang-btn" id="lang-uz" onclick="setLang('uz')">🇺🇿 UZ</button>
+  </div>
+  <div class="hbadge">136 × 136 · 2022</div>
+</header>
+
+<nav>
+  <button class="tab active" onclick="showTab('overview',this)">📊 <span data-i18n="io_tab_overview">Overview & Linkages</span></button>
+  <button class="tab" onclick="showTab('demand',this)">⚡ <span data-i18n="io_tab_demand">Demand Simulator</span></button>
+  <button class="tab" onclick="showTab('price',this)">💰 <span data-i18n="io_tab_price">Price Model</span></button>
+  <button class="tab" onclick="showTab('sectors',this)">🔍 <span data-i18n="io_tab_sectors">Sector Explorer</span></button>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     TAB 1: OVERVIEW & LINKAGES
+════════════════════════════════════════ -->
+<div id="page-overview" class="page active">
+
+  <div class="g4" style="margin-bottom:18px;" id="kpi-row"></div>
+
+  <div class="export-toolbar">
+    <span class="mult-toggle-label">Multiplier:</span>
+    <div class="mult-toggle" id="mult-toggle">
+      <button class="active" onclick="setMultType('I')">Type I</button>
+      <button onclick="setMultType('II')">Type II</button>
+    </div>
+    <span style="font-size:11px;color:var(--text3);margin-right:8px;" id="mult-toggle-hint">Direct + indirect effects</span>
+    <span style="flex:1"></span>
+    <span class="export-label">Export:</span>
+    <button class="export-btn" onclick="exportOverviewCSV()" data-i18n="export_csv">📊 CSV</button>
+    <button class="export-btn" onclick="exportOverviewPNG()" data-i18n="export_png">🖼 PNG Chart</button>
+    <button class="export-btn" onclick="exportOverviewPDF()" data-i18n="export_pdf">📄 PDF Report</button>
+    <button class="export-btn" onclick="ioSaveScenario()" data-i18n="save_scenario" style="background:#16a34a;color:#fff;border-color:#16a34a;">💾 Save</button>
+    <button class="export-btn" onclick="ioAIAnalysis()" data-i18n="ai_analysis" style="background:var(--navy2);color:#fff;border-color:#2563eb;">🤖 AI</button>
+  </div>
+
+  <div class="slabel" data-i18n="io_slabel_linkages">Backward & Forward Linkages — Sector Classification</div>
+  <div class="g2" style="margin-bottom:18px;">
+    <div class="card span2">
+      <div class="card-title" data-i18n="io_scatter_title">Linkage Scatter — Rasmussen Classification</div>
+      <div class="card-sub" data-i18n="io_scatter_sub">Backward linkage (BL) on X-axis; Forward linkage (FL) on Y-axis. Dashed lines at BL=1 / FL=1 divide four quadrants.</div>
+      <div class="quadrant-legend">
+        <span class="ql-item"><span class="ql-dot" style="background:#d97706"></span><span data-i18n="io_key_sector">Key Sector (BL>1, FL>1)</span></span>
+        <span class="ql-item"><span class="ql-dot" style="background:#2563eb"></span><span data-i18n="io_backward_key">Backward Key (BL>1, FL≤1)</span></span>
+        <span class="ql-item"><span class="ql-dot" style="background:#16a34a"></span><span data-i18n="io_forward_key">Forward Key (BL≤1, FL>1)</span></span>
+        <span class="ql-item"><span class="ql-dot" style="background:#94a3b8"></span><span data-i18n="io_weak">Weak (BL≤1, FL≤1)</span></span>
+      </div>
+      <div class="chart-wrap" style="height:400px;"><canvas id="chart-scatter"></canvas></div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:18px;">
+    <div class="card">
+      <div class="card-title" id="chart-out-mult-title" data-i18n="chart_outmult_title">Top 20 — Output Multiplier (Type I)</div>
+      <div class="card-sub" data-i18n="chart_outmult_sub">Total economy-wide output per 1 unit of final demand</div>
+      <div class="chart-wrap" style="height:420px;"><canvas id="chart-out-mult"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title" id="chart-va-mult-title" data-i18n="chart_vamult_title">Top 20 — VA Multiplier (Type I)</div>
+      <div class="card-sub" data-i18n="chart_vamult_sub">Gross value-added generated per unit of final demand</div>
+      <div class="chart-wrap" style="height:420px;"><canvas id="chart-va-mult"></canvas></div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:18px;">
+    <div class="card">
+      <div class="card-title" data-i18n="chart_empmult_title">Top 20 — Employment Multiplier (persons per bln UZS)</div>
+      <div class="card-sub" data-i18n="chart_empmult_sub">Total employment (formal + informal) triggered per 1 bln UZS of final demand</div>
+      <div class="chart-wrap" style="height:420px;"><canvas id="chart-emp-mult"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title" data-i18n="chart_empshare_title">Employment Share — Formal vs Informal (Top 20 by total emp)</div>
+      <div class="card-sub" data-i18n="chart_empshare_sub">Share of formal and informal employment in selected sectors</div>
+      <div class="chart-wrap" style="height:420px;"><canvas id="chart-emp-share"></canvas></div>
+    </div>
+  </div>
+
+  <div class="slabel" data-i18n="io_slabel_full_table">Full Linkage Table (136 Sectors)</div>
+  <div class="card">
+    <div class="search-row">
+      <input class="search-input" id="link-search" data-i18n-placeholder="search_placeholder" placeholder="Search sector name or code…" oninput="filterLinkTable()">
+      <select class="filter-select" id="link-filter-type" onchange="filterLinkTable()">
+        <option value="" data-i18n="filter_all">All types</option>
+        <option value="key" data-i18n="badge_key_short">Key Sector</option>
+        <option value="back" data-i18n="badge_back_short">Backward Key</option>
+        <option value="fwd" data-i18n="badge_fwd_short">Forward Key</option>
+        <option value="weak" data-i18n="badge_weak_short">Weak</option>
+      </select>
+      <select class="filter-select" id="link-sort" onchange="sortLinkTable()">
+        <option value="bl-desc" data-i18n="sort_bl">Sort: BL ↓</option>
+        <option value="fl-desc" data-i18n="sort_fl">FL ↓</option>
+        <option value="out-desc" data-i18n="sort_outm">Output Mult ↓</option>
+        <option value="va-desc" data-i18n="sort_vam">VA Mult ↓</option>
+        <option value="emp-desc" data-i18n="sort_empm">Emp Mult ↓</option>
+      </select>
+    </div>
+    <div style="overflow-x:auto;max-height:500px;overflow-y:auto;">
+      <table id="link-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th data-i18n="th_code">Code</th>
+            <th data-i18n="th_sector">Sector</th>
+            <th onclick="sortBy('bl')">BL <span class="sort-arrow">↕</span></th>
+            <th onclick="sortBy('fl')">FL <span class="sort-arrow">↕</span></th>
+            <th onclick="sortBy('type')" data-i18n="th_type">Type</th>
+            <th onclick="sortBy('outm')" data-i18n="th_outm">Output Mult <span class="sort-arrow">↕</span></th>
+            <th onclick="sortBy('vam')" data-i18n="th_vam">VA Mult <span class="sort-arrow">↕</span></th>
+            <th onclick="sortBy('empm')" data-i18n="th_empm">Emp Mult <span class="sort-arrow">↕</span></th>
+            <th onclick="sortBy('x')" data-i18n="th_output">Output (bln) <span class="sort-arrow">↕</span></th>
+          </tr>
+        </thead>
+        <tbody id="link-tbody"></tbody>
+      </table>
+    </div>
+    <p style="font-size:11px;color:var(--text3);margin-top:8px;" data-i18n="table_footnote">Output in billion UZS (X in millions UZS ÷ 1000) · Employment multiplier = persons per billion UZS of final demand</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 2: DEMAND SIMULATOR
+════════════════════════════════════════ -->
+<div id="page-demand" class="page">
+
+  <div class="sim-panel">
+    <div class="sim-title">⚡ Demand Shock Simulator — Leontief Multiplier Analysis</div>
+    <div class="sim-sub">
+      Specify final demand changes (ΔC + ΔG + ΔI + ΔX − ΔM) per sector, then run: <strong>ΔX = L · ΔY</strong>
+    </div>
+
+    <!-- Aggregate mode -->
+    <div style="display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap;">
+      <div class="sim-field">
+        <label>Mode</label>
+        <select id="demand-mode" class="filter-select" onchange="toggleDemandMode()">
+          <option value="sector">By Sector</option>
+          <option value="agg">Aggregate Shock</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Sector mode -->
+    <div id="demand-sector-mode">
+      <div class="sim-inputs">
+        <div class="sim-field dd-wrap" style="flex:2;min-width:240px;">
+          <label>Search & Add Sector</label>
+          <input type="text" id="demand-search" placeholder="Type sector name or code…" oninput="demandSearch()" autocomplete="off">
+          <div class="dd-menu" id="demand-dd"></div>
+        </div>
+        <div class="sim-field">
+          <label>ΔC (Consumption, bln UZS)</label>
+          <input type="number" id="d-dc" value="0" step="1">
+        </div>
+        <div class="sim-field">
+          <label>ΔG (Government, bln UZS)</label>
+          <input type="number" id="d-dg" value="0" step="1">
+        </div>
+        <div class="sim-field">
+          <label>ΔI (Investment, bln UZS)</label>
+          <input type="number" id="d-di" value="0" step="1">
+        </div>
+        <div class="sim-field">
+          <label>ΔX (Exports, bln UZS)</label>
+          <input type="number" id="d-dx" value="0" step="1">
+        </div>
+        <div class="sim-field">
+          <label>ΔM (Imports, bln UZS)</label>
+          <input type="number" id="d-dm" value="0" step="1">
+        </div>
+        <div class="sim-field" style="justify-content:flex-end;">
+          <button class="btn btn-amber" onclick="addDemandSector()">+ Add Sector</button>
+        </div>
+      </div>
+
+      <div class="slabel" style="margin-top:14px;">Sectors in shock (click × to remove)</div>
+      <div class="tag-list" id="demand-tags"></div>
+    </div>
+
+    <!-- Aggregate mode -->
+    <div id="demand-agg-mode" style="display:none;">
+      <div class="sim-inputs">
+        <div class="sim-field">
+          <label>ΔC Total (bln UZS)</label>
+          <input type="number" id="agg-dc" value="0" step="10">
+        </div>
+        <div class="sim-field">
+          <label>ΔG Total (bln UZS)</label>
+          <input type="number" id="agg-dg" value="0" step="10">
+        </div>
+        <div class="sim-field">
+          <label>ΔI Total (bln UZS)</label>
+          <input type="number" id="agg-di" value="0" step="10">
+        </div>
+        <div class="sim-field">
+          <label>ΔX Total (bln UZS)</label>
+          <input type="number" id="agg-dx" value="0" step="10">
+        </div>
+        <div class="sim-field">
+          <label>ΔM Total (bln UZS)</label>
+          <input type="number" id="agg-dm" value="0" step="10">
+        </div>
+        <div class="sim-field">
+          <label>Distribute by</label>
+          <select id="agg-dist" class="filter-select">
+            <option value="output">Output share</option>
+            <option value="gva">GVA share</option>
+            <option value="equal">Equal</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:14px;align-items:center;flex-wrap:wrap;">
+      <button class="btn btn-amber" onclick="runDemandModel()">▶ Run Demand Model</button>
+      <button class="btn btn-outline btn-sm" onclick="clearDemandModel()">✕ Clear</button>
+      <span style="font-size:12px;color:#a16207;">Model: ΔX = L · ΔY &nbsp;|&nbsp; ΔY_i = ΔC_i + ΔG_i + ΔI_i + ΔX_i − ΔM_i</span>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div id="demand-results" style="display:none;">
+    <div class="result-card" id="demand-summary-card">
+      <div class="result-title">📊 Demand Model Results — Economy-wide Effects</div>
+      <div class="result-kpis" id="demand-kpis"></div>
+    </div>
+
+    <div class="export-toolbar">
+      <span class="export-label">Export:</span>
+      <button class="export-btn" onclick="exportDemandCSV()">📥 CSV — Output Effects</button>
+      <button class="export-btn" onclick="exportDemandJSON()">📋 JSON — Full Results</button>
+      <button class="export-btn" onclick="exportDemandPNG()">🖼 PNG — Chart</button>
+    </div>
+
+    <div class="g2" style="margin-bottom:16px;">
+      <div class="card span2">
+        <div class="card-title">Output Effect by Sector (ΔX_i, bln UZS) — Top 30</div>
+        <div class="chart-wrap" style="height:420px;"><canvas id="chart-demand-out"></canvas></div>
+      </div>
+    </div>
+
+    <div class="slabel">Full Sector-level Results</div>
+    <div class="card">
+      <div style="overflow-x:auto;max-height:460px;overflow-y:auto;">
+        <table id="demand-table">
+          <thead>
+            <tr>
+              <th>#</th><th>Code</th><th>Sector</th>
+              <th>ΔY (bln UZS)</th><th>ΔX (bln UZS)</th>
+              <th>ΔVA (bln UZS)</th><th>ΔEmp (persons)</th>
+            </tr>
+          </thead>
+          <tbody id="demand-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="slabel" style="margin-top:18px;">JSON Output</div>
+    <div class="card">
+      <pre class="json-box" id="demand-json"></pre>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 3: PRICE MODEL
+════════════════════════════════════════ -->
+<div id="page-price" class="page">
+
+  <div class="price-panel">
+    <div class="price-title">💰 Price Model — Cost-Push Analysis</div>
+    <div class="price-sub">
+      Specify value-added cost changes (Δv, % change in VA per unit of output), then run: <strong>Δp = Δv · L</strong>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap;">
+      <div class="price-field">
+        <label>Mode</label>
+        <select id="price-mode" class="filter-select" onchange="togglePriceMode()">
+          <option value="sector">By Sector</option>
+          <option value="scenario">Scenario</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Sector mode -->
+    <div id="price-sector-mode">
+      <div class="sim-inputs">
+        <div class="price-field dd-wrap" style="flex:2;min-width:240px;">
+          <label>Search & Add Sector</label>
+          <input type="text" id="price-search" placeholder="Type sector name or code…" oninput="priceSearch()" autocomplete="off">
+          <div class="dd-menu" id="price-dd"></div>
+        </div>
+        <div class="price-field">
+          <label>Δv (VA cost change, %)</label>
+          <input type="number" id="p-dv" value="10" step="1">
+        </div>
+        <div class="price-field" style="justify-content:flex-end;">
+          <button class="btn btn-blue" onclick="addPriceSector()">+ Add Sector</button>
+        </div>
+      </div>
+      <div class="slabel" style="margin-top:14px;">Sectors with cost shock</div>
+      <div class="tag-list" id="price-tags"></div>
+    </div>
+
+    <!-- Scenario mode -->
+    <div id="price-scenario-mode" style="display:none;">
+      <div class="sim-inputs">
+        <div class="price-field">
+          <label>Energy price shock (%)</label>
+          <input type="number" id="sc-energy" value="20" step="5">
+        </div>
+        <div class="price-field">
+          <label>Labour cost shock (%)</label>
+          <input type="number" id="sc-labour" value="15" step="5">
+        </div>
+        <div class="price-field">
+          <label>Import cost shock (%)</label>
+          <input type="number" id="sc-import" value="10" step="5">
+        </div>
+        <div class="price-field">
+          <label>Apply to</label>
+          <select id="sc-apply" class="filter-select">
+            <option value="all">All sectors</option>
+            <option value="industry">Industry (B-E)</option>
+            <option value="services">Services (G-U)</option>
+          </select>
+        </div>
+      </div>
+      <p style="font-size:11px;color:#1e40af;margin-top:8px;">Energy = Mining (B) + Utilities (D,E) sectors; Labour = wages share weighted</p>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:14px;align-items:center;flex-wrap:wrap;">
+      <button class="btn btn-blue" onclick="runPriceModel()">▶ Run Price Model</button>
+      <button class="btn btn-outline btn-sm" onclick="clearPriceModel()">✕ Clear</button>
+      <span style="font-size:12px;color:#1e40af;">Model: Δp_j = Σ_i (Δv_i · L_ij) &nbsp;|&nbsp; row vector times L matrix</span>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div id="price-results" style="display:none;">
+    <div class="result-card blue" id="price-summary-card">
+      <div class="result-title">📊 Price Model Results — Cost-Push Effects</div>
+      <div class="result-kpis" id="price-kpis"></div>
+    </div>
+
+    <div class="export-toolbar">
+      <span class="export-label">Export:</span>
+      <button class="export-btn" onclick="exportPriceCSV()">📥 CSV — Price Effects</button>
+      <button class="export-btn" onclick="exportPriceJSON()">📋 JSON — Full Results</button>
+      <button class="export-btn" onclick="exportPricePNG()">🖼 PNG — Chart</button>
+    </div>
+
+    <div class="g2" style="margin-bottom:16px;">
+      <div class="card span2">
+        <div class="card-title">Price Effect by Sector (Δp_j, %) — Top 30 Most Affected</div>
+        <div class="chart-wrap" style="height:420px;"><canvas id="chart-price-out"></canvas></div>
+      </div>
+    </div>
+
+    <div class="slabel">Full Sector-level Price Effects</div>
+    <div class="card">
+      <div style="overflow-x:auto;max-height:460px;overflow-y:auto;">
+        <table id="price-table">
+          <thead>
+            <tr>
+              <th>#</th><th>Code</th><th>Sector</th>
+              <th>Δv input</th><th>Δp_j (price effect, %)</th><th>Output weight (bln)</th>
+            </tr>
+          </thead>
+          <tbody id="price-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="slabel" style="margin-top:18px;">JSON Output</div>
+    <div class="card">
+      <pre class="json-box" id="price-json"></pre>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 4: SECTOR EXPLORER
+════════════════════════════════════════ -->
+<div id="page-sectors" class="page">
+
+  <div class="search-row">
+    <input class="search-input" id="sec-search" data-i18n-placeholder="search_placeholder" placeholder="Search sector by name or code…" oninput="filterSectors()">
+    <select class="filter-select" id="sec-filter-type" onchange="filterSectors()">
+      <option value="" data-i18n="filter_all">All types</option>
+      <option value="key" data-i18n="badge_key_short">Key Sector</option>
+      <option value="back" data-i18n="badge_back_short">Backward Key</option>
+      <option value="fwd" data-i18n="badge_fwd_short">Forward Key</option>
+      <option value="weak" data-i18n="badge_weak_short">Weak</option>
+    </select>
+    <select class="filter-select" id="sec-sort" onchange="filterSectors()">
+      <option value="bl-desc" data-i18n="sort_bl">Sort: BL ↓</option>
+      <option value="fl-desc" data-i18n="sort_fl">FL ↓</option>
+      <option value="x-desc" data-i18n="sort_output">Output ↓</option>
+      <option value="emp-desc" data-i18n="sort_emp">Employment ↓</option>
+    </select>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;">
+    <div style="overflow-x:auto;max-height:600px;overflow-y:auto;">
+      <table id="sec-table">
+        <thead>
+          <tr>
+            <th>#</th><th data-i18n="th_code">Code</th><th data-i18n="th_sector">Sector</th><th data-i18n="th_type">Type</th>
+            <th>BL</th><th>FL</th><th data-i18n="th_outm_short">Out Mult</th><th data-i18n="th_vam_short">VA Mult</th>
+            <th data-i18n="th_empm_short">Emp Mult</th><th data-i18n="th_formal">Formal %</th>
+            <th data-i18n="th_output">Output (bln)</th><th data-i18n="th_gva">GVA (bln)</th><th data-i18n="th_employment">Employment</th>
+            <th data-i18n="th_detail">Detail</th>
+          </tr>
+        </thead>
+        <tbody id="sec-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SECTOR DETAIL MODAL ═══════ -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal-box">
+    <div class="modal-header">
+      <div>
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px;" id="modal-code"></div>
+        <h2 style="font-size:18px;font-weight:800;" id="modal-name"></h2>
+        <div style="margin-top:6px;" id="modal-badges"></div>
+      </div>
+      <button class="modal-close" onclick="document.getElementById('modal-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="g4" style="margin-bottom:16px;" id="modal-kpis"></div>
+      <div class="detail-grid">
+        <div class="card"><div class="card-title">Multiplier Profile</div><canvas id="modal-chart-mult" style="max-height:200px;"></canvas></div>
+        <div class="card"><div class="card-title">Employment (persons)</div><canvas id="modal-chart-emp" style="max-height:200px;"></canvas></div>
+      </div>
+      <div style="margin-top:14px;" id="modal-top-suppliers"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// DATA & COMPUTED METRICS
+// ═══════════════════════════════════════
+const n = IO_DATA.codes.length; // 136
+
+// VA share per unit output
+const v = IO_DATA.X.map((x,i) => x > 0 ? IO_DATA.GVA[i] / x : 0);
+// Employment per unit output: persons per billion UZS output
+// X is in millions UZS → X/1e3 = billion UZS
+const eTotal  = IO_DATA.X.map((x,i) => x > 0 ? IO_DATA.EmpTotal[i]    / (x/1e3) : 0);
+const eFormal = IO_DATA.X.map((x,i) => x > 0 ? IO_DATA.EmpFormal[i]   / (x/1e3) : 0);
+const eInformal= IO_DATA.X.map((x,i)=> x > 0 ? IO_DATA.EmpInformal[i] / (x/1e3) : 0);
+
+// Leontief L matrix
+const L = IO_DATA.L;
+
+// Output multiplier = col sum of L
+const outMult = new Array(n).fill(0);
+for (let i=0;i<n;i++) for (let j=0;j<n;j++) outMult[j] += L[i][j];
+
+// VA multiplier = Σ_i v_i * L_ij
+const vaMult = new Array(n).fill(0);
+for (let i=0;i<n;i++) for (let j=0;j<n;j++) vaMult[j] += v[i]*L[i][j];
+
+// Emp multiplier (total) = Σ_i e_i * L_ij  [jobs per bln UZS final demand]
+const empMult = new Array(n).fill(0);
+const empFMult= new Array(n).fill(0);
+const empIMult= new Array(n).fill(0);
+for (let i=0;i<n;i++){
+  for (let j=0;j<n;j++){
+    empMult[j]  += eTotal[i]   * L[i][j];
+    empFMult[j] += eFormal[i]  * L[i][j];
+    empIMult[j] += eInformal[i]* L[i][j];
+  }
+}
+
+// Linkages: BL_j = n * colSum_j / totalSum(L), FL_i = n * rowSum_i / totalSum(L)
+let totalL = 0;
+const colSumL = new Array(n).fill(0);
+const rowSumL = new Array(n).fill(0);
+for (let i=0;i<n;i++) for (let j=0;j<n;j++){
+  totalL += L[i][j];
+  colSumL[j] += L[i][j];
+  rowSumL[i] += L[i][j];
+}
+const BL = colSumL.map(cs => n * cs / totalL);
+const FL = rowSumL.map(rs => n * rs / totalL);
+
+function getType(j){
+  if (BL[j]>1 && FL[j]>1) return 'key';
+  if (BL[j]>1 && FL[j]<=1) return 'back';
+  if (BL[j]<=1 && FL[j]>1) return 'fwd';
+  return 'weak';
+}
+
+// Sector records — include both Type I and Type II multipliers
+const sectors = IO_DATA.codes.map((code,j)=>{
+  const bl2=IO_DATA.BL_II[j], fl2=IO_DATA.FL_II[j];
+  const type2 = bl2>1&&fl2>1?'key':bl2>1&&fl2<=1?'back':bl2<=1&&fl2>1?'fwd':'weak';
+  return {
+    j, code, name:IO_DATA.names[j],
+    bl:BL[j], fl:FL[j], type:getType(j),
+    bl2, fl2, type2,
+    outm:outMult[j], vam:vaMult[j],
+    empm:empMult[j], empfm:empFMult[j], empim:empIMult[j],
+    outm2:IO_DATA.outMultII[j], vam2:IO_DATA.vaMultII[j],
+    empm2:IO_DATA.empMultII[j], empfm2:IO_DATA.empFMultII[j], empim2:IO_DATA.empIMultII[j],
+    x:IO_DATA.X[j]/1e3, gva:IO_DATA.GVA[j]/1e3,
+    empT:IO_DATA.EmpTotal[j], empF:IO_DATA.EmpFormal[j], empI:IO_DATA.EmpInformal[j],
+    formalShare: IO_DATA.EmpTotal[j]>0 ? IO_DATA.EmpFormal[j]/IO_DATA.EmpTotal[j]*100 : 0
+  };
+});
+
+const typeCounts = {key:0,back:0,fwd:0,weak:0};
+sectors.forEach(s=>typeCounts[s.type]++);
+
+// ── Active multiplier type (Type I = default) ──
+let multType = 'I';
+// Helpers to get active multiplier values from a sector object
+function abl(s)  { return multType==='II' ? s.bl2   : s.bl; }
+function afl(s)  { return multType==='II' ? s.fl2   : s.fl; }
+function atype(s){ return multType==='II' ? s.type2 : s.type; }
+function aoutm(s){ return multType==='II' ? s.outm2 : s.outm; }
+function avam(s) { return multType==='II' ? s.vam2  : s.vam; }
+function aempm(s){ return multType==='II' ? s.empm2 : s.empm; }
+
+function setMultType(t){
+  multType = t;
+  document.querySelectorAll('#mult-toggle button').forEach((b,i)=>{
+    b.classList.toggle('active', (i===0&&t==='I')||(i===1&&t==='II'));
+  });
+  const hint = document.getElementById('mult-toggle-hint');
+  if(hint) hint.textContent = t==='II'
+    ? 'Direct + indirect + induced (household spending) effects'
+    : 'Direct + indirect effects';
+  // Update chart card titles
+  const outTitle = document.getElementById('chart-out-mult-title');
+  const vaTitle  = document.getElementById('chart-va-mult-title');
+  if(outTitle) outTitle.textContent = 'Top 20 — Output Multiplier (Type '+t+')';
+  if(vaTitle)  vaTitle.textContent  = 'Top 20 — VA Multiplier (Type '+t+')';
+  // Re-render all views
+  buildLinkTable();
+  buildTopChart('chart-out-mult', sectors.slice().sort((a,b)=>aoutm(b)-aoutm(a)).slice(0,20), aoutm, 'Output Multiplier', '#1a3a6e');
+  buildTopChart('chart-va-mult',  sectors.slice().sort((a,b)=>avam(b)-avam(a)).slice(0,20),   avam,  'VA Multiplier', '#16a34a');
+  buildTopChart('chart-emp-mult', sectors.slice().sort((a,b)=>aempm(b)-aempm(a)).slice(0,20), aempm,'Emp Mult (persons/bln UZS)', '#7c3aed');
+  buildScatterChart();
+  initSectors();
+}
+
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+function showTab(name, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+
+// ═══════════════════════════════════════
+// TAB 1: OVERVIEW — INIT
+// ═══════════════════════════════════════
+function initOverview(){
+  // KPI row
+  const totalX = sectors.reduce((s,r)=>s+r.x,0);
+  const totalGVA = sectors.reduce((s,r)=>s+r.gva,0);
+  const totalEmp = IO_DATA.EmpTotal.reduce((a,b)=>a+b,0);
+  document.getElementById('kpi-row').innerHTML = `
+    <div class="card"><div class="card-title">Total Output</div>
+      <div class="kpi">${fmtT(totalX)}</div>
+      <div class="kpi-unit">trillion UZS (2022)</div></div>
+    <div class="card"><div class="card-title">Total GVA</div>
+      <div class="kpi">${fmtT(totalGVA)}</div>
+      <div class="kpi-unit">trillion UZS</div></div>
+    <div class="card"><div class="card-title">Sectors Analysed</div>
+      <div class="kpi">${n}</div>
+      <div class="kpi-unit">sectors (all linked)</div>
+      <div class="kpi-note">Key: ${typeCounts.key} · BK: ${typeCounts.back} · FK: ${typeCounts.fwd} · Weak: ${typeCounts.weak}</div></div>
+    <div class="card"><div class="card-title">Total Employment</div>
+      <div class="kpi">${(totalEmp/1e6).toFixed(2)}M</div>
+      <div class="kpi-unit">persons (2022)</div>
+      <div class="kpi-note">Formal: ${(IO_DATA.EmpFormal.reduce((a,b)=>a+b,0)/1e6).toFixed(2)}M · Informal: ${(IO_DATA.EmpInformal.reduce((a,b)=>a+b,0)/1e6).toFixed(2)}M</div></div>
+  `;
+
+  buildScatter();
+  buildTopChart('chart-out-mult', sectors.slice().sort((a,b)=>aoutm(b)-aoutm(a)).slice(0,20), aoutm, 'Output Multiplier', '#1a3a6e');
+  buildTopChart('chart-va-mult',  sectors.slice().sort((a,b)=>avam(b)-avam(a)).slice(0,20),   avam,  'VA Multiplier', '#16a34a');
+  buildTopChart('chart-emp-mult', sectors.slice().sort((a,b)=>aempm(b)-aempm(a)).slice(0,20), aempm,'Emp Mult (persons/bln UZS)', '#7c3aed');
+  buildEmpShareChart();
+  buildLinkTable();
+}
+
+let scatterChartRef = null;
+function buildScatter(){ buildScatterChart(); }
+function buildScatterChart(){
+  const typeColor = {key:'#d97706',back:'#2563eb',fwd:'#16a34a',weak:'#94a3b8'};
+  const typeLabel = {key:'Key Sector (BL>1, FL>1)',back:'Backward Key (BL>1, FL≤1)',fwd:'Forward Key (BL≤1, FL>1)',weak:'Weak (BL≤1, FL≤1)'};
+  const allBL = sectors.map(abl), allFL = sectors.map(afl);
+  const maxBL = Math.min(Math.ceil(Math.max(...allBL))+0.5, 8);
+  const maxFL = Math.min(Math.ceil(Math.max(...allFL))+0.5, 8);
+  const pointDatasets = ['key','back','fwd','weak'].map(t=>({
+    label: typeLabel[t],
+    data: sectors.filter(s=>atype(s)===t).map(s=>({x:abl(s),y:afl(s),label:s.code+' '+getSectorName(s.j).slice(0,30)})),
+    backgroundColor: typeColor[t]+'cc',
+    borderColor: typeColor[t],
+    borderWidth:1, pointRadius:4, pointHoverRadius:8,
+    type:'scatter'
+  }));
+  // Reference lines as line datasets (no plugin needed)
+  const refDatasets = [
+    { label:'_BL=1', data:[{x:1,y:0},{x:1,y:maxFL}], borderColor:'#94a3b8', borderWidth:1.5,
+      borderDash:[5,5], pointRadius:0, showLine:true, type:'line', fill:false },
+    { label:'_FL=1', data:[{x:0,y:1},{x:maxBL,y:1}], borderColor:'#94a3b8', borderWidth:1.5,
+      borderDash:[5,5], pointRadius:0, showLine:true, type:'line', fill:false }
+  ];
+  if(scatterChartRef){scatterChartRef.destroy();}
+  scatterChartRef = new Chart(document.getElementById('chart-scatter'),{
+    type:'scatter',
+    data:{datasets:[...pointDatasets, ...refDatasets]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{
+          position:'top',
+          labels:{filter:item=>!item.text.startsWith('_')}
+        },
+        tooltip:{callbacks:{
+          label:d=>{
+            if(!d.raw.label) return null;
+            return `${d.raw.label} (BL=${d.raw.x.toFixed(2)}, FL=${d.raw.y.toFixed(2)})`;
+          }
+        }}
+      },
+      scales:{
+        x:{min:0,title:{display:true,text:'Backward Linkage (BL)'},grid:{color:'#f0f2f5'}},
+        y:{min:0,title:{display:true,text:'Forward Linkage (FL)'},grid:{color:'#f0f2f5'}}
+      }
+    }
+  });
+}
+
+const _topChartRefs = {};
+function buildTopChart(canvasId, data, accessor, label, color){
+  if(_topChartRefs[canvasId]){_topChartRefs[canvasId].destroy();}
+  const getValue = typeof accessor === 'function' ? accessor : s=>s[accessor];
+  _topChartRefs[canvasId] = new Chart(document.getElementById(canvasId),{
+    type:'bar',
+    data:{
+      labels: data.map(s=>s.code),
+      datasets:[{label, data:data.map(getValue),
+        backgroundColor:color+'cc', borderColor:color, borderWidth:1, borderRadius:4}]
+    },
+    options:{
+      indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>{
+          const s=data[ctx.dataIndex];
+          return [`${getSectorName(s.j).slice(0,50)}`, `${label}: ${ctx.raw.toFixed(3)}`];
+        }}}},
+      scales:{x:{grid:{color:'#f0f2f5'}},y:{grid:{display:false},ticks:{font:{size:10}}}}
+    }
+  });
+}
+
+function buildEmpShareChart(){
+  const top20 = sectors.slice().sort((a,b)=>b.empT-a.empT).slice(0,20);
+  new Chart(document.getElementById('chart-emp-share'),{
+    type:'bar',
+    data:{
+      labels: top20.map(s=>s.code),
+      datasets:[
+        {label:'Formal (%)', data:top20.map(s=>s.formalShare.toFixed(1)),
+          backgroundColor:'#2563ebcc', borderRadius:3},
+        {label:'Informal (%)', data:top20.map(s=>(100-s.formalShare).toFixed(1)),
+          backgroundColor:'#f59e0bcc', borderRadius:3}
+      ]
+    },
+    options:{
+      indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{position:'top'},
+        tooltip:{callbacks:{label:ctx=>{
+          const s=top20[ctx.dataIndex];
+          return [`${getSectorName(s.j).slice(0,40)}`, `${ctx.dataset.label}: ${ctx.raw}%`];
+        }}}},
+      scales:{x:{stacked:true,max:100,grid:{color:'#f0f2f5'}},y:{stacked:true,grid:{display:false},ticks:{font:{size:10}}}}
+    }
+  });
+}
+
+// ── Link Table ──
+let linkData = sectors.slice();
+function buildLinkTable(){
+  const tbody = document.getElementById('link-tbody');
+  tbody.innerHTML = linkData.map((s,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td><span class="code-badge">${esc(s.code)}</span></td>
+      <td class="clickable" onclick="openModal(${s.j})">${esc(getSectorName(s.j).slice(0,45))}</td>
+      <td>${abl(s).toFixed(3)}<span class="bar-viz" style="width:${Math.min(abl(s)*30,60)}px;background:#d97706aa"></span></td>
+      <td>${afl(s).toFixed(3)}<span class="bar-viz" style="width:${Math.min(afl(s)*30,60)}px;background:#16a34aaa"></span></td>
+      <td>${typeBadge(atype(s))}</td>
+      <td>${aoutm(s).toFixed(3)}</td>
+      <td>${avam(s).toFixed(3)}</td>
+      <td>${aempm(s).toFixed(2)}</td>
+      <td>${fmtN(s.x)}</td>
+    </tr>`).join('');
+}
+
+function filterLinkTable(){
+  const q=(document.getElementById('link-search').value||'').toLowerCase();
+  const ft=document.getElementById('link-filter-type').value;
+  linkData = sectors.filter(s=>{
+    const match=sectorMatchesQuery(s,q);
+    const tm=!ft||atype(s)===ft;
+    return match&&tm;
+  });
+  sortLinkTable();
+}
+function sortLinkTable(){
+  const sv=document.getElementById('link-sort').value;
+  const [f,dir]=sv.split('-');
+  const fieldFn={bl:abl,fl:afl,out:aoutm,va:avam,emp:aempm};
+  const fn=fieldFn[f]||(s=>s.x);
+  linkData.sort((a,b)=>dir==='desc'?fn(b)-fn(a):fn(a)-fn(b));
+  buildLinkTable();
+}
+function sortBy(f){
+  const el=document.getElementById('link-sort');
+  const cur=el.value;
+  el.value=f+'-desc';
+  sortLinkTable();
+}
+
+// ═══════════════════════════════════════
+// TAB 2: DEMAND MODEL
+// ═══════════════════════════════════════
+let demandShocks = []; // [{j, name, dc, dg, di, dx, dm, dy}]
+let demandChartRef = null;
+let lastDemandKPIs = null; // stored after runDemandModel for save/AI
+
+function toggleDemandMode(){
+  const m = document.getElementById('demand-mode').value;
+  document.getElementById('demand-sector-mode').style.display = m==='sector'?'':'none';
+  document.getElementById('demand-agg-mode').style.display = m==='agg'?'':'none';
+}
+
+let demandSearchResults = [];
+function demandSearch(){
+  const q=(document.getElementById('demand-search').value||'').toLowerCase();
+  const dd=document.getElementById('demand-dd');
+  if(!q){dd.style.display='none';return;}
+  demandSearchResults = sectors.filter(s=>sectorMatchesQuery(s,q)).slice(0,12);
+  dd.innerHTML = demandSearchResults.map((s,i)=>`<div class="dd-item" onclick="selectDemandSector(${i})">${s.code} — ${getSectorName(s.j).slice(0,60)}</div>`).join('');
+  dd.style.display = demandSearchResults.length?'block':'none';
+}
+
+function selectDemandSector(i){
+  const s=demandSearchResults[i];
+  document.getElementById('demand-search').value=s.code+' — '+getSectorName(s.j).slice(0,40);
+  document.getElementById('demand-dd').style.display='none';
+  window._selectedDemandSector=s;
+}
+
+function addDemandSector(){
+  const s=window._selectedDemandSector;
+  if(!s){alert('Please search and select a sector first.');return;}
+  const dc=+document.getElementById('d-dc').value||0;
+  const dg=+document.getElementById('d-dg').value||0;
+  const di=+document.getElementById('d-di').value||0;
+  const dx=+document.getElementById('d-dx').value||0;
+  const dm=+document.getElementById('d-dm').value||0;
+  const dy=dc+dg+di+dx-dm;
+  // merge if same sector
+  const ex=demandShocks.findIndex(sh=>sh.j===s.j);
+  if(ex>=0){
+    demandShocks[ex]={...demandShocks[ex],dc:demandShocks[ex].dc+dc,dg:demandShocks[ex].dg+dg,
+      di:demandShocks[ex].di+di,dx:demandShocks[ex].dx+dx,dm:demandShocks[ex].dm+dm};
+    demandShocks[ex].dy=demandShocks[ex].dc+demandShocks[ex].dg+demandShocks[ex].di+demandShocks[ex].dx-demandShocks[ex].dm;
+  } else {
+    demandShocks.push({j:s.j,name:s.name,code:s.code,dc,dg,di,dx,dm,dy});
+  }
+  renderDemandTags();
+  window._selectedDemandSector=null;
+  document.getElementById('demand-search').value='';
+  ['d-dc','d-dg','d-di','d-dx','d-dm'].forEach(id=>document.getElementById(id).value=0);
+}
+
+function removeDemandShock(j){
+  demandShocks=demandShocks.filter(s=>s.j!==j);
+  renderDemandTags();
+}
+
+function renderDemandTags(){
+  document.getElementById('demand-tags').innerHTML = demandShocks.map(s=>
+    `<span class="tag">${s.code}: ΔY=${fmtN(s.dy)} bln
+      <button onclick="removeDemandShock(${s.j})">×</button></span>`).join('');
+}
+
+function runDemandModel(){
+  if (!window.ModelReadiness || !window.ModelReadiness.requireExecution('standalone:io_model:runDemandModel')) return;
+  // Build dY vector
+  let dY;
+  const mode=document.getElementById('demand-mode').value;
+  if(mode==='agg'){
+    const dc=+document.getElementById('agg-dc').value||0;
+    const dg=+document.getElementById('agg-dg').value||0;
+    const di=+document.getElementById('agg-di').value||0;
+    const dx=+document.getElementById('agg-dx').value||0;
+    const dm=+document.getElementById('agg-dm').value||0;
+    const total=dc+dg+di+dx-dm;
+    const dist=document.getElementById('agg-dist').value;
+    const weights = dist==='output'? IO_DATA.X : dist==='gva'? IO_DATA.GVA : new Array(n).fill(1);
+    const wsum=weights.reduce((a,b)=>a+b,0);
+    dY=weights.map(w=>total*(w/wsum));
+  } else {
+    dY=new Array(n).fill(0);
+    demandShocks.forEach(sh=>{ dY[sh.j]+=sh.dy; });
+    if(dY.every(v=>v===0)){alert('Please add at least one sector shock.');return;}
+  }
+
+  // ΔX = L · ΔY  (matrix-vector multiply)
+  const dX = new Array(n).fill(0);
+  for(let i=0;i<n;i++) for(let j=0;j<n;j++) dX[i] += L[i][j]*dY[j];
+
+  // VA effect = v_i * dX_i
+  const dVA = dX.map((dx,i)=>dx*v[i]);
+  // Employment effect: dX in bln UZS * eTotal in persons/bln = persons
+  const dEmp = dX.map((dx,i)=>dx*eTotal[i]);
+
+  const totalDY=dY.reduce((a,b)=>a+b,0);
+  const totalDX=dX.reduce((a,b)=>a+b,0);
+  const totalDVA=dVA.reduce((a,b)=>a+b,0);
+  const totalDEmp=dEmp.reduce((a,b)=>a+b,0);
+
+  // Show summary
+  document.getElementById('demand-kpis').innerHTML=`
+    <div class="rkpi"><div class="rkpi-val">${fmtN(totalDY)}</div><div class="rkpi-lbl">Total Final Demand Shock ΔY (bln UZS)</div></div>
+    <div class="rkpi"><div class="rkpi-val">${fmtN(totalDX)}</div><div class="rkpi-lbl">Total Output Effect ΔX (bln UZS)</div></div>
+    <div class="rkpi"><div class="rkpi-val">${fmtN(totalDVA)}</div><div class="rkpi-lbl">Total VA Effect ΔVA (bln UZS)</div></div>
+    <div class="rkpi"><div class="rkpi-val">${fmtN(Math.round(totalDEmp))}</div><div class="rkpi-lbl">Employment Effect (persons)</div></div>
+    <div class="rkpi"><div class="rkpi-val">${totalDY!==0?(totalDX/totalDY).toFixed(2):'—'}</div><div class="rkpi-lbl">Aggregate Multiplier (ΔX/ΔY)</div></div>
+  `;
+
+  // Chart — top 30 by |dX|
+  const sortedIdx=dX.map((v,i)=>i).sort((a,b)=>Math.abs(dX[b])-Math.abs(dX[a])).slice(0,30);
+  if(demandChartRef){demandChartRef.destroy();}
+  demandChartRef=new Chart(document.getElementById('chart-demand-out'),{
+    type:'bar',
+    data:{
+      labels:sortedIdx.map(i=>IO_DATA.codes[i]),
+      datasets:[{label:'ΔX (bln UZS)',data:sortedIdx.map(i=>+dX[i].toFixed(2)),
+        backgroundColor:sortedIdx.map(i=>dX[i]>=0?'#16a34acc':'#dc2626cc'),
+        borderColor:sortedIdx.map(i=>dX[i]>=0?'#16a34a':'#dc2626'),
+        borderWidth:1,borderRadius:4}]
+    },
+    options:{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>`${getSectorName(sortedIdx[ctx.dataIndex]).slice(0,50)}: ${ctx.raw} bln UZS`}}},
+      scales:{x:{grid:{color:'#f0f2f5'}},y:{grid:{display:false},ticks:{font:{size:10}}}}
+    }
+  });
+
+  // Table
+  const tbody=document.getElementById('demand-tbody');
+  const tableRows=dX.map((dx,i)=>({i,dy:dY[i],dx,dva:dVA[i],demp:dEmp[i]}))
+    .filter(r=>Math.abs(r.dx)>0.001).sort((a,b)=>Math.abs(b.dx)-Math.abs(a.dx));
+  tbody.innerHTML=tableRows.map((r,ri)=>`
+    <tr>
+      <td>${ri+1}</td>
+      <td><span class="code-badge">${esc(IO_DATA.codes[r.i])}</span></td>
+      <td>${esc(getSectorName(r.i).slice(0,45))}</td>
+      <td class="${r.dy>0?'pos':r.dy<0?'neg':''}">${fmtN(r.dy)}</td>
+      <td class="${r.dx>0?'pos':r.dx<0?'neg':''}">${fmtN(r.dx)}</td>
+      <td class="${r.dva>0?'pos':r.dva<0?'neg':''}">${fmtN(r.dva)}</td>
+      <td>${Math.round(r.demp).toLocaleString()}</td>
+    </tr>`).join('');
+
+  // JSON output
+  const jObj={
+    model:'demand',
+    timestamp:new Date().toISOString(),
+    shocks: mode==='agg'
+      ? [{type:'aggregate',dc:+(document.getElementById('agg-dc').value||0),
+          dg:+(document.getElementById('agg-dg').value||0),
+          di:+(document.getElementById('agg-di').value||0),
+          dx:+(document.getElementById('agg-dx').value||0),
+          dm:+(document.getElementById('agg-dm').value||0)}]
+      : demandShocks.map(sh=>({sector:sh.code,name:sh.name,dc:sh.dc,dg:sh.dg,di:sh.di,dx:sh.dx,dm:sh.dm,dY:sh.dy})),
+    results:{
+      total_dY:+totalDY.toFixed(2),
+      total_dX:+totalDX.toFixed(2),
+      total_dVA:+totalDVA.toFixed(2),
+      total_employment_effect_persons:Math.round(totalDEmp),
+      aggregate_multiplier:totalDY!==0?+(totalDX/totalDY).toFixed(3):null,
+      sector_dX: Object.fromEntries(tableRows.slice(0,30).map(r=>
+        [IO_DATA.codes[r.i],{name:getSectorName(r.i),dY:+r.dy.toFixed(2),dX:+r.dx.toFixed(2),dVA:+r.dva.toFixed(2),dEmp_persons:Math.round(r.demp)}]))
+    }
+  };
+  document.getElementById('demand-json').textContent=JSON.stringify(jObj,null,2);
+  document.getElementById('demand-results').style.display='';
+  document.getElementById('demand-results').scrollIntoView({behavior:'smooth',block:'start'});
+
+  // store for export
+  window._demandResult={dY,dX,dVA,dEmp,jObj};
+  lastDemandKPIs={totalDY,totalDX,totalDVA,totalDEmp,
+    multiplier:totalDY!==0?+(totalDX/totalDY).toFixed(3):null};
+}
+
+function clearDemandModel(){
+  demandShocks=[];
+  renderDemandTags();
+  document.getElementById('demand-results').style.display='none';
+  window._demandResult=null;
+  lastDemandKPIs=null;
+}
+
+function exportDemandCSV(){
+  const r=window._demandResult;
+  if(!r){alert('Run the model first.');return;}
+  const rows=[['Code','Sector','dY_shock','dX_output','dVA_effect','dEmp_jobs']];
+  r.dX.forEach((dx,i)=>{
+    if(Math.abs(dx)>0.001||Math.abs(r.dY[i])>0)
+      rows.push([IO_DATA.codes[i],getSectorName(i),r.dY[i].toFixed(2),dx.toFixed(2),r.dVA[i].toFixed(2),r.dEmp[i].toFixed(3)]);
+  });
+  downloadCSV(rows,'demand_model_results.csv');
+}
+
+function exportDemandJSON(){
+  const r=window._demandResult;
+  if(!r){alert('Run the model first.');return;}
+  const blob=new Blob([JSON.stringify(r.jObj,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='demand_results.json';a.click();
+}
+
+function exportDemandPNG(){
+  const canvas=document.getElementById('chart-demand-out');
+  if(!canvas){alert('Run the model first.');return;}
+  const a=document.createElement('a');a.download='demand_output_effects.png';a.href=canvas.toDataURL();a.click();
+}
+
+// ═══════════════════════════════════════
+// TAB 3: PRICE MODEL
+// ═══════════════════════════════════════
+let priceShocks = []; // [{j, code, name, dv}]
+let priceChartRef = null;
+let priceSearchResults = [];
+
+function togglePriceMode(){
+  const m=document.getElementById('price-mode').value;
+  document.getElementById('price-sector-mode').style.display=m==='sector'?'':'none';
+  document.getElementById('price-scenario-mode').style.display=m==='scenario'?'':'none';
+}
+
+function priceSearch(){
+  const q=(document.getElementById('price-search').value||'').toLowerCase();
+  const dd=document.getElementById('price-dd');
+  if(!q){dd.style.display='none';return;}
+  priceSearchResults=sectors.filter(s=>sectorMatchesQuery(s,q)).slice(0,12);
+  dd.innerHTML=priceSearchResults.map((s,i)=>`<div class="dd-item" onclick="selectPriceSector(${i})">${s.code} — ${getSectorName(s.j).slice(0,60)}</div>`).join('');
+  dd.style.display=priceSearchResults.length?'block':'none';
+}
+
+function selectPriceSector(i){
+  const s=priceSearchResults[i];
+  document.getElementById('price-search').value=s.code+' — '+getSectorName(s.j).slice(0,40);
+  document.getElementById('price-dd').style.display='none';
+  window._selectedPriceSector=s;
+}
+
+function addPriceSector(){
+  const s=window._selectedPriceSector;
+  if(!s){alert('Please search and select a sector first.');return;}
+  const dv=+document.getElementById('p-dv').value||0;
+  const ex=priceShocks.findIndex(sh=>sh.j===s.j);
+  if(ex>=0) priceShocks[ex].dv=dv;
+  else priceShocks.push({j:s.j,code:s.code,name:s.name,dv});
+  renderPriceTags();
+  window._selectedPriceSector=null;
+  document.getElementById('price-search').value='';
+}
+
+function removePriceShock(j){
+  priceShocks=priceShocks.filter(s=>s.j!==j);
+  renderPriceTags();
+}
+
+function renderPriceTags(){
+  document.getElementById('price-tags').innerHTML=priceShocks.map(s=>
+    `<span class="tag ptag">${s.code}: Δv=${s.dv}%
+      <button onclick="removePriceShock(${s.j})">×</button></span>`).join('');
+}
+
+function runPriceModel(){
+  if (!window.ModelReadiness || !window.ModelReadiness.requireExecution('standalone:io_model:runPriceModel')) return;
+  // Build dv vector (fraction, not %)
+  const dv=new Array(n).fill(0);
+  const mode=document.getElementById('price-mode').value;
+
+  if(mode==='scenario'){
+    const energy=+document.getElementById('sc-energy').value/100;
+    const labour=+document.getElementById('sc-labour').value/100;
+    const importShk=+document.getElementById('sc-import').value/100;
+    const apply=document.getElementById('sc-apply').value;
+    sectors.forEach(s=>{
+      const code=s.code.toUpperCase();
+      const isEnergy=code.startsWith('B')||code.startsWith('D')||code.startsWith('E');
+      const isIndustry=code.match(/^[B-E]/);
+      const isServices=code.match(/^[G-U]/);
+      const include=apply==='all'||(apply==='industry'&&isIndustry)||(apply==='services'&&isServices);
+      if(!include) return;
+      // energy sectors get energy shock; labour shock applied to wage share; import applied as fraction
+      const vaS=v[s.j]||0;
+      let total=0;
+      if(isEnergy) total+=energy*0.6; // energy cost = 60% of VA for energy sectors
+      total+=labour*0.4*vaS; // labour = 40% of VA share
+      total+=importShk*0.2*(1-vaS); // import = 20% of intermediate share
+      dv[s.j]=total;
+    });
+  } else {
+    if(priceShocks.length===0){alert('Please add at least one sector cost shock.');return;}
+    priceShocks.forEach(sh=>{ dv[sh.j]=sh.dv/100; });
+  }
+
+  // Δp_j = Σ_i (dv_i * L[i][j])  → row vector * L matrix
+  const dp=new Array(n).fill(0);
+  for(let j=0;j<n;j++) for(let i=0;i<n;i++) dp[j]+=dv[i]*L[i][j];
+
+  // Weighted average price change (output-weighted)
+  const totalX=IO_DATA.X.reduce((a,b)=>a+b,0);
+  const avgDp=dp.reduce((s,p,i)=>s+p*IO_DATA.X[i],0)/totalX*100;
+  const maxDp=Math.max(...dp)*100;
+  const nAffected=dp.filter(p=>Math.abs(p)>0.001).length;
+
+  document.getElementById('price-kpis').innerHTML=`
+    <div class="rkpi"><div class="rkpi-val">${avgDp.toFixed(2)}%</div><div class="rkpi-lbl">Output-weighted avg price change</div></div>
+    <div class="rkpi"><div class="rkpi-val">${maxDp.toFixed(2)}%</div><div class="rkpi-lbl">Maximum sector price effect</div></div>
+    <div class="rkpi"><div class="rkpi-val">${nAffected}</div><div class="rkpi-lbl">Sectors affected (|Δp|>0.1%)</div></div>
+    <div class="rkpi"><div class="rkpi-val">${priceShocks.length||'Scenario'}</div><div class="rkpi-lbl">Cost shocks applied</div></div>
+  `;
+
+  // Chart — top 30 by |dp|
+  const sortedIdx=dp.map((v,i)=>i).sort((a,b)=>Math.abs(dp[b])-Math.abs(dp[a])).slice(0,30);
+  if(priceChartRef){priceChartRef.destroy();}
+  priceChartRef=new Chart(document.getElementById('chart-price-out'),{
+    type:'bar',
+    data:{
+      labels:sortedIdx.map(i=>IO_DATA.codes[i]),
+      datasets:[{label:'Δp (%)',data:sortedIdx.map(i=>+(dp[i]*100).toFixed(3)),
+        backgroundColor:'#2563ebcc',borderColor:'#2563eb',borderWidth:1,borderRadius:4}]
+    },
+    options:{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>`${getSectorName(sortedIdx[ctx.dataIndex]).slice(0,50)}: ${ctx.raw}%`}}},
+      scales:{x:{grid:{color:'#f0f2f5'},title:{display:true,text:'Price change (%)'}},
+        y:{grid:{display:false},ticks:{font:{size:10}}}}
+    }
+  });
+
+  // Table
+  const tbody=document.getElementById('price-tbody');
+  const tableRows=dp.map((p,i)=>({i,dv:dv[i],dp:p,x:IO_DATA.X[i]/1e3}))
+    .filter(r=>Math.abs(r.dp)>0.0001).sort((a,b)=>Math.abs(b.dp)-Math.abs(a.dp));
+  tbody.innerHTML=tableRows.map((r,ri)=>`
+    <tr>
+      <td>${ri+1}</td>
+      <td><span class="code-badge">${esc(IO_DATA.codes[r.i])}</span></td>
+      <td>${esc(getSectorName(r.i).slice(0,45))}</td>
+      <td>${(r.dv*100).toFixed(2)}%</td>
+      <td class="pos">${(r.dp*100).toFixed(3)}%</td>
+      <td>${fmtN(r.x)}</td>
+    </tr>`).join('');
+
+  // JSON
+  const jObj={
+    model:'price',
+    timestamp:new Date().toISOString(),
+    shocks: mode==='scenario'
+      ? {type:'scenario',energy_pct:+document.getElementById('sc-energy').value,
+          labour_pct:+document.getElementById('sc-labour').value,
+          import_pct:+document.getElementById('sc-import').value}
+      : priceShocks.map(sh=>({sector:sh.code,name:sh.name,dv_pct:sh.dv})),
+    results:{
+      avg_price_change_pct:+avgDp.toFixed(3),
+      max_price_change_pct:+maxDp.toFixed(3),
+      sectors_affected:nAffected,
+      sector_dp: Object.fromEntries(tableRows.slice(0,30).map(r=>
+        [IO_DATA.codes[r.i],{name:getSectorName(r.i),dv_input_pct:+(r.dv*100).toFixed(2),dp_pct:+(r.dp*100).toFixed(3)}]))
+    }
+  };
+  document.getElementById('price-json').textContent=JSON.stringify(jObj,null,2);
+  document.getElementById('price-results').style.display='';
+  document.getElementById('price-results').scrollIntoView({behavior:'smooth',block:'start'});
+  window._priceResult={dv,dp,jObj};
+}
+
+function clearPriceModel(){
+  priceShocks=[];
+  renderPriceTags();
+  document.getElementById('price-results').style.display='none';
+  window._priceResult=null;
+}
+
+function exportPriceCSV(){
+  const r=window._priceResult;
+  if(!r){alert('Run the model first.');return;}
+  const rows=[['Code','Sector','dv_input_pct','dp_pct','Output_bln']];
+  r.dp.forEach((dp,i)=>{
+    if(Math.abs(dp)>0.0001)
+      rows.push([IO_DATA.codes[i],getSectorName(i),(r.dv[i]*100).toFixed(2),(dp*100).toFixed(3),(IO_DATA.X[i]/1e3).toFixed(1)]);
+  });
+  downloadCSV(rows,'price_model_results.csv');
+}
+
+function exportPriceJSON(){
+  const r=window._priceResult;
+  if(!r){alert('Run the model first.');return;}
+  const blob=new Blob([JSON.stringify(r.jObj,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='price_results.json';a.click();
+}
+
+function exportPricePNG(){
+  const canvas=document.getElementById('chart-price-out');
+  if(!canvas){alert('Run the model first.');return;}
+  const a=document.createElement('a');a.download='price_effects.png';a.href=canvas.toDataURL();a.click();
+}
+
+// ═══════════════════════════════════════
+// TAB 4: SECTOR EXPLORER
+// ═══════════════════════════════════════
+let secData=sectors.slice();
+function initSectors(){
+  filterSectors();
+}
+function filterSectors(){
+  const q=(document.getElementById('sec-search').value||'').toLowerCase();
+  const ft=document.getElementById('sec-filter-type').value;
+  const sv=document.getElementById('sec-sort').value;
+  const [f,dir]=sv.split('-');
+  const fieldMap={bl:'bl',fl:'fl',x:'x',emp:'empT'};
+  secData=sectors.filter(s=>{
+    const match=sectorMatchesQuery(s,q);
+    const tm=!ft||atype(s)===ft;
+    return match&&tm;
+  }).sort((a,b)=>dir==='desc'?b[fieldMap[f]]-a[fieldMap[f]]:a[fieldMap[f]]-b[fieldMap[f]]);
+  buildSecTable();
+}
+function buildSecTable(){
+  document.getElementById('sec-tbody').innerHTML=secData.map((s,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td><span class="code-badge">${esc(s.code)}</span></td>
+      <td>${esc(getSectorName(s.j).slice(0,45))}</td>
+      <td>${typeBadge(atype(s))}</td>
+      <td>${abl(s).toFixed(3)}</td>
+      <td>${afl(s).toFixed(3)}</td>
+      <td>${aoutm(s).toFixed(3)}</td>
+      <td>${avam(s).toFixed(3)}</td>
+      <td>${aempm(s).toFixed(2)}</td>
+      <td>${s.formalShare.toFixed(1)}%</td>
+      <td>${fmtN(s.x)}</td>
+      <td>${fmtN(s.gva)}</td>
+      <td>${fmtEmp(s.empT)}</td>
+      <td><button class="btn btn-outline btn-sm" onclick="openModal(${s.j})">Detail →</button></td>
+    </tr>`).join('');
+}
+
+// ═══════════════════════════════════════
+// SECTOR DETAIL MODAL
+// ═══════════════════════════════════════
+let modalChartMult=null, modalChartEmp=null;
+function openModal(j){
+  const s=sectors[j];
+  document.getElementById('modal-code').textContent=s.code;
+  document.getElementById('modal-name').textContent=getSectorName(s.j);
+  const mLabel = multType==='II' ? ' (Type II)' : ' (Type I)';
+  document.getElementById('modal-badges').innerHTML=typeBadge(atype(s))+
+    ` <span class="badge badge-strong" style="margin-left:4px;">BL ${abl(s).toFixed(3)}${mLabel}</span>
+      <span class="badge badge-strong" style="margin-left:4px;background:#d1fae5;color:#065f46;">FL ${afl(s).toFixed(3)}${mLabel}</span>`;
+
+  document.getElementById('modal-kpis').innerHTML=`
+    <div class="card"><div class="card-title">Output</div><div class="kpi" style="font-size:22px">${fmtN(s.x)}</div><div class="kpi-unit">bln UZS</div></div>
+    <div class="card"><div class="card-title">GVA</div><div class="kpi" style="font-size:22px">${fmtN(s.gva)}</div><div class="kpi-unit">bln UZS</div></div>
+    <div class="card"><div class="card-title">Output Mult${mLabel}</div><div class="kpi" style="font-size:22px">${aoutm(s).toFixed(3)}</div><div class="kpi-unit">per unit final demand</div></div>
+    <div class="card"><div class="card-title">Emp Multiplier${mLabel}</div><div class="kpi" style="font-size:22px">${aempm(s).toFixed(2)}</div><div class="kpi-unit">persons per bln UZS</div></div>
+  `;
+
+  if(modalChartMult){modalChartMult.destroy();}
+  if(modalChartEmp){modalChartEmp.destroy();}
+
+  modalChartMult=new Chart(document.getElementById('modal-chart-mult'),{
+    type:'bar',
+    data:{labels:['Output Mult','VA Mult','BL','FL'],
+      datasets:[{label:'Value',data:[aoutm(s),avam(s),abl(s),afl(s)].map(v=>+v.toFixed(3)),
+        backgroundColor:['#1a3a6ecc','#16a34acc','#d97706cc','#7c3aedcc'],borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{y:{beginAtZero:true}}}
+  });
+
+  modalChartEmp=new Chart(document.getElementById('modal-chart-emp'),{
+    type:'bar',
+    data:{labels:['Total','Formal','Informal'],
+      datasets:[{label:'Employment (persons)',data:[s.empT,s.empF,s.empI].map(v=>Math.round(v)),
+        backgroundColor:['#0d9488cc','#2563ebcc','#f59e0bcc'],borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{y:{beginAtZero:true}}}
+  });
+
+  // Top suppliers (col j of A matrix)
+  const aCol=IO_DATA.A.map((row,i)=>({i,v:row[j]})).filter(r=>r.v>0.0001)
+    .sort((a,b)=>b.v-a.v).slice(0,8);
+  document.getElementById('modal-top-suppliers').innerHTML=`
+    <div class="slabel">Top Intermediate Input Suppliers (A matrix, col ${j+1})</div>
+    <table><thead><tr><th>Supplier</th><th>A coefficient</th></tr></thead>
+    <tbody>${aCol.map(r=>`<tr><td><span class="code-badge">${esc(IO_DATA.codes[r.i])}</span> ${esc(getSectorName(r.i).slice(0,40))}</td>
+      <td>${r.v.toFixed(4)}</td></tr>`).join('')}</tbody></table>`;
+
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(e){
+  if(e.target===document.getElementById('modal-overlay'))
+    document.getElementById('modal-overlay').classList.remove('open');
+}
+
+// ═══════════════════════════════════════
+// OVERVIEW EXPORTS
+// ═══════════════════════════════════════
+function exportOverviewCSV(){
+  const t=multType;
+  const rows=[['#','Code','Sector','BL','FL','Type','OutputMult_'+t,'VAMult_'+t,'EmpMult_'+t,'Output_bln','GVA_bln','EmpTotal','EmpFormal','EmpInformal']];
+  sectors.forEach((s,i)=>rows.push([i+1,s.code,getSectorName(s.j),abl(s).toFixed(4),afl(s).toFixed(4),atype(s),
+    aoutm(s).toFixed(4),avam(s).toFixed(4),aempm(s).toFixed(4),
+    s.x.toFixed(1),s.gva.toFixed(1),s.empT.toFixed(2),s.empF.toFixed(2),s.empI.toFixed(2)]));
+  downloadCSV(rows,'io_linkage_analysis_type'+t+'.csv');
+}
+
+function exportOverviewPNG(){
+  const canvas=document.getElementById('chart-scatter');
+  if(!canvas) return;
+  const a=document.createElement('a');a.download='io_linkage_scatter.png';a.href=canvas.toDataURL();a.click();
+}
+
+function exportOverviewPDF(){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+  doc.setFillColor(26,58,110);doc.rect(0,0,297,18,'F');
+  doc.setTextColor(255,255,255);doc.setFontSize(13);doc.setFont(undefined,'bold');
+  doc.text('Input-Output Model — Uzbekistan 2022',14,11);
+  doc.setFontSize(8);doc.setFont(undefined,'normal');
+  doc.text('Leontief Framework · 136 Sectors · CERR Policy Engine',14,16);
+  doc.setTextColor(0,0,0);
+
+  let y=26;
+  doc.setFontSize(10);doc.setFont(undefined,'bold');
+  doc.text('Linkage Classification Summary',14,y);y+=6;
+  doc.setFontSize(8);doc.setFont(undefined,'normal');
+  [['Key Sectors (BL>1, FL>1)',typeCounts.key],
+   ['Backward Key (BL>1, FL≤1)',typeCounts.back],
+   ['Forward Key (BL≤1, FL>1)',typeCounts.fwd],
+   ['Weak (BL≤1, FL≤1)',typeCounts.weak]
+  ].forEach(([lbl,cnt])=>{doc.text(`${lbl}: ${cnt}`,14,y);y+=5;});
+
+  y+=4;doc.setFontSize(10);doc.setFont(undefined,'bold');
+  doc.text(`Top 20 Sectors by Output Multiplier (Type ${multType})`,14,y);y+=5;
+  doc.setFontSize(7);doc.setFont(undefined,'normal');
+  const top20=sectors.slice().sort((a,b)=>aoutm(b)-aoutm(a)).slice(0,20);
+  top20.forEach((s,i)=>{
+    doc.text(`${i+1}. [${s.code}] ${getSectorName(s.j).slice(0,50)} — Mult: ${aoutm(s).toFixed(3)} · BL: ${abl(s).toFixed(3)} · ${atype(s)}`,14,y);
+    y+=4.5;
+  });
+
+  doc.save('io_model_linkage_report.pdf');
+}
+
+// ═══════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════
+function esc(str){
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmtN(v){
+  if(Math.abs(v)>=1e6) return (v/1e6).toFixed(1)+'M';
+  if(Math.abs(v)>=1e3) return (v/1e3).toFixed(1)+'K';
+  return v.toFixed(1);
+}
+// Employment: persons — display as "343.6K" or "1.2M"
+function fmtEmp(v){
+  if(Math.abs(v)>=1e6) return (v/1e6).toFixed(2)+'M';
+  if(Math.abs(v)>=1e3) return (v/1e3).toFixed(1)+'K';
+  return Math.round(v).toString();
+}
+function fmtT(v){ // trillion
+  if(Math.abs(v)>=1000) return (v/1000).toFixed(2)+' trl';
+  return v.toFixed(0)+' bln';
+}
+function typeBadge(t){
+  const map={key:'<span class="badge badge-key">Key Sector</span>',
+    back:'<span class="badge badge-back">Backward Key</span>',
+    fwd:'<span class="badge badge-fwd">Forward Key</span>',
+    weak:'<span class="badge badge-weak">Weak</span>'};
+  return map[t]||'';
+}
+function downloadCSV(rows,filename){
+  const csv=rows.map(r=>r.map(c=>{
+    const s=String(c).replace(/"/g,'""');
+    return /[,"\n]/.test(s)?`"${s}"`:s;
+  }).join(',')).join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();
+}
+
+// Close dropdowns on outside click
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.dd-wrap')){
+    document.querySelectorAll('.dd-menu').forEach(d=>d.style.display='none');
+  }
+});
+
+// ═══════════════════════════════════════
+// INIT — safe, wrapped
+// ═══════════════════════════════════════
+function safeInit(){
+  try { initOverview(); } catch(e){ console.error('initOverview error:',e); }
+  try { initSectors();  } catch(e){ console.error('initSectors error:',e); }
+}
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', ()=>{ safeInit(); applyLang(currentLang); });
+} else {
+  safeInit();
+  applyLang(currentLang);
+}
+
+/* ── Save scenario ── */
+function ioSaveScenario() {
+  if(!lastDemandKPIs){ Toast.show('Run demand model first','warning'); return; }
+  if(!window.ScenarioEngine){ Toast.show('Scenario engine not loaded','error'); return; }
+  const k=lastDemandKPIs;
+  const mode=document.getElementById('demand-mode').value;
+  const shocks=mode==='agg'
+    ? {type:'aggregate',dist:document.getElementById('agg-dist').value,
+       dc:+document.getElementById('agg-dc').value, dg:+document.getElementById('agg-dg').value,
+       di:+document.getElementById('agg-di').value, dx:+document.getElementById('agg-dx').value,
+       dm:+document.getElementById('agg-dm').value}
+    : {type:'sector',sectors:demandShocks.map(s=>({code:s.code,name:s.name,dy:s.dy}))};
+
+  const name=prompt('Name this scenario:','IO Demand Shock');
+  if(!name) return;
+  ScenarioEngine.save({
+    name, model:'io',
+    params:{
+      shockType:shocks.type,
+      affectedSectors:shocks.type==='sector'?shocks.sectors.map(s=>s.code).join(', '):'All ('+shocks.dist+')',
+      shockSize:fmtN(k.totalDY)+' bln UZS',
+      details:shocks
+    },
+    results:{
+      kpis:[
+        {label:'Output Multiplier',value:k.multiplier!==null?k.multiplier.toFixed(2):'--'},
+        {label:'Employment Effect',value:fmtN(Math.round(k.totalDEmp))+' persons'},
+        {label:'Total Output Effect',value:fmtN(k.totalDX)+' bln UZS'},
+        {label:'VA Effect',value:fmtN(k.totalDVA)+' bln UZS'}
+      ],chartData:null,tables:[]
+    },
+    tags:['io','leontief'],notes:''
+  });
+  Toast.show('Scenario saved: '+name,'success');
+}
+
+async function ioAIAnalysis() {
+  if(!lastDemandKPIs){ Toast.show('Run demand model first','warning'); return; }
+  if(!window.PolicyAdvisor){ Toast.show('AI advisor not loaded','error'); return; }
+  const k=lastDemandKPIs;
+  const mode=document.getElementById('demand-mode').value;
+  const shockType=mode==='agg'?'aggregate':'sector';
+  const affectedSectors=mode==='agg'?'All ('+document.getElementById('agg-dist').value+')'
+    :demandShocks.map(s=>s.code).join(', ');
+
+  let c=document.getElementById('io-ai-output');
+  if(!c){c=document.createElement('div');c.id='io-ai-output';c.style.margin='20px 0';document.getElementById('page-overview')?.appendChild(c);}
+  c.innerHTML='<div style="padding:20px;color:#475569;">Analyzing...</div>';
+  const analysis=await PolicyAdvisor.analyzeSim('io',
+    {shockType,affectedSectors,shockSize:fmtN(k.totalDY)+' bln UZS'},
+    {kpis:[
+      {label:'Output Multiplier',value:k.multiplier!==null?k.multiplier.toFixed(2):'--'},
+      {label:'Employment Effect',value:fmtN(Math.round(k.totalDEmp))+' persons'},
+      {label:'Total Output Effect',value:fmtN(k.totalDX)+' bln UZS'},
+      {label:'VA Effect',value:fmtN(k.totalDVA)+' bln UZS'}
+    ]}
+  );
+  PolicyAdvisor.renderAdvisorPanel('io-ai-output',analysis);
+}
+
+// ═══════════════════════════════════════
+// i18n — Language support (EN / RU / UZ)
+// ═══════════════════════════════════════
+let currentLang = localStorage.getItem('io_lang') || 'en';
+
+const LANGS = {
+  en: {
+    title:'Input-Output Model — Uzbekistan 2022',
+    subtitle:'Center for Economic Research and Reforms · Leontief Framework · 136 Sectors',
+    tab_overview:'📊 Overview & Linkages',
+    tab_demand:'⚡ Demand Simulator',
+    tab_price:'💰 Price Model',
+    tab_sectors:'🔍 Sector Explorer',
+    slabel_linkage:'Backward & Forward Linkages — Sector Classification',
+    scatter_title:'Linkage Scatter — Rasmussen Classification',
+    scatter_sub:'Backward linkage (BL) on X-axis; Forward linkage (FL) on Y-axis. Dashed lines at BL=1 / FL=1 divide four quadrants.',
+    badge_key:'Key Sector (BL>1, FL>1)', badge_back:'Backward Key (BL>1, FL≤1)',
+    badge_fwd:'Forward Key (BL≤1, FL>1)', badge_weak:'Weak (BL≤1, FL≤1)',
+    badge_key_short:'Key Sector', badge_back_short:'Backward Key',
+    badge_fwd_short:'Forward Key', badge_weak_short:'Weak',
+    chart_outmult_title:'Top 20 — Output Multiplier (Type I)',
+    chart_outmult_sub:'Total economy-wide output per 1 unit of final demand',
+    chart_vamult_title:'Top 20 — VA Multiplier (Type I)',
+    chart_vamult_sub:'Gross value-added generated per unit of final demand',
+    chart_empmult_title:'Top 20 — Employment Multiplier (persons per bln UZS)',
+    chart_empmult_sub:'Total employment (formal + informal) triggered per 1 bln UZS of final demand',
+    chart_empshare_title:'Employment Share — Formal vs Informal (Top 20 by total emp)',
+    chart_empshare_sub:'Share of formal and informal employment in selected sectors',
+    slabel_linktable:'Full Linkage Table (136 Sectors)',
+    search_placeholder:'Search sector name or code…',
+    filter_all:'All types',
+    sort_bl:'Sort: BL ↓', sort_fl:'FL ↓', sort_outm:'Output Mult ↓',
+    sort_vam:'VA Mult ↓', sort_empm:'Emp Mult ↓',
+    sort_output:'Output ↓', sort_emp:'Employment ↓',
+    th_code:'Code', th_sector:'Sector', th_type:'Type',
+    th_outm:'Output Mult', th_vam:'VA Mult', th_empm:'Emp Mult',
+    th_outm_short:'Out Mult', th_vam_short:'VA Mult', th_empm_short:'Emp Mult',
+    th_output:'Output (bln)', th_gva:'GVA (bln)', th_employment:'Employment',
+    th_formal:'Formal %', th_detail:'Detail',
+    table_footnote:'Output in billion UZS (X in millions UZS ÷ 1000) · Employment multiplier = persons per billion UZS of final demand',
+    mult_hint_i:'Direct + indirect effects',
+    mult_hint_ii:'Direct + indirect + induced (household spending) effects',
+  },
+  ru: {
+    title:'Модель межотраслевого баланса — Узбекистан 2022',
+    subtitle:'Центр экономических исследований и реформ · Модель Леонтьева · 136 отраслей',
+    tab_overview:'📊 Обзор и связи',
+    tab_demand:'⚡ Симулятор спроса',
+    tab_price:'💰 Ценовая модель',
+    tab_sectors:'🔍 Анализ отраслей',
+    slabel_linkage:'Прямые и обратные связи — Классификация секторов',
+    scatter_title:'Диаграмма связей — Классификация Расмуссена',
+    scatter_sub:'Обратная связь (BL) по оси X; прямая связь (FL) по оси Y. Пунктирные линии при BL=1 / FL=1 делят квадранты.',
+    badge_key:'Ключевой сектор (BL>1, FL>1)', badge_back:'Обратно-ключевой (BL>1, FL≤1)',
+    badge_fwd:'Прямо-ключевой (BL≤1, FL>1)', badge_weak:'Слабый (BL≤1, FL≤1)',
+    badge_key_short:'Ключевой', badge_back_short:'Обратно-ключевой',
+    badge_fwd_short:'Прямо-ключевой', badge_weak_short:'Слабый',
+    chart_outmult_title:'Топ 20 — Мультипликатор выпуска (Тип I)',
+    chart_outmult_sub:'Совокупный выпуск экономики на 1 единицу конечного спроса',
+    chart_vamult_title:'Топ 20 — Мультипликатор ВДС (Тип I)',
+    chart_vamult_sub:'Валовая добавленная стоимость на единицу конечного спроса',
+    chart_empmult_title:'Топ 20 — Мультипликатор занятости (чел. на млрд сум)',
+    chart_empmult_sub:'Совокупная занятость (формальная + неформальная) на 1 млрд сум конечного спроса',
+    chart_empshare_title:'Структура занятости — Формальная и неформальная (Топ 20)',
+    chart_empshare_sub:'Доля формальной и неформальной занятости в выбранных секторах',
+    slabel_linktable:'Полная таблица связей (136 секторов)',
+    search_placeholder:'Поиск по названию или коду сектора…',
+    filter_all:'Все типы',
+    sort_bl:'Сортировка: BL ↓', sort_fl:'FL ↓', sort_outm:'Мульт. выпуска ↓',
+    sort_vam:'Мульт. ВДС ↓', sort_empm:'Мульт. занятости ↓',
+    sort_output:'Выпуск ↓', sort_emp:'Занятость ↓',
+    th_code:'Код', th_sector:'Сектор', th_type:'Тип',
+    th_outm:'Мульт. выпуска', th_vam:'Мульт. ВДС', th_empm:'Мульт. занят.',
+    th_outm_short:'Мульт. вып.', th_vam_short:'Мульт. ВДС', th_empm_short:'Мульт. зан.',
+    th_output:'Выпуск (млрд)', th_gva:'ВДС (млрд)', th_employment:'Занятость',
+    th_formal:'Формальн. %', th_detail:'Детали',
+    table_footnote:'Выпуск в млрд сум (X в млн сум ÷ 1000) · Мультипликатор занятости = чел. на млрд сум конечного спроса',
+    mult_hint_i:'Прямые + косвенные эффекты',
+    mult_hint_ii:'Прямые + косвенные + индуцированные эффекты (расходы домохозяйств)',
+  },
+  uz: {
+    title:'Tarmoqlararo balans modeli — O\'zbekiston 2022',
+    subtitle:'Iqtisodiy tadqiqotlar va islohotlar markazi · Leontief modeli · 136 tarmoq',
+    tab_overview:'📊 Umumiy ko\'rinish va bog\'liqliklar',
+    tab_demand:'⚡ Talab simulyatori',
+    tab_price:'💰 Narx modeli',
+    tab_sectors:'🔍 Tarmoqlar tahlili',
+    slabel_linkage:'Oldinga va orqaga bog\'liqliklar — Tarmoq tasnifi',
+    scatter_title:'Bog\'liqlik diagrammasi — Rasmussen tasnifi',
+    scatter_sub:'Orqaga bog\'liqlik (BL) X o\'qida; oldinga bog\'liqlik (FL) Y o\'qida. BL=1 / FL=1 da to\'rtburchak kvadrantlar.',
+    badge_key:'Asosiy tarmoq (BL>1, FL>1)', badge_back:'Orqaga asosiy (BL>1, FL≤1)',
+    badge_fwd:'Oldinga asosiy (BL≤1, FL>1)', badge_weak:'Zaif (BL≤1, FL≤1)',
+    badge_key_short:'Asosiy', badge_back_short:'Orqaga asosiy',
+    badge_fwd_short:'Oldinga asosiy', badge_weak_short:'Zaif',
+    chart_outmult_title:'Top 20 — Ishlab chiqarish multiplikatori (I tur)',
+    chart_outmult_sub:'Yakuniy talabning 1 birligiga iqtisodiyot bo\'yicha jami ishlab chiqarish',
+    chart_vamult_title:'Top 20 — YaQQ multiplikatori (I tur)',
+    chart_vamult_sub:'Yakuniy talabning 1 birligiga yaratilgan yalpi qo\'shilgan qiymat',
+    chart_empmult_title:'Top 20 — Bandlik multiplikatori (kishi/mlrd so\'m)',
+    chart_empmult_sub:'1 mlrd so\'m yakuniy talabga jami bandlik (rasmiy + norasmiy)',
+    chart_empshare_title:'Bandlik tarkibi — Rasmiy va norasmiy (Top 20)',
+    chart_empshare_sub:'Tanlangan tarmoqlarda rasmiy va norasmiy bandlik ulushi',
+    slabel_linktable:'To\'liq bog\'liqlik jadvali (136 tarmoq)',
+    search_placeholder:'Tarmoq nomi yoki kodi bo\'yicha qidirish…',
+    filter_all:'Barcha turlar',
+    sort_bl:'Saralash: BL ↓', sort_fl:'FL ↓', sort_outm:'Ishlab ch. mult. ↓',
+    sort_vam:'YaQQ mult. ↓', sort_empm:'Bandlik mult. ↓',
+    sort_output:'Ishlab chiqarish ↓', sort_emp:'Bandlik ↓',
+    th_code:'Kod', th_sector:'Tarmoq', th_type:'Tur',
+    th_outm:'Ishlab ch. mult.', th_vam:'YaQQ mult.', th_empm:'Bandlik mult.',
+    th_outm_short:'Ishlab ch.', th_vam_short:'YaQQ', th_empm_short:'Bandlik m.',
+    th_output:'Ishlab chiqarish (mlrd)', th_gva:'YaQQ (mlrd)', th_employment:'Bandlik',
+    th_formal:'Rasmiy %', th_detail:'Batafsil',
+    table_footnote:'Ishlab chiqarish mlrd so\'mda (X mln so\'m ÷ 1000) · Bandlik multiplikatori = kishi/mlrd so\'m',
+    mult_hint_i:'To\'g\'ridan-to\'g\'ri + bilvosita ta\'sirlar',
+    mult_hint_ii:'To\'g\'ridan-to\'g\'ri + bilvosita + indusirangan ta\'sirlar (uy xo\'jaligi xarajatlari)',
+  }
+};
+
+function getSectorName(j) {
+  if (currentLang === 'ru') return IO_DATA.names[j];
+  if (currentLang === 'uz') return IO_DATA.namesUZ[j];
+  return IO_DATA.namesEN[j];
+}
+function sectorMatchesQuery(s, q) {
+  if (!q) return true;
+  return s.code.toLowerCase().includes(q) ||
+    IO_DATA.namesEN[s.j].toLowerCase().includes(q) ||
+    IO_DATA.names[s.j].toLowerCase().includes(q) ||
+    IO_DATA.namesUZ[s.j].toLowerCase().includes(q);
+}
+
+function applyLang(lang) {
+  const t = LANGS[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.textContent = t[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (t[key] !== undefined) el.setAttribute('placeholder', t[key]);
+  });
+  ['en','ru','uz'].forEach(l => {
+    const btn = document.getElementById('lang-'+l);
+    if (btn) btn.classList.toggle('active', l === lang);
+  });
+  // Update multiplier toggle hint
+  const hint = document.getElementById('mult-toggle-hint');
+  if (hint) hint.textContent = multType === 'II' ? t.mult_hint_ii : t.mult_hint_i;
+  // Update chart card titles to reflect active mult type
+  const outTitle = document.getElementById('chart-out-mult-title');
+  const vaTitle  = document.getElementById('chart-va-mult-title');
+  if (outTitle) outTitle.textContent = t.chart_outmult_title.replace('Type I', 'Type '+multType).replace('Тип I','Тип '+multType).replace('I tur', multType+' tur');
+  if (vaTitle)  vaTitle.textContent  = t.chart_vamult_title.replace('Type I', 'Type '+multType).replace('Тип I','Тип '+multType).replace('I tur', multType+' tur');
+  document.documentElement.lang = lang === 'uz' ? 'uz' : lang === 'ru' ? 'ru' : 'en';
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('io_lang', lang);
+  applyLang(lang);
+  // Re-render all tables and charts with new sector names
+  buildLinkTable();
+  buildSecTable();
+  filterLinkTable();
+  filterSectors();
+}
+
+// ── Registry consistency check ──
+window.addEventListener('load', () => {
+  if (!window.EPE) return;
+  EPE.ready(() => {
+    const computed = IO_DATA.outMultII.reduce((a,b)=>a+b,0) / IO_DATA.outMultII.length;
+    const registry = EPE.get('io_summary.type_ii_avg_multiplier', null);
+    if (registry == null) return;
+    const diff = Math.abs(computed - registry);
+    const tol = 0.05;
+    console.log('[IO] Registry avg Type-II multiplier: ' + registry.toFixed(2) +
+                ' | Computed from IO_DATA: ' + computed.toFixed(2) +
+                ' | ' + (diff < tol ? '✓ consistent' : '⚠ diverges by ' + diff.toFixed(2)));
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+status: diagnostic_only_no_update
+as_of: 2026-07-10
+
+sources:
+  trade:
+    name: CEPII BACI
+    version: "202601"
+    hs_revision: HS17
+    years: 2017-2024
+    url: https://www.cepii.fr/DATA_DOWNLOAD/baci/doc/baci_webpage.html
+    unit: current_usd
+  russia_real_gdp:
+    provider: World Bank WDI
+    indicator: NY.GDP.MKTP.KD
+    unit: constant_2015_usd
+  russia_import_volume:
+    provider: World Bank / UNCTAD
+    indicator: TM.QTY.MRCH.XD.WD
+    unit: index_2015_100
+    years: 2005-2024
+
+estimates:
+  russia_import_volume_gdp_elasticity:
+    estimate: 3.9464436034
+    ci_95_low: 3.0351039565
+    ci_95_high: 4.8577832503
+    observations: 19
+    method: first_difference_ols_with_post_2014_post_2022_controls_newey_west_lag_2
+  uzbek_export_product_demand_elasticity:
+    estimate: -0.0204882825
+    ci_95_low: -0.8424259948
+    ci_95_high: 0.8014494297
+    observations: 395
+    method: hs2_first_difference_weighted_year_fe_clustered_se_2019_2023
+  combined_export_gdp_elasticity:
+    estimate: -0.0808558515
+    ci_95_low_approx: -3.3246404178
+    ci_95_high_approx: 3.1629287149
+    method: product_of_two_stages_delta_method
+  direct_aggregate_diagnostic:
+    estimate: -0.8912321928
+    ci_95_low: -2.4634055777
+    ci_95_high: 0.6809411921
+    observations: 7
+
+sector_diagnostics:
+  textiles:
+    estimate: 0.564
+    ci_95_low: 0.422
+    ci_95_high: 0.705
+    use: sensitivity_analysis_only
+  metals:
+    estimate: -0.741
+    ci_95_low: -1.309
+    ci_95_high: -0.172
+    use: diagnostic_structural_break_warning
+
+decision:
+  update_exports_russia_gdp_elasticity: false
+  reason: Product-demand response is near zero, unstable by sector, and imprecisely estimated; combined interval is too wide for calibration.
+  current_model_values: remain_judgemental_and_must_stay_labelled_as_such

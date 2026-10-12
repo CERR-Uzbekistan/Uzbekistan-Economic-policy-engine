@@ -1,0 +1,355 @@
+{
+  "artifact": {
+    "id": "dfm-final-robustness-verdict",
+    "generated_at": "2026-06-08T19:29:05Z",
+    "source_folder": "C:/Users/n.ortiqov/Desktop/2026/50. Nowcasting/Nowcasting 2026 q1/DFM Nowcast/Nowcasting ready for R",
+    "source_workbook": "C:/Users/n.ortiqov/Desktop/2026/50. Nowcasting/Nowcasting 2026 q1/DFM Nowcast/Nowcasting ready for R/data/data_uzbekistan.xlsx",
+    "source_workbook_md5": "763365dcca1a9a307ad22c4260aa91b7",
+    "runner": "scripts/dfm/review-model-robustness.R",
+    "r_version": "4.5.2"
+  },
+  "baseline": {
+    "source_artifact": "docs/data-bridge/dfm-source-output-review.json",
+    "nowcast_period": "2026Q2",
+    "gdp_growth_yoy_pct": 7.984,
+    "gdp_growth_qoq_pct": 1.5293,
+    "status": "review_only_not_public_export"
+  },
+  "factor_structure_cases": [
+    {
+      "case_id": "ar_lag_2_global_factor",
+      "label": "Global one-block DFM with AR lag p=2",
+      "status": "completed",
+      "converged": true,
+      "iterations": 187,
+      "loglik": 2743.133176,
+      "variable_count": 36,
+      "block_count": 1,
+      "ar_lag_count": 2,
+      "nowcast_period": "2026Q2",
+      "gdp_growth_yoy_pct": 7.9789,
+      "gdp_growth_qoq_pct": 1.5245,
+      "gdp_level": 298811.6,
+      "elapsed_seconds": 196.43,
+      "warnings": []
+    },
+    {
+      "case_id": "global_plus_activity_block",
+      "label": "Two-block DFM: global factor plus real-activity loading block",
+      "status": "completed",
+      "converged": true,
+      "iterations": 157,
+      "loglik": 2847.250785,
+      "variable_count": 36,
+      "block_count": 2,
+      "ar_lag_count": 1,
+      "nowcast_period": "2026Q2",
+      "gdp_growth_yoy_pct": 7.874,
+      "gdp_growth_qoq_pct": 1.4258,
+      "gdp_level": 298521.2,
+      "elapsed_seconds": 174.2,
+      "warnings": []
+    }
+  ],
+  "factor_structure_sensitivity": [
+    {
+      "case_id": "ar_lag_2_global_factor",
+      "yoy_difference_vs_baseline_pp": -0.0051,
+      "qoq_difference_vs_baseline_pp": -0.0048
+    },
+    {
+      "case_id": "global_plus_activity_block",
+      "yoy_difference_vs_baseline_pp": -0.11,
+      "qoq_difference_vs_baseline_pp": -0.1035
+    }
+  ],
+  "benchmark_comparison": [
+    {
+      "benchmark_id": "latest_adjusted_yoy_carry_forward",
+      "description": "Carry forward latest model-input adjusted GDP YoY from 2026Q1.",
+      "gdp_growth_yoy_pct": 7.8578,
+      "difference_vs_dfm_pp": 0.1262
+    },
+    {
+      "benchmark_id": "latest_adjusted_qoq_carry_forward",
+      "description": "Apply latest model-input adjusted QoQ growth to 2026Q1 adjusted level.",
+      "gdp_growth_yoy_pct": 8.3638,
+      "difference_vs_dfm_pp": -0.3798
+    },
+    {
+      "benchmark_id": "four_quarter_adjusted_yoy_average",
+      "description": "Average model-input adjusted YoY over 2025Q2-2026Q1.",
+      "gdp_growth_yoy_pct": 7.4038,
+      "difference_vs_dfm_pp": 0.5802
+    },
+    {
+      "benchmark_id": "latest_raw_official_yoy_carry_forward",
+      "description": "Carry forward latest raw official GDP YoY from 2026Q1; display-only benchmark.",
+      "gdp_growth_yoy_pct": 8.7615,
+      "difference_vs_dfm_pp": -0.7775
+    }
+  ],
+  "driver_credibility_audit": {
+    "warning_count": 6,
+    "rows": [
+      {
+        "variable_id": "retail_trade_2021p",
+        "direction": "drags_nowcast",
+        "contribution": -1.273421,
+        "standardized_signal": -4.361969,
+        "latest_level_date": "2026-04-01",
+        "latest_level_value": 33806650.5333,
+        "category": "Trade",
+        "unit": "Currency Units",
+        "transformation_status": "approved",
+        "severity": "warning",
+        "issues": [
+          "large_standardized_signal",
+          "native_unit_contribution_is_factor_signal_not_gdp_pp"
+        ],
+        "reviewer_read": "Use as directional common-factor news only; do not interpret as GDP percentage-point contribution."
+      },
+      {
+        "variable_id": "real_est",
+        "direction": "drags_nowcast",
+        "contribution": -0.695628,
+        "standardized_signal": -1.738017,
+        "latest_level_date": "2026-04-01",
+        "latest_level_value": 23319,
+        "category": "Real estate",
+        "unit": "Number",
+        "transformation_status": "approved",
+        "severity": "note",
+        "issues": [
+          "native_unit_contribution_is_factor_signal_not_gdp_pp"
+        ],
+        "reviewer_read": "Use as directional common-factor news only; do not interpret as GDP percentage-point contribution."
+      },
+      {
+        "variable_id": "IDA_mom",
+        "direction": "drags_nowcast",
+        "contribution": -0.349699,
+        "standardized_signal": -0.976691,
+        "latest_level_date": "2026-04-01",
+        "latest_level_value": 1065,
+        "category": "Business survey",
+        "unit": "Index",
+        "transformation_status": "approved_with_caveat",
+        "severity": "warning",
+        "issues": [
+          "caveated_transformation",
+          "risk_flags:already_growth_series;index;unit_mismatch"
+        ],
+        "reviewer_read": "Use as directional common-factor news only; do not interpret as GDP percentage-point contribution."
+      },
+      {
+        "variable_id": "bank_trans",
+        "direction": "drags_nowcast",
+        "contribution": -0.300606,
+        "standardized_signal": -0.807473,
+        "latest_level_date": "2026-05-01",
+        "latest_level_value": 6742450.0754,
+        "category": "Transactions",
+        "unit": "Number",
+        "transformation_status": "approved",
+        "severity": "note",
+        "issues": [
+          "native_unit_contribution_is_factor_signal_not_gdp_pp"
+        ],
+        "reviewer_read": "Use as directional common-factor news only; do not interpret as GDP percentage-point contribution."
+      },
+      {
+        "variable_id": "retail_trade_grwth",
+        "direction": "drags_nowcast",
+        "contribution": -0.155153,
+        "standardized_signal": -0.682227,
+        "latest_level_date": "2026-04-01",
+        "latest_level_value": 122.9,
+        "category": "Trade",
+        "unit": "Index",
+        "transformation_status": "approved_with_caveat",
+        "severity": "warning",
+        "issues": [
+          "caveated_transformation",
+          "risk_flags:already_growth_series;index;label_ambiguity"
+        ],
+        "reviewer_read": "Use as directional common-factor news only; do not interpret as GDP percentage-point contribution."
+      },
+      {
+        "variable_id": "manf_YOY",
+        "direction": "drags_nowcast",
+        "contribution": -0.095933,
+        "standardized_signal": -0.3003,
+        "latest_level_date": "2026-04-01",
+        "latest_level_value": 106.1166,
+        "category": "Production",
+        "unit": "Index",
+        "transformation_status": "approved_with_caveat",
+        "severity": "warning",
+        "issues": [
+          "caveated_transformation",
+          "risk_flags:already_growth_series;index"
+        ],
+        "reviewer_read": "Use as directional common-factor news only; do not interpret as GDP percentage-point contribution."
+      },
+      {
+        "variable_id": "wholesale_trade_grwth",
+        "direction": "supports_nowcast",
+        "contribution": 0.070216,
+        "standardized_signal": 0.3856,
+        "latest_level_date": "2026-04-01",
+        "latest_level_value": 112.7,
+        "category": "Trade",
+        "unit": "Index",
+        "transformation_status": "approved_with_caveat",
+        "severity": "warning",
+        "issues": [
+          "caveated_transformation",
+          "risk_flags:already_growth_series;index"
+        ],
+        "reviewer_read": "Use as directional common-factor news only; do not interpret as GDP percentage-point contribution."
+      },
+      {
+        "variable_id": "stock_deals",
+        "direction": "drags_nowcast",
+        "contribution": -0.050355,
+        "standardized_signal": -1.115735,
+        "latest_level_date": "2026-05-01",
+        "latest_level_value": 62441,
+        "category": "Stock market",
+        "unit": "Index",
+        "transformation_status": "approved_with_caveat",
+        "severity": "warning",
+        "issues": [
+          "caveated_transformation",
+          "risk_flags:unit_mismatch;label_ambiguity"
+        ],
+        "reviewer_read": "Use as directional common-factor news only; do not interpret as GDP percentage-point contribution."
+      },
+      {
+        "variable_id": "IND_YOY",
+        "direction": "drags_nowcast",
+        "contribution": -0.037421,
+        "standardized_signal": -0.097831,
+        "latest_level_date": "2026-04-01",
+        "latest_level_value": 106.2808,
+        "category": "Production",
+        "unit": "Index",
+        "transformation_status": "approved_with_caveat",
+        "severity": "note",
+        "issues": [
+          "caveated_transformation",
+          "risk_flags:already_growth_series;index"
+        ],
+        "reviewer_read": "Use as directional common-factor news only; do not interpret as GDP percentage-point contribution."
+      },
+      {
+        "variable_id": "IND_2021p",
+        "direction": "supports_nowcast",
+        "contribution": 0.026405,
+        "standardized_signal": 0.105695,
+        "latest_level_date": "2026-04-01",
+        "latest_level_value": 47320.0132,
+        "category": "Production",
+        "unit": "Currency Units",
+        "transformation_status": "approved",
+        "severity": "note",
+        "issues": [
+          "native_unit_contribution_is_factor_signal_not_gdp_pp"
+        ],
+        "reviewer_read": "Use as directional common-factor news only; do not interpret as GDP percentage-point contribution."
+      },
+      {
+        "variable_id": "rate_1y",
+        "direction": "supports_nowcast",
+        "contribution": 0.02318,
+        "standardized_signal": -0.393439,
+        "latest_level_date": "2026-03-01",
+        "latest_level_value": 18.9089,
+        "category": "Interest & Exchange Rates",
+        "unit": "Percent",
+        "transformation_status": "approved_with_caveat",
+        "severity": "note",
+        "issues": [
+          "caveated_transformation",
+          "risk_flags:rate;unit_mismatch"
+        ],
+        "reviewer_read": "Use as directional common-factor news only; do not interpret as GDP percentage-point contribution."
+      },
+      {
+        "variable_id": "exp_agg",
+        "direction": "drags_nowcast",
+        "contribution": -0.021847,
+        "standardized_signal": -0.620648,
+        "latest_level_date": "2026-04-01",
+        "latest_level_value": 26533600652.3109,
+        "category": "Trade",
+        "unit": "Currency Units",
+        "transformation_status": "approved",
+        "severity": "note",
+        "issues": [
+          "native_unit_contribution_is_factor_signal_not_gdp_pp"
+        ],
+        "reviewer_read": "Use as directional common-factor news only; do not interpret as GDP percentage-point contribution."
+      },
+      {
+        "variable_id": "bus_clim",
+        "direction": "supports_nowcast",
+        "contribution": 0.015478,
+        "standardized_signal": 0.426438,
+        "latest_level_date": "2026-04-01",
+        "latest_level_value": 60.4484,
+        "category": "Business survey",
+        "unit": "Index",
+        "transformation_status": "approved_with_caveat",
+        "severity": "note",
+        "issues": [
+          "caveated_transformation",
+          "risk_flags:index;label_ambiguity"
+        ],
+        "reviewer_read": "Use as directional common-factor news only; do not interpret as GDP percentage-point contribution."
+      },
+      {
+        "variable_id": "construction (2021p)",
+        "direction": "drags_nowcast",
+        "contribution": -0.010773,
+        "standardized_signal": -0.189816,
+        "latest_level_date": "2026-04-01",
+        "latest_level_value": 13084.1956,
+        "category": "construction",
+        "unit": "Currency Units",
+        "transformation_status": "approved",
+        "severity": "note",
+        "issues": [
+          "native_unit_contribution_is_factor_signal_not_gdp_pp"
+        ],
+        "reviewer_read": "Use as directional common-factor news only; do not interpret as GDP percentage-point contribution."
+      }
+    ]
+  },
+  "transformation_robustness_reference": {
+    "status": "small_headline_sensitivity_with_convergence_caveat",
+    "max_abs_yoy_difference_pp": 0.1719,
+    "artifact": "docs/data-bridge/dfm-transformation-robustness-review.json"
+  },
+  "final_verdict": {
+    "status": "reviewable_but_not_publication_ready",
+    "critical": [
+      "Do not publish the 2026Q2 source result as an official forecast or as the public dfm.json contract yet.",
+      "True real-time vintage backtesting is still missing.",
+      "At least one robustness layer has a convergence caveat, so alternative specifications are diagnostics rather than accepted production models."
+    ],
+    "supporting_points": [
+      "The baseline source nowcast is close to simple adjusted-GDP benchmarks.",
+      "Transformation stress changes the headline by less than 0.2 pp; isolation shows a multi-row production-growth-index interaction rather than one bad row.",
+      "Dropping caveated high-frequency rows changes the headline by -0.1719 pp.",
+      "Top drivers are economically plausible directional signals, but several are caveated or large standardized moves."
+    ],
+    "required_before_publication": [
+      "Resolve EM non-convergence in the reviewed-transformation stress case.",
+      "Confirm transformations and labels for caveated growth, rate, survey, FX, and stock-market rows.",
+      "Add historical source-workbook vintages or saved pre-release DFM outputs for real-time backtesting.",
+      "Decide the publication contract for source-output review versus public dfm.json."
+    ]
+  }
+}

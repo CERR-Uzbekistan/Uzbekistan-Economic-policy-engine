@@ -1,0 +1,106 @@
+{
+  "model_id": "uzbekistan-qpm-extended",
+  "version": "0.4.0",
+  "status": "research_diagnostic",
+  "production_runtime": false,
+  "reference": {
+    "document": "QPM_MB_lot.pdf",
+    "institution": "Central Bank of the Republic of Uzbekistan",
+    "calibration_as_of": "2026-05"
+  },
+  "compatibility_model": "qpm-core-v0.3",
+  "modules": {
+    "legacy_contract": "mcp_server/models/qpm_spec.py",
+    "structural_baseline": "mcp_server/models/qpm_structural_baseline.py",
+    "inflation": "mcp_server/models/qpm_inflation_block.py",
+    "cpi_data": "mcp_server/models/qpm_cpi_data.py",
+    "satellites": "mcp_server/models/qpm_satellite_blocks.py",
+    "validation": "mcp_server/models/qpm_validation.py"
+  },
+  "published_calibration": {
+    "demand_lag": 0.6,
+    "demand_forward": 0.01,
+    "demand_rmci": 0.15,
+    "demand_foreign_gap": 0.18,
+    "demand_remittance_gap": 0.03,
+    "demand_fiscal_impulse": 0.2,
+    "demand_credit_activity": 0.2,
+    "demand_fdi_gap": 0.05,
+    "rmci_rer_share": 0.45,
+    "core_expectations": 0.25,
+    "core_imported_inflation": 0.15,
+    "core_marginal_cost": 0.5,
+    "core_adaptive_inertia": 0.6,
+    "fruit_vegetable_inertia": 0.2,
+    "fruit_vegetable_relative_price_reversion": 1.0,
+    "regulated_inertia": 0.01,
+    "regulated_relative_price_reversion": 0.5,
+    "policy_rate_smoothing": 0.6,
+    "policy_inflation_response": 1.0,
+    "policy_output_gap_response": 0.35,
+    "exchange_expectations_weight": 0.2,
+    "exchange_rer_gap_response": 1.0,
+    "exchange_remittance_response": 0.1,
+    "remittance_inertia": 0.8,
+    "remittance_russia_gap_response": 0.65,
+    "remittance_trend_inertia": 0.9,
+    "remittance_ruble_response": 0.1,
+    "wage_expectations_weight": 0.5,
+    "wage_output_gap_response": 3.0,
+    "wage_real_gap_response": 0.7,
+    "import_inflation_inertia": 0.4
+  },
+  "explicitly_uncalibrated": {
+    "cpi": [
+      "component_weights_by_vintage",
+      "official_component_membership",
+      "wage_gap_marginal_cost_slope",
+      "oil_gap_marginal_cost_slope",
+      "food_gap_marginal_cost_slope"
+    ],
+    "external_and_uip": [
+      "partner_output_persistences",
+      "partner_trade_weights",
+      "partner_cpi_weights",
+      "foreign_rate_persistence",
+      "risk_premium_process",
+      "equilibrium_rer_trend_persistence",
+      "fdi_appreciation_slope",
+      "gold_appreciation_slope"
+    ],
+    "fiscal": [
+      "fiscal_impulse_weights",
+      "cyclical_deficit_sensitivity",
+      "structural_deficit_persistence",
+      "debt_feedback",
+      "debt_maturities_and_term_premium"
+    ],
+    "credit": [
+      "repayment_rate",
+      "writeoff_rate",
+      "fx_credit_share",
+      "default_gap_sensitivity",
+      "new_credit_equation_slopes"
+    ],
+    "fdi": [
+      "fdi_gap_persistence",
+      "fdi_trend_persistence",
+      "long_run_fdi_to_gdp"
+    ]
+  },
+  "diagnostic_only_inputs": {
+    "cpi_component_map": "model_specs/qpm/cpi-component-map-v0.1.json",
+    "equal_weight_component_aggregation": "requires_explicit_opt_in",
+    "residual_fan_chart": "does_not_include_parameter_data_or_scenario_uncertainty"
+  },
+  "promotion_state": {
+    "cpi_weights": false,
+    "joint_forward_solver": false,
+    "trend_and_gap_estimation": false,
+    "historical_decomposition": false,
+    "rolling_backtest": false,
+    "parameter_uncertainty": false,
+    "scenario_lab_migration": false,
+    "model_owner_approval": false
+  }
+}

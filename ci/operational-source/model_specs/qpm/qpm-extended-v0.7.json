@@ -1,0 +1,117 @@
+{
+  "model_id": "uzbekistan-qpm-extended",
+  "version": "0.7.0",
+  "status": "research_diagnostic",
+  "production_runtime": false,
+  "reference": {
+    "document": "QPM_MB_lot.pdf",
+    "institution": "Central Bank of the Republic of Uzbekistan",
+    "calibration_as_of": "2026-07-20"
+  },
+  "compatibility_model": "qpm-core-v0.3",
+  "modules": {
+    "observed_state": "mcp_server/models/qpm_observed_state.py",
+    "official_gdp": "mcp_server/models/qpm_siat_gdp.py",
+    "official_cpi_policy": "mcp_server/models/qpm_official_macro_data.py",
+    "macro_proxies": "mcp_server/models/qpm_macro_proxies.py",
+    "credit_equation": "mcp_server/models/qpm_credit_equation.py",
+    "extended_runtime": "mcp_server/models/qpm_extended_runtime.py"
+  },
+  "data_inputs": {
+    "credit_and_fdi_activity_proxy": {
+      "readiness": "verified_official",
+      "coverage": "2020Q1/2026Q1"
+    },
+    "nominal_gdp_and_discrete_real_growth": {
+      "readiness": "verified_official",
+      "contract": "model_specs/qpm/qpm-gdp-data-contract-v0.1.json"
+    },
+    "headline_cpi_and_policy_rate": {
+      "readiness": "verified_official",
+      "contract": "model_specs/qpm/qpm-official-macro-data-contract-v0.1.json",
+      "quarterly_cpi_yoy_coverage": "2022Q1/2026Q2",
+      "quarterly_policy_coverage": "2016Q1/2026Q2"
+    }
+  },
+  "published_satellite_demand_weights": {
+    "credit_activity": 0.2,
+    "fdi_gap": 0.05
+  },
+  "macro_proxy_diagnostics": {
+    "output_growth_gap": "official discrete-quarter real growth minus strictly prior eight-quarter mean",
+    "real_policy_rate_gap": "calendar-day-weighted official policy rate minus official CPI inflation, minus strictly prior four-quarter mean",
+    "structural_interpretation_allowed": false,
+    "lookahead_safe": true,
+    "latest_output_growth_gap_period": "2026Q1",
+    "latest_output_growth_gap_percentage_points": 1.5591123112,
+    "latest_real_policy_rate_gap_period": "2026Q1",
+    "latest_real_policy_rate_gap_percentage_points": 1.7148707243
+  },
+  "empirical_diagnostics": {
+    "multivariate_credit_activity": {
+      "coverage": "2023Q2/2026Q1",
+      "observations": 12,
+      "persistence": 0.1088314570,
+      "real_policy_rate_gap_slope": -0.4705857517,
+      "output_growth_gap_slope": 1.2932977340,
+      "r_squared": 0.3883313411,
+      "standardized_condition_number": 1.7744229445,
+      "expected_signs_satisfied": true,
+      "backtest_forecasts": 4,
+      "multivariate_rmse": 2.2505158315,
+      "ar1_rmse": 2.3685035082,
+      "random_walk_rmse": 2.2330798436,
+      "historical_mean_rmse": 2.3850809169,
+      "real_rate_window_sensitivity": {
+        "4_quarters": {
+          "observations": 12,
+          "persistence": 0.1088314570,
+          "real_rate_slope": -0.4705857517,
+          "output_slope": 1.2932977340
+        },
+        "6_quarters": {
+          "observations": 10,
+          "persistence": 0.0376560575,
+          "real_rate_slope": -0.7018328495,
+          "output_slope": 1.4571144241
+        },
+        "8_quarters": {
+          "observations": 8,
+          "persistence": -0.2788313576,
+          "real_rate_slope": -1.2717916788,
+          "output_slope": 3.0827051700
+        }
+      },
+      "promoted": false,
+      "reason": "only four rolling forecasts; does not beat random walk; persistence becomes negative with an eight-quarter real-rate window"
+    }
+  },
+  "latest_diagnostic_conditioning": {
+    "credit_period": "2026Q1",
+    "fdi_proxy_period": "2026Q1",
+    "mapped_demand_contribution": 0.2856265494,
+    "mixed_vintage": false,
+    "production_authorized": false
+  },
+  "explicitly_unidentified": [
+    "structural_output_gap",
+    "neutral_real_interest_rate",
+    "inflation_expectations_consistent_real_rate_gap",
+    "causal_credit_equation_slopes",
+    "balance_of_payments_fdi_flow",
+    "credit_default_migration_and_cure_flows"
+  ],
+  "promotion_state": {
+    "official_credit_observed_state": true,
+    "official_gdp_observed_state": true,
+    "official_headline_cpi": true,
+    "official_policy_rate_events": true,
+    "one_sided_macro_proxies": true,
+    "multivariate_credit_expected_signs": true,
+    "multivariate_credit_equation": false,
+    "joint_forward_solver": false,
+    "historical_decomposition": false,
+    "parameter_uncertainty": false,
+    "model_owner_approval": false
+  }
+}

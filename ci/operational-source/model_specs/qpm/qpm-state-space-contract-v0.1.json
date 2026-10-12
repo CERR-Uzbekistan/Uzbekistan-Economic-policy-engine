@@ -1,0 +1,107 @@
+{
+  "contract_id": "qpm-state-space-contract",
+  "version": "0.1.0",
+  "model_version": "0.9.0",
+  "status": "research_diagnostic",
+  "as_of": "2026-07-21",
+  "production_authorized": false,
+  "state_vector": [
+    "potential_output_log_index",
+    "trend_growth_quarter_percent",
+    "output_gap_percent",
+    "neutral_real_rate_percent"
+  ],
+  "official_inputs": {
+    "gdp": {
+      "source_contract": "model_specs/qpm/qpm-gdp-data-contract-v0.1.json",
+      "source_frequency": "quarterly",
+      "source_measure": "year-on-year real growth by discrete quarter",
+      "activity_proxy": "2018-base seasonal-quarter chain volumes aggregated as a trailing four-quarter sum",
+      "activity_proxy_coverage": "2018Q4/2026Q1",
+      "validation": "recursively chained volumes exactly reproduce every published discrete-quarter real growth rate",
+      "limitation": "not an official seasonally adjusted chain-linked real GDP level"
+    },
+    "inflation": {
+      "source_contract": "model_specs/qpm/qpm-official-macro-data-contract-v0.1.json",
+      "measurement": "quarterly change in year-on-year headline CPI inflation",
+      "measurement_coverage": "2022Q2/2026Q2"
+    },
+    "expected_real_policy_rate": {
+      "source_contract": "model_specs/qpm/qpm-monetary-stance-data-contract-v0.1.json",
+      "measurement": "calendar-day-weighted policy rate minus equal-weight household/business 12-month expectations",
+      "coverage": "2024Q1/2026Q2",
+      "observations": 10,
+      "timing_in_transition": "one-quarter lag"
+    }
+  },
+  "transition_equations": {
+    "potential_output": "potential[t] = potential[t-1] + trend_growth[t-1] + level_shock[t]",
+    "trend_growth": "trend_growth[t] = trend_growth[t-1] + trend_shock[t]",
+    "output_gap": "gap[t] = rho_gap * gap[t-1] - alpha_r * (real_rate[t-1] - rstar[t-1]) + gap_shock[t]",
+    "neutral_rate": "rstar[t] = rho_rstar * rstar[t-1] + (1-rho_rstar) * anchor + rstar_shock[t]"
+  },
+  "measurement_equations": {
+    "activity": "log_activity[t] = potential[t] + gap[t] + measurement_error[t]",
+    "inflation_change": "delta_inflation_yoy[t] = kappa_gap * gap[t] + measurement_error[t]"
+  },
+  "central_calibration": {
+    "output_gap_persistence": 0.75,
+    "real_rate_gap_effect": 0.06,
+    "inflation_gap_slope": 0.15,
+    "neutral_rate_persistence": 0.95,
+    "neutral_rate_anchor_percent": 4.0,
+    "potential_level_shock_std": 0.10,
+    "trend_growth_shock_std": 0.04,
+    "output_gap_shock_std": 0.35,
+    "neutral_rate_shock_std": 0.12,
+    "activity_measurement_std": 0.10,
+    "inflation_change_measurement_std": 0.80,
+    "initial_potential_std": 0.50,
+    "initial_trend_growth_std": 0.25,
+    "initial_output_gap_std": 1.00,
+    "initial_neutral_rate_std": 0.55
+  },
+  "missing_data_rules": {
+    "pre_2024_real_rate": "set transition input to the neutral-rate anchor; do not label it observed",
+    "missing_activity": "perform prediction and update with any available inflation measurement",
+    "complete_case_deletion": false
+  },
+  "real_time_rules": {
+    "filtered_states": "one-sided and eligible for real-time diagnostics",
+    "smoothed_states": "full-sample retrospective only",
+    "lookahead_in_filtered_states": false,
+    "data_vintage_required": true
+  },
+  "sensitivity_grid": {
+    "neutral_rate_anchor_percent": [3.4, 4.0, 4.5],
+    "real_rate_gap_effect": [0.03, 0.06, 0.10],
+    "cells": 9
+  },
+  "current_validation": {
+    "activity_forecasts": 29,
+    "activity_filter_rmse_log_points": 0.7788710950,
+    "activity_random_walk_rmse_log_points": 1.6621247045,
+    "activity_beats_random_walk": true,
+    "inflation_change_forecasts": 17,
+    "inflation_filter_rmse_percentage_points": 0.9393436316,
+    "inflation_zero_change_rmse_percentage_points": 0.9081507713,
+    "inflation_beats_zero_change": false
+  },
+  "promotion_gates": {
+    "minimum_expectations_real_rate_quarters": 16,
+    "current_expectations_real_rate_quarters": 10,
+    "activity_must_beat_random_walk": true,
+    "inflation_change_must_beat_zero_change": true,
+    "coefficients_and_variances_must_be_estimated_or_owner_approved": true,
+    "official_seasonally_adjusted_real_gdp_or_owner_approved_proxy_required": true,
+    "model_owner_approval_required": true,
+    "all_current_gates_pass": false
+  },
+  "interpretation_limits": [
+    "Filtered output gaps and neutral rates are conditional on the stated calibration.",
+    "The neutral-rate prior materially influences the short expectations sample.",
+    "The 2026Q2 output gap is a partial-information nowcast because official activity ends in 2026Q1.",
+    "The smoother must never be presented as a real-time historical estimate.",
+    "No causal or structural interpretation is authorized."
+  ]
+}

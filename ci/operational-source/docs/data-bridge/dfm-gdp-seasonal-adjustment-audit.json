@@ -1,0 +1,158 @@
+{
+  "artifact": {
+    "id": "dfm-gdp-seasonal-adjustment-audit",
+    "generated_at": "2026-07-16T10:01:34Z",
+    "source_folder": "<DFM_SOURCE_DIR>",
+    "source_workbook": "<DFM_SOURCE_DIR>/data/data_uzbekistan.xlsx",
+    "source_workbook_md5": "42a1e478f39a77db3797c188cd841f78",
+    "runner": "scripts/dfm/audit-gdp-seasonal-adjustment.R",
+    "r_version": "4.5.2"
+  },
+  "latest": {
+    "period": "2025Q4",
+    "raw_gdp_level": 317688.7,
+    "adjusted_gdp_level": 282979.5,
+    "raw_yoy_pct": 8.5455,
+    "adjusted_yoy_pct": 8.7027,
+    "yoy_gap_pp": 0.1572,
+    "raw_qoq_pct": 8.0818,
+    "adjusted_qoq_pct": 1.9005,
+    "qoq_gap_pp": -6.1813
+  },
+  "volatility": {
+    "raw_qoq_sd_pp": 25.4865,
+    "adjusted_qoq_sd_pp": 1.9876,
+    "raw_yoy_sd_pp": 5.5285,
+    "adjusted_yoy_sd_pp": 2.8217
+  },
+  "seasonal_by_quarter": [
+    {
+      "quarter": "Q1",
+      "mean_raw_to_adjusted_ratio": 0.7767,
+      "mean_raw_qoq_pct": -34.8235,
+      "mean_adjusted_qoq_pct": 1.553,
+      "observations": 9
+    },
+    {
+      "quarter": "Q2",
+      "mean_raw_to_adjusted_ratio": 0.9986,
+      "mean_raw_qoq_pct": 30.6968,
+      "mean_adjusted_qoq_pct": 1.5931,
+      "observations": 9
+    },
+    {
+      "quarter": "Q3",
+      "mean_raw_to_adjusted_ratio": 1.0395,
+      "mean_raw_qoq_pct": 5.7135,
+      "mean_adjusted_qoq_pct": 1.44,
+      "observations": 9
+    },
+    {
+      "quarter": "Q4",
+      "mean_raw_to_adjusted_ratio": 1.1845,
+      "mean_raw_qoq_pct": 15.8831,
+      "mean_adjusted_qoq_pct": 1.588,
+      "observations": 9
+    }
+  ],
+  "recent_quarters": [
+    {
+      "period": "2024Q1",
+      "raw_yoy_pct": 7.2416,
+      "adjusted_yoy_pct": 8.5113,
+      "yoy_gap_pp": 1.2697,
+      "raw_qoq_pct": -35.6439,
+      "adjusted_qoq_pct": -0.6382,
+      "qoq_gap_pp": 35.0058,
+      "raw_to_adjusted_ratio": 0.7788
+    },
+    {
+      "period": "2024Q2",
+      "raw_yoy_pct": 14.2956,
+      "adjusted_yoy_pct": 6.6449,
+      "yoy_gap_pp": -7.6507,
+      "raw_qoq_pct": 36.1746,
+      "adjusted_qoq_pct": 1.9663,
+      "qoq_gap_pp": -34.2083,
+      "raw_to_adjusted_ratio": 1.04
+    },
+    {
+      "period": "2024Q3",
+      "raw_yoy_pct": 13.7263,
+      "adjusted_yoy_pct": 10.2295,
+      "yoy_gap_pp": -3.4968,
+      "raw_qoq_pct": 2.0734,
+      "adjusted_qoq_pct": 1.7128,
+      "qoq_gap_pp": -0.3606,
+      "raw_to_adjusted_ratio": 1.0437
+    },
+    {
+      "period": "2024Q4",
+      "raw_yoy_pct": -4.9756,
+      "adjusted_yoy_pct": 1.6241,
+      "yoy_gap_pp": 6.5998,
+      "raw_qoq_pct": 6.2274,
+      "adjusted_qoq_pct": -1.3846,
+      "qoq_gap_pp": -7.612,
+      "raw_to_adjusted_ratio": 1.1243
+    },
+    {
+      "period": "2025Q1",
+      "raw_yoy_pct": 4.7701,
+      "adjusted_yoy_pct": 5.3927,
+      "yoy_gap_pp": 0.6226,
+      "raw_qoq_pct": -29.0435,
+      "adjusted_qoq_pct": 3.0466,
+      "qoq_gap_pp": 32.0901,
+      "raw_to_adjusted_ratio": 0.7742
+    },
+    {
+      "period": "2025Q2",
+      "raw_yoy_pct": 6.1521,
+      "adjusted_yoy_pct": 5.3793,
+      "yoy_gap_pp": -0.7728,
+      "raw_qoq_pct": 37.9708,
+      "adjusted_qoq_pct": 1.9533,
+      "qoq_gap_pp": -36.0175,
+      "raw_to_adjusted_ratio": 1.0477
+    },
+    {
+      "period": "2025Q3",
+      "raw_yoy_pct": 6.6832,
+      "adjusted_yoy_pct": 5.1983,
+      "yoy_gap_pp": -1.4848,
+      "raw_qoq_pct": 2.5841,
+      "adjusted_qoq_pct": 1.5382,
+      "qoq_gap_pp": -1.0459,
+      "raw_to_adjusted_ratio": 1.0585
+    },
+    {
+      "period": "2025Q4",
+      "raw_yoy_pct": 8.5455,
+      "adjusted_yoy_pct": 8.7027,
+      "yoy_gap_pp": 0.1572,
+      "raw_qoq_pct": 8.0818,
+      "adjusted_qoq_pct": 1.9005,
+      "qoq_gap_pp": -6.1813,
+      "raw_to_adjusted_ratio": 1.1227
+    }
+  ],
+  "recommendation": {
+    "decision": "keep_adjusted_gdp_for_model_estimation_and_block_source_history_from_public_display_pending_verification",
+    "rationale": [
+      "Raw GDP levels have strong quarter-specific seasonality, especially large Q1 declines and Q2 rebounds, so raw QoQ dynamics are not suitable for the DFM state equation.",
+      "Skipping GDP seasonal adjustment changes the 2026Q2 YoY nowcast by more than 3 percentage points, which is a model-risk warning rather than a reason to display adjusted history as official.",
+      "The raw source-workbook series may be used only to audit the seasonal-adjustment effect until its provenance and continuity are verified."
+    ],
+    "required_guardrails": [
+      "Label both raw source-workbook GDP and adjusted model-input GDP as review-only until provenance and continuity checks pass.",
+      "Do not publish the no-GDP-seasonal-adjustment sensitivity or raw workbook history as an official series.",
+      "Ask the model owner to confirm the X-13 specification and whether GDP should be adjusted by source code or by an official SA series."
+    ]
+  },
+  "limitations": [
+    "This audit checks GDP seasonal adjustment only; it does not validate every non-GDP transformation.",
+    "The source workflow uses automatic X-13 through seasonal::seas(); the exact official seasonal-adjustment convention still needs model-owner confirmation.",
+    "The audit does not create a real-time vintage backtest."
+  ]
+}

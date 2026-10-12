@@ -1,0 +1,90 @@
+{
+  "schema_version": "0.1.0",
+  "status": "diagnostic_only",
+  "as_of": "2026-07-20",
+  "source_dataset": "scripts/overview/source-discovery/phase3/siat-cpi-all-items-mom-4585.json",
+  "headline_code": "1",
+  "value_semantics": "monthly_price_relative_100_equals_no_change",
+  "zero_policy": "treat_as_missing_unavailable",
+  "weight_policy": {
+    "production": "explicit_official_weights_required",
+    "diagnostic": "equal_weight_permitted_only_with_explicit_opt_in"
+  },
+  "components": {
+    "fruit_vegetable": {
+      "review_status": "provisional_clear_fresh_items",
+      "codes": [
+        "01.78",
+        "01.79",
+        "01.80",
+        "01.81",
+        "01.82",
+        "01.83",
+        "01.84",
+        "01.85",
+        "01.86",
+        "01.87",
+        "01.88",
+        "01.88.1",
+        "01.99",
+        "01.100",
+        "01.101",
+        "01.102",
+        "01.103",
+        "01.104",
+        "01.105",
+        "01.106",
+        "01.107",
+        "01.108",
+        "01.109",
+        "01.110",
+        "01.111",
+        "01.113"
+      ],
+      "excluded_pending_definition": {
+        "01.89-01.98": "dried fruit, nuts, seeds, and preserved fruit",
+        "01.112": "mixed fresh/chilled/pickled mushroom item",
+        "01.114-01.116": "legumes; CBU component treatment not documented"
+      }
+    },
+    "regulated": {
+      "review_status": "provisional_administered_price_candidates",
+      "codes": [
+        "03.10",
+        "03.11",
+        "03.12",
+        "03.13",
+        "03.14",
+        "03.15",
+        "03.16",
+        "03.17",
+        "03.35",
+        "03.36",
+        "03.37",
+        "03.38",
+        "03.40",
+        "03.41",
+        "03.68",
+        "03.70"
+      ],
+      "excluded_pending_institutional_confirmation": {
+        "03.39": "intercity bus services",
+        "03.42": "minibus services",
+        "03.43": "taxi services",
+        "03.69-03.71": "private education and mixed state/non-state definitions; 03.70 alone retained as state university"
+      }
+    },
+    "core": {
+      "review_status": "not_constructed",
+      "codes": [],
+      "reason": "the extract mixes aggregates and items; complement classification would double count without a leaf hierarchy and official exclusion rules"
+    }
+  },
+  "promotion_gates": [
+    "official item weights with validity dates",
+    "reviewed mutually exclusive component membership",
+    "leaf-row hierarchy",
+    "weighted reconciliation to official headline CPI",
+    "administered-price event calendar validation"
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.1.0",
+  "status": "classification_verified_item_weights_unavailable",
+  "as_of": "2026-07-23",
+  "methodology_source": {
+    "institution": "Central Bank of the Republic of Uzbekistan",
+    "document": "Core inflation and its estimation methods",
+    "approved": "2025-12-11",
+    "source_url": "https://cbu.uz/upload/iblock/99a/11soxyzf092t6mkb2yok3zpaatc65z7y/Methodology-of-core-inflation-and-its-estimation.pdf",
+    "local_snapshot": "scripts/overview/source-discovery/phase4/cbu-core-inflation-methodology-2025.pdf"
+  },
+  "item_panel": "scripts/overview/source-discovery/phase3/siat-cpi-all-items-mom-4585-2026-07.json",
+  "weight_status": {
+    "regulated_share_of_2025_cpi_percent": 15,
+    "seasonal_share_of_2025_cpi_percent": 7,
+    "core_share_of_2025_cpi_percent": 78,
+    "current_item_weights_available": false,
+    "production_aggregation_allowed": false
+  },
+  "regulated_items": [
+    {"cbu_basket_number": 12, "cbu_name": "Bread made from first-grade wheat flour", "siat_code": "01.12"},
+    {"cbu_basket_number": 301, "cbu_name": "Coal", "siat_code": "02.131.1"},
+    {"cbu_basket_number": 361, "cbu_name": "Passenger cars", "siat_code": "02.191"},
+    {"cbu_basket_number": 366, "cbu_name": "Petrol", "siat_code": "02.196"},
+    {"cbu_basket_number": 367, "cbu_name": "Propane for private vehicles", "siat_code": "02.197"},
+    {"cbu_basket_number": 368, "cbu_name": "Methane for private vehicles", "siat_code": "02.198"},
+    {"cbu_basket_number": 430, "cbu_name": "Charges for cold water supply and sewerage", "siat_code": "03.10"},
+    {"cbu_basket_number": 431, "cbu_name": "Charges for household waste collection", "siat_code": "03.11"},
+    {"cbu_basket_number": 433, "cbu_name": "Charges for electricity supply", "siat_code": "03.13"},
+    {"cbu_basket_number": 434, "cbu_name": "Charges for piped (network) gas supply", "siat_code": "03.14"},
+    {"cbu_basket_number": 435, "cbu_name": "Charges for liquefied gas supply", "siat_code": "03.15"},
+    {"cbu_basket_number": 436, "cbu_name": "Charges for hot water supply", "siat_code": "03.16"},
+    {"cbu_basket_number": 437, "cbu_name": "Charges for central heating", "siat_code": "03.17"},
+    {"cbu_basket_number": 455, "cbu_name": "Fare for suburban trains", "siat_code": "03.35"},
+    {"cbu_basket_number": 456, "cbu_name": "Fare for long-distance trains", "siat_code": "03.36"},
+    {"cbu_basket_number": 457, "cbu_name": "Metro fare", "siat_code": "03.37"},
+    {"cbu_basket_number": 458, "cbu_name": "Tram fare", "siat_code": "03.38"},
+    {"cbu_basket_number": 460, "cbu_name": "Urban bus fare", "siat_code": "03.40"},
+    {"cbu_basket_number": 461, "cbu_name": "Trolleybus fare", "siat_code": "03.41"},
+    {"cbu_basket_number": 469, "cbu_name": "Fixed telephone subscription fee", "siat_code": "03.49"},
+    {"cbu_basket_number": 482, "cbu_name": "Museum services", "siat_code": "03.62"},
+    {"cbu_basket_number": 483, "cbu_name": "Zoo services", "siat_code": "03.63"},
+    {"cbu_basket_number": 488, "cbu_name": "Public preschool education institutions", "siat_code": "03.68"},
+    {"cbu_basket_number": 490, "cbu_name": "Public higher-education tuition under contract", "siat_code": "03.70"},
+    {
+      "cbu_basket_number": 508,
+      "cbu_name": "Religious services",
+      "siat_code": "03.88",
+      "translation_note": "SIAT English label is Funeral services; Uzbek/Russian source meaning requires owner review before aggregation"
+    },
+    {"cbu_basket_number": 509, "cbu_name": "Legal services", "siat_code": "03.89"}
+  ],
+  "seasonal_fruit_vegetable_codes": [
+    "01.78", "01.79", "01.80", "01.81", "01.82", "01.83", "01.84",
+    "01.85", "01.86", "01.87", "01.88", "01.99", "01.100", "01.101",
+    "01.102", "01.103", "01.104", "01.105", "01.106", "01.107",
+    "01.108", "01.109", "01.110", "01.111", "01.112", "01.113"
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": "0.1.0",
+  "status": "research_data_inventory",
+  "as_of": "2026-07-20",
+  "allowed_readiness_states": [
+    "verified_official",
+    "provisional_reconcile",
+    "quarantined",
+    "missing"
+  ],
+  "production_policy": {
+    "default_allowed_state": "verified_official",
+    "provisional_requires_explicit_opt_in": true,
+    "quarantined_requires_explicit_opt_in": true,
+    "missing_is_never_loadable": true,
+    "silent_unit_conversion_forbidden": true,
+    "silent_missing_value_imputation_forbidden": true,
+    "raw_files_read_only": true
+  },
+  "sources": {
+    "cbu_bulletin_2026_03_normalized": {
+      "path": "scripts/overview/source-discovery/phase3/cbu-qpm-credit-npl-monthly-2026-03.json",
+      "format": "normalized_json",
+      "frequency": "monthly",
+      "coverage": "2020M01/2026M04",
+      "upstream_vintage": "2026-07-09",
+      "url": "https://cbu.uz/en/statistics/buleten/4140520/"
+    }
+  },
+  "series": {
+    "gross_credit_stock": {
+      "source": "cbu_bulletin_2026_03_normalized",
+      "column": "npl.gross_loans_total_bn_uzs",
+      "frequency": "monthly_stock",
+      "unit": "billion_uzs",
+      "coverage": "2020M01/2026M04",
+      "missing_observations": 0,
+      "readiness": "verified_official",
+      "required_action": "map month-start observations to the preceding quarter end"
+    },
+    "nonperforming_credit_stock_and_ratio": {
+      "source": "cbu_bulletin_2026_03_normalized",
+      "column": "npl.npl_total_bn_uzs;npl_ratio_total_percent",
+      "frequency": "monthly_stock",
+      "unit": "billion_uzs_and_percent",
+      "coverage": "2020M01/2026M04",
+      "missing_observations": 0,
+      "readiness": "verified_official",
+      "required_action": "use for state initialization and reduced-form NPL validation"
+    },
+    "fx_credit_share": {
+      "source": "cbu_bulletin_2026_03_normalized",
+      "column": "loan_stock_by_client.fcy_total_bn_uzs/total_bn_uzs",
+      "frequency": "monthly_stock",
+      "unit": "fraction",
+      "coverage": "2020M01/2026M04",
+      "missing_observations": 0,
+      "readiness": "verified_official",
+      "required_action": "use the lending table currency split, not the NPL ownership split"
+    },
+    "new_credit_flow": {
+      "source": "cbu_bulletin_2026_03_normalized",
+      "column": "new_loans.total_bn_uzs;lcy_total_bn_uzs;fcy_total_bn_uzs",
+      "frequency": "monthly_flow",
+      "unit": "billion_uzs",
+      "coverage": "2020M01/2026M03",
+      "missing_observations": 0,
+      "readiness": "verified_official",
+      "required_action": "sum three monthly flows for each model quarter"
+    },
+    "gross_default_migration_rate": {
+      "source": null,
+      "column": null,
+      "frequency": "quarterly",
+      "unit": "fraction",
+      "coverage": null,
+      "missing_observations": null,
+      "readiness": "missing",
+      "required_action": "obtain loan migration or default-entry flows; NPL stock changes do not identify gross defaults"
+    },
+    "npl_cures_and_writeoffs": {
+      "source": null,
+      "column": null,
+      "frequency": "quarterly",
+      "unit": "billion_uzs_or_fraction",
+      "coverage": null,
+      "missing_observations": null,
+      "readiness": "missing",
+      "required_action": "obtain cure, sale, restructuring, and write-off flows"
+    }
+  },
+  "forbidden_legacy_constructions": [
+    "npl_ownership_columns_labeled_as_currency",
+    "month_start_stock_assigned_to_same_calendar_quarter",
+    "net_npl_stock_change_labeled_as_gross_default_flow",
+    "credit_stock_difference_labeled_as_new_lending"
+  ]
+}

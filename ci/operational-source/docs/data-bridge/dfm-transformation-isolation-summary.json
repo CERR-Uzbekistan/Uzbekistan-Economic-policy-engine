@@ -1,0 +1,187 @@
+{
+  "artifact": {
+    "id": "dfm-transformation-isolation-summary",
+    "generated_at": "2026-06-09T07:07:01Z",
+    "source_artifact_latest_run": "docs/data-bridge/dfm-transformation-isolation-review.json",
+    "runner": "scripts/dfm/review-transformation-isolation.R",
+    "em_settings": {
+      "max_iter": 300,
+      "threshold": 0.00001
+    }
+  },
+  "baseline_reference": {
+    "nowcast_period": "2026Q2",
+    "gdp_growth_yoy_pct": 7.984,
+    "gdp_growth_qoq_pct": 1.5293
+  },
+  "stage_1_group_cases": {
+    "finding": "All selected transformation groups converged individually; no standalone group explains the full reviewed-transformation nonconvergence.",
+    "max_abs_yoy_difference_pp": 0.0892,
+    "cases": [
+      {
+        "case_id": "group_rates_ratios",
+        "gdp_growth_yoy_pct": 7.984,
+        "yoy_difference_vs_baseline_pp": 0,
+        "converged": true,
+        "iterations": 186
+      },
+      {
+        "case_id": "group_business_survey",
+        "gdp_growth_yoy_pct": 7.9957,
+        "yoy_difference_vs_baseline_pp": 0.0117,
+        "converged": true,
+        "iterations": 176
+      },
+      {
+        "case_id": "group_production_growth_indexes",
+        "gdp_growth_yoy_pct": 8.0732,
+        "yoy_difference_vs_baseline_pp": 0.0892,
+        "converged": true,
+        "iterations": 195
+      },
+      {
+        "case_id": "group_trade_services_growth_indexes",
+        "gdp_growth_yoy_pct": 7.9909,
+        "yoy_difference_vs_baseline_pp": 0.0069,
+        "converged": true,
+        "iterations": 194
+      },
+      {
+        "case_id": "group_foreign_leading_index",
+        "gdp_growth_yoy_pct": 7.9853,
+        "yoy_difference_vs_baseline_pp": 0.0013,
+        "converged": true,
+        "iterations": 209
+      }
+    ]
+  },
+  "stage_2_all_except_cases": {
+    "finding": "Removing the production-growth-index group is the only all-except case that restored convergence under the 300-iteration cap.",
+    "max_abs_yoy_difference_pp": 0.1121,
+    "cases": [
+      {
+        "case_id": "all_reviewed_replaced_rows",
+        "gdp_growth_yoy_pct": 8.0191,
+        "yoy_difference_vs_baseline_pp": 0.0351,
+        "converged": false,
+        "iterations": 301
+      },
+      {
+        "case_id": "all_except_rates_ratios",
+        "gdp_growth_yoy_pct": 8.0188,
+        "yoy_difference_vs_baseline_pp": 0.0348,
+        "converged": false,
+        "iterations": 301
+      },
+      {
+        "case_id": "all_except_business_survey",
+        "gdp_growth_yoy_pct": 8.0933,
+        "yoy_difference_vs_baseline_pp": 0.1093,
+        "converged": false,
+        "iterations": 301
+      },
+      {
+        "case_id": "all_except_production_growth_indexes",
+        "gdp_growth_yoy_pct": 8.004,
+        "yoy_difference_vs_baseline_pp": 0.02,
+        "converged": true,
+        "iterations": 207
+      },
+      {
+        "case_id": "all_except_trade_services_growth_indexes",
+        "gdp_growth_yoy_pct": 8.0961,
+        "yoy_difference_vs_baseline_pp": 0.1121,
+        "converged": false,
+        "iterations": 301
+      },
+      {
+        "case_id": "all_except_foreign_leading_index",
+        "gdp_growth_yoy_pct": 8.0634,
+        "yoy_difference_vs_baseline_pp": 0.0794,
+        "converged": false,
+        "iterations": 301
+      }
+    ]
+  },
+  "stage_3_production_pair_cases": {
+    "finding": "Production-growth-index transformations plus rates/ratios converge; production plus survey, trade/services, or the foreign leading index does not converge under the 300-iteration cap.",
+    "max_abs_yoy_difference_pp": 0.13,
+    "cases": [
+      {
+        "case_id": "production_plus_rates_ratios",
+        "gdp_growth_yoy_pct": 8.073,
+        "yoy_difference_vs_baseline_pp": 0.089,
+        "converged": true,
+        "iterations": 193
+      },
+      {
+        "case_id": "production_plus_business_survey",
+        "gdp_growth_yoy_pct": 8.114,
+        "yoy_difference_vs_baseline_pp": 0.13,
+        "converged": false,
+        "iterations": 301
+      },
+      {
+        "case_id": "production_plus_trade_services_growth_indexes",
+        "gdp_growth_yoy_pct": 8.0848,
+        "yoy_difference_vs_baseline_pp": 0.1008,
+        "converged": false,
+        "iterations": 301
+      },
+      {
+        "case_id": "production_plus_foreign_leading_index",
+        "gdp_growth_yoy_pct": 8.072,
+        "yoy_difference_vs_baseline_pp": 0.088,
+        "converged": false,
+        "iterations": 301
+      }
+    ]
+  },
+  "stage_4_single_production_plus_foreign_cases": {
+    "finding": "No single production-growth row plus the foreign leading index is sufficient to recreate the nonconvergence; the issue is a multi-row interaction.",
+    "max_abs_yoy_difference_pp": 0.0397,
+    "cases": [
+      {
+        "case_id": "single_ip_cppy_plus_foreign_leading_index",
+        "gdp_growth_yoy_pct": 7.9586,
+        "yoy_difference_vs_baseline_pp": -0.0254,
+        "converged": true,
+        "iterations": 150
+      },
+      {
+        "case_id": "single_ind_percap_grwth_plus_foreign_leading_index",
+        "gdp_growth_yoy_pct": 7.9443,
+        "yoy_difference_vs_baseline_pp": -0.0397,
+        "converged": true,
+        "iterations": 153
+      },
+      {
+        "case_id": "single_const_grwth_plus_foreign_leading_index",
+        "gdp_growth_yoy_pct": 7.9787,
+        "yoy_difference_vs_baseline_pp": -0.0053,
+        "converged": true,
+        "iterations": 256
+      },
+      {
+        "case_id": "single_IND_YOY_plus_foreign_leading_index",
+        "gdp_growth_yoy_pct": 7.9916,
+        "yoy_difference_vs_baseline_pp": 0.0076,
+        "converged": true,
+        "iterations": 210
+      },
+      {
+        "case_id": "single_manf_YOY_plus_foreign_leading_index",
+        "gdp_growth_yoy_pct": 7.9892,
+        "yoy_difference_vs_baseline_pp": 0.0052,
+        "converged": true,
+        "iterations": 216
+      }
+    ]
+  },
+  "reviewer_conclusion": {
+    "status": "multi_row_interaction_in_growth_index_transformations",
+    "headline_assessment": "The nowcast point estimate remains stable in all isolation runs, with maximum observed movement of 0.13 percentage points versus baseline.",
+    "convergence_assessment": "The nonconvergence is not attributable to a single row or standalone group. Production-growth-index level-signal replacements are necessary for the weak convergence, and they become problematic when combined with other already-growth/survey/foreign-index replacements.",
+    "recommended_action": "Do not promote the full reviewed-transformation specification. Keep the baseline/source transformation path for the defensible review nowcast, and require model-owner review before replacing multiple already-growth index rows simultaneously."
+  }
+}

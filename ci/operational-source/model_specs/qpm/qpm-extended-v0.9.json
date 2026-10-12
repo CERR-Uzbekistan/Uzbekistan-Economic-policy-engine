@@ -1,0 +1,123 @@
+{
+  "model_id": "uzbekistan-qpm-extended",
+  "version": "0.9.0",
+  "status": "research_diagnostic",
+  "production_runtime": false,
+  "reference": {
+    "document": "QPM_MB_lot.pdf",
+    "institution": "Central Bank of the Republic of Uzbekistan",
+    "calibration_as_of": "2026-07-21"
+  },
+  "compatibility_model": "qpm-core-v0.3",
+  "modules": {
+    "observed_state": "mcp_server/models/qpm_observed_state.py",
+    "official_gdp": "mcp_server/models/qpm_siat_gdp.py",
+    "official_cpi_policy": "mcp_server/models/qpm_official_macro_data.py",
+    "inflation_expectations": "mcp_server/models/qpm_expectations_data.py",
+    "monetary_stance": "mcp_server/models/qpm_monetary_stance.py",
+    "state_space_filter": "mcp_server/models/qpm_state_space.py",
+    "macro_proxies": "mcp_server/models/qpm_macro_proxies.py",
+    "credit_equation": "mcp_server/models/qpm_credit_equation.py",
+    "extended_runtime": "mcp_server/models/qpm_extended_runtime.py"
+  },
+  "data_contracts": [
+    "model_specs/qpm/qpm-gdp-data-contract-v0.1.json",
+    "model_specs/qpm/qpm-official-macro-data-contract-v0.1.json",
+    "model_specs/qpm/qpm-monetary-stance-data-contract-v0.1.json",
+    "model_specs/qpm/qpm-state-space-contract-v0.1.json"
+  ],
+  "published_satellite_demand_weights": {
+    "credit_activity": 0.2,
+    "fdi_gap": 0.05
+  },
+  "state_space_diagnostics": {
+    "coverage": "2018Q4/2026Q2",
+    "activity_observed_through": "2026Q1",
+    "expectations_real_rate_coverage": "2024Q1/2026Q2",
+    "expectations_real_rate_observations": 10,
+    "filtered_is_one_sided": true,
+    "smoothed_is_retrospective": true,
+    "structural_interpretation_allowed": false,
+    "latest_filtered_partial_information_nowcast": {
+      "period": "2026Q2",
+      "activity_observed": false,
+      "output_gap_percent": 0.6251294096,
+      "output_gap_std": 0.5034826598,
+      "approximate_90_percent_output_gap_interval": [-0.2030995658, 1.4533583849],
+      "neutral_real_rate_percent": 3.9776105786,
+      "neutral_real_rate_std": 0.3928674241,
+      "approximate_90_percent_neutral_rate_interval": [3.3313436649, 4.6238774923]
+    },
+    "latest_observed_activity_filtered": {
+      "period": "2026Q1",
+      "output_gap_percent": 0.8407493607,
+      "output_gap_std": 0.4808032197,
+      "neutral_real_rate_percent": 3.9838531679
+    },
+    "nine_cell_calibration_sensitivity": {
+      "neutral_rate_anchor_grid_percent": [3.4, 4.0, 4.5],
+      "real_rate_gap_effect_grid": [0.03, 0.06, 0.10],
+      "latest_neutral_rate_range_percent": [3.3616064422, 4.4895155216],
+      "latest_output_gap_range_percent": [0.3387184213, 1.0879836976]
+    },
+    "sequential_measurement_diagnostics": {
+      "activity_forecasts": 29,
+      "activity_filter_rmse_log_points": 0.7788710950,
+      "activity_random_walk_rmse_log_points": 1.6621247045,
+      "activity_beats_random_walk": true,
+      "inflation_change_forecasts": 17,
+      "inflation_filter_rmse_percentage_points": 0.9393436316,
+      "inflation_zero_change_rmse_percentage_points": 0.9081507713,
+      "inflation_beats_zero_change": false,
+      "interpretation": "fixed-calibration sequential innovations, not a production forecast backtest"
+    },
+    "promoted": false,
+    "promotion_blockers": [
+      "only ten quarters of expectations-based real-rate inputs; gate requires sixteen",
+      "inflation-change measurement fails the zero-change benchmark",
+      "state-space coefficients and variances are calibrated rather than estimated",
+      "real activity is a validated proxy rather than an official seasonally adjusted level",
+      "model owner approval is absent"
+    ]
+  },
+  "monetary_stance_v0_8_retained": {
+    "latest_period": "2026Q2",
+    "composite_real_policy_rate_percent": 3.855,
+    "literature_neutral_range_percent": [3.4, 4.5],
+    "classification": "inside_neutral_range",
+    "purpose": "transparent non-filter benchmark"
+  },
+  "credit_equations_retained_as_diagnostics": {
+    "expectations_based_observations": 8,
+    "expectations_based_rolling_forecasts": 0,
+    "ex_post_observations": 12,
+    "ex_post_rolling_forecasts": 4,
+    "promoted": false
+  },
+  "explicitly_unidentified": [
+    "structural_output_gap",
+    "structural_time_varying_neutral_real_interest_rate",
+    "model_consistent_inflation_expectations",
+    "causal_aggregate_demand_real_rate_slope",
+    "estimated_state_and_measurement_shock_variances",
+    "causal_credit_equation_slopes",
+    "balance_of_payments_fdi_flow"
+  ],
+  "promotion_state": {
+    "official_gdp_growth": true,
+    "validated_chain_volume_activity_proxy": true,
+    "official_headline_cpi": true,
+    "official_policy_rate_events": true,
+    "official_inflation_expectations_snapshot": true,
+    "one_sided_filter_mechanics": true,
+    "lookahead_invariance_test": true,
+    "activity_sequential_benchmark": true,
+    "inflation_sequential_benchmark": false,
+    "structural_output_gap": false,
+    "structural_time_varying_neutral_rate": false,
+    "joint_forward_solver": false,
+    "historical_decomposition": false,
+    "parameter_uncertainty_estimated": false,
+    "model_owner_approval": false
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": "0.1.0",
+  "status": "verified_official_research_input",
+  "as_of": "2026-07-20",
+  "sources": {
+    "headline_cpi_monthly_relative": {
+      "provider": "National Statistics Committee of Uzbekistan / SIAT",
+      "indicator_id": 1286,
+      "indicator_code": "1.11.01.0002",
+      "path": "scripts/overview/source-discovery/phase3/siat-cpi-coicop-mom-1286-2026-07.json",
+      "url": "https://siat.stat.uz/data/1286/?lang=en",
+      "source_vintage": "2026-07-05",
+      "coverage": "2021M01/2026M06",
+      "unit": "previous_month_equals_100"
+    },
+    "headline_cpi_detailed_crosscheck": {
+      "provider": "National Statistics Committee of Uzbekistan / SIAT",
+      "indicator_id": 4585,
+      "indicator_code": "1.11.01.0026",
+      "path": "scripts/overview/source-discovery/phase3/siat-cpi-all-items-mom-4585-2026-07.json",
+      "url": "https://siat.stat.uz/data/4585/?lang=en",
+      "source_vintage": "2026-07-05",
+      "coverage": "2024M01/2026M06"
+    },
+    "policy_rate_events": {
+      "provider": "Central Bank of the Republic of Uzbekistan",
+      "path": "scripts/overview/source-discovery/phase3/cbu-policy-rate-dynamics-asosiy_stavka.xlsx",
+      "url": "https://cbu.uz/en/monetary-policy/refinancing-rate/press-releases/1451483/",
+      "event_coverage": "1994-05-02/2025-03-24",
+      "unchanged_rate_verified_through": "2026-06-30",
+      "unit": "percent_per_year"
+    }
+  },
+  "transformations": {
+    "headline_cpi_index": "chain monthly official price relatives with 2020M12 normalized to 100",
+    "quarterly_inflation": "year-on-year percent change in the arithmetic mean of three monthly chained index levels",
+    "quarterly_policy_rate_primary": "calendar-day-weighted mean of official event rates",
+    "quarterly_policy_rate_sensitivity": "quarter-end official event rate",
+    "ex_post_real_policy_rate": "calendar-day-weighted policy rate minus quarterly headline CPI year-on-year inflation",
+    "real_rate_deviation": "current ex-post real rate minus strictly prior four-quarter mean"
+  },
+  "validation": {
+    "cpi_contiguous_months": 66,
+    "cpi_missing_observations": 0,
+    "detailed_headline_overlap_months": 30,
+    "detailed_headline_max_abs_error": 0,
+    "legacy_cpi_relative_overlap_months": 60,
+    "legacy_cpi_relative_rmse_percentage_points": 0.0055671839,
+    "policy_language_sheets_identical": true,
+    "legacy_policy_is_month_end_exact": true,
+    "policy_current_rate_percent": 14
+  },
+  "semantic_guards": [
+    "ex-post real policy rate is not an expectations-based real rate",
+    "trailing real-rate deviation is not a structural neutral-rate gap",
+    "calendar-day average and quarter-end policy rates must remain separately named",
+    "raw files are read-only"
+  ]
+}

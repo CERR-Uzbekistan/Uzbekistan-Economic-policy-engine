@@ -1,0 +1,131 @@
+name: Package public site for review
+
+on:
+  push:
+    branches:
+      - epic/replatform-execution
+      - main
+  workflow_dispatch:
+    inputs:
+      source_sha:
+        type: string
+        default: ''
+      source_branch:
+        type: string
+        default: ''
+      channel:
+        type: choice
+        options: [preview, production-candidate]
+        default: preview
+      expected_data_hashes:
+        type: string
+        default: '{}'
+  workflow_call:
+    inputs:
+      source_sha:
+        type: string
+        required: true
+      source_branch:
+        type: string
+        required: true
+      channel:
+        type: string
+        default: preview
+      expected_data_hashes:
+        type: string
+        default: '{}'
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-site-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_sha || github.sha }}
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.12'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.14.0'
+          cache: npm
+          cache-dependency-path: apps/policy-ui/package-lock.json
+
+      - name: Install policy-ui
+        working-directory: apps/policy-ui
+        run: npm ci
+
+      - name: Lint policy-ui
+        working-directory: apps/policy-ui
+        run: npm run lint
+
+      - name: Test policy-ui
+        working-directory: apps/policy-ui
+        run: npm run test
+
+      - name: Build policy-ui
+        working-directory: apps/policy-ui
+        env:
+          POLICY_UI_BASE: /Uzbekistan-Economic-policy-engine/policy-ui/
+          VITE_SCENARIO_LAB_DATA_MODE: mock
+          VITE_POLICY_CHAT_ENABLED: 'false'
+        run: npm run build
+
+      - name: Test publication boundary
+        run: |
+          mkdir -p tmp
+          python -m unittest discover -s scripts/pages/tests -v
+          node --test scripts/pages/tests/*.test.mjs
+
+      - name: Assemble and validate explicit publication allowlist
+        run: |
+          python scripts/pages/package_site.py assemble --output _site
+          python scripts/pages/package_site.py validate --output _site
+
+      - name: Seal exact release identity
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch || github.ref_name }}
+          RELEASE_CHANNEL: ${{ inputs.channel || 'preview' }}
+          EXPECTED_DATA_HASHES: ${{ inputs.expected_data_hashes || '{}' }}
+        run: python scripts/pages/release_contract.py seal --site _site --build-configuration apps/policy-ui/dist/.vite/build-configuration.json --source-branch "$SOURCE_BRANCH" --channel "$RELEASE_CHANNEL"
+
+      - name: Install verification browser
+        run: node apps/policy-ui/node_modules/playwright-core/cli.js install --with-deps chromium
+
+      - name: Verify exact assembled artifact in browser and task flow
+        run: node scripts/pages/verify-release.mjs --site _site --evidence "$RUNNER_TEMP/release-evidence.json"
+
+      - name: Bind functional evidence to release
+        if: always()
+        run: |
+          if [ -f "$RUNNER_TEMP/release-evidence.json" ]; then
+            python scripts/pages/release_contract.py record --site _site --evidence "$RUNNER_TEMP/release-evidence.json"
+          else
+            echo '::error::Release remains unverified: smoke evidence missing.'
+            exit 1
+          fi
+
+      - name: Require release eligibility
+        run: |
+          python scripts/pages/release_contract.py verify --site _site
+          python scripts/pages/package_site.py validate --output _site
+
+      - uses: actions/upload-artifact@v4
+        if: always() && hashFiles('_site/release-identity.json') != ''
+        with:
+          name: public-site-review-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 90
+          path: _site
+          include-hidden-files: true
+          if-no-files-found: error

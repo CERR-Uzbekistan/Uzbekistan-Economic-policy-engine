@@ -1,0 +1,97 @@
+{
+  "model_id": "uzbekistan-qpm-extended",
+  "version": "1.0.0",
+  "status": "research_diagnostic",
+  "production_runtime": false,
+  "supersedes_research_spec": "model_specs/qpm/qpm-extended-v0.9.json",
+  "production_runtime_retained": "model_specs/qpm/qpm-extended-v0.9.json",
+  "modules": {
+    "inflation_source_adapter": "mcp_server/models/qpm_inflation_data_v1.py",
+    "domestic_dataset_entry_point": "mcp_server/models/qpm_inflation_runtime_v1.py",
+    "constrained_equations": "mcp_server/models/qpm_inflation_equations_v1.py",
+    "core_measurement_state_space_experiment": "mcp_server/models/qpm_state_space_v1.py",
+    "retained_state_space_filter": "mcp_server/models/qpm_state_space.py"
+  },
+  "data_contracts": [
+    "model_specs/qpm/qpm-inflation-data-contract-v1.0.json",
+    "model_specs/qpm/qpm-state-space-contract-v0.1.json"
+  ],
+  "validated_input_counts": {
+    "siat_coicop_series": 17,
+    "siat_months": 66,
+    "official_core_months": 51,
+    "official_fx_months": 75,
+    "world_bank_external_price_months": 792,
+    "domestic_model_quarters": 22
+  },
+  "rolling_equation_results": {
+    "minimum_training_observations": 8,
+    "minimum_promotion_forecasts": 8,
+    "constraint_policy": "ridge-regularized least squares with explicit coefficient bounds",
+    "core_preferred_research_candidate": {
+      "name": "core_external",
+      "observations": 16,
+      "rolling_forecasts": 8,
+      "model_rmse": 0.900,
+      "zero_change_rmse": 0.870,
+      "beats_zero_change": false,
+      "admitted": false
+    },
+    "food_division_candidate": {
+      "name": "food_external",
+      "observations": 16,
+      "rolling_forecasts": 8,
+      "model_rmse": 1.716,
+      "zero_change_rmse": 1.744,
+      "beats_zero_change": true,
+      "admitted_as_research_measurement": true
+    },
+    "housing_energy_proxy_candidate": {
+      "name": "housing_persistence",
+      "observations": 17,
+      "rolling_forecasts": 9,
+      "model_rmse": 8.806,
+      "zero_change_rmse": 8.187,
+      "beats_zero_change": false,
+      "admitted": false
+    }
+  },
+  "state_space_core_measurement_experiment": {
+    "measurement_observations": 16,
+    "filter_rmse_percentage_points": 1.1680732738,
+    "zero_change_rmse_percentage_points": 1.1537777282,
+    "beats_zero_change": false,
+    "one_sided_invariance_verified": true,
+    "latest_period": "2026Q2",
+    "latest_filtered_output_gap_percent": 0.6836555282,
+    "latest_filtered_neutral_rate_percent": 3.9834103993,
+    "promoted": false
+  },
+  "historical_decomposition": {
+    "official_division_weighted_headline_reconciliation": true,
+    "equation_contributions_plus_residual_add_up_exactly": true,
+    "exact_regulated_price_decomposition": false
+  },
+  "promotion_state": {
+    "validated_component_and_driver_dataset": true,
+    "explicit_source_and_transformation contract": true,
+    "constrained_estimation": true,
+    "rolling_benchmarks": true,
+    "food_division_research_equation": true,
+    "core_equation_benchmark": false,
+    "housing_energy_equation_benchmark": false,
+    "core_state_space_measurement_benchmark": false,
+    "exact_regulated_basket": false,
+    "production_runtime_changed": false,
+    "model_owner_approval": false
+  },
+  "production_promotion_blockers": [
+    "core equation does not beat zero-change benchmark",
+    "housing/energy proxy equation does not beat zero-change benchmark",
+    "core state-space measurement does not beat zero-change benchmark",
+    "official core history begins only in 2022",
+    "regulated-price basket is not identified by published weights",
+    "World Bank prices are proxies rather than an Uzbekistan import-price index",
+    "model owner approval is absent"
+  ]
+}

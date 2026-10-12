@@ -1,0 +1,17 @@
+{
+  "schema_version": "r-model-environment-v1",
+  "supported_r": [
+    "4.4.1",
+    "4.5.2"
+  ],
+  "packages": [
+    {
+      "name": "jsonlite",
+      "version": "2.0.0",
+      "source_url": "https://cran.r-project.org/src/contrib/jsonlite_2.0.0.tar.gz",
+      "sha256": "75eb910c82b350ec33f094779da0f87bff154c232e4ae39c9896a9b89f3ac82d",
+      "fallback_source_url": "https://cran.r-project.org/src/contrib/Archive/jsonlite/jsonlite_2.0.0.tar.gz"
+    }
+  ],
+  "base_packages_only_otherwise": true
+}

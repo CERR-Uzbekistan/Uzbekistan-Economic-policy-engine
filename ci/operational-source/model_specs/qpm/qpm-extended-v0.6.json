@@ -1,0 +1,137 @@
+{
+  "model_id": "uzbekistan-qpm-extended",
+  "version": "0.6.0",
+  "status": "research_diagnostic",
+  "production_runtime": false,
+  "reference": {
+    "document": "QPM_MB_lot.pdf",
+    "institution": "Central Bank of the Republic of Uzbekistan",
+    "calibration_as_of": "2026-07-20"
+  },
+  "compatibility_model": "qpm-core-v0.3",
+  "modules": {
+    "structural_baseline": "mcp_server/models/qpm_structural_baseline.py",
+    "inflation": "mcp_server/models/qpm_inflation_block.py",
+    "satellite_equations": "mcp_server/models/qpm_satellite_blocks.py",
+    "observed_state": "mcp_server/models/qpm_observed_state.py",
+    "official_gdp": "mcp_server/models/qpm_siat_gdp.py",
+    "macro_proxies": "mcp_server/models/qpm_macro_proxies.py",
+    "credit_equation": "mcp_server/models/qpm_credit_equation.py",
+    "reduced_form_diagnostics": "mcp_server/models/qpm_reduced_form.py",
+    "extended_runtime": "mcp_server/models/qpm_extended_runtime.py"
+  },
+  "data_inputs": {
+    "credit_stock_npl_fx_share_new_lending": {
+      "readiness": "verified_official",
+      "coverage": "2020Q1/2026Q1",
+      "contract": "model_specs/qpm/qpm-financial-data-contract-v0.1.json"
+    },
+    "fixed_investment_financed_by_fdi_and_loans": {
+      "readiness": "verified_official_activity_proxy",
+      "coverage": "2021Q1/2026Q1",
+      "not_equivalent_to": "balance_of_payments_fdi"
+    },
+    "nominal_gdp_and_discrete_real_growth": {
+      "readiness": "verified_official",
+      "coverage": "2018Q1/2026Q1",
+      "contract": "model_specs/qpm/qpm-gdp-data-contract-v0.1.json"
+    },
+    "policy_rate_and_cpi_for_ex_post_real_rate": {
+      "readiness": "provisional_reconcile",
+      "coverage": "2016Q1/2025Q4"
+    }
+  },
+  "published_satellite_demand_weights": {
+    "credit_activity": 0.2,
+    "fdi_gap": 0.05
+  },
+  "macro_proxy_diagnostics": {
+    "output_growth_gap": "official discrete-quarter real growth minus strictly prior eight-quarter mean",
+    "real_policy_rate_gap": "quarter-average policy rate minus quarterly-mean CPI year-on-year inflation, minus strictly prior eight-quarter mean",
+    "structural_interpretation_allowed": false,
+    "lookahead_safe": true,
+    "latest_official_output_growth_gap_period": "2026Q1",
+    "latest_official_output_growth_gap_percentage_points": 1.5591123112,
+    "latest_real_policy_rate_gap_period": "2025Q4",
+    "latest_real_policy_rate_gap_percentage_points": 2.0304103838
+  },
+  "empirical_diagnostics": {
+    "credit_activity_ar1": {
+      "observations": 24,
+      "coverage": "2020Q2/2026Q1",
+      "persistence": 0.2165522031,
+      "backtest_forecasts": 16,
+      "ar1_rmse": 2.2245543063,
+      "historical_mean_rmse": 2.1293686154,
+      "promoted": false,
+      "reason": "does not beat the expanding historical mean"
+    },
+    "fixed_investment_fdi_loans_ratio_ar1": {
+      "observations": 21,
+      "coverage": "2021Q1/2026Q1",
+      "persistence": 0.7059176405,
+      "backtest_forecasts": 13,
+      "ar1_rmse": 6.0562916669,
+      "random_walk_rmse": 5.4854787874,
+      "promoted": false,
+      "reason": "does not beat the random walk"
+    },
+    "multivariate_credit_activity": {
+      "coverage": "2021Q2/2026Q1",
+      "observations": 20,
+      "equation": "credit activity on its lag, lagged real-policy-rate deviation, and lagged output-growth deviation",
+      "persistence": 0.0810500997,
+      "real_policy_rate_gap_slope": -0.4524773224,
+      "output_growth_gap_slope": -0.1473691441,
+      "r_squared": 0.1325149921,
+      "backtest_forecasts": 8,
+      "multivariate_rmse": 2.1654437017,
+      "ar1_rmse": 2.1461757764,
+      "historical_mean_rmse": 2.0260236543,
+      "expected_signs_satisfied": false,
+      "trend_window_sensitivity": {
+        "6_quarters_output_slope": -0.0901679665,
+        "8_quarters_output_slope": -0.1473691441,
+        "12_quarters_output_slope": 0.2248816871
+      },
+      "promoted": false,
+      "reason": "output coefficient is sign-unstable and the equation does not beat AR(1) or historical mean"
+    }
+  },
+  "latest_diagnostic_conditioning": {
+    "credit_period": "2026Q1",
+    "fdi_proxy_period": "2026Q1",
+    "credit_activity_gap_percentage_points": -0.1513584782,
+    "fdi_proxy_ratio_gap_percentage_points": 6.3179649008,
+    "mapped_demand_contribution": 0.2856265494,
+    "mixed_vintage": false,
+    "production_authorized": false
+  },
+  "explicitly_unidentified": [
+    "structural_output_gap",
+    "neutral_real_interest_rate",
+    "inflation_expectations_consistent_real_rate_gap",
+    "causal_credit_equation_slopes",
+    "balance_of_payments_fdi_flow",
+    "gross_default_migration_rate",
+    "npl_cures",
+    "loan_restructuring_flows",
+    "loan_sales",
+    "writeoff_rate",
+    "repayment_rate"
+  ],
+  "promotion_state": {
+    "official_credit_observed_state": true,
+    "official_gdp_observed_state": true,
+    "official_fdi_activity_proxy": true,
+    "one_sided_macro_proxies": true,
+    "rolling_multivariate_credit_backtest": true,
+    "credit_persistence": false,
+    "fdi_proxy_persistence": false,
+    "multivariate_credit_equation": false,
+    "joint_forward_solver": false,
+    "historical_decomposition": false,
+    "parameter_uncertainty": false,
+    "model_owner_approval": false
+  }
+}

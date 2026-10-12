@@ -1,0 +1,279 @@
+{
+  "schema_version": "0.2.0",
+  "status": "research_data_inventory",
+  "as_of": "2026-07-20",
+  "allowed_readiness_states": [
+    "verified_official",
+    "provisional_reconcile",
+    "quarantined",
+    "missing"
+  ],
+  "production_policy": {
+    "default_allowed_state": "verified_official",
+    "provisional_requires_explicit_opt_in": true,
+    "quarantined_requires_explicit_opt_in": true,
+    "missing_is_never_loadable": true,
+    "silent_unit_conversion_forbidden": true,
+    "silent_missing_value_imputation_forbidden": true,
+    "raw_files_read_only": true,
+    "preliminary_official_vintages_must_be_recorded": true
+  },
+  "sources": {
+    "legacy_quarterly": {
+      "path": "model sources/QPM_UZB/data_q.csv",
+      "format": "semicolon_csv",
+      "frequency": "quarterly",
+      "coverage": "2016Q1/2025Q3",
+      "upstream_vintage": null
+    },
+    "legacy_monthly": {
+      "path": "model sources/QPM_UZB/data_m.csv",
+      "format": "semicolon_csv",
+      "frequency": "monthly",
+      "coverage": "2016M01/2025M12",
+      "upstream_vintage": null
+    },
+    "official_siat_cpi_weights": {
+      "path": "scripts/overview/source-discovery/phase3/siat-cpi-coicop-weights-1288.json",
+      "format": "siat_json",
+      "frequency": "annual",
+      "coverage": "2021/2026",
+      "upstream_vintage": "2026-03-30",
+      "url": "https://siat.stat.uz/data/1288/?lang=en"
+    },
+    "official_siat_fixed_investment_fdi_loans": {
+      "path": "scripts/overview/source-discovery/phase3/siat-fdi-fixed-investment-ytd-quarterly-2643.json",
+      "format": "siat_json",
+      "frequency": "quarterly_ytd",
+      "coverage": "2021Q1/2026Q1",
+      "upstream_vintage": "2026-04-27",
+      "indicator_code": "1.04.01.0128",
+      "unit": "million_soums",
+      "preliminary": true,
+      "url": "https://siat.stat.uz/data/2643/?lang=en"
+    }
+  },
+  "series": {
+    "real_gdp_raw": {
+      "source": "legacy_quarterly",
+      "column": "gdp_u",
+      "frequency": "quarterly",
+      "unit": "undocumented_level",
+      "coverage": "2016Q1/2025Q3",
+      "missing_observations": 0,
+      "readiness": "provisional_reconcile",
+      "required_action": "reconcile to official quarterly GDP and apply validated seasonal adjustment"
+    },
+    "nominal_gdp_raw": {
+      "source": "legacy_quarterly",
+      "column": "gdpn_u",
+      "frequency": "quarterly",
+      "unit": "undocumented_level",
+      "coverage": "2016Q1/2025Q3",
+      "missing_observations": 0,
+      "readiness": "provisional_reconcile",
+      "required_action": "verify unit and reconcile to official quarterly nominal GDP"
+    },
+    "fiscal_revenue_raw": {
+      "source": "legacy_quarterly",
+      "column": "rev_u",
+      "frequency": "quarterly",
+      "unit": "undocumented_flow",
+      "coverage": "2017Q1/2025Q3",
+      "missing_observations": 4,
+      "readiness": "provisional_reconcile",
+      "required_action": "verify source/unit and use rolling-four-quarter or seasonally adjusted ratio"
+    },
+    "fiscal_primary_expenditure_raw": {
+      "source": "legacy_quarterly",
+      "column": "pexpend_u",
+      "frequency": "quarterly",
+      "unit": "undocumented_flow",
+      "coverage": "2017Q1/2025Q3",
+      "missing_observations": 4,
+      "readiness": "provisional_reconcile",
+      "required_action": "verify source/unit and use rolling-four-quarter or seasonally adjusted ratio"
+    },
+    "fiscal_interest_expenditure_raw": {
+      "source": "legacy_quarterly",
+      "column": "intr_u",
+      "frequency": "quarterly",
+      "unit": "undocumented_flow",
+      "coverage": "2016Q1/2025Q3",
+      "missing_observations": 0,
+      "readiness": "quarantined",
+      "required_action": "verify whether 12 zero observations in 2016-2018 are missing placeholders"
+    },
+    "legacy_fixed_investment_fdi_loans_flow": {
+      "source": "legacy_quarterly",
+      "column": "fin_acc_fdi_u",
+      "frequency": "quarterly",
+      "unit": "million_soums",
+      "coverage": "2016Q1/2025Q3",
+      "missing_observations": 0,
+      "readiness": "provisional_reconcile",
+      "required_action": "2021Q1-2025Q3 matches the official SIAT quarterly-flow derivation; reconcile 2016Q1-2020Q4 before using the full history"
+    },
+    "official_fixed_investment_fdi_loans_ytd": {
+      "source": "official_siat_fixed_investment_fdi_loans",
+      "column": "Code=1700; YYYY-Qn",
+      "frequency": "quarterly_ytd",
+      "unit": "million_soums",
+      "coverage": "2021Q1/2026Q1",
+      "missing_observations": 0,
+      "readiness": "verified_official",
+      "required_action": "retain for source reconciliation; do not use a YTD level as a quarterly model flow"
+    },
+    "official_fixed_investment_fdi_loans_quarterly_flow": {
+      "source": "official_siat_fixed_investment_fdi_loans",
+      "column": "derived: Q1=YTD; Qn=YTD(Qn)-YTD(Qn-1)",
+      "frequency": "quarterly",
+      "unit": "million_soums",
+      "coverage": "2021Q1/2026Q1",
+      "missing_observations": 0,
+      "readiness": "verified_official",
+      "required_action": "use only as a fixed-investment activity proxy; record the preliminary source vintage"
+    },
+    "world_oil_price_raw": {
+      "source": "legacy_quarterly",
+      "column": "oil_bbl",
+      "frequency": "quarterly",
+      "unit": "usd_per_barrel_assumed",
+      "coverage": "2016Q1/2025Q3",
+      "missing_observations": 0,
+      "readiness": "provisional_reconcile",
+      "required_action": "reconcile to World Bank Pink Sheet or approved source"
+    },
+    "world_food_index_raw": {
+      "source": "legacy_quarterly",
+      "column": "wfood_u",
+      "frequency": "quarterly",
+      "unit": "index_undocumented_base",
+      "coverage": "2016Q1/2025Q3",
+      "missing_observations": 0,
+      "readiness": "provisional_reconcile",
+      "required_action": "identify provider/base and reconcile"
+    },
+    "headline_cpi_raw": {
+      "source": "legacy_monthly",
+      "column": "cpi_u",
+      "frequency": "monthly",
+      "unit": "index_2016m01_100",
+      "coverage": "2016M01/2025M12",
+      "missing_observations": 0,
+      "readiness": "provisional_reconcile",
+      "required_action": "reconcile to official SIAT monthly CPI"
+    },
+    "nominal_exchange_rate_raw": {
+      "source": "legacy_monthly",
+      "column": "s",
+      "frequency": "monthly",
+      "unit": "uzs_per_usd",
+      "coverage": "2016M01/2025M12",
+      "missing_observations": 0,
+      "readiness": "provisional_reconcile",
+      "required_action": "reconcile to CBU official exchange-rate history"
+    },
+    "policy_rate_raw": {
+      "source": "legacy_monthly",
+      "column": "rs",
+      "frequency": "monthly",
+      "unit": "percent_per_year",
+      "coverage": "2016M01/2025M12",
+      "missing_observations": 0,
+      "readiness": "provisional_reconcile",
+      "required_action": "reconcile event dates and averaging convention to CBU official history"
+    },
+    "household_lending_rate_lcy": {
+      "source": "legacy_monthly",
+      "column": "ir_lend_hh_lc",
+      "frequency": "monthly",
+      "unit": "percent_per_year",
+      "coverage": "2019M01/2025M12",
+      "missing_observations": 36,
+      "readiness": "provisional_reconcile",
+      "required_action": "verify definition/source and back-history availability"
+    },
+    "corporate_lending_rate_lcy": {
+      "source": "legacy_monthly",
+      "column": "ir_lend_nfc_lc",
+      "frequency": "monthly",
+      "unit": "percent_per_year",
+      "coverage": "2019M01/2025M12",
+      "missing_observations": 36,
+      "readiness": "provisional_reconcile",
+      "required_action": "verify definition/source and back-history availability"
+    },
+    "official_coicop_division_weights": {
+      "source": "official_siat_cpi_weights",
+      "column": "01-13",
+      "frequency": "annual",
+      "unit": "weight_fraction",
+      "coverage": "2021/2026",
+      "missing_observations": 0,
+      "readiness": "verified_official",
+      "required_action": "use for division reconciliation; do not map directly to detailed 01.xx/02.xx/03.xx item codes"
+    },
+    "balance_of_payments_fdi_flow": {
+      "source": null,
+      "column": null,
+      "frequency": "quarterly",
+      "unit": "foreign_currency_or_percent_of_gdp",
+      "coverage": null,
+      "missing_observations": null,
+      "readiness": "missing",
+      "required_action": "obtain a true balance-of-payments direct-investment flow if the model requires external financing rather than the fixed-investment activity proxy"
+    },
+    "public_debt_stock": {
+      "source": null,
+      "column": null,
+      "frequency": "quarterly",
+      "unit": "percent_of_gdp",
+      "coverage": null,
+      "missing_observations": null,
+      "readiness": "missing",
+      "required_action": "obtain domestic/external debt stocks, rates, maturities, and currency composition"
+    },
+    "credit_stock": {
+      "source": null,
+      "column": null,
+      "frequency": "quarterly",
+      "unit": "local_currency_and_percent_of_gdp",
+      "coverage": null,
+      "missing_observations": null,
+      "readiness": "missing",
+      "required_action": "obtain performing/nonperforming stocks and currency composition"
+    },
+    "new_credit_flow": {
+      "source": null,
+      "column": null,
+      "frequency": "quarterly",
+      "unit": "percent_of_gdp",
+      "coverage": null,
+      "missing_observations": null,
+      "readiness": "missing",
+      "required_action": "obtain gross new lending flows by currency/borrower"
+    },
+    "npl_and_default_rates": {
+      "source": null,
+      "column": null,
+      "frequency": "quarterly",
+      "unit": "percent",
+      "coverage": null,
+      "missing_observations": null,
+      "readiness": "missing",
+      "required_action": "obtain NPL ratio, default migration, cures, and write-offs"
+    }
+  },
+  "forbidden_legacy_constructions": [
+    "trailing_four_quarter_mean_as_seasonal_adjustment",
+    "constant_foreign_output_gap",
+    "constant_foreign_inflation",
+    "constant_foreign_interest_rate",
+    "constant_historical_inflation_target",
+    "silent_fdi_unit_conversion",
+    "fixed_investment_proxy_labeled_as_balance_of_payments_fdi",
+    "ytd_fixed_investment_level_used_as_quarterly_flow",
+    "legacy_12_group_cpi_weights_as_core_component_weights"
+  ]
+}

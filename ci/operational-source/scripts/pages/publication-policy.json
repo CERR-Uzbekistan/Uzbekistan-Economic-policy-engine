@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "static_files": [
+    "index.html",
+    "qpm_uzbekistan/index.html", "dfm_nowcast/index.html", "io_model/index.html",
+    "pe_model/index.html", "cge_model/index.html", "fpp_model/index.html",
+    "dfm_nowcast/dfm_data.js", "io_model/io_data.js", "pe_model/pe_data.js",
+    "shared/design-system.css", "shared/toast.js", "shared/scenario-engine.js",
+    "shared/ai-advisor.js", "shared/model-registry.js", "shared/policy-tracker-data.js",
+    "shared/research-data.js", "shared/literature-data.js", "shared/i18n.js",
+    "shared/report-engine.js", "shared/registry-loader.js", "shared/parameter-registry.json",
+    "shared/model-readiness.js"
+  ],
+  "policy_ui_files": [
+    "index.html", "favicon.svg", "icons.svg",
+    "data/overview.json", "data/qpm.json", "data/dfm.json", "data/io.json",
+    "data/pe.json", "data/pe-v1-frozen.json", "data/cge.json",
+    "data/knowledge-hub.json", "data/business-support-reforms.json", "data/model-manifest.json"
+  ],
+  "generated_files": [".nojekyll", "policy-ui/404.html", "synthesis/index.html"],
+  "legacy_pages": ["qpm_uzbekistan/index.html", "dfm_nowcast/index.html", "io_model/index.html", "pe_model/index.html", "cge_model/index.html", "fpp_model/index.html"]
+}
