@@ -23,6 +23,8 @@ Configure the client's stdio command as `docker` with these arguments:
 compose -f /absolute/path/to/repository/mcp_server/docker-compose.yml run --rm --no-deps -T mcp-server
 ```
 
+Set the client's command environment to `COMPOSE_DISABLE_ENV_FILE=true`, `COMPOSE_STATUS_STDOUT=false`, `COMPOSE_ANSI=never`, and `COMPOSE_REMOVE_ORPHANS=false`; remove any inherited `COMPOSE_ENV_FILES`. These settings disable Compose's own automatic dotenv loading, keep its messages off the protocol stream and prevent removal of unrelated containers. The service also has no container `env_file` setting. See [Docker's environment controls](https://docs.docker.com/compose/how-tos/environment-variables/envvars/).
+
 Run from the repository root or provide the absolute Compose path. The image must be built first. The `-T` option keeps JSON protocol output free of terminal formatting. Compose opens stdin, uses an init process, and removes the client-owned container on completion. Use a client session rather than starting this stdio service as a background daemon.
 
 Default container permissions are **`policy:read`**. Read tool discovery does not grant model execution or shared-data mutation. A trusted local client can explicitly add `-e MCP_STDIO_SCOPES=policy:read,policy:execute` before the service name when diagnostics are required. Exact manifest readiness, accepted artifacts, freshness and model approval still apply. Mutation is outside this read-only recipe; it has no writable shared-data mount.

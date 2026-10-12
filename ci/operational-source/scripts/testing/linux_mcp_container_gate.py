@@ -55,7 +55,10 @@ def run_gate(source, evidence):
 
     async def stdio_probe(name, execution=False, compose=False):
         containers.append(name)
-        env = {**os.environ, "MCP_IMAGE": image}
+        env = {**os.environ, "MCP_IMAGE": image, "COMPOSE_DISABLE_ENV_FILE": "true",
+               "COMPOSE_STATUS_STDOUT": "false", "COMPOSE_ANSI": "never",
+               "COMPOSE_REMOVE_ORPHANS": "false"}
+        env.pop("COMPOSE_ENV_FILES", None)
         if compose:
             args = ["compose", "-f", str(source / "mcp_server/docker-compose.yml"),
                     "run", "--rm", "--no-deps", "-T", "--name", name, "mcp-server"]
