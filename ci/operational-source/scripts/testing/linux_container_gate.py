@@ -19,12 +19,18 @@ def run_gate(source, evidence):
     for name, expected in snapshot["files"].items():
         assert hashlib.sha256((source / name).read_bytes()).hexdigest() == expected, "source snapshot drift"
     commands = []
+    redactions = []
     def command(args, *, checked=True):
         result = subprocess.run(args, cwd=source, text=True, stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT, timeout=300, check=False)
         commands.append({"command": args, "exit_code": result.returncode})
         if checked and result.returncode:
-            raise RuntimeError("platform_command_failed: " + args[0])
+            diagnostic = result.stdout[-12000:]
+            for secret in redactions:
+                diagnostic = diagnostic.replace(secret, "[redacted]")
+            (evidence / f"failed-command-{len(commands)}.log").write_text(diagnostic)
+            last_line = diagnostic.strip().splitlines()[-1] if diagnostic.strip() else "no diagnostic output"
+            raise RuntimeError("platform_command_failed: " + args[0] + ": " + last_line)
         return result.stdout.strip()
     name = "policy-platform-" + uuid4().hex
     memory = name + "-memory"
@@ -51,9 +57,11 @@ def run_gate(source, evidence):
         volume_created = True
         with tempfile.TemporaryDirectory(prefix="synthetic-proxy-") as temporary:
             envfile = Path(temporary) / "test.env"
+            test_secret = uuid4().hex
+            redactions.append(test_secret)
             # Secret appears only in the ephemeral env file, never command/evidence/log output.
             envfile.write_text("POLICY_CHAT_ENABLED=true\nPOLICY_CHAT_AUTH_MODE=trusted_proxy\n"
-                               "POLICY_CHAT_PROXY_SECRET=" + uuid4().hex + "\n"
+                               "POLICY_CHAT_PROXY_SECRET=" + test_secret + "\n"
                                "POLICY_CHAT_ENABLED_MODELS=io,dfm,qpm\n")
             envfile.chmod(0o600)
             def start(container, in_memory=False):
