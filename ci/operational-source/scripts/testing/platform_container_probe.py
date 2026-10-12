@@ -140,8 +140,8 @@ def storage_probe(root):
     recovery = module.exercise(root / "recovery")
     workers = processes(root / "workers")
     quotas = processes(root / "quotas", limited=True)
-    path = root / "atomic.sqlite3"
     for boundary in ["after_state", "after_audit", "before_commit"]:
+        path = root / f"atomic-{boundary}.sqlite3"
         store = PolicyChatStore(str(path))
         claim = store.claim_execution("synthetic-atomic", boundary, {})
         def fail(actual, expected=boundary):
