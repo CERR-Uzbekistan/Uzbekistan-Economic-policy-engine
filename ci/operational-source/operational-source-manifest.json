@@ -174,7 +174,9 @@
     "shared/report-engine.js": "dff7e210d21deb622c54dd1496b1176869eeccbca81ac63d0b7e5356f7acd5e4",
     "shared/research-data.js": "a0c5d6ee199bf081dfbb98793e3e89e12c267ad7964c1efd84057d835ee3f678",
     "shared/scenario-engine.js": "019eee945587c921e5fa0461a699f9bbf3b60eaeba2cd2f1d079647b4998fd1e",
-    "shared/toast.js": "7e72ce150c518246ae27e92f2eceaa7a019c12b818114eba83b209e85fcddad9"
+    "shared/toast.js": "7e72ce150c518246ae27e92f2eceaa7a019c12b818114eba83b209e85fcddad9",
+    "apps/policy-ui/.env.policy-chat.example": "f1655fe30efe4e0c1d4b4c9889bfc96c207fe347d4a2e91522ef0f6791d3ca0d",
+    "mcp_server/.env.example": "c76402503d1e7a8bff6b2f471b335875eaf2a1a005fb77baf254819738f97b74"
   },
   "source_file_count": 174,
   "excluded": [
