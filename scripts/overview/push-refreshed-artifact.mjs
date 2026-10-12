@@ -10,7 +10,8 @@ export function git(args,cwd){return spawnSync('git',args,{cwd,encoding:'utf8',w
 export async function pushRefreshedArtifact({cwd=process.cwd(),runGit=args=>git(args,cwd),wait=ms=>new Promise(resolve=>setTimeout(resolve,ms)),attempts=4,log=console.log}={}){
   if(!Number.isInteger(attempts)||attempts<1||attempts>5)throw Error('Retry bound must be between one and five');
   const required=args=>{const r=runGit(args);if(r.status!==0)throw Error(`Git ${args[0]} failed: ${r.stderr||r.error?.message||'unknown error'}`);return r.stdout.trim()};
-  if(required(['status','--porcelain']))throw Error('Artifact publication requires a clean checkout');
+  const dirty=required(['status','--porcelain','--untracked-files=all']).split('\n').filter(Boolean);
+  if(dirty.some(line=>!line.startsWith('?? tmp/overview-refresh-candidate/')))throw Error('Artifact publication requires a clean checkout except generated refresh evidence');
   const changed=required(['diff-tree','--no-commit-id','--name-only','-r','HEAD']).split('\n').filter(Boolean);
   if(!changed.length||changed.some(p=>!ARTIFACT_PATHS.includes(p)))throw Error('Latest commit is not limited to validated Overview artifacts');
   let head=required(['rev-parse','HEAD']);if(!sha.test(head))throw Error('Invalid local commit identity');
