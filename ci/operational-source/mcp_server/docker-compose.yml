@@ -1,0 +1,23 @@
+services:
+  mcp-server:
+    build:
+      context: ..
+      dockerfile: mcp_server/Dockerfile
+    image: ${MCP_IMAGE:-uz-policy-mcp:local}
+    stdin_open: true
+    tty: false
+    init: true
+    read_only: true
+    network_mode: none
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 64
+    environment:
+      MCP_TRANSPORT: stdio
+      MCP_HOST: 127.0.0.1
+      MCP_AUTH_MODE: none
+      MCP_ALLOW_REMOTE: "false"
+      MCP_STDIO_SCOPES: policy:read
+    restart: "no"

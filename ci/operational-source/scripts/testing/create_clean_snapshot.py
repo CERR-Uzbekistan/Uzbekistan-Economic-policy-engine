@@ -62,6 +62,7 @@ def snapshot(destination):
     if destination.exists():
         raise ValueError("snapshot_destination_must_be_new")
     names = {".gitignore", ".dockerignore", "README.md", "Dockerfile", "Dockerfile.policy-chat"}
+    names.update({"mcp_server/Dockerfile", "mcp_server/Dockerfile.dockerignore"})
     # Only reviewed non-secret examples; real environment files stay excluded.
     names.update({"apps/policy-ui/.env.policy-chat.example", "mcp_server/.env.example"})
     publication = json.loads((ROOT / "scripts/pages/publication-policy.json").read_text())

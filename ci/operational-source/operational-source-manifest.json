@@ -142,7 +142,7 @@
     "scripts/pages/tests/verify-release.test.mjs": "0bfba0b7a62ad6c0a4e73dd639aea2dc7376abd250517c6646adc0c6a61f41c9",
     "scripts/pages/tests/workflow-policy.test.mjs": "7c5eff24da64c109e518e86c2f72ad3cf8909c3c757373837e27d4bf428314ec",
     "scripts/pages/verify-release.mjs": "fdfd6a6a0b0cfa9d73edee9c2302ba9eda341b1927ffd234eecf740907289b51",
-    "scripts/testing/create_clean_snapshot.py": "4d97e2ea507d66a6c13caea4c0133bbb216c5460a780ddcc268884aaef53a553",
+    "scripts/testing/create_clean_snapshot.py": "0d94294fb7324fca2aff279e6cd2b026c4f306d1bd77e91124ff0cc4d9d86a41",
     "scripts/testing/linux_container_gate.py": "c07b2337170346f6ff6ec828661fd20c9c97f054539846fb69070ebdd66bb146",
     "scripts/testing/linux_publication_gate.py": "fac9a7081a49190da089dcd205b0af542d82ba88b5909d3fc446aa83e097e988",
     "scripts/testing/model-fixture-contract.json": "d167860a0dc3c9921550e8d56cd3d5fa96f8959ed634199ea6b167bde0c7bfae",
@@ -179,7 +179,15 @@
     "mcp_server/.env.example": "c76402503d1e7a8bff6b2f471b335875eaf2a1a005fb77baf254819738f97b74",
     "scripts/pages/synthesis-unavailable.html": "6904e112b8a0c8e3c09dcec7b97b9a6329ef997dcdfdac10aa9db31be664be69",
     "apps/policy-ui/public/favicon.svg": "61bc9a161de58248288e6905425d7180f0624c2865007b97d763fdac12043a66",
-    "apps/policy-ui/public/icons.svg": "7ca2d67c9c3aebf50cdc8709ee8aacf8cdb8cc7ea6325ea94939caef5da1c53d"
+    "apps/policy-ui/public/icons.svg": "7ca2d67c9c3aebf50cdc8709ee8aacf8cdb8cc7ea6325ea94939caef5da1c53d",
+    "mcp_server/Dockerfile": "3738309a43c970d659ce5e4a55be5512d3643aa412a6129a0f9d16cb1525d606",
+    "mcp_server/Dockerfile.dockerignore": "dca7690cb79922599b0be8ce2653dfcbab792113e97b043cd4f958f5cebd4898",
+    "mcp_server/docker-compose.yml": "07cd02ee5f9979004b98d7a10bb82053a4b83f6bde2da2d10b242022afaecafd",
+    "mcp_server/README.md": "0c992be678ed0de532667ca8a1843025202d01fda410078b3b6a3427a34d7b1c",
+    "scripts/testing/mcp_container_probe.py": "a9694645714f76d216aecf12a23074e6902ca4692926e2771a62df242fe7b42a",
+    "scripts/testing/linux_mcp_container_gate.py": "9c8608d301a09be1576998d56c4ececa7a008c5397e56a509f7a68e0374133d8",
+    "docs/deployment/mcp-http-security.md": "27c8c42b066933097df23d35e3cabfdd7d8b7228aec0aa8d3849c45015e1d1a5",
+    "docs/deployment/mcp-container.md": "705507fb95839c9942fe13bccb836a48e2aaf6a9ed3ec0ff60ece0c8a5ecca52"
   },
   "source_file_count": 174,
   "excluded": [
