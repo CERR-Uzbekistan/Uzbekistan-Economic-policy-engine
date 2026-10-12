@@ -114,7 +114,9 @@ def run_gate(source, evidence):
         for mode in ["anonymous", "bearer"]:
             name = prefix + "-" + mode
             args = ["docker", "run", "--detach", "--name", name, *hardened,
-                    "-e", "MCP_TRANSPORT=http"]
+                    "-e", "MCP_TRANSPORT=http", "--mount",
+                    "type=bind,src=" + str(source / "scripts/testing/mcp_container_probe.py")
+                    + ",dst=/run/mcp-probe.py,readonly"]
             if mode == "bearer":
                 args += ["--mount", "type=volume,src=" + volume + ",dst=/run/mcp-config,readonly",
                          "-e", "MCP_AUTH_MODE=bearer", "-e", "MCP_TOKEN_FILE=/run/mcp-config/tokens.json",
@@ -122,9 +124,7 @@ def run_gate(source, evidence):
                          "-e", "MCP_AUTH_RESOURCE=http://127.0.0.1:8000/mcp"]
             command(args + [image])
             containers.append(name)
-            command(["docker", "cp", str(source / "scripts/testing/mcp_container_probe.py"),
-                     name + ":/tmp/mcp_container_probe.py"])
-            _, output = command(["docker", "exec", "-i", name, "python", "/tmp/mcp_container_probe.py", mode],
+            _, output = command(["docker", "exec", "-i", name, "python", "/run/mcp-probe.py", mode],
                                 input_text=token if mode == "bearer" else "")
             record["checks"][mode] = json.loads(output.splitlines()[-1])
             command(["docker", "logs", name], check_secret_absent=True)
