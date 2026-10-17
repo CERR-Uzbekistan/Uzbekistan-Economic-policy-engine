@@ -16,6 +16,9 @@ test('refresh remains scheduled, validates PRs and cannot deploy or change QPM',
   assert.match(refresh.if, /github.event_name != 'pull_request'/)
   assert.ok(refresh.steps.some(step => step.run?.includes('--allow-partial true')))
   assert.ok(refresh.steps.some(step => step.run?.includes('refresh-candidate.mjs')))
+  const reconcile = refresh.steps.find(step => step.run?.includes('refresh-candidate.mjs'))
+  assert.match(reconcile.run, /refresh-candidate\.mjs[^\n]+--fail-on-degraded true\n\s*cp /)
+  assert.equal(refresh.steps.find(step => step.uses === 'actions/upload-artifact@v4').if, 'always()')
   assert.ok(refresh.steps.some(step => step.uses === 'actions/upload-artifact@v4' && step.with['retention-days'] === 90))
   assert.ok(!refresh.steps.some(step => /export_qpm|workflow run pages|deploy/.test(step.run ?? '')))
   const validation = workflow.jobs['verify-refresh-change']
