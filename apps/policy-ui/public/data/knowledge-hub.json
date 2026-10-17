@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-10-16T07:27:11.529Z",
+  "generated_at": "2026-10-17T07:08:09.995Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -307,7 +307,7 @@
       "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-16T07:27:11.529Z"
+      "fetched_at": "2026-10-17T07:08:09.995Z"
     },
     {
       "id": "president-reform-news",
@@ -316,10 +316,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 2,
-      "excluded_count": 10,
+      "candidate_count": 1,
+      "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-16T07:27:11.529Z"
+      "fetched_at": "2026-10-17T07:08:09.995Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-16T07:27:11.529Z"
+      "fetched_at": "2026-10-17T07:08:09.995Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-16T07:27:11.529Z"
+      "fetched_at": "2026-10-17T07:08:09.995Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-16T07:27:11.529Z"
+      "fetched_at": "2026-10-17T07:08:09.995Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-16T07:27:11.529Z"
+      "fetched_at": "2026-10-17T07:08:09.995Z"
     },
     {
       "id": "cbu-policy-news",
@@ -377,9 +377,9 @@
       "fetch_url": "https://cbu.uz/en/press_center/news/",
       "ok": true,
       "candidate_count": 0,
-      "excluded_count": 371,
+      "excluded_count": 372,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-16T07:27:11.529Z"
+      "fetched_at": "2026-10-17T07:08:09.995Z"
     },
     {
       "id": "customs-committee-news",
@@ -391,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-16T07:27:11.529Z"
+      "fetched_at": "2026-10-17T07:08:09.995Z"
     },
     {
       "id": "mef-policy-news",
@@ -403,7 +403,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-16T07:27:11.529Z"
+      "fetched_at": "2026-10-17T07:08:09.995Z"
     },
     {
       "id": "tax-committee-news",
@@ -415,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-16T07:27:11.529Z"
+      "fetched_at": "2026-10-17T07:08:09.995Z"
     },
     {
       "id": "energy-ministry-news",
@@ -427,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-16T07:27:11.529Z"
+      "fetched_at": "2026-10-17T07:08:09.995Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -435,11 +435,12 @@
       "url": "https://gov.uz/en/miit/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": true,
+      "ok": false,
       "candidate_count": 0,
-      "excluded_count": 12,
+      "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-16T07:27:11.529Z"
+      "fetched_at": "2026-10-17T07:08:09.995Z",
+      "error": "TypeError: fetch failed"
     },
     {
       "id": "justice-ministry-news",
@@ -447,31 +448,32 @@
       "url": "https://gov.uz/en/adliya/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": true,
-      "candidate_count": 1,
-      "excluded_count": 11,
+      "ok": false,
+      "candidate_count": 0,
+      "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-16T07:27:11.529Z"
+      "fetched_at": "2026-10-17T07:08:09.995Z",
+      "error": "TypeError: fetch failed"
     }
   ],
   "reform_packages": [
     {
-      "package_id": "pkg-tax-administration-incentives-2026-10-09",
+      "package_id": "pkg-tax-administration-incentives-2026-10-13",
       "title": "Tax administration and investment incentive reform",
       "policy_area": "Tax administration and fiscal incentives",
       "reform_category": "fiscal_tax",
-      "current_stage": "Regulation approved",
+      "current_stage": "Rules amended",
       "current_stage_date": "2026-11-07",
       "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-10-09",
+      "next_milestone_date": "2026-10-13",
       "responsible_institutions": [
         "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
       ],
-      "legal_basis": "Verified official source event: 548-сон 09.10.2026. Eng yaxshi soliq toʻlovchi mahallalarni aniqlash mezonlari va tartibi toʻgʻrisidagi nizomni tasdiqlash haqida.",
+      "legal_basis": "Verified official source event: PQ-371-сон 13.10.2026. Ilgʻor “yashil” texnologiyalar asosida issiqxona xoʻjaliklarini rivojlantirish va aholi tomorqa yer maydonlaridan samarali foydalanish boʻyicha qoʻshimcha chora-tadbirlar toʻgʻrisida.",
       "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
       "short_summary": "The cited official document updates tax administration and fiscal incentives rules or procedures.",
       "parameters_or_amounts": [
-        "approved regulation"
+        "approved measures"
       ],
       "source_confidence": "high",
       "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
@@ -488,8 +490,8 @@
       "measure_tracks": [
         {
           "id": "tax-administration-incentives-measure-1",
-          "label": "approved regulation",
-          "status": "approved"
+          "label": "approved measures",
+          "status": "source verified"
         }
       ],
       "implementation_milestones": [
@@ -798,6 +800,21 @@
           "related_next_milestone_ids": [
             "tax-administration-incentives-approved-2026-10-09"
           ]
+        },
+        {
+          "id": "tax-administration-incentives-amended-2026-10-13",
+          "label": "rules amended",
+          "date": "2026-10-13",
+          "date_precision": "day",
+          "event_type": "amended",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-10-13-pq-371-13-10-2026-ilg-or-yashil-texnologiyalar-asosida-issiqxona-xo-j"
+          ],
+          "confidence": "high"
         },
         {
           "id": "tax-administration-incentives-instructions_issued-2026-11-07",
@@ -1370,6 +1387,34 @@
           }
         },
         {
+          "id": "source-event-2026-10-13-pq-371-13-10-2026-ilg-or-yashil-texnologiyalar-asosida-issiqxona-xo-j",
+          "title": "PQ-371-сон 13.10.2026. Ilgʻor “yashil” texnologiyalar asosida issiqxona xoʻjaliklarini rivojlantirish va aholi tomorqa yer maydonlaridan samarali foydalanish boʻyicha qoʻshimcha chora-tadbirlar toʻgʻrisida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/-8536685",
+          "source_published_at": "2026-10-13",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "amended",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-10-17T07:08:09.995Z",
+          "localized": {
+            "title": {
+              "uz": "PQ-371-сон 13.10.2026. Ilgʻor “yashil” texnologiyalar asosida issiqxona xoʻjaliklarini rivojlantirish va aholi tomorqa yer maydonlaridan samarali foydalanish boʻyicha qoʻshimcha chora-tadbirlar toʻgʻrisida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/-8536685",
+              "uz": "https://lex.uz/uz/docs/-8536685"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
           "id": "source-event-2026-11-07-o-rq-1162-05-08-2026-avtomobil-yo-llari-to-g-risida",
           "title": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida",
           "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
@@ -1397,9 +1442,9 @@
       ],
       "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
       "digest": {
-        "changed": "approved regulation",
+        "changed": "approved measures",
         "applies_to": "Tax administration and fiscal incentives",
-        "effective_status": "Regulation approved (2026-11-07)",
+        "effective_status": "Rules amended (2026-11-07)",
         "document": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida"
       },
       "localized": {
@@ -1430,245 +1475,25 @@
       }
     },
     {
-      "package_id": "pkg-pasture-dryland-use-incentives-2026-10-14",
-      "title": "Dryland and pasture land-use incentive reform",
-      "policy_area": "Dryland and pasture land activation incentives",
-      "reform_category": "agriculture",
-      "current_stage": "Multiple changes published",
-      "current_stage_date": "2026-10-14",
-      "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-10-14",
-      "responsible_institutions": [
-        "Official website of the President of the Republic of Uzbekistan",
-        "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-      ],
-      "legal_basis": "Verified official source events: President reviews new framework for pasture restoration and use; PQ-374-сон 14.10.2026. Yaylov yerlaridan samarali foydalanish va chorvachilik xoʻjaliklarini davlat tomonidan qoʻllab-quvvatlashga doir qoʻshimcha chora-tadbirlar toʻgʻrisida.",
-      "official_basis": "Official website of the President of the Republic of Uzbekistan; National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-      "short_summary": "New incentives are introduced to bring dryland and pasture plots into use.",
-      "parameters_or_amounts": [
-        "New incentive mechanisms apply to dryland and pasture land activation.",
-        "Agricultural land-use activation rules are introduced."
-      ],
-      "source_confidence": "medium",
-      "why_tracked": "The package is assembled from 2 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
-      "model_relevance": [
-        "Agricultural output",
-        "Rural investment",
-        "Land productivity"
-      ],
-      "policy_channels": [
-        "Agricultural land use",
-        "Rural production incentives",
-        "Pasture and dryland activation"
-      ],
-      "measure_tracks": [
-        {
-          "id": "pasture-dryland-use-incentives-measure-1",
-          "label": "Incentives apply to dryland and pasture land activation",
-          "status": "source verified"
-        },
-        {
-          "id": "pasture-dryland-use-incentives-measure-2",
-          "label": "Incentives apply to dryland and pasture land activation",
-          "status": "source verified"
-        }
-      ],
-      "implementation_milestones": [
-        {
-          "id": "pasture-dryland-use-incentives-implementation_milestone-2026-05-12",
-          "label": "implementation measure recorded",
-          "date": "2026-05-12",
-          "date_precision": "day",
-          "event_type": "implementation_milestone",
-          "responsible_institutions": [
-            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-05-12-pf-83-12-05-2026-lalmi-va-yaylov-yer-uchastkalarini-foydalanishga-kir"
-          ],
-          "confidence": "high"
-        },
-        {
-          "id": "pasture-dryland-use-incentives-instructions_issued-2026-10-13",
-          "label": "official measure recorded",
-          "date": "2026-10-13",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-10-13-president-reviews-new-framework-for-pasture-restoration-and-use"
-          ],
-          "confidence": "high"
-        },
-        {
-          "id": "pasture-dryland-use-incentives-amended-2026-10-14",
-          "label": "rules amended",
-          "date": "2026-10-14",
-          "date_precision": "day",
-          "event_type": "amended",
-          "responsible_institutions": [
-            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-10-14-pq-374-14-10-2026-yaylov-yerlaridan-samarali-foydalanish-va-chorvachi"
-          ],
-          "confidence": "medium"
-        }
-      ],
-      "official_source_events": [
-        {
-          "id": "source-event-2026-05-12-pf-83-12-05-2026-lalmi-va-yaylov-yer-uchastkalarini-foydalanishga-kir",
-          "title": "PF-83 12.05.2026 Lalmi va yaylov yer uchastkalarini foydalanishga kiritishni rag‘batlantirishning yangi mexanizmlarini joriy etish chora-tadbirlari to‘g‘risida",
-          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-          "source_url": "https://lex.uz/uz/docs/-8187225",
-          "source_published_at": "2026-05-12",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "implementation_milestone",
-          "summary": "PF-83 12.05.2026 Lalmi va yaylov yer uchastkalarini foydalanishga kiritishni rag‘batlantirishning yangi mexanizmlarini joriy etish chora-tadbirlari to‘g‘risida",
-          "source_url_status": "verified",
-          "extracted_at": "2026-05-15T09:00:00.000Z",
-          "localized": {
-            "title": {
-              "uz": "PF-83 12.05.2026 Lalmi va yaylov yer uchastkalarini foydalanishga kiritishni rag‘batlantirishning yangi mexanizmlarini joriy etish chora-tadbirlari to‘g‘risida"
-            },
-            "source_url": {
-              "ru": "https://lex.uz/ru/docs/-8187225",
-              "uz": "https://lex.uz/uz/docs/-8187225"
-            },
-            "source_url_status": {
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-10-13-president-reviews-new-framework-for-pasture-restoration-and-use",
-          "title": "President reviews new framework for pasture restoration and use",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9713",
-          "source_published_at": "2026-10-13",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure, parameter_change; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-10-14T07:56:14.076Z",
-          "localized": {
-            "title": {
-              "en": "President reviews new framework for pasture restoration and use",
-              "ru": "Рассмотрен новый порядок восстановления и использования пастбищ",
-              "uz": "Яйловларни тиклаш ва улардан фойдаланишнинг янги тартиби кўриб чиқилди"
-            },
-            "summary": {
-              "ru": "Перед хокимами поставлена задача восстановить 620 тысяч гектаров до конца текущего года и 3 миллиона 700 тысяч гектаров в следующем году, повысив их продуктивность. Совместно с Агентством по развитию животноводства и пастбищного хозяйства в месячный срок они утвердят комплексные программы по сокращению площади деградировавших земель на 10 процентов в текущем году и на 20 процентов – в следующем.",
-              "uz": "Улар Чорвачилик ва яйлов хўжалигини ривожлантириш агентлиги билан бир ой муддатда деградацияга учраган майдонларни жорий йилда 10 фоизга, келаси йили 20 фоизга қисқартириш бўйича комплекс дастурларни тасдиқлайди. Бу имкониятдан фойдаланиб, 11 та тадбиркор сув ҳавзалари қуриш ва ёмғирлатиб суғориш технологиясини жорий этишга киришган."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9713",
-              "ru": "https://president.uz/ru/lists/view/9713",
-              "uz": "https://president.uz/uz/lists/view/9713"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-10-14-pq-374-14-10-2026-yaylov-yerlaridan-samarali-foydalanish-va-chorvachi",
-          "title": "PQ-374-сон 14.10.2026. Yaylov yerlaridan samarali foydalanish va chorvachilik xoʻjaliklarini davlat tomonidan qoʻllab-quvvatlashga doir qoʻshimcha chora-tadbirlar toʻgʻrisida",
-          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-          "source_url": "https://lex.uz/uz/docs/-8537009",
-          "source_published_at": "2026-10-14",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "amended",
-          "summary": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-10-16T07:27:11.529Z",
-          "localized": {
-            "title": {
-              "uz": "PQ-374-сон 14.10.2026. Yaylov yerlaridan samarali foydalanish va chorvachilik xoʻjaliklarini davlat tomonidan qoʻllab-quvvatlashga doir qoʻshimcha chora-tadbirlar toʻgʻrisida"
-            },
-            "summary": {
-              "uz": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
-            },
-            "source_url": {
-              "ru": "https://lex.uz/ru/docs/-8537009",
-              "uz": "https://lex.uz/uz/docs/-8537009"
-            },
-            "source_url_status": {
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        }
-      ],
-      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
-      "digest": {
-        "changed": "New incentive mechanisms apply to dryland and pasture land activation.",
-        "applies_to": "Dryland and pasture land activation incentives",
-        "effective_status": "Multiple changes published (2026-10-14)",
-        "document": "PQ-374-сон 14.10.2026. Yaylov yerlaridan samarali foydalanish va chorvachilik xoʻjaliklarini davlat tomonidan qoʻllab-quvvatlashga doir qoʻshimcha chora-tadbirlar toʻgʻrisida"
-      },
-      "localized": {
-        "title": {
-          "uz": "PQ-374-сон 14.10.2026. Yaylov yerlaridan samarali foydalanish va chorvachilik xoʻjaliklarini davlat tomonidan qoʻllab-quvvatlashga doir qoʻshimcha chora-tadbirlar toʻgʻrisida"
-        },
-        "short_summary": {
-          "ru": "Перед хокимами поставлена задача восстановить 620 тысяч гектаров до конца текущего года и 3 миллиона 700 тысяч гектаров в следующем году, повысив их продуктивность.",
-          "uz": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
-        },
-        "parameters_or_amounts": {
-          "ru": [
-            "Перед хокимами поставлена задача восстановить 620 тысяч гектаров до конца текущего года и 3 миллиона 700 тысяч гектаров в следующем году, повысив их продуктивность.",
-            "Совместно с Агентством по развитию животноводства и пастбищного хозяйства в месячный срок они утвердят комплексные программы по сокращению площади деградировавших земель на 10 процентов в текущем году и на 20 процентов – в следующем.",
-            "Воспользовавшись этой возможностью, 11 предпринимателей приступили к строительству водоемов и внедрению технологий дождевального орошения.",
-            "В Нишанском районе Кашкадарьинской области на 1 тысяче 332 гектарах пастбищ внедрена система орошения с использованием круговых дождевальных установок и ведется посев новых кормовых культур, адаптированных к местным условиям.",
-            "Поручено внедрить этот опыт в Мубарекском и Дехканабадском районах, а также в течение года создать 9,4 тысячи гектаров участков для семеноводства.",
-            "До конца года также планируется отремонтировать 1 тысячу 600 скважин.",
-            "Кроме того, в текущем году за счет 100 миллиардов сумов бюджетных средств будет построено 161 гидротехническое сооружение для орошения, а в 2027 и 2028 годах – по 81, всего 323 таких объекта.",
-            "Для оформления 623 тысяч гектаров пастбищ, служащих сегодня местом выпаса 260 тысяч голов скота, на имя фактических пользователей полномочия соответствующей комиссии будут продлены до конца года."
-          ],
-          "uz": [
-            "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
-          ]
-        },
-        "digest": {
-          "ru": {
-            "changed": "Перед хокимами поставлена задача восстановить 620 тысяч гектаров до конца текущего года и 3 миллиона 700 тысяч гектаров в следующем году, повысив их продуктивность."
-          },
-          "uz": {
-            "changed": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement.",
-            "document": "PQ-374-сон 14.10.2026. Yaylov yerlaridan samarali foydalanish va chorvachilik xoʻjaliklarini davlat tomonidan qoʻllab-quvvatlashga doir qoʻshimcha chora-tadbirlar toʻgʻrisida"
-          }
-        }
-      }
-    },
-    {
-      "package_id": "pkg-energy-tariff-compensation-2026-10-13",
+      "package_id": "pkg-energy-tariff-compensation-2026-10-16",
       "title": "Energy tariff adjustment and compensation reform",
       "policy_area": "Energy tariffs, household compensation, and fiscal monitoring",
       "reform_category": "energy_tariffs",
-      "current_stage": "Instructions issued",
-      "current_stage_date": "2026-10-13",
+      "current_stage": "Implementation started",
+      "current_stage_date": "2026-10-16",
       "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-10-13",
+      "next_milestone_date": "2026-10-16",
       "responsible_institutions": [
         "Official website of the President of the Republic of Uzbekistan"
       ],
-      "legal_basis": "Verified official source events: President Shavkat Mirziyoyev concludes working visit to Turkmenistan; Measures reviewed to introduce green technologies in greenhouse farming.",
+      "legal_basis": "Verified official source event: President Holds Dialogue with Investors on Accelerating Reforms in the Energy Sector.",
       "official_basis": "Official website of the President of the Republic of Uzbekistan",
-      "short_summary": "2 official measures update energy tariffs, household compensation, and fiscal monitoring rules or procedures.",
+      "short_summary": "The cited official document updates energy tariffs, household compensation, and fiscal monitoring rules or procedures.",
       "parameters_or_amounts": [
         "verified official measure"
       ],
-      "source_confidence": "medium",
-      "why_tracked": "The package is assembled from 2 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "source_confidence": "high",
+      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
       "model_relevance": [
         "Inflation",
         "Household income",
@@ -1682,11 +1507,6 @@
       "measure_tracks": [
         {
           "id": "energy-tariff-compensation-measure-1",
-          "label": "verified official measure",
-          "status": "source verified"
-        },
-        {
-          "id": "energy-tariff-compensation-measure-2",
           "label": "verified official measure",
           "status": "source verified"
         }
@@ -1844,6 +1664,21 @@
             "source-event-2026-10-13-measures-reviewed-to-introduce-green-technologies-in-greenhouse-farmi"
           ],
           "confidence": "medium"
+        },
+        {
+          "id": "energy-tariff-compensation-implementation_milestone-2026-10-16",
+          "label": "implementation measure recorded",
+          "date": "2026-10-16",
+          "date_precision": "day",
+          "event_type": "implementation_milestone",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-10-16-president-holds-dialogue-with-investors-on-accelerating-reforms-in-th"
+          ],
+          "confidence": "high"
         }
       ],
       "official_source_events": [
@@ -2174,54 +2009,302 @@
               "uz": "verified"
             }
           }
+        },
+        {
+          "id": "source-event-2026-10-16-president-holds-dialogue-with-investors-on-accelerating-reforms-in-th",
+          "title": "President Holds Dialogue with Investors on Accelerating Reforms in the Energy Sector",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9726",
+          "source_published_at": "2026-10-16",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "implementation_milestone",
+          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-10-17T07:08:09.995Z",
+          "localized": {
+            "title": {
+              "en": "President Holds Dialogue with Investors on Accelerating Reforms in the Energy Sector",
+              "ru": "Президент обсудил с инвесторами вопросы ускорения реформ в топливно-энергетической отрасли",
+              "uz": "Давлатимиз раҳбари ёқилғи-энергетика тармоғидаги ислоҳотларни жадаллаштириш юзасидан сармоядорлар билан мулоқот ўтказди"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "За последние десять лет энергетический рынок открылся для частных инвестиций, внедрены механизмы государственно-частного партнерства. Они предусматривают создание 3 тысячи мегаватт генерирующих и 400 мегаватт накопительных мощностей.",
+              "uz": "Сўнгги ўн йилда энергетика бозори хусусий сармояга очилиб, давлат-хусусий шериклик механизмлари жорий этилди. Қайси ҳудудда қандай қувват зарурлиги олдиндан режалаштирилиб, тайёр лойиҳалар очиқ танловга чиқарилади."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9726",
+              "ru": "https://president.uz/ru/lists/view/9726",
+              "uz": "https://president.uz/uz/lists/view/9726"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
         }
       ],
       "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
       "digest": {
         "changed": "verified official measure",
         "applies_to": "Energy tariffs, household compensation, and fiscal monitoring",
-        "effective_status": "Instructions issued (2026-10-13)",
-        "document": "Measures reviewed to introduce green technologies in greenhouse farming"
+        "effective_status": "Implementation started (2026-10-16)",
+        "document": "President Holds Dialogue with Investors on Accelerating Reforms in the Energy Sector"
       },
       "localized": {
         "title": {
-          "ru": "Рассмотрены вопросы внедрения «зеленых» технологий в тепличное хозяйство",
-          "uz": "Иссиқхона хўжалигига “яшил” технологияларни жорий қилиш масалалари кўриб чиқилди"
+          "ru": "Президент обсудил с инвесторами вопросы ускорения реформ в топливно-энергетической отрасли",
+          "uz": "Давлатимиз раҳбари ёқилғи-энергетика тармоғидаги ислоҳотларни жадаллаштириш юзасидан сармоядорлар билан мулоқот ўтказди"
         },
         "short_summary": {
-          "ru": "Теплицам, работающим на твердом топливе, предложено до 1 декабря текущего года перейти на указанные источники энергии.",
-          "uz": "Шу боис, Тошкент шаҳри ва унга туташ бешта туманда иссиқхоналар учун “яшил” технологияларга асосланган махсус экологик тартиб жорий этиш таклиф қилинди."
+          "ru": "За последние десять лет энергетический рынок открылся для частных инвестиций, внедрены механизмы государственно-частного партнерства.",
+          "uz": "Сўнгги ўн йилда энергетика бозори хусусий сармояга очилиб, давлат-хусусий шериклик механизмлари жорий этилди."
         },
         "parameters_or_amounts": {
           "ru": [
-            "Теплицам, работающим на твердом топливе, предложено до 1 декабря текущего года перейти на указанные источники энергии.",
-            "С 15 октября текущего года по 15 марта следующего года в тепличных хозяйствах будет осуществляться постоянный экологический мониторинг.",
-            "В его рамках будет контролироваться работа пылегазоочистного оборудования, объем выбросов в атмосферу и соблюдение требований к используемым видам топлива.",
-            "Данные, получаемые с измерительных приборов и средств видеонаблюдения, будут передаваться в информационную систему Национального комитета по экологии в режиме реального времени.",
-            "При необходимости деятельность теплицы будет останавливаться.",
-            "На установку экологичного и энергоэффективного оборудования предложено выделять до 50 миллионов сумов субсидий на каждый гектар, а также предоставлять до 3 миллиардов сумов льготных кредитов сроком на семь лет.",
-            "В частности, предлагается до 2030 года снизить земельный и имущественный налоги на 50 процентов, освободить от уплаты налога с оборота, а также компенсировать половину расходов на электроэнергию, потребляемую энергосберегающими системами.",
-            "Также рассмотрен вопрос выделения грантов в размере до 100 миллионов сумов домохозяйствам города Ташкента и прилегающих территорий на внедрение «зеленых» источников энергии и установку эффективного оборудования."
+            "За последние десять лет энергетический рынок открылся для частных инвестиций, внедрены механизмы государственно-частного партнерства.",
+            "Они предусматривают создание 3 тысячи мегаватт генерирующих и 400 мегаватт накопительных мощностей.",
+            "Теперь каждый проект должен обеспечить не только создание новых мощностей, но и повысить надежность энергоснабжения, а также сократить потери электроэнергии.",
+            "До 2030 года намечено создать 22 тысячи мегаватт новых мощностей, увеличить годовой объем выработки электроэнергии до более чем 129 миллиардов киловатт-часов и довести долю возобновляемых источников энергии до 54 процентов.",
+            "Для этого системы генерации, передачи и накопления энергии будут развивать взаимосвязанно.",
+            "Впервые будет разработан Национальный генеральный план развития энергетики до 2050 года.",
+            "До 1 марта следующего года будет представлена карта возможностей подключения к сетям, а до 1 июля – полный генеральный план.",
+            "До 2030 года планируется построить 5 тысяч километров сетей и 16 крупных подстанций, а также довести мощности по накоплению энергии до 4,5 гигаватта."
           ],
           "uz": [
-            "Шу боис, Тошкент шаҳри ва унга туташ бешта туманда иссиқхоналар учун “яшил” технологияларга асосланган махсус экологик тартиб жорий этиш таклиф қилинди.",
-            "Қаттиқ ёқилғида ишлаётган иссиқхоналарга жорий йил 1 декабрга қадар ушбу манбаларга ўтиш таклиф қилинади.",
-            "Жорий йил 15 октябрдан келгуси йил 15 мартга қадар иссиқхоналарда доимий экологик мониторинг олиб борилади.",
-            "Экологик ва энергия тежамкор ускуналарни ўрнатишга ҳар гектар учун 50 миллион сўмгача субсидия, етти йил муддатга 3 миллиард сўмгача имтиёзли кредит ажратиш таклиф этилди.",
-            "Шахсий томорқалардаги иссиқхоналарни янгилашга кўмаклашиш бўйича алоҳида таклифлар тайёрланган.",
-            "Хусусан, 2030 йилгача ер ва мол-мулк солиқларини 50 фоизга камайтириш, айланмадан олинадиган солиқдан озод қилиш ҳамда энергия тежамкор тизимлар истеъмол қилган электр энергияси харажатининг ярмини қоплаш таклиф этилмоқда.",
-            "Янги “яшил” иссиқхона қуришга 300 миллион сўмгача, мавжудини қайта жиҳозлашга 150 миллион сўмгача имтиёзли кредит бериш назарда тутилмоқда.",
-            "Иссиқхоначиликка ихтисослашган 50 та маҳаллада эҳтиёжманд оилалар учун экологик хавфсиз иссиқхоналар ташкил этиш режалаштирилган."
+            "Сўнгги ўн йилда энергетика бозори хусусий сармояга очилиб, давлат-хусусий шериклик механизмлари жорий этилди.",
+            "Қайси ҳудудда қандай қувват зарурлиги олдиндан режалаштирилиб, тайёр лойиҳалар очиқ танловга чиқарилади.",
+            "Бу сармоядорларга лойиҳаларини узоқ муддатга режалаштириш имконини беради.",
+            "2030 йилгача 5 минг километр тармоқ ва 16 та йирик подстанция қуриш, энергия сақлаш қувватларини 4,5 гигаваттга етказиш режалаштирилган.",
+            "“Яшил” энергия ишлаб чиқарувчиларнинг сертификатлар ва карбон кредитлардан қўшимча даромад олиши учун механизмлар жорий этилади.",
+            "Фориш туманида қурилаётган атом электр станцияси учун зарур маҳсулотлар ишлаб чиқариладиган махсус саноат зонасини ташкил этиш режалаштирилмоқда.",
+            "Устюртда “SOCAR” ва “British Petroleum” компаниялари билан олтита инвестиция блокида қидирув ишлари олиб борилмоқда, хорижлик ҳамкорларга таклиф этиш учун яна 128 та блок тайёрланган.",
+            "Суюлтирилган газ таъминотига бозор механизмларини босқичма-босқич жорий этиш масаласига тўхталиб, давлатимиз раҳбари бунда таъминот узлуксизлиги, хавфсизлик ва аҳолига хизмат кўрсатиш сифати устувор бўлиши шартлигини таъкидлади."
           ]
         },
         "digest": {
           "ru": {
-            "changed": "Теплицам, работающим на твердом топливе, предложено до 1 декабря текущего года перейти на указанные источники энергии.",
-            "document": "Рассмотрены вопросы внедрения «зеленых» технологий в тепличное хозяйство"
+            "changed": "За последние десять лет энергетический рынок открылся для частных инвестиций, внедрены механизмы государственно-частного партнерства.",
+            "document": "Президент обсудил с инвесторами вопросы ускорения реформ в топливно-энергетической отрасли"
           },
           "uz": {
-            "changed": "Шу боис, Тошкент шаҳри ва унга туташ бешта туманда иссиқхоналар учун “яшил” технологияларга асосланган махсус экологик тартиб жорий этиш таклиф қилинди.",
-            "document": "Иссиқхона хўжалигига “яшил” технологияларни жорий қилиш масалалари кўриб чиқилди"
+            "changed": "Сўнгги ўн йилда энергетика бозори хусусий сармояга очилиб, давлат-хусусий шериклик механизмлари жорий этилди.",
+            "document": "Давлатимиз раҳбари ёқилғи-энергетика тармоғидаги ислоҳотларни жадаллаштириш юзасидан сармоядорлар билан мулоқот ўтказди"
+          }
+        }
+      }
+    },
+    {
+      "package_id": "pkg-pasture-dryland-use-incentives-2026-10-14",
+      "title": "Dryland and pasture land-use incentive reform",
+      "policy_area": "Dryland and pasture land activation incentives",
+      "reform_category": "agriculture",
+      "current_stage": "Rules amended",
+      "current_stage_date": "2026-10-14",
+      "next_milestone": "No future milestone published in verified source",
+      "next_milestone_date": "2026-10-14",
+      "responsible_institutions": [
+        "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+      ],
+      "legal_basis": "Verified official source event: PQ-374-сон 14.10.2026. Yaylov yerlaridan samarali foydalanish va chorvachilik xoʻjaliklarini davlat tomonidan qoʻllab-quvvatlashga doir qoʻshimcha chora-tadbirlar toʻgʻrisida.",
+      "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+      "short_summary": "New incentives are introduced to bring dryland and pasture plots into use.",
+      "parameters_or_amounts": [
+        "New incentive mechanisms apply to dryland and pasture land activation.",
+        "Agricultural land-use activation rules are introduced."
+      ],
+      "source_confidence": "medium",
+      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "model_relevance": [
+        "Agricultural output",
+        "Rural investment",
+        "Land productivity"
+      ],
+      "policy_channels": [
+        "Agricultural land use",
+        "Rural production incentives",
+        "Pasture and dryland activation"
+      ],
+      "measure_tracks": [
+        {
+          "id": "pasture-dryland-use-incentives-measure-1",
+          "label": "Incentives apply to dryland and pasture land activation",
+          "status": "source verified"
+        }
+      ],
+      "implementation_milestones": [
+        {
+          "id": "pasture-dryland-use-incentives-implementation_milestone-2026-05-12",
+          "label": "implementation measure recorded",
+          "date": "2026-05-12",
+          "date_precision": "day",
+          "event_type": "implementation_milestone",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-05-12-pf-83-12-05-2026-lalmi-va-yaylov-yer-uchastkalarini-foydalanishga-kir"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "pasture-dryland-use-incentives-instructions_issued-2026-10-13",
+          "label": "official measure recorded",
+          "date": "2026-10-13",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-10-13-president-reviews-new-framework-for-pasture-restoration-and-use"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "pasture-dryland-use-incentives-amended-2026-10-14",
+          "label": "rules amended",
+          "date": "2026-10-14",
+          "date_precision": "day",
+          "event_type": "amended",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-10-14-pq-374-14-10-2026-yaylov-yerlaridan-samarali-foydalanish-va-chorvachi"
+          ],
+          "confidence": "medium"
+        }
+      ],
+      "official_source_events": [
+        {
+          "id": "source-event-2026-05-12-pf-83-12-05-2026-lalmi-va-yaylov-yer-uchastkalarini-foydalanishga-kir",
+          "title": "PF-83 12.05.2026 Lalmi va yaylov yer uchastkalarini foydalanishga kiritishni rag‘batlantirishning yangi mexanizmlarini joriy etish chora-tadbirlari to‘g‘risida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/-8187225",
+          "source_published_at": "2026-05-12",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "implementation_milestone",
+          "summary": "PF-83 12.05.2026 Lalmi va yaylov yer uchastkalarini foydalanishga kiritishni rag‘batlantirishning yangi mexanizmlarini joriy etish chora-tadbirlari to‘g‘risida",
+          "source_url_status": "verified",
+          "extracted_at": "2026-05-15T09:00:00.000Z",
+          "localized": {
+            "title": {
+              "uz": "PF-83 12.05.2026 Lalmi va yaylov yer uchastkalarini foydalanishga kiritishni rag‘batlantirishning yangi mexanizmlarini joriy etish chora-tadbirlari to‘g‘risida"
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/-8187225",
+              "uz": "https://lex.uz/uz/docs/-8187225"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-10-13-president-reviews-new-framework-for-pasture-restoration-and-use",
+          "title": "President reviews new framework for pasture restoration and use",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9713",
+          "source_published_at": "2026-10-13",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure, parameter_change; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-10-14T07:56:14.076Z",
+          "localized": {
+            "title": {
+              "en": "President reviews new framework for pasture restoration and use",
+              "ru": "Рассмотрен новый порядок восстановления и использования пастбищ",
+              "uz": "Яйловларни тиклаш ва улардан фойдаланишнинг янги тартиби кўриб чиқилди"
+            },
+            "summary": {
+              "ru": "Перед хокимами поставлена задача восстановить 620 тысяч гектаров до конца текущего года и 3 миллиона 700 тысяч гектаров в следующем году, повысив их продуктивность. Совместно с Агентством по развитию животноводства и пастбищного хозяйства в месячный срок они утвердят комплексные программы по сокращению площади деградировавших земель на 10 процентов в текущем году и на 20 процентов – в следующем.",
+              "uz": "Улар Чорвачилик ва яйлов хўжалигини ривожлантириш агентлиги билан бир ой муддатда деградацияга учраган майдонларни жорий йилда 10 фоизга, келаси йили 20 фоизга қисқартириш бўйича комплекс дастурларни тасдиқлайди. Бу имкониятдан фойдаланиб, 11 та тадбиркор сув ҳавзалари қуриш ва ёмғирлатиб суғориш технологиясини жорий этишга киришган."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9713",
+              "ru": "https://president.uz/ru/lists/view/9713",
+              "uz": "https://president.uz/uz/lists/view/9713"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-10-14-pq-374-14-10-2026-yaylov-yerlaridan-samarali-foydalanish-va-chorvachi",
+          "title": "PQ-374-сон 14.10.2026. Yaylov yerlaridan samarali foydalanish va chorvachilik xoʻjaliklarini davlat tomonidan qoʻllab-quvvatlashga doir qoʻshimcha chora-tadbirlar toʻgʻrisida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/-8537009",
+          "source_published_at": "2026-10-14",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "amended",
+          "summary": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-10-16T07:27:11.529Z",
+          "localized": {
+            "title": {
+              "uz": "PQ-374-сон 14.10.2026. Yaylov yerlaridan samarali foydalanish va chorvachilik xoʻjaliklarini davlat tomonidan qoʻllab-quvvatlashga doir qoʻshimcha chora-tadbirlar toʻgʻrisida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/-8537009",
+              "uz": "https://lex.uz/uz/docs/-8537009"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        }
+      ],
+      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
+      "digest": {
+        "changed": "New incentive mechanisms apply to dryland and pasture land activation.",
+        "applies_to": "Dryland and pasture land activation incentives",
+        "effective_status": "Rules amended (2026-10-14)",
+        "document": "PQ-374-сон 14.10.2026. Yaylov yerlaridan samarali foydalanish va chorvachilik xoʻjaliklarini davlat tomonidan qoʻllab-quvvatlashga doir qoʻshimcha chora-tadbirlar toʻgʻrisida"
+      },
+      "localized": {
+        "title": {
+          "uz": "PQ-374-сон 14.10.2026. Yaylov yerlaridan samarali foydalanish va chorvachilik xoʻjaliklarini davlat tomonidan qoʻllab-quvvatlashga doir qoʻshimcha chora-tadbirlar toʻgʻrisida"
+        },
+        "short_summary": {
+          "ru": "Перед хокимами поставлена задача восстановить 620 тысяч гектаров до конца текущего года и 3 миллиона 700 тысяч гектаров в следующем году, повысив их продуктивность.",
+          "uz": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
+        },
+        "parameters_or_amounts": {
+          "ru": [
+            "Перед хокимами поставлена задача восстановить 620 тысяч гектаров до конца текущего года и 3 миллиона 700 тысяч гектаров в следующем году, повысив их продуктивность.",
+            "Совместно с Агентством по развитию животноводства и пастбищного хозяйства в месячный срок они утвердят комплексные программы по сокращению площади деградировавших земель на 10 процентов в текущем году и на 20 процентов – в следующем.",
+            "Воспользовавшись этой возможностью, 11 предпринимателей приступили к строительству водоемов и внедрению технологий дождевального орошения.",
+            "В Нишанском районе Кашкадарьинской области на 1 тысяче 332 гектарах пастбищ внедрена система орошения с использованием круговых дождевальных установок и ведется посев новых кормовых культур, адаптированных к местным условиям.",
+            "Поручено внедрить этот опыт в Мубарекском и Дехканабадском районах, а также в течение года создать 9,4 тысячи гектаров участков для семеноводства.",
+            "До конца года также планируется отремонтировать 1 тысячу 600 скважин.",
+            "Кроме того, в текущем году за счет 100 миллиардов сумов бюджетных средств будет построено 161 гидротехническое сооружение для орошения, а в 2027 и 2028 годах – по 81, всего 323 таких объекта.",
+            "Для оформления 623 тысяч гектаров пастбищ, служащих сегодня местом выпаса 260 тысяч голов скота, на имя фактических пользователей полномочия соответствующей комиссии будут продлены до конца года."
+          ],
+          "uz": [
+            "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement."
+          ]
+        },
+        "digest": {
+          "ru": {
+            "changed": "Перед хокимами поставлена задача восстановить 620 тысяч гектаров до конца текущего года и 3 миллиона 700 тысяч гектаров в следующем году, повысив их продуктивность."
+          },
+          "uz": {
+            "changed": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement.",
+            "document": "PQ-374-сон 14.10.2026. Yaylov yerlaridan samarali foydalanish va chorvachilik xoʻjaliklarini davlat tomonidan qoʻllab-quvvatlashga doir qoʻshimcha chora-tadbirlar toʻgʻrisida"
           }
         }
       }
@@ -6287,7 +6370,7 @@
     ],
     "package_links": [
       {
-        "package_id": "pkg-tax-administration-incentives-2026-10-09",
+        "package_id": "pkg-tax-administration-incentives-2026-10-13",
         "active_lenses": [
           {
             "model_id": "DFM",
@@ -6302,6 +6385,38 @@
           {
             "model_id": "PE",
             "channel": "Direct tariff-incidence and trade-flow context.",
+            "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "CGE",
+            "channel": "Experimental economy-wide comparative-static reference.",
+            "caveat": "Experimental reference only; not a forecast or model-owner-approved estimate."
+          }
+        ],
+        "gated_lenses": [
+          {
+            "model_id": "FPP",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "HFI",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "Synthesis",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          }
+        ]
+      },
+      {
+        "package_id": "pkg-energy-tariff-compensation-2026-10-16",
+        "active_lenses": [
+          {
+            "model_id": "QPM",
+            "channel": "Macro-financial and inflation transmission context.",
             "caveat": "Possible lens only."
           },
           {
@@ -6344,38 +6459,6 @@
           {
             "model_id": "PE",
             "channel": "Direct tariff-incidence and trade-flow context.",
-            "caveat": "Possible lens only."
-          },
-          {
-            "model_id": "CGE",
-            "channel": "Experimental economy-wide comparative-static reference.",
-            "caveat": "Experimental reference only; not a forecast or model-owner-approved estimate."
-          }
-        ],
-        "gated_lenses": [
-          {
-            "model_id": "FPP",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "HFI",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "Synthesis",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          }
-        ]
-      },
-      {
-        "package_id": "pkg-energy-tariff-compensation-2026-10-13",
-        "active_lenses": [
-          {
-            "model_id": "QPM",
-            "channel": "Macro-financial and inflation transmission context.",
             "caveat": "Possible lens only."
           },
           {
@@ -6879,6 +6962,7 @@
     "This is a deterministic official-source reform package artifact.",
     "Generated from configured source URLs at artifact build time.",
     "Public packages are assembled only from source events whose official links passed validation.",
-    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser."
+    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser.",
+    "One or more configured sources failed during this automatic refresh; previous verified packages were carried forward when needed to avoid deleting reforms during a temporary source outage."
   ]
 }
