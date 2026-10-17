@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-16T09:13:11Z",
-  "checked_at": "2026-10-16T09:13:11Z",
-  "status": "degraded",
+  "generated_at": "2026-10-17T10:42:10Z",
+  "checked_at": "2026-10-17T10:42:10Z",
+  "status": "validated",
   "scope": "Configured source families; freshness is evaluated separately per metric",
   "families": [
     {
@@ -51,13 +51,13 @@
     },
     {
       "family": "cpi-2026-08",
-      "status": "retained",
-      "reason": "The operation was aborted due to timeout"
+      "status": "validated",
+      "changed": false
     },
     {
       "family": "cpi-2026-09",
-      "status": "retained",
-      "reason": "The operation was aborted due to timeout"
+      "status": "validated",
+      "changed": false
     },
     {
       "family": "policy-rate-2026-09-16",
@@ -67,28 +67,28 @@
   ],
   "sources": [
     {
-      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-16/",
-      "sha256": "f823153d60ed2804791b2c0aa036c565839195ce3cbf7738dd371210f5fe50ed",
+      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-17/",
+      "sha256": "171edfba4f07fd0f07993f2e1b45b096a2a37c402e2a03682e6371dc3ea539b8",
       "bytes": 220,
-      "path": "raw/f823153d60ed2804791b2c0aa036c565839195ce3cbf7738dd371210f5fe50ed.json",
+      "path": "raw/171edfba4f07fd0f07993f2e1b45b096a2a37c402e2a03682e6371dc3ea539b8.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-16T09:13:11Z"
+      "fetched_at": "2026-10-17T10:42:10Z"
     },
     {
-      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-09-16/",
-      "sha256": "6469bf8080e6daab666c5614c7e2d69872fbcf87750cc904db6f46b7709fe2a4",
-      "bytes": 219,
-      "path": "raw/6469bf8080e6daab666c5614c7e2d69872fbcf87750cc904db6f46b7709fe2a4.json",
+      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-09-17/",
+      "sha256": "38fec7e8587c66f3fc11511b02c615edb136e20e26d6e3f3a769d4da8ab48e35",
+      "bytes": 220,
+      "path": "raw/38fec7e8587c66f3fc11511b02c615edb136e20e26d6e3f3a769d4da8ab48e35.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-16T09:13:11Z"
+      "fetched_at": "2026-10-17T10:42:10Z"
     },
     {
-      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2025-10-16/",
-      "sha256": "cdd7af26f05e1eb7650edefc241754a2987ad2ead87a649c9cc6bcbad0f71bba",
-      "bytes": 220,
-      "path": "raw/cdd7af26f05e1eb7650edefc241754a2987ad2ead87a649c9cc6bcbad0f71bba.json",
+      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2025-10-17/",
+      "sha256": "e526fa8d9862ac454a75b5bc0929a6be68d0570235c4edc93fb9e77c06adeda1",
+      "bytes": 221,
+      "path": "raw/e526fa8d9862ac454a75b5bc0929a6be68d0570235c4edc93fb9e77c06adeda1.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-16T09:13:11Z"
+      "fetched_at": "2026-10-17T10:42:10Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json",
@@ -96,7 +96,7 @@
       "bytes": 327805,
       "path": "raw/8e5e8062c495359e032628896c485da90803fec0f695a77bebaaf8b7b46e04c5.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-16T09:13:11Z"
+      "fetched_at": "2026-10-17T10:42:10Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2414.json",
@@ -104,7 +104,7 @@
       "bytes": 330060,
       "path": "raw/9d09d8844df814500602e74cb5f5d0fd5f49a51fde2b77bc3a4d8bd0c116b365.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-16T09:13:11Z"
+      "fetched_at": "2026-10-17T10:42:10Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json",
@@ -112,7 +112,7 @@
       "bytes": 479246,
       "path": "raw/4d66b450aecdc3567f1bc097eb403d2839949d3e410899f61054102a9f7737f4.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-16T09:13:11Z"
+      "fetched_at": "2026-10-17T10:42:10Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_582.json",
@@ -120,7 +120,7 @@
       "bytes": 12304,
       "path": "raw/5261061f73ec576477e2b752b11561863c2cfe9fc3e50967fabf0df390c5be92.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-16T09:13:11Z"
+      "fetched_at": "2026-10-17T10:42:10Z"
     },
     {
       "url": "https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Monthly.xlsx",
@@ -128,22 +128,50 @@
       "bytes": 586099,
       "path": "raw/ea1c350827878ea3bbe30e3cda16a13fd3bd5b409b8458940dc94a36b5a33154.xlsx",
       "representation": "downloaded bytes",
-      "fetched_at": "2026-10-16T09:13:11Z"
+      "fetched_at": "2026-10-17T10:42:10Z"
+    },
+    {
+      "url": "https://stat.uz/img/news/press-release_cpi_august_2026_en_p63576.pdf",
+      "sha256": "7252e48ef6f4f7b22dc51ce9195247cc528aac577e46cd52ae065d177007b500",
+      "bytes": 329568,
+      "path": "raw/7252e48ef6f4f7b22dc51ce9195247cc528aac577e46cd52ae065d177007b500.pdf",
+      "representation": "downloaded bytes",
+      "fetched_at": "2026-10-17T10:42:10Z",
+      "acquisition": {
+        "attempts": 1,
+        "timeout_ms": 45000
+      }
+    },
+    {
+      "url": "https://stat.uz/img/news/press-release_cpi_september_2026_en_p49619.pdf",
+      "sha256": "f05137fdb4bb869ae9c09292dc7d69e20a8f75e9f7f03f505ea17978a92b9aa6",
+      "bytes": 318481,
+      "path": "raw/f05137fdb4bb869ae9c09292dc7d69e20a8f75e9f7f03f505ea17978a92b9aa6.pdf",
+      "representation": "downloaded bytes",
+      "fetched_at": "2026-10-17T10:42:10Z",
+      "acquisition": {
+        "attempts": 1,
+        "timeout_ms": 45000
+      }
     },
     {
       "url": "https://cbu.uz/en/press_center/releases/4540151/",
-      "sha256": "2bec79b48acd6fe05303cd47d3715255fceac723c6b04ddd62a30add52cc4a82",
-      "bytes": 198728,
-      "path": "raw/2bec79b48acd6fe05303cd47d3715255fceac723c6b04ddd62a30add52cc4a82.html",
+      "sha256": "a1cee52c8cbeb7eabcfc3b06fd3a34b312b7310ab22c163252c2dd2c8b290c13",
+      "bytes": 198734,
+      "path": "raw/a1cee52c8cbeb7eabcfc3b06fd3a34b312b7310ab22c163252c2dd2c8b290c13.html",
       "representation": "downloaded bytes",
-      "fetched_at": "2026-10-16T09:13:11Z"
+      "fetched_at": "2026-10-17T10:42:10Z",
+      "acquisition": {
+        "attempts": 1,
+        "timeout_ms": 45000
+      }
     }
   ],
   "diff": [],
-  "exported_at": "2026-10-16T09:14:04.395Z",
-  "snapshot_sha256": "950bdc927b1fbddba5eb434d71eb76aafbe467f07593a61fa7abc77bafdaaa2a",
-  "artifact_sha256": "1e7087da2c09f66d0fe680207617dd28870678db60c1284c4a25f717c286be7f",
+  "exported_at": "2026-10-17T10:42:40.172Z",
+  "snapshot_sha256": "5c415ec22a21dce0841586bd5f4bdcf18de168aed5609d8e23b4ad9c312a2308",
+  "artifact_sha256": "45db46f3283d7cebcbc89151904ebb344650f3fac4edc2ded19bbdfb66f3d703",
   "changed": false,
-  "value_hash": "284f52062920db5bf1c689a262044c8066ff62f9cc3c399928d3ef64fda837b8",
+  "value_hash": "64784c67442cbd72bf68261a53c29ae54eda448da3cec029470d265dc8a9f2da",
   "snapshot_status": "source_verified_for_public_artifact"
 }
