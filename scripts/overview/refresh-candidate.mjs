@@ -12,10 +12,13 @@ import { fetchJsonWithRetry, fetchArrayBufferWithRetry } from './sources/http.mj
 import { resolveRefreshExportedAt } from './sources/refresh-clock.mjs'
 import { applyMetricUpdatesToSnapshot } from './sources/update-snapshot.mjs'
 import { buildReviewedReleaseMetricUpdates } from './sources/reviewed-releases.mjs'
+import { fetchReviewedSource } from './sources/reviewed-source-http.mjs'
+import { assertFullyValidatedRefresh } from './refresh-report-policy.mjs'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 const args = Object.fromEntries(Array.from({ length: Math.floor((process.argv.length - 2) / 2) }, (_, index) => process.argv.slice(2 + index * 2, 4 + index * 2)))
 if (!args['--out'] || !args['--as-of']) throw new Error('Required: --out directory --as-of ISO timestamp')
+if (args['--fail-on-degraded'] && !['true', 'false'].includes(args['--fail-on-degraded'])) throw new Error('Expected --fail-on-degraded true or false')
 const now = args['--as-of']
 if (!Number.isFinite(Date.parse(now))) throw new Error('Invalid as-of timestamp')
 const output = resolve(args['--out'])
@@ -26,12 +29,12 @@ const hash = data => createHash('sha256').update(data).digest('hex')
 let snapshot = await json(resolve(root, 'scripts/overview/overview_source_snapshot.json'))
 const report = { generated_at: now, checked_at: now, status: 'validated', scope: 'Configured source families; freshness is evaluated separately per metric', families: [], sources: [], diff: [] }
 const capturedJson = new Map()
-async function capture(url, body, extension) {
+async function capture(url, body, extension, acquisition) {
   const bytes = Buffer.from(body)
   const digest = hash(bytes)
   const path = `raw/${digest}.${extension}`
   await writeFile(resolve(output, path), bytes)
-  report.sources.push({ url, sha256: digest, bytes: bytes.length, path, representation: extension === 'json' ? 'normalized JSON' : 'downloaded bytes', fetched_at: now })
+  report.sources.push({ url, sha256: digest, bytes: bytes.length, path, representation: extension === 'json' ? 'normalized JSON' : 'downloaded bytes', fetched_at: now, ...(acquisition ? { acquisition } : {}) })
 }
 async function fetchJson(url) {
   const data = await fetchJsonWithRetry(url)
@@ -69,10 +72,8 @@ for (const [family, build] of Object.entries(builders)) {
 const releases = await json(resolve(root, 'scripts/overview/reviewed-releases.json'))
 for (const release of releases.releases) {
   try {
-    const response = await fetch(release.url, { headers: { 'Cache-Control': 'no-cache' }, signal: AbortSignal.timeout(15_000) })
-    if (!response.ok) throw new Error(`HTTP ${response.status}`)
-    const body = Buffer.from(await response.arrayBuffer())
-    await capture(release.url, body, release.sha256 ? 'pdf' : 'html')
+    const { body, acquisition } = await fetchReviewedSource(release.url)
+    await capture(release.url, body, release.sha256 ? 'pdf' : 'html', acquisition)
     const updates = buildReviewedReleaseMetricUpdates({
       release, body, snapshot, asOf: now, siatCpiJson: capturedJson.get(SIAT_CPI_MOM_SOURCE_URL),
     })
@@ -98,3 +99,5 @@ report.value_hash = snapshot.value_hash
 report.snapshot_status = snapshot.status
 await writeFile(resolve(output, 'refresh-report.json'), `${JSON.stringify(report, null, 2)}\n`)
 console.log(JSON.stringify({ status: report.status, changed_fields: report.diff.length, families: report.families, artifact_sha256: report.artifact_sha256 }, null, 2))
+// Write all candidate evidence before failing; callers must not publish a degraded run.
+if (args['--fail-on-degraded'] === 'true') assertFullyValidatedRefresh(report)

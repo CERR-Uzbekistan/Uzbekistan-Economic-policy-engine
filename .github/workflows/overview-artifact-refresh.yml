@@ -120,7 +120,7 @@ jobs:
 
       - name: Reconcile reviewed official releases and archive source evidence
         run: |
-          node scripts/overview/refresh-candidate.mjs --out tmp/overview-refresh-candidate --as-of "${{ steps.meta.outputs.run_started_at }}"
+          node scripts/overview/refresh-candidate.mjs --out tmp/overview-refresh-candidate --as-of "${{ steps.meta.outputs.run_started_at }}" --fail-on-degraded true
           cp tmp/overview-refresh-candidate/source-snapshot.json "$SNAPSHOT_PATH"
           cp tmp/overview-refresh-candidate/refresh-report.json "$DIFF_REPORT_PATH"
           cp tmp/overview-refresh-candidate/overview.json "$PUBLIC_OVERVIEW_PATH"
