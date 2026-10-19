@@ -2,6 +2,11 @@ name: Overview Artifact Refresh
 
 on:
   workflow_dispatch:
+    inputs:
+      catchup_date:
+        description: 'Optional YYYY-MM-DD Tashkent day for deduplicated catch-up'
+        required: false
+        type: string
   pull_request:
     paths:
       - '.github/workflows/overview-artifact-refresh.yml'
@@ -11,7 +16,7 @@ on:
       - 'apps/policy-ui/tests/data/overview/**'
       - 'apps/policy-ui/tests/data/scenario-lab/qpm-artifact-sync.test.ts'
   schedule:
-    - cron: "30 4 * * 1-5"
+    - cron: "17 4 * * 1-5"
 
 permissions:
   contents: write
@@ -21,8 +26,37 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  refresh-overview-artifact:
+  refresh-daily-gate:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      should_refresh: ${{ steps.daily.outputs.should_refresh }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24.14.0"
+      - name: Check validated daily refresh before contacting official sources
+        id: daily
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REFRESH_CATCHUP_DATE: ${{ inputs.catchup_date }}
+        run: node scripts/overview/daily-refresh-gate.mjs
+      - name: Retain daily gate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: overview-daily-gate-evidence
+          path: tmp/overview-daily-gate.json
+          retention-days: 90
+
+  refresh-overview-artifact:
+    needs: refresh-daily-gate
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && needs.refresh-daily-gate.outputs.should_refresh == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:

@@ -8,10 +8,15 @@ const read = async name => yaml.load(await readFile(new URL(`../../../.github/wo
 
 test('refresh remains scheduled, validates PRs and cannot deploy or change QPM', async () => {
   const workflow = await read('overview-artifact-refresh.yml')
-  assert.equal(workflow.on.schedule[0].cron, '30 4 * * 1-5')
+  assert.equal(workflow.on.schedule[0].cron, '17 4 * * 1-5')
   assert.ok(workflow.on.pull_request)
   assert.equal(workflow.permissions.actions, undefined)
   const refresh = workflow.jobs['refresh-overview-artifact']
+  assert.equal(refresh.needs, 'refresh-daily-gate')
+  assert.match(refresh.if, /should_refresh == 'true'/)
+  const dailyGate = workflow.jobs['refresh-daily-gate']
+  assert.deepEqual(dailyGate.permissions, { contents: 'read', actions: 'read' })
+  assert.ok(dailyGate.steps.some(step => step.run === 'node scripts/overview/daily-refresh-gate.mjs'))
   assert.match(refresh.if, /github.ref == 'refs\/heads\/main'/)
   assert.match(refresh.if, /github.event_name != 'pull_request'/)
   assert.ok(refresh.steps.some(step => step.run?.includes('--allow-partial true')))
