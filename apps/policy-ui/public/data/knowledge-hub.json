@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-10-26T08:02:10.439Z",
+  "generated_at": "2026-10-27T08:16:26.241Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -307,7 +307,7 @@
       "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-26T08:02:10.439Z"
+      "fetched_at": "2026-10-27T08:16:26.241Z"
     },
     {
       "id": "president-reform-news",
@@ -319,7 +319,7 @@
       "candidate_count": 7,
       "excluded_count": 5,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-26T08:02:10.439Z"
+      "fetched_at": "2026-10-27T08:16:26.241Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-26T08:02:10.439Z"
+      "fetched_at": "2026-10-27T08:16:26.241Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-26T08:02:10.439Z"
+      "fetched_at": "2026-10-27T08:16:26.241Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-26T08:02:10.439Z"
+      "fetched_at": "2026-10-27T08:16:26.241Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-26T08:02:10.439Z"
+      "fetched_at": "2026-10-27T08:16:26.241Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-26T08:02:10.439Z",
+      "fetched_at": "2026-10-27T08:16:26.241Z",
       "error": "TypeError: fetch failed"
     },
     {
@@ -392,7 +392,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-26T08:02:10.439Z"
+      "fetched_at": "2026-10-27T08:16:26.241Z"
     },
     {
       "id": "mef-policy-news",
@@ -404,7 +404,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-26T08:02:10.439Z"
+      "fetched_at": "2026-10-27T08:16:26.241Z"
     },
     {
       "id": "tax-committee-news",
@@ -416,7 +416,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-26T08:02:10.439Z"
+      "fetched_at": "2026-10-27T08:16:26.241Z"
     },
     {
       "id": "energy-ministry-news",
@@ -428,7 +428,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-26T08:02:10.439Z"
+      "fetched_at": "2026-10-27T08:16:26.241Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -436,11 +436,12 @@
       "url": "https://gov.uz/en/miit/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": true,
+      "ok": false,
       "candidate_count": 0,
-      "excluded_count": 12,
+      "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-26T08:02:10.439Z"
+      "fetched_at": "2026-10-27T08:16:26.241Z",
+      "error": "TypeError: fetch failed"
     },
     {
       "id": "justice-ministry-news",
@@ -448,34 +449,35 @@
       "url": "https://gov.uz/en/adliya/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": true,
+      "ok": false,
       "candidate_count": 0,
-      "excluded_count": 12,
+      "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-10-26T08:02:10.439Z"
+      "fetched_at": "2026-10-27T08:16:26.241Z",
+      "error": "TypeError: fetch failed"
     }
   ],
   "reform_packages": [
     {
-      "package_id": "pkg-tax-administration-incentives-2026-10-20",
+      "package_id": "pkg-tax-administration-incentives-2026-10-26",
       "title": "Tax administration and investment incentive reform",
       "policy_area": "Tax administration and fiscal incentives",
       "reform_category": "fiscal_tax",
-      "current_stage": "Previous rule superseded",
+      "current_stage": "Instructions issued",
       "current_stage_date": "2026-11-07",
       "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-10-20",
+      "next_milestone_date": "2026-10-26",
       "responsible_institutions": [
-        "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+        "Official website of the President of the Republic of Uzbekistan"
       ],
-      "legal_basis": "Verified official source event: 3172-4-сон 20.10.2026. “Yuridik shaxslarni yirik soliq toʻlovchilar toifasiga kiritishning mezonlarini belgilash toʻgʻrisidagi nizomni tasdiqlash haqida”gi qaror, shuningdek unga oʻzgartirish va qoʻshimchalarni oʻz kuchini yoʻqotgan deb topish toʻgʻrisida.",
-      "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-      "short_summary": "The cited official document updates tax administration and fiscal incentives rules or procedures.",
+      "legal_basis": "Verified official source events: Management System in the Film Industry to Be Reformed; President Meets with Filmmakers and Outlines New Priorities for the Development of National Cinema.",
+      "official_basis": "Official website of the President of the Republic of Uzbekistan",
+      "short_summary": "2 official measures update tax administration and fiscal incentives rules or procedures.",
       "parameters_or_amounts": [
-        "amended rules"
+        "verified official measure"
       ],
       "source_confidence": "high",
-      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "why_tracked": "The package is assembled from 2 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
       "model_relevance": [
         "Fiscal balance",
         "Investment",
@@ -489,7 +491,12 @@
       "measure_tracks": [
         {
           "id": "tax-administration-incentives-measure-1",
-          "label": "amended rules",
+          "label": "verified official measure",
+          "status": "source verified"
+        },
+        {
+          "id": "tax-administration-incentives-measure-2",
+          "label": "verified official measure",
           "status": "source verified"
         }
       ],
@@ -844,6 +851,24 @@
             "source-event-2026-10-20-3172-4-20-10-2026-yuridik-shaxslarni-yirik-soliq-to-lovchilar-toifasi"
           ],
           "confidence": "high"
+        },
+        {
+          "id": "tax-administration-incentives-instructions_issued-2026-10-26",
+          "label": "official measure recorded",
+          "date": "2026-10-26",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-10-26-management-system-in-the-film-industry-to-be-reformed"
+          ],
+          "confidence": "high",
+          "related_next_milestone_ids": [
+            "tax-administration-incentives-instructions_issued-2026-10-26"
+          ]
         },
         {
           "id": "tax-administration-incentives-instructions_issued-2026-11-07",
@@ -1500,6 +1525,74 @@
           }
         },
         {
+          "id": "source-event-2026-10-26-management-system-in-the-film-industry-to-be-reformed",
+          "title": "Management System in the Film Industry to Be Reformed",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9779",
+          "source_published_at": "2026-10-26",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-10-27T08:16:26.241Z",
+          "localized": {
+            "title": {
+              "en": "Management System in the Film Industry to Be Reformed",
+              "ru": "Система управления в сфере кино будет реформирована",
+              "uz": "Кино соҳасида бошқарувни тубдан ислоҳ қилиш режалаштирилмоқда"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+              "ru": "Сняты фильмы, посвященные историческим личностям и формированию национального самосознания, созданы современные кинопавильоны. Недавно обновлено руководство Агентства кинематографии, перед ведомством поставлены задачи по внедрению в сферу современных методов управления, созданию прозрачной системы распределения государственных средств и грантов, организации условий для авторского кино и решению ряда других вопросов.",
+              "uz": "Қолаверса, фильмларнинг маркетинги, дистрибуция ва халқаро сотуви бўйича тизим йўлга қўйилмаган. Хусусан, Кинематография агентлиги, унинг тизимидаги 19 та ташкилот ва Кинематография жамғармасини тугатиш, уларнинг ваколатларини Маданият вазирлигига ўтказиш, бўшаган биноларни аукционда сотувга чиқариш таклиф қилинди."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9779",
+              "ru": "https://president.uz/ru/lists/view/9779",
+              "uz": "https://president.uz/uz/lists/view/9779"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-10-26-president-meets-with-filmmakers-and-outlines-new-priorities-for-the-d",
+          "title": "President Meets with Filmmakers and Outlines New Priorities for the Development of National Cinema",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9780",
+          "source_published_at": "2026-10-26",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-10-27T08:16:26.241Z",
+          "localized": {
+            "title": {
+              "en": "President Meets with Filmmakers and Outlines New Priorities for the Development of National Cinema",
+              "ru": "Президент нашей страны встретился с кинематографистами и обозначил новые задачи по развитию национального кинематографа",
+              "uz": "Давлатимиз раҳбари киноижодкорлар билан учрашиб, миллий кинематография соҳасини ривожлантиришнинг янги вазифаларини белгилаб берди"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+              "ru": "Были созданы такие исторические фильмы, как «Исламходжа», «Ибрат», «Авлони», «Абдулла Кадыри», «Ветер Коканда», «Мукими», «Илхак», «Узбекская девушка» и «Бахадур Ялангтуш». Агентство кинематографии будет упразднено, а полномочия по реализации государственной политики в этой сфере перейдут к Министерству культуры.",
+              "uz": "Вазирликда Кино санъати департаменти ташкил этилиб, унинг раҳбари мақоми вазир ўринбосарига тенглаштирилади. Давлат муассасаси бўлган “Ўзбекфильм” ўрнида замонавий бизнес модели асосида ишлайдиган “Ўзбекфильм” миллий кинокомпанияси ташкил этилади."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9780",
+              "ru": "https://president.uz/ru/lists/view/9780",
+              "uz": "https://president.uz/uz/lists/view/9780"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
           "id": "source-event-2026-11-07-o-rq-1162-05-08-2026-avtomobil-yo-llari-to-g-risida",
           "title": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida",
           "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
@@ -1527,9 +1620,9 @@
       ],
       "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
       "digest": {
-        "changed": "amended rules",
+        "changed": "verified official measure",
         "applies_to": "Tax administration and fiscal incentives",
-        "effective_status": "Previous rule superseded (2026-11-07)",
+        "effective_status": "Instructions issued (2026-11-07)",
         "document": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida"
       },
       "localized": {
@@ -1537,23 +1630,36 @@
           "uz": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida"
         },
         "short_summary": {
-          "ru": "Чтобы повысить квалификацию работников, здесь внедрили систему дуального образования.",
-          "uz": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change."
+          "ru": "Были созданы такие исторические фильмы, как «Исламходжа», «Ибрат», «Авлони», «Абдулла Кадыри», «Ветер Коканда», «Мукими», «Илхак», «Узбекская девушка» и «Бахадур Ялангтуш».",
+          "uz": "Вазирликда Кино санъати департаменти ташкил этилиб, унинг раҳбари мақоми вазир ўринбосарига тенглаштирилади."
         },
         "parameters_or_amounts": {
           "ru": [
-            "Чтобы повысить квалификацию работников, здесь внедрили систему дуального образования."
+            "Были созданы такие исторические фильмы, как «Исламходжа», «Ибрат», «Авлони», «Абдулла Кадыри», «Ветер Коканда», «Мукими», «Илхак», «Узбекская девушка» и «Бахадур Ялангтуш».",
+            "Агентство кинематографии будет упразднено, а полномочия по реализации государственной политики в этой сфере перейдут к Министерству культуры.",
+            "В структуре министерства будет создан Департамент киноискусства, руководитель которого будет приравнен по статусу к заместителю министра.",
+            "На базе «Узбекфильма», являвшегося государственной киностудией, будет создана Национальная кинокомпания «Узбекфильм», работающая по современной бизнес-модели.",
+            "Компания не будет сама производить фильмы – эта функция полностью перейдет в частный сектор.",
+            "Национальная кинокомпания будет заниматься отбором и финансированием проектов, продвижением, дистрибуцией и выводом фильмов на международные рынки и кинофестивали.",
+            "В финансировании фильмов вместо государственного заказа будет внедрен механизм поддержки на основе субсидий.",
+            "– Отныне государство будет выступать не заказчиком фильмов, а надежным партнером творческих деятелей и частного сектора, – подчеркнул Президент."
           ],
           "uz": [
-            "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change."
+            "Вазирликда Кино санъати департаменти ташкил этилиб, унинг раҳбари мақоми вазир ўринбосарига тенглаштирилади.",
+            "Давлат муассасаси бўлган “Ўзбекфильм” ўрнида замонавий бизнес модели асосида ишлайдиган “Ўзбекфильм” миллий кинокомпанияси ташкил этилади.",
+            "Киноларни молиялаштиришда давлат буюртмаси ўрнига субсидия асосида қўллаб-қувватлаш тизими жорий этилади.",
+            "Молиялаштириш механизмини бир ойда жорий этиш, келгуси йилдан бошлаб миллий кинокомпания сўровига кўра ҳар йили бюджетдан тегишли маблағ ажратиб бориш топширилди.",
+            "“Ўзбекфильм”нинг 10 гектарлик ҳудудида кино хизматлари жамланган ягона индустриал кластер – “Ўзбекфильм кино шаҳарчаси” ташкил этилади.",
+            "Соҳада илм, таҳлил ва профессионал танқидчиликни ривожлантириш учун “Киношунослар клуби” ташкил этилади.",
+            "Президентимиз “Ўзбекфильм” номини миллий киномизнинг ягона бренди сифатида мустаҳкамлашни таклиф қилди."
           ]
         },
         "digest": {
           "ru": {
-            "changed": "Чтобы повысить квалификацию работников, здесь внедрили систему дуального образования."
+            "changed": "Были созданы такие исторические фильмы, как «Исламходжа», «Ибрат», «Авлони», «Абдулла Кадыри», «Ветер Коканда», «Мукими», «Илхак», «Узбекская девушка» и «Бахадур Ялангтуш»."
           },
           "uz": {
-            "changed": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+            "changed": "Вазирликда Кино санъати департаменти ташкил этилиб, унинг раҳбари мақоми вазир ўринбосарига тенглаштирилади.",
             "document": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida"
           }
         }
@@ -6554,7 +6660,7 @@
     ],
     "package_links": [
       {
-        "package_id": "pkg-tax-administration-incentives-2026-10-20",
+        "package_id": "pkg-tax-administration-incentives-2026-10-26",
         "active_lenses": [
           {
             "model_id": "DFM",
