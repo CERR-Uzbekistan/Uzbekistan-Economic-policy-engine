@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-22T05:30:50Z",
-  "checked_at": "2026-10-22T05:30:50Z",
+  "generated_at": "2026-11-06T12:06:49Z",
+  "checked_at": "2026-11-06T12:06:49Z",
   "status": "validated",
   "scope": "Configured source families; freshness is evaluated separately per metric",
   "families": [
@@ -67,52 +67,52 @@
   ],
   "sources": [
     {
-      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-22/",
-      "sha256": "983d09118b2134cab511dc7753ebe987e1e9128f96336c7bf4a557dab13607ae",
-      "bytes": 221,
-      "path": "raw/983d09118b2134cab511dc7753ebe987e1e9128f96336c7bf4a557dab13607ae.json",
+      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-11-06/",
+      "sha256": "56084f6c5f5d578151c84e6cd9b17cd76e9dd4799bdc4a1b0d710ce2c9af7b2f",
+      "bytes": 220,
+      "path": "raw/56084f6c5f5d578151c84e6cd9b17cd76e9dd4799bdc4a1b0d710ce2c9af7b2f.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-22T05:30:50Z"
+      "fetched_at": "2026-11-06T12:06:49Z"
     },
     {
-      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-09-22/",
-      "sha256": "197939836fc2566f51f1fd3270825f09d02d89591b87318c9c757fac50cc5aed",
-      "bytes": 221,
-      "path": "raw/197939836fc2566f51f1fd3270825f09d02d89591b87318c9c757fac50cc5aed.json",
+      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-06/",
+      "sha256": "005250007bc04303147cb6c1cedaccfc89c65a1f5d96aff9db6a9ec5b6d11a9d",
+      "bytes": 218,
+      "path": "raw/005250007bc04303147cb6c1cedaccfc89c65a1f5d96aff9db6a9ec5b6d11a9d.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-22T05:30:50Z"
+      "fetched_at": "2026-11-06T12:06:49Z"
     },
     {
-      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2025-10-22/",
-      "sha256": "1bc3f39e7dcd0722324dd6697e4054a724016b6f89838bc29c6e7120b4aade5e",
-      "bytes": 221,
-      "path": "raw/1bc3f39e7dcd0722324dd6697e4054a724016b6f89838bc29c6e7120b4aade5e.json",
+      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2025-11-06/",
+      "sha256": "24dee9a723fb9fe2b7611641d274e4bf6ce6544dea2f93f90f3bdae25b0621a9",
+      "bytes": 220,
+      "path": "raw/24dee9a723fb9fe2b7611641d274e4bf6ce6544dea2f93f90f3bdae25b0621a9.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-22T05:30:50Z"
+      "fetched_at": "2026-11-06T12:06:49Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json",
-      "sha256": "8e5e8062c495359e032628896c485da90803fec0f695a77bebaaf8b7b46e04c5",
-      "bytes": 327805,
-      "path": "raw/8e5e8062c495359e032628896c485da90803fec0f695a77bebaaf8b7b46e04c5.json",
+      "sha256": "12465dad6f0be47c8f1359c56ba38f38725d39c0b9558309d69f3c91a276a643",
+      "bytes": 331318,
+      "path": "raw/12465dad6f0be47c8f1359c56ba38f38725d39c0b9558309d69f3c91a276a643.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-22T05:30:50Z"
+      "fetched_at": "2026-11-06T12:06:49Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2414.json",
-      "sha256": "9d09d8844df814500602e74cb5f5d0fd5f49a51fde2b77bc3a4d8bd0c116b365",
-      "bytes": 330060,
-      "path": "raw/9d09d8844df814500602e74cb5f5d0fd5f49a51fde2b77bc3a4d8bd0c116b365.json",
+      "sha256": "f00ec935a3e9a311ef0e908fbd79fb853608859199fac072042c9f414f21c67e",
+      "bytes": 333574,
+      "path": "raw/f00ec935a3e9a311ef0e908fbd79fb853608859199fac072042c9f414f21c67e.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-22T05:30:50Z"
+      "fetched_at": "2026-11-06T12:06:49Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json",
-      "sha256": "4d66b450aecdc3567f1bc097eb403d2839949d3e410899f61054102a9f7737f4",
-      "bytes": 479246,
-      "path": "raw/4d66b450aecdc3567f1bc097eb403d2839949d3e410899f61054102a9f7737f4.json",
+      "sha256": "d567f0da9c56491a60f9075148d10bf815718adc2d6b00e52fdc4f2f56b01dce",
+      "bytes": 488153,
+      "path": "raw/d567f0da9c56491a60f9075148d10bf815718adc2d6b00e52fdc4f2f56b01dce.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-22T05:30:50Z"
+      "fetched_at": "2026-11-06T12:06:49Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_582.json",
@@ -120,15 +120,15 @@
       "bytes": 12304,
       "path": "raw/5261061f73ec576477e2b752b11561863c2cfe9fc3e50967fabf0df390c5be92.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-10-22T05:30:50Z"
+      "fetched_at": "2026-11-06T12:06:49Z"
     },
     {
       "url": "https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Monthly.xlsx",
-      "sha256": "ea1c350827878ea3bbe30e3cda16a13fd3bd5b409b8458940dc94a36b5a33154",
-      "bytes": 586099,
-      "path": "raw/ea1c350827878ea3bbe30e3cda16a13fd3bd5b409b8458940dc94a36b5a33154.xlsx",
+      "sha256": "3c8d9d8dbb48342fdbf24777c39a8ce8964cc2fd0958f72f6779e6e4ad99cde2",
+      "bytes": 587760,
+      "path": "raw/3c8d9d8dbb48342fdbf24777c39a8ce8964cc2fd0958f72f6779e6e4ad99cde2.xlsx",
       "representation": "downloaded bytes",
-      "fetched_at": "2026-10-22T05:30:50Z"
+      "fetched_at": "2026-11-06T12:06:49Z"
     },
     {
       "url": "https://stat.uz/img/news/press-release_cpi_august_2026_en_p63576.pdf",
@@ -136,7 +136,7 @@
       "bytes": 329568,
       "path": "raw/7252e48ef6f4f7b22dc51ce9195247cc528aac577e46cd52ae065d177007b500.pdf",
       "representation": "downloaded bytes",
-      "fetched_at": "2026-10-22T05:30:50Z",
+      "fetched_at": "2026-11-06T12:06:49Z",
       "acquisition": {
         "attempts": 1,
         "timeout_ms": 45000
@@ -148,7 +148,7 @@
       "bytes": 318481,
       "path": "raw/f05137fdb4bb869ae9c09292dc7d69e20a8f75e9f7f03f505ea17978a92b9aa6.pdf",
       "representation": "downloaded bytes",
-      "fetched_at": "2026-10-22T05:30:50Z",
+      "fetched_at": "2026-11-06T12:06:49Z",
       "acquisition": {
         "attempts": 1,
         "timeout_ms": 45000
@@ -156,11 +156,11 @@
     },
     {
       "url": "https://cbu.uz/en/press_center/releases/4540151/",
-      "sha256": "f095b4e134ee740559b0b87ecb2fa7dfad8fe252a5627af913c84b4a1143a934",
-      "bytes": 198732,
-      "path": "raw/f095b4e134ee740559b0b87ecb2fa7dfad8fe252a5627af913c84b4a1143a934.html",
+      "sha256": "6521dfb35ee9d030e8f640b6e0ff1fb76835795a7519bf115cb1cc1be126342f",
+      "bytes": 198348,
+      "path": "raw/6521dfb35ee9d030e8f640b6e0ff1fb76835795a7519bf115cb1cc1be126342f.html",
       "representation": "downloaded bytes",
-      "fetched_at": "2026-10-22T05:30:50Z",
+      "fetched_at": "2026-11-06T12:06:49Z",
       "acquisition": {
         "attempts": 1,
         "timeout_ms": 45000
@@ -168,10 +168,10 @@
     }
   ],
   "diff": [],
-  "exported_at": "2026-10-22T05:31:44.921Z",
-  "snapshot_sha256": "41485319ba63e283ed13cf823001c449ab7f3feaf5d7c5bf2e6c89e32069f5b2",
-  "artifact_sha256": "d766e34265af7aae888442eb72c0e271ba7d52ed753536f99b6ee2e1803f217f",
+  "exported_at": "2026-11-06T12:07:30.815Z",
+  "snapshot_sha256": "9d3dbabe8dd7fd1de5005257f1b01072772204e408e3cf82e7b803ec353a5b7e",
+  "artifact_sha256": "8047989d00aa9bc8f963fc0c7cb1b6491731eba2e6a0ba653a8a65855d140cf1",
   "changed": false,
-  "value_hash": "ad68af01651fdbd4153bd6358ee42268ee41972651bad09ed946ed17ceec92ab",
+  "value_hash": "c7a9b6ebce596a66fe6b113869f79d614620c4509da4362e9f8962c2fd917522",
   "snapshot_status": "source_verified_for_public_artifact"
 }

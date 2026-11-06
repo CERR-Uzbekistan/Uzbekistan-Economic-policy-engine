@@ -2,9 +2,9 @@
   "source_snapshot_version": "overview-source.v1",
   "status": "source_verified_for_public_artifact",
   "snapshot_note": "Overview V2 source snapshot refreshed from official sources on 7 August 2026 and CPI figures corrected against the official 5 August 2026 release on 8 August 2026. The REER is source-backed but remains a Q1 reference; the static DFM fallback remains unavailable for current-quarter headline use until an accepted Q3 run is produced.",
-  "value_hash": "ad68af01651fdbd4153bd6358ee42268ee41972651bad09ed946ed17ceec92ab",
+  "value_hash": "c7a9b6ebce596a66fe6b113869f79d614620c4509da4362e9f8962c2fd917522",
   "source_verified_by": "github-actions[bot]",
-  "source_verified_at": "2026-10-22T05:30:50Z",
+  "source_verified_at": "2026-11-06T12:06:49Z",
   "metrics": [
     {
       "metric_id": "real_gdp_growth_annual_yoy",
@@ -88,23 +88,23 @@
     },
     {
       "metric_id": "cpi_mom",
-      "value": 0.7,
-      "previous_value": 0.2,
+      "value": 0.6,
+      "previous_value": 0.7,
       "source_label": "Statistics Agency SIAT CPI data, calculated MoM",
-      "source_period": "September 2026",
+      "source_period": "October 2026",
       "source_url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json",
-      "observed_at": "2026-10-05T00:00:00Z",
+      "observed_at": "2026-11-05T00:00:00Z",
       "claim_type": "calculated_identity",
       "unit": "percent MoM",
       "frequency": "monthly",
       "validation_status": "valid",
       "caveats": [
         "Monthly inflation can be volatile; do not present as trend alone.",
-        "previous_value 0.2 is August 2026 SIAT 4585 aggregate index 100.2 minus 100."
+        "previous_value 0.7 is September 2026 SIAT 4585 aggregate index 100.7 minus 100."
       ],
       "warnings": [],
-      "source_reference": "Calculated from SIAT sdmx_data_4585 aggregate CPI previous-month index for September 2026: 100.7 minus 100. Previous value uses August 2026 aggregate index 100.2 minus 100.",
-      "extracted_at": "2026-10-05T11:46:54.776Z"
+      "source_reference": "Calculated from SIAT sdmx_data_4585 aggregate CPI previous-month index for October 2026: 100.6 minus 100. Previous value uses September 2026 aggregate index 100.7 minus 100.",
+      "extracted_at": "2026-11-06T12:07:01.985Z"
     },
     {
       "metric_id": "food_cpi_yoy",
@@ -127,56 +127,56 @@
     },
     {
       "metric_id": "exports_yoy",
-      "value": -3.36,
+      "value": -5.46,
       "previous_value": null,
       "source_label": "Statistics Agency SIAT trade data, calculated YoY",
-      "source_period": "January-August 2026",
+      "source_period": "January-September 2026",
       "source_url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json",
-      "observed_at": "2026-09-26T00:00:00Z",
+      "observed_at": "2026-10-28T00:00:00Z",
       "claim_type": "calculated_identity",
       "unit": "percent YoY",
       "frequency": "monthly or quarterly",
       "validation_status": "warning",
       "caveats": [
         "Trade values can be revised; show latest-vintage status.",
-        "YoY rate calculated from official SIAT cumulative monthly export levels: USD 22,866.9 million for January-August 2026 versus USD 23,661.7 million for January-August 2025."
+        "YoY rate calculated from official SIAT cumulative monthly export levels: USD 25,843.1 million for January-September 2026 versus USD 27,335.4 million for January-September 2025."
       ],
       "warnings": [
         "Calculated from SIAT levels; keep out of headline use until reconciled to the corresponding official release vintage."
       ],
-      "source_reference": "Calculated from SIAT sdmx_data_2407 cumulative monthly export levels for January-August 2026: USD 22,866.9 million versus USD 23,661.7 million for January-August 2025.",
-      "extracted_at": "2026-10-01T15:32:00Z"
+      "source_reference": "Calculated from SIAT sdmx_data_2407 cumulative monthly export levels for January-September 2026: USD 25,843.1 million versus USD 27,335.4 million for January-September 2025.",
+      "extracted_at": "2026-11-06T12:06:56.089Z"
     },
     {
       "metric_id": "imports_yoy",
-      "value": 16.26,
+      "value": 15.69,
       "previous_value": null,
       "source_label": "Statistics Agency SIAT trade data, calculated YoY",
-      "source_period": "January-August 2026",
+      "source_period": "January-September 2026",
       "source_url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2414.json",
-      "observed_at": "2026-09-26T00:00:00Z",
+      "observed_at": "2026-10-28T00:00:00Z",
       "claim_type": "calculated_identity",
       "unit": "percent YoY",
       "frequency": "monthly or quarterly",
       "validation_status": "warning",
       "caveats": [
         "Trade values can be revised; show latest-vintage status.",
-        "YoY rate calculated from official SIAT cumulative monthly import levels: USD 34,535.6 million for January-August 2026 versus USD 29,706.6 million for January-August 2025."
+        "YoY rate calculated from official SIAT cumulative monthly import levels: USD 39,560.4 million for January-September 2026 versus USD 34,193.7 million for January-September 2025."
       ],
       "warnings": [
         "Calculated from SIAT levels; keep out of headline use until reconciled to the corresponding official release vintage."
       ],
-      "source_reference": "Calculated from SIAT sdmx_data_2414 cumulative monthly import levels for January-August 2026: USD 34,535.6 million versus USD 29,706.6 million for January-August 2025.",
-      "extracted_at": "2026-10-01T15:32:00Z"
+      "source_reference": "Calculated from SIAT sdmx_data_2414 cumulative monthly import levels for January-September 2026: USD 39,560.4 million versus USD 34,193.7 million for January-September 2025.",
+      "extracted_at": "2026-11-06T12:06:56.089Z"
     },
     {
       "metric_id": "trade_balance",
-      "value": -11.67,
+      "value": -13.72,
       "previous_value": null,
       "source_label": "Statistics Agency SIAT trade data, calculated",
-      "source_period": "January-August 2026",
-      "source_reference": "Calculated from SIAT cumulative monthly goods trade levels for January-August 2026: exports USD 22,866.9 million from sdmx_data_2407, imports USD 34,535.6 million from sdmx_data_2414. Source URLs: https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json; https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2414.json.",
-      "extracted_at": "2026-10-01T15:32:00Z",
+      "source_period": "January-September 2026",
+      "source_reference": "Calculated from SIAT cumulative monthly goods trade levels for January-September 2026: exports USD 25,843.1 million from sdmx_data_2407, imports USD 39,560.4 million from sdmx_data_2414. Source URLs: https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json; https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2414.json.",
+      "extracted_at": "2026-11-06T12:06:56.089Z",
       "claim_type": "calculated_identity",
       "unit": "USD million or USD billion",
       "frequency": "monthly or quarterly",
@@ -189,7 +189,7 @@
         "Calculated from SIAT export and import levels; keep out of headline use until reconciled to the corresponding official release vintage."
       ],
       "source_url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json",
-      "observed_at": "2026-09-26T00:00:00Z"
+      "observed_at": "2026-10-28T00:00:00Z"
     },
     {
       "metric_id": "policy_rate",
@@ -212,68 +212,74 @@
     },
     {
       "metric_id": "usd_uzs_level",
-      "value": 11965.51,
-      "previous_value": 11809.82,
+      "value": 11935.37,
+      "previous_value": 11778.45,
       "source_label": "Central Bank of Uzbekistan exchange rate",
-      "source_period": "2026-10-22",
-      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-22/",
-      "observed_at": "2026-10-22T00:00:00Z",
+      "source_period": "2026-11-05",
+      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-11-06/",
+      "observed_at": "2026-11-05T00:00:00Z",
       "claim_type": "observed",
       "unit": "UZS per USD",
       "frequency": "daily",
       "validation_status": "valid",
       "caveats": [
         "Official/reference rate, not transaction-weighted market average.",
-        "Latest observation: requested 2026-10-22; actual CBU date/rate 2026-10-22, 11965.51 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-09-22; actual CBU date/rate 2026-09-22, 11809.82 UZS per USD."
+        "Latest observation: requested 2026-11-06; actual CBU date/rate 2026-11-05 returned for requested 2026-11-06, 11935.37 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-10-06; actual CBU date/rate 2026-10-06, 11778.45 UZS per USD."
       ],
-      "warnings": []
+      "warnings": [
+        "Latest requested date 2026-11-06 differed from actual CBU date 2026-11-05; nearest available CBU observation was used."
+      ]
     },
     {
       "metric_id": "usd_uzs_mom_change",
-      "value": 1.32,
+      "value": 1.33,
       "previous_value": null,
       "source_label": "CBU exchange rate, calculated",
-      "source_period": "2026-10-22 vs 2026-09-22",
-      "source_reference": "Calculated from CBU official USD rates: 11965.51 on 2026-10-22 and 11809.82 on 2026-09-22. Requested dates: latest 2026-10-22, prior-month 2026-09-22.",
-      "extracted_at": "2026-10-22T05:30:50.136Z",
+      "source_period": "2026-11-05 vs 2026-10-06",
+      "source_reference": "Calculated from CBU official USD rates: 11935.37 on 2026-11-05 and 11778.45 on 2026-10-06. Requested dates: latest 2026-11-06, prior-month 2026-10-06.",
+      "extracted_at": "2026-11-06T12:06:49.839Z",
       "claim_type": "calculated_identity",
       "unit": "percent MoM",
       "frequency": "monthly from daily observations",
       "validation_status": "valid",
       "caveats": [
-        "Latest observation: requested 2026-10-22; actual CBU date/rate 2026-10-22, 11965.51 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-09-22; actual CBU date/rate 2026-09-22, 11809.82 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-10-22; actual CBU date/rate 2025-10-22, 12011.02 UZS per USD.",
+        "Latest observation: requested 2026-11-06; actual CBU date/rate 2026-11-05 returned for requested 2026-11-06, 11935.37 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-10-06; actual CBU date/rate 2026-10-06, 11778.45 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-11-06; actual CBU date/rate 2025-11-06, 11970.67 UZS per USD.",
         "Formula: ((latest - comparison) / comparison) * 100.",
         "Rounded to 2 decimal places.",
         "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
       ],
-      "warnings": [],
-      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-22/"
+      "warnings": [
+        "Latest requested date 2026-11-06 differed from actual CBU date 2026-11-05; nearest available CBU observation was used."
+      ],
+      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-11-06/"
     },
     {
       "metric_id": "usd_uzs_yoy_change",
-      "value": -0.38,
+      "value": -0.29,
       "previous_value": null,
       "source_label": "CBU exchange rate, calculated",
-      "source_period": "2026-10-22 vs 2025-10-22",
-      "source_reference": "Calculated from CBU official USD rates: 11965.51 on 2026-10-22 and 12011.02 on 2025-10-22. Requested dates: latest 2026-10-22, prior-year 2025-10-22.",
-      "extracted_at": "2026-10-22T05:30:50.136Z",
+      "source_period": "2026-11-05 vs 2025-11-06",
+      "source_reference": "Calculated from CBU official USD rates: 11935.37 on 2026-11-05 and 11970.67 on 2025-11-06. Requested dates: latest 2026-11-06, prior-year 2025-11-06.",
+      "extracted_at": "2026-11-06T12:06:49.839Z",
       "claim_type": "calculated_identity",
       "unit": "percent YoY",
       "frequency": "monthly from daily observations",
       "validation_status": "valid",
       "caveats": [
-        "Latest observation: requested 2026-10-22; actual CBU date/rate 2026-10-22, 11965.51 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-09-22; actual CBU date/rate 2026-09-22, 11809.82 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-10-22; actual CBU date/rate 2025-10-22, 12011.02 UZS per USD.",
+        "Latest observation: requested 2026-11-06; actual CBU date/rate 2026-11-05 returned for requested 2026-11-06, 11935.37 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-10-06; actual CBU date/rate 2026-10-06, 11778.45 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-11-06; actual CBU date/rate 2025-11-06, 11970.67 UZS per USD.",
         "Formula: ((latest - comparison) / comparison) * 100.",
         "Rounded to 2 decimal places.",
         "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
       ],
-      "warnings": [],
-      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-22/"
+      "warnings": [
+        "Latest requested date 2026-11-06 differed from actual CBU date 2026-11-05; nearest available CBU observation was used."
+      ],
+      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-11-06/"
     },
     {
       "metric_id": "reer_level",
@@ -299,12 +305,12 @@
     },
     {
       "metric_id": "gold_price_level",
-      "value": 4319,
-      "previous_value": 4411,
+      "value": 4105,
+      "previous_value": 4319,
       "source_label": "World Bank Pink Sheet gold price",
-      "source_period": "September 2026 monthly average",
+      "source_period": "October 2026 monthly average",
       "source_url": "https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Monthly.xlsx",
-      "observed_at": "2026-10-02T00:00:00Z",
+      "observed_at": "2026-11-03T00:00:00Z",
       "claim_type": "observed_market_price",
       "unit": "USD per troy ounce",
       "frequency": "daily or monthly",
@@ -313,16 +319,16 @@
         "External monthly average market price; not a CERR forecast."
       ],
       "warnings": [],
-      "extracted_at": "2026-10-03T19:58:22.308Z"
+      "extracted_at": "2026-11-06T12:07:06.812Z"
     },
     {
       "metric_id": "gold_price_change",
-      "value": -2.09,
+      "value": -4.95,
       "previous_value": null,
       "source_label": "World Bank Pink Sheet gold price, calculated",
-      "source_period": "September 2026 vs August 2026",
-      "source_reference": "Calculated from World Bank Pink Sheet monthly gold prices: 4319 for September 2026 and 4411 for August 2026",
-      "extracted_at": "2026-10-03T19:58:22.308Z",
+      "source_period": "October 2026 vs September 2026",
+      "source_reference": "Calculated from World Bank Pink Sheet monthly gold prices: 4105 for October 2026 and 4319 for September 2026",
+      "extracted_at": "2026-11-06T12:07:06.812Z",
       "claim_type": "calculated_identity",
       "unit": "percent MoM or YoY",
       "frequency": "monthly",
@@ -331,7 +337,7 @@
         "Comparison basis is MoM."
       ],
       "warnings": [],
-      "observed_at": "2026-10-02T00:00:00Z",
+      "observed_at": "2026-11-03T00:00:00Z",
       "source_url": "https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Monthly.xlsx"
     },
     {
