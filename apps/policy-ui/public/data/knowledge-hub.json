@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-11-05T09:45:42.591Z",
+  "generated_at": "2026-11-06T09:42:58.041Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -304,10 +304,10 @@
       "parser": "lexuz-official-search",
       "fetch_url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
       "ok": true,
-      "candidate_count": 7,
-      "excluded_count": 0,
-      "link_invalid_count": 0,
-      "fetched_at": "2026-11-05T09:45:42.591Z"
+      "candidate_count": 6,
+      "excluded_count": 1,
+      "link_invalid_count": 1,
+      "fetched_at": "2026-11-06T09:42:58.041Z"
     },
     {
       "id": "president-reform-news",
@@ -316,10 +316,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 5,
-      "excluded_count": 7,
-      "link_invalid_count": 0,
-      "fetched_at": "2026-11-05T09:45:42.591Z"
+      "candidate_count": 3,
+      "excluded_count": 9,
+      "link_invalid_count": 2,
+      "fetched_at": "2026-11-06T09:42:58.041Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-05T09:45:42.591Z"
+      "fetched_at": "2026-11-06T09:42:58.041Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-05T09:45:42.591Z"
+      "fetched_at": "2026-11-06T09:42:58.041Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-05T09:45:42.591Z"
+      "fetched_at": "2026-11-06T09:42:58.041Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-05T09:45:42.591Z"
+      "fetched_at": "2026-11-06T09:42:58.041Z"
     },
     {
       "id": "cbu-policy-news",
@@ -379,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-05T09:45:42.591Z",
+      "fetched_at": "2026-11-06T09:42:58.041Z",
       "error": "TypeError: fetch failed"
     },
     {
@@ -392,7 +392,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-05T09:45:42.591Z"
+      "fetched_at": "2026-11-06T09:42:58.041Z"
     },
     {
       "id": "mef-policy-news",
@@ -404,7 +404,7 @@
       "candidate_count": 1,
       "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-05T09:45:42.591Z"
+      "fetched_at": "2026-11-06T09:42:58.041Z"
     },
     {
       "id": "tax-committee-news",
@@ -416,7 +416,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-05T09:45:42.591Z"
+      "fetched_at": "2026-11-06T09:42:58.041Z"
     },
     {
       "id": "energy-ministry-news",
@@ -428,7 +428,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-05T09:45:42.591Z"
+      "fetched_at": "2026-11-06T09:42:58.041Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -436,11 +436,12 @@
       "url": "https://gov.uz/en/miit/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": true,
+      "ok": false,
       "candidate_count": 0,
-      "excluded_count": 12,
+      "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-05T09:45:42.591Z"
+      "fetched_at": "2026-11-06T09:42:58.041Z",
+      "error": "TypeError: fetch failed"
     },
     {
       "id": "justice-ministry-news",
@@ -448,11 +449,12 @@
       "url": "https://gov.uz/en/adliya/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": true,
+      "ok": false,
       "candidate_count": 0,
-      "excluded_count": 12,
+      "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-05T09:45:42.591Z"
+      "fetched_at": "2026-11-06T09:42:58.041Z",
+      "error": "TypeError: fetch failed"
     }
   ],
   "reform_packages": [
@@ -952,6 +954,9 @@
               "en": "Information on work completed during the 1st quarter of 2026 on the development of information systems and artificial intelligence technologies",
               "ru": "Министерство экономики и финансов Республики Узбекистан",
               "uz": "Ахборот тизимлари ва сунъий интеллект технологияларини ривожлантириш юзасидан 2026 йил 1-чораги давомида бажарилган ишлар бўйича маълумот"
+            },
+            "summary": {
+              "uz": "бўйича: Иқтисодиёт ва молия вазирлигининг тегишли функция ва вазифаларини рақамлаштиришга қаратилган 4 та устувор лойиҳа амалга оширилди. С унъий интеллект ( AI ) технологияларини жорий қилиш бўйича: Иқтисодиёт ва молия вазирлигида сунъий интеллект ташаббусларини тизимли мувофиқлаштириш ҳамда стратегик ривожлантириш мақсадида «Сунъий интеллект технологияларини жорий қилиш жараёнларини жадаллаштириш юзасидан Ишчи гуруҳ» ташкил этилди."
             },
             "source_url": {
               "en": "https://gov.uz/en/imv/news/view/164666",
@@ -6577,6 +6582,25 @@
       "why_relevant": "Useful for comparing nowcast methods and indicator use around the DFM lane."
     },
     {
+      "id": "research-imf-working-papers-repec-2026-nowcasting-economic-activity-in-afghanistan",
+      "title": "Nowcasting Economic Activity in Afghanistan",
+      "topic": "Nowcasting and high-frequency monitoring",
+      "summary": "Nowcasting and high-frequency monitoring. Included as a source-linked methods update for DFM; it is not a platform model result.",
+      "model_ids": [
+        "DFM"
+      ],
+      "methods": [
+        "Dynamic factor model",
+        "nowcasting",
+        "forecast evaluation"
+      ],
+      "source_title": "Nowcasting Economic Activity in Afghanistan",
+      "source_institution": "International Monetary Fund",
+      "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-238.html",
+      "published_at": "2026",
+      "why_relevant": "Useful for comparing nowcast methods and indicator use around the DFM lane."
+    },
+    {
       "id": "research-imf-working-papers-repec-2026-nowcasting-economic-growth-with-machine-learning-and-satellite-data",
       "title": "Nowcasting Economic Growth with Machine Learning and Satellite Data",
       "topic": "Nowcasting and high-frequency monitoring",
@@ -6649,25 +6673,6 @@
       "source_title": "Nowcasting Low-Income Countries Through Global Linkages",
       "source_institution": "International Monetary Fund",
       "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-107.html",
-      "published_at": "2026",
-      "why_relevant": "Useful for comparing nowcast methods and indicator use around the DFM lane."
-    },
-    {
-      "id": "research-imf-working-papers-repec-2026-nowcasting-world-trade-with-a-multi-region-factor-model",
-      "title": "Nowcasting World Trade with a Multi-Region Factor Model",
-      "topic": "Nowcasting and high-frequency monitoring",
-      "summary": "Nowcasting and high-frequency monitoring. Included as a source-linked methods update for DFM; it is not a platform model result.",
-      "model_ids": [
-        "DFM"
-      ],
-      "methods": [
-        "Dynamic factor model",
-        "nowcasting",
-        "forecast evaluation"
-      ],
-      "source_title": "Nowcasting World Trade with a Multi-Region Factor Model",
-      "source_institution": "International Monetary Fund",
-      "source_url": "https://ideas.repec.org/p/imf/imfwpa/2026-048.html",
       "published_at": "2026",
       "why_relevant": "Useful for comparing nowcast methods and indicator use around the DFM lane."
     }
