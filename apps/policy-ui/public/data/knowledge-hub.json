@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-11-06T09:42:58.041Z",
+  "generated_at": "2026-11-07T09:05:25.278Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -304,10 +304,10 @@
       "parser": "lexuz-official-search",
       "fetch_url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
       "ok": true,
-      "candidate_count": 6,
-      "excluded_count": 1,
-      "link_invalid_count": 1,
-      "fetched_at": "2026-11-06T09:42:58.041Z"
+      "candidate_count": 12,
+      "excluded_count": 0,
+      "link_invalid_count": 0,
+      "fetched_at": "2026-11-07T09:05:25.278Z"
     },
     {
       "id": "president-reform-news",
@@ -318,8 +318,8 @@
       "ok": true,
       "candidate_count": 3,
       "excluded_count": 9,
-      "link_invalid_count": 2,
-      "fetched_at": "2026-11-06T09:42:58.041Z"
+      "link_invalid_count": 0,
+      "fetched_at": "2026-11-07T09:05:25.278Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -331,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-06T09:42:58.041Z"
+      "fetched_at": "2026-11-07T09:05:25.278Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -343,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-06T09:42:58.041Z"
+      "fetched_at": "2026-11-07T09:05:25.278Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -355,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-06T09:42:58.041Z"
+      "fetched_at": "2026-11-07T09:05:25.278Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -367,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-06T09:42:58.041Z"
+      "fetched_at": "2026-11-07T09:05:25.278Z"
     },
     {
       "id": "cbu-policy-news",
@@ -375,12 +375,11 @@
       "url": "https://cbu.uz/en/press_center/news/",
       "parser": "html-articles",
       "fetch_url": "https://cbu.uz/en/press_center/news/",
-      "ok": false,
+      "ok": true,
       "candidate_count": 0,
-      "excluded_count": 0,
+      "excluded_count": 371,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-06T09:42:58.041Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-11-07T09:05:25.278Z"
     },
     {
       "id": "customs-committee-news",
@@ -392,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-06T09:42:58.041Z"
+      "fetched_at": "2026-11-07T09:05:25.278Z"
     },
     {
       "id": "mef-policy-news",
@@ -404,7 +403,7 @@
       "candidate_count": 1,
       "excluded_count": 11,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-06T09:42:58.041Z"
+      "fetched_at": "2026-11-07T09:05:25.278Z"
     },
     {
       "id": "tax-committee-news",
@@ -416,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-06T09:42:58.041Z"
+      "fetched_at": "2026-11-07T09:05:25.278Z"
     },
     {
       "id": "energy-ministry-news",
@@ -428,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-06T09:42:58.041Z"
+      "fetched_at": "2026-11-07T09:05:25.278Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -436,12 +435,11 @@
       "url": "https://gov.uz/en/miit/news/news",
       "parser": "govuz-api",
       "fetch_url": "https://api-portal.gov.uz/authorities/news/category?code_name=news&page=1",
-      "ok": false,
+      "ok": true,
       "candidate_count": 0,
-      "excluded_count": 0,
+      "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-06T09:42:58.041Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-11-07T09:05:25.278Z"
     },
     {
       "id": "justice-ministry-news",
@@ -453,33 +451,31 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-06T09:42:58.041Z",
+      "fetched_at": "2026-11-07T09:05:25.278Z",
       "error": "TypeError: fetch failed"
     }
   ],
   "reform_packages": [
     {
-      "package_id": "pkg-tax-administration-incentives-2026-10-26",
+      "package_id": "pkg-tax-administration-incentives-2026-11-05",
       "title": "Tax administration and investment incentive reform",
       "policy_area": "Tax administration and fiscal incentives",
       "reform_category": "fiscal_tax",
-      "current_stage": "Multiple changes published",
+      "current_stage": "Rules amended",
       "current_stage_date": "2026-11-07",
       "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-10-26",
+      "next_milestone_date": "2026-11-05",
       "responsible_institutions": [
-        "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
-        "Official website of the President of the Republic of Uzbekistan"
+        "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
       ],
-      "legal_basis": "Verified official source events: 583-сон 21.10.2026. Qurilish obyektlarining shartnomaviy joriy narxlarini hisoblashda pudrat tashkilotlarining boshqa xarajatlarini aniqlashtirish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida; Management System in the Film Industry to Be Reformed; President Meets with Filmmakers and Outlines New Priorities for the Development of National Cinema.",
-      "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz); Official website of the President of the Republic of Uzbekistan",
-      "short_summary": "3 official measures update tax administration and fiscal incentives rules or procedures.",
+      "legal_basis": "Verified official source event: 3221-10-сон 05.11.2026. “Soliq hisobotining shakllarini tasdiqlash toʻgʻrisida”gi qarorga oʻzgartirishlar kiritish haqida.",
+      "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+      "short_summary": "The cited official document updates tax administration and fiscal incentives rules or procedures.",
       "parameters_or_amounts": [
-        "approved regulation",
-        "verified official measure"
+        "amended rules"
       ],
       "source_confidence": "high",
-      "why_tracked": "The package is assembled from 3 verified official source events with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
       "model_relevance": [
         "Fiscal balance",
         "Investment",
@@ -493,17 +489,7 @@
       "measure_tracks": [
         {
           "id": "tax-administration-incentives-measure-1",
-          "label": "approved regulation",
-          "status": "approved"
-        },
-        {
-          "id": "tax-administration-incentives-measure-2",
-          "label": "verified official measure",
-          "status": "source verified"
-        },
-        {
-          "id": "tax-administration-incentives-measure-3",
-          "label": "verified official measure",
+          "label": "amended rules",
           "status": "source verified"
         }
       ],
@@ -893,6 +879,21 @@
           ]
         },
         {
+          "id": "tax-administration-incentives-amended-2026-11-05",
+          "label": "rules amended",
+          "date": "2026-11-05",
+          "date_precision": "day",
+          "event_type": "amended",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-11-05-3221-10-05-11-2026-soliq-hisobotining-shakllarini-tasdiqlash-to-g-ris"
+          ],
+          "confidence": "high"
+        },
+        {
           "id": "tax-administration-incentives-instructions_issued-2026-11-07",
           "label": "official measure recorded",
           "date": "2026-11-07",
@@ -954,9 +955,6 @@
               "en": "Information on work completed during the 1st quarter of 2026 on the development of information systems and artificial intelligence technologies",
               "ru": "Министерство экономики и финансов Республики Узбекистан",
               "uz": "Ахборот тизимлари ва сунъий интеллект технологияларини ривожлантириш юзасидан 2026 йил 1-чораги давомида бажарилган ишлар бўйича маълумот"
-            },
-            "summary": {
-              "uz": "бўйича: Иқтисодиёт ва молия вазирлигининг тегишли функция ва вазифаларини рақамлаштиришга қаратилган 4 та устувор лойиҳа амалга оширилди. С унъий интеллект ( AI ) технологияларини жорий қилиш бўйича: Иқтисодиёт ва молия вазирлигида сунъий интеллект ташаббусларини тизимли мувофиқлаштириш ҳамда стратегик ривожлантириш мақсадида «Сунъий интеллект технологияларини жорий қилиш жараёнларини жадаллаштириш юзасидан Ишчи гуруҳ» ташкил этилди."
             },
             "source_url": {
               "en": "https://gov.uz/en/imv/news/view/164666",
@@ -1646,6 +1644,34 @@
           }
         },
         {
+          "id": "source-event-2026-11-05-3221-10-05-11-2026-soliq-hisobotining-shakllarini-tasdiqlash-to-g-ris",
+          "title": "3221-10-сон 05.11.2026. “Soliq hisobotining shakllarini tasdiqlash toʻgʻrisida”gi qarorga oʻzgartirishlar kiritish haqida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/8574301",
+          "source_published_at": "2026-11-05",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "amended",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-11-07T09:05:25.278Z",
+          "localized": {
+            "title": {
+              "uz": "3221-10-сон 05.11.2026. “Soliq hisobotining shakllarini tasdiqlash toʻgʻrisida”gi qarorga oʻzgartirishlar kiritish haqida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/8574301",
+              "uz": "https://lex.uz/uz/docs/8574301"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
           "id": "source-event-2026-11-07-o-rq-1162-05-08-2026-avtomobil-yo-llari-to-g-risida",
           "title": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida",
           "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
@@ -1673,9 +1699,9 @@
       ],
       "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
       "digest": {
-        "changed": "approved regulation",
+        "changed": "amended rules",
         "applies_to": "Tax administration and fiscal incentives",
-        "effective_status": "Multiple changes published (2026-11-07)",
+        "effective_status": "Rules amended (2026-11-07)",
         "document": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida"
       },
       "localized": {
@@ -1684,7 +1710,7 @@
         },
         "short_summary": {
           "ru": "Были созданы такие исторические фильмы, как «Исламходжа», «Ибрат», «Авлони», «Абдулла Кадыри», «Ветер Коканда», «Мукими», «Илхак», «Узбекская девушка» и «Бахадур Ялангтуш».",
-          "uz": "Вазирликда Кино санъати департаменти ташкил этилиб, унинг раҳбари мақоми вазир ўринбосарига тенглаштирилади."
+          "uz": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change."
         },
         "parameters_or_amounts": {
           "ru": [
@@ -1698,13 +1724,7 @@
             "– Отныне государство будет выступать не заказчиком фильмов, а надежным партнером творческих деятелей и частного сектора, – подчеркнул Президент."
           ],
           "uz": [
-            "Вазирликда Кино санъати департаменти ташкил этилиб, унинг раҳбари мақоми вазир ўринбосарига тенглаштирилади.",
-            "Давлат муассасаси бўлган “Ўзбекфильм” ўрнида замонавий бизнес модели асосида ишлайдиган “Ўзбекфильм” миллий кинокомпанияси ташкил этилади.",
-            "Киноларни молиялаштиришда давлат буюртмаси ўрнига субсидия асосида қўллаб-қувватлаш тизими жорий этилади.",
-            "Молиялаштириш механизмини бир ойда жорий этиш, келгуси йилдан бошлаб миллий кинокомпания сўровига кўра ҳар йили бюджетдан тегишли маблағ ажратиб бориш топширилди.",
-            "“Ўзбекфильм”нинг 10 гектарлик ҳудудида кино хизматлари жамланган ягона индустриал кластер – “Ўзбекфильм кино шаҳарчаси” ташкил этилади.",
-            "Соҳада илм, таҳлил ва профессионал танқидчиликни ривожлантириш учун “Киношунослар клуби” ташкил этилади.",
-            "Президентимиз “Ўзбекфильм” номини миллий киномизнинг ягона бренди сифатида мустаҳкамлашни таклиф қилди."
+            "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change."
           ]
         },
         "digest": {
@@ -1712,7 +1732,7 @@
             "changed": "Были созданы такие исторические фильмы, как «Исламходжа», «Ибрат», «Авлони», «Абдулла Кадыри», «Ветер Коканда», «Мукими», «Илхак», «Узбекская девушка» и «Бахадур Ялангтуш»."
           },
           "uz": {
-            "changed": "Вазирликда Кино санъати департаменти ташкил этилиб, унинг раҳбари мақоми вазир ўринбосарига тенглаштирилади.",
+            "changed": "Included by Legal or regulatory change, Adopted policy measure, Fiscal, tax, budget, subsidy, or tariff measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program, budget_tax_measure, regulatory_parameter_change.",
             "document": "O‘RQ-1162-сон 05.08.2026. Avtomobil yoʻllari toʻgʻrisida"
           }
         }
@@ -6785,7 +6805,7 @@
     ],
     "package_links": [
       {
-        "package_id": "pkg-tax-administration-incentives-2026-10-26",
+        "package_id": "pkg-tax-administration-incentives-2026-11-05",
         "active_lenses": [
           {
             "model_id": "DFM",
