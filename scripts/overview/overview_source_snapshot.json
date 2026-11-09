@@ -2,9 +2,9 @@
   "source_snapshot_version": "overview-source.v1",
   "status": "source_verified_for_public_artifact",
   "snapshot_note": "Overview V2 source snapshot refreshed from official sources on 7 August 2026 and CPI figures corrected against the official 5 August 2026 release on 8 August 2026. The REER is source-backed but remains a Q1 reference; the static DFM fallback remains unavailable for current-quarter headline use until an accepted Q3 run is produced.",
-  "value_hash": "c7a9b6ebce596a66fe6b113869f79d614620c4509da4362e9f8962c2fd917522",
+  "value_hash": "2db5e5cc4f6c8d86efabef962d1ec5434b1214560157e2b9bde8bbabb49410ed",
   "source_verified_by": "github-actions[bot]",
-  "source_verified_at": "2026-11-06T12:06:49Z",
+  "source_verified_at": "2026-11-09T12:51:52Z",
   "metrics": [
     {
       "metric_id": "real_gdp_growth_annual_yoy",
@@ -212,74 +212,75 @@
     },
     {
       "metric_id": "usd_uzs_level",
-      "value": 11935.37,
-      "previous_value": 11778.45,
+      "value": 11987.16,
+      "previous_value": 11846.57,
       "source_label": "Central Bank of Uzbekistan exchange rate",
-      "source_period": "2026-11-05",
-      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-11-06/",
-      "observed_at": "2026-11-05T00:00:00Z",
+      "source_period": "2026-11-07",
+      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-11-09/",
+      "observed_at": "2026-11-07T00:00:00Z",
       "claim_type": "observed",
       "unit": "UZS per USD",
       "frequency": "daily",
       "validation_status": "valid",
       "caveats": [
         "Official/reference rate, not transaction-weighted market average.",
-        "Latest observation: requested 2026-11-06; actual CBU date/rate 2026-11-05 returned for requested 2026-11-06, 11935.37 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-10-06; actual CBU date/rate 2026-10-06, 11778.45 UZS per USD."
+        "Latest observation: requested 2026-11-09; actual CBU date/rate 2026-11-07 returned for requested 2026-11-09, 11987.16 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-10-09; actual CBU date/rate 2026-10-09, 11846.57 UZS per USD."
       ],
       "warnings": [
-        "Latest requested date 2026-11-06 differed from actual CBU date 2026-11-05; nearest available CBU observation was used."
+        "Latest requested date 2026-11-09 differed from actual CBU date 2026-11-07; nearest available CBU observation was used."
       ]
     },
     {
       "metric_id": "usd_uzs_mom_change",
-      "value": 1.33,
+      "value": 1.19,
       "previous_value": null,
       "source_label": "CBU exchange rate, calculated",
-      "source_period": "2026-11-05 vs 2026-10-06",
-      "source_reference": "Calculated from CBU official USD rates: 11935.37 on 2026-11-05 and 11778.45 on 2026-10-06. Requested dates: latest 2026-11-06, prior-month 2026-10-06.",
-      "extracted_at": "2026-11-06T12:06:49.839Z",
+      "source_period": "2026-11-07 vs 2026-10-09",
+      "source_reference": "Calculated from CBU official USD rates: 11987.16 on 2026-11-07 and 11846.57 on 2026-10-09. Requested dates: latest 2026-11-09, prior-month 2026-10-09.",
+      "extracted_at": "2026-11-09T12:51:52.295Z",
       "claim_type": "calculated_identity",
       "unit": "percent MoM",
       "frequency": "monthly from daily observations",
       "validation_status": "valid",
       "caveats": [
-        "Latest observation: requested 2026-11-06; actual CBU date/rate 2026-11-05 returned for requested 2026-11-06, 11935.37 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-10-06; actual CBU date/rate 2026-10-06, 11778.45 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-11-06; actual CBU date/rate 2025-11-06, 11970.67 UZS per USD.",
+        "Latest observation: requested 2026-11-09; actual CBU date/rate 2026-11-07 returned for requested 2026-11-09, 11987.16 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-10-09; actual CBU date/rate 2026-10-09, 11846.57 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-11-09; actual CBU date/rate 2025-11-07 returned for requested 2025-11-09, 12022.92 UZS per USD.",
         "Formula: ((latest - comparison) / comparison) * 100.",
         "Rounded to 2 decimal places.",
         "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
       ],
       "warnings": [
-        "Latest requested date 2026-11-06 differed from actual CBU date 2026-11-05; nearest available CBU observation was used."
+        "Latest requested date 2026-11-09 differed from actual CBU date 2026-11-07; nearest available CBU observation was used."
       ],
-      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-11-06/"
+      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-11-09/"
     },
     {
       "metric_id": "usd_uzs_yoy_change",
-      "value": -0.29,
+      "value": -0.3,
       "previous_value": null,
       "source_label": "CBU exchange rate, calculated",
-      "source_period": "2026-11-05 vs 2025-11-06",
-      "source_reference": "Calculated from CBU official USD rates: 11935.37 on 2026-11-05 and 11970.67 on 2025-11-06. Requested dates: latest 2026-11-06, prior-year 2025-11-06.",
-      "extracted_at": "2026-11-06T12:06:49.839Z",
+      "source_period": "2026-11-07 vs 2025-11-07",
+      "source_reference": "Calculated from CBU official USD rates: 11987.16 on 2026-11-07 and 12022.92 on 2025-11-07. Requested dates: latest 2026-11-09, prior-year 2025-11-09.",
+      "extracted_at": "2026-11-09T12:51:52.295Z",
       "claim_type": "calculated_identity",
       "unit": "percent YoY",
       "frequency": "monthly from daily observations",
       "validation_status": "valid",
       "caveats": [
-        "Latest observation: requested 2026-11-06; actual CBU date/rate 2026-11-05 returned for requested 2026-11-06, 11935.37 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-10-06; actual CBU date/rate 2026-10-06, 11778.45 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-11-06; actual CBU date/rate 2025-11-06, 11970.67 UZS per USD.",
+        "Latest observation: requested 2026-11-09; actual CBU date/rate 2026-11-07 returned for requested 2026-11-09, 11987.16 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-10-09; actual CBU date/rate 2026-10-09, 11846.57 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-11-09; actual CBU date/rate 2025-11-07 returned for requested 2025-11-09, 12022.92 UZS per USD.",
         "Formula: ((latest - comparison) / comparison) * 100.",
         "Rounded to 2 decimal places.",
         "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
       ],
       "warnings": [
-        "Latest requested date 2026-11-06 differed from actual CBU date 2026-11-05; nearest available CBU observation was used."
+        "Latest requested date 2026-11-09 differed from actual CBU date 2026-11-07; nearest available CBU observation was used.",
+        "Prior-year requested date 2025-11-09 differed from actual CBU date 2025-11-07; nearest available CBU observation was used."
       ],
-      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-11-06/"
+      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-11-09/"
     },
     {
       "metric_id": "reer_level",
