@@ -1,6 +1,6 @@
 {
   "schema_version": "knowledge-hub-reform-tracker.v1",
-  "generated_at": "2026-11-09T10:09:14.283Z",
+  "generated_at": "2026-11-10T10:15:38.591Z",
   "generated_by": "scripts/knowledge-hub/generate-source-fetch-artifact.mjs",
   "extraction_mode": "configured-source-fetch",
   "extraction_mode_label": "Configured source fetch",
@@ -303,12 +303,11 @@
       "url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
       "parser": "lexuz-official-search",
       "fetch_url": "https://lex.uz/uz/search/official?lang=4&pub_date=month",
-      "ok": false,
-      "candidate_count": 0,
+      "ok": true,
+      "candidate_count": 12,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-09T10:09:14.283Z",
-      "error": "TypeError: fetch failed"
+      "fetched_at": "2026-11-10T10:15:38.591Z"
     },
     {
       "id": "president-reform-news",
@@ -317,10 +316,10 @@
       "parser": "president-uz-list",
       "fetch_url": "https://president.uz/en/lists/news",
       "ok": true,
-      "candidate_count": 3,
-      "excluded_count": 9,
+      "candidate_count": 4,
+      "excluded_count": 8,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-09T10:09:14.283Z"
+      "fetched_at": "2026-11-10T10:15:38.591Z"
     },
     {
       "id": "president-healthcare-reform-detail",
@@ -332,7 +331,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-09T10:09:14.283Z"
+      "fetched_at": "2026-11-10T10:15:38.591Z"
     },
     {
       "id": "gov-housing-urbanization-detail",
@@ -344,7 +343,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-09T10:09:14.283Z"
+      "fetched_at": "2026-11-10T10:15:38.591Z"
     },
     {
       "id": "gov-agriculture-subsidy-detail",
@@ -356,7 +355,7 @@
       "candidate_count": 1,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-09T10:09:14.283Z"
+      "fetched_at": "2026-11-10T10:15:38.591Z"
     },
     {
       "id": "gov-portal-reform-news",
@@ -368,7 +367,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-09T10:09:14.283Z"
+      "fetched_at": "2026-11-10T10:15:38.591Z"
     },
     {
       "id": "cbu-policy-news",
@@ -380,7 +379,7 @@
       "candidate_count": 0,
       "excluded_count": 371,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-09T10:09:14.283Z"
+      "fetched_at": "2026-11-10T10:15:38.591Z"
     },
     {
       "id": "customs-committee-news",
@@ -392,7 +391,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-09T10:09:14.283Z"
+      "fetched_at": "2026-11-10T10:15:38.591Z"
     },
     {
       "id": "mef-policy-news",
@@ -404,7 +403,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-09T10:09:14.283Z"
+      "fetched_at": "2026-11-10T10:15:38.591Z"
     },
     {
       "id": "tax-committee-news",
@@ -416,7 +415,7 @@
       "candidate_count": 0,
       "excluded_count": 0,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-09T10:09:14.283Z"
+      "fetched_at": "2026-11-10T10:15:38.591Z"
     },
     {
       "id": "energy-ministry-news",
@@ -428,7 +427,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-09T10:09:14.283Z"
+      "fetched_at": "2026-11-10T10:15:38.591Z"
     },
     {
       "id": "investment-trade-ministry-news",
@@ -440,7 +439,7 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-09T10:09:14.283Z"
+      "fetched_at": "2026-11-10T10:15:38.591Z"
     },
     {
       "id": "justice-ministry-news",
@@ -452,10 +451,905 @@
       "candidate_count": 0,
       "excluded_count": 12,
       "link_invalid_count": 0,
-      "fetched_at": "2026-11-09T10:09:14.283Z"
+      "fetched_at": "2026-11-10T10:15:38.591Z"
     }
   ],
   "reform_packages": [
+    {
+      "package_id": "pkg-energy-tariff-compensation-2026-11-09",
+      "title": "Energy tariff adjustment and compensation reform",
+      "policy_area": "Energy tariffs, household compensation, and fiscal monitoring",
+      "reform_category": "energy_tariffs",
+      "current_stage": "Instructions issued",
+      "current_stage_date": "2026-11-09",
+      "next_milestone": "No future milestone published in verified source",
+      "next_milestone_date": "2026-11-09",
+      "responsible_institutions": [
+        "Official website of the President of the Republic of Uzbekistan"
+      ],
+      "legal_basis": "Verified official source event: President Visits Major Electrical Equipment Manufacturer in Yukorichirchik District.",
+      "official_basis": "Official website of the President of the Republic of Uzbekistan",
+      "short_summary": "The cited official document updates energy tariffs, household compensation, and fiscal monitoring rules or procedures.",
+      "parameters_or_amounts": [
+        "verified official measure"
+      ],
+      "source_confidence": "medium",
+      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "model_relevance": [
+        "Inflation",
+        "Household income",
+        "Fiscal costs"
+      ],
+      "policy_channels": [
+        "Inflation",
+        "Household income",
+        "Fiscal costs"
+      ],
+      "measure_tracks": [
+        {
+          "id": "energy-tariff-compensation-measure-1",
+          "label": "verified official measure",
+          "status": "source verified"
+        }
+      ],
+      "implementation_milestones": [
+        {
+          "id": "energy-tariff-compensation-implementation_milestone-2026-06-04",
+          "label": "implementation measure recorded",
+          "date": "2026-06-04",
+          "date_precision": "day",
+          "event_type": "implementation_milestone",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-06-04-presidents-of-uzbekistan-and-russia-launch-construction-of-the-first-"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "energy-tariff-compensation-instructions_issued-2026-06-15",
+          "label": "official measure recorded",
+          "date": "2026-06-15",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-06-15-critical-minerals-raw-material-base-to-be-expanded-production-of-high"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "energy-tariff-compensation-instructions_issued-2026-07-13",
+          "label": "official measure recorded",
+          "date": "2026-07-13",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-07-13-tasks-outlined-for-the-further-development-of-the-ferrous-metallurgy-"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "energy-tariff-compensation-approved-2026-08-07",
+          "label": "official measure approved",
+          "date": "2026-08-07",
+          "date_precision": "day",
+          "event_type": "approved",
+          "responsible_institutions": [
+            "Ministry of Economy and Finance of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-07-regulated-tariffs-applicable-between-enterprises-in-the-energy-sector"
+          ],
+          "confidence": "medium",
+          "related_next_milestone_ids": [
+            "energy-tariff-compensation-instructions_issued-2026-08-07"
+          ]
+        },
+        {
+          "id": "energy-tariff-compensation-instructions_issued-2026-08-07",
+          "label": "official measure recorded",
+          "date": "2026-08-07",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Ministry of Economy and Finance of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-07-uzbekistan-introduces-a-new-system-of-state-regulation-of-tariffs-in-"
+          ],
+          "confidence": "medium"
+        },
+        {
+          "id": "energy-tariff-compensation-instructions_issued-2026-08-11",
+          "label": "official measure recorded",
+          "date": "2026-08-11",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-11-measures-to-ensure-oil-and-gas-market-stability-discussed"
+          ],
+          "confidence": "medium"
+        },
+        {
+          "id": "energy-tariff-compensation-instructions_issued-2026-08-13",
+          "label": "official measure recorded",
+          "date": "2026-08-13",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-13-tasks-defined-to-improve-the-management-of-the-fuel-and-energy-sector"
+          ],
+          "confidence": "medium"
+        },
+        {
+          "id": "energy-tariff-compensation-instructions_issued-2026-08-19",
+          "label": "official measure recorded",
+          "date": "2026-08-19",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-08-19-measures-presented-for-small-and-micro-hydropower-development"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "energy-tariff-compensation-instructions_issued-2026-10-09",
+          "label": "official measure recorded",
+          "date": "2026-10-09",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-10-09-president-shavkat-mirziyoyev-concludes-working-visit-to-turkmenistan"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "energy-tariff-compensation-instructions_issued-2026-10-13",
+          "label": "official measure recorded",
+          "date": "2026-10-13",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-10-13-measures-reviewed-to-introduce-green-technologies-in-greenhouse-farmi"
+          ],
+          "confidence": "medium"
+        },
+        {
+          "id": "energy-tariff-compensation-implementation_milestone-2026-10-16",
+          "label": "implementation measure recorded",
+          "date": "2026-10-16",
+          "date_precision": "day",
+          "event_type": "implementation_milestone",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-10-16-president-holds-dialogue-with-investors-on-accelerating-reforms-in-th"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "energy-tariff-compensation-instructions_issued-2026-11-03",
+          "label": "official measure recorded",
+          "date": "2026-11-03",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-11-03-petrochemical-cluster-in-bukhara-district-expands-operations"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "energy-tariff-compensation-instructions_issued-2026-11-09",
+          "label": "official measure recorded",
+          "date": "2026-11-09",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-11-09-president-visits-major-electrical-equipment-manufacturer-in-yukorichi"
+          ],
+          "confidence": "medium"
+        }
+      ],
+      "official_source_events": [
+        {
+          "id": "source-event-2026-06-04-presidents-of-uzbekistan-and-russia-launch-construction-of-the-first-",
+          "title": "Presidents of Uzbekistan and Russia launch construction of the first power unit of a nuclear power plant in Uzbekistan",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9282",
+          "source_published_at": "2026-06-04",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "implementation_milestone",
+          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-06-06T06:07:59.490Z",
+          "localized": {
+            "title": {
+              "en": "Presidents of Uzbekistan and Russia launch construction of the first power unit of a nuclear power plant in Uzbekistan",
+              "ru": "Президенты Узбекистана и России дали старт строительству первого энергоблока АЭС в Узбекистане",
+              "uz": "Ўзбекистон ва Россия Президентлари мамлакатимизда АЭСнинг биринчи энергия блоки қурилишига старт бердилар"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "Отдельно поблагодарил специалистов Узбекистана и России, принимающих участие в создании первой атомной электростанции в нашей стране за совместную работу и высокий профессионализм."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9282",
+              "ru": "https://president.uz/ru/lists/view/9282",
+              "uz": "https://president.uz/uz/lists/view/9282"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-06-15-critical-minerals-raw-material-base-to-be-expanded-production-of-high",
+          "title": "Critical minerals raw material base to be expanded, production of high value-added products to be established",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9304",
+          "source_published_at": "2026-06-15",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-06-16T08:29:14.323Z",
+          "localized": {
+            "title": {
+              "en": "Critical minerals raw material base to be expanded, production of high value-added products to be established",
+              "ru": "Будет расширена сырьевая база критически важных минералов и налажено производство продукции с высокой добавленной стоимостью",
+              "uz": "Муҳим минераллар хомашё базаси кенгайтирилиб, юқори қўшилган қийматли маҳсулотлар ишлаб чиқарилади"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "Кроме того, за счет ввода новых производственных мощностей будут созданы сотни рабочих мест, увеличатся поступления в бюджет и расширятся экспортные возможности. Там будут созданы необходимые условия для коммерциализации научных разработок, поддержки стартап-проектов, а также производства высокочистых металлов и инновационной продукции.",
+              "uz": "Жорий йилнинг ўзида 166 миллион долларлик 12 та лойиҳани ишга тушириш режалаштирилган. Чирчиқ шаҳрида ташкил этилаётган нанотаҳлил лабораторияси геология, кончилик ва металлургия лойиҳалари учун замонавий таҳлил хизматларини кўрсатади."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9304",
+              "ru": "https://president.uz/ru/lists/view/9304",
+              "uz": "https://president.uz/uz/lists/view/9304"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-07-13-tasks-outlined-for-the-further-development-of-the-ferrous-metallurgy-",
+          "title": "Tasks outlined for the further development of the ferrous metallurgy industry",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9410",
+          "source_published_at": "2026-07-13",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-07-14T05:14:20.000Z",
+          "localized": {
+            "title": {
+              "en": "Tasks outlined for the further development of the ferrous metallurgy industry",
+              "ru": "Определены задачи по дальнейшему развитию черной металлургии",
+              "uz": "Қора металлургия саноатини янада ривожлантириш вазифалари белгиланди"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "Для перевода экономики на модель технологичного и инновационного развития и доведения объема валового внутреннего продукта до 240 миллиардов долларов к 2030 году необходимо обеспечить ежегодный рост экономики не менее чем на 8-9 процентов. В этом процессе развитие металлургической отрасли должно опираться на устойчивую сырьевую базу, выпуск конкурентоспособной продукции и внедрение современных технологий.",
+              "uz": "Соҳада соғлом рақобат муҳити ва нарх барқарорлигини таъминлаш, таъсирчан назорат механизмларини ўрнатиш учун Ҳукуматда алоҳида Лойиҳа офиси ташкил этилади. Уларни хомашё билан барқарор таъминлаш мақсадида четдан хомашёни марказлашган ҳолда олиб келиш бўйича алоҳида компания ташкил этилади."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9410",
+              "ru": "https://president.uz/ru/lists/view/9410",
+              "uz": "https://president.uz/uz/lists/view/9410"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-08-07-regulated-tariffs-applicable-between-enterprises-in-the-energy-sector",
+          "title": "Regulated tariffs applicable between enterprises in the energy sector have been approved",
+          "source_institution": "Ministry of Economy and Finance of Uzbekistan",
+          "source_url": "https://gov.uz/en/imv/news/view/204508",
+          "source_published_at": "2026-08-07",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "approved",
+          "summary": "Official detail page did not expose a separate summary in the configured extraction block.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-12T04:23:14.010Z",
+          "localized": {
+            "title": {
+              "en": "Regulated tariffs applicable between enterprises in the energy sector have been approved",
+              "ru": "Министерство экономики и финансов Республики Узбекистан",
+              "uz": "Ўзбекистон Республикаси Иқтисодиёт ва молия вазирлиги"
+            },
+            "source_url": {
+              "en": "https://gov.uz/en/imv/news/view/204508",
+              "ru": "https://gov.uz/ru/imv/news/view/204508",
+              "uz": "https://gov.uz/uz/imv/news/view/204508"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-08-07-uzbekistan-introduces-a-new-system-of-state-regulation-of-tariffs-in-",
+          "title": "Uzbekistan Introduces a New System of State Regulation of Tariffs in the Energy Sector",
+          "source_institution": "Ministry of Economy and Finance of Uzbekistan",
+          "source_url": "https://gov.uz/en/imv/news/view/203538",
+          "source_published_at": "2026-08-07",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Official detail page did not expose a separate summary in the configured extraction block.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-08T03:50:35.005Z",
+          "localized": {
+            "title": {
+              "en": "Uzbekistan Introduces a New System of State Regulation of Tariffs in the Energy Sector",
+              "ru": "Министерство экономики и финансов Республики Узбекистан",
+              "uz": "Ўзбекистонда энергетика соҳасида давлат тарифларини тартибга солишнинг янги тизими жорий этилди"
+            },
+            "source_url": {
+              "en": "https://gov.uz/en/imv/news/view/203538",
+              "ru": "https://gov.uz/ru/imv/news/view/203538",
+              "uz": "https://gov.uz/uz/imv/news/view/203538"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-08-11-measures-to-ensure-oil-and-gas-market-stability-discussed",
+          "title": "Measures to ensure oil and gas market stability discussed",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9492",
+          "source_published_at": "2026-08-11",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument; source evidence: legal_text, official_policy_announcement.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-12T04:23:14.010Z",
+          "localized": {
+            "title": {
+              "en": "Measures to ensure oil and gas market stability discussed",
+              "ru": "Рассмотрены вопросы обеспечения стабильности нефтегазового рынка",
+              "uz": "Нефть-газ бозори барқарорлигини таъминлаш масалалари кўриб чиқилди"
+            },
+            "summary": {
+              "ru": "За счет работ на месторождениях «Янги Култак», «Ниёз», «Коратау», «Марварид» и «Тегирмон» будет создана возможность дополнительной добычи 887 тысяч кубометров природного газа. Дано поручение установить действенный контроль за недопущением случаев необоснованного ограничения поставок ресурсов, создания искусственного дефицита и действий, направленных на завышение цен.",
+              "uz": "Август ойида 27 та қудуқни ишга тушириш режалаштирилган. Ички бозорда талаб ва таклиф мувозанатини сақлаш, углеводород ресурслари таъминотида узилишларга ҳамда нархларнинг асоссиз ўсишига йўл қўймаслик мақсадида “Ўзбекнефтгаз” акциядорлик жамиятига нефть ва газ қазиб чиқариш бўйича белгиланган прогноз кўрсаткичларини сўзсиз таъминлаш вазифаси қўйилди."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9492",
+              "ru": "https://president.uz/ru/lists/view/9492",
+              "uz": "https://president.uz/uz/lists/view/9492"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-08-13-tasks-defined-to-improve-the-management-of-the-fuel-and-energy-sector",
+          "title": "Tasks defined to improve the management of the fuel and energy sector in the regions",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9496",
+          "source_published_at": "2026-08-13",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-15T03:18:32.863Z",
+          "localized": {
+            "title": {
+              "en": "Tasks defined to improve the management of the fuel and energy sector in the regions",
+              "ru": "Определены задачи по системной организации работы топливно-энергетической отрасли в регионах",
+              "uz": "Ҳудудларда ёқилғи-энергетика соҳасидаги ишларни тизимли ташкил этиш вазифалари белгиланди"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "Ранее была поставлена задача создать образцовую систему в 14 районах, отобранных по одному в каждом регионе.",
+              "uz": "Аввалроқ ушбу тажриба асосида ҳар бир ҳудуддан биттадан танлаб олинган 14 та туманда намунавий тизим яратиш вазифаси қўйилган эди. Шу мақсадда ишлар “маҳаллабай” ташкил этилиб, энергетика соҳасидаги муаммоларни жойига чиққан ҳолда ўрганиш ва манзилли чоралар кўриш йўлга қўйилди."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9496",
+              "ru": "https://president.uz/ru/lists/view/9496",
+              "uz": "https://president.uz/uz/lists/view/9496"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-08-19-measures-presented-for-small-and-micro-hydropower-development",
+          "title": "Measures presented for small and micro hydropower development",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9513",
+          "source_published_at": "2026-08-19",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-08-24T03:31:54.047Z",
+          "localized": {
+            "title": {
+              "en": "Measures presented for small and micro hydropower development",
+              "ru": "Представлены меры по дальнейшему развитию малой и микрогидроэнергетики",
+              "uz": "Кичик ва микро гидроэнергетикани ривожлантириш чора-тадбирлари тақдимот қилинди"
+            },
+            "summary": {
+              "en": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
+              "ru": "Будет разрешено изменять конструкцию каналов, рек и русел для создания дополнительного напора воды. Также будет разрешено строительство малых и микроГЭС на объектах водного хозяйства для собственных нужд без проведения аукциона.",
+              "uz": "Ўтган йили қабул қилинган алоҳида қарорга мувофиқ, хусусий сектор иштирокида жами 164 мегаватт қувватли қарийб 3 мингта кичик ва микро ГЭС қуриш белгиланган. Аммо бу белгиланган қувватнинг атиги тўртдан бир қисмини ташкил этади."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9513",
+              "ru": "https://president.uz/ru/lists/view/9513",
+              "uz": "https://president.uz/uz/lists/view/9513"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-10-09-president-shavkat-mirziyoyev-concludes-working-visit-to-turkmenistan",
+          "title": "President Shavkat Mirziyoyev concludes working visit to Turkmenistan",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9705",
+          "source_published_at": "2026-10-09",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-10-11T09:12:06.566Z",
+          "localized": {
+            "title": {
+              "en": "President Shavkat Mirziyoyev concludes working visit to Turkmenistan",
+              "ru": "Рабочий визит Президента Узбекистана в Туркменистан завершился",
+              "uz": "Давлатимиз раҳбарининг Туркманистонга амалий ташрифи якунланди"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "Их важным итогом стало подписание Договора о создании Высшего совета стратегического партнерства.",
+              "uz": "Президентимиз саноат кооперациясини ривожлантириш, транспорт боғлиқлигини мустаҳкамлаш ва янги технологияларни жорий этиш, энергетика, сув ресурслари ва экология масалаларини биргаликда ҳал қилиш бўйича таклифларни илгари сурди. Давлатимиз раҳбари ўз нутқида савдо ва саноат ҳамкорлигини кенгайтириш, транспорт алоқаларини ривожлантириш, озиқ-овқат ва энергетика хавфсизлигини мустаҳкамлаш ҳамда кибержиноятчиликка қарши курашиш бўйича таклифларни илгари сурди."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9705",
+              "ru": "https://president.uz/ru/lists/view/9705",
+              "uz": "https://president.uz/uz/lists/view/9705"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-10-13-measures-reviewed-to-introduce-green-technologies-in-greenhouse-farmi",
+          "title": "Measures reviewed to introduce green technologies in greenhouse farming",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9711",
+          "source_published_at": "2026-10-13",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-10-14T07:56:14.076Z",
+          "localized": {
+            "title": {
+              "en": "Measures reviewed to introduce green technologies in greenhouse farming",
+              "ru": "Рассмотрены вопросы внедрения «зеленых» технологий в тепличное хозяйство",
+              "uz": "Иссиқхона хўжалигига “яшил” технологияларни жорий қилиш масалалари кўриб чиқилди"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "Теплицам, работающим на твердом топливе, предложено до 1 декабря текущего года перейти на указанные источники энергии. С 15 октября текущего года по 15 марта следующего года в тепличных хозяйствах будет осуществляться постоянный экологический мониторинг.",
+              "uz": "Шу боис, Тошкент шаҳри ва унга туташ бешта туманда иссиқхоналар учун “яшил” технологияларга асосланган махсус экологик тартиб жорий этиш таклиф қилинди. Қаттиқ ёқилғида ишлаётган иссиқхоналарга жорий йил 1 декабрга қадар ушбу манбаларга ўтиш таклиф қилинади."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9711",
+              "ru": "https://president.uz/ru/lists/view/9711",
+              "uz": "https://president.uz/uz/lists/view/9711"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-10-16-president-holds-dialogue-with-investors-on-accelerating-reforms-in-th",
+          "title": "President Holds Dialogue with Investors on Accelerating Reforms in the Energy Sector",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9726",
+          "source_published_at": "2026-10-16",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "implementation_milestone",
+          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-10-17T07:08:09.995Z",
+          "localized": {
+            "title": {
+              "en": "President Holds Dialogue with Investors on Accelerating Reforms in the Energy Sector",
+              "ru": "Президент обсудил с инвесторами вопросы ускорения реформ в топливно-энергетической отрасли",
+              "uz": "Давлатимиз раҳбари ёқилғи-энергетика тармоғидаги ислоҳотларни жадаллаштириш юзасидан сармоядорлар билан мулоқот ўтказди"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "За последние десять лет энергетический рынок открылся для частных инвестиций, внедрены механизмы государственно-частного партнерства. Они предусматривают создание 3 тысячи мегаватт генерирующих и 400 мегаватт накопительных мощностей.",
+              "uz": "Сўнгги ўн йилда энергетика бозори хусусий сармояга очилиб, давлат-хусусий шериклик механизмлари жорий этилди. Қайси ҳудудда қандай қувват зарурлиги олдиндан режалаштирилиб, тайёр лойиҳалар очиқ танловга чиқарилади."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9726",
+              "ru": "https://president.uz/ru/lists/view/9726",
+              "uz": "https://president.uz/uz/lists/view/9726"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-11-03-petrochemical-cluster-in-bukhara-district-expands-operations",
+          "title": "Petrochemical cluster in Bukhara district expands operations",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9812",
+          "source_published_at": "2026-11-03",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-11-05T09:45:42.591Z",
+          "localized": {
+            "title": {
+              "en": "Petrochemical cluster in Bukhara district expands operations",
+              "ru": "Нефтехимический кластер в Бухарском районе расширяет свою деятельность",
+              "uz": "Бухоро туманида нефть-кимё кластери кенгаймоқда"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "До конца 2028 года планируется реализовать инвестиционный проект стоимостью 292 миллиона долларов.",
+              "uz": "2028 йил якунига қадар 292 миллион долларлик инвестиция лойиҳасини амалга ошириш режалаштирилган. Корхона Қозоғистон, Қирғизистон, Тожикистон, Туркманистон, Афғонистон ва Европа Иттифоқи мамлакатларига йилига 180 минг тоннага яқин нефть-кимё маҳсулотлари, автобензин ва дизель ёқилғисини экспорт қилишни режалаштирмоқда."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9812",
+              "ru": "https://president.uz/ru/lists/view/9812",
+              "uz": "https://president.uz/uz/lists/view/9812"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-11-09-president-visits-major-electrical-equipment-manufacturer-in-yukorichi",
+          "title": "President Visits Major Electrical Equipment Manufacturer in Yukorichirchik District",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9832",
+          "source_published_at": "2026-11-09",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-11-10T10:15:38.591Z",
+          "localized": {
+            "title": {
+              "en": "President Visits Major Electrical Equipment Manufacturer in Yukorichirchik District",
+              "ru": "Президент нашей страны ознакомился с возможностями крупного электротехнического предприятия в Юкоричирчикском районе",
+              "uz": "Президентимиз Юқори Чирчиқдаги йирик электротехника корхонаси имкониятлари билан танишди"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "Здесь создано более 1 тысячи рабочих мест и налажен выпуск свыше 1,5 тысячи наименований продукции. В этих целях намечено создать в регионах филиалы проектных институтов, специализирующихся на энергетической отрасли.",
+              "uz": "Шу мақсадда ҳудудларда энергетика соҳасига ихтисослашган лойиҳа институтларининг филиаллари ташкил этилиши белгиланди."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9832",
+              "ru": "https://president.uz/ru/lists/view/9832",
+              "uz": "https://president.uz/uz/lists/view/9832"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        }
+      ],
+      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
+      "digest": {
+        "changed": "verified official measure",
+        "applies_to": "Energy tariffs, household compensation, and fiscal monitoring",
+        "effective_status": "Instructions issued (2026-11-09)",
+        "document": "President Visits Major Electrical Equipment Manufacturer in Yukorichirchik District"
+      },
+      "localized": {
+        "title": {
+          "ru": "Президент нашей страны ознакомился с возможностями крупного электротехнического предприятия в Юкоричирчикском районе",
+          "uz": "Президентимиз Юқори Чирчиқдаги йирик электротехника корхонаси имкониятлари билан танишди"
+        },
+        "short_summary": {
+          "ru": "Здесь создано более 1 тысячи рабочих мест и налажен выпуск свыше 1,5 тысячи наименований продукции.",
+          "uz": "Шу мақсадда ҳудудларда энергетика соҳасига ихтисослашган лойиҳа институтларининг филиаллари ташкил этилиши белгиланди."
+        },
+        "parameters_or_amounts": {
+          "ru": [
+            "Здесь создано более 1 тысячи рабочих мест и налажен выпуск свыше 1,5 тысячи наименований продукции.",
+            "В этих целях намечено создать в регионах филиалы проектных институтов, специализирующихся на энергетической отрасли."
+          ],
+          "uz": [
+            "Шу мақсадда ҳудудларда энергетика соҳасига ихтисослашган лойиҳа институтларининг филиаллари ташкил этилиши белгиланди."
+          ]
+        },
+        "digest": {
+          "ru": {
+            "changed": "Здесь создано более 1 тысячи рабочих мест и налажен выпуск свыше 1,5 тысячи наименований продукции.",
+            "document": "Президент нашей страны ознакомился с возможностями крупного электротехнического предприятия в Юкоричирчикском районе"
+          },
+          "uz": {
+            "changed": "Шу мақсадда ҳудудларда энергетика соҳасига ихтисослашган лойиҳа институтларининг филиаллари ташкил этилиши белгиланди.",
+            "document": "Президентимиз Юқори Чирчиқдаги йирик электротехника корхонаси имкониятлари билан танишди"
+          }
+        }
+      }
+    },
+    {
+      "package_id": "pkg-investment-climate-sez-2026-11-09",
+      "title": "Investment climate and special economic zone reform",
+      "policy_area": "Investment climate and special economic zones",
+      "reform_category": "business_environment",
+      "current_stage": "Instructions issued",
+      "current_stage_date": "2026-11-09",
+      "next_milestone": "No future milestone published in verified source",
+      "next_milestone_date": "2026-11-09",
+      "responsible_institutions": [
+        "Official website of the President of the Republic of Uzbekistan"
+      ],
+      "legal_basis": "Verified official source event: President Shavkat Mirziyoyev Outlines Priorities to Bring the Electrical Engineering Industry to a New Technological Level.",
+      "official_basis": "Official website of the President of the Republic of Uzbekistan",
+      "short_summary": "The cited official document updates investment climate and special economic zones rules or procedures.",
+      "parameters_or_amounts": [
+        "verified official measure"
+      ],
+      "source_confidence": "high",
+      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
+      "model_relevance": [
+        "Private investment",
+        "Productivity",
+        "Business costs"
+      ],
+      "policy_channels": [
+        "Private investment",
+        "Productivity",
+        "Business costs"
+      ],
+      "measure_tracks": [
+        {
+          "id": "investment-climate-sez-measure-1",
+          "label": "verified official measure",
+          "status": "source verified"
+        }
+      ],
+      "implementation_milestones": [
+        {
+          "id": "investment-climate-sez-instructions_issued-2026-10-12",
+          "label": "official measure recorded",
+          "date": "2026-10-12",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-10-12-new-tashkent-to-create-new-opportunities-for-investors"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "investment-climate-sez-instructions_issued-2026-11-09",
+          "label": "official measure recorded",
+          "date": "2026-11-09",
+          "date_precision": "day",
+          "event_type": "instructions_issued",
+          "responsible_institutions": [
+            "Official website of the President of the Republic of Uzbekistan"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-11-09-president-shavkat-mirziyoyev-outlines-priorities-to-bring-the-electri"
+          ],
+          "confidence": "high"
+        }
+      ],
+      "official_source_events": [
+        {
+          "id": "source-event-2026-10-12-new-tashkent-to-create-new-opportunities-for-investors",
+          "title": "New Tashkent to create new opportunities for investors",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9708",
+          "source_published_at": "2026-10-12",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, parameter_change, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-10-13T09:40:27.514Z",
+          "localized": {
+            "title": {
+              "en": "New Tashkent to create new opportunities for investors",
+              "ru": "В Новом Ташкенте создадут новые возможности для инвесторов",
+              "uz": "Янги Тошкентда инвесторлар учун янги имкониятлар яратилади"
+            },
+            "summary": {
+              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, parameter_change, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
+              "ru": "До конца года в Новом Ташкенте планируется сдать 20 тысяч квартир. Для привлечения крупных коммерческих объектов будет внедрен механизм выделения земельных участков на основе открытой инициативы и принципа «Swiss Challenge».",
+              "uz": "Йил охиригача шаҳарда 20 минг хонадонни фойдаланишга топшириш режалаштирилган. Келгуси йил 20 ёшгача бўлган футболчилар ўртасидаги жаҳон чемпионати муносабати билан меҳмонхона, овқатланиш ва кўнгилочар масканларга эҳтиёжни ҳисоблаб, тадбиркорларга аниқ инвестиция таклифларини тақдим этиш топширилди."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9708",
+              "ru": "https://president.uz/ru/lists/view/9708",
+              "uz": "https://president.uz/uz/lists/view/9708"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        },
+        {
+          "id": "source-event-2026-11-09-president-shavkat-mirziyoyev-outlines-priorities-to-bring-the-electri",
+          "title": "President Shavkat Mirziyoyev Outlines Priorities to Bring the Electrical Engineering Industry to a New Technological Level",
+          "source_institution": "Official website of the President of the Republic of Uzbekistan",
+          "source_url": "https://president.uz/en/lists/view/9831",
+          "source_published_at": "2026-11-09",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "instructions_issued",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, parameter_change, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-11-10T10:15:38.591Z",
+          "localized": {
+            "title": {
+              "en": "President Shavkat Mirziyoyev Outlines Priorities to Bring the Electrical Engineering Industry to a New Technological Level",
+              "ru": "Определены задачи по выводу электротехнической промышленности на качественно новый технологический уровень",
+              "uz": "Электротехника саноатини технологик жиҳатдан янги босқичга олиб чиқиш вазифалари белгиланди"
+            },
+            "summary": {
+              "en": "Included by Legal or regulatory change, Adopted policy measure, Structural implementation program with hard reform signal(s): legal_or_policy_instrument, adopted_measure, parameter_change, named_implementation_update; source evidence: legal_text, official_policy_announcement, implementation_program.",
+              "ru": "В ближайшие десять лет совместно с зарубежными партнерами планируется реализовать проекты на сумму 450 миллиардов долларов в различных отраслях экономики. К примеру, к 2030 году мощности по хранению энергии в нашей стране планируется довести до 4,5 гигаватта.",
+              "uz": "Натижада жорий йилда электротехника маҳсулотларини ишлаб чиқариш ҳажми 50 триллион сўмга етди. Масалан, 2030 йилгача мамлакатимизда энергия сақлаш қувватларини 4,5 гигаваттга етказиш режалаштирилган."
+            },
+            "source_url": {
+              "en": "https://president.uz/en/lists/view/9831",
+              "ru": "https://president.uz/ru/lists/view/9831",
+              "uz": "https://president.uz/uz/lists/view/9831"
+            },
+            "source_url_status": {
+              "en": "verified",
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
+        }
+      ],
+      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
+      "digest": {
+        "changed": "verified official measure",
+        "applies_to": "Investment climate and special economic zones",
+        "effective_status": "Instructions issued (2026-11-09)",
+        "document": "President Shavkat Mirziyoyev Outlines Priorities to Bring the Electrical Engineering Industry to a New Technological Level"
+      },
+      "localized": {
+        "title": {
+          "ru": "Определены задачи по выводу электротехнической промышленности на качественно новый технологический уровень",
+          "uz": "Электротехника саноатини технологик жиҳатдан янги босқичга олиб чиқиш вазифалари белгиланди"
+        },
+        "short_summary": {
+          "ru": "В ближайшие десять лет совместно с зарубежными партнерами планируется реализовать проекты на сумму 450 миллиардов долларов в различных отраслях экономики.",
+          "uz": "Натижада жорий йилда электротехника маҳсулотларини ишлаб чиқариш ҳажми 50 триллион сўмга етди."
+        },
+        "parameters_or_amounts": {
+          "ru": [
+            "В ближайшие десять лет совместно с зарубежными партнерами планируется реализовать проекты на сумму 450 миллиардов долларов в различных отраслях экономики.",
+            "К примеру, к 2030 году мощности по хранению энергии в нашей стране планируется довести до 4,5 гигаватта.",
+            "В ближайшие три года в электротехнической сфере и смежных отраслях промышленности планируется реализовать 164 проекта общей стоимостью 11 миллиардов 600 миллионов долларов.",
+            "В целях развития высокотехнологичной промышленности в городе Нурафшане будет создан «Центр технологий будущего».",
+            "Для укрепления сотрудничества между научными исследованиями и промышленностью будет разработана национальная платформа «Новая промышленность».",
+            "В ближайшее время их число будет доведено до 100 человек.",
+            "Дополнительные возможности для отечественных производителей будут созданы и в системе государственных закупок.",
+            "Для создания удобств предпринимателям внедрена система отображения государственных заказов на единой платформе."
+          ],
+          "uz": [
+            "Натижада жорий йилда электротехника маҳсулотларини ишлаб чиқариш ҳажми 50 триллион сўмга етди.",
+            "Масалан, 2030 йилгача мамлакатимизда энергия сақлаш қувватларини 4,5 гигаваттга етказиш режалаштирилган.",
+            "Шу боис, ушбу йўналишларда маҳаллий ишлаб чиқаришни ташкил этиш, янги технологиялар ва инвесторларни жалб қилиш вазифалари белгиланди.",
+            "Кейинги уч йилда электротехника ва унга боғлиқ саноат тармоқларида умумий қиймати 11 миллиард 600 миллион долларлик 164 та лойиҳани амалга ошириш режалаштирилган.",
+            "Юқори технологик саноатни ривожлантириш мақсадида Нурафшон шаҳрида “Келажак технологиялари маркази” ташкил этилади.",
+            "Шунингдек, ҳар бир ҳудудда тадқиқот ва ишланмалар маркази ёки технопарк негизида янги маҳсулотларни синовдан ўтказиш майдончалари ташкил этилади.",
+            "Хусусан, ҳар бир корхонага 50 минг долларгача компенсация ажратилади.",
+            "Тадбиркорларга қулайлик яратиш мақсадида давлат буюртмаларини ягона платформада акс эттириш тизими жорий қилинди."
+          ]
+        },
+        "digest": {
+          "ru": {
+            "changed": "В ближайшие десять лет совместно с зарубежными партнерами планируется реализовать проекты на сумму 450 миллиардов долларов в различных отраслях экономики.",
+            "document": "Определены задачи по выводу электротехнической промышленности на качественно новый технологический уровень"
+          },
+          "uz": {
+            "changed": "Натижада жорий йилда электротехника маҳсулотларини ишлаб чиқариш ҳажми 50 триллион сўмга етди.",
+            "document": "Электротехника саноатини технологик жиҳатдан янги босқичга олиб чиқиш вазифалари белгиланди"
+          }
+        }
+      }
+    },
     {
       "package_id": "pkg-tax-administration-incentives-2026-11-05",
       "title": "Tax administration and investment incentive reform",
@@ -1739,675 +2633,18 @@
       }
     },
     {
-      "package_id": "pkg-energy-tariff-compensation-2026-11-03",
-      "title": "Energy tariff adjustment and compensation reform",
-      "policy_area": "Energy tariffs, household compensation, and fiscal monitoring",
-      "reform_category": "energy_tariffs",
-      "current_stage": "Instructions issued",
-      "current_stage_date": "2026-11-03",
-      "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-11-03",
-      "responsible_institutions": [
-        "Official website of the President of the Republic of Uzbekistan"
-      ],
-      "legal_basis": "Verified official source event: Petrochemical cluster in Bukhara district expands operations.",
-      "official_basis": "Official website of the President of the Republic of Uzbekistan",
-      "short_summary": "The cited official document updates energy tariffs, household compensation, and fiscal monitoring rules or procedures.",
-      "parameters_or_amounts": [
-        "expanded incentives"
-      ],
-      "source_confidence": "high",
-      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
-      "model_relevance": [
-        "Inflation",
-        "Household income",
-        "Fiscal costs"
-      ],
-      "policy_channels": [
-        "Inflation",
-        "Household income",
-        "Fiscal costs"
-      ],
-      "measure_tracks": [
-        {
-          "id": "energy-tariff-compensation-measure-1",
-          "label": "expanded incentives",
-          "status": "source verified"
-        }
-      ],
-      "implementation_milestones": [
-        {
-          "id": "energy-tariff-compensation-implementation_milestone-2026-06-04",
-          "label": "implementation measure recorded",
-          "date": "2026-06-04",
-          "date_precision": "day",
-          "event_type": "implementation_milestone",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-06-04-presidents-of-uzbekistan-and-russia-launch-construction-of-the-first-"
-          ],
-          "confidence": "high"
-        },
-        {
-          "id": "energy-tariff-compensation-instructions_issued-2026-06-15",
-          "label": "official measure recorded",
-          "date": "2026-06-15",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-06-15-critical-minerals-raw-material-base-to-be-expanded-production-of-high"
-          ],
-          "confidence": "high"
-        },
-        {
-          "id": "energy-tariff-compensation-instructions_issued-2026-07-13",
-          "label": "official measure recorded",
-          "date": "2026-07-13",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-07-13-tasks-outlined-for-the-further-development-of-the-ferrous-metallurgy-"
-          ],
-          "confidence": "high"
-        },
-        {
-          "id": "energy-tariff-compensation-approved-2026-08-07",
-          "label": "official measure approved",
-          "date": "2026-08-07",
-          "date_precision": "day",
-          "event_type": "approved",
-          "responsible_institutions": [
-            "Ministry of Economy and Finance of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-08-07-regulated-tariffs-applicable-between-enterprises-in-the-energy-sector"
-          ],
-          "confidence": "medium",
-          "related_next_milestone_ids": [
-            "energy-tariff-compensation-instructions_issued-2026-08-07"
-          ]
-        },
-        {
-          "id": "energy-tariff-compensation-instructions_issued-2026-08-07",
-          "label": "official measure recorded",
-          "date": "2026-08-07",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "Ministry of Economy and Finance of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-08-07-uzbekistan-introduces-a-new-system-of-state-regulation-of-tariffs-in-"
-          ],
-          "confidence": "medium"
-        },
-        {
-          "id": "energy-tariff-compensation-instructions_issued-2026-08-11",
-          "label": "official measure recorded",
-          "date": "2026-08-11",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-08-11-measures-to-ensure-oil-and-gas-market-stability-discussed"
-          ],
-          "confidence": "medium"
-        },
-        {
-          "id": "energy-tariff-compensation-instructions_issued-2026-08-13",
-          "label": "official measure recorded",
-          "date": "2026-08-13",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-08-13-tasks-defined-to-improve-the-management-of-the-fuel-and-energy-sector"
-          ],
-          "confidence": "medium"
-        },
-        {
-          "id": "energy-tariff-compensation-instructions_issued-2026-08-19",
-          "label": "official measure recorded",
-          "date": "2026-08-19",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-08-19-measures-presented-for-small-and-micro-hydropower-development"
-          ],
-          "confidence": "high"
-        },
-        {
-          "id": "energy-tariff-compensation-instructions_issued-2026-10-09",
-          "label": "official measure recorded",
-          "date": "2026-10-09",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-10-09-president-shavkat-mirziyoyev-concludes-working-visit-to-turkmenistan"
-          ],
-          "confidence": "high"
-        },
-        {
-          "id": "energy-tariff-compensation-instructions_issued-2026-10-13",
-          "label": "official measure recorded",
-          "date": "2026-10-13",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-10-13-measures-reviewed-to-introduce-green-technologies-in-greenhouse-farmi"
-          ],
-          "confidence": "medium"
-        },
-        {
-          "id": "energy-tariff-compensation-implementation_milestone-2026-10-16",
-          "label": "implementation measure recorded",
-          "date": "2026-10-16",
-          "date_precision": "day",
-          "event_type": "implementation_milestone",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-10-16-president-holds-dialogue-with-investors-on-accelerating-reforms-in-th"
-          ],
-          "confidence": "high"
-        },
-        {
-          "id": "energy-tariff-compensation-instructions_issued-2026-11-03",
-          "label": "official measure recorded",
-          "date": "2026-11-03",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-11-03-petrochemical-cluster-in-bukhara-district-expands-operations"
-          ],
-          "confidence": "high"
-        }
-      ],
-      "official_source_events": [
-        {
-          "id": "source-event-2026-06-04-presidents-of-uzbekistan-and-russia-launch-construction-of-the-first-",
-          "title": "Presidents of Uzbekistan and Russia launch construction of the first power unit of a nuclear power plant in Uzbekistan",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9282",
-          "source_published_at": "2026-06-04",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "implementation_milestone",
-          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-06-06T06:07:59.490Z",
-          "localized": {
-            "title": {
-              "en": "Presidents of Uzbekistan and Russia launch construction of the first power unit of a nuclear power plant in Uzbekistan",
-              "ru": "Президенты Узбекистана и России дали старт строительству первого энергоблока АЭС в Узбекистане",
-              "uz": "Ўзбекистон ва Россия Президентлари мамлакатимизда АЭСнинг биринчи энергия блоки қурилишига старт бердилар"
-            },
-            "summary": {
-              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
-              "ru": "Отдельно поблагодарил специалистов Узбекистана и России, принимающих участие в создании первой атомной электростанции в нашей стране за совместную работу и высокий профессионализм."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9282",
-              "ru": "https://president.uz/ru/lists/view/9282",
-              "uz": "https://president.uz/uz/lists/view/9282"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-06-15-critical-minerals-raw-material-base-to-be-expanded-production-of-high",
-          "title": "Critical minerals raw material base to be expanded, production of high value-added products to be established",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9304",
-          "source_published_at": "2026-06-15",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-06-16T08:29:14.323Z",
-          "localized": {
-            "title": {
-              "en": "Critical minerals raw material base to be expanded, production of high value-added products to be established",
-              "ru": "Будет расширена сырьевая база критически важных минералов и налажено производство продукции с высокой добавленной стоимостью",
-              "uz": "Муҳим минераллар хомашё базаси кенгайтирилиб, юқори қўшилган қийматли маҳсулотлар ишлаб чиқарилади"
-            },
-            "summary": {
-              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
-              "ru": "Кроме того, за счет ввода новых производственных мощностей будут созданы сотни рабочих мест, увеличатся поступления в бюджет и расширятся экспортные возможности. Там будут созданы необходимые условия для коммерциализации научных разработок, поддержки стартап-проектов, а также производства высокочистых металлов и инновационной продукции.",
-              "uz": "Жорий йилнинг ўзида 166 миллион долларлик 12 та лойиҳани ишга тушириш режалаштирилган. Чирчиқ шаҳрида ташкил этилаётган нанотаҳлил лабораторияси геология, кончилик ва металлургия лойиҳалари учун замонавий таҳлил хизматларини кўрсатади."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9304",
-              "ru": "https://president.uz/ru/lists/view/9304",
-              "uz": "https://president.uz/uz/lists/view/9304"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-07-13-tasks-outlined-for-the-further-development-of-the-ferrous-metallurgy-",
-          "title": "Tasks outlined for the further development of the ferrous metallurgy industry",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9410",
-          "source_published_at": "2026-07-13",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-07-14T05:14:20.000Z",
-          "localized": {
-            "title": {
-              "en": "Tasks outlined for the further development of the ferrous metallurgy industry",
-              "ru": "Определены задачи по дальнейшему развитию черной металлургии",
-              "uz": "Қора металлургия саноатини янада ривожлантириш вазифалари белгиланди"
-            },
-            "summary": {
-              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
-              "ru": "Для перевода экономики на модель технологичного и инновационного развития и доведения объема валового внутреннего продукта до 240 миллиардов долларов к 2030 году необходимо обеспечить ежегодный рост экономики не менее чем на 8-9 процентов. В этом процессе развитие металлургической отрасли должно опираться на устойчивую сырьевую базу, выпуск конкурентоспособной продукции и внедрение современных технологий.",
-              "uz": "Соҳада соғлом рақобат муҳити ва нарх барқарорлигини таъминлаш, таъсирчан назорат механизмларини ўрнатиш учун Ҳукуматда алоҳида Лойиҳа офиси ташкил этилади. Уларни хомашё билан барқарор таъминлаш мақсадида четдан хомашёни марказлашган ҳолда олиб келиш бўйича алоҳида компания ташкил этилади."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9410",
-              "ru": "https://president.uz/ru/lists/view/9410",
-              "uz": "https://president.uz/uz/lists/view/9410"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-08-07-regulated-tariffs-applicable-between-enterprises-in-the-energy-sector",
-          "title": "Regulated tariffs applicable between enterprises in the energy sector have been approved",
-          "source_institution": "Ministry of Economy and Finance of Uzbekistan",
-          "source_url": "https://gov.uz/en/imv/news/view/204508",
-          "source_published_at": "2026-08-07",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "approved",
-          "summary": "Official detail page did not expose a separate summary in the configured extraction block.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-08-12T04:23:14.010Z",
-          "localized": {
-            "title": {
-              "en": "Regulated tariffs applicable between enterprises in the energy sector have been approved",
-              "ru": "Министерство экономики и финансов Республики Узбекистан",
-              "uz": "Ўзбекистон Республикаси Иқтисодиёт ва молия вазирлиги"
-            },
-            "source_url": {
-              "en": "https://gov.uz/en/imv/news/view/204508",
-              "ru": "https://gov.uz/ru/imv/news/view/204508",
-              "uz": "https://gov.uz/uz/imv/news/view/204508"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-08-07-uzbekistan-introduces-a-new-system-of-state-regulation-of-tariffs-in-",
-          "title": "Uzbekistan Introduces a New System of State Regulation of Tariffs in the Energy Sector",
-          "source_institution": "Ministry of Economy and Finance of Uzbekistan",
-          "source_url": "https://gov.uz/en/imv/news/view/203538",
-          "source_published_at": "2026-08-07",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Official detail page did not expose a separate summary in the configured extraction block.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-08-08T03:50:35.005Z",
-          "localized": {
-            "title": {
-              "en": "Uzbekistan Introduces a New System of State Regulation of Tariffs in the Energy Sector",
-              "ru": "Министерство экономики и финансов Республики Узбекистан",
-              "uz": "Ўзбекистонда энергетика соҳасида давлат тарифларини тартибга солишнинг янги тизими жорий этилди"
-            },
-            "source_url": {
-              "en": "https://gov.uz/en/imv/news/view/203538",
-              "ru": "https://gov.uz/ru/imv/news/view/203538",
-              "uz": "https://gov.uz/uz/imv/news/view/203538"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-08-11-measures-to-ensure-oil-and-gas-market-stability-discussed",
-          "title": "Measures to ensure oil and gas market stability discussed",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9492",
-          "source_published_at": "2026-08-11",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument; source evidence: legal_text, official_policy_announcement.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-08-12T04:23:14.010Z",
-          "localized": {
-            "title": {
-              "en": "Measures to ensure oil and gas market stability discussed",
-              "ru": "Рассмотрены вопросы обеспечения стабильности нефтегазового рынка",
-              "uz": "Нефть-газ бозори барқарорлигини таъминлаш масалалари кўриб чиқилди"
-            },
-            "summary": {
-              "ru": "За счет работ на месторождениях «Янги Култак», «Ниёз», «Коратау», «Марварид» и «Тегирмон» будет создана возможность дополнительной добычи 887 тысяч кубометров природного газа. Дано поручение установить действенный контроль за недопущением случаев необоснованного ограничения поставок ресурсов, создания искусственного дефицита и действий, направленных на завышение цен.",
-              "uz": "Август ойида 27 та қудуқни ишга тушириш режалаштирилган. Ички бозорда талаб ва таклиф мувозанатини сақлаш, углеводород ресурслари таъминотида узилишларга ҳамда нархларнинг асоссиз ўсишига йўл қўймаслик мақсадида “Ўзбекнефтгаз” акциядорлик жамиятига нефть ва газ қазиб чиқариш бўйича белгиланган прогноз кўрсаткичларини сўзсиз таъминлаш вазифаси қўйилди."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9492",
-              "ru": "https://president.uz/ru/lists/view/9492",
-              "uz": "https://president.uz/uz/lists/view/9492"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-08-13-tasks-defined-to-improve-the-management-of-the-fuel-and-energy-sector",
-          "title": "Tasks defined to improve the management of the fuel and energy sector in the regions",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9496",
-          "source_published_at": "2026-08-13",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-08-15T03:18:32.863Z",
-          "localized": {
-            "title": {
-              "en": "Tasks defined to improve the management of the fuel and energy sector in the regions",
-              "ru": "Определены задачи по системной организации работы топливно-энергетической отрасли в регионах",
-              "uz": "Ҳудудларда ёқилғи-энергетика соҳасидаги ишларни тизимли ташкил этиш вазифалари белгиланди"
-            },
-            "summary": {
-              "en": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
-              "ru": "Ранее была поставлена задача создать образцовую систему в 14 районах, отобранных по одному в каждом регионе.",
-              "uz": "Аввалроқ ушбу тажриба асосида ҳар бир ҳудуддан биттадан танлаб олинган 14 та туманда намунавий тизим яратиш вазифаси қўйилган эди. Шу мақсадда ишлар “маҳаллабай” ташкил этилиб, энергетика соҳасидаги муаммоларни жойига чиққан ҳолда ўрганиш ва манзилли чоралар кўриш йўлга қўйилди."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9496",
-              "ru": "https://president.uz/ru/lists/view/9496",
-              "uz": "https://president.uz/uz/lists/view/9496"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-08-19-measures-presented-for-small-and-micro-hydropower-development",
-          "title": "Measures presented for small and micro hydropower development",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9513",
-          "source_published_at": "2026-08-19",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-08-24T03:31:54.047Z",
-          "localized": {
-            "title": {
-              "en": "Measures presented for small and micro hydropower development",
-              "ru": "Представлены меры по дальнейшему развитию малой и микрогидроэнергетики",
-              "uz": "Кичик ва микро гидроэнергетикани ривожлантириш чора-тадбирлари тақдимот қилинди"
-            },
-            "summary": {
-              "en": "Included by Legal or regulatory change, Adopted policy measure with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
-              "ru": "Будет разрешено изменять конструкцию каналов, рек и русел для создания дополнительного напора воды. Также будет разрешено строительство малых и микроГЭС на объектах водного хозяйства для собственных нужд без проведения аукциона.",
-              "uz": "Ўтган йили қабул қилинган алоҳида қарорга мувофиқ, хусусий сектор иштирокида жами 164 мегаватт қувватли қарийб 3 мингта кичик ва микро ГЭС қуриш белгиланган. Аммо бу белгиланган қувватнинг атиги тўртдан бир қисмини ташкил этади."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9513",
-              "ru": "https://president.uz/ru/lists/view/9513",
-              "uz": "https://president.uz/uz/lists/view/9513"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-10-09-president-shavkat-mirziyoyev-concludes-working-visit-to-turkmenistan",
-          "title": "President Shavkat Mirziyoyev concludes working visit to Turkmenistan",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9705",
-          "source_published_at": "2026-10-09",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-10-11T09:12:06.566Z",
-          "localized": {
-            "title": {
-              "en": "President Shavkat Mirziyoyev concludes working visit to Turkmenistan",
-              "ru": "Рабочий визит Президента Узбекистана в Туркменистан завершился",
-              "uz": "Давлатимиз раҳбарининг Туркманистонга амалий ташрифи якунланди"
-            },
-            "summary": {
-              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
-              "ru": "Их важным итогом стало подписание Договора о создании Высшего совета стратегического партнерства.",
-              "uz": "Президентимиз саноат кооперациясини ривожлантириш, транспорт боғлиқлигини мустаҳкамлаш ва янги технологияларни жорий этиш, энергетика, сув ресурслари ва экология масалаларини биргаликда ҳал қилиш бўйича таклифларни илгари сурди. Давлатимиз раҳбари ўз нутқида савдо ва саноат ҳамкорлигини кенгайтириш, транспорт алоқаларини ривожлантириш, озиқ-овқат ва энергетика хавфсизлигини мустаҳкамлаш ҳамда кибержиноятчиликка қарши курашиш бўйича таклифларни илгари сурди."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9705",
-              "ru": "https://president.uz/ru/lists/view/9705",
-              "uz": "https://president.uz/uz/lists/view/9705"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-10-13-measures-reviewed-to-introduce-green-technologies-in-greenhouse-farmi",
-          "title": "Measures reviewed to introduce green technologies in greenhouse farming",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9711",
-          "source_published_at": "2026-10-13",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-10-14T07:56:14.076Z",
-          "localized": {
-            "title": {
-              "en": "Measures reviewed to introduce green technologies in greenhouse farming",
-              "ru": "Рассмотрены вопросы внедрения «зеленых» технологий в тепличное хозяйство",
-              "uz": "Иссиқхона хўжалигига “яшил” технологияларни жорий қилиш масалалари кўриб чиқилди"
-            },
-            "summary": {
-              "en": "Included by Adopted policy measure with hard reform signal(s): adopted_measure; source evidence: official_policy_announcement, implementation_program.",
-              "ru": "Теплицам, работающим на твердом топливе, предложено до 1 декабря текущего года перейти на указанные источники энергии. С 15 октября текущего года по 15 марта следующего года в тепличных хозяйствах будет осуществляться постоянный экологический мониторинг.",
-              "uz": "Шу боис, Тошкент шаҳри ва унга туташ бешта туманда иссиқхоналар учун “яшил” технологияларга асосланган махсус экологик тартиб жорий этиш таклиф қилинди. Қаттиқ ёқилғида ишлаётган иссиқхоналарга жорий йил 1 декабрга қадар ушбу манбаларга ўтиш таклиф қилинади."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9711",
-              "ru": "https://president.uz/ru/lists/view/9711",
-              "uz": "https://president.uz/uz/lists/view/9711"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-10-16-president-holds-dialogue-with-investors-on-accelerating-reforms-in-th",
-          "title": "President Holds Dialogue with Investors on Accelerating Reforms in the Energy Sector",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9726",
-          "source_published_at": "2026-10-16",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "implementation_milestone",
-          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-10-17T07:08:09.995Z",
-          "localized": {
-            "title": {
-              "en": "President Holds Dialogue with Investors on Accelerating Reforms in the Energy Sector",
-              "ru": "Президент обсудил с инвесторами вопросы ускорения реформ в топливно-энергетической отрасли",
-              "uz": "Давлатимиз раҳбари ёқилғи-энергетика тармоғидаги ислоҳотларни жадаллаштириш юзасидан сармоядорлар билан мулоқот ўтказди"
-            },
-            "summary": {
-              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
-              "ru": "За последние десять лет энергетический рынок открылся для частных инвестиций, внедрены механизмы государственно-частного партнерства. Они предусматривают создание 3 тысячи мегаватт генерирующих и 400 мегаватт накопительных мощностей.",
-              "uz": "Сўнгги ўн йилда энергетика бозори хусусий сармояга очилиб, давлат-хусусий шериклик механизмлари жорий этилди. Қайси ҳудудда қандай қувват зарурлиги олдиндан режалаштирилиб, тайёр лойиҳалар очиқ танловга чиқарилади."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9726",
-              "ru": "https://president.uz/ru/lists/view/9726",
-              "uz": "https://president.uz/uz/lists/view/9726"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        },
-        {
-          "id": "source-event-2026-11-03-petrochemical-cluster-in-bukhara-district-expands-operations",
-          "title": "Petrochemical cluster in Bukhara district expands operations",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9812",
-          "source_published_at": "2026-11-03",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-11-05T09:45:42.591Z",
-          "localized": {
-            "title": {
-              "en": "Petrochemical cluster in Bukhara district expands operations",
-              "ru": "Нефтехимический кластер в Бухарском районе расширяет свою деятельность",
-              "uz": "Бухоро туманида нефть-кимё кластери кенгаймоқда"
-            },
-            "summary": {
-              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
-              "ru": "До конца 2028 года планируется реализовать инвестиционный проект стоимостью 292 миллиона долларов.",
-              "uz": "2028 йил якунига қадар 292 миллион долларлик инвестиция лойиҳасини амалга ошириш режалаштирилган. Корхона Қозоғистон, Қирғизистон, Тожикистон, Туркманистон, Афғонистон ва Европа Иттифоқи мамлакатларига йилига 180 минг тоннага яқин нефть-кимё маҳсулотлари, автобензин ва дизель ёқилғисини экспорт қилишни режалаштирмоқда."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9812",
-              "ru": "https://president.uz/ru/lists/view/9812",
-              "uz": "https://president.uz/uz/lists/view/9812"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        }
-      ],
-      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
-      "digest": {
-        "changed": "expanded incentives",
-        "applies_to": "Energy tariffs, household compensation, and fiscal monitoring",
-        "effective_status": "Instructions issued (2026-11-03)",
-        "document": "Petrochemical cluster in Bukhara district expands operations"
-      },
-      "localized": {
-        "title": {
-          "ru": "Нефтехимический кластер в Бухарском районе расширяет свою деятельность",
-          "uz": "Бухоро туманида нефть-кимё кластери кенгаймоқда"
-        },
-        "short_summary": {
-          "ru": "До конца 2028 года планируется реализовать инвестиционный проект стоимостью 292 миллиона долларов.",
-          "uz": "2028 йил якунига қадар 292 миллион долларлик инвестиция лойиҳасини амалга ошириш режалаштирилган."
-        },
-        "parameters_or_amounts": {
-          "ru": [
-            "До конца 2028 года планируется реализовать инвестиционный проект стоимостью 292 миллиона долларов."
-          ],
-          "uz": [
-            "2028 йил якунига қадар 292 миллион долларлик инвестиция лойиҳасини амалга ошириш режалаштирилган.",
-            "Корхона Қозоғистон, Қирғизистон, Тожикистон, Туркманистон, Афғонистон ва Европа Иттифоқи мамлакатларига йилига 180 минг тоннага яқин нефть-кимё маҳсулотлари, автобензин ва дизель ёқилғисини экспорт қилишни режалаштирмоқда."
-          ]
-        },
-        "digest": {
-          "ru": {
-            "changed": "До конца 2028 года планируется реализовать инвестиционный проект стоимостью 292 миллиона долларов.",
-            "document": "Нефтехимический кластер в Бухарском районе расширяет свою деятельность"
-          },
-          "uz": {
-            "changed": "2028 йил якунига қадар 292 миллион долларлик инвестиция лойиҳасини амалга ошириш режалаштирилган.",
-            "document": "Бухоро туманида нефть-кимё кластери кенгаймоқда"
-          }
-        }
-      }
-    },
-    {
-      "package_id": "pkg-customs-clearance-digitalization-2026-10-31",
+      "package_id": "pkg-customs-clearance-digitalization-2026-11-06",
       "title": "Risk-based customs clearance and electronic declaration reform",
       "policy_area": "Trade facilitation and customs digitalization",
       "reform_category": "trade_customs",
       "current_stage": "Regulation approved",
-      "current_stage_date": "2026-10-31",
+      "current_stage_date": "2026-11-06",
       "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-10-31",
+      "next_milestone_date": "2026-11-06",
       "responsible_institutions": [
         "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
       ],
-      "legal_basis": "Verified official source event: 3966-сон 31.10.2026. Tovarlarni import qilishda va tovarlarni (xizmatlarni) realizatsiya qilishda toʻlanadigan qoʻshilgan qiymat soligʻi summalarini oʻzaro hisobga olish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida.",
+      "legal_basis": "Verified official source event: 610-сон 06.11.2026. Tashqi iqtisodiy faoliyatda mahsulotlarning eksport va importini miqdoriy cheklovlar orqali tartibga solish toʻgʻrisidagi nizomni tasdiqlash haqida.",
       "official_basis": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
       "short_summary": "Customs clearance, declaration, and border-process measures are updated.",
       "parameters_or_amounts": [
@@ -2665,6 +2902,21 @@
           "evidence_type": "official_policy_announcement",
           "source_event_ids": [
             "source-event-2026-10-31-3966-31-10-2026-tovarlarni-import-qilishda-va-tovarlarni-xizmatlarni-"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "customs-clearance-digitalization-approved-2026-11-06",
+          "label": "official measure approved",
+          "date": "2026-11-06",
+          "date_precision": "day",
+          "event_type": "approved",
+          "responsible_institutions": [
+            "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)"
+          ],
+          "evidence_type": "official_policy_announcement",
+          "source_event_ids": [
+            "source-event-2026-11-06-610-06-11-2026-tashqi-iqtisodiy-faoliyatda-mahsulotlarning-eksport-va"
           ],
           "confidence": "high"
         }
@@ -3113,18 +3365,46 @@
               "uz": "verified"
             }
           }
+        },
+        {
+          "id": "source-event-2026-11-06-610-06-11-2026-tashqi-iqtisodiy-faoliyatda-mahsulotlarning-eksport-va",
+          "title": "610-сон 06.11.2026. Tashqi iqtisodiy faoliyatda mahsulotlarning eksport va importini miqdoriy cheklovlar orqali tartibga solish toʻgʻrisidagi nizomni tasdiqlash haqida",
+          "source_institution": "National Database of Legislation of the Republic of Uzbekistan (Lex.uz)",
+          "source_url": "https://lex.uz/uz/docs/-8577858",
+          "source_published_at": "2026-11-06",
+          "evidence_type": "official_policy_announcement",
+          "event_type": "approved",
+          "summary": "Included by Legal or regulatory change, Adopted policy measure, Trade or customs modernization with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
+          "source_url_status": "verified",
+          "extracted_at": "2026-11-10T10:15:38.591Z",
+          "localized": {
+            "title": {
+              "uz": "610-сон 06.11.2026. Tashqi iqtisodiy faoliyatda mahsulotlarning eksport va importini miqdoriy cheklovlar orqali tartibga solish toʻgʻrisidagi nizomni tasdiqlash haqida"
+            },
+            "summary": {
+              "uz": "Included by Legal or regulatory change, Adopted policy measure, Trade or customs modernization with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program."
+            },
+            "source_url": {
+              "ru": "https://lex.uz/ru/docs/-8577858",
+              "uz": "https://lex.uz/uz/docs/-8577858"
+            },
+            "source_url_status": {
+              "ru": "verified",
+              "uz": "verified"
+            }
+          }
         }
       ],
       "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
       "digest": {
         "changed": "Customs and trade-facilitation procedures are updated.",
         "applies_to": "Trade facilitation and customs digitalization",
-        "effective_status": "Regulation approved (2026-10-31)",
-        "document": "3966-сон 31.10.2026. Tovarlarni import qilishda va tovarlarni (xizmatlarni) realizatsiya qilishda toʻlanadigan qoʻshilgan qiymat soligʻi summalarini oʻzaro hisobga olish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida"
+        "effective_status": "Regulation approved (2026-11-06)",
+        "document": "610-сон 06.11.2026. Tashqi iqtisodiy faoliyatda mahsulotlarning eksport va importini miqdoriy cheklovlar orqali tartibga solish toʻgʻrisidagi nizomni tasdiqlash haqida"
       },
       "localized": {
         "title": {
-          "uz": "3966-сон 31.10.2026. Tovarlarni import qilishda va tovarlarni (xizmatlarni) realizatsiya qilishda toʻlanadigan qoʻshilgan qiymat soligʻi summalarini oʻzaro hisobga olish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida"
+          "uz": "610-сон 06.11.2026. Tashqi iqtisodiy faoliyatda mahsulotlarning eksport va importini miqdoriy cheklovlar orqali tartibga solish toʻgʻrisidagi nizomni tasdiqlash haqida"
         },
         "short_summary": {
           "ru": "Активно внедряются цифровые решения, обеспечивающие эффективное взаимодействие таможенных органов с бизнесом, сокращаются административные формальности и минимизируются коррупционные риски.",
@@ -3144,7 +3424,7 @@
           },
           "uz": {
             "changed": "Included by Legal or regulatory change, Adopted policy measure, Trade or customs modernization with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement, implementation_program.",
-            "document": "3966-сон 31.10.2026. Tovarlarni import qilishda va tovarlarni (xizmatlarni) realizatsiya qilishda toʻlanadigan qoʻshilgan qiymat soligʻi summalarini oʻzaro hisobga olish tartibi toʻgʻrisidagi nizomni tasdiqlash haqida"
+            "document": "610-сон 06.11.2026. Tashqi iqtisodiy faoliyatda mahsulotlarning eksport va importini miqdoriy cheklovlar orqali tartibga solish toʻgʻrisidagi nizomni tasdiqlash haqida"
           }
         }
       }
@@ -4462,145 +4742,6 @@
           "uz": {
             "changed": "Included by Legal or regulatory change with hard reform signal(s): legal_or_policy_instrument, adopted_measure; source evidence: legal_text, official_policy_announcement.",
             "document": "PQ-374-сон 14.10.2026. Yaylov yerlaridan samarali foydalanish va chorvachilik xoʻjaliklarini davlat tomonidan qoʻllab-quvvatlashga doir qoʻshimcha chora-tadbirlar toʻgʻrisida"
-          }
-        }
-      }
-    },
-    {
-      "package_id": "pkg-investment-climate-sez-2026-10-12",
-      "title": "Investment climate and special economic zone reform",
-      "policy_area": "Investment climate and special economic zones",
-      "reform_category": "business_environment",
-      "current_stage": "Instructions issued",
-      "current_stage_date": "2026-10-12",
-      "next_milestone": "No future milestone published in verified source",
-      "next_milestone_date": "2026-10-12",
-      "responsible_institutions": [
-        "Official website of the President of the Republic of Uzbekistan"
-      ],
-      "legal_basis": "Verified official source event: New Tashkent to create new opportunities for investors.",
-      "official_basis": "Official website of the President of the Republic of Uzbekistan",
-      "short_summary": "The cited official document updates investment climate and special economic zones rules or procedures.",
-      "parameters_or_amounts": [
-        "verified official measure"
-      ],
-      "source_confidence": "high",
-      "why_tracked": "The package is assembled from 1 verified official source event with legal, fiscal, regulatory, parameter, or implementation evidence accepted by the intake rulebook.",
-      "model_relevance": [
-        "Private investment",
-        "Productivity",
-        "Business costs"
-      ],
-      "policy_channels": [
-        "Private investment",
-        "Productivity",
-        "Business costs"
-      ],
-      "measure_tracks": [
-        {
-          "id": "investment-climate-sez-measure-1",
-          "label": "verified official measure",
-          "status": "source verified"
-        }
-      ],
-      "implementation_milestones": [
-        {
-          "id": "investment-climate-sez-instructions_issued-2026-10-12",
-          "label": "official measure recorded",
-          "date": "2026-10-12",
-          "date_precision": "day",
-          "event_type": "instructions_issued",
-          "responsible_institutions": [
-            "Official website of the President of the Republic of Uzbekistan"
-          ],
-          "evidence_type": "official_policy_announcement",
-          "source_event_ids": [
-            "source-event-2026-10-12-new-tashkent-to-create-new-opportunities-for-investors"
-          ],
-          "confidence": "high"
-        }
-      ],
-      "official_source_events": [
-        {
-          "id": "source-event-2026-10-12-new-tashkent-to-create-new-opportunities-for-investors",
-          "title": "New Tashkent to create new opportunities for investors",
-          "source_institution": "Official website of the President of the Republic of Uzbekistan",
-          "source_url": "https://president.uz/en/lists/view/9708",
-          "source_published_at": "2026-10-12",
-          "evidence_type": "official_policy_announcement",
-          "event_type": "instructions_issued",
-          "summary": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, parameter_change, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
-          "source_url_status": "verified",
-          "extracted_at": "2026-10-13T09:40:27.514Z",
-          "localized": {
-            "title": {
-              "en": "New Tashkent to create new opportunities for investors",
-              "ru": "В Новом Ташкенте создадут новые возможности для инвесторов",
-              "uz": "Янги Тошкентда инвесторлар учун янги имкониятлар яратилади"
-            },
-            "summary": {
-              "en": "Included by Adopted policy measure, Structural implementation program with hard reform signal(s): adopted_measure, parameter_change, named_implementation_update; source evidence: official_policy_announcement, implementation_program.",
-              "ru": "До конца года в Новом Ташкенте планируется сдать 20 тысяч квартир. Для привлечения крупных коммерческих объектов будет внедрен механизм выделения земельных участков на основе открытой инициативы и принципа «Swiss Challenge».",
-              "uz": "Йил охиригача шаҳарда 20 минг хонадонни фойдаланишга топшириш режалаштирилган. Келгуси йил 20 ёшгача бўлган футболчилар ўртасидаги жаҳон чемпионати муносабати билан меҳмонхона, овқатланиш ва кўнгилочар масканларга эҳтиёжни ҳисоблаб, тадбиркорларга аниқ инвестиция таклифларини тақдим этиш топширилди."
-            },
-            "source_url": {
-              "en": "https://president.uz/en/lists/view/9708",
-              "ru": "https://president.uz/ru/lists/view/9708",
-              "uz": "https://president.uz/uz/lists/view/9708"
-            },
-            "source_url_status": {
-              "en": "verified",
-              "ru": "verified",
-              "uz": "verified"
-            }
-          }
-        }
-      ],
-      "caveat": "Automatic official-source tracker entry assembled from verified source events. It is not an official legal registry and does not assert legal force beyond the cited official sources.",
-      "digest": {
-        "changed": "verified official measure",
-        "applies_to": "Investment climate and special economic zones",
-        "effective_status": "Instructions issued (2026-10-12)",
-        "document": "New Tashkent to create new opportunities for investors"
-      },
-      "localized": {
-        "title": {
-          "ru": "В Новом Ташкенте создадут новые возможности для инвесторов",
-          "uz": "Янги Тошкентда инвесторлар учун янги имкониятлар яратилади"
-        },
-        "short_summary": {
-          "ru": "До конца года в Новом Ташкенте планируется сдать 20 тысяч квартир.",
-          "uz": "Йил охиригача шаҳарда 20 минг хонадонни фойдаланишга топшириш режалаштирилган."
-        },
-        "parameters_or_amounts": {
-          "ru": [
-            "До конца года в Новом Ташкенте планируется сдать 20 тысяч квартир.",
-            "Для привлечения крупных коммерческих объектов будет внедрен механизм выделения земельных участков на основе открытой инициативы и принципа «Swiss Challenge».",
-            "Базовая ставка будет снижена в три раза для торговых объектов, предприятий сферы услуг и бизнес-центров, в пять раз – для гостиниц и туристических объектов, в десять раз – для учреждений культуры и развлекательных заведений.",
-            "Для частных детских садов, школ и больниц размер платежа будет установлен на уровне 1 процента.",
-            "Новый порядок будет распространяться и на проекты, строительство которых уже началось.",
-            "Требование об озеленении 30 процентов каждого земельного участка, приобретенного инвестором, здесь применяться не будет: государство обеспечит озеленение 30 процентов территории города в соответствии с генеральным планом.",
-            "За каждым проектом стоимостью свыше 50 миллионов долларов будет закреплен ответственный представитель, который будет сопровождать инвестора вплоть до ввода объекта в эксплуатацию.",
-            "Пакет предложений с указанием их местоположения, экономическими расчетами и информацией о созданных возможностях будет направлен через дипломатические представительства."
-          ],
-          "uz": [
-            "Йил охиригача шаҳарда 20 минг хонадонни фойдаланишга топшириш режалаштирилган.",
-            "Келгуси йил 20 ёшгача бўлган футболчилар ўртасидаги жаҳон чемпионати муносабати билан меҳмонхона, овқатланиш ва кўнгилочар масканларга эҳтиёжни ҳисоблаб, тадбиркорларга аниқ инвестиция таклифларини тақдим этиш топширилди.",
-            "Шаҳар манфаатига хизмат қиладиган ўзига хос лойиҳалар учун лот майдони ёки объект турини ўзгартириш ҳақидаги таклифлар тез ва аниқ мезонлар асосида кўриб чиқилиши керак.",
-            "Бу жараёнда инвестор ташаббуси эълон қилинади ва бошқа иштирокчилар яхшироқ шарт таклиф этмаса, ер дастлабки ташаббускорга ажратилади.",
-            "Хусусий боғча, мактаб ва шифохоналар учун тўлов бир фоиз этиб белгиланади.",
-            "Уларнинг жойлашуви, иқтисодий ҳисоб-китоблари ва яратилган имкониятлар акс этган таклифлар пакети дипломатик ваколатхоналар орқали етказилади.",
-            "Шундан сўнг давлатимиз раҳбари инвесторлар билан мулоқот қилди, уларнинг таклиф ва ташаббусларини тинглади."
-          ]
-        },
-        "digest": {
-          "ru": {
-            "changed": "До конца года в Новом Ташкенте планируется сдать 20 тысяч квартир.",
-            "document": "В Новом Ташкенте создадут новые возможности для инвесторов"
-          },
-          "uz": {
-            "changed": "Йил охиригача шаҳарда 20 минг хонадонни фойдаланишга топшириш режалаштирилган.",
-            "document": "Янги Тошкентда инвесторлар учун янги имкониятлар яратилади"
           }
         }
       }
@@ -6376,7 +6517,7 @@
       "title": "Model routing notes for current reform packages",
       "summary": "Internal package-routing note retained for non-public workflow compatibility.",
       "package_ids": [
-        "pkg-customs-clearance-digitalization-2026-10-31",
+        "pkg-customs-clearance-digitalization-2026-11-06",
         "pkg-public-transport-system-2026-05-13",
         "pkg-pasture-dryland-use-incentives-2026-10-14"
       ],
@@ -6805,6 +6946,80 @@
     ],
     "package_links": [
       {
+        "package_id": "pkg-energy-tariff-compensation-2026-11-09",
+        "active_lenses": [
+          {
+            "model_id": "QPM",
+            "channel": "Macro-financial and inflation transmission context.",
+            "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "CGE",
+            "channel": "Experimental economy-wide comparative-static reference.",
+            "caveat": "Experimental reference only; not a forecast or model-owner-approved estimate."
+          }
+        ],
+        "gated_lenses": [
+          {
+            "model_id": "FPP",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "HFI",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "Synthesis",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          }
+        ]
+      },
+      {
+        "package_id": "pkg-investment-climate-sez-2026-11-09",
+        "active_lenses": [
+          {
+            "model_id": "DFM",
+            "channel": "High-frequency monitoring context.",
+            "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "I-O",
+            "channel": "Sector-linkage and final-demand propagation context.",
+            "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "PE",
+            "channel": "Direct tariff-incidence and trade-flow context.",
+            "caveat": "Possible lens only."
+          },
+          {
+            "model_id": "CGE",
+            "channel": "Experimental economy-wide comparative-static reference.",
+            "caveat": "Experimental reference only; not a forecast or model-owner-approved estimate."
+          }
+        ],
+        "gated_lenses": [
+          {
+            "model_id": "FPP",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "HFI",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          },
+          {
+            "model_id": "Synthesis",
+            "status": "planned_gated",
+            "caveat": "Not active in public outputs."
+          }
+        ]
+      },
+      {
         "package_id": "pkg-tax-administration-incentives-2026-11-05",
         "active_lenses": [
           {
@@ -6847,39 +7062,7 @@
         ]
       },
       {
-        "package_id": "pkg-energy-tariff-compensation-2026-11-03",
-        "active_lenses": [
-          {
-            "model_id": "QPM",
-            "channel": "Macro-financial and inflation transmission context.",
-            "caveat": "Possible lens only."
-          },
-          {
-            "model_id": "CGE",
-            "channel": "Experimental economy-wide comparative-static reference.",
-            "caveat": "Experimental reference only; not a forecast or model-owner-approved estimate."
-          }
-        ],
-        "gated_lenses": [
-          {
-            "model_id": "FPP",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "HFI",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "Synthesis",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          }
-        ]
-      },
-      {
-        "package_id": "pkg-customs-clearance-digitalization-2026-10-31",
+        "package_id": "pkg-customs-clearance-digitalization-2026-11-06",
         "active_lenses": [
           {
             "model_id": "DFM",
@@ -6976,48 +7159,6 @@
       },
       {
         "package_id": "pkg-pasture-dryland-use-incentives-2026-10-14",
-        "active_lenses": [
-          {
-            "model_id": "DFM",
-            "channel": "High-frequency monitoring context.",
-            "caveat": "Possible lens only."
-          },
-          {
-            "model_id": "I-O",
-            "channel": "Sector-linkage and final-demand propagation context.",
-            "caveat": "Possible lens only."
-          },
-          {
-            "model_id": "PE",
-            "channel": "Direct tariff-incidence and trade-flow context.",
-            "caveat": "Possible lens only."
-          },
-          {
-            "model_id": "CGE",
-            "channel": "Experimental economy-wide comparative-static reference.",
-            "caveat": "Experimental reference only; not a forecast or model-owner-approved estimate."
-          }
-        ],
-        "gated_lenses": [
-          {
-            "model_id": "FPP",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "HFI",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          },
-          {
-            "model_id": "Synthesis",
-            "status": "planned_gated",
-            "caveat": "Not active in public outputs."
-          }
-        ]
-      },
-      {
-        "package_id": "pkg-investment-climate-sez-2026-10-12",
         "active_lenses": [
           {
             "model_id": "DFM",
@@ -7397,7 +7538,6 @@
     "This is a deterministic official-source reform package artifact.",
     "Generated from configured source URLs at artifact build time.",
     "Public packages are assembled only from source events whose official links passed validation.",
-    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser.",
-    "One or more configured sources failed during this automatic refresh; previous verified packages were carried forward when needed to avoid deleting reforms during a temporary source outage."
+    "The frontend loads this static JSON artifact only and does not scrape source pages in the browser."
   ]
 }
