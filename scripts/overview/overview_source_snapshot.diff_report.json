@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-10T12:39:39Z",
-  "checked_at": "2026-11-10T12:39:39Z",
+  "generated_at": "2026-11-11T11:52:53Z",
+  "checked_at": "2026-11-11T11:52:53Z",
   "status": "validated",
   "scope": "Configured source families; freshness is evaluated separately per metric",
   "families": [
@@ -67,28 +67,28 @@
   ],
   "sources": [
     {
-      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-11-10/",
-      "sha256": "b84ca3449ff5a7a54a1b0b00df91bf3d43cae7faeb9faacb6541c59ad0968006",
-      "bytes": 219,
-      "path": "raw/b84ca3449ff5a7a54a1b0b00df91bf3d43cae7faeb9faacb6541c59ad0968006.json",
+      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-11-11/",
+      "sha256": "cd991eb87e3c629fe0bb60436cd1229554686181bbe3fdde23477da7e27d11a8",
+      "bytes": 221,
+      "path": "raw/cd991eb87e3c629fe0bb60436cd1229554686181bbe3fdde23477da7e27d11a8.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-11-10T12:39:39Z"
+      "fetched_at": "2026-11-11T11:52:53Z"
     },
     {
-      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-10/",
+      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-10-11/",
       "sha256": "6b042883683240eb80cbfb21c7cceb8518ae02b9061587a630eb430d594d4c62",
       "bytes": 220,
       "path": "raw/6b042883683240eb80cbfb21c7cceb8518ae02b9061587a630eb430d594d4c62.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-11-10T12:39:39Z"
+      "fetched_at": "2026-11-11T11:52:53Z"
     },
     {
-      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2025-11-10/",
-      "sha256": "a5a3867bd2e18f8bdd6b502ad8a80b240ec8b0d93c94cebb98769dae2c9590e5",
-      "bytes": 220,
-      "path": "raw/a5a3867bd2e18f8bdd6b502ad8a80b240ec8b0d93c94cebb98769dae2c9590e5.json",
+      "url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2025-11-11/",
+      "sha256": "e330e4feacc73b71caf8301f0667e3ceaec39dc92fc45c44b9136ac647b988f9",
+      "bytes": 221,
+      "path": "raw/e330e4feacc73b71caf8301f0667e3ceaec39dc92fc45c44b9136ac647b988f9.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-11-10T12:39:39Z"
+      "fetched_at": "2026-11-11T11:52:53Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2407.json",
@@ -96,7 +96,7 @@
       "bytes": 331318,
       "path": "raw/12465dad6f0be47c8f1359c56ba38f38725d39c0b9558309d69f3c91a276a643.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-11-10T12:39:39Z"
+      "fetched_at": "2026-11-11T11:52:53Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_2414.json",
@@ -104,7 +104,7 @@
       "bytes": 333574,
       "path": "raw/f00ec935a3e9a311ef0e908fbd79fb853608859199fac072042c9f414f21c67e.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-11-10T12:39:39Z"
+      "fetched_at": "2026-11-11T11:52:53Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_4585.json",
@@ -112,7 +112,7 @@
       "bytes": 488153,
       "path": "raw/d567f0da9c56491a60f9075148d10bf815718adc2d6b00e52fdc4f2f56b01dce.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-11-10T12:39:39Z"
+      "fetched_at": "2026-11-11T11:52:53Z"
     },
     {
       "url": "https://api.siat.stat.uz/media/uploads/sdmx/sdmx_data_582.json",
@@ -120,7 +120,7 @@
       "bytes": 12304,
       "path": "raw/5261061f73ec576477e2b752b11561863c2cfe9fc3e50967fabf0df390c5be92.json",
       "representation": "normalized JSON",
-      "fetched_at": "2026-11-10T12:39:39Z"
+      "fetched_at": "2026-11-11T11:52:53Z"
     },
     {
       "url": "https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Monthly.xlsx",
@@ -128,7 +128,7 @@
       "bytes": 587760,
       "path": "raw/3c8d9d8dbb48342fdbf24777c39a8ce8964cc2fd0958f72f6779e6e4ad99cde2.xlsx",
       "representation": "downloaded bytes",
-      "fetched_at": "2026-11-10T12:39:39Z"
+      "fetched_at": "2026-11-11T11:52:53Z"
     },
     {
       "url": "https://stat.uz/img/news/press-release_cpi_august_2026_en_p63576.pdf",
@@ -136,7 +136,7 @@
       "bytes": 329568,
       "path": "raw/7252e48ef6f4f7b22dc51ce9195247cc528aac577e46cd52ae065d177007b500.pdf",
       "representation": "downloaded bytes",
-      "fetched_at": "2026-11-10T12:39:39Z",
+      "fetched_at": "2026-11-11T11:52:53Z",
       "acquisition": {
         "attempts": 1,
         "timeout_ms": 45000
@@ -148,7 +148,7 @@
       "bytes": 318481,
       "path": "raw/f05137fdb4bb869ae9c09292dc7d69e20a8f75e9f7f03f505ea17978a92b9aa6.pdf",
       "representation": "downloaded bytes",
-      "fetched_at": "2026-11-10T12:39:39Z",
+      "fetched_at": "2026-11-11T11:52:53Z",
       "acquisition": {
         "attempts": 1,
         "timeout_ms": 45000
@@ -156,11 +156,11 @@
     },
     {
       "url": "https://cbu.uz/en/press_center/releases/4540151/",
-      "sha256": "b0d8631caf353d06590b4f7773f8dfc990483595d2890437ed4810289f83a3b7",
-      "bytes": 198757,
-      "path": "raw/b0d8631caf353d06590b4f7773f8dfc990483595d2890437ed4810289f83a3b7.html",
+      "sha256": "9b903879a24b2bc8c4aea7c93846abe6dec394f04d70daad50f735b9a916bebc",
+      "bytes": 198765,
+      "path": "raw/9b903879a24b2bc8c4aea7c93846abe6dec394f04d70daad50f735b9a916bebc.html",
       "representation": "downloaded bytes",
-      "fetched_at": "2026-11-10T12:39:39Z",
+      "fetched_at": "2026-11-11T11:52:53Z",
       "acquisition": {
         "attempts": 1,
         "timeout_ms": 45000
@@ -168,10 +168,10 @@
     }
   ],
   "diff": [],
-  "exported_at": "2026-11-10T12:40:46.351Z",
-  "snapshot_sha256": "270c3e836b68e1aeb59de6883b44f10d696944b9791082f8960bd1fb5d4f8e64",
-  "artifact_sha256": "4effb5169d462455be9c02df5fa4258c517091005696b45cf7a9e713a5c83876",
+  "exported_at": "2026-11-11T11:53:21.348Z",
+  "snapshot_sha256": "703a15e0bd75618f447d7a817a96df4283a0b11a3f6a0b09d1d6f05353cea3d0",
+  "artifact_sha256": "22481008def2aa9f46d9c692eb3807927a1049e8ecfad0f20aa49c7d9fd399bd",
   "changed": false,
-  "value_hash": "f4d9adc7ded468dad92e94a8017e341cf63140f7338b02b049ee8c20a21b47ae",
+  "value_hash": "ab317796bd4428aa22665a34fdc95e0dece690b549ad3ec869c68983887e0092",
   "snapshot_status": "source_verified_for_public_artifact"
 }

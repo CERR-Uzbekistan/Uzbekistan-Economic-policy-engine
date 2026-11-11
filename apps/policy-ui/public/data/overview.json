@@ -1,6 +1,6 @@
 {
   "schema_version": "overview.v2",
-  "exported_at": "2026-11-10T12:40:46.351Z",
+  "exported_at": "2026-11-11T11:53:21.348Z",
   "generated_by": "scripts/overview/export-overview.mjs",
   "validation_status": "warning",
   "metrics": [
@@ -30,11 +30,11 @@
       "freshness": {
         "status": "current",
         "as_of": "2026-01-27T00:00:00Z",
-        "age_days": 287,
+        "age_days": 288,
         "max_age_days": 550,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-11-10T12:40:46.351Z",
+      "exported_at": "2026-11-11T11:53:21.348Z",
       "top_card": false
     },
     {
@@ -62,11 +62,11 @@
       "freshness": {
         "status": "current",
         "as_of": "2026-07-31T00:00:00Z",
-        "age_days": 102,
+        "age_days": 103,
         "max_age_days": 150,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-11-10T12:40:46.351Z",
+      "exported_at": "2026-11-11T11:53:21.348Z",
       "top_card": true,
       "top_card_order": 1
     },
@@ -97,11 +97,11 @@
       "freshness": {
         "status": "unavailable",
         "as_of": "2026-04-27T00:00:00Z",
-        "age_days": 197,
+        "age_days": 198,
         "max_age_days": 45,
         "reason": "source_url_missing"
       },
-      "exported_at": "2026-11-10T12:40:46.351Z",
+      "exported_at": "2026-11-11T11:53:21.348Z",
       "top_card": false
     },
     {
@@ -128,11 +128,11 @@
       "freshness": {
         "status": "current",
         "as_of": "2026-10-05T00:00:00Z",
-        "age_days": 36,
+        "age_days": 37,
         "max_age_days": 62,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-11-10T12:40:46.351Z",
+      "exported_at": "2026-11-11T11:53:21.348Z",
       "top_card": true,
       "top_card_order": 2
     },
@@ -161,11 +161,11 @@
       "freshness": {
         "status": "current",
         "as_of": "2026-11-05T00:00:00Z",
-        "age_days": 5,
+        "age_days": 6,
         "max_age_days": 62,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-11-10T12:40:46.351Z",
+      "exported_at": "2026-11-11T11:53:21.348Z",
       "top_card": false
     },
     {
@@ -192,11 +192,11 @@
       "freshness": {
         "status": "current",
         "as_of": "2026-10-05T00:00:00Z",
-        "age_days": 36,
+        "age_days": 37,
         "max_age_days": 62,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-11-10T12:40:46.351Z",
+      "exported_at": "2026-11-11T11:53:21.348Z",
       "top_card": true,
       "top_card_order": 3
     },
@@ -227,11 +227,11 @@
       "freshness": {
         "status": "current",
         "as_of": "2026-10-28T00:00:00Z",
-        "age_days": 13,
+        "age_days": 14,
         "max_age_days": 62,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-11-10T12:40:46.351Z",
+      "exported_at": "2026-11-11T11:53:21.348Z",
       "top_card": false
     },
     {
@@ -261,11 +261,11 @@
       "freshness": {
         "status": "current",
         "as_of": "2026-10-28T00:00:00Z",
-        "age_days": 13,
+        "age_days": 14,
         "max_age_days": 62,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-11-10T12:40:46.351Z",
+      "exported_at": "2026-11-11T11:53:21.348Z",
       "top_card": false
     },
     {
@@ -295,11 +295,11 @@
       "freshness": {
         "status": "current",
         "as_of": "2026-10-28T00:00:00Z",
-        "age_days": 13,
+        "age_days": 14,
         "max_age_days": 62,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-11-10T12:40:46.351Z",
+      "exported_at": "2026-11-11T11:53:21.348Z",
       "top_card": false
     },
     {
@@ -326,11 +326,11 @@
       "freshness": {
         "status": "current",
         "as_of": "2026-09-16T00:00:00Z",
-        "age_days": 55,
+        "age_days": 56,
         "max_age_days": 75,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-11-10T12:40:46.351Z",
+      "exported_at": "2026-11-11T11:53:21.348Z",
       "top_card": true,
       "top_card_order": 4
     },
@@ -341,30 +341,32 @@
       "claim_type": "observed",
       "unit": "UZS per USD",
       "frequency": "daily",
-      "value": 11994.1,
+      "value": 11974.02,
       "previous_value": 11897.9,
       "source_label": "Central Bank of Uzbekistan exchange rate",
-      "source_period": "2026-11-10",
-      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-11-10/",
+      "source_period": "2026-11-11",
+      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-11-11/",
       "source_reference": null,
-      "observed_at": "2026-11-10T00:00:00Z",
+      "observed_at": "2026-11-11T00:00:00Z",
       "extracted_at": null,
       "validation_status": "valid",
       "caveats": [
         "Official/reference rate, not transaction-weighted market average.",
-        "Latest observation: requested 2026-11-10; actual CBU date/rate 2026-11-10, 11994.1 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-10-10; actual CBU date/rate 2026-10-10, 11897.9 UZS per USD."
+        "Latest observation: requested 2026-11-11; actual CBU date/rate 2026-11-11, 11974.02 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-10-11; actual CBU date/rate 2026-10-10 returned for requested 2026-10-11, 11897.9 UZS per USD."
       ],
-      "warnings": [],
+      "warnings": [
+        "Prior-month requested date 2026-10-11 differed from actual CBU date 2026-10-10; nearest available CBU observation was used."
+      ],
       "output_class": "static_reference",
       "freshness": {
         "status": "current",
-        "as_of": "2026-11-10T00:00:00Z",
+        "as_of": "2026-11-11T00:00:00Z",
         "age_days": 0,
         "max_age_days": 3,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-11-10T12:40:46.351Z",
+      "exported_at": "2026-11-11T11:53:21.348Z",
       "top_card": true,
       "top_card_order": 5
     },
@@ -375,33 +377,35 @@
       "claim_type": "calculated_identity",
       "unit": "percent MoM",
       "frequency": "monthly from daily observations",
-      "value": 0.81,
+      "value": 0.64,
       "previous_value": null,
       "source_label": "CBU exchange rate, calculated",
-      "source_period": "2026-11-10 vs 2026-10-10",
-      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-11-10/",
-      "source_reference": "Calculated from CBU official USD rates: 11994.1 on 2026-11-10 and 11897.9 on 2026-10-10. Requested dates: latest 2026-11-10, prior-month 2026-10-10.",
+      "source_period": "2026-11-11 vs 2026-10-10",
+      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-11-11/",
+      "source_reference": "Calculated from CBU official USD rates: 11974.02 on 2026-11-11 and 11897.9 on 2026-10-10. Requested dates: latest 2026-11-11, prior-month 2026-10-11.",
       "observed_at": null,
-      "extracted_at": "2026-11-10T12:39:39.294Z",
+      "extracted_at": "2026-11-11T11:52:53.309Z",
       "validation_status": "valid",
       "caveats": [
-        "Latest observation: requested 2026-11-10; actual CBU date/rate 2026-11-10, 11994.1 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-10-10; actual CBU date/rate 2026-10-10, 11897.9 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-11-10; actual CBU date/rate 2025-11-10, 12060.27 UZS per USD.",
+        "Latest observation: requested 2026-11-11; actual CBU date/rate 2026-11-11, 11974.02 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-10-11; actual CBU date/rate 2026-10-10 returned for requested 2026-10-11, 11897.9 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-11-11; actual CBU date/rate 2025-11-11, 12014.94 UZS per USD.",
         "Formula: ((latest - comparison) / comparison) * 100.",
         "Rounded to 2 decimal places.",
         "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
       ],
-      "warnings": [],
+      "warnings": [
+        "Prior-month requested date 2026-10-11 differed from actual CBU date 2026-10-10; nearest available CBU observation was used."
+      ],
       "output_class": "accounting_calculation",
       "freshness": {
         "status": "current",
-        "as_of": "2026-11-10T12:39:39.294Z",
+        "as_of": "2026-11-11T11:52:53.309Z",
         "age_days": 0,
         "max_age_days": 35,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-11-10T12:40:46.351Z",
+      "exported_at": "2026-11-11T11:53:21.348Z",
       "top_card": false
     },
     {
@@ -411,19 +415,19 @@
       "claim_type": "calculated_identity",
       "unit": "percent YoY",
       "frequency": "monthly from daily observations",
-      "value": -0.55,
+      "value": -0.34,
       "previous_value": null,
       "source_label": "CBU exchange rate, calculated",
-      "source_period": "2026-11-10 vs 2025-11-10",
-      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-11-10/",
-      "source_reference": "Calculated from CBU official USD rates: 11994.1 on 2026-11-10 and 12060.27 on 2025-11-10. Requested dates: latest 2026-11-10, prior-year 2025-11-10.",
+      "source_period": "2026-11-11 vs 2025-11-11",
+      "source_url": "https://cbu.uz/en/arkhiv-kursov-valyut/json/USD/2026-11-11/",
+      "source_reference": "Calculated from CBU official USD rates: 11974.02 on 2026-11-11 and 12014.94 on 2025-11-11. Requested dates: latest 2026-11-11, prior-year 2025-11-11.",
       "observed_at": null,
-      "extracted_at": "2026-11-10T12:39:39.294Z",
+      "extracted_at": "2026-11-11T11:52:53.309Z",
       "validation_status": "valid",
       "caveats": [
-        "Latest observation: requested 2026-11-10; actual CBU date/rate 2026-11-10, 11994.1 UZS per USD.",
-        "Prior-month comparison observation: requested 2026-10-10; actual CBU date/rate 2026-10-10, 11897.9 UZS per USD.",
-        "Prior-year comparison observation: requested 2025-11-10; actual CBU date/rate 2025-11-10, 12060.27 UZS per USD.",
+        "Latest observation: requested 2026-11-11; actual CBU date/rate 2026-11-11, 11974.02 UZS per USD.",
+        "Prior-month comparison observation: requested 2026-10-11; actual CBU date/rate 2026-10-10 returned for requested 2026-10-11, 11897.9 UZS per USD.",
+        "Prior-year comparison observation: requested 2025-11-11; actual CBU date/rate 2025-11-11, 12014.94 UZS per USD.",
         "Formula: ((latest - comparison) / comparison) * 100.",
         "Rounded to 2 decimal places.",
         "Positive means USD/UZS is higher, i.e. UZS depreciation against USD; negative means USD/UZS is lower, i.e. UZS appreciation against USD."
@@ -432,12 +436,12 @@
       "output_class": "accounting_calculation",
       "freshness": {
         "status": "current",
-        "as_of": "2026-11-10T12:39:39.294Z",
+        "as_of": "2026-11-11T11:52:53.309Z",
         "age_days": 0,
         "max_age_days": 35,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-11-10T12:40:46.351Z",
+      "exported_at": "2026-11-11T11:53:21.348Z",
       "top_card": false
     },
     {
@@ -467,11 +471,11 @@
       "freshness": {
         "status": "stale",
         "as_of": "2026-03-31T00:00:00Z",
-        "age_days": 224,
+        "age_days": 225,
         "max_age_days": 62,
         "reason": "source_too_old"
       },
-      "exported_at": "2026-11-10T12:40:46.351Z",
+      "exported_at": "2026-11-11T11:53:21.348Z",
       "top_card": false
     },
     {
@@ -498,11 +502,11 @@
       "freshness": {
         "status": "current",
         "as_of": "2026-11-03T00:00:00Z",
-        "age_days": 7,
+        "age_days": 8,
         "max_age_days": 62,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-11-10T12:40:46.351Z",
+      "exported_at": "2026-11-11T11:53:21.348Z",
       "top_card": false
     },
     {
@@ -529,11 +533,11 @@
       "freshness": {
         "status": "current",
         "as_of": "2026-11-03T00:00:00Z",
-        "age_days": 7,
+        "age_days": 8,
         "max_age_days": 62,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-11-10T12:40:46.351Z",
+      "exported_at": "2026-11-11T11:53:21.348Z",
       "top_card": false
     },
     {
@@ -561,11 +565,11 @@
       "freshness": {
         "status": "current",
         "as_of": "2026-04-28T00:00:00Z",
-        "age_days": 196,
+        "age_days": 197,
         "max_age_days": 210,
         "reason": "within_threshold"
       },
-      "exported_at": "2026-11-10T12:40:46.351Z",
+      "exported_at": "2026-11-11T11:53:21.348Z",
       "top_card": false
     }
   ],
